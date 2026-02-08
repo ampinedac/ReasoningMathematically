@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('ℹ️ Código guardado encontrado:', studentCode);
     }
     
+    initHomeScreen();
     initWelcomeScreen();
 });
 
@@ -58,6 +59,21 @@ window.addEventListener('error', (event) => {
 window.addEventListener('unhandledrejection', (event) => {
     console.error('❌ Promesa rechazada:', event.reason);
 });
+
+// ========================================
+// PANTALLA PRINCIPAL
+// ========================================
+
+function initHomeScreen() {
+    console.log('🔧 Inicializando pantalla principal...');
+    
+    const activity0Btn = document.getElementById('activity0Btn');
+    
+    activity0Btn.addEventListener('click', () => {
+        console.log('📌 Navegando a Actividad 0');
+        showScreen('welcomeScreen');
+    });
+}
 
 // ========================================
 // PANTALLA DE BIENVENIDA
