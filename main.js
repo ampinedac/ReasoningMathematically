@@ -292,7 +292,24 @@ function initProblemQ1() {
     const checkEvidence = () => {
         const hasDrawing = boardState.hasDrawing;
         const hasAudio = audioState.audioBlob !== null;
-        submitBtn.disabled = !(hasDrawing || hasAudio);
+        // Requiere AMBOS: dibujo Y audio
+        submitBtn.disabled = !(hasDrawing && hasAudio);
+        
+        // Mostrar mensaje de qué falta
+        const statusText = document.getElementById(statusTextId);
+        if (!hasDrawing && !hasAudio) {
+            statusText.textContent = '⚠️ Debes dibujar tu respuesta y grabar tu explicación';
+            statusText.className = 'status-text';
+        } else if (!hasDrawing) {
+            statusText.textContent = '✏️ Falta dibujar tu respuesta';
+            statusText.className = 'status-text';
+        } else if (!hasAudio) {
+            statusText.textContent = '🎤 Falta grabar tu explicación (es obligatorio)';
+            statusText.className = 'status-text';
+        } else {
+            statusText.textContent = '✅ Listo para enviar';
+            statusText.className = 'status-text success';
+        }
     };
     
     // Verificar cada vez que se dibuja o graba
@@ -348,18 +365,11 @@ function initProblemQ1() {
             } else if (error.message.includes('network')) {
                 errorMsg += 'Revisa tu conexión a internet. ';
             }
-            errorMsg += 'Puedes continuar aun así.';
+            errorMsg += 'Intenta de nuevo.';
             
             statusText.textContent = errorMsg;
             statusText.className = 'status-text error';
-            
-            // Permitir continuar aun con el error
             submitBtn.disabled = false;
-            
-            // Mostrar botón continuar de todas formas (modo sin conexión)
-            const continueBtn = document.getElementById('continueToM2Btn');
-            continueBtn.classList.remove('hidden');
-            continueBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     });
 }
@@ -513,7 +523,24 @@ function initProblem1() {
     const checkEvidence = () => {
         const hasDrawing = boardState.hasDrawing;
         const hasAudio = audioState.audioBlob !== null;
-        submitBtn.disabled = !(hasDrawing || hasAudio);
+        // Requiere AMBOS: dibujo Y audio
+        submitBtn.disabled = !(hasDrawing && hasAudio);
+        
+        // Mostrar mensaje de qué falta
+        const statusText = document.getElementById(statusTextId);
+        if (!hasDrawing && !hasAudio) {
+            statusText.textContent = '⚠️ Debes dibujar tu respuesta y grabar tu explicación';
+            statusText.className = 'status-text';
+        } else if (!hasDrawing) {
+            statusText.textContent = '✏️ Falta dibujar tu respuesta';
+            statusText.className = 'status-text';
+        } else if (!hasAudio) {
+            statusText.textContent = '🎤 Falta grabar tu explicación (es obligatorio)';
+            statusText.className = 'status-text';
+        } else {
+            statusText.textContent = '✅ Listo para enviar';
+            statusText.className = 'status-text success';
+        }
     };
     
     setInterval(checkEvidence, 500);
@@ -627,7 +654,24 @@ function initProblemM3Q2() {
     const checkEvidence = () => {
         const hasDrawing = boardState.hasDrawing;
         const hasAudio = audioState.audioBlob !== null;
-        submitBtn.disabled = !(hasDrawing || hasAudio);
+        // Requiere AMBOS: dibujo Y audio
+        submitBtn.disabled = !(hasDrawing && hasAudio);
+        
+        // Mostrar mensaje de qué falta
+        const statusText = document.getElementById(statusTextId);
+        if (!hasDrawing && !hasAudio) {
+            statusText.textContent = '⚠️ Debes dibujar tu respuesta y grabar tu explicación';
+            statusText.className = 'status-text';
+        } else if (!hasDrawing) {
+            statusText.textContent = '✏️ Falta dibujar tu respuesta';
+            statusText.className = 'status-text';
+        } else if (!hasAudio) {
+            statusText.textContent = '🎤 Falta grabar tu explicación (es obligatorio)';
+            statusText.className = 'status-text';
+        } else {
+            statusText.textContent = '✅ Listo para enviar';
+            statusText.className = 'status-text success';
+        }
     };
     
     setInterval(checkEvidence, 500);
@@ -962,7 +1006,7 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
             
         } catch (error) {
             console.error('Error al acceder al micrófono:', error);
-            status.textContent = '⚠️ No se pudo acceder al micrófono. Puedes continuar sin audio.';
+            status.textContent = '❌ Error: El micrófono es OBLIGATORIO. Debes permitir el acceso para continuar.';
             status.classList.add('error-text');
         }
     });
