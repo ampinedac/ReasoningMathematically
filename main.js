@@ -86,6 +86,33 @@ function initWelcomeScreen() {
     const studentCodeInput = document.getElementById('studentCodeInput');
     const welcomeError = document.getElementById('welcomeError');
     
+    // Bloquear cualquier tecla que no sea un número
+    studentCodeInput.addEventListener('keydown', (e) => {
+        // Permitir: backspace, delete, tab, escape, enter
+        if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+            // Permitir: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+            (e.keyCode === 65 && e.ctrlKey === true) ||
+            (e.keyCode === 67 && e.ctrlKey === true) ||
+            (e.keyCode === 86 && e.ctrlKey === true) ||
+            (e.keyCode === 88 && e.ctrlKey === true) ||
+            // Permitir: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            return;
+        }
+        // Bloquear si no es un número (0-9 del teclado principal o numérico)
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+    
+    // Eliminar cualquier carácter no numérico al pegar
+    studentCodeInput.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = e.clipboardData.getData('text');
+        const numericOnly = pasteData.replace(/\D/g, '');
+        studentCodeInput.value = numericOnly;
+    });
+    
     // Verificar que los elementos existen
     if (!enterBtn || !studentCodeInput || !welcomeError) {
         console.error('❌ Error: No se encontraron los elementos de bienvenida');
