@@ -1,0 +1,8 @@
+⚠️ COLOCA AQUÍ EL ARCHIVO PDF DEL CUENTO
+
+El archivo debe llamarse exactamente:
+El_Secreto_de_las_Bandejas_de_Dona_Martha.pdf
+
+Este archivo debe estar en esta carpeta (assets/) para que el lector de PDF funcione correctamente.
+
+Si el nombre del PDF es diferente, actualiza la ruta en main.js línea 117.

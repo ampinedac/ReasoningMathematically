@@ -1,0 +1,28 @@
+{
+  "name": "thinking-matematically",
+  "version": "1.0.0",
+  "description": "Piloto educativo sobre conmutatividad en multiplicación para niñas de 2° grado",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve -l 3000 .",
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "keywords": [
+    "educación",
+    "matemáticas",
+    "conmutatividad",
+    "multiplicación",
+    "piloto",
+    "firebase"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^12.9.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}

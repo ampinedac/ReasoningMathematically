@@ -1,0 +1,718 @@
+/* ========================================
+   ESTILOS GENERALES
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', cursive, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   PANTALLAS Y NAVEGACIÓN
+   ======================================== */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ========================================
+   TIPOGRAFÍA Y TÍTULOS
+   ======================================== */
+
+.main-title {
+    font-size: 3em;
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5),
+                 0 0 20px rgba(102, 126, 234, 0.6);
+    margin-bottom: 40px;
+    line-height: 1.3;
+    padding: 20px;
+    font-weight: bold;
+}
+
+.section-title {
+    font-size: 2em;
+    color: #667eea;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 30px;
+    border-bottom: 3px dashed #764ba2;
+    padding-bottom: 15px;
+}
+
+.student-code-display {
+    text-align: center;
+    font-size: 1.2em;
+    color: #764ba2;
+    font-weight: bold;
+}
+
+/* ========================================
+   PANTALLA DE BIENVENIDA
+   ======================================== */
+
+.welcome-box {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.chalk-text {
+    display: block;
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.chalk-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.3em;
+    border: 3px solid #667eea;
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+
+.chalk-input:focus {
+    outline: none;
+    border-color: #764ba2;
+}
+
+.error-text {
+    color: #e74c3c;
+    font-size: 1.1em;
+    margin-top: 10px;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+
+.btn {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: bold;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-secondary {
+    background: #95a5a6;
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    margin-top: 20px;
+}
+
+.btn-audio {
+    background: #e74c3c;
+    color: white;
+}
+
+/* ========================================
+   LECTOR DE PDF CON FLIP 3D
+   ======================================== */
+
+.pdf-container {
+    perspective: 2000px;
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 600px;
+}
+
+.book {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    transform-style: preserve-3d;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    transition: transform 0.8s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+.page.flipping {
+    transform: rotateY(-180deg);
+}
+
+.page-canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 2px solid #333;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: white;
+}
+
+.page-canvas.front {
+    transform: rotateY(0deg);
+}
+
+.page-canvas.back {
+    transform: rotateY(180deg);
+}
+
+.pdf-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.page-indicator {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #667eea;
+    min-width: 150px;
+    text-align: center;
+}
+
+#finishReadingBtn {
+    display: block;
+    margin: 30px auto;
+    font-size: 1.5em;
+    padding: 20px 40px;
+}
+
+/* Fallback para dispositivos con bajo rendimiento */
+@media (max-width: 768px) {
+    .book {
+        width: 100%;
+        max-width: 600px;
+        height: 450px;
+    }
+}
+
+/* ========================================
+   PROBLEMA Y CAJAS DE CONTENIDO
+   ======================================== */
+
+.problem-box {
+    background: #fff9e6;
+    border: 4px solid #f39c12;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 20px 0;
+}
+
+.problem-box h3 {
+    color: #e67e22;
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.problem-box p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.question {
+    font-size: 1.3em !important;
+    color: #c0392b;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.formula {
+    font-size: 2.5em;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: bold;
+    margin: 30px 0;
+    padding: 20px;
+    background: #ecf0f1;
+    border-radius: 10px;
+}
+
+/* ========================================
+   PIZARRA (CANVAS)
+   ======================================== */
+
+.evidence-section {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 15px;
+}
+
+.evidence-section h4 {
+    font-size: 1.5em;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.board-container {
+    margin: 20px 0;
+}
+
+.board-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+    justify-content: center;
+}
+
+.tool-btn {
+    padding: 10px 20px;
+    border: 2px solid #34495e;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: 'Comic Sans MS', cursive;
+    transition: all 0.2s;
+}
+
+.tool-btn:hover {
+    background: #ecf0f1;
+}
+
+.tool-btn.active {
+    background: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+.clear-btn {
+    background: #e74c3c;
+    color: white;
+    border-color: #c0392b;
+}
+
+.clear-btn:hover {
+    background: #c0392b;
+}
+
+.drawing-board {
+    display: block;
+    margin: 0 auto;
+    border: 3px solid #34495e;
+    border-radius: 10px;
+    background: white;
+    cursor: crosshair;
+    max-width: 100%;
+    height: auto;
+    touch-action: none; /* Evita scroll en touch */
+}
+
+/* ========================================
+   AUDIO
+   ======================================== */
+
+.audio-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.audio-status {
+    font-size: 1.1em;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* ========================================
+   ENVÍO Y ESTADO
+   ======================================== */
+
+.submit-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.status-text {
+    font-size: 1.2em;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+.status-text.success {
+    color: #27ae60;
+}
+
+.status-text.error {
+    color: #e74c3c;
+}
+
+.status-text.loading {
+    color: #3498db;
+}
+
+/* ========================================
+   TABLA (MOMENTO 2)
+   ======================================== */
+
+.table-container {
+    overflow-x: auto;
+    margin: 20px 0;
+}
+
+.panebonos-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1.1em;
+}
+
+.panebonos-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #5568d3;
+}
+
+.panebonos-table td {
+    padding: 15px;
+    text-align: center;
+    border: 2px solid #bdc3c7;
+    background: white;
+}
+
+.panebonos-table input[type="number"] {
+    width: 80px;
+    padding: 10px;
+    font-size: 1.2em;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive;
+}
+
+.panebonos-table input[type="number"]:disabled {
+    background: #ecf0f1;
+    border-color: #95a5a6;
+}
+
+.panebonos-table tr.disabled {
+    opacity: 0.5;
+}
+
+.panebonos-table tr.correct {
+    background: #d5f4e6;
+}
+
+.feedback-text {
+    font-size: 1.3em;
+    text-align: center;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+.feedback-text.error {
+    color: #e74c3c;
+}
+
+.feedback-text.success {
+    color: #27ae60;
+}
+
+/* ========================================
+   MOMENTO 3: RADIO BUTTONS
+   ======================================== */
+
+.question-section {
+    margin: 20px 0;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border: 3px solid #3498db;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.3s;
+}
+
+.radio-label:hover {
+    background: #ebf5fb;
+    transform: translateX(5px);
+}
+
+.radio-label input[type="radio"] {
+    width: 25px;
+    height: 25px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.prompt-box {
+    background: #d5f4e6;
+    border: 3px solid #27ae60;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.prompt-box p {
+    font-size: 1.3em;
+    color: #16a085;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ========================================
+   MOMENTO 4: ÍTEMS
+   ======================================== */
+
+.items-container {
+    margin: 30px 0;
+}
+
+.instruction {
+    font-size: 1.3em;
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+#itemsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.item-box {
+    background: white;
+    border: 4px solid #3498db;
+    border-radius: 15px;
+    padding: 25px;
+    transition: all 0.3s;
+}
+
+.item-box.hidden {
+    display: none;
+}
+
+.item-equation {
+    font-size: 2em;
+    text-align: center;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.item-input {
+    width: 80px;
+    padding: 10px;
+    font-size: 1.5em;
+    border: 3px solid #3498db;
+    border-radius: 8px;
+    text-align: center;
+    font-family: 'Comic Sans MS', cursive;
+    margin: 0 5px;
+}
+
+.item-input:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+}
+
+.item-feedback {
+    display: block;
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.item-feedback.correct {
+    color: #27ae60;
+}
+
+.item-feedback.incorrect {
+    color: #e74c3c;
+}
+
+/* ========================================
+   PANTALLA FINAL
+   ======================================== */
+
+.final-box {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    border-radius: 20px;
+    padding: 50px;
+    text-align: center;
+    margin: 30px 0;
+    color: white;
+}
+
+.final-box h3 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.final-question {
+    font-size: 1.8em;
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.thank-you {
+    font-size: 2em;
+    margin-top: 30px;
+}
+
+/* ========================================
+   RESPONSIVE (TABLETS Y MÓVILES)
+   ======================================== */
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2em;
+    }
+
+    .section-title {
+        font-size: 1.5em;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .drawing-board {
+        width: 100%;
+        height: 300px;
+    }
+
+    .board-tools {
+        flex-direction: column;
+    }
+
+    .tool-btn {
+        width: 100%;
+    }
+
+    .pdf-container {
+        min-height: 400px;
+    }
+
+    .item-equation {
+        font-size: 1.5em;
+    }
+
+    .item-input {
+        width: 60px;
+        font-size: 1.2em;
+    }
+
+    .panebonos-table {
+        font-size: 0.9em;
+    }
+
+    .panebonos-table input[type="number"] {
+        width: 60px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 1.5em;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    .formula {
+        font-size: 1.8em;
+    }
+}
