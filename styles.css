@@ -210,9 +210,8 @@ body {
     margin: 30px auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    min-height: 500px;
     position: relative;
     max-width: 850px;
 }
@@ -257,27 +256,50 @@ body {
 }
 
 .pdf-controls {
-    position: relative;
+    position: absolute;
     width: 100%;
     max-width: 750px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 0;
-    margin: 0 auto;
+    height: calc(100% - 10px);
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 5;
+}
+
+#prevPageBtn {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 1.2em;
+}
+
+#nextPageBtn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 1.2em;
 }
 
 .page-indicator {
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
     color: #667eea;
     text-align: center;
-    flex-grow: 1;
     background: white;
-    padding: 8px 15px;
+    padding: 8px 20px;
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    margin: 15px auto 0 auto;
+    width: fit-content;
 }
 
 #finishReadingBtn {
@@ -305,11 +327,11 @@ body {
     width: 100%;
     max-width: 750px;
     min-height: 350px;
-    max-height: 450px;
+    height: auto;
     background: linear-gradient(to bottom, #fff9f0 0%, #ffffff 100%);
     border: 3px solid #e67e22;
     border-radius: 15px;
-    padding: 30px 40px 60px 40px;
+    padding: 30px 65px 80px 65px;
     box-shadow: 0 10px 30px rgba(230, 126, 34, 0.2),
                 inset 0 0 50px rgba(255, 249, 240, 0.5);
     transition: all 0.3s ease;
