@@ -340,9 +340,26 @@ function initProblemQ1() {
             
         } catch (error) {
             console.error('Error al enviar:', error);
-            statusText.textContent = 'Error al guardar. Intenta de nuevo.';
+            console.error('Detalles del error:', error.message);
+            
+            let errorMsg = 'Error al guardar. ';
+            if (error.message.includes('Firebase no está configurado')) {
+                errorMsg += 'Firebase no disponible. ';
+            } else if (error.message.includes('network')) {
+                errorMsg += 'Revisa tu conexión a internet. ';
+            }
+            errorMsg += 'Puedes continuar aun así.';
+            
+            statusText.textContent = errorMsg;
             statusText.className = 'status-text error';
+            
+            // Permitir continuar aun con el error
             submitBtn.disabled = false;
+            
+            // Mostrar botón continuar de todas formas (modo sin conexión)
+            const continueBtn = document.getElementById('continueToM2Btn');
+            continueBtn.classList.remove('hidden');
+            continueBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     });
 }
@@ -929,6 +946,8 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
             mediaRecorder.addEventListener('stop', () => {
                 audioBlob = new Blob(audioChunks, { type: options.mimeType });
                 status.textContent = '🎤 Audio grabado';
+                status.classList.remove('error-text');
+                status.classList.add('success-text');
                 
                 // Detener todas las pistas del stream
                 stream.getTracks().forEach(track => track.stop());
@@ -939,10 +958,12 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
             recordBtn.classList.add('hidden');
             stopBtn.classList.remove('hidden');
             status.textContent = '🔴 Grabando...';
+            status.classList.remove('error-text');
             
         } catch (error) {
             console.error('Error al acceder al micrófono:', error);
-            status.textContent = 'Error: no se pudo acceder al micrófono';
+            status.textContent = '⚠️ No se pudo acceder al micrófono. Puedes continuar sin audio.';
+            status.classList.add('error-text');
         }
     });
     
@@ -965,26 +986,36 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
 // ========================================
 
 async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
+    // Verificar si Firebase está disponible
+    if (!db || !storage) {
+        throw new Error('Firebase no está configurado. Los datos no se pueden guardar en la nube, pero puedes continuar con la actividad.');
+    }
+    
     const timestamp = Date.now();
     let boardUrl = null;
     let audioUrl = null;
     
-    // Subir imagen de pizarra (si existe)
-    if (boardBlob) {
-        const boardPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.png`;
-        const boardRef = ref(storage, boardPath);
-        await uploadBytes(boardRef, boardBlob);
-        boardUrl = await getDownloadURL(boardRef);
-        console.log('Pizarra subida:', boardUrl);
-    }
-    
-    // Subir audio (si existe)
-    if (audioBlob) {
-        const audioPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.webm`;
-        const audioRef = ref(storage, audioPath);
-        await uploadBytes(audioRef, audioBlob);
-        audioUrl = await getDownloadURL(audioRef);
-        console.log('Audio subido:', audioUrl);
+    try {
+        // Subir imagen de pizarra (si existe)
+        if (boardBlob) {
+            const boardPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.png`;
+            const boardRef = ref(storage, boardPath);
+            await uploadBytes(boardRef, boardBlob);
+            boardUrl = await getDownloadURL(boardRef);
+            console.log('Pizarra subida:', boardUrl);
+        }
+        
+        // Subir audio (si existe)
+        if (audioBlob) {
+            const audioPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.webm`;
+            const audioRef = ref(storage, audioPath);
+            await uploadBytes(audioRef, audioBlob);
+            audioUrl = await getDownloadURL(audioRef);
+            console.log('Audio subido:', audioUrl);
+        }
+    } catch (storageError) {
+        console.error('Error al subir archivos:', storageError);
+        throw new Error('Error al subir archivos a Firebase Storage');
     }
     
     // Crear documento en Firestore

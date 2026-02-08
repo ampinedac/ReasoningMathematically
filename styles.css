@@ -128,6 +128,13 @@ body {
     margin-top: 10px;
 }
 
+.success-text {
+    color: #27ae60;
+    font-size: 1.1em;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
 /* ========================================
    BOTONES
    ======================================== */
