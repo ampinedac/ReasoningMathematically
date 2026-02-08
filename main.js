@@ -208,25 +208,60 @@ function renderStoryPage(pageNum) {
             // Página de título
             storyDiv.innerHTML = `
                 <div class="story-title-page">
+                    <button id="readStoryBtn" class="read-story-btn" title="Escuchar el cuento">🔊</button>
                     <h1 class="story-main-title">${cuentoData.titulo}</h1>
                     <p class="story-author">${cuentoData.autor}</p>
                     <div class="story-decoration">🥐 🧈 🫓</div>
                 </div>
             `;
+            
+            // Agregar evento al botón de leer
+            document.getElementById('readStoryBtn').addEventListener('click', readCurrentPage);
         } else {
             // Páginas del cuento
             storyDiv.innerHTML = `
                 <div class="story-page">
-                    <div class="page-number">Página ${pagina.numero}</div>
+                    <button id="readStoryBtn" class="read-story-btn" title="Escuchar esta página">🔊</button>
+                    <div class="story-illustration-top">${pagina.emojis || '📖'}</div>
                     <p class="story-text">${pagina.texto}</p>
-                    <div class="story-illustration">📖</div>
                 </div>
             `;
+            
+            // Agregar evento al botón de leer
+            document.getElementById('readStoryBtn').addEventListener('click', readCurrentPage);
         }
         
     } catch (error) {
         console.error('Error al renderizar página del cuento:', error);
     }
+}
+
+// Función para leer el texto con voz
+function readCurrentPage() {
+    // Detener cualquier lectura previa
+    window.speechSynthesis.cancel();
+    
+    const pagina = cuentoData.paginas[currentPage - 1];
+    const textoALeer = currentPage === 1 ? cuentoData.titulo : pagina.texto;
+    
+    const utterance = new SpeechSynthesisUtterance(textoALeer);
+    utterance.lang = 'es-MX'; // Español de México (Latino)
+    utterance.rate = 0.9; // Velocidad ligeramente más lenta para niños
+    utterance.pitch = 1.1; // Tono ligeramente más alto (más femenino)
+    
+    // Intentar usar una voz femenina en español
+    const voices = window.speechSynthesis.getVoices();
+    const femaleSpanishVoice = voices.find(voice => 
+        voice.lang.includes('es') && voice.name.toLowerCase().includes('female')
+    ) || voices.find(voice => 
+        voice.lang.includes('es') && !voice.name.toLowerCase().includes('male')
+    ) || voices.find(voice => voice.lang.includes('es'));
+    
+    if (femaleSpanishVoice) {
+        utterance.voice = femaleSpanishVoice;
+    }
+    
+    window.speechSynthesis.speak(utterance);
 }
 
 function flipPage(direction) {
