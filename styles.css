@@ -471,7 +471,6 @@ body {
     position: relative;
     width: 100%;
     max-width: 750px;
-    min-height: 350px;
     height: auto;
     background: linear-gradient(to bottom, #fff9f0 0%, #ffffff 100%);
     border: 3px solid #e67e22;
