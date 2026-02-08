@@ -492,7 +492,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 300px;
 }
 
 .read-story-btn {
@@ -544,7 +543,6 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-height: 300px;
 }
 
 .story-illustration-top {
@@ -580,7 +578,6 @@ body {
 @media (max-width: 768px) {
     .story-page-content {
         padding: 25px;
-        min-height: 350px;
     }
     
     .story-main-title {
