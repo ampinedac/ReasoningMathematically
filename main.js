@@ -109,6 +109,14 @@ function initWelcomeScreen() {
             return;
         }
         
+        // Validar que solo contenga números
+        if (!/^\d+$/.test(code)) {
+            console.log('⚠️ Código inválido, solo se permiten números');
+            welcomeError.textContent = 'Solo se permiten números';
+            welcomeError.classList.remove('hidden');
+            return;
+        }
+        
         // Ocultar error si había uno previo
         welcomeError.classList.add('hidden');
         
