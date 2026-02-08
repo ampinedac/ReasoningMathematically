@@ -1,5 +1,6 @@
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
+import { cuentoData } from './assets/cuento-data.js';
 
 console.log('✅ Firebase cargado correctamente');
 
@@ -8,10 +9,8 @@ console.log('✅ Firebase cargado correctamente');
 // ========================================
 
 let studentCode = null;
-let pdfDoc = null;
 let currentPage = 1;
 let totalPages = 0;
-let isFlipping = false;
 
 // Datos de Momento 2
 let tablePairs = [];
@@ -38,13 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Aplicación iniciada');
     console.log('📅 Fecha:', new Date().toLocaleString());
     
-    // Configurar PDF.js worker
-    if (typeof pdfjsLib !== 'undefined') {
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        console.log('✅ PDF.js configurado');
-    } else {
-        console.warn('⚠️ PDF.js no está cargado');
-    }
+    // Inicialización completada
+    console.log('✅ Sistema inicializado');
     
     // Verificar si ya hay código guardado
     const savedCode = localStorage.getItem('studentCode');
@@ -142,8 +136,8 @@ function showScreen(screenId) {
 function initMoment1() {
     document.getElementById('studentCodeM1').textContent = studentCode;
     
-    // Cargar PDF
-    loadPDF('./assets/El_Secreto_de_las_Bandejas_de_Dona_Martha.pdf');
+    // Cargar cuento HTML
+    loadCuento();
     
     // Botones de navegación del PDF
     document.getElementById('prevPageBtn').addEventListener('click', () => {
@@ -173,113 +167,90 @@ function initMoment1() {
 }
 
 // ========================================
-// LECTOR DE PDF CON FLIP 3D
+// LECTOR DE CUENTO HTML
 // ========================================
 
-async function loadPDF(url) {
+function loadCuento() {
     try {
-        const loadingTask = pdfjsLib.getDocument(url);
-        pdfDoc = await loadingTask.promise;
-        totalPages = pdfDoc.numPages;
-        
-        console.log(`PDF cargado: ${totalPages} páginas`);
+        totalPages = cuentoData.paginas.length;
+        console.log(`Cuento cargado: ${totalPages} páginas`);
         
         // Renderizar primera página
-        await renderPage(currentPage);
+        renderStoryPage(currentPage);
         updatePageIndicator();
         
     } catch (error) {
-        console.error('Error al cargar PDF:', error);
-        alert('No se pudo cargar el cuento. Asegúrate de que el archivo PDF esté en la carpeta /assets/');
+        console.error('Error al cargar cuento:', error);
+        alert('No se pudo cargar el cuento.');
     }
 }
 
-async function renderPage(pageNum) {
+function renderStoryPage(pageNum) {
     try {
-        const page = await pdfDoc.getPage(pageNum);
-        const canvas = document.getElementById('pageFrontCanvas');
-        const context = canvas.getContext('2d');
+        const frontCanvas = document.getElementById('pageFrontCanvas');
+        const container = frontCanvas.parentElement;
         
-        const viewport = page.getViewport({ scale: 1.3 });
+        // Ocultar canvas y mostrar contenido HTML
+        frontCanvas.style.display = 'none';
         
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
-        
-        await page.render(renderContext).promise;
-        
-    } catch (error) {
-        console.error('Error al renderizar página:', error);
-    }
-}
-
-async function flipPage(direction) {
-    if (isFlipping) return;
-    
-    isFlipping = true;
-    const pageElement = document.getElementById('page');
-    const frontCanvas = document.getElementById('pageFrontCanvas');
-    const backCanvas = document.getElementById('pageBackCanvas');
-    
-    // Detectar si el dispositivo soporta 3D o usar fallback
-    const use3D = window.matchMedia('(min-width: 769px)').matches && 
-                  CSS.supports('transform', 'rotateY(180deg)');
-    
-    if (use3D) {
-        // Animación 3D
-        const nextPage = currentPage + direction;
-        
-        // Renderizar la página siguiente en el back canvas
-        if (nextPage >= 1 && nextPage <= totalPages) {
-            const page = await pdfDoc.getPage(nextPage);
-            const context = backCanvas.getContext('2d');
-            const viewport = page.getViewport({ scale: 1.3 });
-            
-            backCanvas.height = viewport.height;
-            backCanvas.width = viewport.width;
-            
-            await page.render({
-                canvasContext: context,
-                viewport: viewport
-            }).promise;
+        // Buscar o crear div para el cuento
+        let storyDiv = document.getElementById('storyContent');
+        if (!storyDiv) {
+            storyDiv = document.createElement('div');
+            storyDiv.id = 'storyContent';
+            storyDiv.className = 'story-page-content';
+            container.insertBefore(storyDiv, frontCanvas);
         }
         
-        // Aplicar animación flip
-        pageElement.classList.add('flipping');
+        const pagina = cuentoData.paginas[pageNum - 1];
         
-        setTimeout(async () => {
+        if (pageNum === 1) {
+            // Página de título
+            storyDiv.innerHTML = `
+                <div class="story-title-page">
+                    <h1 class="story-main-title">${cuentoData.titulo}</h1>
+                    <p class="story-author">${cuentoData.autor}</p>
+                    <div class="story-decoration">🥐 🧈 🫓</div>
+                </div>
+            `;
+        } else {
+            // Páginas del cuento
+            storyDiv.innerHTML = `
+                <div class="story-page">
+                    <div class="page-number">Página ${pagina.numero}</div>
+                    <p class="story-text">${pagina.texto}</p>
+                    <div class="story-illustration">📖</div>
+                </div>
+            `;
+        }
+        
+    } catch (error) {
+        console.error('Error al renderizar página del cuento:', error);
+    }
+}
+
+function flipPage(direction) {
+    const nextPage = currentPage + direction;
+    
+    if (nextPage >= 1 && nextPage <= totalPages) {
+        const storyDiv = document.getElementById('storyContent');
+        
+        // Animación de salida
+        storyDiv.style.opacity = '0';
+        storyDiv.style.transform = 'translateX(' + (direction > 0 ? '-20px' : '20px') + ')';
+        
+        setTimeout(() => {
             currentPage = nextPage;
+            renderStoryPage(currentPage);
             
-            // Intercambiar canvases
-            const tempCanvas = document.createElement('canvas');
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCanvas.width = frontCanvas.width;
-            tempCanvas.height = frontCanvas.height;
-            tempCtx.drawImage(backCanvas, 0, 0);
+            // Animación de entrada
+            storyDiv.style.transform = 'translateX(' + (direction > 0 ? '20px' : '-20px') + ')';
             
-            const frontCtx = frontCanvas.getContext('2d');
-            frontCtx.clearRect(0, 0, frontCanvas.width, frontCanvas.height);
-            frontCtx.drawImage(tempCanvas, 0, 0);
+            setTimeout(() => {
+                storyDiv.style.opacity = '1';
+                storyDiv.style.transform = 'translateX(0)';
+            }, 50);
             
-            pageElement.classList.remove('flipping');
-            isFlipping = false;
-            updatePageIndicator();
-            checkLastPage();
-        }, 800);
-        
-    } else {
-        // Fallback: simple fade
-        frontCanvas.style.opacity = '0';
-        
-        setTimeout(async () => {
-            currentPage += direction;
-            await renderPage(currentPage);
-            frontCanvas.style.opacity = '1';
-            isFlipping = false;
             updatePageIndicator();
             checkLastPage();
         }, 300);
