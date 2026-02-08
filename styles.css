@@ -443,7 +443,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: block;
-    margin: 15px auto 0 auto;
+    margin: 2px auto 0 auto;
     width: fit-content;
 }
 
@@ -483,7 +483,7 @@ body {
     opacity: 1;
     transform: translateX(0);
     overflow-y: auto;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 .story-title-page {
