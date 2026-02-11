@@ -1121,6 +1121,9 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         throw new Error('Firebase no está configurado. Los datos no se pueden guardar en la nube, pero puedes continuar con la actividad.');
     }
     
+    console.log('📤 Iniciando envío:', { moment, tag, hasBoard: !!boardBlob, hasAudio: !!audioBlob });
+    console.log('🎤 Audio blob:', audioBlob);
+    
     const timestamp = Date.now();
     let boardUrl = null;
     let audioUrl = null;
@@ -1128,24 +1131,28 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
     try {
         // Subir imagen de pizarra (si existe)
         if (boardBlob) {
+            console.log('📸 Subiendo imagen...');
             const boardPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.png`;
             const boardRef = ref(storage, boardPath);
             await uploadBytes(boardRef, boardBlob);
             boardUrl = await getDownloadURL(boardRef);
-            console.log('Pizarra subida:', boardUrl);
+            console.log('✅ Pizarra subida:', boardUrl);
         }
         
         // Subir audio (si existe)
         if (audioBlob) {
+            console.log('🎤 Subiendo audio...', audioBlob.size, 'bytes');
             const audioPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.webm`;
             const audioRef = ref(storage, audioPath);
             await uploadBytes(audioRef, audioBlob);
             audioUrl = await getDownloadURL(audioRef);
-            console.log('Audio subido:', audioUrl);
+            console.log('✅ Audio subido:', audioUrl);
+        } else {
+            console.warn('⚠️ No hay audio blob para subir');
         }
     } catch (storageError) {
-        console.error('Error al subir archivos:', storageError);
-        throw new Error('Error al subir archivos a Firebase Storage');
+        console.error('❌ Error al subir archivos:', storageError);
+        throw storageError; // Propagar el error original, no uno genérico
     }
     
     // Crear documento en Firestore
@@ -1164,10 +1171,16 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         }
     };
     
-    const docRef = await addDoc(collection(db, 'submissions'), docData);
-    console.log('Documento guardado:', docRef.id);
+    console.log('💾 Creando documento en Firestore...', docData);
     
-    return docRef.id;
+    try {
+        const docRef = await addDoc(collection(db, 'submissions'), docData);
+        console.log('✅ Documento guardado con ID:', docRef.id);
+        return docRef.id;
+    } catch (firestoreError) {
+        console.error('❌ Error al guardar en Firestore:', firestoreError);
+        throw firestoreError;
+    }
 }
 
 // ========================================
