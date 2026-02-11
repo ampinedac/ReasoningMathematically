@@ -242,6 +242,26 @@ body {
     margin: 0 auto;
 }
 
+.confirmation-question {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.confirmation-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.confirmation-buttons .btn {
+    min-width: 150px;
+    font-size: 1.3em;
+}
+
 .chalk-text {
     display: block;
     font-size: 1.5em;

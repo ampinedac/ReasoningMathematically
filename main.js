@@ -1,6 +1,7 @@
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
 import { cuentoData } from './assets/cuento-data.js';
+import { estudiantesData } from './assets/estudiantes-data.js';
 
 console.log('✅ Firebase cargado correctamente');
 
@@ -9,6 +10,7 @@ console.log('✅ Firebase cargado correctamente');
 // ========================================
 
 let studentCode = null;
+let studentInfo = null; // Información del estudiante (nombre, apellidos, curso)
 let currentPage = 1;
 let totalPages = 0;
 
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initHomeScreen();
     initWelcomeScreen();
+    initConfirmationScreen();
 });
 
 // Manejador global de errores
@@ -144,16 +147,25 @@ function initWelcomeScreen() {
             return;
         }
         
+        // Verificar que el código existe en la base de datos
+        const estudiante = estudiantesData[code];
+        if (!estudiante) {
+            console.log('⚠️ Código no encontrado en la base de datos');
+            welcomeError.textContent = 'Código no encontrado. Verifica que esté bien escrito.';
+            welcomeError.classList.remove('hidden');
+            return;
+        }
+        
         // Ocultar error si había uno previo
         welcomeError.classList.add('hidden');
         
+        // Guardar temporalmente el código y la información del estudiante
         studentCode = code;
-        localStorage.setItem('studentCode', studentCode);
-        console.log('✅ Código guardado:', studentCode);
+        studentInfo = estudiante;
+        console.log('✅ Estudiante encontrado:', estudiante);
         
-        // Navegar a Momento 1
-        showScreen('moment1Screen');
-        initMoment1();
+        // Navegar a pantalla de confirmación
+        showConfirmationScreen();
     });
     
     studentCodeInput.addEventListener('keypress', (e) => {
@@ -164,6 +176,65 @@ function initWelcomeScreen() {
     });
     
     console.log('✅ Eventos enlazados correctamente');
+}
+
+// ========================================
+// PANTALLA DE CONFIRMACIÓN
+// ========================================
+
+function showConfirmationScreen() {
+    const confirmationQuestion = document.getElementById('confirmationQuestion');
+    
+    // Construir la pregunta basada en si es docente o estudiante
+    let pregunta = '';
+    if (studentInfo.curso === 'DOCENTE') {
+        pregunta = `¿Eres ${studentInfo.nombre} ${studentInfo.apellidos}?`;
+    } else {
+        pregunta = `¿Eres ${studentInfo.nombre} ${studentInfo.apellidos} del curso ${studentInfo.curso}?`;
+    }
+    
+    confirmationQuestion.textContent = pregunta;
+    showScreen('confirmationScreen');
+}
+
+function initConfirmationScreen() {
+    const confirmYesBtn = document.getElementById('confirmYesBtn');
+    const confirmNoBtn = document.getElementById('confirmNoBtn');
+    
+    if (!confirmYesBtn || !confirmNoBtn) {
+        console.error('❌ Error: No se encontraron los botones de confirmación');
+        return;
+    }
+    
+    confirmYesBtn.addEventListener('click', () => {
+        console.log('✅ Usuario confirmó identidad');
+        // Guardar el código en localStorage
+        localStorage.setItem('studentCode', studentCode);
+        console.log('✅ Código guardado:', studentCode);
+        
+        // Navegar a Momento 1
+        showScreen('moment1Screen');
+        initMoment1();
+    });
+    
+    confirmNoBtn.addEventListener('click', () => {
+        console.log('❌ Usuario rechazó identidad');
+        // Limpiar variables temporales
+        studentCode = null;
+        studentInfo = null;
+        
+        // Volver a la pantalla de bienvenida
+        showScreen('welcomeScreen');
+        
+        // Limpiar el input
+        const studentCodeInput = document.getElementById('studentCodeInput');
+        if (studentCodeInput) {
+            studentCodeInput.value = '';
+            studentCodeInput.focus();
+        }
+    });
+    
+    console.log('✅ Pantalla de confirmación inicializada');
 }
 
 // ========================================

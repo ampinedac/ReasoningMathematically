@@ -1,0 +1,51 @@
+// Base de datos de estudiantes
+export const estudiantesData = {
+    // Curso 201
+    "51003": { nombre: "AMELIA", apellidos: "BENAVIDES GUZMÁN", curso: "201" },
+    "52013": { nombre: "FRANCISCA", apellidos: "BETANCUR SÁNCHEZ", curso: "201" },
+    "51026": { nombre: "CAMILA", apellidos: "BUITRAGO ALAJMO", curso: "201" },
+    "52080": { nombre: "JULIANA", apellidos: "BUSTOS CASTELLANOS", curso: "201" },
+    "51041": { nombre: "VALERIA", apellidos: "DÍAZ MENDOZA", curso: "201" },
+    "51009": { nombre: "MARÍA JULIANA", apellidos: "DUARTE RODRÍGUEZ", curso: "201" },
+    "51049": { nombre: "JULIETA", apellidos: "ERAZO VELA", curso: "201" },
+    "51021": { nombre: "EVA", apellidos: "ESCOBAR ROMERO", curso: "201" },
+    "51034": { nombre: "MANUELA", apellidos: "GARCÍA GONZÁLEZ", curso: "201" },
+    "51015": { nombre: "ELENA", apellidos: "GARCÍA MERCADO", curso: "201" },
+    "51047": { nombre: "SILVANA", apellidos: "GONZÁLEZ MALAGÓN", curso: "201" },
+    "51024": { nombre: "LAURA CATALINA", apellidos: "JIMÉNEZ FRANCO", curso: "201" },
+    "53004": { nombre: "LETICIA", apellidos: "MANRIQUE PILONIETA", curso: "201" },
+    "51030": { nombre: "MARÍA DANIELA", apellidos: "MÉNDEZ RICO", curso: "201" },
+    "54037": { nombre: "SARA JEAN", apellidos: "MORGAN JAIME", curso: "201" },
+    "53070": { nombre: "GABRIELA", apellidos: "NEIRA BONILLA", curso: "201" },
+    "51064": { nombre: "VALENTINA", apellidos: "ORTIZ DOMÍNGUEZ", curso: "201" },
+    "52020": { nombre: "MARÍA LUCÍA", apellidos: "REYES PAVA", curso: "201" },
+    "51001": { nombre: "ELENA", apellidos: "SANTANA FIGUEROA", curso: "201" },
+    "51053": { nombre: "PAULA", apellidos: "VILLALOBOS GARCÍA", curso: "201" },
+    
+    // Curso 202
+    "51066": { nombre: "MARÍA LUCÍA", apellidos: "ACUÑA CUESTAS", curso: "202" },
+    "52009": { nombre: "VERÓNICA", apellidos: "ÁLVAREZ GARCÍA", curso: "202" },
+    "51038": { nombre: "MARIANA", apellidos: "BASTO TELLO", curso: "202" },
+    "51008": { nombre: "LUCIANA", apellidos: "BINCOS BEDOYA", curso: "202" },
+    "51005": { nombre: "MARÍA LUCÍA", apellidos: "CONCHA GARNICA", curso: "202" },
+    "51019": { nombre: "MARÍA", apellidos: "CURREA RAMÍREZ", curso: "202" },
+    "51004": { nombre: "JUANITA", apellidos: "GÓMEZ HERNÁNDEZ", curso: "202" },
+    "52010": { nombre: "IGNACIA", apellidos: "GOMILA COTTON", curso: "202" },
+    "52015": { nombre: "BELÉN", apellidos: "JASMINOY CHARRIA", curso: "202" },
+    "51035": { nombre: "EMILIA", apellidos: "JIMÉNEZ URIBE", curso: "202" },
+    "53046": { nombre: "ANTONELLA", apellidos: "LUQUE VELÁSQUEZ", curso: "202" },
+    "51017": { nombre: "SOFÍA", apellidos: "MARTÍNEZ BOTERO", curso: "202" },
+    "51025": { nombre: "ZOE", apellidos: "MARTÍNEZ CORREA", curso: "202" },
+    "51002": { nombre: "VIOLETA", apellidos: "MUÑOZ CASTELLANOS", curso: "202" },
+    "53051": { nombre: "MARÍA EMILIA", apellidos: "PARDO FERNÁNDEZ", curso: "202" },
+    "51006": { nombre: "MARÍA PAZ", apellidos: "PIÑEROS ORTIZ", curso: "202" },
+    "52035": { nombre: "LUCÍA", apellidos: "RODRÍGUEZ CARABALLO", curso: "202" },
+    "51007": { nombre: "VICTORIA", apellidos: "RODRÍGUEZ ULLOA", curso: "202" },
+    "51022": { nombre: "KAYLA", apellidos: "URREA STERLING", curso: "202" },
+    "51020": { nombre: "JULIETA", apellidos: "VILLALBA VÁSQUEZ", curso: "202" },
+    "51057": { nombre: "GUADALUPE", apellidos: "ZAMORA WILLS", curso: "202" },
+    
+    // Docentes
+    "98100": { nombre: "ÁNGELA", apellidos: "PINEDA", curso: "DOCENTE" },
+    "832511": { nombre: "EMERSON", apellidos: "LEÓN", curso: "DOCENTE" }
+};
