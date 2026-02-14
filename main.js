@@ -72,10 +72,12 @@ function initHomeScreen() {
     
     const activity0Btn = document.getElementById('activity0Btn');
     
-    activity0Btn.addEventListener('click', () => {
-        console.log('📌 Abriendo Actividad 0 en nueva pestaña');
-        window.open('actividad0.html', '_blank');
-    });
+    if (activity0Btn) {
+        activity0Btn.addEventListener('click', () => {
+            console.log('📌 Abriendo Actividad 0 en nueva pestaña');
+            window.open('actividad0.html', '_blank');
+        });
+    }
 }
 
 // ========================================

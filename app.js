@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== CONFIGURATION =====
     const CONFIG = {
-        totalPages: 11, // Cover + TOC + 9 story pages + Back cover
+        totalPages: 9, // 9 story pages only
         soundEnabled: true,
         soundFrequency: 800,
         soundDuration: 100
@@ -14,19 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== STATE =====
     let currentPage = 0;
-    let darkMode = localStorage.getItem('darkMode') === 'true';
 
     // ===== DOM ELEMENTS =====
     const pages = document.querySelectorAll('#flipbook .page');
     const elements = {
-        darkModeToggle: document.getElementById('darkModeToggle'),
         progressBar: document.getElementById('progressBar'),
         progressText: document.getElementById('progressText'),
         prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn'),
-        startBtn: document.getElementById('startBtn'),
-        restartBtn: document.getElementById('restartBtn'),
-        tocItems: document.querySelectorAll('.toc-item')
+        nextBtn: document.getElementById('nextBtn')
     };
 
     // ===== WEB AUDIO API - PAGE TURN SOUND =====
@@ -55,32 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ===== DARK MODE =====
-    function toggleDarkMode() {
-        darkMode = !darkMode;
-        document.body.classList.toggle('dark-mode', darkMode);
-        localStorage.setItem('darkMode', darkMode);
-        elements.darkModeToggle.textContent = darkMode ? '☀️' : '🌙';
-    }
-
-    function initDarkMode() {
-        if (darkMode) {
-            document.body.classList.add('dark-mode');
-            elements.darkModeToggle.textContent = '☀️';
-        }
-    }
-
     // ===== PROGRESS INDICATOR =====
     function updateProgress(page) {
         currentPage = page;
-        const progress = (page / CONFIG.totalPages) * 100;
+        const progress = ((page + 1) / CONFIG.totalPages) * 100;
         elements.progressBar.style.setProperty('--progress', `${progress}%`);
         elements.progressBar.querySelector('::before')?.style.setProperty('width', `${progress}%`);
         
         // Update CSS variable for progress bar
         document.documentElement.style.setProperty('--flipbook-progress', `${progress}%`);
         
-        elements.progressText.textContent = `Página ${page} de ${CONFIG.totalPages}`;
+        elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
         
         // Update navigation buttons
         updateNavButtons(page);
@@ -88,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateNavButtons(page) {
         elements.prevBtn.disabled = page === 0;
-        elements.nextBtn.disabled = page === CONFIG.totalPages;
+        elements.nextBtn.disabled = page === CONFIG.totalPages - 1;
     }
 
     // ===== PAGE DISPLAY =====
@@ -110,12 +90,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     oldPage.classList.remove('turning-forward');
                     oldPage.classList.add('turned');
-                }, 800);
+                }, 1200);
             }
             
             setTimeout(() => {
                 newPage.classList.add('active');
-            }, 400);
+            }, 600);
             
         } else {
             // Voltear hacia atrás
@@ -128,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (oldPage) {
                     oldPage.classList.remove('active');
                 }
-            }, 800);
+            }, 1200);
         }
         
         currentPage = pageIndex;
@@ -207,35 +187,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ===== TABLE OF CONTENTS =====
-    function initTableOfContents() {
-        elements.tocItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const targetPage = parseInt(item.getAttribute('data-page'));
-                const direction = targetPage > currentPage ? 'forward' : 'backward';
-                goToPage(targetPage, direction);
-            });
-        });
-    }
-
     // ===== EVENT LISTENERS =====
     function initEventListeners() {
-        // Dark mode toggle
-        elements.darkModeToggle.addEventListener('click', toggleDarkMode);
-
         // Navigation buttons
         elements.prevBtn.addEventListener('click', previousPage);
         elements.nextBtn.addEventListener('click', nextPage);
-
-        // Start button (on cover)
-        elements.startBtn.addEventListener('click', () => {
-            goToPage(1, 'forward');
-        });
-
-        // Restart button (on back cover)
-        elements.restartBtn.addEventListener('click', () => {
-            goToPage(0, 'backward');
-        });
     }
 
     // ===== CUSTOM PROGRESS BAR STYLE =====
@@ -251,11 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== INITIALIZATION =====
     function init() {
-        initDarkMode();
         addProgressBarStyle();
         initEventListeners();
+        initKeyboardNavigation();
+        initTouchSupport();
         
-        // Show first page (cover) without animation
+        // Show first story page without animation
         pages[0].classList.add('active');
         updateProgress(0);
 
