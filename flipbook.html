@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Secreto de las Bandejas de Doña Martha</title>
+    <link rel="stylesheet" href="flipbook-styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <button id="darkModeToggle" class="dark-toggle" aria-label="Cambiar modo oscuro">🌙</button>
+    
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">Página 1 de 11</div>
+    </div>
+
+    <!-- Book Container -->
+    <div class="book-container">
+        <div id="flipbook">
+            <!-- Cover Page -->
+            <div class="page cover-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="0" title="Escuchar">🔊</button>
+                    <div class="cover-emoji">🥐</div>
+                    <h1 class="cover-title">El Secreto de las Bandejas de Doña Martha</h1>
+                    <p class="cover-subtitle">By Angela Pineda con asistencia de Gemini Storybook</p>
+                    <button class="start-btn" onclick="nextPage()">Comenzar a leer 📖</button>
+                </div>
+            </div>
+
+            <!-- Table of Contents -->
+            <div class="page toc-page">
+                <div class="page-content">
+                    <h2 class="toc-title">Índice</h2>
+                    <ul class="toc-list">
+                        <li onclick="goToPage(3)">1. El barrio de Doña Martha</li>
+                        <li onclick="goToPage(4)">2. La magia de la mañana</li>
+                        <li onclick="goToPage(5)">3. Lucas, el ayudante</li>
+                        <li onclick="goToPage(6)">4. ¡Al horno!</li>
+                        <li onclick="goToPage(7)">5. El momento dorado</li>
+                        <li onclick="goToPage(8)">6. El orden importa</li>
+                        <li onclick="goToPage(9)">7. Contando con amor</li>
+                        <li onclick="goToPage(10)">8. Compartir con el corazón</li>
+                        <li onclick="goToPage(11)">9. La mejor receta</li>
+                    </ul>
+                    <div class="page-number">Índice</div>
+                </div>
+            </div>
+
+            <!-- Story Pages -->
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="3" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">🏠🧀🧈😊</div>
+                    <h3 class="page-title">El barrio de Doña Martha</h3>
+                    <p class="page-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Martha. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                    <div class="page-number">1</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="4" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">🌅👩‍🍳🎵🫓</div>
+                    <h3 class="page-title">La magia de la mañana</h3>
+                    <p class="page-text">Cada mañana, muy temprano, Doña Martha comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
+                    <div class="page-number">2</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="5" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">👦⚪☁️🧀</div>
+                    <h3 class="page-title">Lucas, el ayudante</h3>
+                    <p class="page-text">Lucas, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                    <div class="page-number">3</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="6" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">🔥✨🏘️👃</div>
+                    <h3 class="page-title">¡Al horno!</h3>
+                    <p class="page-text">¡Es hora de entrar al calor! Doña Martha coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
+                    <div class="page-number">4</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="7" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">🔔💨🥐✨</div>
+                    <h3 class="page-title">El momento dorado</h3>
+                    <p class="page-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                    <div class="page-number">5</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="8" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">📋💝🍽️✨</div>
+                    <h3 class="page-title">El orden importa</h3>
+                    <p class="page-text">Ahora viene la parte más importante para Doña Martha: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
+                    <div class="page-number">6</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="9" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">👆🔢🫓🫓</div>
+                    <h3 class="page-title">Contando con amor</h3>
+                    <p class="page-text">Lucas ayuda a contar para que todo sea justo. "Uno para Clara, uno para Mateo, uno para Sofía…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                    <div class="page-number">7</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="10" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">💬❤️🤝✨</div>
+                    <h3 class="page-title">Compartir con el corazón</h3>
+                    <p class="page-text">"Mira, Lucas", dice Doña Martha con ternura. "Cuando ponemos las cosas en orden y las repartimos con cuidado, nos aseguramos de que nadie se quede sin su bocado. Compartir con orden es compartir con el corazón".</p>
+                    <div class="page-number">8</div>
+                </div>
+            </div>
+
+            <div class="page story-page">
+                <div class="page-content">
+                    <button class="audio-btn" data-page="11" title="Escuchar esta página">🔊</button>
+                    <div class="page-emoji">👧👦🥐😊</div>
+                    <h3 class="page-title">La mejor receta</h3>
+                    <p class="page-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Martha y Lucas sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el orden al compartir.</p>
+                    <div class="page-number">9</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+        <button id="prevBtn" class="nav-btn" onclick="prevPage()" aria-label="Página anterior">◀ Anterior</button>
+        <button id="nextBtn" class="nav-btn" onclick="nextPage()" aria-label="Página siguiente">Siguiente ▶</button>
+    </div>
+
+    <script src="flipbook-app.js"></script>
+</body>
+</html>

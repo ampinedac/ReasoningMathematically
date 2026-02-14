@@ -212,6 +212,84 @@
                     </div>
                 </div>
 
+                <button id="continueToM2Btn" class="btn btn-success hidden">Continuar al Momento 2</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 2: Tabla + Problema 1 -->
+    <section id="moment2Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 2: Organizando pandebonos</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
+            </div>
+
+            <!-- TABLA PROGRESIVA -->
+            <div id="tableSection">
+                <h3>Completa la tabla con los totales:</h3>
+                <div class="table-container">
+                    <table id="panebonos-table" class="panebonos-table">
+                        <thead>
+                            <tr>
+                                <th colspan="3">Martha</th>
+                                <th colspan="3">Lucas</th>
+                            </tr>
+                            <tr>
+                                <th># Filas</th>
+                                <th># Columnas</th>
+                                <th>Total</th>
+                                <th># Filas</th>
+                                <th># Columnas</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Filas generadas dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <p id="tableFeedback" class="feedback-text"></p>
+                <button id="submitTableBtn" class="btn btn-primary hidden">Enviar tabla</button>
+            </div>
+
+            <!-- PROBLEMA 1 -->
+            <div id="problem1Section" class="hidden">
+                <div class="problem-box">
+                    <h3>Problema 1</h3>
+                    <p class="question">Observa nuevamente los resultados y responde: si ambos lo hacen de maneras diferentes ¿cómo es que siempre les da el mismo número de pandebonos?</p>
+                </div>
+
+                <!-- PIZARRA Y AUDIO -->
+                <div class="evidence-section">
+                    <h4>Explica tu respuesta:</h4>
+                    
+                    <!-- Pizarra -->
+                    <div class="board-container">
+                        <div class="board-tools">
+                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                        </div>
+                        <canvas id="boardCanvasM2P1" class="drawing-board" width="800" height="500"></canvas>
+                    </div>
+
+                    <!-- Audio -->
+                    <div class="audio-controls">
+                        <button id="recordBtnM2P1" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM2P1" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM2P1" class="audio-status"></span>
+                    </div>
+
+                    <!-- Enviar -->
+                    <div class="submit-section">
+                        <p id="statusM2P1" class="status-text"></p>
+                        <button id="submitM2P1" class="btn btn-primary" disabled>Enviar</button>
+                    </div>
+                </div>
+
                 <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
             </div>
         </div>
