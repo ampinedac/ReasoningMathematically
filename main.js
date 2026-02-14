@@ -73,8 +73,8 @@ function initHomeScreen() {
     const activity0Btn = document.getElementById('activity0Btn');
     
     activity0Btn.addEventListener('click', () => {
-        console.log('📌 Navegando a Actividad 0');
-        showScreen('welcomeScreen');
+        console.log('📌 Abriendo Actividad 0 en nueva pestaña');
+        window.open('actividad0.html', '_blank');
     });
 }
 
@@ -160,11 +160,13 @@ function initWelcomeScreen() {
         welcomeError.classList.add('hidden');
         
         // Guardar temporalmente el código y la información del estudiante
+        // NO guardar en localStorage hasta que se confirme
         studentCode = code;
         studentInfo = estudiante;
         console.log('✅ Estudiante encontrado:', estudiante);
+        console.log('⏯️ Navegando a pantalla de confirmación...');
         
-        // Navegar a pantalla de confirmación
+        // Navegar a pantalla de confirmación - REQUERIDO, no se puede saltar
         showConfirmationScreen();
     });
     
@@ -183,7 +185,20 @@ function initWelcomeScreen() {
 // ========================================
 
 function showConfirmationScreen() {
+    console.log('🔍 Mostrando pantalla de confirmación...');
+    console.log('📋 Información del estudiante:', studentInfo);
+    
     const confirmationQuestion = document.getElementById('confirmationQuestion');
+    
+    if (!confirmationQuestion) {
+        console.error('❌ Error: No se encontró el elemento confirmationQuestion');
+        return;
+    }
+    
+    if (!studentInfo) {
+        console.error('❌ Error: No hay información del estudiante');
+        return;
+    }
     
     // Construir la pregunta basada en si es docente o estudiante
     let pregunta = '';
@@ -194,7 +209,9 @@ function showConfirmationScreen() {
     }
     
     confirmationQuestion.textContent = pregunta;
+    console.log('❓ Pregunta de confirmación:', pregunta);
     showScreen('confirmationScreen');
+    console.log('✅ Pantalla de confirmación mostrada');
 }
 
 function initConfirmationScreen() {
@@ -208,9 +225,16 @@ function initConfirmationScreen() {
     
     confirmYesBtn.addEventListener('click', () => {
         console.log('✅ Usuario confirmó identidad');
-        // Guardar el código en localStorage
+        
+        if (!studentCode || !studentInfo) {
+            console.error('❌ Error: No hay código o información del estudiante');
+            showScreen('welcomeScreen');
+            return;
+        }
+        
+        // SOLO AHORA guardar el código en localStorage
         localStorage.setItem('studentCode', studentCode);
-        console.log('✅ Código guardado:', studentCode);
+        console.log('💾 Código guardado en localStorage:', studentCode);
         
         // Navegar a Momento 1
         showScreen('moment1Screen');
@@ -219,9 +243,14 @@ function initConfirmationScreen() {
     
     confirmNoBtn.addEventListener('click', () => {
         console.log('❌ Usuario rechazó identidad');
+        
         // Limpiar variables temporales
         studentCode = null;
         studentInfo = null;
+        
+        // Limpiar localStorage también por seguridad
+        localStorage.removeItem('studentCode');
+        console.log('🧹 Datos limpiados');
         
         // Volver a la pantalla de bienvenida
         showScreen('welcomeScreen');
@@ -242,13 +271,29 @@ function initConfirmationScreen() {
 // ========================================
 
 function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
+    console.log(`🔄 Navegando a pantalla: ${screenId}`);
+    
+    const targetScreen = document.getElementById(screenId);
+    if (!targetScreen) {
+        console.error(`❌ Error: No se encontró la pantalla con ID: ${screenId}`);
+        return;
+    }
+    
+    // Remover 'active' de todas las pantallas
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+    });
+    
+    // Agregar 'active' a la pantalla objetivo
+    targetScreen.classList.add('active');
+    console.log(`✅ Pantalla ${screenId} activada`);
     
     // Actualizar código estudiantil en encabezados
-    document.querySelectorAll('.student-code-display span').forEach(span => {
-        span.textContent = studentCode;
-    });
+    if (studentCode) {
+        document.querySelectorAll('.student-code-display span').forEach(span => {
+            span.textContent = studentCode;
+        });
+    }
 }
 
 // ========================================
@@ -358,32 +403,57 @@ function renderStoryPage(pageNum) {
     }
 }
 
-// Función para leer el texto con voz
+// Función para leer el texto con voz mejorada
 function readCurrentPage() {
     // Detener cualquier lectura previa
-    window.speechSynthesis.cancel();
+    if (typeof responsiveVoice !== 'undefined') {
+        responsiveVoice.cancel();
+    } else {
+        window.speechSynthesis.cancel();
+    }
     
     const pagina = cuentoData.paginas[currentPage - 1];
     const textoALeer = currentPage === 1 ? cuentoData.titulo : pagina.texto;
     
-    const utterance = new SpeechSynthesisUtterance(textoALeer);
-    utterance.lang = 'es-MX'; // Español de México (Latino)
-    utterance.rate = 0.9; // Velocidad ligeramente más lenta para niños
-    utterance.pitch = 1.1; // Tono ligeramente más alto (más femenino)
-    
-    // Intentar usar una voz femenina en español
-    const voices = window.speechSynthesis.getVoices();
-    const femaleSpanishVoice = voices.find(voice => 
-        voice.lang.includes('es') && voice.name.toLowerCase().includes('female')
-    ) || voices.find(voice => 
-        voice.lang.includes('es') && !voice.name.toLowerCase().includes('male')
-    ) || voices.find(voice => voice.lang.includes('es'));
-    
-    if (femaleSpanishVoice) {
-        utterance.voice = femaleSpanishVoice;
+    // Usar ResponsiveVoice si está disponible (voz más expresiva)
+    if (typeof responsiveVoice !== 'undefined') {
+        // Opciones de ResponsiveVoice
+        // Voces: "Mexican Spanish Female" (neutral latino), "Spanish Latin American Female"
+        responsiveVoice.speak(textoALeer, "Mexican Spanish Female", {
+            pitch: 1.05,
+            rate: 0.88,
+            volume: 1,
+            onstart: function() {
+                console.log("🔊 Iniciando lectura...");
+                const btn = document.getElementById('readStoryBtn');
+                if (btn) btn.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+            },
+            onend: function() {
+                console.log("✅ Lectura completada");
+                const btn = document.getElementById('readStoryBtn');
+                if (btn) btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            }
+        });
+    } else {
+        // Fallback a la voz nativa del navegador
+        const utterance = new SpeechSynthesisUtterance(textoALeer);
+        utterance.lang = 'es-MX';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
+        
+        const voices = window.speechSynthesis.getVoices();
+        const femaleSpanishVoice = voices.find(voice => 
+            voice.lang.includes('es') && voice.name.toLowerCase().includes('female')
+        ) || voices.find(voice => 
+            voice.lang.includes('es') && !voice.name.toLowerCase().includes('male')
+        ) || voices.find(voice => voice.lang.includes('es'));
+        
+        if (femaleSpanishVoice) {
+            utterance.voice = femaleSpanishVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
     }
-    
-    window.speechSynthesis.speak(utterance);
 }
 
 function flipPage(direction) {

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 0 - ¿El orden de los factores altera el producto?</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥐</text></svg>">
+    <link rel="stylesheet" href="styles.css?v=2026021401">
+    <!-- ResponsiveVoice para voces más expresivas -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
+</head>
+<body>
+    <!-- PANTALLA DE BIENVENIDA -->
+    <section id="welcomeScreen" class="screen active">
+        <h1 class="main-title">Actividad 0</h1>
+        <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
+        <div class="container">
+            <div class="welcome-box">
+                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+                <p id="welcomeError" class="error-text hidden"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PANTALLA DE CONFIRMACIÓN -->
+    <section id="confirmationScreen" class="screen">
+        <h1 class="main-title">Confirmación</h1>
+        <div class="container">
+            <div class="welcome-box">
+                <p id="confirmationQuestion" class="confirmation-question"></p>
+                <div class="confirmation-buttons">
+                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
+                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 1: Cuento + Problema Q1 -->
+    <section id="moment1Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 1: El cuento de Doña Martha</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
+            </div>
+
+            <!-- FLIPBOOK 3D DEL CUENTO -->
+            <div id="flipbookSection">
+                <!-- Dark Mode Toggle -->
+                <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Alternar modo oscuro">🌙</button>
+                
+                <!-- Progress Indicator -->
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <div class="progress-text" id="progressText">Página 0 de 11</div>
+                </div>
+
+                <!-- Flipbook Container -->
+                <div class="flipbook-wrapper">
+                    <div id="flipbook">
+                        
+                        <!-- Cover Page -->
+                        <div class="page cover-page">
+                            <div class="cover-content">
+                                <div class="cover-emoji">🥐</div>
+                                <h1 class="cover-title">El Secreto de las Bandejas de Doña Martha</h1>
+                                <p class="cover-subtitle">By Angela Pineda con asistencia de Gemini Storybook</p>
+                                <button class="start-btn" id="startBtn">Comenzar a leer</button>
+                            </div>
+                        </div>
+
+                        <!-- Table of Contents -->
+                        <div class="page toc-page">
+                            <h2 class="toc-title">Índice</h2>
+                            <ul class="toc-list">
+                                <li class="toc-item" data-page="2">1. El lugar más feliz 🏠</li>
+                                <li class="toc-item" data-page="3">2. La magia de la mañana 🌅</li>
+                                <li class="toc-item" data-page="4">3. El pequeño ayudante 👦</li>
+                                <li class="toc-item" data-page="5">4. Al horno 🔥</li>
+                                <li class="toc-item" data-page="6">5. Los soles dorados 🔔</li>
+                                <li class="toc-item" data-page="7">6. El orden del amor 📋</li>
+                                <li class="toc-item" data-page="8">7. Contando con el corazón 👆</li>
+                                <li class="toc-item" data-page="9">8. La lección de Martha 💬</li>
+                                <li class="toc-item" data-page="10">9. Compartir con cariño 👧</li>
+                            </ul>
+                        </div>
+
+                        <!-- Story Page 1 -->
+                        <div class="page story-page">
+                            <div class="page-number">1</div>
+                            <div class="emoji-large">🏠🧀🧈😊</div>
+                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Martha. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                        </div>
+
+                        <!-- Story Page 2 -->
+                        <div class="page story-page">
+                            <div class="page-number">2</div>
+                            <div class="emoji-large">🌅👩‍🍳🎵🫓</div>
+                            <p class="story-text">Cada mañana, muy temprano, Doña Martha comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
+                        </div>
+
+                        <!-- Story Page 3 -->
+                        <div class="page story-page">
+                            <div class="page-number">3</div>
+                            <div class="emoji-large">👦⚪☁️🧀</div>
+                            <p class="story-text">Lucas, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                        </div>
+
+                        <!-- Story Page 4 -->
+                        <div class="page story-page">
+                            <div class="page-number">4</div>
+                            <div class="emoji-large">🔥✨🏘️👃</div>
+                            <p class="story-text">¡Es hora de entrar al calor! Doña Martha coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
+                        </div>
+
+                        <!-- Story Page 5 -->
+                        <div class="page story-page">
+                            <div class="page-number">5</div>
+                            <div class="emoji-large">🔔💨🥐✨</div>
+                            <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                        </div>
+
+                        <!-- Story Page 6 -->
+                        <div class="page story-page">
+                            <div class="page-number">6</div>
+                            <div class="emoji-large">📋💝🍽️✨</div>
+                            <p class="story-text">Ahora viene la parte más importante para Doña Martha: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
+                        </div>
+
+                        <!-- Story Page 7 -->
+                        <div class="page story-page">
+                            <div class="page-number">7</div>
+                            <div class="emoji-large">👆🔢🫓🫓</div>
+                            <p class="story-text">Lucas ayuda a contar para que todo sea justo. "Uno para Clara, uno para Mateo, uno para Sofía…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                        </div>
+
+                        <!-- Story Page 8 -->
+                        <div class="page story-page">
+                            <div class="page-number">8</div>
+                            <div class="emoji-large">💬❤️🤝✨</div>
+                            <p class="story-text">"Mira, Lucas", dice Doña Martha con ternura. "Cuando ponemos las cosas en orden y las repartimos con cuidado, nos aseguramos de que nadie se quede sin su bocado. Compartir con orden es compartir con el corazón".</p>
+                        </div>
+
+                        <!-- Story Page 9 -->
+                        <div class="page story-page">
+                            <div class="page-number">9</div>
+                            <div class="emoji-large">👧👦🥐😊</div>
+                            <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Martha y Lucas sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el orden al compartir.</p>
+                        </div>
+
+                        <!-- Back Cover -->
+                        <div class="page back-cover">
+                            <div class="back-cover-content">
+                                <div class="emoji-large">✨📖✨</div>
+                                <h2>Fin de la historia</h2>
+                                <p class="thanks-text">¡Gracias por leer!</p>
+                                <button class="restart-btn" id="restartBtn">Leer de nuevo</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="controls">
+                    <button id="prevBtn" class="nav-btn" aria-label="Página anterior">← Anterior</button>
+                    <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">Siguiente →</button>
+                </div>
+                
+                <button id="finishReadingBtn" class="btn btn-primary" style="margin-top: 20px;">Ya terminé la lectura</button>
+            </div>
+
+            <!-- PROBLEMA Q1 -->
+            <div id="problemQ1Section" class="hidden">
+                <div class="problem-box">
+                    <h3>Problema</h3>
+                    <p>Doña Martha hizo <strong>22 pandebonos</strong> y quiere organizarlos en bandejas para venderlos.</p>
+                    <p><strong>Martha dice:</strong> "Los voy a poner en <strong>2 filas</strong> con <strong>11 pandebonos</strong> en cada fila."</p>
+                    <p><strong>Lucas dice:</strong> "¡No! Mejor ponlos en <strong>11 filas</strong> con <strong>2 pandebonos</strong> en cada fila."</p>
+                    <p class="question">❓ ¿Quién tiene razón? ¿Por qué?</p>
+                </div>
+
+                <!-- PIZARRA Y AUDIO -->
+                <div class="evidence-section">
+                    <h4>Explica tu respuesta:</h4>
+                    
+                    <!-- Pizarra -->
+                    <div class="board-container">
+                        <div class="board-tools">
+                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                        </div>
+                        <canvas id="boardCanvasM2P1" class="drawing-board" width="800" height="500"></canvas>
+                    </div>
+
+                    <!-- Audio -->
+                    <div class="audio-controls">
+                        <button id="recordBtnM2P1" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM2P1" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM2P1" class="audio-status"></span>
+                    </div>
+
+                    <!-- Enviar -->
+                    <div class="submit-section">
+                        <p id="statusM2P1" class="status-text"></p>
+                        <button id="submitM2P1" class="btn btn-primary" disabled>Enviar</button>
+                    </div>
+                </div>
+
+                <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 3: Veracidad + Evidencia -->
+    <section id="moment3Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 3: ¿Es verdad o no?</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM3"></span></p>
+            </div>
+
+            <div class="problem-box">
+                <h3>Observa lo siguiente:</h3>
+                <p class="formula"><span id="formulaA">a</span> × <span id="formulaB">b</span> = <span id="formulaB2">b</span> × <span id="formulaA2">a</span></p>
+                
+                <div class="question-section">
+                    <p class="question">¿Crees que esta afirmación es verdadera?</p>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="truthQ" value="yes">
+                            Sí, creo que es verdadera
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="truthQ" value="unsure">
+                            No estoy segura
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="truthQ" value="no">
+                            Creo que no es verdadera
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="promptSection" class="hidden">
+                <div class="prompt-box">
+                    <p id="promptText"></p>
+                </div>
+
+                <!-- PIZARRA Y AUDIO -->
+                <div class="evidence-section">
+                    <h4>Usa la pizarra y el audio para explicar:</h4>
+                    
+                    <!-- Pizarra -->
+                    <div class="board-container">
+                        <div class="board-tools">
+                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                        </div>
+                        <canvas id="boardCanvasM3Q2" class="drawing-board" width="800" height="500"></canvas>
+                    </div>
+
+                    <!-- Audio -->
+                    <div class="audio-controls">
+                        <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM3Q2" class="audio-status"></span>
+                    </div>
+
+                    <!-- Enviar -->
+                    <div class="submit-section">
+                        <p id="statusM3Q2" class="status-text"></p>
+                        <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar</button>
+                    </div>
+                </div>
+
+                <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 4: 6 ítems -->
+    <section id="moment4Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 4: Completa las ecuaciones</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+            </div>
+
+            <div class="items-container">
+                <p class="instruction">Completa cada ecuación. Solo avanzas cuando aciertes:</p>
+                
+                <div id="itemsWrapper">
+                    <!-- Item 1 -->
+                    <div class="item-box" data-item="1">
+                        <p class="item-equation">3 × 7 = <input type="number" class="item-input" data-answer="7" min="0" max="99"> × 3</p>
+                        <span class="item-feedback"></span>
+                    </div>
+                    
+                    <!-- Item 2 -->
+                    <div class="item-box hidden" data-item="2">
+                        <p class="item-equation"><input type="number" class="item-input" data-answer="9" min="0" max="99"> × 5 = 5 × 9</p>
+                        <span class="item-feedback"></span>
+                    </div>
+                    
+                    <!-- Item 3 -->
+                    <div class="item-box hidden" data-item="3">
+                        <p class="item-equation">4 × <input type="number" class="item-input" data-answer="8" min="0" max="99"> = 8 × 4</p>
+                        <span class="item-feedback"></span>
+                    </div>
+                    
+                    <!-- Item 4 -->
+                    <div class="item-box hidden" data-item="4">
+                        <p class="item-equation">6 × 2 = <input type="number" class="item-input" data-answer="2" min="0" max="99"> × 6</p>
+                        <span class="item-feedback"></span>
+                    </div>
+                    
+                    <!-- Item 5 -->
+                    <div class="item-box hidden" data-item="5">
+                        <p class="item-equation">9 × 4 = 4 × <input type="number" class="item-input" data-answer="9" min="0" max="99"></p>
+                        <span class="item-feedback"></span>
+                    </div>
+                    
+                    <!-- Item 6 -->
+                    <div class="item-box hidden" data-item="6">
+                        <p class="item-equation">2 × 8 = <input type="number" class="item-input" data-answer="8" min="0" max="99"> × 2</p>
+                        <span class="item-feedback"></span>
+                    </div>
+                </div>
+
+                <p id="moment4Status" class="status-text"></p>
+            </div>
+
+            <div id="finalQuestionSection" class="hidden">
+                <div class="final-box">
+                    <h3>Entonces…</h3>
+                    <p class="final-question">¿El orden de los factores altera el producto o no?</p>
+                    <p class="thank-you">¡Gracias por participar! 🎉</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script type="module" src="main.js?v=2026021401"></script>
+    <script src="app.js"></script>
+</body>
+</html>
