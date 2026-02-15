@@ -831,6 +831,9 @@ function tryPairing(draggedTray, targetTray, isLeftSide) {
         draggedTray.classList.add('paired');
         targetTray.classList.add('paired');
         
+        // Hacer el wrapper draggable para mover el par junto
+        setupWrapperDragging(wrapper);
+        
         // Registrar emparejamiento
         addPairing(id1, id2);
         
@@ -849,6 +852,57 @@ function addPairing(id1, id2) {
     
     console.log('Emparejamientos actuales:', pairs);
 }
+
+// Variables para arrastrar wrappers
+let isDraggingWrapper = false;
+let currentDraggedWrapper = null;
+let wrapperStartX, wrapperStartY, wrapperInitialLeft, wrapperInitialTop;
+
+function setupWrapperDragging(wrapper) {
+    wrapper.addEventListener('mousedown', function(e) {
+        // Solo si el clic es directamente en el wrapper (no en las bandejas)
+        if (e.target === this || e.target.classList.contains('tray-pair-wrapper')) {
+            isDraggingWrapper = true;
+            currentDraggedWrapper = this;
+            
+            wrapperStartX = e.clientX;
+            wrapperStartY = e.clientY;
+            wrapperInitialLeft = parseInt(this.style.left) || 0;
+            wrapperInitialTop = parseInt(this.style.top) || 0;
+            
+            this.style.cursor = 'grabbing';
+            this.style.zIndex = '1000';
+            
+            console.log('📦 Arrastrando par completo');
+            
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    });
+}
+
+// Event listeners globales para arrastrar wrappers
+document.addEventListener('mousemove', function(e) {
+    if (!isDraggingWrapper || !currentDraggedWrapper) return;
+    
+    const deltaX = e.clientX - wrapperStartX;
+    const deltaY = e.clientY - wrapperStartY;
+    
+    currentDraggedWrapper.style.left = (wrapperInitialLeft + deltaX) + 'px';
+    currentDraggedWrapper.style.top = (wrapperInitialTop + deltaY) + 'px';
+});
+
+document.addEventListener('mouseup', function(e) {
+    if (!isDraggingWrapper || !currentDraggedWrapper) return;
+    
+    currentDraggedWrapper.style.cursor = 'grab';
+    currentDraggedWrapper.style.zIndex = 'auto';
+    
+    console.log('📦 Par movido');
+    
+    isDraggingWrapper = false;
+    currentDraggedWrapper = null;
+});
 
 function verifyPairings() {
     const feedback = document.getElementById('traysFeedback');
