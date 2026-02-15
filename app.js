@@ -183,15 +183,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
         
-        // Notificar a main.js sobre el cambio de página
-        console.log(`📖 [app.js] updateProgress llamado con página ${page + 1}/${CONFIG.totalPages}`);
-        console.log(`📖 [app.js] window.onFlipbookPageChange existe:`, !!window.onFlipbookPageChange);
-        
-        if (window.onFlipbookPageChange) {
-            console.log(`📖 [app.js] Llamando a window.onFlipbookPageChange(${page + 1}, ${CONFIG.totalPages})`);
-            window.onFlipbookPageChange(page + 1, CONFIG.totalPages);
-        } else {
-            console.log(`⚠️ [app.js] window.onFlipbookPageChange NO ESTÁ DEFINIDO`);
+        // LÓGICA SIMPLE Y DIRECTA DEL BOTÓN
+        const finishBtn = document.getElementById('finishReadingBtn');
+        if (finishBtn) {
+            if (page === CONFIG.totalPages - 1) {
+                // ÚLTIMA PÁGINA - MOSTRAR BOTÓN
+                console.log('✅ ÚLTIMA PÁGINA - MOSTRANDO BOTÓN');
+                finishBtn.style.display = 'block';
+                finishBtn.style.visibility = 'visible';
+                finishBtn.style.opacity = '1';
+            } else {
+                // NO ES ÚLTIMA PÁGINA - OCULTAR BOTÓN
+                finishBtn.style.display = 'none';
+            }
         }
         
         // Update navigation buttons

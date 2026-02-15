@@ -309,61 +309,13 @@ function initMoment1() {
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
     
     // El flipbook ya está en el HTML y app.js maneja la animación
-    // No necesitamos cargar ni renderizar nada aquí
+    // app.js también maneja la lógica del botón directamente
     
-    // Configurar callback para recibir notificaciones de cambio de página
-    window.onFlipbookPageChange = function(currentPage, totalPages) {
-        console.log(`📄 Página actual: ${currentPage}/${totalPages}`);
-        const finishBtn = document.getElementById('finishReadingBtn');
-        console.log('🔍 Botón encontrado:', finishBtn);
-        console.log('🔍 Botón clases:', finishBtn?.className);
-        console.log('🔍 Botón display:', finishBtn ? window.getComputedStyle(finishBtn).display : 'N/A');
-        
-        if (finishBtn) {
-            if (currentPage === totalPages) {
-                console.log('✅ Última página alcanzada - Mostrando botón');
-                finishBtn.classList.remove('hidden');
-                finishBtn.style.display = 'block';
-                finishBtn.style.visibility = 'visible';
-                finishBtn.style.opacity = '1';
-                console.log('🔍 Después de mostrar - display:', window.getComputedStyle(finishBtn).display);
-                console.log('🔍 Después de mostrar - visibility:', window.getComputedStyle(finishBtn).visibility);
-            } else {
-                finishBtn.classList.add('hidden');
-                finishBtn.style.display = 'none';
-            }
-        } else {
-            console.error('❌ No se encontró el botón finishReadingBtn');
-        }
-    };
-    
-    console.log('✅ Callback onFlipbookPageChange configurado');
-    
-    // Verificar estado inicial del flipbook después de un pequeño delay
-    setTimeout(() => {
-        console.log('🔍 Verificando estado inicial del flipbook...');
-        const flipbookPages = document.querySelectorAll('#flipbook .page');
-        console.log('🔍 Total de páginas en flipbook:', flipbookPages.length);
-        
-        let activePage = 0;
-        flipbookPages.forEach((page, index) => {
-            if (page.classList.contains('active')) {
-                activePage = index + 1;
-                console.log('🔍 Página activa inicial:', activePage);
-            }
-        });
-        
-        // Si ya está en la última página, mostrar el botón inmediatamente
-        if (activePage === flipbookPages.length && window.onFlipbookPageChange) {
-            console.log('🔍 Ya está en la última página, llamando al callback...');
-            window.onFlipbookPageChange(activePage, flipbookPages.length);
-        }
-    }, 100);
-    
-    // Botón "Ya terminé la lectura"
+    // Botón "Ya terminé la lectura" - Solo manejar el click
     const finishReadingBtn = document.getElementById('finishReadingBtn');
     if (finishReadingBtn) {
         finishReadingBtn.addEventListener('click', () => {
+            console.log('🔘 Click en botón "Ya terminé la lectura"');
             document.getElementById('flipbookSection').style.display = 'none';
             const problemSection = document.getElementById('problemQ1Section');
             if (problemSection) {
@@ -371,6 +323,9 @@ function initMoment1() {
                 initProblemQ1();
             }
         });
+        console.log('✅ Event listener del botón configurado');
+    } else {
+        console.error('❌ No se encontró el botón finishReadingBtn');
     }
     
     // Botón continuar a M2
