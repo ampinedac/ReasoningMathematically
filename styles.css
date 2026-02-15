@@ -1626,8 +1626,8 @@ section.screen.active {
     padding: 30px;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     border-radius: 15px;
-    min-height: 500px;
-    height: 600px;
+    min-height: 600px;
+    height: 650px;
     margin: 20px auto;
     position: relative;
     max-width: 1000px;
@@ -1650,6 +1650,7 @@ section.screen.active {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    user-select: none;
 }
 
 .tray-card:active {
@@ -1657,9 +1658,10 @@ section.screen.active {
 }
 
 .tray-card.dragging {
-    opacity: 0.6;
+    opacity: 0.7;
     transform: scale(1.05);
     z-index: 1000;
+    cursor: grabbing;
 }
 
 .tray-card.paired {

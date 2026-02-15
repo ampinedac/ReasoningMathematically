@@ -506,7 +506,7 @@ function createTraysGame() {
     
     const traysArea = document.getElementById('traysArea');
     const containerWidth = traysArea.offsetWidth || 900;
-    const containerHeight = 500;
+    const containerHeight = 600;
     
     // Configurar eventos del contenedor para permitir drop
     traysArea.addEventListener('dragover', (e) => {
@@ -519,6 +519,26 @@ function createTraysGame() {
         return false;
     });
     
+    // Sistema de grid para evitar sobreposiciones
+    const cols = 4;
+    const rows = 2;
+    const cellWidth = containerWidth / cols;
+    const cellHeight = containerHeight / rows;
+    const positions = [];
+    
+    // Generar posiciones posibles
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            positions.push({
+                x: col * cellWidth + (cellWidth - 220) / 2,
+                y: row * cellHeight + (cellHeight - 240) / 2
+            });
+        }
+    }
+    
+    // Barajar posiciones
+    positions.sort(() => Math.random() - 0.5);
+    
     // Crear bandejas
     traysData.forEach((data, index) => {
         const trayCard = document.createElement('div');
@@ -526,13 +546,11 @@ function createTraysGame() {
         trayCard.dataset.id = data.id;
         trayCard.dataset.pairId = data.pairId;
         trayCard.dataset.total = data.total;
-        trayCard.draggable = true;
         
-        // Posición aleatoria inicial
-        const randomX = Math.random() * (containerWidth - 200) + 20;
-        const randomY = Math.random() * (containerHeight - 220) + 20;
-        trayCard.style.left = randomX + 'px';
-        trayCard.style.top = randomY + 'px';
+        // Usar posición del grid (sin sobreposiciones)
+        const pos = positions[index];
+        trayCard.style.left = pos.x + 'px';
+        trayCard.style.top = pos.y + 'px';
         
         // Grid de arepas (SIN etiqueta para que las niñas cuenten)
         const grid = document.createElement('div');
@@ -562,11 +580,8 @@ function createTraysGame() {
         trayCard.appendChild(grid);
         traysArea.appendChild(trayCard);
         
-        // Drag events
-        trayCard.addEventListener('dragstart', handleDragStart);
-        trayCard.addEventListener('dragend', handleDragEnd);
-        trayCard.addEventListener('dragover', handleDragOver);
-        trayCard.addEventListener('drop', handleDrop);
+        // Eventos de mouse para arrastrar (más control que drag & drop nativo)
+        setupDragging(trayCard);
         
         trays.push({
             element: trayCard,
@@ -580,73 +595,83 @@ function createTraysGame() {
     document.getElementById('verifyTraysBtn').addEventListener('click', verifyPairings);
 }
 
-let draggedTray = null;
-let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
+// Sistema de arrastre con mouse (más confiable que drag & drop nativo)
+let currentDraggedTray = null;
+let isDraggingMouse = false;
+let startX = 0;
+let startY = 0;
+let initialLeft = 0;
+let initialTop = 0;
 
-function handleDragStart(e) {
-    console.log('🎯 Drag start');
-    draggedTray = this;
-    isDragging = true;
-    this.classList.add('dragging');
-    this.style.zIndex = '1000';
-    
-    // Guardar offset para posicionamiento preciso
-    const rect = this.getBoundingClientRect();
-    const containerRect = this.parentElement.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
+function setupDragging(trayCard) {
+    trayCard.addEventListener('mousedown', function(e) {
+        // Verificar si la bandeja ya está emparejada
+        if (this.classList.contains('paired')) {
+            return; // No permitir mover bandejas ya emparejadas
+        }
+        
+        currentDraggedTray = this;
+        isDraggingMouse = true;
+        
+        // Guardar posición inicial
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseInt(this.style.left) || 0;
+        initialTop = parseInt(this.style.top) || 0;
+        
+        // Estilo visual
+        this.classList.add('dragging');
+        this.style.zIndex = '1000';
+        this.style.cursor = 'grabbing';
+        
+        console.log('🎯 Inicio arrastre:', this.dataset.id);
+        
+        e.preventDefault();
+    });
 }
 
-function handleDragEnd(e) {
-    console.log('🎯 Drag end');
-    this.classList.remove('dragging');
-    this.style.zIndex = 'auto';
-    isDragging = false;
+document.addEventListener('mousemove', function(e) {
+    if (!isDraggingMouse || !currentDraggedTray) return;
+    
+    // Calcular nueva posición
+    const deltaX = e.clientX - startX;
+    const deltaY = e.clientY - startY;
+    
+    currentDraggedTray.style.left = (initialLeft + deltaX) + 'px';
+    currentDraggedTray.style.top = (initialTop + deltaY) + 'px';
+});
+
+document.addEventListener('mouseup', function(e) {
+    if (!isDraggingMouse || !currentDraggedTray) return;
+    
+    console.log('🎯 Fin arrastre');
+    
+    // Restaurar estilo
+    currentDraggedTray.classList.remove('dragging');
+    currentDraggedTray.style.zIndex = 'auto';
+    currentDraggedTray.style.cursor = 'grab';
     
     // Verificar si se soltó sobre otra bandeja
-    checkForPairing(e);
-}
+    checkForPairingMouse(e, currentDraggedTray);
+    
+    isDraggingMouse = false;
+    currentDraggedTray = null;
+});
 
-function handleDragOver(e) {
-    if (e.preventDefault) {
-        e.preventDefault();
-    }
-    e.dataTransfer.dropEffect = 'move';
-    return false;
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    console.log('🎯 Drop detectado');
-    
-    if (draggedTray && draggedTray !== this) {
-        tryPairing(draggedTray, this);
-    }
-    
-    return false;
-}
-
-function checkForPairing(e) {
-    if (!draggedTray) return;
-    
-    // Obtener elemento bajo el cursor
+function checkForPairingMouse(e, draggedTray) {
+    // Obtener todas las bandejas bajo el cursor
     const elementsBelow = document.elementsFromPoint(e.clientX, e.clientY);
     
-    // Buscar si hay otra bandeja debajo
+    // Buscar otra bandeja (que no sea la que estamos arrastrando)
     for (let elem of elementsBelow) {
-        if (elem.classList.contains('tray-card') && elem !== draggedTray) {
-            console.log('🎯 Bandeja encontrada debajo');
+        if (elem.classList && elem.classList.contains('tray-card') && elem !== draggedTray) {
+            console.log('🔍 Bandeja encontrada debajo:', elem.dataset.id);
             tryPairing(draggedTray, elem);
-            break;
+            return;
         }
     }
+    
+    console.log('❌ No hay bandeja debajo');
 }
 
 function tryPairing(tray1, tray2) {
@@ -655,18 +680,21 @@ function tryPairing(tray1, tray2) {
     const id1 = parseInt(tray1.dataset.id);
     const id2 = parseInt(tray2.dataset.id);
     
-    console.log(`🔍 Intentando emparejar: ${id1} (${pairId1}) con ${id2} (${pairId2})`);
+    console.log(`🔍 Comparando: Bandeja ${id1} (pareja ${pairId1}) con Bandeja ${id2} (pareja ${pairId2})`);
     
     // Si son una pareja válida, juntarlas
     if (pairId1 === pairId2 && id1 !== id2) {
-        console.log('✅ ¡Son pareja!');
+        console.log('✅ ¡SON PAREJA! Uniendo...');
         
-        // Posicionar cerca de la segunda bandeja
-        const targetRect = tray2.getBoundingClientRect();
+        // Posicionar junto a la segunda bandeja (arriba a la derecha)
+        const rect2 = tray2.getBoundingClientRect();
         const containerRect = tray2.parentElement.getBoundingClientRect();
         
-        tray1.style.left = (targetRect.left - containerRect.left + 30) + 'px';
-        tray1.style.top = (targetRect.top - containerRect.top + 30) + 'px';
+        const newLeft = (rect2.left - containerRect.left) + 40;
+        const newTop = (rect2.top - containerRect.top) - 40;
+        
+        tray1.style.left = newLeft + 'px';
+        tray1.style.top = newTop + 'px';
         
         // Marcar como emparejadas visualmente
         tray1.classList.add('paired');
@@ -674,8 +702,10 @@ function tryPairing(tray1, tray2) {
         
         // Registrar emparejamiento
         addPairing(id1, id2);
+        
+        console.log('✨ Bandejas emparejadas correctamente');
     } else {
-        console.log('❌ No son pareja');
+        console.log('❌ No son pareja (diferentes grupos o misma bandeja)');
     }
 }
 
