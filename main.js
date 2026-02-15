@@ -329,6 +329,7 @@ function initMoment1() {
         finishReadingBtn.addEventListener('click', () => {
             console.log('🔘 Click en botón "Ya terminé la lectura"');
             document.getElementById('flipbookSection').style.display = 'none';
+            finishReadingBtn.style.display = 'none'; // Ocultar el botón también
             const problemSection = document.getElementById('problemQ1Section');
             if (problemSection) {
                 problemSection.classList.remove('hidden');
@@ -338,19 +339,6 @@ function initMoment1() {
         console.log('✅ Event listener del botón configurado');
     } else {
         console.error('❌ No se encontró el botón finishReadingBtn');
-    }
-    
-    // Botón continuar a M2
-    const continueBtn = document.getElementById('continueToM2Btn');
-    if (continueBtn) {
-        continueBtn.addEventListener('click', () => {
-            // Ocultar el botón de lectura al pasar a M2
-            if (finishReadingBtn) {
-                finishReadingBtn.style.display = 'none';
-            }
-            showScreen('moment2Screen');
-            initMoment2();
-        });
     }
 }
 
@@ -411,7 +399,11 @@ function initProblemQ1() {
     
     // Enviar evidencia
     submitBtn.addEventListener('click', async () => {
+        // Bloquear botón inmediatamente
         submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
@@ -427,7 +419,7 @@ function initProblemQ1() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅';
+            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
             statusText.className = 'status-text success';
             
             // Bloquear edición
@@ -440,14 +432,16 @@ function initProblemQ1() {
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Mostrar botón continuar y hacer scroll hacia él
-            const continueBtn = document.getElementById('continueToM2Btn');
-            continueBtn.classList.remove('hidden');
-            
-            // Scroll suave hacia el botón
+            // Continuar automáticamente al Momento 2 después de un breve delay
             setTimeout(() => {
-                continueBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
+                // Ocultar botón de lectura si existe
+                const finishReadingBtn = document.getElementById('finishReadingBtn');
+                if (finishReadingBtn) {
+                    finishReadingBtn.style.display = 'none';
+                }
+                showScreen('moment2Screen');
+                initMoment2();
+            }, 1000);
             
         } catch (error) {
             console.error('Error al enviar:', error);
@@ -463,7 +457,11 @@ function initProblemQ1() {
             
             statusText.textContent = errorMsg;
             statusText.className = 'status-text error';
+            
+            // Rehabilitar botón solo si hay error
             submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
         }
     });
 }
@@ -505,6 +503,17 @@ function createTraysGame() {
     const containerWidth = traysArea.offsetWidth || 900;
     const containerHeight = 500;
     
+    // Configurar eventos del contenedor para permitir drop
+    traysArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        return false;
+    });
+    
+    traysArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        return false;
+    });
+    
     // Crear bandejas
     traysData.forEach((data, index) => {
         const trayCard = document.createElement('div');
@@ -531,10 +540,22 @@ function createTraysGame() {
         grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
         grid.style.gridTemplateRows = `repeat(${data.rows}, 1fr)`;
         
+        // Ajustar tamaño de emojis según filas/columnas para que todo quepa
+        const maxDimension = Math.max(data.rows, data.cols);
+        let emojiSize = '1.2em';
+        if (maxDimension >= 6) {
+            emojiSize = '0.8em';
+        } else if (maxDimension >= 5) {
+            emojiSize = '0.9em';
+        } else if (maxDimension >= 4) {
+            emojiSize = '1.0em';
+        }
+        
         // Emojis de arepas
         for (let i = 0; i < data.total; i++) {
             const arepa = document.createElement('span');
             arepa.textContent = '🫓';
+            arepa.style.fontSize = emojiSize;
             grid.appendChild(arepa);
         }
         
