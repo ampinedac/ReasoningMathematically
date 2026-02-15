@@ -680,11 +680,11 @@ function tryPairing(tray1, tray2) {
     const id1 = parseInt(tray1.dataset.id);
     const id2 = parseInt(tray2.dataset.id);
     
-    console.log(`🔍 Comparando: Bandeja ${id1} (pareja ${pairId1}) con Bandeja ${id2} (pareja ${pairId2})`);
+    console.log(`🔍 Uniendo: Bandeja ${id1} (pareja ${pairId1}) con Bandeja ${id2} (pareja ${pairId2})`);
     
-    // Si son una pareja válida, juntarlas
-    if (pairId1 === pairId2 && id1 !== id2) {
-        console.log('✅ ¡SON PAREJA! Uniendo...');
+    // Permitir emparejar cualquier bandeja con cualquier otra (excepto consigo misma)
+    if (id1 !== id2) {
+        console.log('✅ Uniendo bandejas...');
         
         // Posicionar junto a la segunda bandeja (arriba a la derecha)
         const rect2 = tray2.getBoundingClientRect();
@@ -696,16 +696,16 @@ function tryPairing(tray1, tray2) {
         tray1.style.left = newLeft + 'px';
         tray1.style.top = newTop + 'px';
         
-        // Marcar como emparejadas visualmente
+        // Marcar como emparejadas visualmente (NO indica si es correcto)
         tray1.classList.add('paired');
         tray2.classList.add('paired');
         
-        // Registrar emparejamiento
+        // Registrar emparejamiento (la validación se hace al verificar)
         addPairing(id1, id2);
         
-        console.log('✨ Bandejas emparejadas correctamente');
+        console.log('✨ Bandejas agrupadas - la validación ocurrirá al verificar');
     } else {
-        console.log('❌ No son pareja (diferentes grupos o misma bandeja)');
+        console.log('❌ No puedes emparejar una bandeja consigo misma');
     }
 }
 
