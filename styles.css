@@ -1428,6 +1428,40 @@ section.screen.active {
     border-radius: 10px;
 }
 
+.envelope-equation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 25px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    flex-wrap: wrap;
+}
+
+.envelope-equation .envelope {
+    display: inline-block;
+    vertical-align: middle;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.envelope-equation .operator {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.envelope-equation .number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #e67e22;
+    background: white;
+    padding: 5px 15px;
+    border-radius: 8px;
+    border: 3px solid #f39c12;
+}
+
 /* ========================================
    PIZARRA (CANVAS)
    ======================================== */

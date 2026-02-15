@@ -241,73 +241,186 @@ Argumenta tu respuesta.
         </div>
     </section>
 
-    <!-- MOMENTO 3: Veracidad + Evidencia -->
+    <!-- MOMENTO 3: Los sobres misteriosos -->
     <section id="moment3Screen" class="screen">
         <div class="container">
             <div class="header">
-                <h2 class="section-title">Momento 3: ¿Es verdad o no?</h2>
+                <h2 class="section-title">Momento 3: Los sobres misteriosos</h2>
                 <p class="student-code-display">Código: <span id="studentCodeM3"></span></p>
             </div>
 
             <div class="problem-box">
-                <h3>Observa lo siguiente:</h3>
-                <p class="formula"><span id="formulaA">a</span> × <span id="formulaB">b</span> = <span id="formulaB2">b</span> × <span id="formulaA2">a</span></p>
-                
-                <div class="question-section">
-                    <p class="question">¿Crees que esta afirmación es verdadera?</p>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="truthQ" value="yes">
-                            Sí, creo que es verdadera
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="truthQ" value="unsure">
-                            No estoy segura
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="truthQ" value="no">
-                            Creo que no es verdadera
-                        </label>
+                <p><strong>En cada sobre hay un número secreto.</strong></p>
+                <ul style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    <li>Los sobres del mismo color guardan el mismo número.</li>
+                    <li>Los sobres de diferente color guardan números diferentes.</li>
+                </ul>
+            </div>
+
+            <!-- PREGUNTA 1 -->
+            <div id="question1Section">
+                <div class="problem-box">
+                    <h3>Pregunta 1</h3>
+                    <div class="envelope-equation">
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">×</span>
+                        <span class="number">4</span>
+                        <span class="operator">=</span>
+                        <span class="number">4</span>
+                        <span class="operator">×</span>
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="question-section">
+                        <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="yes">
+                                Sí, creo que es verdadera
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="unsure">
+                                No estoy segura
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="no">
+                                Creo que no es verdadera
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="promptSection1" class="hidden">
+                    <div class="prompt-box">
+                        <p id="promptText1"></p>
+                    </div>
+
+                    <!-- PIZARRA Y AUDIO -->
+                    <div class="evidence-section">
+                        <h4>Usa el audio para explicar (pizarra opcional):</h4>
+                        
+                        <!-- Pizarra -->
+                        <div class="board-container">
+                            <div class="board-tools">
+                                <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                                <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                                <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                                <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                                <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                            </div>
+                            <canvas id="boardCanvasM3Q1" class="drawing-board" width="800" height="500"></canvas>
+                        </div>
+
+                        <!-- Audio -->
+                        <div class="audio-controls">
+                            <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                            <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                            <span id="audioStatusM3Q1" class="audio-status"></span>
+                        </div>
+
+                        <!-- Enviar -->
+                        <div class="submit-section">
+                            <p id="statusM3Q1" class="status-text"></p>
+                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar Pregunta 1</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="promptSection" class="hidden">
-                <div class="prompt-box">
-                    <p id="promptText"></p>
-                </div>
-
-                <!-- PIZARRA Y AUDIO -->
-                <div class="evidence-section">
-                    <h4>Usa la pizarra y el audio para explicar:</h4>
+            <!-- PREGUNTA 2 (oculta hasta que se envíe la primera) -->
+            <div id="question2Section" class="hidden">
+                <div class="problem-box">
+                    <h3>Pregunta 2</h3>
+                    <div class="envelope-equation">
+                        <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#64B5F6" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">×</span>
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">=</span>
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">×</span>
+                        <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#64B5F6" opacity="0.7"/>
+                        </svg>
+                    </div>
                     
-                    <!-- Pizarra -->
-                    <div class="board-container">
-                        <div class="board-tools">
-                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
-                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
-                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
-                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
-                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                    <div class="question-section">
+                        <p class="question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ2" value="yes">
+                                Sí
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ2" value="unsure">
+                                No estoy segura
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ2" value="no">
+                                No
+                            </label>
                         </div>
-                        <canvas id="boardCanvasM3Q2" class="drawing-board" width="800" height="500"></canvas>
-                    </div>
-
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM3Q2" class="audio-status"></span>
-                    </div>
-
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM3Q2" class="status-text"></p>
-                        <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar</button>
                     </div>
                 </div>
 
-                <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
+                <div id="promptSection2" class="hidden">
+                    <div class="prompt-box">
+                        <p id="promptText2"></p>
+                    </div>
+
+                    <!-- PIZARRA Y AUDIO -->
+                    <div class="evidence-section">
+                        <h4>Usa el audio para explicar (pizarra opcional):</h4>
+                        
+                        <!-- Pizarra -->
+                        <div class="board-container">
+                            <div class="board-tools">
+                                <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                                <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                                <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                                <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                                <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                            </div>
+                            <canvas id="boardCanvasM3Q2" class="drawing-board" width="800" height="500"></canvas>
+                        </div>
+
+                        <!-- Audio -->
+                        <div class="audio-controls">
+                            <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
+                            <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                            <span id="audioStatusM3Q2" class="audio-status"></span>
+                        </div>
+
+                        <!-- Enviar -->
+                        <div class="submit-section">
+                            <p id="statusM3Q2" class="status-text"></p>
+                            <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar Pregunta 2</button>
+                        </div>
+                    </div>
+
+                    <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
+                </div>
             </div>
         </div>
     </section>

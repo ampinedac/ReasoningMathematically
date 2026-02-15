@@ -760,19 +760,21 @@ function initMoment2Audio() {
 function initMoment3() {
     document.getElementById('studentCodeM3').textContent = studentCode;
     
-    // Generar números aleatorios
-    m3_a = randomInt(1, 10);
-    m3_b = randomInt(1, 10);
-    
-    document.querySelectorAll('#formulaA, #formulaA2').forEach(el => el.textContent = m3_a);
-    document.querySelectorAll('#formulaB, #formulaB2').forEach(el => el.textContent = m3_b);
-    
-    // Radio buttons
-    const radios = document.querySelectorAll('input[name="truthQ"]');
-    radios.forEach(radio => {
+    // Radio buttons para Pregunta 1
+    const radiosQ1 = document.querySelectorAll('input[name="truthQ1"]');
+    radiosQ1.forEach(radio => {
         radio.addEventListener('change', (e) => {
             m3_choice = e.target.value;
-            showPrompt(m3_choice);
+            showPrompt1(m3_choice);
+        });
+    });
+    
+    // Radio buttons para Pregunta 2
+    const radiosQ2 = document.querySelectorAll('input[name="truthQ2"]');
+    radiosQ2.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const choice = e.target.value;
+            showPrompt2(choice);
         });
     });
     
@@ -783,30 +785,47 @@ function initMoment3() {
     });
 }
 
-function showPrompt(choice) {
-    const promptSection = document.getElementById('promptSection');
-    const promptText = document.getElementById('promptText');
+function showPrompt1(choice) {
+    const promptSection = document.getElementById('promptSection1');
+    const promptText = document.getElementById('promptText1');
     
     const prompts = {
-        yes: 'Puede ser verdadero. Muéstrame por qué con un ejemplo.',
-        no: 'Crees que es falso. ¿Qué ejemplo te hace pensar eso?',
+        yes: 'Muéstrame por qué con un ejemplo.',
+        no: '¿Qué ejemplo te hace pensar eso?',
         unsure: '¿Qué no te permite decidir?'
     };
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
     
-    // Inicializar pizarra y audio para M3
+    // Inicializar pizarra y audio para pregunta 1
+    initProblemM3Q1();
+}
+
+function showPrompt2(choice) {
+    const promptSection = document.getElementById('promptSection2');
+    const promptText = document.getElementById('promptText2');
+    
+    const prompts = {
+        yes: 'Muéstrame por qué con un ejemplo.',
+        no: '¿Qué ejemplo te hace pensar eso?',
+        unsure: '¿Qué no te permite decidir?'
+    };
+    
+    promptText.textContent = prompts[choice] || '';
+    promptSection.classList.remove('hidden');
+    
+    // Inicializar pizarra y audio para pregunta 2
     initProblemM3Q2();
 }
 
-function initProblemM3Q2() {
-    const canvasId = 'boardCanvasM3Q2';
-    const recordBtnId = 'recordBtnM3Q2';
-    const stopBtnId = 'stopBtnM3Q2';
-    const statusId = 'audioStatusM3Q2';
-    const submitBtnId = 'submitM3Q2';
-    const statusTextId = 'statusM3Q2';
+function initProblemM3Q1() {
+    const canvasId = 'boardCanvasM3Q1';
+    const recordBtnId = 'recordBtnM3Q1';
+    const stopBtnId = 'stopBtnM3Q1';
+    const statusId = 'audioStatusM3Q1';
+    const submitBtnId = 'submitM3Q1';
+    const statusTextId = 'statusM3Q1';
     
     const boardState = initBoard(canvasId);
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
@@ -815,10 +834,8 @@ function initProblemM3Q2() {
     
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
-        // Solo requiere audio (pizarra opcional)
         submitBtn.disabled = !hasAudio;
         
-        // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
             statusText.textContent = '🎤 Graba tu explicación';
@@ -842,8 +859,8 @@ function initProblemM3Q2() {
             
             await submitEvidence({
                 moment: 'm3',
-                tag: 'q2',
-                data: { a: m3_a, b: m3_b, choice: m3_choice },
+                tag: 'pregunta1',
+                data: { choice: m3_choice },
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
@@ -856,12 +873,86 @@ function initProblemM3Q2() {
             const canvas = document.getElementById(canvasId);
             canvas.style.pointerEvents = 'none';
             
-            // Deshabilitar herramientas
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Mostrar botón continuar y hacer scroll
+            // Mostrar Pregunta 2
+            setTimeout(() => {
+                document.getElementById('question2Section').classList.remove('hidden');
+                document.getElementById('question2Section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 1000);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            statusText.textContent = 'Error al guardar. Intenta de nuevo.';
+            statusText.className = 'status-text error';
+            submitBtn.disabled = false;
+        }
+    });
+}
+
+function initProblemM3Q2() {
+    const canvasId = 'boardCanvasM3Q2';
+    const recordBtnId = 'recordBtnM3Q2';
+    const stopBtnId = 'stopBtnM3Q2';
+    const statusId = 'audioStatusM3Q2';
+    const submitBtnId = 'submitM3Q2';
+    const statusTextId = 'statusM3Q2';
+    
+    const boardState = initBoard(canvasId);
+    const audioState = initAudio(recordBtnId, stopBtnId, statusId);
+    
+    const submitBtn = document.getElementById(submitBtnId);
+    
+    const checkEvidence = () => {
+        const hasAudio = audioState.audioBlob !== null;
+        submitBtn.disabled = !hasAudio;
+        
+        const statusText = document.getElementById(statusTextId);
+        if (!hasAudio) {
+            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.className = 'status-text';
+        } else {
+            statusText.textContent = '✅ Listo para enviar';
+            statusText.className = 'status-text success';
+        }
+    };
+    
+    setInterval(checkEvidence, 500);
+    
+    submitBtn.addEventListener('click', async () => {
+        submitBtn.disabled = true;
+        const statusText = document.getElementById(statusTextId);
+        statusText.textContent = 'Subiendo evidencia...';
+        statusText.className = 'status-text loading';
+        
+        try {
+            const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
+            
+            const choice2 = document.querySelector('input[name="truthQ2"]:checked')?.value;
+            
+            await submitEvidence({
+                moment: 'm3',
+                tag: 'pregunta2',
+                data: { choice: choice2 },
+                boardBlob: boardBlob,
+                audioBlob: audioState.audioBlob
+            });
+            
+            statusText.textContent = 'Guardado exitosamente ✅';
+            statusText.className = 'status-text success';
+            
+            // Bloquear edición
+            boardState.disabled = true;
+            const canvas = document.getElementById(canvasId);
+            canvas.style.pointerEvents = 'none';
+            
+            const evidenceSection = canvas.closest('.evidence-section');
+            evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
+            document.getElementById(recordBtnId).disabled = true;
+            
+            // Mostrar botón continuar
             const continueBtn = document.getElementById('continueToM4Btn');
             continueBtn.classList.remove('hidden');
             setTimeout(() => {
