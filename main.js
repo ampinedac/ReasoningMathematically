@@ -709,7 +709,15 @@ function checkForPairingMouse(e, draggedTray) {
     for (let elem of elementsBelow) {
         if (elem.classList && elem.classList.contains('tray-card') && elem !== draggedTray) {
             console.log('🔍 Bandeja encontrada debajo:', elem.dataset.id);
-            tryPairing(draggedTray, elem);
+            
+            // Detectar en qué lado de la bandeja se soltó
+            const rect = elem.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const isLeftSide = e.clientX < centerX;
+            
+            console.log(`📍 Soltada en el lado: ${isLeftSide ? 'IZQUIERDO' : 'DERECHO'}`);
+            
+            tryPairing(draggedTray, elem, isLeftSide);
             return;
         }
     }
@@ -717,13 +725,11 @@ function checkForPairingMouse(e, draggedTray) {
     console.log('❌ No hay bandeja debajo');
 }
 
-function tryPairing(tray1, tray2) {
-    const pairId1 = tray1.dataset.pairId;
-    const pairId2 = tray2.dataset.pairId;
-    const id1 = parseInt(tray1.dataset.id);
-    const id2 = parseInt(tray2.dataset.id);
+function tryPairing(draggedTray, targetTray, isLeftSide) {
+    const id1 = parseInt(draggedTray.dataset.id);
+    const id2 = parseInt(targetTray.dataset.id);
     
-    console.log(`🔍 Uniendo: Bandeja ${id1} (pareja ${pairId1}) con Bandeja ${id2} (pareja ${pairId2})`);
+    console.log(`🔍 Uniendo: Bandeja ${id1} con Bandeja ${id2} (lado ${isLeftSide ? 'izquierdo' : 'derecho'})`);
     
     // Permitir emparejar cualquier bandeja con cualquier otra (excepto consigo misma)
     if (id1 !== id2) {
@@ -734,12 +740,21 @@ function tryPairing(tray1, tray2) {
         wrapper.classList.add('tray-pair-wrapper');
         wrapper.dataset.pair = `${id1}-${id2}`;
         
-        // Obtener posición de tray2
-        const rect2 = tray2.getBoundingClientRect();
-        const containerRect = tray2.parentElement.getBoundingClientRect();
+        // Obtener posición de la bandeja objetivo
+        const rectTarget = targetTray.getBoundingClientRect();
+        const containerRect = targetTray.parentElement.getBoundingClientRect();
         
-        const wrapperLeft = rect2.left - containerRect.left;
-        const wrapperTop = rect2.top - containerRect.top;
+        // Ajustar posición del wrapper según el lado
+        let wrapperLeft, wrapperTop;
+        if (isLeftSide) {
+            // La arrastrada va a la izquierda, wrapper comienza más a la izquierda
+            wrapperLeft = (rectTarget.left - containerRect.left) - 210; // ancho bandeja + gap
+            wrapperTop = rectTarget.top - containerRect.top;
+        } else {
+            // La arrastrada va a la derecha, wrapper comienza en la posición de la target
+            wrapperLeft = rectTarget.left - containerRect.left;
+            wrapperTop = rectTarget.top - containerRect.top;
+        }
         
         // Posicionar wrapper
         wrapper.style.position = 'absolute';
@@ -747,24 +762,31 @@ function tryPairing(tray1, tray2) {
         wrapper.style.top = wrapperTop + 'px';
         
         // Agregar wrapper al contenedor de bandejas
-        const traysContainer = tray2.parentElement;
+        const traysContainer = targetTray.parentElement;
         traysContainer.appendChild(wrapper);
         
         // Resetear estilos de posicionamiento de las bandejas
-        tray1.style.position = 'relative';
-        tray1.style.left = '0';
-        tray1.style.top = '0';
-        tray2.style.position = 'relative';
-        tray2.style.left = '0';
-        tray2.style.top = '0';
+        draggedTray.style.position = 'relative';
+        draggedTray.style.left = '0';
+        draggedTray.style.top = '0';
+        targetTray.style.position = 'relative';
+        targetTray.style.left = '0';
+        targetTray.style.top = '0';
         
-        // Mover ambas bandejas al wrapper
-        wrapper.appendChild(tray2);
-        wrapper.appendChild(tray1);
+        // Agregar bandejas al wrapper en el orden correcto
+        if (isLeftSide) {
+            // Arrastrada a la izquierda, objetivo a la derecha
+            wrapper.appendChild(draggedTray);
+            wrapper.appendChild(targetTray);
+        } else {
+            // Objetivo a la izquierda, arrastrada a la derecha
+            wrapper.appendChild(targetTray);
+            wrapper.appendChild(draggedTray);
+        }
         
         // Marcar como emparejadas
-        tray1.classList.add('paired');
-        tray2.classList.add('paired');
+        draggedTray.classList.add('paired');
+        targetTray.classList.add('paired');
         
         // Registrar emparejamiento
         addPairing(id1, id2);
