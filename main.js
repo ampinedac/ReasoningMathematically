@@ -534,12 +534,7 @@ function createTraysGame() {
         trayCard.style.left = randomX + 'px';
         trayCard.style.top = randomY + 'px';
         
-        // Etiqueta
-        const label = document.createElement('div');
-        label.className = 'tray-label';
-        label.textContent = `${data.rows} filas de ${data.cols}`;
-        
-        // Grid de arepas
+        // Grid de arepas (SIN etiqueta para que las niñas cuenten)
         const grid = document.createElement('div');
         grid.className = 'tray-grid';
         grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
@@ -564,7 +559,6 @@ function createTraysGame() {
             grid.appendChild(arepa);
         }
         
-        trayCard.appendChild(label);
         trayCard.appendChild(grid);
         traysArea.appendChild(trayCard);
         
@@ -587,15 +581,35 @@ function createTraysGame() {
 }
 
 let draggedTray = null;
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
 
 function handleDragStart(e) {
+    console.log('🎯 Drag start');
     draggedTray = this;
+    isDragging = true;
     this.classList.add('dragging');
+    this.style.zIndex = '1000';
+    
+    // Guardar offset para posicionamiento preciso
+    const rect = this.getBoundingClientRect();
+    const containerRect = this.parentElement.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
 }
 
 function handleDragEnd(e) {
+    console.log('🎯 Drag end');
     this.classList.remove('dragging');
+    this.style.zIndex = 'auto';
+    isDragging = false;
+    
+    // Verificar si se soltó sobre otra bandeja
+    checkForPairing(e);
 }
 
 function handleDragOver(e) {
@@ -607,36 +621,62 @@ function handleDragOver(e) {
 }
 
 function handleDrop(e) {
-    if (e.stopPropagation) {
-        e.stopPropagation();
-    }
+    e.preventDefault();
+    e.stopPropagation();
     
-    if (draggedTray !== this) {
-        // Obtener datos de ambas bandejas
-        const draggedPairId = draggedTray.dataset.pairId;
-        const targetPairId = this.dataset.pairId;
-        const draggedId = parseInt(draggedTray.dataset.id);
-        const targetId = parseInt(this.dataset.id);
-        
-        // Si son una pareja válida, juntarlas
-        if (draggedPairId === targetPairId && draggedId !== targetId) {
-            // Posicionar cerca de la target
-            const targetRect = this.getBoundingClientRect();
-            const containerRect = this.parentElement.getBoundingClientRect();
-            
-            draggedTray.style.left = (targetRect.left - containerRect.left + 200) + 'px';
-            draggedTray.style.top = (targetRect.top - containerRect.top) + 'px';
-            
-            // Marcar como emparejadas visualmente
-            draggedTray.classList.add('paired');
-            this.classList.add('paired');
-            
-            // Registrar emparejamiento
-            addPairing(draggedId, targetId);
-        }
+    console.log('🎯 Drop detectado');
+    
+    if (draggedTray && draggedTray !== this) {
+        tryPairing(draggedTray, this);
     }
     
     return false;
+}
+
+function checkForPairing(e) {
+    if (!draggedTray) return;
+    
+    // Obtener elemento bajo el cursor
+    const elementsBelow = document.elementsFromPoint(e.clientX, e.clientY);
+    
+    // Buscar si hay otra bandeja debajo
+    for (let elem of elementsBelow) {
+        if (elem.classList.contains('tray-card') && elem !== draggedTray) {
+            console.log('🎯 Bandeja encontrada debajo');
+            tryPairing(draggedTray, elem);
+            break;
+        }
+    }
+}
+
+function tryPairing(tray1, tray2) {
+    const pairId1 = tray1.dataset.pairId;
+    const pairId2 = tray2.dataset.pairId;
+    const id1 = parseInt(tray1.dataset.id);
+    const id2 = parseInt(tray2.dataset.id);
+    
+    console.log(`🔍 Intentando emparejar: ${id1} (${pairId1}) con ${id2} (${pairId2})`);
+    
+    // Si son una pareja válida, juntarlas
+    if (pairId1 === pairId2 && id1 !== id2) {
+        console.log('✅ ¡Son pareja!');
+        
+        // Posicionar cerca de la segunda bandeja
+        const targetRect = tray2.getBoundingClientRect();
+        const containerRect = tray2.parentElement.getBoundingClientRect();
+        
+        tray1.style.left = (targetRect.left - containerRect.left + 30) + 'px';
+        tray1.style.top = (targetRect.top - containerRect.top + 30) + 'px';
+        
+        // Marcar como emparejadas visualmente
+        tray1.classList.add('paired');
+        tray2.classList.add('paired');
+        
+        // Registrar emparejamiento
+        addPairing(id1, id2);
+    } else {
+        console.log('❌ No son pareja');
+    }
 }
 
 function addPairing(id1, id2) {
