@@ -185,6 +185,15 @@ function initWelcomeScreen() {
 // PANTALLA DE CONFIRMACIÓN
 // ========================================
 
+// Función para convertir texto a formato título (Primera Letra Mayúscula)
+function toTitleCase(text) {
+    return text
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
 function showConfirmationScreen() {
     console.log('🔍 Mostrando pantalla de confirmación...');
     console.log('📋 Información del estudiante:', studentInfo);
@@ -201,12 +210,16 @@ function showConfirmationScreen() {
         return;
     }
     
+    // Convertir nombre y apellidos a formato título
+    const nombreFormateado = toTitleCase(studentInfo.nombre);
+    const apellidosFormateados = toTitleCase(studentInfo.apellidos);
+    
     // Construir la pregunta basada en si es docente o estudiante
     let pregunta = '';
     if (studentInfo.curso === 'DOCENTE') {
-        pregunta = `¿Eres ${studentInfo.nombre} ${studentInfo.apellidos}?`;
+        pregunta = `¿Eres ${nombreFormateado} ${apellidosFormateados}?`;
     } else {
-        pregunta = `¿Eres ${studentInfo.nombre} ${studentInfo.apellidos} del curso ${studentInfo.curso}?`;
+        pregunta = `¿Eres ${nombreFormateado} ${apellidosFormateados} del curso ${studentInfo.curso}?`;
     }
     
     confirmationQuestion.textContent = pregunta;

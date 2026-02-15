@@ -923,6 +923,7 @@ section.screen.active {
     display: flex;
     gap: 20px;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
 }
 
@@ -930,9 +931,11 @@ section.screen.active {
     width: 150px !important;
     min-width: 150px !important;
     max-width: 150px !important;
+    height: 60px !important;
     font-size: 1.3em;
     flex-shrink: 0;
     padding: 15px 20px;
+    margin: 0 !important;
 }
 
 .chalk-text {
