@@ -608,33 +608,59 @@ function setupDragging(trayCard) {
         currentDraggedTray = this;
         isDraggingMouse = true;
         
+        // Si estaba emparejada, desemparejarla
+        if (this.classList.contains('paired')) {
+            const myId = parseInt(this.dataset.id);
+            const pairIndex = pairs.findIndex(p => p.includes(myId));
+            
+            if (pairIndex !== -1) {
+                const [id1, id2] = pairs[pairIndex];
+                const otherId = id1 === myId ? id2 : id1;
+                const otherTray = document.querySelector(`.tray-card[data-id="${otherId}"]`);
+                
+                // Buscar el wrapper padre
+                const wrapper = this.closest('.tray-pair-wrapper');
+                if (wrapper) {
+                    const traysContainer = wrapper.parentElement;
+                    const wrapperRect = wrapper.getBoundingClientRect();
+                    const containerRect = traysContainer.getBoundingClientRect();
+                    
+                    // Restaurar posicionamiento absoluto de las bandejas
+                    this.style.position = 'absolute';
+                    this.style.left = (wrapperRect.left - containerRect.left) + 'px';
+                    this.style.top = (wrapperRect.top - containerRect.top) + 'px';
+                    
+                    if (otherTray) {
+                        otherTray.style.position = 'absolute';
+                        otherTray.style.left = (wrapperRect.left - containerRect.left) + 'px';
+                        otherTray.style.top = (wrapperRect.top - containerRect.top) + 'px';
+                        otherTray.classList.remove('paired');
+                    }
+                    
+                    // Mover bandejas de vuelta al contenedor principal
+                    traysContainer.appendChild(this);
+                    if (otherTray) {
+                        traysContainer.appendChild(otherTray);
+                    }
+                    
+                    // Eliminar wrapper
+                    wrapper.remove();
+                }
+                
+                // Remover clase paired
+                this.classList.remove('paired');
+                
+                // Eliminar del array
+                pairs.splice(pairIndex, 1);
+                console.log('🔓 Desemparejada de bandeja', otherId);
+            }
+        }
+        
         // Guardar posición inicial
         startX = e.clientX;
         startY = e.clientY;
         initialLeft = parseInt(this.style.left) || 0;
         initialTop = parseInt(this.style.top) || 0;
-        
-        // Si estaba emparejada, desemparejarla
-        if (this.classList.contains('paired')) {
-            const myId = parseInt(this.dataset.id);
-            // Buscar con quién estaba emparejada
-            const pairIndex = pairs.findIndex(p => p.includes(myId));
-            if (pairIndex !== -1) {
-                const [id1, id2] = pairs[pairIndex];
-                const otherId = id1 === myId ? id2 : id1;
-                
-                // Remover clase paired de ambas bandejas
-                this.classList.remove('paired');
-                const otherTray = document.querySelector(`.tray-card[data-id="${otherId}"]`);
-                if (otherTray) {
-                    otherTray.classList.remove('paired');
-                }
-                
-                // Eliminar del array de emparejamientos
-                pairs.splice(pairIndex, 1);
-                console.log('🔓 Desemparejada de bandeja', otherId);
-            }
-        }
         
         // Estilo visual
         this.classList.add('dragging');
@@ -703,24 +729,47 @@ function tryPairing(tray1, tray2) {
     if (id1 !== id2) {
         console.log('✅ Uniendo bandejas...');
         
-        // Posicionar lado a lado (a la derecha de la segunda bandeja)
+        // Crear contenedor wrapper para el par
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('tray-pair-wrapper');
+        wrapper.dataset.pair = `${id1}-${id2}`;
+        
+        // Obtener posición de tray2
         const rect2 = tray2.getBoundingClientRect();
         const containerRect = tray2.parentElement.getBoundingClientRect();
         
-        const newLeft = (rect2.left - containerRect.left) + 210; // Ancho bandeja + gap
-        const newTop = (rect2.top - containerRect.top); // Misma altura
+        const wrapperLeft = rect2.left - containerRect.left;
+        const wrapperTop = rect2.top - containerRect.top;
         
-        tray1.style.left = newLeft + 'px';
-        tray1.style.top = newTop + 'px';
+        // Posicionar wrapper
+        wrapper.style.position = 'absolute';
+        wrapper.style.left = wrapperLeft + 'px';
+        wrapper.style.top = wrapperTop + 'px';
         
-        // Marcar como emparejadas visualmente (NO indica si es correcto)
+        // Agregar wrapper al contenedor de bandejas
+        const traysContainer = tray2.parentElement;
+        traysContainer.appendChild(wrapper);
+        
+        // Resetear estilos de posicionamiento de las bandejas
+        tray1.style.position = 'relative';
+        tray1.style.left = '0';
+        tray1.style.top = '0';
+        tray2.style.position = 'relative';
+        tray2.style.left = '0';
+        tray2.style.top = '0';
+        
+        // Mover ambas bandejas al wrapper
+        wrapper.appendChild(tray2);
+        wrapper.appendChild(tray1);
+        
+        // Marcar como emparejadas
         tray1.classList.add('paired');
         tray2.classList.add('paired');
         
-        // Registrar emparejamiento (la validación se hace al verificar)
+        // Registrar emparejamiento
         addPairing(id1, id2);
         
-        console.log('✨ Bandejas agrupadas - la validación ocurrirá al verificar');
+        console.log('✨ Bandejas agrupadas en wrapper - la validación ocurrirá al verificar');
     } else {
         console.log('❌ No puedes emparejar una bandeja consigo misma');
     }
