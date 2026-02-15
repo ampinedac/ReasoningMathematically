@@ -425,63 +425,34 @@ Argumenta tu respuesta.
         </div>
     </section>
 
-    <!-- MOMENTO 4: 6 ítems -->
+    <!-- MOMENTO 4: ¿Quieres ser millonario? -->
     <section id="moment4Screen" class="screen">
         <div class="container">
             <div class="header">
-                <h2 class="section-title">Momento 4: Completa las ecuaciones</h2>
+                <h2 class="section-title">Momento 4: ¿Quieres ser millonario?</h2>
                 <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
             </div>
 
             <div class="items-container">
-                <p class="instruction">Completa cada ecuación. Solo avanzas cuando aciertes:</p>
+                <p class="instruction">Completa cada ecuación para que la igualdad sea correcta:</p>
                 
                 <div id="itemsWrapper">
-                    <!-- Item 1 -->
-                    <div class="item-box" data-item="1">
-                        <p class="item-equation">3 × 7 = <input type="number" class="item-input" data-answer="7" min="0" max="99"> × 3</p>
-                        <span class="item-feedback"></span>
-                    </div>
-                    
-                    <!-- Item 2 -->
-                    <div class="item-box hidden" data-item="2">
-                        <p class="item-equation"><input type="number" class="item-input" data-answer="9" min="0" max="99"> × 5 = 5 × 9</p>
-                        <span class="item-feedback"></span>
-                    </div>
-                    
-                    <!-- Item 3 -->
-                    <div class="item-box hidden" data-item="3">
-                        <p class="item-equation">4 × <input type="number" class="item-input" data-answer="8" min="0" max="99"> = 8 × 4</p>
-                        <span class="item-feedback"></span>
-                    </div>
-                    
-                    <!-- Item 4 -->
-                    <div class="item-box hidden" data-item="4">
-                        <p class="item-equation">6 × 2 = <input type="number" class="item-input" data-answer="2" min="0" max="99"> × 6</p>
-                        <span class="item-feedback"></span>
-                    </div>
-                    
-                    <!-- Item 5 -->
-                    <div class="item-box hidden" data-item="5">
-                        <p class="item-equation">9 × 4 = 4 × <input type="number" class="item-input" data-answer="9" min="0" max="99"></p>
-                        <span class="item-feedback"></span>
-                    </div>
-                    
-                    <!-- Item 6 -->
-                    <div class="item-box hidden" data-item="6">
-                        <p class="item-equation">2 × 8 = <input type="number" class="item-input" data-answer="8" min="0" max="99"> × 2</p>
-                        <span class="item-feedback"></span>
-                    </div>
+                    <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
                 </div>
 
                 <p id="moment4Status" class="status-text"></p>
+                <p id="pointsStatus" class="points-status hidden"></p>
             </div>
+
+            <!-- Confetti canvas para celebración -->
+            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
 
             <div id="finalQuestionSection" class="hidden">
                 <div class="final-box">
-                    <h3>Entonces…</h3>
-                    <p class="final-question">¿El orden de los factores altera el producto o no?</p>
-                    <p class="thank-you">¡Gracias por participar! 🎉</p>
+                    <h3>¡Felicitaciones! 🎉</h3>
+                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
+                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
+                    <p class="thank-you-sub">¡Gracias por participar!</p>
                 </div>
             </div>
         </div>
