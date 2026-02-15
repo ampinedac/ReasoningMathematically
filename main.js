@@ -374,21 +374,14 @@ function initProblemQ1() {
     const submitBtn = document.getElementById(submitBtnId);
     
     const checkEvidence = () => {
-        const hasDrawing = boardState.hasDrawing;
         const hasAudio = audioState.audioBlob !== null;
-        // Requiere AMBOS: dibujo Y audio
-        submitBtn.disabled = !(hasDrawing && hasAudio);
+        // Solo requiere audio (pizarra opcional)
+        submitBtn.disabled = !hasAudio;
         
         // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
-        if (!hasDrawing && !hasAudio) {
-            statusText.textContent = '⚠️ Debes dibujar tu respuesta y grabar tu explicación';
-            statusText.className = 'status-text';
-        } else if (!hasDrawing) {
-            statusText.textContent = '✏️ Falta dibujar tu respuesta';
-            statusText.className = 'status-text';
-        } else if (!hasAudio) {
-            statusText.textContent = '🎤 Falta grabar tu explicación (es obligatorio)';
+        if (!hasAudio) {
+            statusText.textContent = '🎤 Graba tu explicación';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
@@ -817,21 +810,14 @@ function initProblemM3Q2() {
     const submitBtn = document.getElementById(submitBtnId);
     
     const checkEvidence = () => {
-        const hasDrawing = boardState.hasDrawing;
         const hasAudio = audioState.audioBlob !== null;
-        // Requiere AMBOS: dibujo Y audio
-        submitBtn.disabled = !(hasDrawing && hasAudio);
+        // Solo requiere audio (pizarra opcional)
+        submitBtn.disabled = !hasAudio;
         
         // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
-        if (!hasDrawing && !hasAudio) {
-            statusText.textContent = '⚠️ Debes dibujar tu respuesta y grabar tu explicación';
-            statusText.className = 'status-text';
-        } else if (!hasDrawing) {
-            statusText.textContent = '✏️ Falta dibujar tu respuesta';
-            statusText.className = 'status-text';
-        } else if (!hasAudio) {
-            statusText.textContent = '🎤 Falta grabar tu explicación (es obligatorio)';
+        if (!hasAudio) {
+            statusText.textContent = '🎤 Graba tu explicación';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
