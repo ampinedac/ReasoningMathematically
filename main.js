@@ -935,6 +935,9 @@ function initBoard(canvasId) {
     let hasDrawing = false;
     let disabled = false;
     
+    // Establecer cursor inicial (lápiz negro)
+    canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><path fill=\'black\' d=\'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z\'/></svg>") 2 22, auto';
+    
     // Configurar herramientas
     const evidenceSection = canvas.closest('.evidence-section');
     if (!evidenceSection) {
@@ -956,6 +959,22 @@ function initBoard(canvasId) {
             }
             
             currentTool = tool;
+            
+            // Cambiar cursor según herramienta
+            switch (tool) {
+                case 'black':
+                    canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><path fill=\'black\' d=\'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z\'/></svg>") 2 22, auto';
+                    break;
+                case 'red':
+                    canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><path fill=\'red\' d=\'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z\'/></svg>") 2 22, auto';
+                    break;
+                case 'yellow':
+                    canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><rect x=\'4\' y=\'6\' width=\'16\' height=\'12\' fill=\'%23f1c40f\' opacity=\'0.5\'/><rect x=\'6\' y=\'8\' width=\'12\' height=\'8\' fill=\'%23f1c40f\'/></svg>") 12 12, auto';
+                    break;
+                case 'eraser':
+                    canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><path fill=\'gray\' d=\'M16.24 3.56l4.95 4.94c.78.79.78 2.05 0 2.84L12 20.53a4.008 4.008 0 0 1-5.66 0L2.81 17c-.78-.79-.78-2.05 0-2.84l10.6-10.6c.79-.78 2.05-.78 2.83 0M4.22 15.58l3.54 3.53c.78.79 2.04.79 2.83 0l3.53-3.53l-4.95-4.95l-4.95 4.95z\'/></svg>") 12 12, auto';
+                    break;
+            }
             
             toolButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -1015,7 +1034,7 @@ function initBoard(canvasId) {
             case 'yellow':
                 ctx.strokeStyle = '#f1c40f';
                 ctx.lineWidth = 15;
-                ctx.globalAlpha = 0.4;
+                ctx.globalAlpha = 0.3; // 30% de opacidad para el resaltador
                 break;
             case 'eraser':
                 ctx.strokeStyle = '#fff';
