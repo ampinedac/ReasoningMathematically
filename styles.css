@@ -1544,57 +1544,95 @@ section.screen.active {
 }
 
 /* ========================================
-   TABLA (MOMENTO 2)
+   JUEGO DE BANDEJAS (MOMENTO 2)
    ======================================== */
 
-.table-container {
-    overflow-x: auto;
-    margin: 20px 0;
-}
-
-.panebonos-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
+.instruction-hint {
+    background: #fff3cd;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #ffc107;
+    margin: 15px 0;
     font-size: 1.1em;
 }
 
-.panebonos-table th {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 15px;
-    text-align: center;
-    border: 2px solid #5568d3;
+.trays-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 30px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    min-height: 500px;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 20px 0;
+    position: relative;
 }
 
-.panebonos-table td {
+.tray-card {
+    background: linear-gradient(145deg, #d4d4d4, #f0f0f0);
+    border: 3px solid #999;
+    border-radius: 12px;
     padding: 15px;
-    text-align: center;
-    border: 2px solid #bdc3c7;
-    background: white;
+    cursor: grab;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: absolute;
+    width: 180px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-.panebonos-table input[type="number"] {
-    width: 80px;
+.tray-card:active {
+    cursor: grabbing;
+}
+
+.tray-card.dragging {
+    opacity: 0.6;
+    transform: scale(1.05);
+    z-index: 1000;
+}
+
+.tray-card.paired {
+    border: 4px solid #27ae60;
+    box-shadow: 0 0 20px rgba(39, 174, 96, 0.5);
+    background: linear-gradient(145deg, #d1f2e1, #e8f8f0);
+}
+
+.tray-label {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.tray-grid {
+    display: grid;
+    gap: 4px;
+    justify-items: center;
+    align-items: center;
     padding: 10px;
-    font-size: 1.2em;
-    border: 2px solid #3498db;
-    border-radius: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 8px;
+}
+
+.tray-grid span {
+    font-size: 1.5em;
+    user-select: none;
+}
+
+.game-controls {
+    margin: 30px 0;
     text-align: center;
-    font-family: 'Comic Sans MS', cursive;
 }
 
-.panebonos-table input[type="number"]:disabled {
-    background: #ecf0f1;
-    border-color: #95a5a6;
-}
-
-.panebonos-table tr.disabled {
-    opacity: 0.5;
-}
-
-.panebonos-table tr.correct {
-    background: #d5f4e6;
+.game-controls .btn {
+    margin: 10px auto;
 }
 
 .feedback-text {
@@ -1606,6 +1644,10 @@ section.screen.active {
 
 .feedback-text.error {
     color: #e74c3c;
+}
+
+.feedback-text.success {
+    color: #27ae60;
 }
 
 .feedback-text.success {
@@ -1816,13 +1858,13 @@ section.screen.active {
         font-size: 1.2em;
     }
 
-    .panebonos-table {
-        font-size: 0.9em;
+    .tray-card {
+        width: 150px;
+        min-height: 180px;
     }
 
-    .panebonos-table input[type="number"] {
-        width: 60px;
-        font-size: 1em;
+    .tray-grid span {
+        font-size: 1.3em;
     }
 }
 

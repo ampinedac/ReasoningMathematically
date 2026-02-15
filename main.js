@@ -14,10 +14,9 @@ let studentInfo = null; // Información del estudiante (nombre, apellidos, curso
 let currentPage = 1;
 let totalPages = 0;
 
-// Datos de Momento 2
-let tablePairs = [];
-let tableAttempts = 0;
-let consecutiveErrors = 0;
+// Datos de Momento 2 (Juego de Bandejas)
+let trays = [];
+let pairs = [];
 
 // Datos de Momento 3
 let m3_a = 0;
@@ -466,17 +465,8 @@ function initProblemQ1() {
 function initMoment2() {
     document.getElementById('studentCodeM2').textContent = studentCode;
     
-    // Generar 3 pares aleatorios
-    tablePairs = [
-        [randomInt(1, 10), randomInt(1, 10)],
-        [randomInt(1, 10), randomInt(1, 10)],
-        [randomInt(1, 10), randomInt(1, 10)]
-    ];
-    
-    console.log('Pares generados:', tablePairs);
-    
-    // Renderizar tabla
-    renderTable();
+    // Crear juego de bandejas
+    createTraysGame();
     
     // Botón continuar a M3
     document.getElementById('continueToM3Btn').addEventListener('click', () => {
@@ -485,142 +475,240 @@ function initMoment2() {
     });
 }
 
-function renderTable() {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
+// ========================================
+// JUEGO DE BANDEJAS - DRAG AND DROP
+// ========================================
+
+function createTraysGame() {
+    const traysData = [
+        { id: 1, rows: 3, cols: 4, total: 12, pairId: 'A' },
+        { id: 2, rows: 4, cols: 3, total: 12, pairId: 'A' },
+        { id: 3, rows: 2, cols: 6, total: 12, pairId: 'B' },
+        { id: 4, rows: 6, cols: 2, total: 12, pairId: 'B' },
+        { id: 5, rows: 5, cols: 3, total: 15, pairId: 'C' },
+        { id: 6, rows: 3, cols: 5, total: 15, pairId: 'C' },
+        { id: 7, rows: 4, cols: 5, total: 20, pairId: 'D' },  // Sin pareja
+        { id: 8, rows: 2, cols: 7, total: 14, pairId: 'E' }   // Sin pareja
+    ];
     
-    tablePairs.forEach((pair, index) => {
-        const [a, b] = pair;
-        const tr = document.createElement('tr');
-        tr.dataset.row = index;
+    const traysArea = document.getElementById('traysArea');
+    const containerWidth = traysArea.offsetWidth || 900;
+    const containerHeight = 500;
+    
+    // Crear bandejas
+    traysData.forEach((data, index) => {
+        const trayCard = document.createElement('div');
+        trayCard.className = 'tray-card';
+        trayCard.dataset.id = data.id;
+        trayCard.dataset.pairId = data.pairId;
+        trayCard.dataset.total = data.total;
+        trayCard.draggable = true;
         
-        // Deshabilitar filas que no son la primera sin completar
-        if (index > 0) {
-            tr.classList.add('disabled');
+        // Posición aleatoria inicial
+        const randomX = Math.random() * (containerWidth - 200) + 20;
+        const randomY = Math.random() * (containerHeight - 220) + 20;
+        trayCard.style.left = randomX + 'px';
+        trayCard.style.top = randomY + 'px';
+        
+        // Etiqueta
+        const label = document.createElement('div');
+        label.className = 'tray-label';
+        label.textContent = `${data.rows} filas de ${data.cols}`;
+        
+        // Grid de arepas
+        const grid = document.createElement('div');
+        grid.className = 'tray-grid';
+        grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
+        grid.style.gridTemplateRows = `repeat(${data.rows}, 1fr)`;
+        
+        // Emojis de arepas
+        for (let i = 0; i < data.total; i++) {
+            const arepa = document.createElement('span');
+            arepa.textContent = '🫓';
+            grid.appendChild(arepa);
         }
         
-        tr.innerHTML = `
-            <td>${a}</td>
-            <td>${b}</td>
-            <td><input type="number" class="total-input martha-total" data-row="${index}" min="0" max="999" ${index > 0 ? 'disabled' : ''}></td>
-            <td>${b}</td>
-            <td>${a}</td>
-            <td><input type="number" class="total-input lucas-total" data-row="${index}" min="0" max="999" ${index > 0 ? 'disabled' : ''}></td>
-        `;
+        trayCard.appendChild(label);
+        trayCard.appendChild(grid);
+        traysArea.appendChild(trayCard);
         
-        tbody.appendChild(tr);
+        // Drag events
+        trayCard.addEventListener('dragstart', handleDragStart);
+        trayCard.addEventListener('dragend', handleDragEnd);
+        trayCard.addEventListener('dragover', handleDragOver);
+        trayCard.addEventListener('drop', handleDrop);
+        
+        trays.push({
+            element: trayCard,
+            data: data,
+            paired: false,
+            pairedWith: null
+        });
     });
     
-    // Event listeners para validación
-    document.querySelectorAll('.total-input').forEach(input => {
-        input.addEventListener('input', validateRow);
-    });
+    // Botón verificar
+    document.getElementById('verifyTraysBtn').addEventListener('click', verifyPairings);
 }
 
-function validateRow(e) {
-    const row = parseInt(e.target.dataset.row);
-    const tr = document.querySelector(`tr[data-row="${row}"]`);
+let draggedTray = null;
+
+function handleDragStart(e) {
+    draggedTray = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragEnd(e) {
+    this.classList.remove('dragging');
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+    e.dataTransfer.dropEffect = 'move';
+    return false;
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation();
+    }
     
-    const marthaInput = tr.querySelector('.martha-total');
-    const lucasInput = tr.querySelector('.lucas-total');
-    
-    const [a, b] = tablePairs[row];
-    const correctTotal = a * b;
-    
-    const marthaVal = parseInt(marthaInput.value);
-    const lucasVal = parseInt(lucasInput.value);
-    
-    const feedback = document.getElementById('tableFeedback');
-    
-    // Validar solo si ambos campos tienen valor
-    if (marthaInput.value && lucasInput.value) {
-        const isCorrect = (marthaVal === correctTotal) && (lucasVal === correctTotal) && (marthaVal === lucasVal);
+    if (draggedTray !== this) {
+        // Obtener datos de ambas bandejas
+        const draggedPairId = draggedTray.dataset.pairId;
+        const targetPairId = this.dataset.pairId;
+        const draggedId = parseInt(draggedTray.dataset.id);
+        const targetId = parseInt(this.dataset.id);
         
-        if (isCorrect) {
-            tr.classList.add('correct');
-            tr.classList.remove('disabled');
-            feedback.textContent = '¡Muy bien! ✅';
-            feedback.className = 'feedback-text success';
+        // Si son una pareja válida, juntarlas
+        if (draggedPairId === targetPairId && draggedId !== targetId) {
+            // Posicionar cerca de la target
+            const targetRect = this.getBoundingClientRect();
+            const containerRect = this.parentElement.getBoundingClientRect();
             
-            // Habilitar siguiente fila
-            const nextRow = document.querySelector(`tr[data-row="${row + 1}"]`);
-            if (nextRow) {
-                nextRow.classList.remove('disabled');
-                nextRow.querySelectorAll('input').forEach(inp => inp.disabled = false);
-            } else {
-                // Todas las filas completadas
-                document.getElementById('submitTableBtn').classList.remove('hidden');
-            }
+            draggedTray.style.left = (targetRect.left - containerRect.left + 200) + 'px';
+            draggedTray.style.top = (targetRect.top - containerRect.top) + 'px';
             
-            consecutiveErrors = 0;
+            // Marcar como emparejadas visualmente
+            draggedTray.classList.add('paired');
+            this.classList.add('paired');
             
-        } else {
-            feedback.textContent = '🔍 Revisa de nuevo… ¿estás segura?';
-            feedback.className = 'feedback-text error';
-            tableAttempts++;
-            consecutiveErrors++;
+            // Registrar emparejamiento
+            addPairing(draggedId, targetId);
         }
     }
+    
+    return false;
 }
 
-// Enviar tabla
-document.getElementById('submitTableBtn')?.addEventListener('click', async () => {
-    try {
-        await submitEvidence({
-            moment: 'm2',
-            tag: 'table',
-            data: {
-                pairs: tablePairs,
-                attempts: tableAttempts,
-                errorsConsecutive: consecutiveErrors
-            },
-            boardBlob: null,
-            audioBlob: null
+function addPairing(id1, id2) {
+    // Eliminar emparejamientos previos de estas bandejas
+    pairs = pairs.filter(p => !p.includes(id1) && !p.includes(id2));
+    
+    // Agregar nuevo emparejamiento
+    pairs.push([id1, id2].sort((a, b) => a - b));
+    
+    console.log('Emparejamientos actuales:', pairs);
+}
+
+function verifyPairings() {
+    const feedback = document.getElementById('traysFeedback');
+    
+    // Emparejamientos correctos
+    const correctPairs = [
+        [1, 2],  // 3x4 y 4x3
+        [3, 4],  // 2x6 y 6x2
+        [5, 6]   // 5x3 y 3x5
+    ];
+    
+    // Bandejas que deben quedar solas
+    const singleTrays = [7, 8];
+    
+    // Verificar que todos los pares correctos estén presentes
+    let allCorrect = true;
+    let missingPairs = [];
+    
+    for (const correctPair of correctPairs) {
+        const found = pairs.some(pair => 
+            (pair[0] === correctPair[0] && pair[1] === correctPair[1]) ||
+            (pair[0] === correctPair[1] && pair[1] === correctPair[0])
+        );
+        
+        if (!found) {
+            allCorrect = false;
+            const tray1 = trays.find(t => t.data.id === correctPair[0]);
+            const tray2 = trays.find(t => t.data.id === correctPair[1]);
+            missingPairs.push(`${tray1.data.rows}×${tray1.data.cols} con ${tray2.data.rows}×${tray2.data.cols}`);
+        }
+    }
+    
+    // Verificar que no hayan emparejado las bandejas solas
+    const wrongPairs = pairs.filter(pair => 
+        singleTrays.includes(pair[0]) || singleTrays.includes(pair[1])
+    );
+    
+    if (wrongPairs.length > 0) {
+        allCorrect = false;
+    }
+    
+    if (allCorrect && pairs.length === 3) {
+        feedback.textContent = '🎉 ¡Perfecto! Todos los emparejamientos son correctos.';
+        feedback.className = 'feedback-text success';
+        
+        // Deshabilitar el juego
+        trays.forEach(t => {
+            t.element.draggable = false;
+            t.element.style.cursor = 'default';
         });
         
-        // Bloquear tabla
-        document.querySelectorAll('.total-input').forEach(input => input.disabled = true);
-        document.getElementById('submitTableBtn').classList.add('hidden');
+        document.getElementById('verifyTraysBtn').disabled = true;
         
-        // Mostrar Problema 1
-        document.getElementById('problem1Section').classList.remove('hidden');
-        initProblem1();
+        // Mostrar pregunta final
+        setTimeout(() => {
+            document.getElementById('finalQuestionSection').classList.remove('hidden');
+            initMoment2Audio();
+        }, 1000);
         
-    } catch (error) {
-        console.error('Error al enviar tabla:', error);
-        alert('Error al guardar. Intenta de nuevo.');
+    } else {
+        let errorMsg = '🔍 Revisa de nuevo. ';
+        
+        if (pairs.length < 3) {
+            errorMsg += 'Recuerda que debes emparejar las bandejas con la misma cantidad de arepas. ';
+        }
+        
+        if (wrongPairs.length > 0) {
+            errorMsg += 'Hay bandejas que no tienen pareja porque tienen cantidades únicas. ';
+        }
+        
+        if (missingPairs.length > 0) {
+            errorMsg += 'Cuenta bien las arepas de cada bandeja.';
+        }
+        
+        feedback.textContent = errorMsg;
+        feedback.className = 'feedback-text error';
     }
-});
+}
 
-function initProblem1() {
-    const canvasId = 'boardCanvasM2P1';
-    const recordBtnId = 'recordBtnM2P1';
-    const stopBtnId = 'stopBtnM2P1';
-    const statusId = 'audioStatusM2P1';
-    const submitBtnId = 'submitM2P1';
-    const statusTextId = 'statusM2P1';
+function initMoment2Audio() {
+    const recordBtnId = 'recordBtnM2';
+    const stopBtnId = 'stopBtnM2';
+    const statusId = 'audioStatusM2';
+    const submitBtnId = 'submitM2';
+    const statusTextId = 'statusM2';
     
-    const boardState = initBoard(canvasId);
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
     
     const checkEvidence = () => {
-        const hasDrawing = boardState.hasDrawing;
         const hasAudio = audioState.audioBlob !== null;
-        // Requiere AMBOS: dibujo Y audio
-        submitBtn.disabled = !(hasDrawing && hasAudio);
+        submitBtn.disabled = !hasAudio;
         
-        // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
-        if (!hasDrawing && !hasAudio) {
-            statusText.textContent = '⚠️ Debes dibujar tu respuesta y grabar tu explicación';
-            statusText.className = 'status-text';
-        } else if (!hasDrawing) {
-            statusText.textContent = '✏️ Falta dibujar tu respuesta';
-            statusText.className = 'status-text';
-        } else if (!hasAudio) {
-            statusText.textContent = '🎤 Falta grabar tu explicación (es obligatorio)';
+        if (!hasAudio) {
+            statusText.textContent = '🎤 Graba tu explicación';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
@@ -637,30 +725,22 @@ function initProblem1() {
         statusText.className = 'status-text loading';
         
         try {
-            const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
-            
             await submitEvidence({
                 moment: 'm2',
-                tag: 'prob1',
-                data: { question: 'Problema 1: ¿Por qué da el mismo número?' },
-                boardBlob: boardBlob,
+                tag: 'trays_explanation',
+                data: { 
+                    question: '¿Por qué tienen la misma cantidad?',
+                    pairs: pairs
+                },
+                boardBlob: null,
                 audioBlob: audioState.audioBlob
             });
             
             statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
             
-            // Bloquear edición
-            boardState.disabled = true;
-            const canvas = document.getElementById(canvasId);
-            canvas.style.pointerEvents = 'none';
-            
-            // Deshabilitar herramientas de este momento
-            const evidenceSection = canvas.closest('.evidence-section');
-            evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Mostrar botón continuar y hacer scroll
             const continueBtn = document.getElementById('continueToM3Btn');
             continueBtn.classList.remove('hidden');
             setTimeout(() => {

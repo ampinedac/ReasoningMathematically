@@ -142,7 +142,10 @@
                     <p>Doña Alicia hizo <strong>28 pandebonos</strong> y quiere organizarlos en bandejas para venderlos.</p>
                     <p><strong>Alicia dice:</strong> "Los voy a poner en <strong>4 filas</strong> con <strong>7 pandebonos</strong> en cada fila."</p>
                     <p><strong>Daniel dice:</strong> "¡No! Mejor ponlos en <strong>7 filas</strong> con <strong>4 pandebonos</strong> en cada fila."</p>
-                    <p class="question"> ¿Qué arreglo permite tener más pandebono? ¿Por qué? Explica tu respuesta</p>
+                    <p class="question"> Compara las dos propuestas de organización y explica qué ocurre en cada una.
+¿Hay alguna que resulte más conveniente desde el punto de vista matemático?
+Argumenta tu respuesta.
+</p>
                 </div>
 
                 <!-- PIZARRA Y AUDIO -->
@@ -180,76 +183,56 @@
         </div>
     </section>
 
-    <!-- MOMENTO 2: Tabla + Problema 1 -->
+    <!-- MOMENTO 2: Emparejamiento de Bandejas -->
     <section id="moment2Screen" class="screen">
         <div class="container">
             <div class="header">
-                <h2 class="section-title">Momento 2: Organizando pandebonos</h2>
+                <h2 class="section-title">Momento 2: Organizando arepas</h2>
                 <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
             </div>
 
-            <!-- TABLA PROGRESIVA -->
-            <div id="tableSection">
-                <h3>Completa la tabla con los totales:</h3>
-                <div class="table-container">
-                    <table id="panebonos-table" class="panebonos-table">
-                        <thead>
-                            <tr>
-                                <th colspan="3">Alicia</th>
-                                <th colspan="3">Daniel</th>
-                            </tr>
-                            <tr>
-                                <th># Filas</th>
-                                <th># Columnas</th>
-                                <th>Total</th>
-                                <th># Filas</th>
-                                <th># Columnas</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Filas generadas dinámicamente -->
-                        </tbody>
-                    </table>
-                </div>
-                <p id="tableFeedback" class="feedback-text"></p>
-                <button id="submitTableBtn" class="btn btn-primary hidden">Enviar tabla</button>
+            <!-- INTRODUCCIÓN -->
+            <div class="problem-box">
+                <p>Doña Alicia y Daniel prepararon varias bandejas de arepas. Cada tarjeta muestra una forma diferente de organizarlas.</p>
+                <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de arepas:</strong></p>
+                <p class="instruction-hint">💡 Arrastra las bandejas para juntarlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
             </div>
 
-            <!-- PROBLEMA 1 -->
-            <div id="problem1Section" class="hidden">
+            <!-- ÁREA DE BANDEJAS -->
+            <div id="traysGameSection">
+                <div id="traysArea" class="trays-container">
+                    <!-- Las 8 bandejas se generarán aquí dinámicamente -->
+                </div>
+                
+                <div class="game-controls">
+                    <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
+                    <p id="traysFeedback" class="feedback-text"></p>
+                </div>
+            </div>
+
+            <!-- PREGUNTA FINAL -->
+            <div id="finalQuestionSection" class="hidden">
                 <div class="problem-box">
-                    <h3>Problema 1</h3>
-                    <p class="question">Observa nuevamente los resultados y responde: si ambos lo hacen de maneras diferentes ¿cómo es que siempre les da el mismo número de pandebonos?</p>
+                    <h3>¡Excelente trabajo!</h3>
+                    <p class="question">En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad.</p>
+                    <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
                 </div>
 
-                <!-- PIZARRA Y AUDIO -->
+                <!-- SOLO AUDIO -->
                 <div class="evidence-section">
-                    <h4>Explica tu respuesta:</h4>
+                    <h4>Graba tu explicación:</h4>
                     
-                    <!-- Pizarra -->
-                    <div class="board-container">
-                        <div class="board-tools">
-                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
-                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
-                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
-                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
-                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
-                        </div>
-                        <canvas id="boardCanvasM2P1" class="drawing-board" width="800" height="500"></canvas>
-                    </div>
-
                     <!-- Audio -->
                     <div class="audio-controls">
-                        <button id="recordBtnM2P1" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM2P1" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM2P1" class="audio-status"></span>
+                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM2" class="audio-status"></span>
                     </div>
 
                     <!-- Enviar -->
                     <div class="submit-section">
-                        <p id="statusM2P1" class="status-text"></p>
-                        <button id="submitM2P1" class="btn btn-primary" disabled>Enviar</button>
+                        <p id="statusM2" class="status-text"></p>
+                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
                     </div>
                 </div>
 
