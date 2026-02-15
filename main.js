@@ -422,6 +422,11 @@ function initProblemQ1() {
             statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
             statusText.className = 'status-text success';
             
+            // Mantener botón deshabilitado permanentemente
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+            
             // Bloquear edición
             boardState.disabled = true;
             const canvas = document.getElementById(canvasId);
