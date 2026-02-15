@@ -605,11 +605,6 @@ let initialTop = 0;
 
 function setupDragging(trayCard) {
     trayCard.addEventListener('mousedown', function(e) {
-        // Verificar si la bandeja ya está emparejada
-        if (this.classList.contains('paired')) {
-            return; // No permitir mover bandejas ya emparejadas
-        }
-        
         currentDraggedTray = this;
         isDraggingMouse = true;
         
@@ -618,6 +613,28 @@ function setupDragging(trayCard) {
         startY = e.clientY;
         initialLeft = parseInt(this.style.left) || 0;
         initialTop = parseInt(this.style.top) || 0;
+        
+        // Si estaba emparejada, desemparejarla
+        if (this.classList.contains('paired')) {
+            const myId = parseInt(this.dataset.id);
+            // Buscar con quién estaba emparejada
+            const pairIndex = pairs.findIndex(p => p.includes(myId));
+            if (pairIndex !== -1) {
+                const [id1, id2] = pairs[pairIndex];
+                const otherId = id1 === myId ? id2 : id1;
+                
+                // Remover clase paired de ambas bandejas
+                this.classList.remove('paired');
+                const otherTray = document.querySelector(`.tray-card[data-id="${otherId}"]`);
+                if (otherTray) {
+                    otherTray.classList.remove('paired');
+                }
+                
+                // Eliminar del array de emparejamientos
+                pairs.splice(pairIndex, 1);
+                console.log('🔓 Desemparejada de bandeja', otherId);
+            }
+        }
         
         // Estilo visual
         this.classList.add('dragging');
@@ -686,12 +703,12 @@ function tryPairing(tray1, tray2) {
     if (id1 !== id2) {
         console.log('✅ Uniendo bandejas...');
         
-        // Posicionar junto a la segunda bandeja (arriba a la derecha)
+        // Posicionar lado a lado (a la derecha de la segunda bandeja)
         const rect2 = tray2.getBoundingClientRect();
         const containerRect = tray2.parentElement.getBoundingClientRect();
         
-        const newLeft = (rect2.left - containerRect.left) + 40;
-        const newTop = (rect2.top - containerRect.top) - 40;
+        const newLeft = (rect2.left - containerRect.left) + 210; // Ancho bandeja + gap
+        const newTop = (rect2.top - containerRect.top); // Misma altura
         
         tray1.style.left = newLeft + 'px';
         tray1.style.top = newTop + 'px';
