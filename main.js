@@ -552,7 +552,7 @@ function createTraysGame() {
         trayCard.style.left = pos.x + 'px';
         trayCard.style.top = pos.y + 'px';
         
-        // Grid de arepas (SIN etiqueta para que las niñas cuenten)
+        // Grid de pandebonos (SIN etiqueta para que las niñas cuenten)
         const grid = document.createElement('div');
         grid.className = 'tray-grid';
         grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
@@ -569,7 +569,7 @@ function createTraysGame() {
             emojiSize = '1.0em';
         }
         
-        // Emojis de arepas
+        // Emojis de pandebonos
         for (let i = 0; i < data.total; i++) {
             const arepa = document.createElement('span');
             arepa.textContent = '🫓';
@@ -912,7 +912,7 @@ function verifyPairings() {
         let errorMsg = '🔍 Revisa de nuevo. ';
         
         if (pairs.length < 3) {
-            errorMsg += 'Recuerda que debes emparejar las bandejas con la misma cantidad de arepas. ';
+            errorMsg += 'Recuerda que debes emparejar las bandejas con la misma cantidad de pandebonos. ';
         }
         
         if (wrongPairs.length > 0) {
@@ -920,7 +920,7 @@ function verifyPairings() {
         }
         
         if (missingPairs.length > 0) {
-            errorMsg += 'Cuenta bien las arepas de cada bandeja.';
+            errorMsg += 'Cuenta bien los pandebonos de cada bandeja.';
         }
         
         feedback.textContent = errorMsg;
