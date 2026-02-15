@@ -767,38 +767,78 @@ section.screen.active {
    PANTALLA PRINCIPAL
    ======================================== */
 
+/* Fondo con patrón matemático infantil */
+#homeScreen {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    position: relative;
+}
+
+#homeScreen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        /* Números y símbolos */
+        url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.15' fill='%231976d2' font-family='Comic Sans MS' font-weight='bold'%3E%3Ctext x='10' y='30' font-size='28'%3E1%3C/text%3E%3Ctext x='160' y='50' font-size='32'%3E2%3C/text%3E%3Ctext x='80' y='90' font-size='25'%3E3%3C/text%3E%3Ctext x='140' y='130' font-size='30'%3E4%3C/text%3E%3Ctext x='20' y='170' font-size='26'%3E5%3C/text%3E%3Ctext x='50' y='50' font-size='22'%3E+%3C/text%3E%3Ctext x='120' y='90' font-size='24'%3E×%3C/text%3E%3Ctext x='30' y='130' font-size='20'%3E=%3C/text%3E%3C/g%3E%3C/svg%3E"),
+        /* Círculos */
+        url("data:image/svg+xml,%3Csvg width='150' height='150' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='15' fill='none' stroke='%23ff6b6b' stroke-width='3' opacity='0.2'/%3E%3Ccircle cx='120' cy='100' r='20' fill='none' stroke='%23feca57' stroke-width='3' opacity='0.2'/%3E%3C/svg%3E"),
+        /* Triángulos */
+        url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='90,20 120,70 60,70' fill='none' stroke='%2348bb78' stroke-width='3' opacity='0.2'/%3E%3Cpolygon points='30,130 50,160 10,160' fill='none' stroke='%23ee5a6f' stroke-width='3' opacity='0.2'/%3E%3C/svg%3E"),
+        /* Cuadrados */
+        url("data:image/svg+xml,%3Csvg width='160' height='160' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='20' y='20' width='40' height='40' fill='none' stroke='%239b59b6' stroke-width='3' opacity='0.2' rx='5'/%3E%3Crect x='100' y='100' width='35' height='35' fill='none' stroke='%23e67e22' stroke-width='3' opacity='0.2' rx='5'/%3E%3C/svg%3E"),
+        /* Estrellas */
+        url("data:image/svg+xml,%3Csvg width='140' height='140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='70,10 75,30 95,30 80,42 85,62 70,50 55,62 60,42 45,30 65,30' fill='%23ffd700' opacity='0.15'/%3E%3Cpolygon points='30,100 33,110 43,110 35,116 38,126 30,120 22,126 25,116 17,110 27,110' fill='%23ffd700' opacity='0.15'/%3E%3C/svg%3E");
+    background-size: 200px 200px, 150px 150px, 180px 180px, 160px 160px, 140px 140px;
+    background-position: 0 0, 50px 50px, 100px 30px, 30px 80px, 70px 110px;
+    animation: floatPattern 60s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes floatPattern {
+    0% { background-position: 0 0, 50px 50px, 100px 30px, 30px 80px, 70px 110px; }
+    100% { background-position: 200px 200px, 250px 250px, 300px 230px, 230px 280px, 270px 310px; }
+}
+
 .home-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 .home-title {
     font-size: 3.5em;
-    color: #1d3557;
-    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3),
-                 0 0 30px rgba(29, 53, 87, 0.5),
-                 0 0 50px rgba(29, 53, 87, 0.3);
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff6b6b, #feca57, #48bb78, #4299e1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.3));
     margin-bottom: 20px;
     font-weight: bold;
-    animation: titleGlow 2s ease-in-out infinite alternate;
+    font-family: 'Comic Sans MS', cursive;
+    animation: titleGlow 3s ease-in-out infinite alternate;
 }
 
 @keyframes titleGlow {
-    from { text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3),
-                        0 0 30px rgba(29, 53, 87, 0.5),
-                        0 0 50px rgba(29, 53, 87, 0.3); }
-    to { text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3),
-                      0 0 40px rgba(29, 53, 87, 0.7),
-                      0 0 60px rgba(29, 53, 87, 0.5); }
+    from { filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.3)); }
+    to { filter: drop-shadow(3px 3px 12px rgba(255, 107, 107, 0.6)); }
 }
 
 .home-subtitle {
     font-size: 1.8em;
-    color: #2d4654;
+    color: #1565c0;
     margin-bottom: 60px;
-    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    font-family: 'Comic Sans MS', cursive;
+    font-weight: bold;
 }
 
 .activities-grid {
