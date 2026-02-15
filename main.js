@@ -331,6 +331,10 @@ function initMoment1() {
     const continueBtn = document.getElementById('continueToM2Btn');
     if (continueBtn) {
         continueBtn.addEventListener('click', () => {
+            // Ocultar el botón de lectura al pasar a M2
+            if (finishReadingBtn) {
+                finishReadingBtn.style.display = 'none';
+            }
             showScreen('moment2Screen');
             initMoment2();
         });
