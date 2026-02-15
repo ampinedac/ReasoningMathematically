@@ -175,13 +175,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProgress(page) {
         currentPage = page;
         const progress = ((page + 1) / CONFIG.totalPages) * 100;
-        elements.progressBar.style.setProperty('--progress', `${progress}%`);
-        elements.progressBar.querySelector('::before')?.style.setProperty('width', `${progress}%`);
         
-        // Update CSS variable for progress bar
-        document.documentElement.style.setProperty('--flipbook-progress', `${progress}%`);
+        // Update progress bar only if it exists
+        if (elements.progressBar) {
+            elements.progressBar.style.setProperty('--progress', `${progress}%`);
+            elements.progressBar.querySelector('::before')?.style.setProperty('width', `${progress}%`);
+            // Update CSS variable for progress bar
+            document.documentElement.style.setProperty('--flipbook-progress', `${progress}%`);
+        }
         
-        elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
+        // Update progress text only if it exists
+        if (elements.progressText) {
+            elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
+        }
         
         // LÓGICA SIMPLE Y DIRECTA DEL BOTÓN
         const finishBtn = document.getElementById('finishReadingBtn');
