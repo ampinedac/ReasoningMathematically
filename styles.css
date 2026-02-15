@@ -927,9 +927,9 @@ section.screen.active {
 }
 
 .confirmation-buttons .btn {
-    width: 150px;
-    min-width: 150px;
-    max-width: 150px;
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
     font-size: 1.3em;
     flex-shrink: 0;
     padding: 15px 20px;
@@ -1016,7 +1016,6 @@ section.screen.active {
     box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
     transition: all 0.3s;
     font-weight: bold;
-    min-width: 120px;
 }
 
 .btn-secondary:hover {
