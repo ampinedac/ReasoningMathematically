@@ -735,14 +735,58 @@ function tryPairing(draggedTray, targetTray, isLeftSide) {
     if (id1 !== id2) {
         console.log('✅ Uniendo bandejas...');
         
-        // Crear contenedor wrapper para el par
+        // Si la bandeja objetivo ya está emparejada, desemparejarla primero
+        if (targetTray.classList.contains('paired')) {
+            console.log('🔓 Bandeja objetivo ya emparejada, desemparejando...');
+            const targetId = parseInt(targetTray.dataset.id);
+            const pairIndex = pairs.findIndex(p => p.includes(targetId));
+            
+            if (pairIndex !== -1) {
+                const [id_a, id_b] = pairs[pairIndex];
+                const otherTargetId = id_a === targetId ? id_b : id_a;
+                const otherTargetTray = document.querySelector(`.tray-card[data-id="${otherTargetId}"]`);
+                
+                // Buscar el wrapper padre de targetTray
+                const oldWrapper = targetTray.closest('.tray-pair-wrapper');
+                if (oldWrapper) {
+                    const traysContainer = oldWrapper.parentElement;
+                    const wrapperRect = oldWrapper.getBoundingClientRect();
+                    const containerRect = traysContainer.getBoundingClientRect();
+                    
+                    // Restaurar targetTray
+                    targetTray.style.position = 'absolute';
+                    targetTray.style.left = (wrapperRect.left - containerRect.left) + 'px';
+                    targetTray.style.top = (wrapperRect.top - containerRect.top) + 'px';
+                    targetTray.classList.remove('paired');
+                    traysContainer.appendChild(targetTray);
+                    
+                    // Restaurar la otra bandeja
+                    if (otherTargetTray) {
+                        otherTargetTray.style.position = 'absolute';
+                        otherTargetTray.style.left = (wrapperRect.left - containerRect.left) + 'px';
+                        otherTargetTray.style.top = (wrapperRect.top - containerRect.top) + 'px';
+                        otherTargetTray.classList.remove('paired');
+                        traysContainer.appendChild(otherTargetTray);
+                    }
+                    
+                    // Eliminar wrapper
+                    oldWrapper.remove();
+                }
+                
+                // Eliminar del array
+                pairs.splice(pairIndex, 1);
+            }
+        }
+        
+        // Crear contenedor wrapper para el nuevo par
         const wrapper = document.createElement('div');
         wrapper.classList.add('tray-pair-wrapper');
         wrapper.dataset.pair = `${id1}-${id2}`;
         
         // Obtener posición de la bandeja objetivo
         const rectTarget = targetTray.getBoundingClientRect();
-        const containerRect = targetTray.parentElement.getBoundingClientRect();
+        const traysContainer = document.getElementById('traysContainer');
+        const containerRect = traysContainer.getBoundingClientRect();
         
         // Ajustar posición del wrapper según el lado
         let wrapperLeft, wrapperTop;
@@ -762,7 +806,6 @@ function tryPairing(draggedTray, targetTray, isLeftSide) {
         wrapper.style.top = wrapperTop + 'px';
         
         // Agregar wrapper al contenedor de bandejas
-        const traysContainer = targetTray.parentElement;
         traysContainer.appendChild(wrapper);
         
         // Resetear estilos de posicionamiento de las bandejas
