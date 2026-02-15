@@ -9,11 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
         totalPages: 9, // 9 story pages only
         soundEnabled: true,
         soundFrequency: 800,
-        soundDuration: 100
+        soundDuration: 100,
+        narrationEnabled: false // Control para la narración de texto
     };
 
     // ===== STATE =====
     let currentPage = 0;
+    let currentSpeech = null; // Almacenar el objeto de narración actual
 
     // ===== DOM ELEMENTS =====
     const pages = document.querySelectorAll('#flipbook .page');
@@ -21,32 +23,151 @@ document.addEventListener('DOMContentLoaded', function() {
         progressBar: document.getElementById('progressBar'),
         progressText: document.getElementById('progressText'),
         prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn')
+        nextBtn: document.getElementById('nextBtn'),
+        soundToggle: document.getElementById('soundToggle')
     };
 
-    // ===== WEB AUDIO API - PAGE TURN SOUND =====
+    // ===== WEB AUDIO API - REALISTIC PAGE TURN SOUND =====
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     function playPageTurnSound() {
         if (!CONFIG.soundEnabled) return;
 
         try {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            const duration = 0.3;
+            const now = audioContext.currentTime;
 
-            oscillator.connect(gainNode);
+            // Crear buffer para ruido blanco (simula papel)
+            const bufferSize = audioContext.sampleRate * duration;
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            // Generar ruido blanco
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            // Crear fuente de buffer
+            const noise = audioContext.createBufferSource();
+            noise.buffer = buffer;
+
+            // Filtro paso-alto para eliminar graves (sonido más realista de papel)
+            const highpass = audioContext.createBiquadFilter();
+            highpass.type = 'highpass';
+            highpass.frequency.value = 1000;
+            highpass.Q.value = 0.5;
+
+            // Filtro paso-bajo para suavizar
+            const lowpass = audioContext.createBiquadFilter();
+            lowpass.type = 'lowpass';
+            lowpass.frequency.value = 4000;
+            lowpass.Q.value = 1;
+
+            // Control de volumen con envelope
+            const gainNode = audioContext.createGain();
+            gainNode.gain.setValueAtTime(0, now);
+            gainNode.gain.linearRampToValueAtTime(0.15, now + 0.02);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+            // Conectar cadena de audio
+            noise.connect(highpass);
+            highpass.connect(lowpass);
+            lowpass.connect(gainNode);
             gainNode.connect(audioContext.destination);
 
-            oscillator.type = 'sine';
-            oscillator.frequency.value = CONFIG.soundFrequency;
-
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + CONFIG.soundDuration / 1000);
-
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + CONFIG.soundDuration / 1000);
+            // Reproducir
+            noise.start(now);
+            noise.stop(now + duration);
         } catch (e) {
             console.warn('Audio playback failed:', e);
+        }
+    }
+
+    // ===== TOGGLE SONIDO =====
+    function toggleNarration() {
+        CONFIG.narrationEnabled = !CONFIG.narrationEnabled;
+        updateSoundButton();
+        
+        if (CONFIG.narrationEnabled) {
+            // Narrar la página actual
+            narrateCurrentPage();
+        } else {
+            // Detener narración
+            stopNarration();
+        }
+        
+        // Guardar preferencia
+        localStorage.setItem('flipbookNarrationEnabled', CONFIG.narrationEnabled);
+    }
+
+    function narrateCurrentPage() {
+        // Detener cualquier narración anterior
+        stopNarration();
+        
+        const currentPageElement = pages[currentPage];
+        const storyText = currentPageElement.querySelector('.story-text');
+        
+        if (!storyText) return;
+        
+        const text = storyText.textContent;
+        
+        // Usar Web Speech API
+        if ('speechSynthesis' in window) {
+            currentSpeech = new SpeechSynthesisUtterance(text);
+            currentSpeech.lang = 'es-ES'; // Español
+            currentSpeech.rate = 0.9; // Velocidad un poco más lenta
+            currentSpeech.pitch = 1.1; // Tono ligeramente más alto (voz femenina)
+            
+            // Buscar voz femenina con acento neutral (es-ES o es-MX preferentemente)
+            const voices = window.speechSynthesis.getVoices();
+            
+            // Priorizar voces de España (es-ES) o México (es-MX) que suelen ser más neutrales
+            const spanishFemaleVoice = voices.find(voice => 
+                (voice.lang === 'es-ES' || voice.lang === 'es-MX') && 
+                (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('woman'))
+            ) || voices.find(voice => 
+                voice.lang === 'es-ES' && voice.name.toLowerCase().includes('lucia')
+            ) || voices.find(voice => 
+                voice.lang === 'es-MX' && voice.name.toLowerCase().includes('paulina')
+            ) || voices.find(voice => 
+                voice.lang.startsWith('es') && !voice.name.toLowerCase().includes('male')
+            ) || voices.find(voice => voice.lang.startsWith('es'));
+            
+            if (spanishFemaleVoice) {
+                currentSpeech.voice = spanishFemaleVoice;
+                console.log('🎙️ Usando voz:', spanishFemaleVoice.name);
+            }
+            
+            currentSpeech.onend = () => {
+                console.log('🔊 Narración completada');
+            };
+            
+            window.speechSynthesis.speak(currentSpeech);
+        }
+    }
+
+    function stopNarration() {
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        currentSpeech = null;
+    }
+
+    function updateSoundButton() {
+        if (!elements.soundToggle) return;
+        
+        const muteLine = elements.soundToggle.querySelector('.mute-line');
+        const soundWaves = elements.soundToggle.querySelector('.sound-waves');
+        
+        // Siempre mostrar bocina abierta (ondas de sonido visibles)
+        muteLine.style.display = 'none';
+        soundWaves.style.display = 'block';
+        
+        // Cambiar solo el aria-label para accesibilidad
+        if (CONFIG.narrationEnabled) {
+            elements.soundToggle.setAttribute('aria-label', 'Detener narración');
+        } else {
+            elements.soundToggle.setAttribute('aria-label', 'Narrar página');
         }
     }
 
@@ -61,6 +182,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.documentElement.style.setProperty('--flipbook-progress', `${progress}%`);
         
         elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
+        
+        // Notificar a main.js sobre el cambio de página
+        console.log(`📖 [app.js] updateProgress llamado con página ${page + 1}/${CONFIG.totalPages}`);
+        console.log(`📖 [app.js] window.onFlipbookPageChange existe:`, !!window.onFlipbookPageChange);
+        
+        if (window.onFlipbookPageChange) {
+            console.log(`📖 [app.js] Llamando a window.onFlipbookPageChange(${page + 1}, ${CONFIG.totalPages})`);
+            window.onFlipbookPageChange(page + 1, CONFIG.totalPages);
+        } else {
+            console.log(`⚠️ [app.js] window.onFlipbookPageChange NO ESTÁ DEFINIDO`);
+        }
         
         // Update navigation buttons
         updateNavButtons(page);
@@ -77,6 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const newPage = pages[pageIndex];
         
         if (!newPage) return;
+        
+        // Detener narración al cambiar de página
+        stopNarration();
+        CONFIG.narrationEnabled = false;
+        updateSoundButton();
         
         // Limpiar todas las clases de animación
         pages.forEach(page => {
@@ -192,6 +329,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // Navigation buttons
         elements.prevBtn.addEventListener('click', previousPage);
         elements.nextBtn.addEventListener('click', nextPage);
+        
+        // Sound toggle
+        if (elements.soundToggle) {
+            elements.soundToggle.addEventListener('click', toggleNarration);
+        }
+        
+        // Cargar voces disponibles
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                const voices = window.speechSynthesis.getVoices();
+                console.log('🎙️ Voces disponibles:', voices.length);
+            };
+        }
     }
 
     // ===== CUSTOM PROGRESS BAR STYLE =====
@@ -207,10 +357,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== INITIALIZATION =====
     function init() {
+        // Cargar preferencia de narración
+        const savedNarrationPref = localStorage.getItem('flipbookNarrationEnabled');
+        if (savedNarrationPref !== null) {
+            CONFIG.narrationEnabled = savedNarrationPref === 'true';
+        }
+        
         addProgressBarStyle();
         initEventListeners();
         initKeyboardNavigation();
         initTouchSupport();
+        updateSoundButton();
         
         // Show first story page without animation
         pages[0].classList.add('active');

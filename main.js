@@ -305,198 +305,81 @@ function showScreen(screenId) {
 function initMoment1() {
     document.getElementById('studentCodeM1').textContent = studentCode;
     
-    // Cargar cuento HTML
-    loadCuento();
+    console.log('✅ Momento 1 inicializado');
+    console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
     
-    // Botones de navegación del PDF
-    document.getElementById('prevPageBtn').addEventListener('click', () => {
-        if (currentPage > 1) {
-            flipPage(-1);
-        }
-    });
+    // El flipbook ya está en el HTML y app.js maneja la animación
+    // No necesitamos cargar ni renderizar nada aquí
     
-    document.getElementById('nextPageBtn').addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            flipPage(1);
-        }
-    });
-    
-    // Botón "Ya terminé la lectura"
-    document.getElementById('finishReadingBtn').addEventListener('click', () => {
-        document.getElementById('pdfReaderSection').style.display = 'none';
-        document.getElementById('problemQ1Section').classList.remove('hidden');
-        initProblemQ1();
-    });
-    
-    // Botón continuar a M2
-    document.getElementById('continueToM2Btn').addEventListener('click', () => {
-        showScreen('moment2Screen');
-        initMoment2();
-    });
-}
-
-// ========================================
-// LECTOR DE CUENTO HTML
-// ========================================
-
-function loadCuento() {
-    try {
-        totalPages = cuentoData.paginas.length;
-        console.log(`Cuento cargado: ${totalPages} páginas`);
+    // Configurar callback para recibir notificaciones de cambio de página
+    window.onFlipbookPageChange = function(currentPage, totalPages) {
+        console.log(`📄 Página actual: ${currentPage}/${totalPages}`);
+        const finishBtn = document.getElementById('finishReadingBtn');
+        console.log('🔍 Botón encontrado:', finishBtn);
+        console.log('🔍 Botón clases:', finishBtn?.className);
+        console.log('🔍 Botón display:', finishBtn ? window.getComputedStyle(finishBtn).display : 'N/A');
         
-        // Renderizar primera página
-        renderStoryPage(currentPage);
-        updatePageIndicator();
-        
-    } catch (error) {
-        console.error('Error al cargar cuento:', error);
-        alert('No se pudo cargar el cuento.');
-    }
-}
-
-function renderStoryPage(pageNum) {
-    try {
-        const frontCanvas = document.getElementById('pageFrontCanvas');
-        const container = frontCanvas.parentElement;
-        
-        // Ocultar canvas y mostrar contenido HTML
-        frontCanvas.style.display = 'none';
-        
-        // Buscar o crear div para el cuento
-        let storyDiv = document.getElementById('storyContent');
-        if (!storyDiv) {
-            storyDiv = document.createElement('div');
-            storyDiv.id = 'storyContent';
-            storyDiv.className = 'story-page-content';
-            container.insertBefore(storyDiv, frontCanvas);
-        }
-        
-        const pagina = cuentoData.paginas[pageNum - 1];
-        
-        if (pageNum === 1) {
-            // Página de título
-            storyDiv.innerHTML = `
-                <div class="story-title-page">
-                    <button id="readStoryBtn" class="read-story-btn" title="Escuchar el cuento">🔊</button>
-                    <h1 class="story-main-title">${cuentoData.titulo}</h1>
-                    <p class="story-author">${cuentoData.autor}</p>
-                    <div class="story-decoration">🥐 🧈 🫓</div>
-                </div>
-            `;
-            
-            // Agregar evento al botón de leer
-            document.getElementById('readStoryBtn').addEventListener('click', readCurrentPage);
+        if (finishBtn) {
+            if (currentPage === totalPages) {
+                console.log('✅ Última página alcanzada - Mostrando botón');
+                finishBtn.classList.remove('hidden');
+                finishBtn.style.display = 'block';
+                finishBtn.style.visibility = 'visible';
+                finishBtn.style.opacity = '1';
+                console.log('🔍 Después de mostrar - display:', window.getComputedStyle(finishBtn).display);
+                console.log('🔍 Después de mostrar - visibility:', window.getComputedStyle(finishBtn).visibility);
+            } else {
+                finishBtn.classList.add('hidden');
+                finishBtn.style.display = 'none';
+            }
         } else {
-            // Páginas del cuento
-            storyDiv.innerHTML = `
-                <div class="story-page">
-                    <button id="readStoryBtn" class="read-story-btn" title="Escuchar esta página">🔊</button>
-                    <div class="story-illustration-top">${pagina.emojis || '📖'}</div>
-                    <p class="story-text">${pagina.texto}</p>
-                </div>
-            `;
-            
-            // Agregar evento al botón de leer
-            document.getElementById('readStoryBtn').addEventListener('click', readCurrentPage);
+            console.error('❌ No se encontró el botón finishReadingBtn');
         }
+    };
+    
+    console.log('✅ Callback onFlipbookPageChange configurado');
+    
+    // Verificar estado inicial del flipbook después de un pequeño delay
+    setTimeout(() => {
+        console.log('🔍 Verificando estado inicial del flipbook...');
+        const flipbookPages = document.querySelectorAll('#flipbook .page');
+        console.log('🔍 Total de páginas en flipbook:', flipbookPages.length);
         
-    } catch (error) {
-        console.error('Error al renderizar página del cuento:', error);
-    }
-}
-
-// Función para leer el texto con voz mejorada
-function readCurrentPage() {
-    // Detener cualquier lectura previa
-    if (typeof responsiveVoice !== 'undefined') {
-        responsiveVoice.cancel();
-    } else {
-        window.speechSynthesis.cancel();
-    }
-    
-    const pagina = cuentoData.paginas[currentPage - 1];
-    const textoALeer = currentPage === 1 ? cuentoData.titulo : pagina.texto;
-    
-    // Usar ResponsiveVoice si está disponible (voz más expresiva)
-    if (typeof responsiveVoice !== 'undefined') {
-        // Opciones de ResponsiveVoice
-        // Voces: "Mexican Spanish Female" (neutral latino), "Spanish Latin American Female"
-        responsiveVoice.speak(textoALeer, "Mexican Spanish Female", {
-            pitch: 1.05,
-            rate: 0.88,
-            volume: 1,
-            onstart: function() {
-                console.log("🔊 Iniciando lectura...");
-                const btn = document.getElementById('readStoryBtn');
-                if (btn) btn.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-            },
-            onend: function() {
-                console.log("✅ Lectura completada");
-                const btn = document.getElementById('readStoryBtn');
-                if (btn) btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        let activePage = 0;
+        flipbookPages.forEach((page, index) => {
+            if (page.classList.contains('active')) {
+                activePage = index + 1;
+                console.log('🔍 Página activa inicial:', activePage);
             }
         });
-    } else {
-        // Fallback a la voz nativa del navegador
-        const utterance = new SpeechSynthesisUtterance(textoALeer);
-        utterance.lang = 'es-MX';
-        utterance.rate = 0.9;
-        utterance.pitch = 1.1;
         
-        const voices = window.speechSynthesis.getVoices();
-        const femaleSpanishVoice = voices.find(voice => 
-            voice.lang.includes('es') && voice.name.toLowerCase().includes('female')
-        ) || voices.find(voice => 
-            voice.lang.includes('es') && !voice.name.toLowerCase().includes('male')
-        ) || voices.find(voice => voice.lang.includes('es'));
-        
-        if (femaleSpanishVoice) {
-            utterance.voice = femaleSpanishVoice;
+        // Si ya está en la última página, mostrar el botón inmediatamente
+        if (activePage === flipbookPages.length && window.onFlipbookPageChange) {
+            console.log('🔍 Ya está en la última página, llamando al callback...');
+            window.onFlipbookPageChange(activePage, flipbookPages.length);
         }
-        
-        window.speechSynthesis.speak(utterance);
-    }
-}
-
-function flipPage(direction) {
-    const nextPage = currentPage + direction;
+    }, 100);
     
-    if (nextPage >= 1 && nextPage <= totalPages) {
-        const storyDiv = document.getElementById('storyContent');
-        
-        // Animación de salida
-        storyDiv.style.opacity = '0';
-        storyDiv.style.transform = 'translateX(' + (direction > 0 ? '-20px' : '20px') + ')';
-        
-        setTimeout(() => {
-            currentPage = nextPage;
-            renderStoryPage(currentPage);
-            
-            // Animación de entrada
-            storyDiv.style.transform = 'translateX(' + (direction > 0 ? '20px' : '-20px') + ')';
-            
-            setTimeout(() => {
-                storyDiv.style.opacity = '1';
-                storyDiv.style.transform = 'translateX(0)';
-            }, 50);
-            
-            updatePageIndicator();
-            checkLastPage();
-        }, 300);
+    // Botón "Ya terminé la lectura"
+    const finishReadingBtn = document.getElementById('finishReadingBtn');
+    if (finishReadingBtn) {
+        finishReadingBtn.addEventListener('click', () => {
+            document.getElementById('flipbookSection').style.display = 'none';
+            const problemSection = document.getElementById('problemQ1Section');
+            if (problemSection) {
+                problemSection.classList.remove('hidden');
+                initProblemQ1();
+            }
+        });
     }
-}
-
-function updatePageIndicator() {
-    document.getElementById('pageIndicator').textContent = `Página ${currentPage} / ${totalPages}`;
     
-    // Deshabilitar botones según corresponda
-    document.getElementById('prevPageBtn').disabled = currentPage === 1;
-    document.getElementById('nextPageBtn').disabled = currentPage === totalPages;
-}
-
-function checkLastPage() {
-    if (currentPage === totalPages) {
-        document.getElementById('finishReadingBtn').classList.remove('hidden');
+    // Botón continuar a M2
+    const continueBtn = document.getElementById('continueToM2Btn');
+    if (continueBtn) {
+        continueBtn.addEventListener('click', () => {
+            showScreen('moment2Screen');
+            initMoment2();
+        });
     }
 }
 
@@ -505,6 +388,8 @@ function checkLastPage() {
 // ========================================
 
 function initProblemQ1() {
+    console.log('🔧 Inicializando Problema Q1...');
+    
     const canvasId = 'boardCanvasM1Q1';
     const recordBtnId = 'recordBtnM1Q1';
     const stopBtnId = 'stopBtnM1Q1';
@@ -512,8 +397,24 @@ function initProblemQ1() {
     const submitBtnId = 'submitM1Q1';
     const statusTextId = 'statusM1Q1';
     
+    // Verificar que existen los elementos
+    const canvas = document.getElementById(canvasId);
+    const recordBtn = document.getElementById(recordBtnId);
+    const stopBtn = document.getElementById(stopBtnId);
+    
+    console.log('Canvas:', canvas ? '✅ Encontrado' : '❌ No encontrado');
+    console.log('Botón grabar:', recordBtn ? '✅ Encontrado' : '❌ No encontrado');
+    console.log('Botón detener:', stopBtn ? '✅ Encontrado' : '❌ No encontrado');
+    
+    if (!canvas || !recordBtn || !stopBtn) {
+        console.error('⚠️ Faltan elementos necesarios para el problema Q1');
+        return;
+    }
+    
     const boardState = initBoard(canvasId);
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
+    
+    console.log('✅ Board y Audio inicializados');
     
     // Habilitar botón enviar cuando haya evidencia
     const submitBtn = document.getElementById(submitBtnId);
@@ -1064,7 +965,14 @@ async function finalizeMoment4() {
 // ========================================
 
 function initBoard(canvasId) {
+    console.log('🎨 Inicializando board:', canvasId);
+    
     const canvas = document.getElementById(canvasId);
+    if (!canvas) {
+        console.error('❌ Canvas no encontrado:', canvasId);
+        return { hasDrawing: false, disabled: false };
+    }
+    
     const ctx = canvas.getContext('2d');
     
     let isDrawing = false;
@@ -1073,7 +981,14 @@ function initBoard(canvasId) {
     let disabled = false;
     
     // Configurar herramientas
-    const toolButtons = canvas.closest('.evidence-section').querySelectorAll('.tool-btn');
+    const evidenceSection = canvas.closest('.evidence-section');
+    if (!evidenceSection) {
+        console.error('❌ No se encontró .evidence-section para el canvas:', canvasId);
+        return { hasDrawing: false, disabled: false };
+    }
+    
+    const toolButtons = evidenceSection.querySelectorAll('.tool-btn');
+    console.log('🔧 Botones de herramientas encontrados:', toolButtons.length);
     
     toolButtons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1191,15 +1106,28 @@ function initBoard(canvasId) {
 // ========================================
 
 function initAudio(recordBtnId, stopBtnId, statusId) {
+    console.log('🎤 Inicializando audio:', recordBtnId);
+    
     const recordBtn = document.getElementById(recordBtnId);
     const stopBtn = document.getElementById(stopBtnId);
     const status = document.getElementById(statusId);
+    
+    if (!recordBtn || !stopBtn || !status) {
+        console.error('❌ Elementos de audio no encontrados');
+        console.error('recordBtn:', recordBtn);
+        console.error('stopBtn:', stopBtn);
+        console.error('status:', status);
+        return { audioBlob: null };
+    }
+    
+    console.log('✅ Elementos de audio encontrados');
     
     let mediaRecorder = null;
     let audioChunks = [];
     let audioBlob = null;
     
     recordBtn.addEventListener('click', async () => {
+        console.log('🔴 Intentando grabar audio...');
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             

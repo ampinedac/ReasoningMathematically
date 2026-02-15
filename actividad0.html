@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0 - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥐</text></svg>">
-    <link rel="stylesheet" href="styles.css?v=999999999">
+    <link rel="stylesheet" href="styles.css?v=20260214159999">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
 </head>
@@ -42,111 +42,111 @@
     <section id="moment1Screen" class="screen">
         <div class="container">
             <div class="header">
-                <h2 class="section-title">Momento 1: El cuento de Doña Martha</h2>
+                <h2 class="section-title">Momento 1: El cuento de Doña Alicia</h2>
                 <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
             </div>
 
             <!-- FLIPBOOK 3D DEL CUENTO -->
             <div id="flipbookSection">
-                
-                <!-- Progress Indicator -->
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar"></div>
-                    <div class="progress-text" id="progressText">Página 1 de 9</div>
-                </div>
 
                 <!-- Flipbook Container -->
                 <div class="flipbook-wrapper">
+                    <!-- Botón de sonido en esquina superior derecha -->
+                    <button id="soundToggle" class="sound-toggle" aria-label="Activar/Desactivar sonido">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="speaker-icon" d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
+                            <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line class="mute-line" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: none;"/>
+                        </svg>
+                    </button>
                     <div id="flipbook">
                         
                         <!-- Story Page 1 -->
                         <div class="page story-page active">
                             <div class="page-number">1</div>
-                            <div class="emoji-large">🏠🧀🧈😊</div>
-                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Martha. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                            <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
+                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
                         </div>
 
                         <!-- Story Page 2 -->
                         <div class="page story-page">
                             <div class="page-number">2</div>
-                            <div class="emoji-large">🌅👩‍🍳🎵🫓</div>
-                            <p class="story-text">Cada mañana, muy temprano, Doña Martha comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
+                            <img src="assets/images/pagina2_cuento_act0_1.png" alt="Doña Alicia amasando" class="story-image">
+                            <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
                         </div>
 
                         <!-- Story Page 3 -->
                         <div class="page story-page">
                             <div class="page-number">3</div>
-                            <div class="emoji-large">👦⚪☁️🧀</div>
-                            <p class="story-text">Lucas, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                            <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
+                            <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
                         </div>
 
                         <!-- Story Page 4 -->
                         <div class="page story-page">
                             <div class="page-number">4</div>
-                            <div class="emoji-large">🔥✨🏘️👃</div>
-                            <p class="story-text">¡Es hora de entrar al calor! Doña Martha coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
+                            <img src="assets/images/pagina4_cuento_act0_1.png" alt="Pandebonos en el horno" class="story-image">
+                            <p class="story-text">¡Es hora de entrar al calor! Doña Alicia coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
                         </div>
 
                         <!-- Story Page 5 -->
                         <div class="page story-page">
                             <div class="page-number">5</div>
-                            <div class="emoji-large">🔔💨🥐✨</div>
+                            <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
                             <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
                         </div>
 
                         <!-- Story Page 6 -->
                         <div class="page story-page">
                             <div class="page-number">6</div>
-                            <div class="emoji-large">📋💝🍽️✨</div>
-                            <p class="story-text">Ahora viene la parte más importante para Doña Martha: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
+                            <img src="assets/images/pagina6_cuento_act0_1.png" alt="Organizando bandejas" class="story-image">
+                            <p class="story-text">Ahora viene la parte más importante para Doña Alicia: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
                         </div>
 
                         <!-- Story Page 7 -->
                         <div class="page story-page">
                             <div class="page-number">7</div>
-                            <div class="emoji-large">👆🔢🫓🫓</div>
-                            <p class="story-text">Lucas ayuda a contar para que todo sea justo. "Uno para Clara, uno para Mateo, uno para Sofía…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                            <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebonos" class="story-image">
+                            <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Uno para Sarita, uno para Luchi, uno para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
                         </div>
 
                         <!-- Story Page 8 -->
                         <div class="page story-page">
                             <div class="page-number">8</div>
-                            <div class="emoji-large">💬❤️🤝✨</div>
-                            <p class="story-text">"Mira, Lucas", dice Doña Martha con ternura. "Cuando ponemos las cosas en orden y las repartimos con cuidado, nos aseguramos de que nadie se quede sin su bocado. Compartir con orden es compartir con el corazón".</p>
+                            <img src="assets/images/pagina8_cuento_act0_1.png" alt="Compartiendo con orden" class="story-image">
+                            <p class="story-text">"Mira, Daniel", dice Doña Alicia con ternura. "Cuando ponemos las cosas en orden y las repartimos con cuidado, nos aseguramos de que nadie se quede sin su bocado. Compartir con orden es compartir con el corazón".</p>
                         </div>
 
                         <!-- Story Page 9 -->
                         <div class="page story-page">
                             <div class="page-number">9</div>
-                            <div class="emoji-large">👧👦🥐😊</div>
-                            <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Martha y Lucas sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el orden al compartir.</p>
+                            <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
+                            <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
                         </div>
 
                     </div>
-                </div>
-
-                <!-- Navigation Controls -->
-                <div class="controls">
-                    <button id="prevBtn" class="nav-btn" aria-label="Página anterior">← Anterior</button>
-                    <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">Siguiente →</button>
+                    
+                    <!-- Navigation Controls dentro del libro -->
+                    <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
+                    <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
                 </div>
                 
-                <button id="finishReadingBtn" class="btn btn-primary" style="margin-top: 20px;">Ya terminé la lectura</button>
+                <button id="finishReadingBtn" class="btn btn-primary hidden">Ya terminé la lectura</button>
             </div>
 
-            <!-- PROBLEMA Q1 -->
+            <!-- SITUACIÓN 1 -->
             <div id="problemQ1Section" class="hidden">
                 <div class="problem-box">
-                    <h3>Problema</h3>
-                    <p>Doña Martha hizo <strong>22 pandebonos</strong> y quiere organizarlos en bandejas para venderlos.</p>
-                    <p><strong>Martha dice:</strong> "Los voy a poner en <strong>2 filas</strong> con <strong>11 pandebonos</strong> en cada fila."</p>
-                    <p><strong>Lucas dice:</strong> "¡No! Mejor ponlos en <strong>11 filas</strong> con <strong>2 pandebonos</strong> en cada fila."</p>
-                    <p class="question">❓ ¿Quién tiene razón? ¿Por qué?</p>
+                    <h3>Situación 1</h3>
+                    <p>Doña Alicia hizo <strong>28 pandebonos</strong> y quiere organizarlos en bandejas para venderlos.</p>
+                    <p><strong>Alicia dice:</strong> "Los voy a poner en <strong>4 filas</strong> con <strong>7 pandebonos</strong> en cada fila."</p>
+                    <p><strong>Daniel dice:</strong> "¡No! Mejor ponlos en <strong>7 filas</strong> con <strong>4 pandebonos</strong> en cada fila."</p>
+                    <p class="question"> ¿Qué arreglo permite tener más pandebono? ¿Por qué? Explica tu respuesta</p>
                 </div>
 
                 <!-- PIZARRA Y AUDIO -->
                 <div class="evidence-section">
-                    <h4>Explica tu respuesta:</h4>
+                    <h4>Puedes utilizar la pizarra</h4>
                     
                     <!-- Pizarra -->
                     <div class="board-container">
@@ -157,20 +157,20 @@
                             <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
                             <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
                         </div>
-                        <canvas id="boardCanvasM2P1" class="drawing-board" width="800" height="500"></canvas>
+                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
                     </div>
 
                     <!-- Audio -->
                     <div class="audio-controls">
-                        <button id="recordBtnM2P1" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM2P1" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM2P1" class="audio-status"></span>
+                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM1Q1" class="audio-status"></span>
                     </div>
 
                     <!-- Enviar -->
                     <div class="submit-section">
-                        <p id="statusM2P1" class="status-text"></p>
-                        <button id="submitM2P1" class="btn btn-primary" disabled>Enviar</button>
+                        <p id="statusM1Q1" class="status-text"></p>
+                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
                     </div>
                 </div>
 
@@ -194,8 +194,8 @@
                     <table id="panebonos-table" class="panebonos-table">
                         <thead>
                             <tr>
-                                <th colspan="3">Martha</th>
-                                <th colspan="3">Lucas</th>
+                                <th colspan="3">Alicia</th>
+                                <th colspan="3">Daniel</th>
                             </tr>
                             <tr>
                                 <th># Filas</th>
@@ -391,7 +391,7 @@
     </section>
 
     <!-- Scripts -->
-    <script type="module" src="main.js?v=2026021401"></script>
-    <script src="app.js"></script>
+    <script type="module" src="main.js?v=20260214159999"></script>
+    <script src="app.js?v=20260214159999"></script>
 </body>
 </html>
