@@ -46,8 +46,7 @@ class TraysSystem {
     render() {
         // CRÍTICO: Limpiar contenedor primero
         this.container.innerHTML = '';
-        this.container.style.display = 'grid';
-        this.container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+        // El CSS ya define el grid, no sobrescribir aquí
         
         // Crear copia para barajar (no mutar el original)
         const shuffledTrays = [...this.BASE_TRAYS].sort(() => Math.random() - 0.5);
