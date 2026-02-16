@@ -1364,7 +1364,7 @@ function initProblemM3Q2() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅';
+            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
             statusText.className = 'status-text success';
             
             // Bloquear edición
@@ -1376,12 +1376,11 @@ function initProblemM3Q2() {
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Mostrar botón continuar
-            const continueBtn = document.getElementById('continueToM4Btn');
-            continueBtn.classList.remove('hidden');
+            // Continuar automáticamente al Momento 4 después de un breve delay
             setTimeout(() => {
-                continueBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
+                showScreen('moment4Screen');
+                initMoment4();
+            }, 1000);
             
         } catch (error) {
             console.error('Error:', error);
