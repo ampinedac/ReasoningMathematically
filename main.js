@@ -1403,6 +1403,9 @@ function initProblemM3Q2() {
 function initMoment4() {
     document.getElementById('studentCodeM4').textContent = studentCode;
     
+    // Generar las 6 preguntas
+    generateMoment4Questions();
+    
     // Mostrar primer ítem
     showItem(1);
     
@@ -1410,6 +1413,42 @@ function initMoment4() {
     const inputs = document.querySelectorAll('.item-input');
     inputs.forEach(input => {
         input.addEventListener('input', validateItem);
+    });
+}
+
+function generateMoment4Questions() {
+    const questions = [
+        { equation: '3 × ☐ = 2 × 3', answer: 2 },
+        { equation: '☐ × 5 = 5 × 7', answer: 7 },
+        { equation: '4 × 6 = 6 × ☐', answer: 4 },
+        { equation: '☐ × 8 = 8 × 9', answer: 9 },
+        { equation: '5 × ☐ = 4 × 5', answer: 4 },
+        { equation: '6 × 7 = ☐ × 6', answer: 7 }
+    ];
+    
+    const wrapper = document.getElementById('itemsWrapper');
+    wrapper.innerHTML = ''; // Limpiar contenedor
+    
+    questions.forEach((q, index) => {
+        const itemNum = index + 1;
+        const itemBox = document.createElement('div');
+        itemBox.className = 'item-box hidden';
+        itemBox.dataset.item = itemNum;
+        
+        itemBox.innerHTML = `
+            <div class="item-equation">${q.equation}</div>
+            <div style="text-align: center; margin-top: 20px;">
+                <input type="number" 
+                       class="item-input" 
+                       data-answer="${q.answer}"
+                       placeholder="?"
+                       min="1"
+                       max="9">
+            </div>
+            <div class="item-feedback"></div>
+        `;
+        
+        wrapper.appendChild(itemBox);
     });
 }
 
