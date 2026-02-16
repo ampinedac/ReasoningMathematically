@@ -1251,10 +1251,17 @@ function initProblemM3Q1() {
         }
     };
     
-    setInterval(checkEvidence, 500);
+    const checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
+        // Bloquear botón inmediatamente y permanentemente
         submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+        
+        // Detener el intervalo de verificación
+        clearInterval(checkInterval);
+        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
@@ -1292,7 +1299,12 @@ function initProblemM3Q1() {
             console.error('Error:', error);
             statusText.textContent = 'Error al guardar. Intenta de nuevo.';
             statusText.className = 'status-text error';
+            // Solo rehabilitar si hay error
             submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+            // Reiniciar el intervalo si hay error
+            checkInterval = setInterval(checkEvidence, 500);
         }
     });
 }
@@ -1324,10 +1336,17 @@ function initProblemM3Q2() {
         }
     };
     
-    setInterval(checkEvidence, 500);
+    const checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
+        // Bloquear botón inmediatamente y permanentemente
         submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+        
+        // Detener el intervalo de verificación
+        clearInterval(checkInterval);
+        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
@@ -1368,7 +1387,12 @@ function initProblemM3Q2() {
             console.error('Error:', error);
             statusText.textContent = 'Error al guardar. Intenta de nuevo.';
             statusText.className = 'status-text error';
+            // Solo rehabilitar si hay error
             submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+            // Reiniciar el intervalo si hay error
+            checkInterval = setInterval(checkEvidence, 500);
         }
     });
 }
