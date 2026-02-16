@@ -4,7 +4,6 @@
 
 /* Contenedor principal de bandejas */
 .trays-container {
-    position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -55,6 +54,7 @@
     min-height: 180px;
     position: relative;
     user-select: none;
+    /* NO agregar left, top, transform que saquen del flujo */
 }
 
 /* Estados de interacción */
