@@ -989,7 +989,7 @@ function verifyTraysPairings() {
         if (totalPairs < expectedCorrectPairs) {
             errorMsg = `🔍 Te faltan emparejamientos. Solo tienes ${totalPairs} de ${expectedCorrectPairs} pares.`;
         } else if (totalPairs > expectedCorrectPairs) {
-            errorMsg = '🔍 Tienes demasiados emparejamientos. Recuerda: algunas bandejas no tienen pareja.';
+            errorMsg = '� Pista: algunas bandejas no tienen pareja.';
         } else {
             errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Cuenta bien los pandebonos.`;
         }
