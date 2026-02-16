@@ -17,6 +17,7 @@ let totalPages = 0;
 // Datos de Momento 2 (Juego de Bandejas)
 let trays = [];
 let pairs = [];
+let traysSystem = null; // Nueva instancia del sistema de bandejas
 
 // Datos de Momento 3
 let m3_a = 0;
@@ -476,23 +477,57 @@ function initProblemQ1() {
 // ========================================
 
 function initMoment2() {
+    console.log('🎯 Inicializando Momento 2 - Sistema de Bandejas');
+    
     document.getElementById('studentCodeM2').textContent = studentCode;
     
-    // Crear juego de bandejas
-    createTraysGame();
+    // Destruir instancia previa si existe (evitar duplicados)
+    if (traysSystem) {
+        traysSystem.destroy();
+        traysSystem = null;
+    }
+    
+    // Crear nueva instancia del sistema de bandejas
+    try {
+        traysSystem = new TraysSystem('traysArea');
+        console.log('✅ Sistema de bandejas inicializado');
+    } catch (error) {
+        console.error('❌ Error al inicializar sistema de bandejas:', error);
+    }
+    
+    // Configurar botón de verificación
+    const verifyBtn = document.getElementById('verifyTraysBtn');
+    if (verifyBtn) {
+        // Remover event listeners previos
+        const newVerifyBtn = verifyBtn.cloneNode(true);
+        verifyBtn.parentNode.replaceChild(newVerifyBtn, verifyBtn);
+        
+        newVerifyBtn.addEventListener('click', verifyTraysPairings);
+    }
     
     // Botón continuar a M3
-    document.getElementById('continueToM3Btn').addEventListener('click', () => {
-        showScreen('moment3Screen');
-        initMoment3();
-    });
+    const continueBtn = document.getElementById('continueToM3Btn');
+    if (continueBtn) {
+        // Remover event listeners previos
+        const newContinueBtn = continueBtn.cloneNode(true);
+        continueBtn.parentNode.replaceChild(newContinueBtn, continueBtn);
+        
+        newContinueBtn.addEventListener('click', () => {
+            showScreen('moment3Screen');
+            initMoment3();
+        });
+    }
 }
 
 // ========================================
 // JUEGO DE BANDEJAS - DRAG AND DROP
 // ========================================
+// NOTA: Esta sección ha sido reemplazada por el nuevo sistema TraysSystem
+// El código antiguo se mantiene comentado por referencia
 
-function createTraysGame() {
+/*
+// ===== CÓDIGO ANTIGUO (DESHABILITADO) =====
+function createTraysGame_OLD() {
     const traysData = [
         { id: 1, rows: 3, cols: 4, total: 12, pairId: 'A' },
         { id: 2, rows: 4, cols: 3, total: 12, pairId: 'A' },
@@ -903,8 +938,70 @@ document.addEventListener('mouseup', function(e) {
     isDraggingWrapper = false;
     currentDraggedWrapper = null;
 });
+*/
+// ===== FIN DEL CÓDIGO ANTIGUO =====
 
-function verifyPairings() {
+// Nueva función de verificación usando el sistema TraysSystem
+function verifyTraysPairings() {
+    if (!traysSystem) {
+        console.error('❌ Sistema de bandejas no inicializado');
+        return;
+    }
+    
+    const results = traysSystem.validatePairings();
+    const feedback = document.getElementById('traysFeedback');
+    
+    if (results.length === 0) {
+        feedback.textContent = '⚠️ No hay emparejamientos. Arrastra las bandejas para unirlas.';
+        feedback.className = 'feedback-text info';
+        return;
+    }
+    
+    // Contar emparejamientos correctos
+    const correctCount = results.filter(r => r.isCorrect).length;
+    const totalPairs = results.length;
+    
+    console.log('📊 Validación:', { correctCount, totalPairs, results });
+    
+    // Emparejamientos esperados: 3 pares correctos (12-12, 12-12, 15-15)
+    // Bandejas solas: tray-7 (20) y tray-8 (14)
+    const expectedCorrectPairs = 3;
+    
+    if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {
+        feedback.textContent = `🎉 ¡Perfecto! Todos los ${totalPairs} emparejamientos son correctos.`;
+        feedback.className = 'feedback-text success';
+        
+        // Deshabilitar el botón
+        document.getElementById('verifyTraysBtn').disabled = true;
+        
+        // Mostrar pregunta final
+        setTimeout(() => {
+            const finalSection = document.getElementById('finalQuestionSection');
+            if (finalSection) {
+                finalSection.classList.remove('hidden');
+                initMoment2Audio();
+            }
+        }, 1000);
+        
+    } else {
+        let errorMsg = '';
+        
+        if (totalPairs < expectedCorrectPairs) {
+            errorMsg = `🔍 Te faltan emparejamientos. Solo tienes ${totalPairs} de ${expectedCorrectPairs} pares.`;
+        } else if (totalPairs > expectedCorrectPairs) {
+            errorMsg = '🔍 Tienes demasiados emparejamientos. Recuerda: algunas bandejas no tienen pareja.';
+        } else {
+            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Cuenta bien los pandebonos.`;
+        }
+        
+        feedback.textContent = errorMsg;
+        feedback.className = 'feedback-text error';
+    }
+}
+
+// Función antigua (mantenida por referencia)
+/*
+function verifyPairings_OLD() {
     const feedback = document.getElementById('traysFeedback');
     
     // Emparejamientos correctos
@@ -981,6 +1078,7 @@ function verifyPairings() {
         feedback.className = 'feedback-text error';
     }
 }
+*/
 
 function initMoment2Audio() {
     const recordBtnId = 'recordBtnM2';
