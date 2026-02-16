@@ -991,7 +991,7 @@ function verifyTraysPairings() {
         } else if (totalPairs > expectedCorrectPairs) {
             errorMsg = '� Pista: algunas bandejas no tienen pareja.';
         } else {
-            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Cuenta bien los pandebonos.`;
+            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Vuelve a contar y verifica que las parejas estén unidas solo si tienen la misma cantidad.`;
         }
         
         feedback.textContent = errorMsg;
