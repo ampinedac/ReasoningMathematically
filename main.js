@@ -1132,17 +1132,17 @@ function initMoment2Audio() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅';
+            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
             statusText.className = 'status-text success';
             
             // Deshabilitar botón de grabar también
             document.getElementById(recordBtnId).disabled = true;
             
-            const continueBtn = document.getElementById('continueToM3Btn');
-            continueBtn.classList.remove('hidden');
+            // Continuar automáticamente al Momento 3 después de un breve delay
             setTimeout(() => {
-                continueBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
+                showScreen('moment3Screen');
+                initMoment3();
+            }, 1000);
             
         } catch (error) {
             console.error('Error:', error);
