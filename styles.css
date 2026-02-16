@@ -603,6 +603,8 @@ section.screen.active {
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
+    background: #f5f5f0;
+    border-radius: 15px;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
