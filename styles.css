@@ -1525,7 +1525,9 @@ section.screen.active {
     padding: 20px;
     background: #f8f9fa;
     border-radius: 15px;
-    max-width: 85%;
+    max-width: 90%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .evidence-section h4 {
@@ -1536,7 +1538,10 @@ section.screen.active {
 }
 
 .board-container {
-    margin: 20px 0;
+    margin: 20px auto;
+    max-width: 90%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .board-tools {
@@ -1730,7 +1735,10 @@ section.screen.active {
    ======================================== */
 
 .items-container {
-    margin: 30px 0;
+    margin: 30px auto;
+    max-width: 90%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .instruction {
