@@ -1662,7 +1662,7 @@ function initBoard(canvasId) {
             case 'yellow':
                 ctx.strokeStyle = '#f1c40f';
                 ctx.lineWidth = 15;
-                ctx.globalAlpha = 0.3; // 30% de opacidad para el resaltador
+                ctx.globalAlpha = 0.15; // 15% de opacidad para efecto resaltador real
                 break;
             case 'eraser':
                 ctx.strokeStyle = '#fff';
