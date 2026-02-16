@@ -138,10 +138,9 @@ section.screen.active {
 }
 
 #flipbook {
-    width: 90%;
-    max-width: 1200px;
-    height: 55vh;
-    min-height: 400px;
+    width: 80%;
+    max-width: 900px;
+    aspect-ratio: 16 / 10;
     margin: 0 auto;
     position: relative;
     transform-style: preserve-3d;
@@ -161,7 +160,7 @@ section.screen.active {
         inset 0 0 0 1px rgba(0,0,0,0.1),
         0 0 0 1px rgba(0,0,0,0.05);
     border-radius: 10px;
-    padding: 20px;
+    padding: 3%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -446,8 +445,8 @@ section.screen.active {
 
 .story-page .story-image {
     grid-area: emoji;
-    max-width: 90%;
-    max-height: 90%;
+    max-width: 85%;
+    max-height: 85%;
     width: auto;
     height: auto;
     object-fit: contain;
@@ -463,13 +462,14 @@ section.screen.active {
     justify-content: center;
     text-align: justify;
     max-width: 100%;
-    padding: 15px 5% 15px 15px;
+    padding: 2%;
     font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif;
-    font-size: clamp(1rem, 2.5vw, 1.45rem);
-    line-height: 1.8;
+    font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+    line-height: 1.6;
     font-weight: 400;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .story-page .page-number {
@@ -626,47 +626,50 @@ section.screen.active {
 
 @media (max-width: 650px) {
     #flipbook {
-        max-width: 400px;
-        height: 550px;
+        width: 90%;
+        max-width: none;
     }
     
     #flipbook .page {
-        max-width: 400px;
-        height: 550px;
-        padding: 40px 30px;
+        padding: 2.5%;
     }
     
     .flipbook-wrapper {
-        margin: 100px auto 20px;
+        margin: 80px auto 20px;
+    }
+    
+    .story-page .story-text {
+        font-size: clamp(0.75rem, 2.5vw, 1rem);
+        line-height: 1.5;
     }
     
     .cover-emoji {
-        font-size: 70px;
+        font-size: 60px;
     }
     
     .cover-title {
-        font-size: 24px;
+        font-size: 22px;
     }
     
     .cover-subtitle {
-        font-size: 16px;
-    }
-    
-    .emoji-large {
-        font-size: 50px;
-    }
-    
-    .story-text {
         font-size: 15px;
     }
     
+    .emoji-large {
+        font-size: 45px;
+    }
+    
+    .story-text {
+        font-size: 14px;
+    }
+    
     .toc-title {
-        font-size: 26px;
+        font-size: 24px;
     }
     
     .toc-item {
-        font-size: 14px;
-        padding: 10px;
+        font-size: 13px;
+        padding: 8px;
     }
     
     .controls {
@@ -682,22 +685,25 @@ section.screen.active {
 
 @media (max-width: 450px) {
     #flipbook {
-        max-width: 90vw;
-        height: 70vh;
+        width: 95%;
+        aspect-ratio: 3 / 4;
     }
     
     #flipbook .page {
-        max-width: 90vw;
-        height: 70vh;
-        padding: 30px 20px;
+        padding: 2%;
+    }
+    
+    .story-page .story-text {
+        font-size: clamp(0.7rem, 3vw, 0.9rem);
+        line-height: 1.4;
     }
     
     .cover-title {
-        font-size: 20px;
+        font-size: 18px;
     }
     
     .story-text {
-        font-size: 14px;
+        font-size: 13px;
     }
 }
 
