@@ -161,6 +161,7 @@ section.screen::before {
 #flipbook {
     width: 80%;
     max-width: 900px;
+    aspect-ratio: 3 / 2;
     margin: 0 auto;
     position: relative;
     transform-style: preserve-3d;
@@ -173,8 +174,7 @@ section.screen::before {
 
 #flipbook .page {
     width: 100%;
-    height: auto;
-    min-height: 400px;
+    height: 100%;
     background: var(--page-bg-light);
     box-shadow: 
         0 4px 20px var(--shadow-light),
@@ -720,11 +720,11 @@ section.screen::before {
 @media (max-width: 450px) {
     #flipbook {
         width: 95%;
+        aspect-ratio: 4 / 5;
     }
     
     #flipbook .page {
         padding: 2%;
-        min-height: 350px;
     }
     
     .story-page .story-text {
