@@ -1165,7 +1165,7 @@ function initMoment2Audio() {
 function initMoment3() {
     document.getElementById('studentCodeM3').textContent = studentCode;
     
-    // Radio buttons para Pregunta 1
+    // Radio buttons para Problema 1
     const radiosQ1 = document.querySelectorAll('input[name="truthQ1"]');
     radiosQ1.forEach(radio => {
         radio.addEventListener('change', (e) => {
@@ -1174,7 +1174,7 @@ function initMoment3() {
         });
     });
     
-    // Radio buttons para Pregunta 2
+    // Radio buttons para Problema 2
     const radiosQ2 = document.querySelectorAll('input[name="truthQ2"]');
     radiosQ2.forEach(radio => {
         radio.addEventListener('change', (e) => {
@@ -1203,7 +1203,7 @@ function showPrompt1(choice) {
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
     
-    // Inicializar pizarra y audio para pregunta 1
+    // Inicializar pizarra y audio para problema 1
     initProblemM3Q1();
 }
 
@@ -1220,7 +1220,7 @@ function showPrompt2(choice) {
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
     
-    // Inicializar pizarra y audio para pregunta 2
+    // Inicializar pizarra y audio para problema 2
     initProblemM3Q2();
 }
 
@@ -1271,7 +1271,7 @@ function initProblemM3Q1() {
             
             await submitEvidence({
                 moment: 'm3',
-                tag: 'pregunta1',
+                tag: 'problema1',
                 data: { choice: m3_choice },
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
@@ -1289,7 +1289,7 @@ function initProblemM3Q1() {
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Mostrar Pregunta 2
+            // Mostrar Problema 2
             setTimeout(() => {
                 document.getElementById('problem2Section').classList.remove('hidden');
                 document.getElementById('problem2Section').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1358,7 +1358,7 @@ function initProblemM3Q2() {
             
             await submitEvidence({
                 moment: 'm3',
-                tag: 'pregunta2',
+                tag: 'problema2',
                 data: { choice: choice2 },
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
