@@ -1408,23 +1408,30 @@ function initMoment4() {
     
     // Mostrar primer ítem
     showItem(1);
-    
-    // Event listeners para los inputs
-    const inputs = document.querySelectorAll('.item-input');
-    inputs.forEach(input => {
-        input.addEventListener('input', validateItem);
-    });
 }
 
 function generateMoment4Questions() {
-    const questions = [
-        { equation: '3 × ☐ = 2 × 3', answer: 2 },
-        { equation: '☐ × 5 = 5 × 7', answer: 7 },
-        { equation: '4 × 6 = 6 × ☐', answer: 4 },
-        { equation: '☐ × 8 = 8 × 9', answer: 9 },
-        { equation: '5 × ☐ = 4 × 5', answer: 4 },
-        { equation: '6 × 7 = ☐ × 6', answer: 7 }
+    // Generar 6 preguntas con números aleatorios entre 1 y 50
+    const questions = [];
+    const patterns = [
+        (a, b) => ({ eq: `${a} × ☐ = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `☐ × ${a} = ${a} × ${b}`, ans: b, fullEq: `${b} × ${a} = ${a} × ${b}` }),
+        (a, b) => ({ eq: `${a} × ${b} = ${b} × ☐`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `☐ × ${b} = ${b} × ${a}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `${b} × ☐ = ${a} × ${b}`, ans: a, fullEq: `${b} × ${a} = ${a} × ${b}` }),
+        (a, b) => ({ eq: `${a} × ${b} = ☐ × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` })
     ];
+    
+    patterns.forEach(pattern => {
+        const a = Math.floor(Math.random() * 50) + 1;
+        const b = Math.floor(Math.random() * 50) + 1;
+        const result = pattern(a, b);
+        questions.push({
+            equation: result.eq,
+            answer: result.ans,
+            fullEquation: result.fullEq
+        });
+    });
     
     const wrapper = document.getElementById('itemsWrapper');
     wrapper.innerHTML = ''; // Limpiar contenedor
@@ -1441,11 +1448,14 @@ function generateMoment4Questions() {
                 <input type="number" 
                        class="item-input" 
                        data-answer="${q.answer}"
+                       data-full-equation="${q.fullEquation}"
+                       data-attempts="0"
                        placeholder="?"
                        min="1"
-                       max="9">
+                       max="50">
+                <button class="btn btn-primary check-answer-btn" style="margin-left: 15px; padding: 10px 25px;">Comprobar</button>
             </div>
-            <div class="item-feedback"></div>
+            <div class="item-feedback" style="margin-top: 15px; font-size: 1.2em; min-height: 50px;"></div>
         `;
         
         wrapper.appendChild(itemBox);
@@ -1456,55 +1466,114 @@ function showItem(itemNum) {
     document.querySelectorAll('.item-box').forEach(box => {
         if (parseInt(box.dataset.item) === itemNum) {
             box.classList.remove('hidden');
+            
+            // Agregar evento al botón comprobar
+            const checkBtn = box.querySelector('.check-answer-btn');
+            const input = box.querySelector('.item-input');
+            
+            checkBtn.addEventListener('click', () => validateItem(input, box));
+            
+            // Prevenir validación automática al escribir
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkBtn.click();
+                }
+            });
         }
     });
 }
 
-function validateItem(e) {
-    const input = e.target;
+function validateItem(input, itemBox) {
     const answer = parseInt(input.dataset.answer);
+    const fullEquation = input.dataset.fullEquation;
     const userAnswer = parseInt(input.value);
-    const itemBox = input.closest('.item-box');
     const feedback = itemBox.querySelector('.item-feedback');
+    const checkBtn = itemBox.querySelector('.check-answer-btn');
+    let attempts = parseInt(input.dataset.attempts);
     
-    if (input.value === '') {
-        feedback.textContent = '';
+    if (input.value === '' || isNaN(userAnswer)) {
+        feedback.textContent = '⚠️ Por favor ingresa un número';
+        feedback.className = 'item-feedback incorrect';
         return;
     }
     
     if (userAnswer === answer) {
-        // Correcto
-        feedback.textContent = '✅';
+        // ✅ CORRECTO
+        feedback.innerHTML = '<span style="color: #27ae60; font-weight: bold;">✅ ¡Correcto! Muy bien.</span>';
         feedback.className = 'item-feedback correct';
         input.disabled = true;
+        checkBtn.disabled = true;
+        checkBtn.style.opacity = '0.5';
         
         m4_responses.push({
             item: m4_currentItem,
             correct: true,
-            errors: m4_errorsConsecutive
+            attempts: attempts + 1
         });
         
-        // Reiniciar contador de errores consecutivos
-        if (m4_errorsConsecutive > m4_errorsConsecutiveMax) {
-            m4_errorsConsecutiveMax = m4_errorsConsecutive;
-        }
-        m4_errorsConsecutive = 0;
-        
         // Avanzar al siguiente ítem
-        m4_currentItem++;
-        if (m4_currentItem <= 6) {
-            showItem(m4_currentItem);
-        } else {
-            finalizeMoment4();
-        }
+        setTimeout(() => {
+            m4_currentItem++;
+            if (m4_currentItem <= 6) {
+                showItem(m4_currentItem);
+            } else {
+                finalizeMoment4();
+            }
+        }, 1500);
         
     } else {
-        // Incorrecto
-        feedback.textContent = 'Intenta de nuevo';
-        feedback.className = 'item-feedback incorrect';
+        // ❌ INCORRECTO
+        attempts++;
+        input.dataset.attempts = attempts;
         m4_errorsTotal++;
-        m4_errorsConsecutive++;
-        input.value = '';
+        
+        if (attempts === 1) {
+            // Primer intento fallido
+            feedback.innerHTML = '<span style="color: #e67e22;">❌ Verifica tu respuesta. Recuerda lo que hemos hecho para adivinar el número que va en el sobre.</span>';
+            feedback.className = 'item-feedback incorrect';
+            input.value = '';
+            input.focus();
+            
+        } else if (attempts === 2) {
+            // Segundo intento fallido
+            const parts = fullEquation.split('=').map(s => s.trim());
+            feedback.innerHTML = `<span style="color: #e67e22;">❌ Intenta hacer ambas multiplicaciones:<br><strong>${parts[0]}</strong> y <strong>${parts[1]}</strong><br>Verifica si te da lo mismo.</span>`;
+            feedback.className = 'item-feedback incorrect';
+            input.value = '';
+            input.focus();
+            
+        } else {
+            // Tercer intento fallido - mostrar respuesta completa
+            const parts = fullEquation.split('=').map(s => s.trim());
+            const mult1 = parts[0].replace('×', '*');
+            const mult2 = parts[1].replace('×', '*');
+            const result1 = eval(mult1);
+            const result2 = eval(mult2);
+            
+            feedback.innerHTML = `<span style="color: #c0392b;">❌ El número correcto es <strong>${answer}</strong>.<br>
+                <strong>¿Por qué?</strong> Porque ${parts[0]} = ${result1} y ${parts[1]} = ${result2}.<br>
+                Ambas multiplicaciones dan el mismo resultado.</span>`;
+            feedback.className = 'item-feedback incorrect';
+            input.disabled = true;
+            checkBtn.disabled = true;
+            checkBtn.style.opacity = '0.5';
+            
+            m4_responses.push({
+                item: m4_currentItem,
+                correct: false,
+                attempts: 3
+            });
+            
+            // Habilitar siguiente pregunta después de 3 segundos
+            setTimeout(() => {
+                m4_currentItem++;
+                if (m4_currentItem <= 6) {
+                    showItem(m4_currentItem);
+                } else {
+                    finalizeMoment4();
+                }
+            }, 4000);
+        }
     }
 }
 

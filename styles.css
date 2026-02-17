@@ -1784,6 +1784,17 @@ section.screen::before {
     box-sizing: border-box;
 }
 
+/* Ocultar flechas/spinners del input tipo number */
+.item-input::-webkit-inner-spin-button,
+.item-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.item-input[type=number] {
+    -moz-appearance: textfield;
+}
+
 .item-input:focus {
     outline: none;
     border-color: #2980b9;
