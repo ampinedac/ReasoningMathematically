@@ -1291,8 +1291,8 @@ function initProblemM3Q1() {
             
             // Mostrar Pregunta 2
             setTimeout(() => {
-                document.getElementById('question2Section').classList.remove('hidden');
-                document.getElementById('question2Section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('problem2Section').classList.remove('hidden');
+                document.getElementById('problem2Section').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 1000);
             
         } catch (error) {
