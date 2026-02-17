@@ -1744,6 +1744,179 @@ section.screen::before {
     word-wrap: break-word;
 }
 
+/* ========================================
+   TEMA MÁGICO - MOMENTO 4
+   ======================================== */
+
+.magic-theme {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.magic-theme::before {
+    background-image: 
+        url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='20' y='30' font-size='24' fill='%23ffd700' opacity='0.1'%3E✨%3C/text%3E%3Ctext x='70' y='70' font-size='20' fill='%23fff' opacity='0.08'%3E⭐%3C/text%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='30' y='50' font-size='28' fill='%239b59b6' opacity='0.12'%3E🔮%3C/text%3E%3C/svg%3E");
+    background-size: 150px 150px, 200px 200px;
+    background-position: 0 0, 100px 80px;
+    animation: magicFloat 20s ease-in-out infinite;
+}
+
+@keyframes magicFloat {
+    0%, 100% { background-position: 0 0, 100px 80px; }
+    50% { background-position: 50px 50px, 150px 130px; }
+}
+
+.magic-theme .section-title {
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
+    animation: magicGlow 2s ease-in-out infinite;
+}
+
+@keyframes magicGlow {
+    0%, 100% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4); }
+    50% { text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6); }
+}
+
+.magic-theme .student-code-display {
+    color: #bb86fc;
+}
+
+/* Sistema de vidas mágicas */
+.magic-lives-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.magic-label {
+    font-size: 1.2em;
+    color: #ffd700;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.magic-lives {
+    display: flex;
+    gap: 10px;
+}
+
+.magic-heart {
+    font-size: 2em;
+    animation: heartBeat 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+}
+
+.magic-heart.lost {
+    opacity: 0.3;
+    filter: grayscale(100%);
+    animation: none;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+}
+
+/* Instrucción mágica */
+.magic-instruction {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.3), rgba(142, 68, 173, 0.3));
+    padding: 20px !important;
+    border-radius: 15px;
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Item boxes con tema mágico */
+.magic-theme .item-box {
+    background: linear-gradient(135deg, rgba(30, 30, 60, 0.9), rgba(20, 40, 80, 0.9));
+    border: 3px solid #9b59b6;
+    box-shadow: 0 0 20px rgba(155, 89, 182, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.magic-theme .item-equation {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.magic-theme .item-input {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.magic-theme .check-answer-btn {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.6);
+    transition: all 0.3s ease;
+}
+
+.magic-theme .check-answer-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+}
+
+/* Canvas para efectos mágicos */
+.magic-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+}
+
+/* Animación de hechizo (cuando acierta) */
+@keyframes spellCast {
+    0% {
+        transform: scale(0.8) rotate(0deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2) rotate(180deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.spell-effect {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    animation: spellCast 1s ease-out;
+    pointer-events: none;
+    z-index: 1000;
+}
+
 #itemsWrapper {
     display: flex;
     flex-direction: column;
@@ -1793,6 +1966,7 @@ section.screen::before {
 
 .item-input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .item-input:focus {

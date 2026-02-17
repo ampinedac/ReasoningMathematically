@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0 - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫓</text></svg>">
-    <link rel="stylesheet" href="styles.css?v=20260215018">
+    <link rel="stylesheet" href="styles.css?v=20260215019">
     <link rel="stylesheet" href="trays-styles.css">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
@@ -424,16 +424,26 @@ Argumenta tu respuesta.
         </div>
     </section>
 
-    <!-- MOMENTO 4: ¿Quieres ser millonario? -->
-    <section id="moment4Screen" class="screen">
+    <!-- MOMENTO 4: El mago lo hizo de nuevo -->
+    <section id="moment4Screen" class="screen magic-theme">
         <div class="container">
             <div class="header">
-                <h2 class="section-title">Momento 4: ¿Quieres ser millonario?</h2>
+                <h2 class="section-title">🧙‍♂️ Momento 4: El mago lo hizo de nuevo</h2>
                 <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+                
+                <!-- Sistema de vidas -->
+                <div class="magic-lives-container">
+                    <span class="magic-label">✨ Vidas mágicas:</span>
+                    <div id="magicLives" class="magic-lives">
+                        <span class="magic-heart">❤️</span>
+                        <span class="magic-heart">❤️</span>
+                        <span class="magic-heart">❤️</span>
+                    </div>
+                </div>
             </div>
 
             <div class="items-container">
-                <p class="instruction">¿Qué número guardarías en el sobre para que la igualdad sea verdadera?</p>
+                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
                 
                 <div id="itemsWrapper">
                     <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
@@ -443,7 +453,8 @@ Argumenta tu respuesta.
                 <p id="pointsStatus" class="points-status hidden"></p>
             </div>
 
-            <!-- Confetti canvas para celebración -->
+            <!-- Canvas para efectos mágicos -->
+            <canvas id="magicCanvas" class="magic-canvas"></canvas>
             <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
 
             <div id="finalQuestionSection" class="hidden">
@@ -459,7 +470,7 @@ Argumenta tu respuesta.
 
     <!-- Scripts -->
     <script src="trays-system.js"></script>
-    <script type="module" src="main.js?v=20260215018"></script>
+    <script type="module" src="main.js?v=20260215019"></script>
     <script src="app.js?v=20260215008"></script>
 </body>
 </html>

@@ -30,6 +30,7 @@ let m4_responses = [];
 let m4_errorsTotal = 0;
 let m4_errorsConsecutive = 0;
 let m4_errorsConsecutiveMax = 0;
+let m4_magicLives = 3; // Sistema de vidas mágicas
 
 // ========================================
 // INICIALIZACIÓN
@@ -1483,6 +1484,120 @@ function showItem(itemNum) {
     });
 }
 
+// ========================================
+// SISTEMA DE VIDAS MÁGICAS
+// ========================================
+
+function loseLife() {
+    if (m4_magicLives > 0) {
+        m4_magicLives--;
+        const hearts = document.querySelectorAll('.magic-heart');
+        if (hearts[2 - m4_magicLives]) {
+            hearts[2 - m4_magicLives].classList.add('lost');
+        }
+        
+        if (m4_magicLives === 0) {
+            // Game over - finalizar actividad
+            setTimeout(() => {
+                finalizeMoment4();
+            }, 2000);
+        }
+    }
+}
+
+// ========================================
+// ANIMACIÓN DE HECHIZO
+// ========================================
+
+function createSpellEffect(itemBox) {
+    const canvas = document.getElementById('magicCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const particles = [];
+    const particleCount = 50;
+    const colors = ['#9b59b6', '#8e44ad', '#ffd700', '#fff', '#bb86fc'];
+    
+    // Obtener posición del itemBox
+    const rect = itemBox.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    
+    // Crear partículas
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: centerX,
+            y: centerY,
+            vx: (Math.random() - 0.5) * 10,
+            vy: (Math.random() - 0.5) * 10,
+            radius: Math.random() * 4 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            decay: Math.random() * 0.02 + 0.015
+        });
+    }
+    
+    // Animar partículas
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        let anyAlive = false;
+        
+        particles.forEach(p => {
+            if (p.alpha > 0) {
+                anyAlive = true;
+                
+                // Actualizar posición
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= p.decay;
+                
+                // Dibujar partícula
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fill();
+                
+                // Dibujar estela
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x - p.vx * 2, p.y - p.vy * 2);
+                ctx.strokeStyle = p.color;
+                ctx.lineWidth = p.radius / 2;
+                ctx.stroke();
+            }
+        });
+        
+        ctx.globalAlpha = 1;
+        
+        if (anyAlive) {
+            requestAnimationFrame(animate);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    
+    animate();
+    
+    // Agregar emoji de hechizo temporal
+    const emoji = document.createElement('div');
+    emoji.className = 'spell-effect';
+    emoji.textContent = '✨';
+    itemBox.style.position = 'relative';
+    itemBox.appendChild(emoji);
+    
+    setTimeout(() => {
+        if (emoji.parentElement) {
+            emoji.remove();
+        }
+    }, 1000);
+}
+
+
 function validateItem(input, itemBox) {
     const answer = parseInt(input.dataset.answer);
     const fullEquation = input.dataset.fullEquation;
@@ -1498,7 +1613,9 @@ function validateItem(input, itemBox) {
     }
     
     if (userAnswer === answer) {
-        // ✅ CORRECTO
+        // ✅ CORRECTO - Activar animación de hechizo
+        createSpellEffect(itemBox);
+        
         feedback.innerHTML = '<span style="color: #27ae60; font-weight: bold;">✅ ¡Correcto! Muy bien.</span>';
         feedback.className = 'item-feedback correct';
         input.disabled = true;
@@ -1543,7 +1660,9 @@ function validateItem(input, itemBox) {
             input.focus();
             
         } else {
-            // Tercer intento fallido - mostrar respuesta completa
+            // Tercer intento fallido - mostrar respuesta completa y perder vida
+            loseLife();
+            
             const parts = fullEquation.split('=').map(s => s.trim());
             const mult1 = parts[0].replace('×', '*');
             const mult2 = parts[1].replace('×', '*');
@@ -1552,7 +1671,8 @@ function validateItem(input, itemBox) {
             
             feedback.innerHTML = `<span style="color: #c0392b;">❌ El número correcto es <strong>${answer}</strong>.<br>
                 <strong>¿Por qué?</strong> Porque ${parts[0]} = ${result1} y ${parts[1]} = ${result2}.<br>
-                Ambas multiplicaciones dan el mismo resultado.</span>`;
+                Ambas multiplicaciones dan el mismo resultado.<br>
+                💔 ¡Perdiste una vida mágica!</span>`;
             feedback.className = 'item-feedback incorrect';
             input.disabled = true;
             checkBtn.disabled = true;
@@ -1564,15 +1684,18 @@ function validateItem(input, itemBox) {
                 attempts: 3
             });
             
-            // Habilitar siguiente pregunta después de 3 segundos
-            setTimeout(() => {
-                m4_currentItem++;
-                if (m4_currentItem <= 6) {
-                    showItem(m4_currentItem);
-                } else {
-                    finalizeMoment4();
-                }
-            }, 4000);
+            // Si todavía hay vidas, continuar con la siguiente pregunta
+            if (m4_magicLives > 0) {
+                setTimeout(() => {
+                    m4_currentItem++;
+                    if (m4_currentItem <= 6) {
+                        showItem(m4_currentItem);
+                    } else {
+                        finalizeMoment4();
+                    }
+                }, 4000);
+            }
+            // Si no hay vidas, loseLife() ya llamó a finalizeMoment4()
         }
     }
 }
