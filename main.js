@@ -1,6 +1,5 @@
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
-import { cuentoData } from './assets/cuento-data.js';
 import { estudiantesData } from './assets/estudiantes-data.js';
 
 console.log('✅ Firebase cargado correctamente');
@@ -31,6 +30,8 @@ let m4_errorsTotal = 0;
 let m4_errorsConsecutive = 0;
 let m4_errorsConsecutiveMax = 0;
 let m4_magicLives = 3; // Sistema de vidas mágicas
+let m4_isFinalizing = false;
+let m4_returnHomeTimeout = null;
 
 // ========================================
 // INICIALIZACIÓN
@@ -48,6 +49,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedCode) {
         studentCode = savedCode;
         console.log('ℹ️ Código guardado encontrado:', studentCode);
+
+        if (savedCode === '0000') {
+            const savedGuestName = localStorage.getItem('guestName');
+            if (savedGuestName) {
+                studentInfo = {
+                    nombre: savedGuestName,
+                    apellidos: '',
+                    curso: 'INVITADO'
+                };
+            }
+        }
     }
     
     initHomeScreen();
@@ -149,6 +161,29 @@ function initWelcomeScreen() {
             welcomeError.classList.remove('hidden');
             return;
         }
+
+        // Flujo especial para participantes invitados
+        if (code === '0000') {
+            const providedName = window.prompt('¡Bienvenido(a)! ¿Cuál es tu nombre?');
+            const invitedName = providedName ? providedName.trim() : '';
+
+            if (!invitedName) {
+                welcomeError.textContent = 'Para continuar con el código 0000, escribe tu nombre.';
+                welcomeError.classList.remove('hidden');
+                return;
+            }
+
+            welcomeError.classList.add('hidden');
+            studentCode = code;
+            studentInfo = {
+                nombre: invitedName,
+                apellidos: '',
+                curso: 'INVITADO'
+            };
+
+            showConfirmationScreen();
+            return;
+        }
         
         // Verificar que el código existe en la base de datos
         const estudiante = estudiantesData[code];
@@ -196,6 +231,16 @@ function toTitleCase(text) {
         .join(' ');
 }
 
+function getStudentHeaderText() {
+    if (!studentCode) return '';
+
+    if (studentCode === '0000' && studentInfo?.nombre) {
+        return `${studentCode} · ${toTitleCase(studentInfo.nombre)}`;
+    }
+
+    return studentCode;
+}
+
 function showConfirmationScreen() {
     console.log('🔍 Mostrando pantalla de confirmación...');
     console.log('📋 Información del estudiante:', studentInfo);
@@ -213,12 +258,14 @@ function showConfirmationScreen() {
     }
     
     // Convertir nombre y apellidos a formato título
-    const nombreFormateado = toTitleCase(studentInfo.nombre);
-    const apellidosFormateados = toTitleCase(studentInfo.apellidos);
+    const nombreFormateado = toTitleCase(studentInfo.nombre || '');
+    const apellidosFormateados = toTitleCase(studentInfo.apellidos || '');
     
     // Construir la pregunta basada en si es docente o estudiante
     let pregunta = '';
-    if (studentInfo.curso === 'DOCENTE') {
+    if (studentCode === '0000' || studentInfo.curso === 'INVITADO') {
+        pregunta = `¡Hola, ${nombreFormateado}! ¿Deseas iniciar la actividad?`;
+    } else if (studentInfo.curso === 'DOCENTE') {
         pregunta = `¿Eres ${nombreFormateado} ${apellidosFormateados}?`;
     } else {
         pregunta = `¿Eres ${nombreFormateado} ${apellidosFormateados} del curso ${studentInfo.curso}?`;
@@ -250,6 +297,9 @@ function initConfirmationScreen() {
         
         // SOLO AHORA guardar el código en localStorage
         localStorage.setItem('studentCode', studentCode);
+        if (studentCode === '0000' && studentInfo?.nombre) {
+            localStorage.setItem('guestName', studentInfo.nombre);
+        }
         console.log('💾 Código guardado en localStorage:', studentCode);
         
         // Navegar a Momento 1
@@ -266,6 +316,7 @@ function initConfirmationScreen() {
         
         // Limpiar localStorage también por seguridad
         localStorage.removeItem('studentCode');
+        localStorage.removeItem('guestName');
         console.log('🧹 Datos limpiados');
         
         // Volver a la pantalla de bienvenida
@@ -307,7 +358,7 @@ function showScreen(screenId) {
     // Actualizar código estudiantil en encabezados
     if (studentCode) {
         document.querySelectorAll('.student-code-display span').forEach(span => {
-            span.textContent = studentCode;
+            span.textContent = getStudentHeaderText();
         });
     }
 }
@@ -317,7 +368,7 @@ function showScreen(screenId) {
 // ========================================
 
 function initMoment1() {
-    document.getElementById('studentCodeM1').textContent = studentCode;
+    document.getElementById('studentCodeM1').textContent = getStudentHeaderText();
     
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
@@ -480,7 +531,7 @@ function initProblemQ1() {
 function initMoment2() {
     console.log('🎯 Inicializando Momento 2 - Sistema de Bandejas');
     
-    document.getElementById('studentCodeM2').textContent = studentCode;
+    document.getElementById('studentCodeM2').textContent = getStudentHeaderText();
     
     // Destruir instancia previa si existe (evitar duplicados)
     if (traysSystem) {
@@ -1164,7 +1215,7 @@ function initMoment2Audio() {
 // ========================================
 
 function initMoment3() {
-    document.getElementById('studentCodeM3').textContent = studentCode;
+    document.getElementById('studentCodeM3').textContent = getStudentHeaderText();
     
     // Radio buttons para Problema 1
     const radiosQ1 = document.querySelectorAll('input[name="truthQ1"]');
@@ -1402,7 +1453,25 @@ function initProblemM3Q2() {
 // ========================================
 
 function initMoment4() {
-    document.getElementById('studentCodeM4').textContent = studentCode;
+    m4_currentItem = 1;
+    m4_responses = [];
+    m4_errorsTotal = 0;
+    m4_errorsConsecutive = 0;
+    m4_errorsConsecutiveMax = 0;
+    m4_magicLives = 3;
+    m4_isFinalizing = false;
+    if (m4_returnHomeTimeout) {
+        clearTimeout(m4_returnHomeTimeout);
+        m4_returnHomeTimeout = null;
+    }
+
+    document.querySelectorAll('.magic-heart').forEach(heart => heart.classList.remove('lost'));
+    const finalSection = document.getElementById('finalQuestionSection');
+    if (finalSection) {
+        finalSection.classList.add('hidden');
+    }
+
+    document.getElementById('studentCodeM4').textContent = getStudentHeaderText();
     
     // Generar las 6 preguntas
     generateMoment4Questions();
@@ -1414,13 +1483,24 @@ function initMoment4() {
 function generateMoment4Questions() {
     // Generar 6 preguntas con números aleatorios entre 1 y 50
     const questions = [];
+    
+    // SVG del sobre mágico (faltante)
+    const envelope = `<span class="missing-envelope" aria-label="sobre misterioso" role="img">
+        <svg class="envelope magic" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="10" width="50" height="35" fill="#ffd166" stroke="#ff9f1c" stroke-width="2" rx="4"/>
+            <path d="M5 10 L30 30 L55 10" fill="#ffe28a" stroke="#ff9f1c" stroke-width="2"/>
+            <path d="M5 10 L30 30 L55 10 Z" fill="#fff4c2" opacity="0.85"/>
+            <circle cx="30" cy="28" r="3" fill="#ff6f91"/>
+        </svg>
+    </span>`;
+    
     const patterns = [
-        (a, b) => ({ eq: `${a} × ☐ = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `☐ × ${a} = ${a} × ${b}`, ans: b, fullEq: `${b} × ${a} = ${a} × ${b}` }),
-        (a, b) => ({ eq: `${a} × ${b} = ${b} × ☐`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `☐ × ${b} = ${b} × ${a}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${b} × ☐ = ${a} × ${b}`, ans: a, fullEq: `${b} × ${a} = ${a} × ${b}` }),
-        (a, b) => ({ eq: `${a} × ${b} = ☐ × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` })
+        (a, b) => ({ eq: `${a} × ${envelope} = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `${envelope} × ${a} = ${a} × ${b}`, ans: b, fullEq: `${b} × ${a} = ${a} × ${b}` }),
+        (a, b) => ({ eq: `${a} × ${b} = ${b} × ${envelope}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `${envelope} × ${b} = ${b} × ${a}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `${b} × ${envelope} = ${a} × ${b}`, ans: a, fullEq: `${b} × ${a} = ${a} × ${b}` }),
+        (a, b) => ({ eq: `${a} × ${b} = ${envelope} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` })
     ];
     
     patterns.forEach(pattern => {
@@ -1612,6 +1692,34 @@ function validateItem(input, itemBox) {
         return;
     }
     
+    const getComparisonParts = () => {
+        const equationText = itemBox.querySelector('.item-equation')?.textContent || '';
+        const normalized = equationText.replace(/\s+/g, ' ').trim();
+        const parts = normalized.split('=').map(s => s.trim());
+
+        const fillMissingValue = (part) => {
+            if (!part.includes('×')) {
+                return part;
+            }
+
+            const factors = part.split('×').map(s => s.trim());
+            if (factors.length !== 2) {
+                return part;
+            }
+
+            const leftFactor = /\d/.test(factors[0]) ? factors[0] : String(userAnswer);
+            const rightFactor = /\d/.test(factors[1]) ? factors[1] : String(userAnswer);
+            return `${leftFactor} × ${rightFactor}`;
+        };
+
+        if (parts.length === 2) {
+            return [fillMissingValue(parts[0]), fillMissingValue(parts[1])];
+        }
+
+        const fallback = fullEquation.split('=').map(s => s.trim());
+        return [fallback[0], fallback[1]];
+    };
+
     if (userAnswer === answer) {
         // ✅ CORRECTO - Activar animación de hechizo
         createSpellEffect(itemBox);
@@ -1648,30 +1756,24 @@ function validateItem(input, itemBox) {
             // Primer intento fallido
             feedback.innerHTML = '<span style="color: #e67e22;">❌ Verifica tu respuesta. Recuerda lo que hemos hecho para adivinar el número que va en el sobre.</span>';
             feedback.className = 'item-feedback incorrect';
-            input.value = '';
             input.focus();
             
         } else if (attempts === 2) {
-            // Segundo intento fallido
-            const parts = fullEquation.split('=').map(s => s.trim());
-            feedback.innerHTML = `<span style="color: #e67e22;">❌ Intenta hacer ambas multiplicaciones:<br><strong>${parts[0]}</strong> y <strong>${parts[1]}</strong><br>Verifica si te da lo mismo.</span>`;
-            feedback.className = 'item-feedback incorrect';
-            input.value = '';
+            // Segundo intento fallido - solo sugerir hacer las multiplicaciones sin decir si está bien o mal
+            const parts = getComparisonParts();
+            feedback.innerHTML = `<span style="color: #555; font-size: 1.1em;">💭 Intenta hacer ambas multiplicaciones:<br><strong>${parts[0]}</strong> y <strong>${parts[1]}</strong></span>`;
+            feedback.className = 'item-feedback';
             input.focus();
             
         } else {
-            // Tercer intento fallido - mostrar respuesta completa y perder vida
+            // Tercer intento fallido - mostrar respuesta incorrecta ingresada y perder vida
             loseLife();
             
-            const parts = fullEquation.split('=').map(s => s.trim());
-            const mult1 = parts[0].replace('×', '*');
-            const mult2 = parts[1].replace('×', '*');
-            const result1 = eval(mult1);
-            const result2 = eval(mult2);
+            const parts = getComparisonParts();
             
-            feedback.innerHTML = `<span style="color: #c0392b;">❌ El número correcto es <strong>${answer}</strong>.<br>
-                <strong>¿Por qué?</strong> Porque ${parts[0]} = ${result1} y ${parts[1]} = ${result2}.<br>
-                Ambas multiplicaciones dan el mismo resultado.<br>
+            feedback.innerHTML = `<span style="color: #c0392b;">❌ Intentaste hacer ambas multiplicaciones:<br>
+                <strong>${parts[0]}</strong> y <strong>${parts[1]}</strong><br>
+                Pero con el número <strong>${userAnswer}</strong> no te da lo mismo en ambas multiplicaciones.<br>
                 💔 ¡Perdiste una vida mágica!</span>`;
             feedback.className = 'item-feedback incorrect';
             input.disabled = true;
@@ -1701,6 +1803,9 @@ function validateItem(input, itemBox) {
 }
 
 async function finalizeMoment4() {
+    if (m4_isFinalizing) return;
+    m4_isFinalizing = true;
+
     const needsSupport = m4_errorsConsecutiveMax > 2;
     
     const statusText = document.getElementById('moment4Status');
@@ -1716,6 +1821,7 @@ async function finalizeMoment4() {
                 errorsTotal: m4_errorsTotal,
                 errorsConsecutiveMax: m4_errorsConsecutiveMax,
                 needsSupport: needsSupport,
+                livesRemaining: m4_magicLives,
                 comment: needsSupport ? 'No está clara la propiedad conmutativa' : null
             },
             boardBlob: null,
@@ -1726,13 +1832,149 @@ async function finalizeMoment4() {
         statusText.className = 'status-text success';
         
         // Mostrar pantalla final
-        document.getElementById('finalQuestionSection').classList.remove('hidden');
+        const finalSection = document.getElementById('finalQuestionSection');
+        finalSection.classList.remove('hidden');
+        
+        // Celebración si termina con al menos 1 vida
+        if (m4_magicLives > 0) {
+            createFullScreenMagicEffect();
+        }
+
+        // Si terminó con las 3 vidas, mostrar mensaje especial
+        if (m4_magicLives === 3) {
+            
+            const finalBox = finalSection.querySelector('.final-box');
+            finalBox.innerHTML = `
+                <h3 style="color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);">🎉 ¡Increíble! 🎉</h3>
+                <p class="final-question" style="font-size: 1.4em; color: #fff; margin: 20px 0;">
+                    ¡Completaste todos los desafíos sin perder ninguna vida mágica! ✨
+                </p>
+                <p style="font-size: 1.6em; color: #ffd700; font-weight: bold; margin: 25px 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);">
+                    🌟 Puedes reclamar <strong style="font-size: 1.3em;">3 PUNTOS POSITIVOS</strong> 🌟
+                </p>
+                <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
+                <p class="thank-you-sub">¡Gracias por participar!</p>
+            `;
+        } else {
+            // Calcular puntos basados en vidas restantes
+            const points = m4_magicLives;
+            const totalPointsEl = document.getElementById('totalPoints');
+            if (totalPointsEl) {
+                totalPointsEl.textContent = points;
+            }
+        }
+
+        statusText.textContent = 'Completado ✅ Regresando al inicio...';
+        m4_returnHomeTimeout = setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 8000);
         
     } catch (error) {
         console.error('Error:', error);
-        statusText.textContent = 'Error al guardar.';
+        statusText.textContent = 'Error al guardar. Regresando al inicio...';
         statusText.className = 'status-text error';
+        m4_returnHomeTimeout = setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 5000);
     }
+}
+
+// Crear efecto mágico de pantalla completa
+function createFullScreenMagicEffect() {
+    const canvas = document.getElementById('magicCanvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const particles = [];
+    const particleCount = 150;
+    const colors = ['#ffd700', '#fff', '#9b59b6', '#8e44ad', '#bb86fc', '#feca57'];
+    
+    // Crear partículas desde el centro de la pantalla
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const velocity = 3 + Math.random() * 5;
+        
+        particles.push({
+            x: centerX,
+            y: centerY,
+            vx: Math.cos(angle) * velocity,
+            vy: Math.sin(angle) * velocity,
+            radius: Math.random() * 5 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: 1,
+            decay: Math.random() * 0.01 + 0.005
+        });
+    }
+    
+    // Animar partículas
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        let anyAlive = false;
+        
+        particles.forEach(p => {
+            if (p.alpha > 0) {
+                anyAlive = true;
+                
+                // Actualizar posición
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.1; // Gravedad
+                p.alpha -= p.decay;
+                
+                // Dibujar partícula como estrella
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.beginPath();
+                
+                // Dibujar estrella de 5 puntas
+                for (let i = 0; i < 5; i++) {
+                    const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+                    const x = Math.cos(angle) * p.radius;
+                    const y = Math.sin(angle) * p.radius;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                    
+                    const innerAngle = angle + Math.PI / 5;
+                    const innerX = Math.cos(innerAngle) * (p.radius * 0.5);
+                    const innerY = Math.sin(innerAngle) * (p.radius * 0.5);
+                    ctx.lineTo(innerX, innerY);
+                }
+                
+                ctx.closePath();
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fill();
+                
+                // Agregar brillo
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = p.color;
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        });
+        
+        ctx.globalAlpha = 1;
+        
+        if (anyAlive) {
+            requestAnimationFrame(animate);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    }
+    
+    animate();
 }
 
 // ========================================
@@ -2021,8 +2263,15 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
     }
     
     // Crear documento en Firestore
+    const participantName = [studentInfo?.nombre, studentInfo?.apellidos]
+        .filter(Boolean)
+        .join(' ')
+        .trim() || null;
+
     const docData = {
         studentCode: studentCode,
+        participantName: participantName,
+        participantType: studentCode === '0000' ? 'invited' : 'registered',
         activity: 'act0',
         moment: moment,
         tag: tag,

@@ -1760,7 +1760,8 @@ section.screen::before {
         url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='30' y='50' font-size='28' fill='%239b59b6' opacity='0.12'%3E🔮%3C/text%3E%3C/svg%3E");
     background-size: 150px 150px, 200px 200px;
     background-position: 0 0, 100px 80px;
-    animation: magicFloat 20s ease-in-out infinite;
+    /* Animación deshabilitada - fondo estático */
+    /* animation: magicFloat 20s ease-in-out infinite; */
 }
 
 @keyframes magicFloat {
@@ -1769,9 +1770,8 @@ section.screen::before {
 }
 
 .magic-theme .section-title {
-    color: #ffd700;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
-    animation: magicGlow 2s ease-in-out infinite;
+    color: #fff3b0;
+    text-shadow: 0 2px 8px rgba(22, 33, 62, 0.6);
 }
 
 @keyframes magicGlow {
@@ -1780,7 +1780,7 @@ section.screen::before {
 }
 
 .magic-theme .student-code-display {
-    color: #bb86fc;
+    color: #ffe6a7;
 }
 
 /* Sistema de vidas mágicas */
@@ -1791,17 +1791,16 @@ section.screen::before {
     gap: 15px;
     margin-top: 20px;
     padding: 15px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 15px;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 215, 0, 0.3);
+    border: 2px solid #ffb347;
+    box-shadow: 0 6px 18px rgba(22, 33, 62, 0.25);
 }
 
 .magic-label {
     font-size: 1.2em;
-    color: #ffd700;
+    color: #6a3d9a;
     font-weight: bold;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
 .magic-lives {
@@ -1811,8 +1810,8 @@ section.screen::before {
 
 .magic-heart {
     font-size: 2em;
-    animation: heartBeat 1.5s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+    animation: heartBeat 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 3px 6px rgba(255, 76, 129, 0.45));
 }
 
 .magic-heart.lost {
@@ -1829,44 +1828,64 @@ section.screen::before {
 
 /* Instrucción mágica */
 .magic-instruction {
-    color: #fff !important;
-    background: linear-gradient(135deg, rgba(155, 89, 182, 0.3), rgba(142, 68, 173, 0.3));
+    color: #2c3e50 !important;
+    background: linear-gradient(135deg, rgba(255, 239, 196, 0.95), rgba(255, 214, 165, 0.95));
     padding: 20px !important;
     border-radius: 15px;
-    border: 2px solid rgba(255, 215, 0, 0.4);
-    box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    border: 2px solid #ffb347;
+    box-shadow: 0 8px 18px rgba(22, 33, 62, 0.2);
 }
 
 /* Item boxes con tema mágico */
 .magic-theme .item-box {
-    background: linear-gradient(135deg, rgba(30, 30, 60, 0.9), rgba(20, 40, 80, 0.9));
-    border: 3px solid #9b59b6;
-    box-shadow: 0 0 20px rgba(155, 89, 182, 0.5), 0 5px 15px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 243, 224, 0.96));
+    border: 3px solid #ffb347;
+    box-shadow: 0 10px 20px rgba(22, 33, 62, 0.2);
 }
 
 .magic-theme .item-equation {
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    color: #6a3d9a;
+    text-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.magic-theme .item-equation .missing-envelope {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 52px;
+    vertical-align: middle;
+}
+
+.magic-theme .item-equation .missing-envelope svg {
+    width: 60px;
+    height: 50px;
+    display: block;
 }
 
 .magic-theme .item-input {
     background: rgba(255, 255, 255, 0.95);
-    border-color: #ffd700;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    border-color: #ff9f43;
+    box-shadow: 0 0 0 4px rgba(255, 183, 71, 0.2);
+    color: #2c3e50;
 }
 
 .magic-theme .check-answer-btn {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-    border: 2px solid #ffd700;
-    box-shadow: 0 0 15px rgba(155, 89, 182, 0.6);
+    background: linear-gradient(135deg, #ff6f91, #ff9671);
+    border: 2px solid #fff3b0;
+    box-shadow: 0 6px 14px rgba(22, 33, 62, 0.25);
     transition: all 0.3s ease;
 }
 
 .magic-theme .check-answer-btn:hover:not(:disabled) {
     transform: translateY(-3px);
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    box-shadow: 0 10px 18px rgba(22, 33, 62, 0.3);
+    background: linear-gradient(135deg, #ff5f8a, #ff8f6b);
 }
 
 /* Canvas para efectos mágicos */
