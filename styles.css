@@ -2048,6 +2048,73 @@ section.screen::before {
    ======================================== */
 
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .home-container {
+        padding: 20px 12px;
+    }
+
+    .home-title {
+        font-size: 2.1em;
+        line-height: 1.2;
+    }
+
+    .home-subtitle {
+        font-size: 1.2em;
+        margin-bottom: 28px;
+    }
+
+    .activities-grid {
+        gap: 16px;
+    }
+
+    .activity-card {
+        height: auto;
+        min-height: 160px;
+        padding: 18px 16px;
+        border-radius: 20px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-emoji {
+        font-size: 3.2em;
+    }
+
+    .activity-badge {
+        top: 10px;
+        right: 10px;
+        font-size: 0.95em;
+        padding: 6px 14px;
+    }
+
+    .activity-title {
+        font-size: 1.2em;
+        margin-left: 12px;
+        white-space: normal;
+        text-align: left;
+    }
+
+    .welcome-box {
+        max-width: 100%;
+        padding: 22px 16px;
+    }
+
+    .chalk-text {
+        font-size: 1.2em;
+    }
+
+    .chalk-input {
+        font-size: 1.15em;
+        padding: 12px;
+    }
+
+    .confirmation-question {
+        font-size: 1.2em;
+    }
+
     .main-title {
         font-size: 2em;
     }
@@ -2103,6 +2170,56 @@ section.screen::before {
 }
 
 @media (max-width: 480px) {
+    .home-title {
+        font-size: 1.7em;
+    }
+
+    .home-subtitle {
+        font-size: 1.05em;
+        margin-bottom: 20px;
+    }
+
+    .activity-card {
+        padding: 16px 12px;
+        min-height: 150px;
+    }
+
+    .activity-emoji {
+        font-size: 2.6em;
+    }
+
+    .activity-title {
+        font-size: 1.05em;
+        margin-left: 10px;
+    }
+
+    .activity-badge {
+        font-size: 0.82em;
+        padding: 5px 10px;
+    }
+
+    .welcome-box {
+        padding: 18px 12px;
+        border-radius: 12px;
+    }
+
+    .chalk-text {
+        font-size: 1.05em;
+    }
+
+    .chalk-input {
+        font-size: 1.05em;
+        padding: 10px;
+    }
+
+    .confirmation-buttons .btn {
+        width: 130px !important;
+        min-width: 130px !important;
+        max-width: 130px !important;
+        height: 52px !important;
+        font-size: 1.05em;
+    }
+
     .main-title {
         font-size: 1.5em;
     }
