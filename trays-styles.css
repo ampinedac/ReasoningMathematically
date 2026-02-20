@@ -55,6 +55,7 @@
     min-height: 180px;
     width: 100%;
     min-width: 0;
+    overflow: hidden;
     position: relative;
     user-select: none;
     /* NO agregar left, top, transform que saquen del flujo */
@@ -114,10 +115,11 @@
 /* Grid de items dentro de la bandeja */
 .tray-grid {
     display: grid;
-    gap: 4px;
+    gap: 2px;
     width: min(100%, 160px);
     max-width: 160px;
     max-height: 160px;
+    overflow: hidden;
 }
 
 .tray-item {
@@ -125,6 +127,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.1em;
+    line-height: 1;
     transition: transform 0.2s;
 }
 
@@ -301,7 +304,7 @@
     .tray-grid {
         max-width: 92px;
         max-height: 92px;
-        gap: 2px;
+        gap: 1px;
     }
 
     .tray-item {

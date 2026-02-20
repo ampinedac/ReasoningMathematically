@@ -76,13 +76,14 @@ class TraysSystem {
         
         // Ajustar tamaño de emoji según dimensión
         const maxDim = Math.max(data.rows, data.cols);
-        const emojiSize = maxDim >= 6 ? '0.8em' : maxDim >= 5 ? '0.9em' : '1.1em';
+        const emojiSize = maxDim >= 7 ? '0.56em' : maxDim >= 6 ? '0.62em' : maxDim >= 5 ? '0.72em' : '0.9em';
         
         // Crear items
         for (let i = 0; i < data.total; i++) {
             const item = document.createElement('span');
             item.textContent = data.emoji;
             item.style.fontSize = emojiSize;
+            item.style.lineHeight = '1';
             item.className = 'tray-item';
             grid.appendChild(item);
         }
