@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!CONFIG.soundEnabled) return;
 
         try {
-            const duration = 0.3;
+            const duration = 0.42;
             const now = audioContext.currentTime;
 
             // Crear buffer para ruido blanco (simula papel)
@@ -51,23 +51,24 @@ document.addEventListener('DOMContentLoaded', function() {
             const noise = audioContext.createBufferSource();
             noise.buffer = buffer;
 
-            // Filtro paso-alto para eliminar graves (sonido más realista de papel)
+            // Filtro paso-alto para quitar graves tipo "golpe"
             const highpass = audioContext.createBiquadFilter();
             highpass.type = 'highpass';
-            highpass.frequency.value = 1000;
-            highpass.Q.value = 0.5;
+            highpass.frequency.value = 1400;
+            highpass.Q.value = 0.7;
 
-            // Filtro paso-bajo para suavizar
+            // Filtro paso-bajo para evitar brillo áspero
             const lowpass = audioContext.createBiquadFilter();
             lowpass.type = 'lowpass';
-            lowpass.frequency.value = 4000;
-            lowpass.Q.value = 1;
+            lowpass.frequency.value = 3400;
+            lowpass.Q.value = 0.8;
 
-            // Control de volumen con envelope
+            // Control de volumen suave (sin ataque brusco)
             const gainNode = audioContext.createGain();
             gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.15, now + 0.02);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+            gainNode.gain.linearRampToValueAtTime(0.04, now + 0.08);
+            gainNode.gain.linearRampToValueAtTime(0.026, now + 0.2);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
             // Conectar cadena de audio
             noise.connect(highpass);
