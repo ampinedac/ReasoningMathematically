@@ -2191,7 +2191,24 @@ section.screen::before {
     }
 
     .container {
-        padding: 20px;
+        width: 100%;
+        max-width: none;
+        padding: 8px;
+    }
+
+    .header {
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+    }
+
+    .problem-box,
+    .evidence-section,
+    .board-container,
+    .items-container {
+        max-width: 100%;
+        width: 100%;
+        margin: 12px auto;
+        padding: 14px;
     }
 
     .drawing-board {
@@ -2268,6 +2285,18 @@ section.screen::before {
     .welcome-box {
         padding: 18px 12px;
         border-radius: 12px;
+    }
+
+    .container {
+        padding: 6px;
+    }
+
+    .problem-box,
+    .evidence-section,
+    .board-container,
+    .items-container {
+        padding: 12px;
+        border-width: 3px;
     }
 
     .chalk-text {
