@@ -661,11 +661,33 @@ section.screen::before {
 @media (max-width: 650px) {
     #flipbook {
         width: 90%;
-        max-width: none;
+        max-width: 420px;
+        aspect-ratio: 4 / 5;
     }
     
     #flipbook .page {
         padding: 2.5%;
+        height: 100%;
+    }
+
+    .story-page {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+            "emoji"
+            "text"
+            "number";
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .story-page::after {
+        display: none;
+    }
+
+    .story-page .story-image {
+        max-width: 72%;
+        max-height: 180px;
     }
     
     .flipbook-wrapper {
@@ -673,8 +695,11 @@ section.screen::before {
     }
     
     .story-page .story-text {
-        font-size: clamp(0.75rem, 2.5vw, 1rem);
-        line-height: 1.5;
+        font-size: clamp(0.8rem, 2.9vw, 1rem);
+        line-height: 1.45;
+        align-items: flex-start;
+        padding: 0 4px 8px;
+        overflow-y: auto;
     }
     
     .cover-emoji {
@@ -711,9 +736,23 @@ section.screen::before {
         gap: 10px;
     }
     
-    .nav-btn {
+    .nav-buttons .nav-btn {
         width: 100%;
         max-width: 300px;
+    }
+
+    .flipbook-wrapper .nav-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+    }
+
+    .flipbook-wrapper #prevBtn {
+        left: 6px;
+    }
+
+    .flipbook-wrapper #nextBtn {
+        right: 6px;
     }
 }
 
@@ -730,6 +769,16 @@ section.screen::before {
     .story-page .story-text {
         font-size: clamp(0.7rem, 3vw, 0.9rem);
         line-height: 1.4;
+    }
+
+    .story-page .story-image {
+        max-height: 150px;
+    }
+
+    .flipbook-wrapper .nav-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 20px;
     }
     
     .cover-title {
