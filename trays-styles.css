@@ -5,7 +5,7 @@
 /* Contenedor principal de bandejas */
 .trays-container {
     display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px !important;
     padding: 30px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -13,7 +13,6 @@
     min-height: 500px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
     align-items: start;
-    overflow-x: hidden;
 }
 
 /* Wrapper para parejas - ocupa 2 columnas */
@@ -55,7 +54,6 @@
     min-height: 180px;
     width: 100%;
     min-width: 0;
-    overflow: hidden;
     position: relative;
     user-select: none;
     /* NO agregar left, top, transform que saquen del flujo */
@@ -115,11 +113,10 @@
 /* Grid de items dentro de la bandeja */
 .tray-grid {
     display: grid;
-    gap: 2px;
-    width: min(100%, 160px);
+    gap: 4px;
+    width: 100%;
     max-width: 160px;
     max-height: 160px;
-    overflow: hidden;
 }
 
 .tray-item {
@@ -267,6 +264,8 @@
     .tray-grid {
         max-width: 104px;
         max-height: 104px;
+        overflow: hidden;
+        gap: 2px;
     }
     
     .tray-item {
