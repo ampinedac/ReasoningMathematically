@@ -248,7 +248,7 @@
 /* Responsividad */
 @media (max-width: 768px) {
     .trays-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 12px;
         padding: 14px;
         min-height: auto;
@@ -287,13 +287,13 @@
 
 @media (max-width: 480px) {
     .trays-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 8px;
         padding: 12px;
     }
     
     .tray-pair-wrapper {
-        grid-column: span 1;
+        grid-column: span 2;
     }
     
     .tray-card {
