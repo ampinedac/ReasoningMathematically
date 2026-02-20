@@ -2230,6 +2230,24 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
     
     console.log('📤 Iniciando envío:', { moment, tag, hasBoard: !!boardBlob, hasAudio: !!audioBlob });
     console.log('🎤 Audio blob:', audioBlob);
+
+    const participantName = [studentInfo?.nombre, studentInfo?.apellidos]
+        .filter(Boolean)
+        .join(' ')
+        .trim() || null;
+
+    const storageSafeName = (value) =>
+        String(value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9_-]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+
+    const effectiveIdentifier = (studentCode === '0000' && participantName)
+        ? participantName
+        : studentCode;
+
+    const storageIdentifier = storageSafeName(effectiveIdentifier) || 'invitado';
     
     const timestamp = Date.now();
     let boardUrl = null;
@@ -2239,7 +2257,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         // Subir imagen de pizarra (si existe)
         if (boardBlob) {
             console.log('📸 Subiendo imagen...');
-            const boardPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.png`;
+            const boardPath = `uploads/${storageIdentifier}/act0/${moment}/${storageIdentifier}_act0_${moment}_${tag}_${timestamp}.png`;
             const boardRef = ref(storage, boardPath);
             await uploadBytes(boardRef, boardBlob);
             boardUrl = await getDownloadURL(boardRef);
@@ -2249,7 +2267,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         // Subir audio (si existe)
         if (audioBlob) {
             console.log('🎤 Subiendo audio...', audioBlob.size, 'bytes');
-            const audioPath = `uploads/${studentCode}/act0/${moment}/${studentCode}_act0_${moment}_${tag}_${timestamp}.webm`;
+            const audioPath = `uploads/${storageIdentifier}/act0/${moment}/${storageIdentifier}_act0_${moment}_${tag}_${timestamp}.webm`;
             const audioRef = ref(storage, audioPath);
             await uploadBytes(audioRef, audioBlob);
             audioUrl = await getDownloadURL(audioRef);
@@ -2263,13 +2281,9 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
     }
     
     // Crear documento en Firestore
-    const participantName = [studentInfo?.nombre, studentInfo?.apellidos]
-        .filter(Boolean)
-        .join(' ')
-        .trim() || null;
-
     const docData = {
-        studentCode: studentCode,
+        studentCode: effectiveIdentifier,
+        accessCode: studentCode,
         participantName: participantName,
         participantType: studentCode === '0000' ? 'invited' : 'registered',
         activity: 'act0',
