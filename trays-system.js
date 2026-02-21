@@ -79,7 +79,7 @@ class TraysSystem {
         const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
         const emojiSize = isSmallScreen
             ? (maxDim >= 7 ? '0.50em' : maxDim >= 6 ? '0.60em' : maxDim >= 5 ? '0.72em' : '0.9em')
-            : (maxDim >= 6 ? '0.8em' : maxDim >= 5 ? '0.9em' : '1.1em');
+            : (maxDim >= 6 ? '1.0em' : maxDim >= 5 ? '1.15em' : '1.3em');
         
         // Crear items
         for (let i = 0; i < data.total; i++) {
