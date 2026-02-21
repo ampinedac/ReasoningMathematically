@@ -370,6 +370,34 @@ class TraysSystem {
         this.draggedTray = null;
         this.render();
     }
+
+    // Corregir glitch visual en iPhone sin perder el armado actual
+    stabilizeTouchLayout() {
+        if (!this.isTouchDevice) return;
+
+        const wrappers = this.container.querySelectorAll('.tray-pair-wrapper');
+        const cards = this.container.querySelectorAll('.tray-card');
+
+        wrappers.forEach(wrapper => {
+            wrapper.style.display = 'flex';
+            wrapper.style.visibility = 'visible';
+            wrapper.style.opacity = '1';
+        });
+
+        cards.forEach(card => {
+            card.style.display = 'flex';
+            card.style.visibility = 'visible';
+            card.style.opacity = '1';
+            card.style.pointerEvents = 'auto';
+        });
+
+        // Forzar repaint en Safari/iOS
+        this.container.style.transform = 'translateZ(0)';
+        this.container.offsetHeight;
+        requestAnimationFrame(() => {
+            this.container.style.transform = '';
+        });
+    }
     
     // Destruir y limpiar
     destroy() {
