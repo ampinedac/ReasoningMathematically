@@ -61,38 +61,60 @@ class TraysSystem {
         console.log('✅ 8 bolsas renderizadas correctamente');
     }
     
-    // Crear elemento de bandeja
+    // Crear elemento de bolsa
     createTrayElement(data, index) {
         const tray = document.createElement('div');
         tray.className = 'tray-card';
         tray.id = data.id;
         tray.setAttribute('draggable', this.isTouchDevice ? 'false' : 'true');
         tray.dataset.total = data.total;
-        
-        // Grid de pandebonos
-        const grid = document.createElement('div');
-        grid.className = 'tray-grid';
-        grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
-        grid.style.gridTemplateRows = `repeat(${data.rows}, 1fr)`;
-        
-        // Ajustar tamaño de emoji según dimensión
-        const maxDim = Math.max(data.rows, data.cols);
+
+        const bagShape = document.createElement('div');
+        bagShape.className = 'bag-shape';
+
+        const bagTop = document.createElement('div');
+        bagTop.className = 'bag-top';
+
+        const bagWindow = document.createElement('div');
+        bagWindow.className = 'bag-window';
+
+        const bagItems = document.createElement('div');
+        bagItems.className = 'bag-items';
+
         const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
-        const emojiSize = isSmallScreen
-            ? (maxDim >= 7 ? '0.50em' : maxDim >= 6 ? '0.60em' : maxDim >= 5 ? '0.72em' : '0.9em')
-            : (maxDim >= 6 ? '1.0em' : maxDim >= 5 ? '1.15em' : '1.3em');
-        
-        // Crear items
+        const emojiSize = data.total >= 24
+            ? (isSmallScreen ? '0.62em' : '0.82em')
+            : data.total >= 15
+                ? (isSmallScreen ? '0.72em' : '0.95em')
+                : (isSmallScreen ? '0.85em' : '1.05em');
+
+        // Posicionar panes dentro de la bolsa con patrón natural (no matricial)
         for (let i = 0; i < data.total; i++) {
+            const angle = i * 2.399963229728653; // ángulo áureo
+            const radius = Math.sqrt((i + 0.6) / data.total) * 42;
+            const offsetX = Math.cos(angle) * radius;
+            const offsetY = Math.sin(angle) * radius;
+
+            const driftX = ((i % 4) - 1.5) * 1.1;
+            const driftY = (((i + 2) % 5) - 2) * 0.9;
+
+            const centerX = 50;
+            const centerY = 55;
+
             const item = document.createElement('span');
             item.textContent = data.emoji;
+            item.className = 'bag-item';
             item.style.fontSize = emojiSize;
-            item.style.lineHeight = '1';
-            item.className = 'tray-item';
-            grid.appendChild(item);
+            item.style.left = `${Math.min(92, Math.max(8, centerX + offsetX + driftX))}%`;
+            item.style.top = `${Math.min(91, Math.max(14, centerY + offsetY + driftY))}%`;
+
+            bagItems.appendChild(item);
         }
-        
-        tray.appendChild(grid);
+
+        bagWindow.appendChild(bagItems);
+        bagShape.appendChild(bagTop);
+        bagShape.appendChild(bagWindow);
+        tray.appendChild(bagShape);
         return tray;
     }
     
