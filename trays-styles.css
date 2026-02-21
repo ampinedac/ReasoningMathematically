@@ -264,8 +264,12 @@
     .tray-grid {
         max-width: 104px;
         max-height: 104px;
-        overflow: hidden;
+        overflow: visible;
         gap: 2px;
+        padding: 2px;
+        box-sizing: border-box;
+        justify-items: center;
+        align-items: center;
     }
     
     .tray-item {
@@ -301,9 +305,11 @@
     }
     
     .tray-grid {
-        max-width: 92px;
-        max-height: 92px;
+        max-width: 96px;
+        max-height: 96px;
         gap: 1px;
+        padding: 2px;
+        overflow: visible;
     }
 
     .tray-item {
