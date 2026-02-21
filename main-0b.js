@@ -1016,7 +1016,7 @@ function verifyTraysPairings() {
     console.log('📊 Validación:', { correctCount, totalPairs, results });
     
     // Emparejamientos esperados: 3 pares correctos (15-15, 8-8, 30-30)
-    // Bolsas solas: tray-7 (24) y tray-8 (20)
+    // Pedidos solos: Pedido 5 (24) y Pedido 1 (20)
     const expectedCorrectPairs = 3;
     
     if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {

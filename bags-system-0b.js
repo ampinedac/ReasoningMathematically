@@ -9,16 +9,16 @@ class TraysSystem {
             throw new Error(`Container #${containerId} no encontrado`);
         }
         
-        // Datos base de las 8 bolsas (Actividad 0B)
+        // Datos base de los 8 pedidos (Actividad 0B)
         this.BASE_TRAYS = [
-            { id: 'tray-1', rows: 3, cols: 5, total: 15, emoji: '🫓' },
-            { id: 'tray-2', rows: 5, cols: 3, total: 15, emoji: '🫓' },
-            { id: 'tray-3', rows: 2, cols: 4, total: 8, emoji: '🫓' },
-            { id: 'tray-4', rows: 4, cols: 2, total: 8, emoji: '🫓' },
-            { id: 'tray-5', rows: 6, cols: 5, total: 30, emoji: '🫓' },
-            { id: 'tray-6', rows: 5, cols: 6, total: 30, emoji: '🫓' },
-            { id: 'tray-7', rows: 6, cols: 4, total: 24, emoji: '🫓' },
-            { id: 'tray-8', rows: 5, cols: 4, total: 20, emoji: '🫓' }
+            { id: 'tray-1', pedido: 1, bags: 5, itemsPerBag: 4, total: 20, emoji: '🫓' },
+            { id: 'tray-2', pedido: 2, bags: 3, itemsPerBag: 5, total: 15, emoji: '🫓' },
+            { id: 'tray-3', pedido: 3, bags: 4, itemsPerBag: 2, total: 8, emoji: '🫓' },
+            { id: 'tray-4', pedido: 4, bags: 5, itemsPerBag: 6, total: 30, emoji: '🫓' },
+            { id: 'tray-5', pedido: 5, bags: 6, itemsPerBag: 4, total: 24, emoji: '🫓' },
+            { id: 'tray-6', pedido: 6, bags: 5, itemsPerBag: 3, total: 15, emoji: '🫓' },
+            { id: 'tray-7', pedido: 7, bags: 2, itemsPerBag: 4, total: 8, emoji: '🫓' },
+            { id: 'tray-8', pedido: 8, bags: 6, itemsPerBag: 5, total: 30, emoji: '🫓' }
         ];
         
         // Estado de emparejamiento (Map bidireccional)
@@ -43,7 +43,7 @@ class TraysSystem {
         this.setupEventListeners();
     }
     
-    // Limpiar y renderizar las 8 bandejas
+    // Limpiar y renderizar los 8 pedidos
     render() {
         // CRÍTICO: Limpiar contenedor primero
         this.container.innerHTML = '';
@@ -52,16 +52,16 @@ class TraysSystem {
         // Crear copia para barajar (no mutar el original)
         const shuffledTrays = [...this.BASE_TRAYS].sort(() => Math.random() - 0.5);
         
-        // Renderizar cada bandeja
+        // Renderizar cada pedido
         shuffledTrays.forEach((trayData, index) => {
             const trayElement = this.createTrayElement(trayData, index);
             this.container.appendChild(trayElement);
         });
         
-        console.log('✅ 8 bolsas renderizadas correctamente');
+        console.log('✅ 8 pedidos renderizados correctamente');
     }
     
-    // Crear elemento de bolsa
+    // Crear tarjeta visual de pedido
     createTrayElement(data, index) {
         const tray = document.createElement('div');
         tray.className = 'tray-card';
@@ -69,53 +69,97 @@ class TraysSystem {
         tray.setAttribute('draggable', this.isTouchDevice ? 'false' : 'true');
         tray.dataset.total = data.total;
 
-        const bagShape = document.createElement('div');
-        bagShape.className = 'bag-shape';
+        const pedidoTitle = document.createElement('div');
+        pedidoTitle.className = 'pedido-title';
+        pedidoTitle.textContent = `Pedido ${data.pedido}`;
 
-        const bagTop = document.createElement('div');
-        bagTop.className = 'bag-top';
+        const pedidoSubtitle = document.createElement('div');
+        pedidoSubtitle.className = 'pedido-subtitle';
+        pedidoSubtitle.textContent = `${data.bags} bolsas de ${data.itemsPerBag}`;
 
-        const bagWindow = document.createElement('div');
-        bagWindow.className = 'bag-window';
+        const bagsGrid = document.createElement('div');
+        bagsGrid.className = 'pedido-bags-grid';
 
-        const bagItems = document.createElement('div');
-        bagItems.className = 'bag-items';
+        for (let bagIndex = 0; bagIndex < data.bags; bagIndex++) {
+            const miniBag = document.createElement('div');
+            miniBag.className = 'mini-bag';
 
-        const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
-        const emojiSize = data.total >= 24
-            ? (isSmallScreen ? '0.62em' : '0.82em')
-            : data.total >= 15
-                ? (isSmallScreen ? '0.72em' : '0.95em')
-                : (isSmallScreen ? '0.85em' : '1.05em');
+            const miniHandleLeft = document.createElement('span');
+            miniHandleLeft.className = 'mini-handle mini-handle-left';
 
-        // Posicionar panes dentro de la bolsa con patrón natural (no matricial)
-        for (let i = 0; i < data.total; i++) {
-            const angle = i * 2.399963229728653; // ángulo áureo
-            const radius = Math.sqrt((i + 0.6) / data.total) * 42;
-            const offsetX = Math.cos(angle) * radius;
-            const offsetY = Math.sin(angle) * radius;
+            const miniHandleRight = document.createElement('span');
+            miniHandleRight.className = 'mini-handle mini-handle-right';
 
-            const driftX = ((i % 4) - 1.5) * 1.1;
-            const driftY = (((i + 2) % 5) - 2) * 0.9;
+            const miniWindow = document.createElement('div');
+            miniWindow.className = 'mini-bag-window';
 
-            const centerX = 50;
-            const centerY = 55;
+            const layout = this.getBagLayout(data.itemsPerBag);
 
-            const item = document.createElement('span');
-            item.textContent = data.emoji;
-            item.className = 'bag-item';
-            item.style.fontSize = emojiSize;
-            item.style.left = `${Math.min(92, Math.max(8, centerX + offsetX + driftX))}%`;
-            item.style.top = `${Math.min(91, Math.max(14, centerY + offsetY + driftY))}%`;
+            layout.forEach((position) => {
+                const pane = document.createElement('span');
+                pane.className = 'mini-pane';
+                pane.textContent = data.emoji;
+                pane.style.left = `${position.left}%`;
+                pane.style.top = `${position.top}%`;
+                miniWindow.appendChild(pane);
+            });
 
-            bagItems.appendChild(item);
+            miniBag.appendChild(miniHandleLeft);
+            miniBag.appendChild(miniHandleRight);
+            miniBag.appendChild(miniWindow);
+            bagsGrid.appendChild(miniBag);
         }
 
-        bagWindow.appendChild(bagItems);
-        bagShape.appendChild(bagTop);
-        bagShape.appendChild(bagWindow);
-        tray.appendChild(bagShape);
+        tray.appendChild(pedidoTitle);
+        tray.appendChild(pedidoSubtitle);
+        tray.appendChild(bagsGrid);
         return tray;
+    }
+
+    getBagLayout(itemsPerBag) {
+        const layouts = {
+            2: [
+                { left: 35, top: 42 },
+                { left: 65, top: 42 }
+            ],
+            3: [
+                { left: 35, top: 36 },
+                { left: 65, top: 36 },
+                { left: 50, top: 68 }
+            ],
+            4: [
+                { left: 34, top: 34 },
+                { left: 66, top: 34 },
+                { left: 34, top: 66 },
+                { left: 66, top: 66 }
+            ],
+            5: [
+                { left: 34, top: 34 },
+                { left: 66, top: 34 },
+                { left: 50, top: 50 },
+                { left: 34, top: 66 },
+                { left: 66, top: 66 }
+            ],
+            6: [
+                { left: 34, top: 30 },
+                { left: 66, top: 30 },
+                { left: 34, top: 50 },
+                { left: 66, top: 50 },
+                { left: 34, top: 70 },
+                { left: 66, top: 70 }
+            ],
+            7: [
+                { left: 28, top: 28 },
+                { left: 50, top: 28 },
+                { left: 72, top: 28 },
+                { left: 34, top: 50 },
+                { left: 66, top: 50 },
+                { left: 50, top: 64 },
+                { left: 50, top: 78 }
+            ]
+        };
+
+        return layouts[itemsPerBag] || layouts[6];
     }
     
     // Configurar event listeners
