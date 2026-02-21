@@ -31,6 +31,7 @@
 
 .activity-0b .tray-card.paired {
     border-width: 4px !important;
+    transform: translateY(-1px);
 }
 
 .activity-0b .pedido-title {
@@ -111,6 +112,7 @@
 .activity-0b .tray-pair-wrapper {
     background: rgba(255, 255, 255, 0.16);
     border-radius: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 @media (max-width: 768px) {

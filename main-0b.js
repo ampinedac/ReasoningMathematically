@@ -1491,13 +1491,14 @@ function generateMoment4Questions() {
     // Generar 6 preguntas con números aleatorios entre 1 y 50
     const questions = [];
     
-    // SVG del sobre mágico (faltante)
-    const envelope = `<span class="missing-envelope" aria-label="sobre misterioso" role="img">
+    // SVG de la bolsa mágica (faltante)
+    const envelope = `<span class="missing-envelope" aria-label="bolsa misteriosa" role="img">
         <svg class="envelope magic" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
-            <rect x="5" y="10" width="50" height="35" fill="#ffd166" stroke="#ff9f1c" stroke-width="2" rx="4"/>
-            <path d="M5 10 L30 30 L55 10" fill="#ffe28a" stroke="#ff9f1c" stroke-width="2"/>
-            <path d="M5 10 L30 30 L55 10 Z" fill="#fff4c2" opacity="0.85"/>
-            <circle cx="30" cy="28" r="3" fill="#ff6f91"/>
+            <rect x="8" y="12" width="44" height="34" fill="#ffd166" stroke="#ff9f1c" stroke-width="2" rx="8"/>
+            <rect x="8" y="12" width="44" height="9" fill="#ffe28a" opacity="0.9" rx="8"/>
+            <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#ff9f1c" stroke-width="2" stroke-linecap="round"/>
+            <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#ff9f1c" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="30" cy="30" r="3" fill="#ff6f91"/>
         </svg>
     </span>`;
     
@@ -1761,7 +1762,7 @@ function validateItem(input, itemBox) {
         
         if (attempts === 1) {
             // Primer intento fallido
-            feedback.innerHTML = '<span style="color: #e67e22;">❌ Verifica tu respuesta. Recuerda lo que hemos hecho para adivinar el número que va en el sobre.</span>';
+            feedback.innerHTML = '<span style="color: #e67e22;">❌ Verifica tu respuesta. Recuerda lo que hemos hecho para adivinar el número que va en la bolsa.</span>';
             feedback.className = 'item-feedback incorrect';
             input.focus();
             
