@@ -31,6 +31,7 @@ class TraysSystem {
         // Estado de drag
         this.draggedTray = null;
         this.selectedTray = null;
+        this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
         
         // Inicializar
         this.init();
@@ -65,7 +66,7 @@ class TraysSystem {
         const tray = document.createElement('div');
         tray.className = 'tray-card';
         tray.id = data.id;
-        tray.setAttribute('draggable', 'true');
+        tray.setAttribute('draggable', this.isTouchDevice ? 'false' : 'true');
         tray.dataset.total = data.total;
         
         // Grid de pandebonos
@@ -97,11 +98,13 @@ class TraysSystem {
     
     // Configurar event listeners
     setupEventListeners() {
-        // Drag & Drop
-        this.container.addEventListener('dragstart', (e) => this.handleDragStart(e));
-        this.container.addEventListener('dragover', (e) => this.handleDragOver(e));
-        this.container.addEventListener('drop', (e) => this.handleDrop(e));
-        this.container.addEventListener('dragend', (e) => this.handleDragEnd(e));
+        if (!this.isTouchDevice) {
+            // Drag & Drop solo en escritorio (más estable)
+            this.container.addEventListener('dragstart', (e) => this.handleDragStart(e));
+            this.container.addEventListener('dragover', (e) => this.handleDragOver(e));
+            this.container.addEventListener('drop', (e) => this.handleDrop(e));
+            this.container.addEventListener('dragend', (e) => this.handleDragEnd(e));
+        }
         
         // Click para selección manual (alternativa al drag)
         this.container.addEventListener('click', (e) => this.handleClick(e));

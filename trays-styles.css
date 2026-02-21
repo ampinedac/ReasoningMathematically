@@ -56,6 +56,9 @@
     min-width: 0;
     position: relative;
     user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    touch-action: manipulation;
     /* NO agregar left, top, transform que saquen del flujo */
 }
 
