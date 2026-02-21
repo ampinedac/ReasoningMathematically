@@ -16,8 +16,13 @@
             <div class="activities-grid">
                 <button id="activity0Btn" class="activity-card">
                     <span class="activity-emoji">🫓</span>
-                    <div class="activity-badge">Actividad 0</div>
+                    <div class="activity-badge">Actividad 0A</div>
                     <h2 class="activity-title">¿El orden de los factores altera el producto?</h2>
+                </button>
+                <button id="activity0BBtn" class="activity-card">
+                    <span class="activity-emoji">🛍️</span>
+                    <div class="activity-badge">Actividad 0B</div>
+                    <h2 class="activity-title">El Misterio de las Sumas Repetidas</h2>
                 </button>
                 <!-- Aquí irán más actividades en el futuro
                 <button id="activity1Btn" class="activity-card">
@@ -33,10 +38,16 @@
     <!-- Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Redirect to actividad0.html when clicking Actividad 0
+            // Redirect to actividad0A.html when clicking Actividad 0A
             const activity0Btn = document.getElementById('activity0Btn');
             activity0Btn.addEventListener('click', () => {
-                window.location.href = 'actividad0.html';
+                window.location.href = 'actividad0A.html';
+            });
+
+            // Redirect to actividad0B.html when clicking Actividad 0B
+            const activity0BBtn = document.getElementById('activity0BBtn');
+            activity0BBtn.addEventListener('click', () => {
+                window.location.href = 'actividad0B.html';
             });
             
             // Future activities will be added here

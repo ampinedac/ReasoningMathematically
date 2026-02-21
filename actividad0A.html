@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫓</text></svg>">
+    <link rel="stylesheet" href="styles.css?v=2026022010">
+    <link rel="stylesheet" href="trays-styles.css?v=2026022007">
+    <!-- ResponsiveVoice para voces más expresivas -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
+</head>
+<body>
+    <!-- PANTALLA DE BIENVENIDA -->
+    <section id="welcomeScreen" class="screen active">
+        <h1 class="main-title">Actividad 0A</h1>
+        <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
+        <div class="container">
+            <div class="welcome-box">
+                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+                <p id="welcomeError" class="error-text hidden"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PANTALLA DE CONFIRMACIÓN -->
+    <section id="confirmationScreen" class="screen">
+        <h1 class="main-title">Confirmación</h1>
+        <div class="container">
+            <div class="welcome-box">
+                <p id="confirmationQuestion" class="confirmation-question"></p>
+                <div class="confirmation-buttons">
+                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
+                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 1: Cuento + Problema Q1 -->
+    <section id="moment1Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 1: El cuento de Doña Alicia</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
+            </div>
+
+            <!-- FLIPBOOK 3D DEL CUENTO -->
+            <div id="flipbookSection">
+
+                <!-- Flipbook Container -->
+                <div class="flipbook-wrapper">
+                    <!-- Botón de sonido en esquina superior derecha -->
+                    <button id="soundToggle" class="sound-toggle" aria-label="Activar/Desactivar sonido">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="speaker-icon" d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
+                            <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line class="mute-line" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: none;"/>
+                        </svg>
+                    </button>
+                    <div id="flipbook">
+                        
+                        <!-- Story Page 1 -->
+                        <div class="page story-page active">
+                            <div class="page-number">1</div>
+                            <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
+                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                        </div>
+
+                        <!-- Story Page 2 -->
+                        <div class="page story-page">
+                            <div class="page-number">2</div>
+                            <img src="assets/images/pagina2_cuento_act0_1.png" alt="Doña Alicia amasando" class="story-image">
+                            <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
+                        </div>
+
+                        <!-- Story Page 3 -->
+                        <div class="page story-page">
+                            <div class="page-number">3</div>
+                            <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
+                            <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                        </div>
+
+                        <!-- Story Page 4 -->
+                        <div class="page story-page">
+                            <div class="page-number">4</div>
+                            <img src="assets/images/pagina4_cuento_act0_1.png" alt="Pandebonos en el horno" class="story-image">
+                            <p class="story-text">¡Es hora de entrar al calor! Doña Alicia coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
+                        </div>
+
+                        <!-- Story Page 5 -->
+                        <div class="page story-page">
+                            <div class="page-number">5</div>
+                            <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
+                            <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                        </div>
+
+                        <!-- Story Page 6 -->
+                        <div class="page story-page">
+                            <div class="page-number">6</div>
+                            <img src="assets/images/pagina6_cuento_act0_1.png" alt="Organizando bandejas" class="story-image">
+                            <p class="story-text">Ahora viene la parte más importante para Doña Alicia: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
+                        </div>
+
+                        <!-- Story Page 7 -->
+                        <div class="page story-page">
+                            <div class="page-number">7</div>
+                            <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebono" class="story-image">
+                            <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                        </div>
+
+                        <!-- Story Page 8 -->
+                        <div class="page story-page">
+                            <div class="page-number">8</div>
+                            <img src="assets/images/pagina8_cuento_act0_1.png" alt="Compartiendo con orden" class="story-image">
+                            <p class="story-text">"Mira, Daniel", dice Doña Alicia con ternura. "Cuando ponemos las cosas en orden y las repartimos con cuidado, nos aseguramos de que nadie se quede sin su bocado. Compartir con orden es compartir con el corazón".</p>
+                        </div>
+
+                        <!-- Story Page 9 -->
+                        <div class="page story-page">
+                            <div class="page-number">9</div>
+                            <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
+                            <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
+                        </div>
+
+                    </div>
+                    
+                    <!-- Navigation Controls dentro del libro -->
+                    <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
+                    <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
+                </div>
+            </div>
+
+            <!-- Botón fuera del flipbook para evitar problemas de visibilidad -->
+            <button id="finishReadingBtn" class="btn btn-primary" style="display: none; margin: 20px auto 40px auto;">Ya terminé la lectura</button>
+
+            <!-- SITUACIÓN 1 -->
+            <div id="problemQ1Section" class="hidden">
+                <div class="problem-box">
+                    <h3>Situación 1</h3>
+                    <p>Doña Alicia hizo <strong>28 pandebonos</strong> y quiere organizarlos en bandejas para venderlos.</p>
+                    <p><strong>Alicia dice:</strong> "Los voy a poner en <strong>4 filas</strong> con <strong>7 pandebonos</strong> en cada fila."</p>
+                    <p><strong>Daniel dice:</strong> "¡No! Mejor ponlos en <strong>7 filas</strong> con <strong>4 pandebonos</strong> en cada fila."</p>
+                    <p class="question"> Compara las dos propuestas de organización y explica qué ocurre en cada una.
+¿Hay alguna que resulte más conveniente desde el punto de vista matemático?
+Argumenta tu respuesta.
+</p>
+                </div>
+
+                <!-- PIZARRA Y AUDIO -->
+                <div class="evidence-section">
+                    <h4>Puedes utilizar la pizarra</h4>
+                    
+                    <!-- Pizarra -->
+                    <div class="board-container">
+                        <div class="board-tools">
+                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                        </div>
+                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
+                    </div>
+
+                    <!-- Audio -->
+                    <div class="audio-controls">
+                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM1Q1" class="audio-status"></span>
+                    </div>
+
+                    <!-- Enviar -->
+                    <div class="submit-section">
+                        <p id="statusM1Q1" class="status-text"></p>
+                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 2: Emparejamiento de Bandejas -->
+    <section id="moment2Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 2: Organizando pandebonos</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
+            </div>
+
+            <!-- INTRODUCCIÓN -->
+            <div class="problem-box">
+                <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Cada tarjeta muestra una forma diferente de organizarlas.</p>
+                <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos:</strong></p>
+                <p class="instruction-hint">💡 Arrastra las bandejas para juntarlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
+            </div>
+
+            <!-- ÁREA DE BANDEJAS -->
+            <div id="traysGameSection">
+                <div id="traysArea" class="trays-container">
+                    <!-- Las 8 bandejas se generarán aquí dinámicamente -->
+                </div>
+                
+                <div class="game-controls">
+                    <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
+                    <p id="traysFeedback" class="feedback-text"></p>
+                </div>
+            </div>
+
+            <!-- PREGUNTA FINAL -->
+            <div id="finalQuestionSection" class="hidden">
+                <div class="problem-box">
+                    <h3>¡Excelente trabajo!</h3>
+                    <p class="question">En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
+                    <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                </div>
+
+                <!-- SOLO AUDIO -->
+                <div class="evidence-section">
+                    <h4>Graba tu explicación:</h4>
+                    
+                    <!-- Audio -->
+                    <div class="audio-controls">
+                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
+                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                        <span id="audioStatusM2" class="audio-status"></span>
+                    </div>
+
+                    <!-- Enviar -->
+                    <div class="submit-section">
+                        <p id="statusM2" class="status-text"></p>
+                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                    </div>
+                </div>
+
+                <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 3: Los sobres misteriosos -->
+    <section id="moment3Screen" class="screen">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">Momento 3: Los sobres misteriosos</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM3"></span></p>
+            </div>
+
+            <div class="problem-box">
+                <p><strong>En cada sobre hay un número secreto.</strong></p>
+                <ul style="font-size: 1.1em; line-height: 1.8; margin: 15px 0; padding-left: 40px;">
+                    <li>Los sobres del mismo color guardan el mismo número.</li>
+                    <li>Los sobres de diferente color guardan números diferentes.</li>
+                </ul>
+            </div>
+
+            <!-- PROBLEMA 1 -->
+            <div id="problem1Section">
+                <div class="problem-box">
+                    <h3>Problema 1</h3>
+                    <div class="envelope-equation">
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">×</span>
+                        <span class="number">4</span>
+                        <span class="operator">=</span>
+                        <span class="number">4</span>
+                        <span class="operator">×</span>
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="question-section">
+                        <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="yes">
+                                Sí, creo que es verdadera
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="unsure">
+                                No estoy segura
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="no">
+                                Creo que no es verdadera
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="promptSection1" class="hidden">
+                    <div class="prompt-box">
+                        <p id="promptText1"></p>
+                    </div>
+
+                    <!-- PIZARRA Y AUDIO -->
+                    <div class="evidence-section">
+                        <h4>Usa el audio para explicar:</h4>
+                        
+                        <!-- Pizarra -->
+                        <div class="board-container">
+                            <div class="board-tools">
+                                <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                                <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                                <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                                <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                                <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                            </div>
+                            <canvas id="boardCanvasM3Q1" class="drawing-board" width="800" height="500"></canvas>
+                        </div>
+
+                        <!-- Audio -->
+                        <div class="audio-controls">
+                            <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                            <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                            <span id="audioStatusM3Q1" class="audio-status"></span>
+                        </div>
+
+                        <!-- Enviar -->
+                        <div class="submit-section">
+                            <p id="statusM3Q1" class="status-text"></p>
+                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar Problema 1</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROBLEMA 2 (oculto hasta que se envíe el primero) -->
+            <div id="problem2Section" class="hidden">
+                <div class="problem-box">
+                    <h3>Problema 2</h3>
+                    <div class="envelope-equation">
+                        <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#64B5F6" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">×</span>
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">=</span>
+                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                        </svg>
+                        <span class="operator">×</span>
+                        <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                            <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                            <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                            <path d="M5 10 L30 30 L55 10 Z" fill="#64B5F6" opacity="0.7"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="question-section">
+                        <p class="question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ2" value="yes">
+                                Sí
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ2" value="unsure">
+                                No estoy segura
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ2" value="no">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="promptSection2" class="hidden">
+                    <div class="prompt-box">
+                        <p id="promptText2"></p>
+                    </div>
+
+                    <!-- PIZARRA Y AUDIO -->
+                    <div class="evidence-section">
+                        <h4>Usa el audio para explicar:</h4>
+                        
+                        <!-- Pizarra -->
+                        <div class="board-container">
+                            <div class="board-tools">
+                                <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                                <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                                <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                                <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                                <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                            </div>
+                            <canvas id="boardCanvasM3Q2" class="drawing-board" width="800" height="500"></canvas>
+                        </div>
+
+                        <!-- Audio -->
+                        <div class="audio-controls">
+                            <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
+                            <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                            <span id="audioStatusM3Q2" class="audio-status"></span>
+                        </div>
+
+                        <!-- Enviar -->
+                        <div class="submit-section">
+                            <p id="statusM3Q2" class="status-text"></p>
+                            <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar Problema 2</button>
+                        </div>
+                    </div>
+
+                    <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 4: El mago lo hizo de nuevo -->
+    <section id="moment4Screen" class="screen magic-theme">
+        <div class="container">
+            <div class="header">
+                <h2 class="section-title">🧙‍♂️ Momento 4: El mago lo hizo de nuevo</h2>
+                <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+                
+                <!-- Sistema de vidas -->
+                <div class="magic-lives-container">
+                    <span class="magic-label">✨ Vidas mágicas:</span>
+                    <div id="magicLives" class="magic-lives">
+                        <span class="magic-heart">❤️</span>
+                        <span class="magic-heart">❤️</span>
+                        <span class="magic-heart">❤️</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="items-container">
+                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
+                
+                <div id="itemsWrapper">
+                    <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
+                </div>
+
+                <p id="moment4Status" class="status-text"></p>
+                <p id="pointsStatus" class="points-status hidden"></p>
+            </div>
+
+            <!-- Canvas para efectos mágicos -->
+            <canvas id="magicCanvas" class="magic-canvas"></canvas>
+            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+
+            <div id="finalQuestionSection" class="hidden">
+                <div class="final-box">
+                    <h3>¡Felicitaciones! 🎉</h3>
+                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
+                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
+                    <p class="thank-you-sub">¡Gracias por participar!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="trays-system.js?v=2026022001"></script>
+    <script type="module" src="main.js?v=2026022008"></script>
+    <script src="app.js?v=2026022001"></script>
+</body>
+</html>

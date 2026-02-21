@@ -529,7 +529,7 @@ function initProblemQ1() {
 // ========================================
 
 function initMoment2() {
-    console.log('🎯 Inicializando Momento 2 - Sistema de Bandejas');
+    console.log('🎯 Inicializando Momento 2 - Sistema de Bolsas');
     
     document.getElementById('studentCodeM2').textContent = getStudentHeaderText();
     
@@ -542,9 +542,9 @@ function initMoment2() {
     // Crear nueva instancia del sistema de bandejas
     try {
         traysSystem = new TraysSystem('traysArea');
-        console.log('✅ Sistema de bandejas inicializado');
+        console.log('✅ Sistema de bolsas inicializado');
     } catch (error) {
-        console.error('❌ Error al inicializar sistema de bandejas:', error);
+        console.error('❌ Error al inicializar sistema de bolsas:', error);
     }
     
     // Configurar botón de verificación
@@ -1004,7 +1004,7 @@ function verifyTraysPairings() {
     const feedback = document.getElementById('traysFeedback');
     
     if (results.length === 0) {
-        feedback.textContent = '⚠️ No hay emparejamientos. Arrastra las bandejas para unirlas.';
+        feedback.textContent = '⚠️ No hay emparejamientos. Arrastra las bolsas para unirlas.';
         feedback.className = 'feedback-text info';
         return;
     }
@@ -1015,8 +1015,8 @@ function verifyTraysPairings() {
     
     console.log('📊 Validación:', { correctCount, totalPairs, results });
     
-    // Emparejamientos esperados: 3 pares correctos (12-12, 12-12, 15-15)
-    // Bandejas solas: tray-7 (20) y tray-8 (14)
+    // Emparejamientos esperados: 3 pares correctos (15-15, 8-8, 30-30)
+    // Bolsas solas: tray-7 (24) y tray-8 (20)
     const expectedCorrectPairs = 3;
     
     if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {
@@ -1041,9 +1041,9 @@ function verifyTraysPairings() {
         if (totalPairs < expectedCorrectPairs) {
             errorMsg = `🔍 Te faltan emparejamientos. Solo tienes ${totalPairs} de ${expectedCorrectPairs} pares.`;
         } else if (totalPairs > expectedCorrectPairs) {
-            errorMsg = '� Pista: algunas bandejas no tienen pareja.';
+            errorMsg = '💡 Pista: algunas bolsas no tienen pareja.';
         } else {
-            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Vuelve a contar y verifica que las parejas estén unidas solo si tienen la misma cantidad.`;
+            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Vuelve a contar y verifica que las parejas estén unidas solo si tienen la misma cantidad de panes de bono.`;
         }
         
         feedback.textContent = errorMsg;
@@ -1503,10 +1503,10 @@ function generateMoment4Questions() {
     
     const patterns = [
         (a, b) => ({ eq: `${a} × ${envelope} = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${envelope} × ${a} = ${a} × ${b}`, ans: b, fullEq: `${b} × ${a} = ${a} × ${b}` }),
+        (a, b) => ({ eq: `${envelope} × ${a} = ${b} × ${a}`, ans: b, fullEq: `${b} × ${a} = ${b} × ${a}` }),
         (a, b) => ({ eq: `${a} × ${b} = ${b} × ${envelope}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${envelope} × ${b} = ${b} × ${a}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${b} × ${envelope} = ${a} × ${b}`, ans: a, fullEq: `${b} × ${a} = ${a} × ${b}` }),
+        (a, b) => ({ eq: `${envelope} × ${a} = ${b} × ${a}`, ans: b, fullEq: `${b} × ${a} = ${b} × ${a}` }),
+        (a, b) => ({ eq: `${a} × ${envelope} = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
         (a, b) => ({ eq: `${a} × ${b} = ${envelope} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` })
     ];
     
@@ -2264,7 +2264,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         // Subir imagen de pizarra (si existe)
         if (boardBlob) {
             console.log('📸 Subiendo imagen...');
-            const boardPath = `uploads/${storageIdentifier}/act0/${moment}/${storageIdentifier}_act0_${moment}_${tag}_${timestamp}.png`;
+            const boardPath = `uploads/${storageIdentifier}/act0b/${moment}/${storageIdentifier}_act0b_${moment}_${tag}_${timestamp}.png`;
             const boardRef = ref(storage, boardPath);
             await uploadBytes(boardRef, boardBlob);
             boardUrl = await getDownloadURL(boardRef);
@@ -2274,7 +2274,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         // Subir audio (si existe)
         if (audioBlob) {
             console.log('🎤 Subiendo audio...', audioBlob.size, 'bytes');
-            const audioPath = `uploads/${storageIdentifier}/act0/${moment}/${storageIdentifier}_act0_${moment}_${tag}_${timestamp}.webm`;
+            const audioPath = `uploads/${storageIdentifier}/act0b/${moment}/${storageIdentifier}_act0b_${moment}_${tag}_${timestamp}.webm`;
             const audioRef = ref(storage, audioPath);
             await uploadBytes(audioRef, audioBlob);
             audioUrl = await getDownloadURL(audioRef);
@@ -2293,7 +2293,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         accessCode: studentCode,
         participantName: participantName,
         participantType: studentCode === '0000' ? 'invited' : 'registered',
-        activity: 'act0',
+        activity: 'act0b',
         moment: moment,
         tag: tag,
         createdAt: serverTimestamp(),

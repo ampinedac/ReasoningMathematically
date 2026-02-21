@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== CONFIGURATION =====
     const CONFIG = {
-        totalPages: 9, // 9 story pages only
+        totalPages: 0,
         soundEnabled: true,
         soundFrequency: 800,
         soundDuration: 100,
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== DOM ELEMENTS =====
     const pages = document.querySelectorAll('#flipbook .page');
+    CONFIG.totalPages = pages.length;
     const elements = {
         progressBar: document.getElementById('progressBar'),
         progressText: document.getElementById('progressText'),
