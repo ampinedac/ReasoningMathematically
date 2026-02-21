@@ -1048,6 +1048,15 @@ function verifyTraysPairings() {
         
         feedback.textContent = errorMsg;
         feedback.className = 'feedback-text error';
+
+        // iPhone/Safari: evitar que se oculten bandejas al reintentar
+        if (traysSystem?.isTouchDevice) {
+            setTimeout(() => {
+                traysSystem.reset();
+                feedback.textContent = '🔄 Intenta de nuevo: el tablero se reorganizó para facilitar el reintento.';
+                feedback.className = 'feedback-text info';
+            }, 400);
+        }
     }
 }
 
