@@ -1,0 +1,98 @@
+/* Estilos visuales exclusivos para Actividad 0B (bolsas) */
+
+.activity-0b .tray-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none;
+    min-height: 220px;
+    padding: 8px;
+}
+
+.activity-0b .tray-card:hover {
+    transform: translateY(-3px);
+    box-shadow: none;
+}
+
+.activity-0b .tray-card.selected,
+.activity-0b .tray-card.drag-over,
+.activity-0b .tray-card.paired {
+    box-shadow: none;
+}
+
+.activity-0b .bag-shape {
+    width: 100%;
+    max-width: 210px;
+    aspect-ratio: 4 / 5;
+    margin: 0 auto;
+    border-radius: 14px 14px 26px 26px;
+    background: linear-gradient(180deg, rgba(223, 185, 129, 0.65) 0%, rgba(196, 150, 92, 0.62) 100%);
+    border: 3px solid rgba(134, 93, 47, 0.75);
+    position: relative;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.activity-0b .bag-shape::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(75deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 25%),
+        linear-gradient(105deg, rgba(120, 82, 42, 0.12) 0%, rgba(120, 82, 42, 0) 35%);
+    pointer-events: none;
+}
+
+.activity-0b .bag-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 16%;
+    background: linear-gradient(180deg, rgba(231, 201, 143, 0.78) 0%, rgba(219, 187, 128, 0.72) 100%);
+    border-bottom: 2px dashed rgba(129, 92, 45, 0.45);
+}
+
+.activity-0b .bag-window {
+    width: 80%;
+    height: 72%;
+    margin-top: 8%;
+    border-radius: 18px;
+    background: rgba(250, 253, 255, 0.38);
+    border: 2px solid rgba(255, 255, 255, 0.92);
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+
+.activity-0b .bag-items {
+    position: absolute;
+    inset: 0;
+}
+
+.activity-0b .bag-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    line-height: 1;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+    user-select: none;
+    pointer-events: none;
+    opacity: 1;
+}
+
+.activity-0b .tray-pair-wrapper {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 768px) {
+    .activity-0b .tray-card {
+        min-height: 180px;
+    }
+
+    .activity-0b .bag-shape {
+        max-width: 170px;
+        border-radius: 16px 16px 24px 24px;
+    }
+}
