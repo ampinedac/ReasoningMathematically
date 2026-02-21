@@ -921,8 +921,9 @@ section.screen::before {
     border: none;
     border-radius: 30px;
     padding: 0;
-    width: 100%;
-    max-width: 950px;
+    width: calc(50% - 15px);
+    max-width: 620px;
+    min-width: 460px;
     height: 200px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -934,6 +935,14 @@ section.screen::before {
     align-items: center;
     justify-content: space-between;
     padding: 30px 40px;
+}
+
+@media (max-width: 1100px) {
+    .activity-card {
+        width: 100%;
+        max-width: 950px;
+        min-width: 0;
+    }
 }
 
 .activity-card::before {
