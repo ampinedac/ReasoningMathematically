@@ -1254,9 +1254,9 @@ function showPrompt1(choice) {
     const promptText = document.getElementById('promptText1');
     
     const prompts = {
-        yes: 'Muéstrame por qué con un ejemplo.',
-        no: '¿Qué ejemplo te hace pensar eso?',
-        unsure: '¿Qué no te permite decidir?'
+        yes: 'Explica detalladamente cómo lo sabes.',
+        no: '¿Con qué número crees que no funcionaría?',
+        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
     };
     
     promptText.textContent = prompts[choice] || '';
@@ -1271,9 +1271,9 @@ function showPrompt2(choice) {
     const promptText = document.getElementById('promptText2');
     
     const prompts = {
-        yes: 'Muéstrame por qué con un ejemplo.',
-        no: '¿Qué ejemplo te hace pensar eso?',
-        unsure: '¿Qué no te permite decidir?'
+        yes: 'Explica detalladamente cómo lo sabes.',
+        no: '¿Con qué número crees que no funcionaría?',
+        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
     };
     
     promptText.textContent = prompts[choice] || '';
