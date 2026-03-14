@@ -2197,12 +2197,12 @@ function initBoard(canvasId) {
         switch (currentTool) {
             case 'black':
                 ctx.strokeStyle = '#000';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 8;
                 ctx.globalAlpha = 1;
                 break;
             case 'red':
                 ctx.strokeStyle = '#e74c3c';
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 8;
                 ctx.globalAlpha = 1;
                 break;
             case 'yellow':
