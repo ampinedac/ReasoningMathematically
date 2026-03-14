@@ -53,6 +53,11 @@
      /* Forzar tamaño de letra uniforme (30px) en la pantalla activa actual
          Esto asegura que TODO el texto del apartado que esté visible tenga el mismo tamaño */
      section.screen.active, section.screen.active * { font-size:30px !important; line-height:1.4 !important; }
+    /* Recuadro blanco principal para la pantalla (uniformidad visual) */
+    #moment1Screen .panel{background:#fff;padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(20,40,60,0.12);max-width:1180px;margin:20px auto}
+    /* Ajustes internos para que el contenido dentro del panel respete el diseño */
+    #moment1Screen .panel .flipbook-wrapper{margin:0}
+    #moment1Screen .panel .welcome-box, #moment1Screen .panel .problem-box{background:transparent;padding:0}
     </style>
 </head>
 <body>
@@ -86,6 +91,7 @@
 
     <!-- MOMENTO 1: Cuento + Problema Q1 -->
     <section id="moment1Screen" class="screen">
+        <div class="panel">
         <div class="container">
             <div class="header">
                 <!-- Momento 1: El cuento de Doña Alicia -->
@@ -220,6 +226,8 @@
                     <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
                 </div>
             </div>
+        </div>
+        </div>
         </div>
     </section>
 
