@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="trays-styles.css?v=2026022007">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
+    <style>
+    /* Ajustes para Situación 1: centrar izquierda y agrandar tablero */
+    .q1-book-spread{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+    .q1-left-page{flex:0 0 46%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px;box-sizing:border-box}
+    .q1-left-page h3{margin-top:0}
+    .q1-left-page p{color:inherit;font-weight:400;font-size:1rem}
+    .q1-left-page .question{color:#000;font-weight:400;font-size:1rem;margin-top:12px}
+    .q1-book-spread .q1-right-page{flex:0 0 50%;display:flex;flex-direction:column;align-items:flex-start}
+    .q1-book-spread .board-container{width:100%;max-width:1200px}
+    /* Hacer el canvas responsive y permitir mayor altura */
+    .drawing-board{width:100% !important;height:auto !important;max-height:800px}
+    </style>
 </head>
 <body>
     <!-- PANTALLA DE BIENVENIDA -->
@@ -133,8 +145,7 @@
                             <h3>Situación 1</h3>
                             <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
                             <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
-                            <p class="question"> Compara las dos propuestas de organización ¿Hay alguna que permita organizar más pandebonos que la otra? Explica.
-</p>
+                            <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
                         </div>
 
                         <!-- TABLERO Y AUDIO -->
@@ -150,7 +161,7 @@
                                     <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
                                     <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
                                 </div>
-                                <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
+                                <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="700"></canvas>
                             </div>
 
                             <!-- Audio -->

@@ -2124,7 +2124,7 @@ function initBoard(canvasId) {
             const tool = btn.dataset.tool;
             
             if (tool === 'clear') {
-                const shouldClear = window.confirm('¿Estás segura de que quieres limpiar el tablero?');
+                const shouldClear = window.confirm('¿Estás segura de querer limpiar todo el tablero?');
                 if (!shouldClear) {
                     return;
                 }
