@@ -423,6 +423,10 @@ function initMoment1() {
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
     const problemSection = document.getElementById('problemQ1Section');
+    const flipbook = document.getElementById('flipbook');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const soundToggle = document.getElementById('soundToggle');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
 
@@ -434,6 +438,19 @@ function initMoment1() {
         const isLastPage = Boolean(event?.detail?.isLastPage);
 
         if (isLastPage) {
+            if (flipbook) {
+                flipbook.style.display = 'none';
+            }
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+            }
+            if (soundToggle) {
+                soundToggle.style.display = 'none';
+            }
+            if (prevBtn) {
+                prevBtn.style.display = '';
+            }
+
             problemSection.classList.remove('hidden');
             problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
@@ -444,6 +461,19 @@ function initMoment1() {
                 initProblemQ1();
             }
         } else {
+            if (flipbook) {
+                flipbook.style.display = '';
+            }
+            if (prevBtn) {
+                prevBtn.style.display = '';
+            }
+            if (nextBtn) {
+                nextBtn.style.display = '';
+            }
+            if (soundToggle) {
+                soundToggle.style.display = '';
+            }
+
             problemSection.classList.add('hidden');
         }
     };
