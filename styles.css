@@ -1684,6 +1684,80 @@ section.screen::before {
     margin: 20px 0;
 }
 
+/* ========================================
+   Q1 MOMENTO 1 (ACTIVIDAD 0A) - DOBLE PÁGINA
+   ======================================== */
+
+#problemQ1Section.q1-book-spread {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    width: 100%;
+    margin: 20px auto;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    position: relative;
+    background: #fdfdfd;
+}
+
+#problemQ1Section.q1-book-spread::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: rgba(0, 0, 0, 0.08);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+#problemQ1Section .q1-left-page,
+#problemQ1Section .q1-right-page {
+    margin: 0;
+    max-width: none;
+    min-height: 560px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 28px;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #ffffff 0px,
+            #ffffff 34px,
+            rgba(53, 122, 189, 0.12) 35px,
+            #ffffff 36px
+        );
+}
+
+#problemQ1Section .q1-left-page {
+    background-color: #fffef8;
+}
+
+#problemQ1Section .q1-right-page {
+    background-color: #f8fbff;
+}
+
+#problemQ1Section .q1-right-page .board-container {
+    max-width: 100%;
+    margin: 12px 0;
+}
+
+#problemQ1Section .q1-right-page .board-tools {
+    justify-content: flex-start;
+}
+
+#problemQ1Section .q1-right-page .audio-controls {
+    align-items: flex-start;
+}
+
+#problemQ1Section .q1-right-page .submit-section {
+    text-align: left;
+}
+
 .status-text {
     font-size: 1.2em;
     margin: 15px 0;
@@ -2254,6 +2328,21 @@ section.screen::before {
         font-size: 1.0em;
     }
     */
+}
+
+@media (max-width: 1024px) {
+    #problemQ1Section.q1-book-spread {
+        grid-template-columns: 1fr;
+    }
+
+    #problemQ1Section.q1-book-spread::before {
+        display: none;
+    }
+
+    #problemQ1Section .q1-left-page,
+    #problemQ1Section .q1-right-page {
+        min-height: auto;
+    }
 }
 
 @media (max-width: 480px) {
