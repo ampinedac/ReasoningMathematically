@@ -1293,13 +1293,6 @@ section.screen::before {
     width: fit-content;
 }
 
-#finishReadingBtn {
-    display: block;
-    margin: 20px auto 40px auto;
-    font-size: 1.4em;
-    padding: 18px 35px;
-}
-
 /* Fallback para dispositivos con bajo rendimiento */
 @media (max-width: 768px) {
     .book {

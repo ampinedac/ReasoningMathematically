@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== STATE =====
     let currentPage = 0;
     let currentSpeech = null; // Almacenar el objeto de narración actual
+    let completionEventDispatched = false;
 
     // ===== DOM ELEMENTS =====
     const pages = document.querySelectorAll('#flipbook .page');
@@ -191,19 +192,11 @@ document.addEventListener('DOMContentLoaded', function() {
             elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
         }
         
-        // LÓGICA SIMPLE Y DIRECTA DEL BOTÓN
-        const finishBtn = document.getElementById('finishReadingBtn');
-        if (finishBtn) {
-            if (page === CONFIG.totalPages - 1) {
-                // ÚLTIMA PÁGINA - MOSTRAR BOTÓN
-                console.log('✅ ÚLTIMA PÁGINA - MOSTRANDO BOTÓN');
-                finishBtn.style.display = 'block';
-                finishBtn.style.visibility = 'visible';
-                finishBtn.style.opacity = '1';
-            } else {
-                // NO ES ÚLTIMA PÁGINA - OCULTAR BOTÓN
-                finishBtn.style.display = 'none';
-            }
+        // Al llegar por primera vez a la última página, mostrar Situación 1 automáticamente
+        if (page === CONFIG.totalPages - 1 && !completionEventDispatched) {
+            completionEventDispatched = true;
+            document.dispatchEvent(new CustomEvent('flipbook:completed'));
+            console.log('✅ Última página alcanzada - evento de situación emitido');
         }
         
         // Update navigation buttons

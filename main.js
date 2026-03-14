@@ -17,6 +17,8 @@ let totalPages = 0;
 let trays = [];
 let pairs = [];
 let traysSystem = null; // Nueva instancia del sistema de bandejas
+let m1ProblemInitialized = false;
+let m1FlipbookListenerAttached = false;
 
 // Datos de Momento 3
 let m3_a = 0;
@@ -372,26 +374,46 @@ function initMoment1() {
     
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
-    
-    // El flipbook ya está en el HTML y app.js maneja la animación
-    // app.js también maneja la lógica del botón directamente
-    
-    // Botón "Ya terminé la lectura" - Solo manejar el click
-    const finishReadingBtn = document.getElementById('finishReadingBtn');
-    if (finishReadingBtn) {
-        finishReadingBtn.addEventListener('click', () => {
-            console.log('🔘 Click en botón "Ya terminé la lectura"');
-            document.getElementById('flipbookSection').style.display = 'none';
-            finishReadingBtn.style.display = 'none'; // Ocultar el botón también
-            const problemSection = document.getElementById('problemQ1Section');
-            if (problemSection) {
-                problemSection.classList.remove('hidden');
-                initProblemQ1();
-            }
-        });
-        console.log('✅ Event listener del botón configurado');
-    } else {
-        console.error('❌ No se encontró el botón finishReadingBtn');
+
+    const problemSection = document.getElementById('problemQ1Section');
+    const evidenceSection = problemSection ? problemSection.querySelector('.evidence-section') : null;
+
+    // Paso intermedio: mostrar enunciado y ocultar pizarra/audio hasta completar el cuento
+    if (problemSection && problemSection.classList.contains('hidden')) {
+        problemSection.classList.remove('hidden');
+    }
+    if (evidenceSection && !m1ProblemInitialized) {
+        evidenceSection.classList.add('hidden');
+    }
+
+    const revealProblemQ1 = () => {
+        if (!problemSection) {
+            console.error('❌ No se encontró la sección problemQ1Section');
+            return;
+        }
+
+        if (problemSection.classList.contains('hidden')) {
+            problemSection.classList.remove('hidden');
+        }
+
+        if (evidenceSection && evidenceSection.classList.contains('hidden')) {
+            evidenceSection.classList.remove('hidden');
+            evidenceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            console.log('✅ Pizarra y audio habilitados en la misma página');
+        } else {
+            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        if (!m1ProblemInitialized) {
+            m1ProblemInitialized = true;
+            initProblemQ1();
+        }
+    };
+
+    if (!m1FlipbookListenerAttached) {
+        document.addEventListener('flipbook:completed', revealProblemQ1);
+        m1FlipbookListenerAttached = true;
+        console.log('✅ Listener de finalización del cuento configurado');
     }
 }
 
@@ -492,11 +514,6 @@ function initProblemQ1() {
             
             // Continuar automáticamente al Momento 2 después de un breve delay
             setTimeout(() => {
-                // Ocultar botón de lectura si existe
-                const finishReadingBtn = document.getElementById('finishReadingBtn');
-                if (finishReadingBtn) {
-                    finishReadingBtn.style.display = 'none';
-                }
                 showScreen('moment2Screen');
                 initMoment2();
             }, 1000);
