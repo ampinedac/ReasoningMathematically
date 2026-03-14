@@ -25,7 +25,15 @@
     .q1-left-page h3{margin-top:0}
     .q1-left-page p{color:inherit;font-weight:400}
     .q1-left-page .question{color:#000;font-weight:400;margin-top:12px}
-    .q1-book-spread .q1-right-page{flex:0 0 50%;display:flex;flex-direction:column;align-items:center;text-align:center}
+    .q1-book-spread .q1-right-page{flex:0 0 50%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px}
+
+    /* Centrar título, herramientas y tablero en la columna derecha */
+    .q1-right-page h4, .q1-right-page .board-tools{width:100%;display:flex;justify-content:center;align-items:center}
+    .q1-right-page .board-tools{gap:10px;margin-bottom:8px}
+    .q1-right-page .board-tools .tool-btn{flex:0 0 auto}
+    .q1-right-page .board-container{max-width:95%;margin:0 auto}
+    .board-wrapper{max-width:100%;margin:0 auto}
+    .drawing-board{margin:0 auto;display:block}
 
     /* Aplicar tamaño máximo, centrar y comportamiento responsive a todos los tableros */
     .board-container{width:100%;max-width:1200px;margin:0 auto;padding:12px;box-sizing:border-box;border-radius:10px}
@@ -35,6 +43,9 @@
     .board-grid{position:absolute;inset:10px;border-radius:6px;pointer-events:none;z-index:1;background-image: linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px);background-size:36px 36px;}
     /* Hacer el canvas transparente y por encima de la cuadricula */
     .drawing-board{position:relative;z-index:2;width:100% !important;height:auto !important;max-height:1100px;background:transparent;border-radius:6px;display:block}
+     /* Quitar patrón de fondo global SOLO para la pantalla del Momento 1 (Situación 1)
+         la cuadricula debe seguir apareciendo únicamente dentro de .board-grid */
+     #moment1Screen::before{background-image:none;}
     </style>
 </head>
 <body>
