@@ -376,14 +376,27 @@ function initMoment1() {
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
     const problemSection = document.getElementById('problemQ1Section');
-    const evidenceSection = problemSection ? problemSection.querySelector('.evidence-section') : null;
+    const flipbook = document.getElementById('flipbook');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const soundToggle = document.getElementById('soundToggle');
 
-    // Paso intermedio: mostrar enunciado y ocultar pizarra/audio hasta completar el cuento
-    if (problemSection && problemSection.classList.contains('hidden')) {
-        problemSection.classList.remove('hidden');
+    // Mantener oculta la respuesta hasta terminar el cuento
+    if (problemSection && !problemSection.classList.contains('hidden')) {
+        problemSection.classList.add('hidden');
     }
-    if (evidenceSection && !m1ProblemInitialized) {
-        evidenceSection.classList.add('hidden');
+
+    if (flipbook) {
+        flipbook.style.display = '';
+    }
+    if (prevBtn) {
+        prevBtn.style.display = '';
+    }
+    if (nextBtn) {
+        nextBtn.style.display = '';
+    }
+    if (soundToggle) {
+        soundToggle.style.display = '';
     }
 
     const revealProblemQ1 = () => {
@@ -392,17 +405,23 @@ function initMoment1() {
             return;
         }
 
-        if (problemSection.classList.contains('hidden')) {
-            problemSection.classList.remove('hidden');
+        // Reemplazar el libro por la respuesta, en el mismo contenedor visual
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
         }
 
-        if (evidenceSection && evidenceSection.classList.contains('hidden')) {
-            evidenceSection.classList.remove('hidden');
-            evidenceSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            console.log('✅ Pizarra y audio habilitados en la misma página');
-        } else {
-            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        problemSection.classList.remove('hidden');
+        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        console.log('✅ Situación 1 y respuesta mostradas como continuidad del cuento');
 
         if (!m1ProblemInitialized) {
             m1ProblemInitialized = true;

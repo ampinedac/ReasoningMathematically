@@ -1692,8 +1692,10 @@ section.screen::before {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0;
-    width: 100%;
-    margin: 20px auto;
+    width: 80%;
+    max-width: 900px;
+    min-height: 600px;
+    margin: 0 auto;
     border-radius: 18px;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.1);
@@ -1718,7 +1720,7 @@ section.screen::before {
 #problemQ1Section .q1-right-page {
     margin: 0;
     max-width: none;
-    min-height: 560px;
+    min-height: 600px;
     border: 0;
     border-radius: 0;
     box-shadow: none;
@@ -1756,6 +1758,10 @@ section.screen::before {
 
 #problemQ1Section .q1-right-page .submit-section {
     text-align: left;
+}
+
+#problemQ1Section .q1-right-page .drawing-board {
+    height: 220px;
 }
 
 .status-text {
@@ -2332,7 +2338,9 @@ section.screen::before {
 
 @media (max-width: 1024px) {
     #problemQ1Section.q1-book-spread {
+        width: 90%;
         grid-template-columns: 1fr;
+        min-height: auto;
     }
 
     #problemQ1Section.q1-book-spread::before {

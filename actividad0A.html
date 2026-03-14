@@ -132,53 +132,53 @@
                         </div>
 
                     </div>
+
+                    <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
+                    <div id="problemQ1Section" class="hidden q1-book-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Situación 1</h3>
+                            <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
+                            <p><strong>Alicia dice:</strong> "Los voy a poner en <strong>4 filas</strong> con <strong>7 pandebonos</strong> en cada fila."</p>
+                            <p><strong>Daniel dice:</strong> "¡No! Mejor ponlos en <strong>7 filas</strong> con <strong>4 pandebonos</strong> en cada fila."</p>
+                            <p class="question"> Compara las dos propuestas de organización ¿Hay alguna que permita organizar más pandebonos que la otra? Explica.
+Argumenta tu respuesta.
+</p>
+                        </div>
+
+                        <!-- PIZARRA Y AUDIO -->
+                        <div class="evidence-section q1-right-page">
+                            <h4>Puedes utilizar la pizarra</h4>
+                            
+                            <!-- Pizarra -->
+                            <div class="board-container">
+                                <div class="board-tools">
+                                    <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
+                                    <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
+                                    <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
+                                    <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
+                                    <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
+                                </div>
+                                <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
+                            </div>
+
+                            <!-- Audio -->
+                            <div class="audio-controls">
+                                <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                                <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <span id="audioStatusM1Q1" class="audio-status"></span>
+                            </div>
+
+                            <!-- Enviar -->
+                            <div class="submit-section">
+                                <p id="statusM1Q1" class="status-text"></p>
+                                <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
+                            </div>
+                        </div>
+                    </div>
                     
                     <!-- Navigation Controls dentro del libro -->
                     <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
                     <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
-                </div>
-            </div>
-
-            <!-- SITUACIÓN 1 -->
-            <div id="problemQ1Section" class="hidden q1-book-spread">
-                <div class="problem-box q1-left-page">
-                    <h3>Situación 1</h3>
-                    <p>Doña Alicia hizo <strong>pandebonos</strong> y quiere organizarlos en bandejas cuadradas para venderlos.</p>
-                    <p><strong>Alicia dice:</strong> "Los voy a poner en <strong>4 filas</strong> con <strong>7 pandebonos</strong> en cada fila."</p>
-                    <p><strong>Daniel dice:</strong> "¡No! Mejor ponlos en <strong>7 filas</strong> con <strong>4 pandebonos</strong> en cada fila."</p>
-                    <p class="question"> Compara las dos propuestas de organización ¿Hay alguna que permita organizar más pandebonos que la otra? Explica.
-Argumenta tu respuesta.
-</p>
-                </div>
-
-                <!-- PIZARRA Y AUDIO -->
-                <div class="evidence-section q1-right-page">
-                    <h4>Puedes utilizar la pizarra</h4>
-                    
-                    <!-- Pizarra -->
-                    <div class="board-container">
-                        <div class="board-tools">
-                            <button class="tool-btn active" data-tool="black">✏️ Lápiz Negro</button>
-                            <button class="tool-btn" data-tool="red">✏️ Lápiz Rojo</button>
-                            <button class="tool-btn" data-tool="yellow">🖍️ Resaltador</button>
-                            <button class="tool-btn" data-tool="eraser">🧹 Borrador</button>
-                            <button class="tool-btn clear-btn" data-tool="clear">🗑️ Limpiar</button>
-                        </div>
-                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
-                    </div>
-
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM1Q1" class="audio-status"></span>
-                    </div>
-
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM1Q1" class="status-text"></p>
-                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -472,7 +472,7 @@ Argumenta tu respuesta.
 
     <!-- Scripts -->
     <script src="trays-system.js?v=2026022001"></script>
-    <script type="module" src="main.js?v=2026031401"></script>
+    <script type="module" src="main.js?v=2026031404"></script>
     <script src="app.js?v=2026031401"></script>
 </body>
 </html>
