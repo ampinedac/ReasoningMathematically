@@ -14,7 +14,7 @@ Este proyecto implementa una experiencia educativa interactiva dividida en 4 mom
 ### Características principales
 
 ✅ Navegación tipo wizard (sin recargar página)  
-✅ Pizarra interactiva con múltiples herramientas (lápiz negro, rojo, resaltador, borrador)  
+✅ Tablero interactivo con múltiples herramientas (lápiz negro, rojo, resaltador, borrador)  
 ✅ Grabación de audio con MediaRecorder  
 ✅ Lector de PDF con animación flip 3D (con fallback a fade)  
 ✅ Guardado automático de evidencias en Firebase (Firestore + Storage)  
@@ -183,7 +183,7 @@ gh browse --settings
   - Storage: Almacenamiento de archivos
 - **PDF.js 3.11.174**: Renderizado de PDF
 - **MediaRecorder API**: Grabación de audio
-- **Canvas API**: Pizarra interactiva
+- **Canvas API**: Tablero interactivo
 
 ## 📊 Estructura de Datos en Firestore
 
@@ -285,7 +285,7 @@ Edita `index.html` líneas 260-295 (sección Momento 4).
 - ✅ Revisa la consola del navegador (F12) para errores
 - ✅ Asegúrate de tener créditos/plan activo en Firebase
 
-### La pizarra no dibuja en tablet
+### El tablero no dibuja en tablet
 
 - ✅ Verifica que `touch-action: none` esté en el CSS del canvas
 - ✅ Prueba en un navegador actualizado

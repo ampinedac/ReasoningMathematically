@@ -1527,6 +1527,18 @@ section.screen::before {
     word-wrap: break-word;
 }
 
+.situation-image {
+    display: block;
+    width: 100%;
+    max-width: 620px;
+    margin: 14px auto 18px;
+    border-radius: 12px;
+    border: 2px solid rgba(52, 73, 94, 0.25);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    background: #fff;
+    padding: 4px;
+}
+
 .question {
     font-size: 1.3em !important;
     color: #c0392b;
@@ -1580,7 +1592,7 @@ section.screen::before {
 }
 
 /* ========================================
-   PIZARRA (CANVAS)
+    TABLERO (CANVAS)
    ======================================== */
 
 .evidence-section {

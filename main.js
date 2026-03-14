@@ -491,7 +491,7 @@ function initMoment1() {
 }
 
 // ========================================
-// PROBLEMA Q1 CON PIZARRA Y AUDIO
+// PROBLEMA Q1 CON TABLERO Y AUDIO
 // ========================================
 
 function initProblemQ1() {
@@ -533,7 +533,7 @@ function initProblemQ1() {
     
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
-        // Solo requiere audio (pizarra opcional)
+        // Solo requiere audio (tablero opcional)
         submitBtn.disabled = !hasAudio;
         
         // Mostrar mensaje de qué falta
@@ -1363,7 +1363,7 @@ function showPrompt1(choice) {
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
     
-    // Inicializar pizarra y audio para problema 1
+    // Inicializar tablero y audio para problema 1
     initProblemM3Q1();
 }
 
@@ -1380,7 +1380,7 @@ function showPrompt2(choice) {
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
     
-    // Inicializar pizarra y audio para problema 2
+    // Inicializar tablero y audio para problema 2
     initProblemM3Q2();
 }
 
@@ -2086,7 +2086,7 @@ function createFullScreenMagicEffect() {
 }
 
 // ========================================
-// SISTEMA DE PIZARRA (CANVAS)
+// SISTEMA DE TABLERO (CANVAS)
 // ========================================
 
 function initBoard(canvasId) {
@@ -2123,6 +2123,10 @@ function initBoard(canvasId) {
             const tool = btn.dataset.tool;
             
             if (tool === 'clear') {
+                const shouldClear = window.confirm('¿Estás segura de que quieres limpiar el tablero?');
+                if (!shouldClear) {
+                    return;
+                }
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 hasDrawing = false;
                 return;
@@ -2362,14 +2366,14 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
     let audioUrl = null;
     
     try {
-        // Subir imagen de pizarra (si existe)
+        // Subir imagen del tablero (si existe)
         if (boardBlob) {
             console.log('📸 Subiendo imagen...');
             const boardPath = `uploads/${storageIdentifier}/act0/${moment}/${storageIdentifier}_act0_${moment}_${tag}_${timestamp}.png`;
             const boardRef = ref(storage, boardPath);
             await uploadBytes(boardRef, boardBlob);
             boardUrl = await getDownloadURL(boardRef);
-            console.log('✅ Pizarra subida:', boardUrl);
+            console.log('✅ Tablero subido:', boardUrl);
         }
         
         // Subir audio (si existe)
