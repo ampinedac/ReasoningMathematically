@@ -50,9 +50,8 @@
          la cuadricula debe seguir apareciendo únicamente dentro de .board-grid */
      #moment1Screen::before{background-image:none;}
 
-     /* Forzar tamaño de letra uniforme (30px) en la pantalla activa actual
-         Esto asegura que TODO el texto del apartado que esté visible tenga el mismo tamaño */
-     section.screen.active, section.screen.active * { font-size:30px !important; line-height:1.4 !important; }
+     /* Aplicar tamaño grande SOLO al título y subtítulo de la pantalla de bienvenida */
+     #welcomeScreen .main-title, #welcomeScreen .activity-subtitle { font-size:30px !important; line-height:1.2 !important; }
     /* Recuadro blanco principal semitransparente para welcome y momento1 (uniformidad visual) */
     #welcomeScreen .container, #moment1Screen .container{background:rgba(255,255,255,0.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(20,40,60,0.12);max-width:880px;margin:20px auto}
     /* Forzar que elementos internos tengan el mismo ancho y queden centrados */
@@ -60,11 +59,11 @@
     #welcomeScreen .main-title, #moment1Screen .main-title, #welcomeScreen .activity-subtitle, #moment1Screen .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
     /* Hacer las cajas internas un poco más delgadas que el panel principal */
     #welcomeScreen .welcome-box, #moment1Screen .problem-box, #moment1Screen .welcome-box{width:100%;max-width:720px;margin:0 auto;padding:0;background:transparent}
-    /* Hacer que el campo de código y el botón tengan el mismo ancho y estén centrados */
+    /* Hacer que el campo de código y el botón tengan el mismo ancho (3/4 del panel) y estén centrados */
     #welcomeScreen .welcome-box .chalk-input,
     #welcomeScreen .welcome-box .btn {
-        width:640px;
-        max-width:86%;
+        width:75%;
+        max-width:640px;
         margin:12px auto;
         display:block;
         box-sizing:border-box;
