@@ -1530,8 +1530,8 @@ section.screen::before {
 .situation-image {
     display: block;
     width: 100%;
-    max-width: 620px;
-    margin: 14px auto 18px;
+    max-width: 500px;
+    margin: 10px auto 12px;
     border-radius: 12px;
     border: 2px solid rgba(52, 73, 94, 0.25);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
@@ -2528,11 +2528,75 @@ section.screen::before {
 #moment1Screen #problemQ1Section .q1-right-page {
     min-height: 0;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
+    padding: 18px;
 }
 
 #moment1Screen #problemQ1Section .q1-right-page .drawing-board {
-    height: clamp(200px, 34vh, 380px);
+    height: clamp(150px, 24vh, 260px);
+}
+
+#moment1Screen #problemQ1Section .q1-left-page p {
+    font-size: clamp(0.92rem, 1.5vw, 1.08rem);
+    line-height: 1.35;
+    letter-spacing: -0.2px;
+    margin-bottom: 6px;
+}
+
+#moment1Screen #problemQ1Section .q1-left-page .question {
+    font-size: clamp(1.05rem, 2vw, 1.55rem) !important;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+    margin-top: 8px;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page h4 {
+    font-size: clamp(1.25rem, 2vw, 2rem);
+    margin-bottom: 8px;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .board-container {
+    margin: 6px 0;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .board-tools {
+    margin-bottom: 8px;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .audio-controls {
+    margin: 8px 0;
+    gap: 8px;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .submit-section {
+    margin: 8px 0;
+}
+
+.tool-icon-black,
+.tool-icon-red {
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.tool-icon-black {
+    color: #1f2937;
+}
+
+.tool-icon-red {
+    color: #e53935;
+}
+
+.tool-icon-image {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
 }
 
 #moment1Screen .sound-toggle {

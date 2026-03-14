@@ -539,7 +539,7 @@ function initProblemQ1() {
         // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
