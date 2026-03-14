@@ -53,14 +53,16 @@
      /* Forzar tamaño de letra uniforme (30px) en la pantalla activa actual
          Esto asegura que TODO el texto del apartado que esté visible tenga el mismo tamaño */
      section.screen.active, section.screen.active * { font-size:30px !important; line-height:1.4 !important; }
-    /* Recuadro blanco principal para la pantalla (uniformidad visual) */
-    section.screen.active .container{background:#fff;padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(20,40,60,0.12);max-width:1000px;margin:20px auto}
+    /* Recuadro blanco principal para welcome y momento1 (uniformidad visual) */
+    #welcomeScreen .container, #moment1Screen .container{background:#fff;padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(20,40,60,0.12);max-width:880px;margin:20px auto}
     /* Forzar que elementos internos tengan el mismo ancho y queden centrados */
-    section.screen.active .container, section.screen.active .container *{box-sizing:border-box}
-    section.screen.active .main-title, section.screen.active .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
-    section.screen.active .welcome-box, section.screen.active .problem-box, section.screen.active .flipbook-wrapper{width:100%;max-width:940px;margin:0 auto;padding:0;background:transparent}
-    /* Asegurar que los elementos de formulario se adapten al ancho uniforme */
-    section.screen.active .welcome-box .chalk-input, section.screen.active .welcome-box .btn{width:100%}
+    #welcomeScreen .container, #moment1Screen .container, #welcomeScreen .container * , #moment1Screen .container * {box-sizing:border-box}
+    #welcomeScreen .main-title, #moment1Screen .main-title, #welcomeScreen .activity-subtitle, #moment1Screen .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
+    /* Hacer las cajas internas un poco más delgadas que el panel principal */
+    #welcomeScreen .welcome-box, #moment1Screen .problem-box, #moment1Screen .welcome-box{width:100%;max-width:720px;margin:0 auto;padding:0;background:transparent}
+    /* Ajustar ancho del campo de código y botón para que no ocupen todo el panel */
+    #welcomeScreen .welcome-box .chalk-input{width:88%;max-width:640px;margin:10px auto;display:block}
+    #welcomeScreen .welcome-box .btn{width:260px;margin:18px auto;display:block}
     </style>
 </head>
 <body>
