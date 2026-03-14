@@ -19,6 +19,53 @@ let pairs = [];
 let traysSystem = null; // Nueva instancia del sistema de bandejas
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
+let m1Q1Submitted = false;
+
+function getM1Q1StorageKey() {
+    if (!studentCode) return null;
+
+    if (studentCode === '0000' && studentInfo?.nombre) {
+        return `m1-q1-submitted-${studentCode}-${studentInfo.nombre.trim().toLowerCase()}`;
+    }
+
+    return `m1-q1-submitted-${studentCode}`;
+}
+
+function applyM1Q1SubmittedLock() {
+    const statusText = document.getElementById('statusM1Q1');
+    const submitBtn = document.getElementById('submitM1Q1');
+    const recordBtn = document.getElementById('recordBtnM1Q1');
+    const stopBtn = document.getElementById('stopBtnM1Q1');
+    const canvas = document.getElementById('boardCanvasM1Q1');
+    const evidenceSection = canvas ? canvas.closest('.evidence-section') : null;
+
+    if (statusText) {
+        statusText.textContent = '✅ Ya enviaste esta respuesta. Puedes volver al cuento con la flecha izquierda.';
+        statusText.className = 'status-text success';
+    }
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+    }
+
+    if (recordBtn) {
+        recordBtn.disabled = true;
+    }
+
+    if (stopBtn) {
+        stopBtn.disabled = true;
+    }
+
+    if (canvas) {
+        canvas.style.pointerEvents = 'none';
+    }
+
+    if (evidenceSection) {
+        evidenceSection.querySelectorAll('.tool-btn').forEach(btn => btn.disabled = true);
+    }
+}
 
 // Datos de Momento 3
 let m3_a = 0;
@@ -376,63 +423,40 @@ function initMoment1() {
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
     const problemSection = document.getElementById('problemQ1Section');
-    const flipbook = document.getElementById('flipbook');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const soundToggle = document.getElementById('soundToggle');
+    const m1StorageKey = getM1Q1StorageKey();
+    m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
 
-    // Mantener oculta la respuesta hasta terminar el cuento
+    const syncM1WithFlipbookPage = (event) => {
+        if (!problemSection) {
+            return;
+        }
+
+        const isLastPage = Boolean(event?.detail?.isLastPage);
+
+        if (isLastPage) {
+            problemSection.classList.remove('hidden');
+            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            if (m1Q1Submitted) {
+                applyM1Q1SubmittedLock();
+            } else if (!m1ProblemInitialized) {
+                m1ProblemInitialized = true;
+                initProblemQ1();
+            }
+        } else {
+            problemSection.classList.add('hidden');
+        }
+    };
+
+    // Estado inicial: en el cuento no se muestra la respuesta
     if (problemSection && !problemSection.classList.contains('hidden')) {
         problemSection.classList.add('hidden');
     }
 
-    if (flipbook) {
-        flipbook.style.display = '';
-    }
-    if (prevBtn) {
-        prevBtn.style.display = '';
-    }
-    if (nextBtn) {
-        nextBtn.style.display = '';
-    }
-    if (soundToggle) {
-        soundToggle.style.display = '';
-    }
-
-    const revealProblemQ1 = () => {
-        if (!problemSection) {
-            console.error('❌ No se encontró la sección problemQ1Section');
-            return;
-        }
-
-        // Reemplazar el libro por la respuesta, en el mismo contenedor visual
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = 'none';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = 'none';
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-
-        problemSection.classList.remove('hidden');
-        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        console.log('✅ Situación 1 y respuesta mostradas como continuidad del cuento');
-
-        if (!m1ProblemInitialized) {
-            m1ProblemInitialized = true;
-            initProblemQ1();
-        }
-    };
-
     if (!m1FlipbookListenerAttached) {
-        document.addEventListener('flipbook:completed', revealProblemQ1);
+        document.addEventListener('flipbook:pagechange', syncM1WithFlipbookPage);
         m1FlipbookListenerAttached = true;
-        console.log('✅ Listener de finalización del cuento configurado');
+        console.log('✅ Listener de cambio de página del cuento configurado');
     }
 }
 
@@ -442,6 +466,11 @@ function initMoment1() {
 
 function initProblemQ1() {
     console.log('🔧 Inicializando Problema Q1...');
+
+    if (m1Q1Submitted) {
+        applyM1Q1SubmittedLock();
+        return;
+    }
     
     const canvasId = 'boardCanvasM1Q1';
     const recordBtnId = 'recordBtnM1Q1';
@@ -512,6 +541,12 @@ function initProblemQ1() {
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
+
+            m1Q1Submitted = true;
+            const m1StorageKey = getM1Q1StorageKey();
+            if (m1StorageKey) {
+                localStorage.setItem(m1StorageKey, 'true');
+            }
             
             statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
             statusText.className = 'status-text success';

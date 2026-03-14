@@ -1610,18 +1610,26 @@ section.screen::before {
 .board-tools {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 15px;
     justify-content: center;
 }
 
 .tool-btn {
-    padding: 10px 20px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
     border: 2px solid #34495e;
     background: white;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.5em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-family: 'Comic Sans MS', cursive;
     transition: all 0.2s;
 }
@@ -1725,22 +1733,29 @@ section.screen::before {
     border-radius: 0;
     box-shadow: none;
     padding: 28px;
-    background:
+    background: var(--page-bg-light);
+    background-image:
+        linear-gradient(90deg,
+            rgba(0,0,0,0) 0%,
+            rgba(0,0,0,0) 85%,
+            rgba(0,0,0,0.02) 92%,
+            rgba(0,0,0,0.05) 96%,
+            rgba(0,0,0,0.08) 100%),
         repeating-linear-gradient(
-            to bottom,
-            #ffffff 0px,
-            #ffffff 34px,
-            rgba(53, 122, 189, 0.12) 35px,
-            #ffffff 36px
+            0deg,
+            transparent,
+            transparent 24px,
+            rgba(0, 0, 0, 0.02) 24px,
+            rgba(0, 0, 0, 0.02) 25px
         );
 }
 
 #problemQ1Section .q1-left-page {
-    background-color: #fffef8;
+    background-color: var(--page-bg-light);
 }
 
 #problemQ1Section .q1-right-page {
-    background-color: #f8fbff;
+    background-color: var(--page-bg-light);
 }
 
 #problemQ1Section .q1-right-page .board-container {
@@ -2300,11 +2315,15 @@ section.screen::before {
     }
 
     .board-tools {
-        flex-direction: column;
+        flex-direction: row;
+        justify-content: flex-start;
     }
 
     .tool-btn {
-        width: 100%;
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
     }
 
     .pdf-container {
@@ -2427,5 +2446,98 @@ section.screen::before {
 
     .formula {
         font-size: 1.8em;
+    }
+}
+
+/* ========================================
+   MOMENTO 1 - LIBRO A PANTALLA (95%)
+   ======================================== */
+
+#moment1Screen.active {
+    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+#moment1Screen .container {
+    width: min(96vw, 1800px);
+    height: 96dvh;
+    padding: 8px 10px;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 8px;
+}
+
+#moment1Screen .header {
+    margin-bottom: 0;
+    padding-bottom: 6px;
+}
+
+#moment1Screen .section-title {
+    margin-bottom: 6px;
+    font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+}
+
+#moment1Screen .student-code-display {
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+}
+
+#moment1Screen #flipbookSection {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+}
+
+#moment1Screen .flipbook-wrapper {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#moment1Screen #flipbook,
+#moment1Screen #problemQ1Section.q1-book-spread {
+    width: 95%;
+    max-width: none;
+    height: 95%;
+    min-height: 0;
+    margin: 0 auto;
+}
+
+#moment1Screen #flipbook {
+    aspect-ratio: auto;
+}
+
+#moment1Screen #problemQ1Section .q1-left-page,
+#moment1Screen #problemQ1Section .q1-right-page {
+    min-height: 0;
+    height: 100%;
+    overflow: auto;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .drawing-board {
+    height: clamp(200px, 34vh, 380px);
+}
+
+#moment1Screen .sound-toggle {
+    top: 8px;
+    right: 3%;
+}
+
+@media (max-width: 900px) {
+    #moment1Screen .container {
+        width: 98vw;
+        height: 98dvh;
+        padding: 6px;
+    }
+
+    #moment1Screen #flipbook,
+    #moment1Screen #problemQ1Section.q1-book-spread {
+        width: 96%;
+        height: 94%;
     }
 }

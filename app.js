@@ -198,6 +198,14 @@ document.addEventListener('DOMContentLoaded', function() {
             document.dispatchEvent(new CustomEvent('flipbook:completed'));
             console.log('✅ Última página alcanzada - evento de situación emitido');
         }
+
+        document.dispatchEvent(new CustomEvent('flipbook:pagechange', {
+            detail: {
+                page,
+                totalPages: CONFIG.totalPages,
+                isLastPage: page === CONFIG.totalPages - 1
+            }
+        }));
         
         // Update navigation buttons
         updateNavButtons(page);
