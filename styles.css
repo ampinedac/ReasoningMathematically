@@ -483,12 +483,15 @@ section.screen > * {
 
 .story-page .story-text {
     grid-area: text;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     text-align: justify;
-    max-width: 100%;
-    padding: 2%;
+    width: 86%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2% 1%;
+    box-sizing: border-box;
+    align-self: center;
+    justify-self: center;
     font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif;
     font-size: clamp(0.85rem, 1.8vw, 1.2rem);
     line-height: 1.6;
@@ -496,6 +499,7 @@ section.screen > * {
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
+    overflow: hidden;
 }
 
 .story-page .page-number {
@@ -703,7 +707,9 @@ section.screen > * {
     .story-page .story-text {
         font-size: clamp(0.8rem, 2.9vw, 1rem);
         line-height: 1.45;
-        align-items: flex-start;
+        width: 100%;
+        max-width: none;
+        margin: 0;
         padding: 0 4px 8px;
         overflow-y: auto;
     }
