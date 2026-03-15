@@ -428,8 +428,57 @@ function initMoment1() {
     const nextBtn = document.getElementById('nextBtn');
     const soundToggle = document.getElementById('soundToggle');
     let showProblemTimer = null;
+    let isAtLastStoryPage = false;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+
+    const showProblemSection = () => {
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+
+        problemSection.classList.remove('hidden');
+        problemSection.classList.add('page-enter');
+        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        setTimeout(() => {
+            problemSection.classList.remove('page-enter');
+        }, 900);
+
+        if (m1Q1Submitted) {
+            applyM1Q1SubmittedLock();
+        } else if (!m1ProblemInitialized) {
+            m1ProblemInitialized = true;
+            initProblemQ1();
+        }
+    };
+
+    const hideProblemSection = () => {
+        if (flipbook) {
+            flipbook.style.display = '';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = '';
+        }
+        if (soundToggle) {
+            soundToggle.style.display = '';
+        }
+
+        problemSection.classList.remove('page-enter');
+        problemSection.classList.add('hidden');
+    };
 
     const syncM1WithFlipbookPage = (event) => {
         if (!problemSection) {
@@ -437,65 +486,54 @@ function initMoment1() {
         }
 
         const isLastPage = Boolean(event?.detail?.isLastPage);
+        isAtLastStoryPage = isLastPage;
 
-        if (isLastPage) {
-            if (showProblemTimer) {
-                clearTimeout(showProblemTimer);
-            }
+        if (showProblemTimer) {
+            clearTimeout(showProblemTimer);
+            showProblemTimer = null;
+        }
 
-            // Esperar a que termine el giro de página del flipbook para conservar continuidad visual
-            showProblemTimer = setTimeout(() => {
-                if (flipbook) {
-                    flipbook.style.display = 'none';
-                }
-                if (nextBtn) {
-                    nextBtn.style.display = 'none';
-                }
-                if (soundToggle) {
-                    soundToggle.style.display = 'none';
-                }
-                if (prevBtn) {
-                    prevBtn.style.display = '';
-                }
+        // La página 9 debe permanecer visible; la Situación 1 (página 10) se abre al dar siguiente
+        hideProblemSection();
 
-                problemSection.classList.remove('hidden');
-                problemSection.classList.add('page-enter');
-                problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                setTimeout(() => {
-                    problemSection.classList.remove('page-enter');
-                }, 900);
-
-                if (m1Q1Submitted) {
-                    applyM1Q1SubmittedLock();
-                } else if (!m1ProblemInitialized) {
-                    m1ProblemInitialized = true;
-                    initProblemQ1();
-                }
-            }, 1250);
-        } else {
-            if (showProblemTimer) {
-                clearTimeout(showProblemTimer);
-                showProblemTimer = null;
-            }
-
-            if (flipbook) {
-                flipbook.style.display = '';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-            }
-            if (soundToggle) {
-                soundToggle.style.display = '';
-            }
-
-            problemSection.classList.remove('page-enter');
-            problemSection.classList.add('hidden');
+        if (isLastPage && nextBtn) {
+            nextBtn.disabled = false;
         }
     };
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (!problemSection.classList.contains('hidden')) {
+                return;
+            }
+
+            if (isAtLastStoryPage) {
+                if (showProblemTimer) {
+                    clearTimeout(showProblemTimer);
+                }
+
+                // Dejar sentir el final del giro y luego mostrar la página 10
+                showProblemTimer = setTimeout(() => {
+                    showProblemSection();
+                }, 220);
+            }
+        });
+    }
+
+    if (prevBtn) {
+        // En la página 10 (Situación 1), volver exactamente a la página 9 del cuento
+        prevBtn.addEventListener('click', (event) => {
+            if (!problemSection.classList.contains('hidden')) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                if (showProblemTimer) {
+                    clearTimeout(showProblemTimer);
+                    showProblemTimer = null;
+                }
+                hideProblemSection();
+            }
+        }, true);
+    }
 
     // Estado inicial: en el cuento no se muestra la respuesta
     if (problemSection && !problemSection.classList.contains('hidden')) {
