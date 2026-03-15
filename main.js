@@ -23,6 +23,7 @@ let m1Moment3AdvanceListenerAttached = false;
 let m1Q1Submitted = false;
 let m1Q2Submitted = false;
 let m3Q1Submitted = false;
+let m3Q2Submitted = false;
 
 function getM1Q1StorageKey() {
     if (!studentCode) return null;
@@ -75,6 +76,7 @@ let m3_a = 0;
 let m3_b = 0;
 let m3_choice = null;
 let m3Q1EvidenceInitialized = false;
+let m3Q2EvidenceInitialized = false;
 
 // Datos de Momento 4
 let m4_currentItem = 1;
@@ -430,6 +432,7 @@ function initMoment1() {
     const problemSection = document.getElementById('problemQ1Section');
     const problemSection2 = document.getElementById('problemQ2Section');
     const problemSection3 = document.getElementById('problemQ3Section');
+    const problemSection3b = document.getElementById('problemQ3Section2');
     const problemSection4 = document.getElementById('problemQ4Section');
     const m1Q2FinalQuestion = document.getElementById('m1Q2FinalQuestion');
     const flipbook = document.getElementById('flipbook');
@@ -443,6 +446,7 @@ function initMoment1() {
     let isOnSheet11 = false;
     let isOnSheet12 = false;
     let isOnSheet13 = false;
+    let isOnSheet14 = false;
     let isSpecialPageTransitioning = false;
     let m1Q2Verified = false;
     let m1Q2AudioInitialized = false;
@@ -466,6 +470,11 @@ function initMoment1() {
         problemSection3.classList.add('hidden');
     };
 
+    const hideProblemSection3b = () => {
+        if (!problemSection3b) return;
+        problemSection3b.classList.add('hidden');
+    };
+
     const hideProblemSection4 = () => {
         if (!problemSection4) return;
         problemSection4.classList.add('hidden');
@@ -487,6 +496,12 @@ function initMoment1() {
         }
 
         if (isOnSheet13) {
+            nextBtn.style.display = '';
+            nextBtn.disabled = !m3Q2Submitted;
+            return;
+        }
+
+        if (isOnSheet14) {
             nextBtn.style.display = 'none';
             nextBtn.disabled = true;
         }
@@ -735,11 +750,13 @@ function initMoment1() {
 
         hideProblemSection2();
         hideProblemSection3();
+        hideProblemSection3b();
         hideProblemSection4();
         isOnSheet10 = true;
         isOnSheet11 = false;
         isOnSheet12 = false;
         isOnSheet13 = false;
+        isOnSheet14 = false;
 
         if (m1Q1Submitted) {
             applyM1Q1SubmittedLock();
@@ -764,6 +781,7 @@ function initMoment1() {
 
         problemSection.classList.add('hidden');
         hideProblemSection3();
+        hideProblemSection3b();
         hideProblemSection4();
         problemSection2.classList.remove('hidden');
         problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -773,6 +791,7 @@ function initMoment1() {
         isOnSheet11 = true;
         isOnSheet12 = false;
         isOnSheet13 = false;
+        isOnSheet14 = false;
         updateCocinaButtonState();
         initSheet11Trays();
         if (m1Q2Verified) {
@@ -795,6 +814,7 @@ function initMoment1() {
 
         problemSection.classList.add('hidden');
         hideProblemSection2();
+        hideProblemSection3b();
         hideProblemSection4();
         problemSection3.classList.remove('hidden');
         problemSection3.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -804,6 +824,7 @@ function initMoment1() {
         isOnSheet11 = false;
         isOnSheet12 = true;
         isOnSheet13 = false;
+        isOnSheet14 = false;
 
         if (!m3BookInitialized) {
             m3BookInitialized = true;
@@ -823,6 +844,35 @@ function initMoment1() {
         syncBookNextButton();
     };
 
+    const showProblemSection3b = () => {
+        if (!problemSection3b) return;
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+
+        problemSection.classList.add('hidden');
+        hideProblemSection2();
+        hideProblemSection3();
+        hideProblemSection4();
+        problemSection3b.classList.remove('hidden');
+        problemSection3b.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+
+        isOnSheet10 = false;
+        isOnSheet11 = false;
+        isOnSheet12 = false;
+        isOnSheet13 = true;
+        isOnSheet14 = false;
+
+        syncBookNextButton();
+    };
+
     const showProblemSection4 = () => {
         if (!problemSection4) return;
         if (flipbook) {
@@ -838,6 +888,7 @@ function initMoment1() {
         problemSection.classList.add('hidden');
         hideProblemSection2();
         hideProblemSection3();
+        hideProblemSection3b();
         problemSection4.classList.remove('hidden');
         problemSection4.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
@@ -845,7 +896,8 @@ function initMoment1() {
         isOnSheet10 = false;
         isOnSheet11 = false;
         isOnSheet12 = false;
-        isOnSheet13 = true;
+        isOnSheet13 = false;
+        isOnSheet14 = true;
 
         if (!m4BookInitialized) {
             m4BookInitialized = true;
@@ -878,17 +930,22 @@ function initMoment1() {
         if (problemSection3) {
             problemSection3.classList.remove('turning-forward');
         }
+        if (problemSection3b) {
+            problemSection3b.classList.remove('turning-forward');
+        }
         if (problemSection4) {
             problemSection4.classList.remove('turning-forward');
         }
         problemSection.classList.add('hidden');
         hideProblemSection2();
         hideProblemSection3();
+        hideProblemSection3b();
         hideProblemSection4();
         isOnSheet10 = false;
         isOnSheet11 = false;
         isOnSheet12 = false;
         isOnSheet13 = false;
+        isOnSheet14 = false;
     };
 
     const syncM1WithFlipbookPage = (event) => {
@@ -955,6 +1012,18 @@ function initMoment1() {
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 playForwardTurnTransition(problemSection3, () => {
+                    showProblemSection3b();
+                });
+                return;
+            }
+
+            if (isOnSheet13) {
+                if (!m3Q2Submitted) {
+                    return;
+                }
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                playForwardTurnTransition(problemSection3b, () => {
                     showProblemSection4();
                 });
                 return;
@@ -984,6 +1053,13 @@ function initMoment1() {
     if (prevBtn) {
         // En la página 10 (Situación 1), volver exactamente a la página 9 del cuento
         prevBtn.addEventListener('click', (event) => {
+            if (isOnSheet14) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                showProblemSection3b();
+                return;
+            }
+
             if (isOnSheet13) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
@@ -1929,6 +2005,7 @@ function showPrompt1(choice) {
 function showPrompt2(choice) {
     const promptSection = document.getElementById('promptSection2');
     const promptText = document.getElementById('promptText2');
+    const placeholder = document.getElementById('m3Q2Placeholder');
     
     const prompts = {
         yes: 'Explica detalladamente cómo lo sabes.',
@@ -1938,6 +2015,9 @@ function showPrompt2(choice) {
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
+    if (placeholder) {
+        placeholder.classList.add('hidden');
+    }
     
     // Inicializar tablero y audio para problema 2
     initProblemM3Q2();
@@ -2034,14 +2114,15 @@ function initProblemM3Q1() {
 }
 
 function initProblemM3Q2() {
-    const canvasId = 'boardCanvasM3Q2';
+    if (m3Q2EvidenceInitialized) return;
+    m3Q2EvidenceInitialized = true;
+
     const recordBtnId = 'recordBtnM3Q2';
     const stopBtnId = 'stopBtnM3Q2';
     const statusId = 'audioStatusM3Q2';
     const submitBtnId = 'submitM3Q2';
     const statusTextId = 'statusM3Q2';
-    
-    const boardState = initBoard(canvasId);
+
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
@@ -2076,35 +2157,29 @@ function initProblemM3Q2() {
         statusText.className = 'status-text loading';
         
         try {
-            const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
-            
             const choice2 = document.querySelector('input[name="truthQ2"]:checked')?.value;
             
             await submitEvidence({
                 moment: 'm3',
                 tag: 'problema2',
                 data: { choice: choice2 },
-                boardBlob: boardBlob,
+                boardBlob: null,
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
+            m3Q2Submitted = true;
             
-            // Bloquear edición
-            boardState.disabled = true;
-            const canvas = document.getElementById(canvasId);
-            canvas.style.pointerEvents = 'none';
-            
-            const evidenceSection = canvas.closest('.evidence-section');
-            evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
-            
-            // Continuar automáticamente al Momento 4 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment4Screen');
-                initMoment4();
-            }, 1000);
+            document.getElementById(stopBtnId).disabled = true;
+            document.getElementById(stopBtnId).classList.add('hidden');
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+            }
             
         } catch (error) {
             console.error('Error:', error);

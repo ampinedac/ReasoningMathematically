@@ -10,6 +10,9 @@
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
     <style>
+    /* Tipografia unificada en toda la Actividad 0A */
+    html, body, body *{font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important}
+
     /* Tipografía y alineación global */
     body{font-size:20px;line-height:1.5;color:#222}
     /* Por defecto todo el texto (p, listas, labels) debe ir justificado, excepto títulos */
@@ -160,14 +163,14 @@
     .cocina-body::after{position:absolute;top:22px;bottom:22px;width:78px;border-radius:24px;background:linear-gradient(180deg,#a66b3f 0%,#8a572d 48%,#6f4523 100%);border:4px solid rgba(111,69,35,0.8);box-shadow:inset 0 0 0 4px rgba(255,235,200,0.14),0 12px 24px rgba(90,56,26,0.22);color:#fff4de;font-size:2rem;line-height:1.9;white-space:pre;text-align:center;padding-top:20px;pointer-events:none;opacity:0.96}
     .cocina-body::before{content:'🥖\A🍞\A🧁\A🥣\A🥐';left:18px}
     .cocina-body::after{content:'🧈\A🥨\A🍪\A☕\A🫓';right:18px}
-    .cocina-body .trays-container{width:min(100%,1100px);max-width:1100px;flex:1;min-height:0;grid-template-columns:repeat(4,1fr) !important;grid-template-rows:repeat(2,1fr) !important;align-content:stretch !important;gap:18px !important;padding:24px !important;justify-items:stretch;overflow:hidden;border-radius:28px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 3px rgba(255,232,198,0.16),inset 0 0 0 10px rgba(84,50,26,0.22),0 16px 34px rgba(84,50,26,0.28);position:relative}
+    .cocina-body .trays-container{width:min(100%,1100px);max-width:1100px;flex:1;min-height:620px;grid-template-columns:repeat(4,1fr) !important;grid-template-rows:repeat(2,1fr) !important;align-content:stretch !important;gap:18px !important;padding:24px !important;justify-items:stretch;overflow:hidden;border-radius:28px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 3px rgba(255,232,198,0.16),inset 0 0 0 10px rgba(84,50,26,0.22),0 16px 34px rgba(84,50,26,0.28);position:relative}
     .cocina-body .trays-container::before{content:'';position:absolute;inset:0;border-radius:28px;background:linear-gradient(25deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 16%,rgba(82,47,23,0.08) 16%,rgba(82,47,23,0.08) 32%,rgba(255,255,255,0.03) 32%,rgba(255,255,255,0.03) 48%,rgba(82,47,23,0.08) 48%,rgba(82,47,23,0.08) 64%,rgba(255,255,255,0.03) 64%,rgba(255,255,255,0.03) 80%,rgba(82,47,23,0.08) 80%,rgba(82,47,23,0.08) 100%);mix-blend-mode:soft-light;pointer-events:none}
     #cocinaScreen .trays-container,
     #cocinaScreen .trays-container *{cursor:url('assets/images/hand-point-cursor.svg') 16 12, grab !important}
     #cocinaScreen .trays-container:active,
     #cocinaScreen .trays-container:active *,
     #cocinaScreen .tray-card:active{cursor:url('assets/images/hand-grab-cursor.svg') 16 14, grabbing !important}
-    #cocinaScreen .tray-card{width:100%;aspect-ratio:auto !important;height:100% !important;min-height:0 !important;padding:12px;box-sizing:border-box}
+    #cocinaScreen .tray-card{width:100%;aspect-ratio:1/1 !important;height:auto !important;min-height:0 !important;padding:12px;box-sizing:border-box}
     #cocinaScreen .tray-grid{width:100%;height:100%;max-width:none;max-height:none}
     #cocinaScreen .tray-item-image{width:118%;height:118%;max-width:none;max-height:none}
     .cocina-controls{padding:14px 20px 22px;text-align:center;background:linear-gradient(180deg,rgba(255,248,239,0.9),rgba(247,231,209,0.88));border-top:2px solid rgba(146,96,54,0.22);display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
@@ -201,35 +204,72 @@
 
     /* Páginas 12 y 13 dentro del libro */
     #problemQ3Section.q1-book-spread,
+    #problemQ3Section2.q1-book-spread,
     #problemQ4Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;width:95%;max-width:none;min-height:600px;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd;position:relative}
     #problemQ3Section.q1-book-spread::before,
+    #problemQ3Section2.q1-book-spread::before,
     #problemQ4Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
     #problemQ3Section .q1-left-page,
     #problemQ3Section .q1-right-page,
+    #problemQ3Section2 .q1-left-page,
+    #problemQ3Section2 .q1-right-page,
     #problemQ4Section .q1-left-page,
     #problemQ4Section .q1-right-page{margin:0;max-width:none;min-height:600px;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
     #problemQ3Section .problem-box,
+    #problemQ3Section2 .problem-box,
     #problemQ4Section .problem-box{background:transparent;border:0;box-shadow:none;padding:0;display:flex;flex-direction:column;justify-content:flex-start;height:100%}
     .book-story-card{width:92%;max-width:470px;margin:14px auto 0;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.76);border:1px solid rgba(63,94,251,0.18);box-shadow:0 4px 10px rgba(0,0,0,0.05)}
     .book-story-card p{margin:0 0 10px}
     .book-story-card p:last-child{margin-bottom:0}
     #problemQ3Section .envelope-equation{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:16px auto 10px}
+    #problemQ3Section .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
     #problemQ3Section .question-section{width:92%;max-width:470px;margin:10px auto 0;text-align:left}
     #problemQ3Section .radio-group{display:grid;gap:10px;margin-top:12px}
     #problemQ3Section .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left}
     #problemQ3Section .radio-label input{margin-top:4px}
-    #problemQ3Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:0;margin-bottom:8px}
+    #problemQ3Section .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
+    #problemQ3Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:10px;margin-bottom:14px}
     #problemQ3Section .q1-left-page p,
     #problemQ3Section .q1-left-page .question,
     #problemQ3Section .radio-label{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+    #problemQ3Section .q1-left-page .book-story-card{width:96%;max-width:540px;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none}
     #problemQ3Section .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
     #problemQ3Section .q1-right-page{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:28px !important}
     #problemQ3Section .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
     #problemQ3Section .prompt-box{margin:0 auto 14px;max-width:480px;width:100%;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid rgba(59,130,246,0.2)}
+    #problemQ3Section .prompt-box p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400 !important;color:#222 !important;text-align:center}
     #problemQ3Section .evidence-section{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+    #problemQ3Section #promptSection1 .evidence-section{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px}
+    #problemQ3Section #promptSection1 .evidence-section h4{flex-basis:100%;margin:0 0 2px;text-align:center;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400;color:#222}
+    #problemQ3Section #promptSection1 .audio-controls,
+    #problemQ3Section #promptSection1 .submit-section{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;margin-top:0}
+    #problemQ3Section #promptSection1 #statusM3Q1{display:none}
+    #problemQ3Section #promptSection1 .btn{font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
     #problemQ3Section .board-container{max-width:92%;margin:6px auto 4px}
     #problemQ3Section .audio-controls,
     #problemQ3Section .submit-section{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+    #problemQ3Section2 .envelope-equation{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:16px auto 10px}
+    #problemQ3Section2 .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
+    #problemQ3Section2 .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
+    #problemQ3Section2 .radio-group{display:grid;gap:10px;margin-top:12px}
+    #problemQ3Section2 .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+    #problemQ3Section2 .radio-label input{margin-top:4px}
+    #problemQ3Section2 .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
+    #problemQ3Section2 .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:10px;margin-bottom:14px}
+    #problemQ3Section2 .q1-left-page .book-story-card{width:96%;max-width:540px;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none}
+    #problemQ3Section2 .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+    #problemQ3Section2 .q1-right-page{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:28px !important}
+    #problemQ3Section2 .prompt-box{margin:0 auto 14px;max-width:480px;width:100%;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid rgba(59,130,246,0.2)}
+    #problemQ3Section2 .prompt-box p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400 !important;color:#222 !important;text-align:center}
+    #problemQ3Section2 .evidence-section{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+    #problemQ3Section2 #promptSection2 .evidence-section{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px}
+    #problemQ3Section2 #promptSection2 .evidence-section h4{flex-basis:100%;margin:0 0 2px;text-align:center;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400;color:#222}
+    #problemQ3Section2 #promptSection2 .audio-controls,
+    #problemQ3Section2 #promptSection2 .submit-section{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;margin-top:0}
+    #problemQ3Section2 #promptSection2 #statusM3Q2{display:none}
+    #problemQ3Section2 #promptSection2 .btn{font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+    #problemQ3Section2 .audio-controls,
+    #problemQ3Section2 .submit-section{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
     .book-placeholder{max-width:430px;margin:0 auto;padding:18px 20px;border-radius:14px;background:rgba(255,248,230,0.9);border:1px solid rgba(251,191,36,0.35);text-align:center;color:#5b4b1f;font-weight:700}
     #problemQ4Section .q1-left-page{display:flex;flex-direction:column;justify-content:center}
     #problemQ4Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:0;margin-bottom:8px}
@@ -247,11 +287,15 @@
     #problemQ4Section #finalQuestionSection{position:relative;z-index:5}
     @media (max-width:900px){
         #problemQ3Section.q1-book-spread,
+        #problemQ3Section2.q1-book-spread,
         #problemQ4Section.q1-book-spread{grid-template-columns:1fr;min-height:auto}
         #problemQ3Section.q1-book-spread::before,
+        #problemQ3Section2.q1-book-spread::before,
         #problemQ4Section.q1-book-spread::before{display:none}
         #problemQ3Section .q1-left-page,
         #problemQ3Section .q1-right-page,
+        #problemQ3Section2 .q1-left-page,
+        #problemQ3Section2 .q1-right-page,
         #problemQ4Section .q1-left-page,
         #problemQ4Section .q1-right-page{min-height:auto;padding:18px}
     }
@@ -496,11 +540,11 @@
                                     <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
                                 </svg>
                             </div>
+                            <p class="q3-inline-question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
                         </div>
 
                         <div class="evidence-section q1-right-page">
                             <div class="question-section">
-                                <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
                                 <div class="radio-group">
                                     <label class="radio-label">
                                         <input type="radio" name="truthQ1" value="yes">
@@ -541,6 +585,84 @@
                     </div>
 
                     <div id="problemQ4Section" class="hidden q1-book-spread">
+                    <div id="problemQ3Section2" class="hidden q1-book-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Los sobres secretos (Problema 2)</h3>
+                            <div class="book-story-card">
+                                <p>Ahora aparece un nuevo reto con dos sobres de color diferente.</p>
+                                <p>Recuerda: sobres del mismo color guardan el mismo número.</p>
+                                <p><strong>Piensa si el orden de los factores sigue funcionando aquí.</strong></p>
+                            </div>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">=</span>
+                                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <p class="q3-inline-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                        </div>
+
+                        <div class="evidence-section q1-right-page">
+                            <div class="question-section">
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="yes">
+                                        Sí, creo que es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="unsure">
+                                        No estoy segura.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="no">
+                                        Creo que no es verdadera.
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="promptSection2" class="hidden">
+                                <div class="prompt-box">
+                                    <p id="promptText2"></p>
+                                </div>
+                                <div class="evidence-section">
+                                    <h4>Graba tu explicación</h4>
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar audio</button>
+                                        <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM3Q2" class="audio-status"></span>
+                                    </div>
+                                    <div class="submit-section">
+                                        <p id="statusM3Q2" class="status-text"></p>
+                                        <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="m3Q2Placeholder" class="book-placeholder">
+                                Elige una opción para activar este espacio de explicación.
+                            </div>
+                        </div>
+                        <div class="page-number">13</div>
+                    </div>
+
+                    <div id="problemQ4Section" class="hidden q1-book-spread">
                         <div class="problem-box q1-left-page">
                             <h3>El reto final</h3>
                             <div class="book-story-card">
@@ -577,7 +699,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="page-number">13</div>
+                        <div class="page-number">14</div>
                     </div>
                     
                     <!-- Navigation Controls dentro del libro -->
