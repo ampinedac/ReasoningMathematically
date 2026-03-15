@@ -86,6 +86,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Exponer globalmente para que main.js pueda usarla en páginas 10 y 11
+    window.playPageTurnSound = playPageTurnSound;
+
     // ===== TOGGLE SONIDO =====
     function toggleNarration() {
         CONFIG.narrationEnabled = !CONFIG.narrationEnabled;

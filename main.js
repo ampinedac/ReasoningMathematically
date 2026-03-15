@@ -436,8 +436,11 @@ function initMoment1() {
     let isOnSheet11 = false;
     let isSpecialPageTransitioning = false;
     let m1Q2Verified = false;
+    let m1Q2AudioInitialized = false;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+    const cocinaScreen = document.getElementById('cocinaScreen');
+    const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
     const hideProblemSection2 = () => {
         if (!problemSection2) return;
@@ -453,9 +456,38 @@ function initMoment1() {
         m1Q2FinalQuestion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
+    const buildPairsPhoto = () => {
+        const photoContent = document.getElementById('pairsPhotoContent');
+        const pairsPhotoArea = document.getElementById('pairsPhotoArea');
+        if (!photoContent || !pairsPhotoArea || !traysSystem) return;
+        const seen = new Set();
+        const pairsList = [];
+        traysSystem.pairings.forEach((mateId, trayId) => {
+            const key = [trayId, mateId].sort().join('|');
+            if (!seen.has(key)) {
+                seen.add(key);
+                const t1 = traysSystem.BASE_TRAYS.find(t => t.id === trayId);
+                const t2 = traysSystem.BASE_TRAYS.find(t => t.id === mateId);
+                if (t1 && t2) pairsList.push([t1, t2]);
+            }
+        });
+        const makeMiniGrid = (tray) => {
+            const cells = Array(tray.total).fill('<span class="photo-pano">🫓</span>').join('');
+            return `<div class="photo-tray-grid" style="display:grid;grid-template-columns:repeat(${tray.cols},1fr);gap:1px">${cells}</div>`;
+        };
+        photoContent.innerHTML = pairsList.map(([a, b]) =>
+            `<div class="photo-pair">
+                <div class="photo-tray">${makeMiniGrid(a)}<small>${a.rows}×${a.cols}=${a.total}</small></div>
+                <span class="photo-equal">⟷</span>
+                <div class="photo-tray">${makeMiniGrid(b)}<small>${b.rows}×${b.cols}=${b.total}</small></div>
+            </div>`
+        ).join('');
+        pairsPhotoArea.classList.remove('hidden');
+    };
+
     const initSheet11Trays = () => {
         if (traysM1Q2Initialized) return;
-
+        try {
         try {
             if (traysSystem) {
                 traysSystem.destroy();
@@ -564,6 +596,7 @@ function initMoment1() {
 
         problemSection.classList.remove('hidden');
         problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
 
         hideProblemSection2();
         isOnSheet10 = true;
@@ -597,6 +630,7 @@ function initMoment1() {
         problemSection.classList.add('hidden');
         problemSection2.classList.remove('hidden');
         problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
 
         isOnSheet10 = false;
         isOnSheet11 = true;
