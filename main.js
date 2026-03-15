@@ -471,6 +471,9 @@ function initMoment1() {
         }
         if (nextBtn) {
             nextBtn.style.display = '';
+            if (isAtLastStoryPage) {
+                nextBtn.disabled = false;
+            }
         }
         if (soundToggle) {
             soundToggle.style.display = '';
@@ -497,7 +500,10 @@ function initMoment1() {
         hideProblemSection();
 
         if (isLastPage && nextBtn) {
-            nextBtn.disabled = false;
+            // app.js deshabilita el botón al final; lo reactivamos para permitir pasar a la página 10
+            setTimeout(() => {
+                nextBtn.disabled = false;
+            }, 0);
         }
     };
 
