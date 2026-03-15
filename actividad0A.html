@@ -51,8 +51,11 @@
 
      /* Aplicar tamaño grande SOLO al título y subtítulo de la pantalla de bienvenida */
      #welcomeScreen .main-title, #welcomeScreen .activity-subtitle { font-size:30px !important; line-height:1.2 !important; }
-    /* Recuadro blanco principal semitransparente para welcome y momento1 (uniformidad visual) */
-    #welcomeScreen .container, #moment1Screen .container{background:rgba(255,255,255,0.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(20,40,60,0.12);max-width:880px;margin:20px auto}
+     /* Recuadro blanco principal semitransparente para Momento 1; en la pantalla de bienvenida
+         queremos quitar el recuadro grande y usar cajas específicas (.user-rect) */
+     #moment1Screen .container{background:rgba(255,255,255,0.86);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:28px;border-radius:14px;box-shadow:0 10px 30px rgba(20,40,60,0.12);max-width:880px;margin:20px auto}
+     /* Quitar el recuadro blanco grande solo en la pantalla de bienvenida */
+     #welcomeScreen .container{background:transparent;padding:28px;border-radius:14px;box-shadow:none;max-width:880px;margin:20px auto}
     /* Forzar que elementos internos tengan el mismo ancho y queden centrados */
     #welcomeScreen .container, #moment1Screen .container, #welcomeScreen .container * , #moment1Screen .container * {box-sizing:border-box}
     #welcomeScreen .main-title, #moment1Screen .main-title, #welcomeScreen .activity-subtitle, #moment1Screen .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
@@ -85,7 +88,7 @@
             <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
         </div>
         <div class="container">
-            <div class="welcome-box user-rect">
+            <div class="welcome-box">
                 <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
                 <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
                 <button id="enterBtn" class="btn btn-primary">Ingresar</button>
