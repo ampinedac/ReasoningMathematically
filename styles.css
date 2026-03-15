@@ -996,9 +996,20 @@ section.screen > * {
 }
 
 .activity-icon-image {
-    width: 6.2em;
-    height: 6.2em;
+    width: 96px;
+    height: 96px;
+    min-width: 96px;
+    flex: 0 0 auto;
+    display: block;
     object-fit: contain;
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
+    animation: bounce 2s ease-in-out infinite;
+}
+
+#activity0Btn .activity-icon-image {
+    width: 88px;
+    height: 88px;
+    min-width: 88px;
 }
 
 @keyframes bounce {
@@ -1030,6 +1041,8 @@ section.screen > * {
     font-weight: bold;
     white-space: normal;
     overflow-wrap: anywhere;
+    position: relative;
+    z-index: 2;
 }
 
 /* ========================================
@@ -2277,6 +2290,18 @@ section.screen > * {
         font-size: 3.2em;
     }
 
+    .activity-icon-image {
+        width: 74px;
+        height: 74px;
+        min-width: 74px;
+    }
+
+    #activity0Btn .activity-icon-image {
+        width: 68px;
+        height: 68px;
+        min-width: 68px;
+    }
+
     .activity-badge {
         top: 10px;
         right: 10px;
@@ -2418,6 +2443,18 @@ section.screen > * {
 
     .activity-emoji {
         font-size: 2.6em;
+    }
+
+    .activity-icon-image {
+        width: 62px;
+        height: 62px;
+        min-width: 62px;
+    }
+
+    #activity0Btn .activity-icon-image {
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
     }
 
     .activity-title {
