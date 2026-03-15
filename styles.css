@@ -2610,13 +2610,31 @@ section.screen > * {
     line-height: 1.1;
 }
 
-/* Entrada de la Situación 1 con sensación de continuidad de página */
-#problemQ1Section.page-enter {
-    transform-origin: left center;
-    animation: q1PageTurnIn 0.9s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+/* Entrada de las Situaciones 1 y 2 con dirección explícita de página */
+#problemQ1Section.page-enter-forward,
+#problemQ2Section.page-enter-forward {
+    transform-origin: right center;
+    animation: q1PageTurnInForward 0.9s cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
-@keyframes q1PageTurnIn {
+#problemQ1Section.page-enter-backward,
+#problemQ2Section.page-enter-backward {
+    transform-origin: left center;
+    animation: q1PageTurnInBackward 0.9s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes q1PageTurnInForward {
+    0% {
+        opacity: 0;
+        transform: perspective(1400px) rotateY(70deg) translateX(-8%);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(1400px) rotateY(0deg) translateX(0);
+    }
+}
+
+@keyframes q1PageTurnInBackward {
     0% {
         opacity: 0;
         transform: perspective(1400px) rotateY(-70deg) translateX(8%);

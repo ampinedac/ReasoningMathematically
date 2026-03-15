@@ -111,13 +111,35 @@
     #problemQ2Section .q1-left-page p{width:92%;max-width:460px;margin:8px auto;text-align:justify;line-height:1.45}
     #problemQ2Section .q1-left-page p{margin-bottom:6px}
     #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:8px auto 0;text-align:justify;background:transparent;border:0;padding:0}
+    #problemQ2Section .q2-guide-card{width:92%;max-width:460px;margin:14px auto 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.72);border:1px solid rgba(63,94,251,0.2);box-shadow:0 4px 10px rgba(0,0,0,0.05);text-align:left}
+    #problemQ2Section .q2-guide-title{margin:0 0 8px;font-size:clamp(0.88rem,1.35vw,1rem);font-weight:700;color:#2f3f87;text-align:left}
+    #problemQ2Section .q2-guide-list{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+    #problemQ2Section .q2-guide-list li{margin:0;font-size:clamp(0.82rem,1.2vw,0.95rem);line-height:1.35;text-align:left;color:#233047}
+    #problemQ2Section .q2-example{margin:10px 0 0;font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.35;color:#2f3f87;font-weight:600;text-align:left}
     #problemQ2Section .q1-right-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
     #problemQ2Section .trays-container{width:100%;max-width:100%;grid-template-columns:repeat(4, minmax(0, 1fr)) !important;gap:14px !important;padding:14px !important;min-height:auto}
     #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1;min-height:0 !important;height:auto;padding:10px;overflow:hidden}
     #problemQ2Section .trays-container .tray-grid{max-width:100%;max-height:100%;overflow:hidden;justify-items:center;align-items:center;gap:2px}
-    #problemQ2Section .trays-container .tray-item{font-size:0.82rem !important;line-height:1 !important}
+    #problemQ2Section .trays-container .tray-item{font-size:clamp(0.46rem,0.7vw,0.64rem) !important;line-height:1 !important}
     #problemQ2Section .q1-right-page .btn{margin-top:10px}
     #problemQ2Section .q1-right-page .feedback-text{min-height:30px;padding:8px 10px;font-size:0.95rem}
+    @media (max-width:1200px){
+        #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:12px !important;padding:12px !important}
+        #problemQ2Section .trays-container .tray-item{font-size:clamp(0.42rem,0.95vw,0.6rem) !important}
+    }
+    @media (max-width:900px){
+        #problemQ2Section .trays-container{grid-template-columns:repeat(2, minmax(0, 1fr)) !important;gap:10px !important;padding:10px !important}
+        #problemQ2Section .trays-container .tray-item{font-size:clamp(0.4rem,1.2vw,0.55rem) !important}
+    }
+    @media (max-width:900px){
+        #problemQ2Section.q1-book-spread{grid-template-columns:1fr;min-height:auto}
+        #problemQ2Section.q1-book-spread::before{display:none}
+        #problemQ2Section .q1-left-page,
+        #problemQ2Section .q1-right-page{min-height:auto;padding:18px}
+        #problemQ2Section .q1-right-page{padding-top:8px}
+        #problemQ2Section .q1-right-page .btn{margin-top:8px}
+        #problemQ2Section .page-number{bottom:8px}
+    }
     .author-credit{position:fixed;top:10px;right:14px;z-index:1200;font-size:12px;line-height:1;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.78);color:#2a3d55;font-weight:700;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(0,0,0,0.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
     @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
     </style>
@@ -293,7 +315,16 @@
                             <h3>Situación 2</h3>
                             <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Cada tarjeta muestra una forma diferente de organizarlas.</p>
                             <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos:</strong></p>
-                            <p class="instruction-hint">💡 Arrastra las bandejas para juntarlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
+                            <p class="instruction-hint">💡 Selecciona dos bandejas para juntarlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
+                            <div class="q2-guide-card">
+                                <p class="q2-guide-title">Guía rápida</p>
+                                <ul class="q2-guide-list">
+                                    <li>1. Haz clic en una bandeja para seleccionarla.</li>
+                                    <li>2. Haz clic en otra bandeja para formar el par.</li>
+                                    <li>3. Repite hasta completar los cuatro pares.</li>
+                                </ul>
+                                <p class="q2-example">Ejemplo: 3 × 4 y 4 × 3 representan la misma cantidad.</p>
+                            </div>
                         </div>
 
                         <div class="evidence-section q1-right-page">

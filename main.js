@@ -40,7 +40,7 @@ function applyM1Q1SubmittedLock() {
     const evidenceSection = canvas ? canvas.closest('.evidence-section') : null;
 
     if (statusText) {
-        statusText.textContent = '✅ Ya enviaste esta respuesta. Puedes volver al cuento con la flecha izquierda.';
+        statusText.textContent = '✅ Ya enviaste esta respuesta. Continúa con la flecha derecha para seguir en el cuento.';
         statusText.className = 'status-text success';
     }
 
@@ -482,7 +482,18 @@ function initMoment1() {
         }
     };
 
-    const showProblemSection = () => {
+    const runBookSectionEnterAnimation = (sectionEl, direction = 'forward') => {
+        if (!sectionEl) return;
+
+        sectionEl.classList.remove('page-enter-forward', 'page-enter-backward');
+        sectionEl.classList.add(direction === 'backward' ? 'page-enter-backward' : 'page-enter-forward');
+
+        setTimeout(() => {
+            sectionEl.classList.remove('page-enter-forward', 'page-enter-backward');
+        }, 900);
+    };
+
+    const showProblemSection = (direction = 'forward') => {
         if (flipbook) {
             flipbook.style.display = 'none';
         }
@@ -498,12 +509,8 @@ function initMoment1() {
         }
 
         problemSection.classList.remove('hidden');
-        problemSection.classList.add('page-enter');
+        runBookSectionEnterAnimation(problemSection, direction);
         problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        setTimeout(() => {
-            problemSection.classList.remove('page-enter');
-        }, 900);
 
         hideProblemSection2();
         isOnSheet10 = true;
@@ -517,7 +524,7 @@ function initMoment1() {
         }
     };
 
-    const showProblemSection2 = () => {
+    const showProblemSection2 = (direction = 'forward') => {
         if (!problemSection2) return;
 
         if (flipbook) {
@@ -536,11 +543,8 @@ function initMoment1() {
 
         problemSection.classList.add('hidden');
         problemSection2.classList.remove('hidden');
-        problemSection2.classList.add('page-enter');
+        runBookSectionEnterAnimation(problemSection2, direction);
         problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setTimeout(() => {
-            problemSection2.classList.remove('page-enter');
-        }, 900);
 
         isOnSheet10 = false;
         isOnSheet11 = true;
@@ -564,7 +568,7 @@ function initMoment1() {
             soundToggle.style.display = '';
         }
 
-        problemSection.classList.remove('page-enter');
+        problemSection.classList.remove('page-enter-forward', 'page-enter-backward');
         problemSection.classList.add('hidden');
         hideProblemSection2();
         isOnSheet10 = false;
@@ -635,7 +639,7 @@ function initMoment1() {
             if (isOnSheet11) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                showProblemSection();
+                showProblemSection('backward');
                 return;
             }
 
@@ -1281,7 +1285,7 @@ function verifyTraysPairings() {
     const feedback = document.getElementById('traysFeedback');
     
     if (results.length === 0) {
-        feedback.textContent = '⚠️ No hay emparejamientos. Arrastra las bandejas para unirlas.';
+        feedback.textContent = '⚠️ No hay emparejamientos. Selecciona dos bandejas para formar cada pareja.';
         feedback.className = 'feedback-text info';
         return;
     }

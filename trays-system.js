@@ -42,6 +42,11 @@ class TraysSystem {
         this.render();
         this.setupEventListeners();
     }
+
+    // Buscar una bandeja SOLO dentro del contenedor de esta instancia
+    getTrayElement(trayId) {
+        return this.container.querySelector(`.tray-card[id="${trayId}"]`);
+    }
     
     // Limpiar y renderizar las 8 bandejas
     render() {
@@ -187,8 +192,13 @@ class TraysSystem {
     togglePairing(id1, id2) {
         if (id1 === id2) return;
         
-        const tray1 = document.getElementById(id1);
-        const tray2 = document.getElementById(id2);
+        const tray1 = this.getTrayElement(id1);
+        const tray2 = this.getTrayElement(id2);
+
+        if (!tray1 || !tray2) {
+            console.warn('⚠️ No se encontraron las bandejas en el contenedor activo:', id1, id2);
+            return;
+        }
         
         // Verificar si ya están emparejadas entre sí
         if (this.pairings.get(id1) === id2) {
@@ -215,8 +225,8 @@ class TraysSystem {
         this.pairings.set(id1, id2);
         this.pairings.set(id2, id1); // Bidireccional
         
-        const tray1 = document.getElementById(id1);
-        const tray2 = document.getElementById(id2);
+        const tray1 = this.getTrayElement(id1);
+        const tray2 = this.getTrayElement(id2);
         
         if (!tray1 || !tray2) return;
         
@@ -257,8 +267,8 @@ class TraysSystem {
         this.pairings.delete(id1);
         this.pairings.delete(id2);
         
-        const tray1 = document.getElementById(id1);
-        const tray2 = document.getElementById(id2);
+        const tray1 = this.getTrayElement(id1);
+        const tray2 = this.getTrayElement(id2);
         
         if (!tray1 || !tray2) return;
         
