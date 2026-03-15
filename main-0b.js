@@ -423,6 +423,7 @@ function initMoment1() {
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
     const problemSection = document.getElementById('problemQ1Section');
+    const flipbookSection = document.getElementById('flipbookSection');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -438,6 +439,9 @@ function initMoment1() {
         const isLastPage = Boolean(event?.detail?.isLastPage);
 
         if (isLastPage) {
+            if (flipbookSection) {
+                flipbookSection.style.display = 'none';
+            }
             if (flipbook) {
                 flipbook.style.display = 'none';
             }
@@ -461,6 +465,9 @@ function initMoment1() {
                 initProblemQ1();
             }
         } else {
+            if (flipbookSection) {
+                flipbookSection.style.display = '';
+            }
             if (flipbook) {
                 flipbook.style.display = '';
             }

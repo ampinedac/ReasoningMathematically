@@ -4,19 +4,279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0B - El Misterio de las Sumas Repetidas</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>😎</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css?v=2026031414">
     <link rel="stylesheet" href="trays-styles.css?v=2026022007">
     <link rel="stylesheet" href="bags-styles-0b.css?v=2026022103">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
+    <style>
+    .activity-0b,
+    .activity-0b * {
+        font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif !important;
+    }
+
+    .activity-0b {
+        font-size: 20px;
+        line-height: 1.5;
+        color: #222;
+    }
+
+    .activity-0b p,
+    .activity-0b li,
+    .activity-0b .story-text,
+    .activity-0b .question,
+    .activity-0b .instruction-hint,
+    .activity-0b .confirmation-question,
+    .activity-0b .radio-label,
+    .activity-0b .feedback-text,
+    .activity-0b .status-text,
+    .activity-0b .activity-subtitle,
+    .activity-0b .student-code-display,
+    .activity-0b .problem-box p {
+        font-size: 13px;
+        text-align: justify;
+    }
+
+    .activity-0b .main-title {
+        display: block;
+        text-align: center;
+    }
+
+    .activity-0b .story-image,
+    .activity-0b .situation-image {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .activity-0b #welcomeScreen {
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .activity-0b #welcomeScreen .user-rect {
+        width: 100%;
+        max-width: 720px;
+        margin: 12px auto;
+        background: rgb(200, 230, 255);
+        border-radius: 14px;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .activity-0b #welcomeScreen .main-title,
+    .activity-0b #welcomeScreen .activity-subtitle {
+        margin: 0;
+        text-align: center;
+    }
+
+    .activity-0b #welcomeScreen .main-title {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+    }
+
+    .activity-0b #welcomeScreen .activity-subtitle {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+        font-weight: 700;
+        color: #0b2a3a;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        font-style: italic;
+    }
+
+    .activity-0b #welcomeScreen .chalk-text {
+        display: block;
+        margin-bottom: 14px;
+    }
+
+    .activity-0b #welcomeScreen .chalk-input,
+    .activity-0b #welcomeScreen .btn {
+        width: 75%;
+        max-width: 640px;
+        margin: 12px auto;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    .activity-0b #welcomeScreen .welcome-box {
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        max-width: none;
+        margin: 0;
+    }
+
+    .activity-0b #welcomeScreen #welcomeError {
+        margin-top: 10px;
+    }
+
+    .activity-0b #moment1Screen .container {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 8px 10px;
+        border-radius: 14px;
+        box-shadow: none;
+        width: 95vw;
+        max-width: none;
+        margin: 12px auto;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page h3 {
+        font-size: clamp(1.15rem, 2vw, 1.4rem) !important;
+        margin-top: 0;
+        margin-bottom: 8px;
+        color: #d97825;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page p,
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page .question {
+        font-size: clamp(0.92rem, 1.5vw, 1.08rem) !important;
+        line-height: 1.35 !important;
+        letter-spacing: -0.2px;
+        width: 92%;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: justify;
+        color: #222;
+        font-weight: 400;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page .question {
+        margin-top: 12px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page h4 {
+        font-size: clamp(1.05rem, 1.65vw, 1.45rem);
+        line-height: 1.25;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .board-tools {
+        justify-content: center !important;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .board-container {
+        max-width: 92%;
+        margin: 6px auto 4px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .drawing-board {
+        max-height: 400px !important;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 8px 6px 0;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section .status-text {
+        margin: 0;
+    }
+
+    .activity-0b .evidence-section .audio-controls,
+    .activity-0b .evidence-section .submit-section {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 8px 6px 0;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .activity-0b .evidence-section .audio-controls {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b .evidence-section .submit-section {
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b .evidence-section .submit-section .status-text {
+        margin: 0 8px 0 0;
+    }
+
+    .activity-0b .evidence-section .submit-section .btn.btn-primary::before {
+        content: '';
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        margin-right: 0.45em;
+        vertical-align: -0.1em;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M2.01 21 23 12 2.01 3 2 10l15 2-15 2z'/%3E%3C/svg%3E");
+    }
+
+    @media (max-width: 768px) {
+        .activity-0b #welcomeScreen .user-rect {
+            max-width: 100%;
+            border-radius: 14px;
+            padding: 14px 12px;
+            margin: 10px auto;
+        }
+
+        .activity-0b #welcomeScreen .main-title {
+            font-size: 30px !important;
+        }
+
+        .activity-0b #welcomeScreen .activity-subtitle {
+            font-size: 30px !important;
+        }
+
+        .activity-0b #welcomeScreen .chalk-input,
+        .activity-0b #welcomeScreen .btn {
+            width: 75%;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page {
+            padding: 18px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section {
+            flex-wrap: wrap;
+        }
+
+        .activity-0b .evidence-section .audio-controls,
+        .activity-0b .evidence-section .submit-section {
+            flex-wrap: wrap;
+        }
+    }
+    </style>
 </head>
 <body class="activity-0b">
     <!-- PANTALLA DE BIENVENIDA -->
     <section id="welcomeScreen" class="screen active">
-        <h1 class="main-title">Actividad 0B</h1>
-        <p class="activity-subtitle">El Misterio de las Sumas Repetidas</p>
-        <div class="container">
+        <div class="user-rect">
+            <h1 class="main-title">Actividad 0B</h1>
+        </div>
+        <div class="user-rect">
+            <p class="activity-subtitle">El Misterio de las Sumas Repetidas</p>
+        </div>
+        <div class="user-rect">
             <div class="welcome-box">
                 <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
                 <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
@@ -95,7 +355,7 @@
                         <div class="page story-page">
                             <div class="page-number">5</div>
                             <img src="assets/images/pagina5_cuento_act0B.png" alt="Pedidos de bolsitas" class="story-image">
-                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 pandebonos”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Alejo. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
+                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 pandebonos”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Adrián. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
                         </div>
 
                         <!-- Story Page 6 -->
@@ -132,7 +392,7 @@
 
                 <!-- TABLERO Y AUDIO -->
                 <div class="evidence-section q1-right-page">
-                    <h4>Puedes usar el tablero si lo necesitas (audio obligatorio):</h4>
+                    <h4>Puedes usar el tablero:</h4>
                     
                     <!-- Tablero -->
                     <div class="board-container">
@@ -311,7 +571,7 @@
                         <!-- Enviar -->
                         <div class="submit-section">
                             <p id="statusM3Q1" class="status-text"></p>
-                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar Problema 1</button>
+                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar</button>
                         </div>
                     </div>
                 </div>
@@ -401,7 +661,7 @@
                         <!-- Enviar -->
                         <div class="submit-section">
                             <p id="statusM3Q2" class="status-text"></p>
-                            <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar Problema 2</button>
+                            <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar</button>
                         </div>
                     </div>
 
