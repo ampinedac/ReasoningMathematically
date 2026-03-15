@@ -32,6 +32,9 @@ class TraysSystem {
         this.draggedTray = null;
         this.selectedTray = null;
         this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
+        this.pandebonoImageSrc = 'assets/images/pandebono.png';
+        this.resizeObserver = null;
+        this.resizeRaf = null;
         
         // Inicializar
         this.init();
@@ -41,6 +44,7 @@ class TraysSystem {
         console.log('🎯 Inicializando sistema de bandejas...');
         this.render();
         this.setupEventListeners();
+        this.setupResponsiveSizing();
     }
 
     // Buscar una bandeja SOLO dentro del contenedor de esta instancia
@@ -62,6 +66,8 @@ class TraysSystem {
             const trayElement = this.createTrayElement(trayData, index);
             this.container.appendChild(trayElement);
         });
+
+        this.scheduleResponsiveSizing();
         
         console.log('✅ 8 bandejas renderizadas correctamente');
     }
@@ -80,25 +86,78 @@ class TraysSystem {
         grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
         grid.style.gridTemplateRows = `repeat(${data.rows}, 1fr)`;
         
-        // Ajustar tamaño de emoji según dimensión
-        const maxDim = Math.max(data.rows, data.cols);
-        const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
-        const emojiSize = isSmallScreen
-            ? (maxDim >= 7 ? '0.50em' : maxDim >= 6 ? '0.60em' : maxDim >= 5 ? '0.72em' : '0.9em')
-            : (maxDim >= 6 ? '1.0em' : maxDim >= 5 ? '1.15em' : '1.3em');
-        
         // Crear items
         for (let i = 0; i < data.total; i++) {
             const item = document.createElement('span');
-            item.textContent = data.emoji;
-            item.style.fontSize = emojiSize;
             item.style.lineHeight = '1';
             item.className = 'tray-item';
+
+            const itemImage = document.createElement('img');
+            itemImage.src = this.pandebonoImageSrc;
+            itemImage.alt = 'Pandebono';
+            itemImage.className = 'tray-item-image';
+            itemImage.draggable = false;
+
+            item.appendChild(itemImage);
             grid.appendChild(item);
         }
         
         tray.appendChild(grid);
         return tray;
+    }
+
+    setupResponsiveSizing() {
+        if (typeof ResizeObserver !== 'undefined') {
+            this.resizeObserver = new ResizeObserver(() => {
+                this.scheduleResponsiveSizing();
+            });
+            this.resizeObserver.observe(this.container);
+        } else {
+            window.addEventListener('resize', () => this.scheduleResponsiveSizing());
+        }
+    }
+
+    scheduleResponsiveSizing() {
+        if (this.resizeRaf) {
+            cancelAnimationFrame(this.resizeRaf);
+        }
+        this.resizeRaf = requestAnimationFrame(() => {
+            this.resizeRaf = null;
+            this.updateTrayItemSizes();
+        });
+    }
+
+    updateTrayItemSizes() {
+        const trayCards = this.container.querySelectorAll('.tray-card');
+
+        trayCards.forEach(tray => {
+            const trayData = this.BASE_TRAYS.find(t => t.id === tray.id);
+            const grid = tray.querySelector('.tray-grid');
+            const items = grid ? grid.querySelectorAll('.tray-item') : null;
+
+            if (!trayData || !grid || !items || items.length === 0) return;
+
+            const trayStyles = window.getComputedStyle(tray);
+            const padX = parseFloat(trayStyles.paddingLeft) + parseFloat(trayStyles.paddingRight);
+            const padY = parseFloat(trayStyles.paddingTop) + parseFloat(trayStyles.paddingBottom);
+
+            const innerWidth = Math.max(1, tray.clientWidth - padX);
+            const innerHeight = Math.max(1, tray.clientHeight - padY);
+
+            const cellWidth = innerWidth / trayData.cols;
+            const cellHeight = innerHeight / trayData.rows;
+            const cellSize = Math.max(4, Math.min(cellWidth, cellHeight));
+
+            // Escalar con el tamaño real de la bandeja para que siempre quepan todos los panes
+            const emojiPx = Math.max(6, Math.min(36, Math.floor(cellSize * 0.72)));
+            const gapPx = Math.max(0, Math.min(6, Math.floor(cellSize * 0.08)));
+
+            grid.style.gap = `${gapPx}px`;
+            items.forEach(item => {
+                item.style.width = `${emojiPx}px`;
+                item.style.height = `${emojiPx}px`;
+            });
+        });
     }
     
     // Configurar event listeners
@@ -332,6 +391,7 @@ class TraysSystem {
         // Las bandejas solas ocupan 1 columna
         // El CSS grid se encarga automáticamente del flujo
         console.log('📐 Layout reorganizado automáticamente por CSS Grid');
+        this.scheduleResponsiveSizing();
     }
     
     // Obtener todos los emparejamientos actuales
@@ -406,11 +466,20 @@ class TraysSystem {
         this.container.offsetHeight;
         requestAnimationFrame(() => {
             this.container.style.transform = '';
+            this.scheduleResponsiveSizing();
         });
     }
     
     // Destruir y limpiar
     destroy() {
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+            this.resizeObserver = null;
+        }
+        if (this.resizeRaf) {
+            cancelAnimationFrame(this.resizeRaf);
+            this.resizeRaf = null;
+        }
         this.container.innerHTML = '';
         this.pairings.clear();
         this.pairColors.clear();

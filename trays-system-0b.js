@@ -32,6 +32,7 @@ class TraysSystem {
         this.draggedTray = null;
         this.selectedTray = null;
         this.isTouchDevice = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
+        this.pandebonoImageSrc = 'assets/images/pandebono.png';
         
         // Inicializar
         this.init();
@@ -102,11 +103,19 @@ class TraysSystem {
             const centerY = 55;
 
             const item = document.createElement('span');
-            item.textContent = data.emoji;
             item.className = 'bag-item';
-            item.style.fontSize = emojiSize;
+            item.style.width = emojiSize;
+            item.style.height = emojiSize;
             item.style.left = `${Math.min(92, Math.max(8, centerX + offsetX + driftX))}%`;
             item.style.top = `${Math.min(91, Math.max(14, centerY + offsetY + driftY))}%`;
+
+            const itemImage = document.createElement('img');
+            itemImage.src = this.pandebonoImageSrc;
+            itemImage.alt = 'Pandebono';
+            itemImage.className = 'bag-item-image';
+            itemImage.draggable = false;
+
+            item.appendChild(itemImage);
 
             bagItems.appendChild(item);
         }

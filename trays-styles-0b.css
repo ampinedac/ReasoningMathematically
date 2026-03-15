@@ -71,6 +71,15 @@
     opacity: 0.95;
 }
 
+.activity-0b .bag-item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+    pointer-events: none;
+}
+
 .activity-0b .tray-pair-wrapper {
     background: rgba(255, 255, 255, 0.18);
 }

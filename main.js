@@ -40,8 +40,8 @@ function applyM1Q1SubmittedLock() {
     const evidenceSection = canvas ? canvas.closest('.evidence-section') : null;
 
     if (statusText) {
-        statusText.textContent = '✅ Ya enviaste esta respuesta. Continúa con la flecha derecha para seguir en el cuento.';
-        statusText.className = 'status-text success';
+        statusText.textContent = '';
+        statusText.className = 'status-text hidden';
     }
 
     if (submitBtn) {
@@ -424,6 +424,7 @@ function initMoment1() {
 
     const problemSection = document.getElementById('problemQ1Section');
     const problemSection2 = document.getElementById('problemQ2Section');
+    const m1Q2FinalQuestion = document.getElementById('m1Q2FinalQuestion');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -441,6 +442,15 @@ function initMoment1() {
     const hideProblemSection2 = () => {
         if (!problemSection2) return;
         problemSection2.classList.add('hidden');
+        if (m1Q2FinalQuestion) {
+            m1Q2FinalQuestion.classList.add('hidden');
+        }
+    };
+
+    const showM1Q2FinalQuestion = () => {
+        if (!m1Q2FinalQuestion) return;
+        m1Q2FinalQuestion.classList.remove('hidden');
+        m1Q2FinalQuestion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     };
 
     const initSheet11Trays = () => {
@@ -669,8 +679,10 @@ function initMoment1() {
                  if (!m1Q2Verified) return;
                  event.preventDefault();
                  event.stopImmediatePropagation();
-                 showScreen('moment2Screen');
-                 initMoment2();
+                showM1Q2FinalQuestion();
+                if (nextBtn) {
+                    nextBtn.disabled = true;
+                }
                  return;
             }
 
@@ -781,8 +793,8 @@ function initProblemQ1() {
             statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
-            statusText.textContent = '✅ Listo para enviar';
-            statusText.className = 'status-text success';
+            statusText.textContent = '';
+            statusText.className = 'status-text';
         }
     };
     
@@ -817,8 +829,8 @@ function initProblemQ1() {
                 localStorage.setItem(m1StorageKey, 'true');
             }
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
-            statusText.className = 'status-text success';
+            statusText.textContent = '';
+            statusText.className = 'status-text hidden';
             
             // Mantener botón deshabilitado permanentemente
             submitBtn.disabled = true;
@@ -1001,10 +1013,10 @@ function createTraysGame_OLD() {
         
         // Emojis de pandebonos
         for (let i = 0; i < data.total; i++) {
-            const arepa = document.createElement('span');
-            arepa.textContent = '🫓';
-            arepa.style.fontSize = emojiSize;
-            grid.appendChild(arepa);
+            const pandebono = document.createElement('span');
+            pandebono.textContent = '🫓';
+            pandebono.style.fontSize = emojiSize;
+            grid.appendChild(pandebono);
         }
         
         trayCard.appendChild(grid);

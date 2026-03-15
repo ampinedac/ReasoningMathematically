@@ -995,6 +995,12 @@ section.screen > * {
     animation: bounce 2s ease-in-out infinite;
 }
 
+.activity-icon-image {
+    width: 6.2em;
+    height: 6.2em;
+    object-fit: contain;
+}
+
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }

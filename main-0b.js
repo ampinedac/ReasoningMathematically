@@ -759,10 +759,10 @@ function createTraysGame_OLD() {
         
         // Emojis de pandebonos
         for (let i = 0; i < data.total; i++) {
-            const arepa = document.createElement('span');
-            arepa.textContent = '🫓';
-            arepa.style.fontSize = emojiSize;
-            grid.appendChild(arepa);
+            const pandebono = document.createElement('span');
+            pandebono.textContent = '🫓';
+            pandebono.style.fontSize = emojiSize;
+            grid.appendChild(pandebono);
         }
         
         trayCard.appendChild(grid);
