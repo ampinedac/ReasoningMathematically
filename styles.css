@@ -2543,8 +2543,13 @@ section.screen > * {
     padding: 18px;
 }
 
+#moment1Screen #problemQ1Section .q1-right-page {
+    overflow: visible;
+    text-align: center;
+}
+
 #moment1Screen #problemQ1Section .q1-right-page .drawing-board {
-    height: clamp(150px, 24vh, 260px);
+    height: clamp(130px, 21vh, 220px);
 }
 
 #moment1Screen #problemQ1Section .q1-left-page p {
@@ -2567,20 +2572,59 @@ section.screen > * {
 }
 
 #moment1Screen #problemQ1Section .q1-right-page .board-container {
-    margin: 6px 0;
+    margin: 4px auto;
+    max-width: 94%;
 }
 
 #moment1Screen #problemQ1Section .q1-right-page .board-tools {
     margin-bottom: 8px;
+    justify-content: center;
 }
 
 #moment1Screen #problemQ1Section .q1-right-page .audio-controls {
-    margin: 8px 0;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 6px 6px 0;
     gap: 8px;
 }
 
 #moment1Screen #problemQ1Section .q1-right-page .submit-section {
-    margin: 8px 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 6px 6px 0;
+    text-align: center;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .audio-controls .audio-status,
+#moment1Screen #problemQ1Section .q1-right-page .submit-section .status-text {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+#moment1Screen #problemQ1Section .q1-right-page .btn-audio,
+#moment1Screen #problemQ1Section .q1-right-page #submitM1Q1 {
+    font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+    padding: 10px 14px;
+    line-height: 1.1;
+}
+
+/* Entrada de la Situación 1 con sensación de continuidad de página */
+#problemQ1Section.page-enter {
+    transform-origin: left center;
+    animation: q1PageTurnIn 0.9s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes q1PageTurnIn {
+    0% {
+        opacity: 0;
+        transform: perspective(1400px) rotateY(-70deg) translateX(8%);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(1400px) rotateY(0deg) translateX(0);
+    }
 }
 
 .tool-icon-black,

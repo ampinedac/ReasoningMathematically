@@ -459,7 +459,12 @@ function initMoment1() {
                 }
 
                 problemSection.classList.remove('hidden');
+                problemSection.classList.add('page-enter');
                 problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                setTimeout(() => {
+                    problemSection.classList.remove('page-enter');
+                }, 900);
 
                 if (m1Q1Submitted) {
                     applyM1Q1SubmittedLock();
@@ -487,6 +492,7 @@ function initMoment1() {
                 soundToggle.style.display = '';
             }
 
+            problemSection.classList.remove('page-enter');
             problemSection.classList.add('hidden');
         }
     };
