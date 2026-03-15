@@ -434,6 +434,7 @@ function initMoment1() {
     let isOnSheet10 = false;
     let isOnSheet11 = false;
     let isSpecialPageTransitioning = false;
+    let m1Q2Verified = false;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
 
@@ -480,6 +481,19 @@ function initMoment1() {
                     if (incorrectPairs === 0 && !validPairRemains) {
                         feedback.textContent = '¡Excelente! Has encontrado todas las parejas posibles.';
                         feedback.className = 'feedback-text success';
+                        // Congelar: deshabilitar botón y bloquear interacción con bandejas
+                        verifyBtn.disabled = true;
+                        if (traysSystem.selectedTray) {
+                            traysSystem.selectedTray.classList.remove('selected');
+                            traysSystem.selectedTray = null;
+                        }
+                        traysSystem.container.style.pointerEvents = 'none';
+                        m1Q2Verified = true;
+                        // Mostrar botón siguiente para continuar
+                        if (nextBtn) {
+                            nextBtn.style.display = '';
+                            nextBtn.disabled = false;
+                        }
                         return;
                     }
 
@@ -652,7 +666,12 @@ function initMoment1() {
             }
 
             if (isOnSheet11) {
-                return;
+                 if (!m1Q2Verified) return;
+                 event.preventDefault();
+                 event.stopImmediatePropagation();
+                 showScreen('moment2Screen');
+                 initMoment2();
+                 return;
             }
 
             // Solo abrir Situación 1 cuando YA estamos en la última página del cuento (página 9)
