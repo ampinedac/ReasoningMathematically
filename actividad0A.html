@@ -150,23 +150,30 @@
     @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
 
     /* ===== PANTALLA COCINA ===== */
-    .cocina-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:linear-gradient(160deg,#fff8f0 0%,#ffe8cc 55%,#ffd49a 100%);z-index:9999;display:flex;flex-direction:column;overflow-y:auto}
+    .cocina-overlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:linear-gradient(180deg,#fff9f1 0%,#f7e8d1 58%,#efd4af 100%);background-image:linear-gradient(180deg,rgba(255,255,255,0.38),rgba(255,255,255,0.06)),linear-gradient(90deg,rgba(190,145,90,0.08) 0,rgba(190,145,90,0.08) 1px,transparent 1px,transparent 72px),linear-gradient(0deg,rgba(190,145,90,0.08) 0,rgba(190,145,90,0.08) 1px,transparent 1px,transparent 72px);z-index:9999;display:flex;flex-direction:column;overflow:hidden}
     .cocina-overlay.hidden{display:none !important}
     .cocina-header{text-align:center;padding:18px 20px 12px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.22);flex-shrink:0}
     .cocina-header h2{margin:0 0 4px;font-size:clamp(1.3rem,3vw,2rem);font-family:'Comic Sans MS',cursive;text-shadow:2px 2px 4px rgba(0,0,0,0.28)}
     .cocina-header p{margin:0;font-size:clamp(0.9rem,2vw,1.1rem);opacity:0.95}
-    .cocina-body{flex:1;padding:16px 20px;display:flex;flex-direction:column;align-items:center;min-height:0}
-    .cocina-body .trays-container{width:100%;max-width:1320px;gap:24px !important;padding:24px !important}
+    .cocina-body{flex:1;padding:18px 108px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;overflow:hidden;position:relative}
+    .cocina-body::before,
+    .cocina-body::after{position:absolute;top:22px;bottom:22px;width:78px;border-radius:24px;background:linear-gradient(180deg,#a66b3f 0%,#8a572d 48%,#6f4523 100%);border:4px solid rgba(111,69,35,0.8);box-shadow:inset 0 0 0 4px rgba(255,235,200,0.14),0 12px 24px rgba(90,56,26,0.22);color:#fff4de;font-size:2rem;line-height:1.9;white-space:pre;text-align:center;padding-top:20px;pointer-events:none;opacity:0.96}
+    .cocina-body::before{content:'🥖\A🍞\A🧁\A🥣\A🥐';left:18px}
+    .cocina-body::after{content:'🧈\A🥨\A🍪\A☕\A🫓';right:18px}
+    .cocina-body .trays-container{width:min(100%,1100px);max-width:1100px;max-height:calc(100vh - 250px);min-height:min(540px,calc(100vh - 250px));gap:18px !important;padding:24px !important;align-content:center !important;justify-items:stretch;overflow:hidden;border-radius:28px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 3px rgba(255,232,198,0.16),inset 0 0 0 10px rgba(84,50,26,0.22),0 16px 34px rgba(84,50,26,0.28);position:relative}
+    .cocina-body .trays-container::before{content:'';position:absolute;inset:0;border-radius:28px;background:linear-gradient(25deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 16%,rgba(82,47,23,0.08) 16%,rgba(82,47,23,0.08) 32%,rgba(255,255,255,0.03) 32%,rgba(255,255,255,0.03) 48%,rgba(82,47,23,0.08) 48%,rgba(82,47,23,0.08) 64%,rgba(255,255,255,0.03) 64%,rgba(255,255,255,0.03) 80%,rgba(82,47,23,0.08) 80%,rgba(82,47,23,0.08) 100%);mix-blend-mode:soft-light;pointer-events:none}
     #cocinaScreen .trays-container,
     #cocinaScreen .trays-container *{cursor:url('assets/images/hand-point-cursor.svg') 16 12, grab !important}
     #cocinaScreen .trays-container:active,
     #cocinaScreen .trays-container:active *,
     #cocinaScreen .tray-card:active{cursor:url('assets/images/hand-grab-cursor.svg') 16 14, grabbing !important}
-    #cocinaScreen .tray-card{width:100%;aspect-ratio:1/1 !important;height:auto !important;min-height:0 !important;padding:14px;box-sizing:border-box}
+    #cocinaScreen .tray-card{width:100%;aspect-ratio:1/1 !important;height:auto !important;min-height:0 !important;padding:12px;box-sizing:border-box}
     #cocinaScreen .tray-grid{max-width:none;max-height:none}
     #cocinaScreen .tray-item-image{width:118%;height:118%;max-width:none;max-height:none}
-    .cocina-controls{padding:14px 20px 22px;text-align:center;background:rgba(255,255,255,0.75);border-top:2px solid rgba(249,115,22,0.25);display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
+    .cocina-controls{padding:14px 20px 22px;text-align:center;background:linear-gradient(180deg,rgba(255,248,239,0.9),rgba(247,231,209,0.88));border-top:2px solid rgba(146,96,54,0.22);display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
     .cocina-controls .btn-primary{font-size:clamp(0.95rem,2vw,1.15rem);padding:12px 32px}
+    @media (max-width:1200px){.cocina-body{padding-left:88px;padding-right:88px}.cocina-body .trays-container{width:min(100%,980px);gap:16px !important}}
+    @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:16px 20px 18px;overflow:visible}.cocina-body::before,.cocina-body::after{display:none}.cocina-body .trays-container{width:100%;max-width:760px;max-height:none;min-height:0;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:14px !important;padding:18px !important}}
 
     /* ===== BOTÓN IR A COCINA ===== */
     #problemQ2Section .btn-cocina{display:block;width:92%;max-width:460px;margin:18px auto 0;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;border:none;border-radius:16px;padding:16px 24px;font-size:clamp(1rem,1.8vw,1.25rem);font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.38);transition:all 0.3s;text-shadow:1px 1px 2px rgba(0,0,0,0.18)}
@@ -186,9 +193,9 @@
     .photo-pano{display:flex;align-items:center;justify-content:center;width:14px;height:14px;line-height:1}
     .photo-pano-img{width:100%;height:100%;object-fit:contain;display:block}
     .photo-equal{font-size:1.4em;font-weight:bold;color:#16a34a;flex-shrink:0}
-    .photo-singles-wrap{background:rgba(255,255,255,0.65);border:1px dashed rgba(22,101,52,0.35);border-radius:10px;padding:8px}
+    .photo-singles-wrap{background:rgba(255,255,255,0.92);border:1px dashed rgba(22,101,52,0.35);border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:flex;flex-direction:column;justify-content:center;min-height:88px}
     .photo-singles-title{margin:0 0 6px;text-align:center;font-size:0.82rem;font-weight:700;color:#166534}
-    .photo-singles-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+    .photo-singles-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
     .photo-single{background:white;border-radius:8px;padding:6px 8px;box-shadow:0 1px 5px rgba(0,0,0,0.08)}
     @media (max-width:850px){.photo-pairs-grid{grid-template-columns:1fr}}
 
@@ -241,9 +248,12 @@
 
     /* Ajustes página derecha pág 11 */
     #q2RightPage{display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto}
-    #m1Q2FinalQuestion .audio-controls{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-    #m1Q2FinalQuestion .btn{font-size:0.82rem !important;padding:6px 14px !important}
-    #statusM1Q2{font-size:0.82rem;margin-top:6px}
+    #m1Q2FinalQuestion{font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+    #m1Q2FinalQuestion .audio-controls{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+    #m1Q2FinalQuestion .btn{font-size:0.82rem !important;padding:6px 14px !important;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important}
+    #m1Q2FinalQuestion .audio-status{font-size:0.82rem;line-height:1.1;font-weight:700;white-space:nowrap;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+    #m1Q2FinalQuestion #submitM1Q2{margin-left:0}
+    #statusM1Q2{display:none;font-size:0.82rem;margin-top:6px;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
     </style>
 </head>
 <body>

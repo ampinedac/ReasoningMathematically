@@ -21,6 +21,8 @@ let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
 let m1Moment3AdvanceListenerAttached = false;
 let m1Q1Submitted = false;
+let m1Q2Submitted = false;
+let m3Q1Submitted = false;
 
 function getM1Q1StorageKey() {
     if (!studentCode) return null;
@@ -468,6 +470,27 @@ function initMoment1() {
         problemSection4.classList.add('hidden');
     };
 
+    const syncBookNextButton = () => {
+        if (!nextBtn) return;
+
+        if (isOnSheet11) {
+            nextBtn.style.display = '';
+            nextBtn.disabled = !m1Q2Submitted;
+            return;
+        }
+
+        if (isOnSheet12) {
+            nextBtn.style.display = '';
+            nextBtn.disabled = !m3Q1Submitted;
+            return;
+        }
+
+        if (isOnSheet13) {
+            nextBtn.style.display = 'none';
+            nextBtn.disabled = true;
+        }
+    };
+
     const showM1Q2FinalQuestion = () => {
         if (!m1Q2FinalQuestion) return;
         buildPairsPhoto();
@@ -477,6 +500,8 @@ function initMoment1() {
             m1Q2AudioInitialized = true;
             const audioState = initAudio('recordBtnM1Q2', 'stopBtnM1Q2', 'audioStatusM1Q2');
             const submitBtn = document.getElementById('submitM1Q2');
+            const recordBtn = document.getElementById('recordBtnM1Q2');
+            const stopBtn = document.getElementById('stopBtnM1Q2');
             if (submitBtn && audioState) {
                 const checkAudio = setInterval(() => {
                     if (audioState.audioBlob) { submitBtn.disabled = false; clearInterval(checkAudio); }
@@ -484,20 +509,30 @@ function initMoment1() {
                 submitBtn.addEventListener('click', async () => {
                     submitBtn.disabled = true;
                     const statusEl = document.getElementById('statusM1Q2');
-                    if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.className = 'status-text loading'; }
+                    if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.className = 'status-text loading'; statusEl.style.display = 'block'; }
                     try {
                         await submitEvidence({
                             moment: 'm1', tag: 'q2-final',
                             data: { question: '¿Por qué bandejas distintas tienen la misma cantidad?' },
                             boardBlob: null, audioBlob: audioState.audioBlob
                         });
-                        if (statusEl) { statusEl.textContent = '✅ ¡Guardado!'; statusEl.className = 'status-text success-text'; }
+                        m1Q2Submitted = true;
+                        if (statusEl) { statusEl.textContent = ''; statusEl.className = 'status-text hidden'; statusEl.style.display = 'none'; }
                         submitBtn.disabled = true;
-                        setTimeout(() => {
-                            showProblemSection3();
-                        }, 900);
+                        submitBtn.style.opacity = '0.5';
+                        submitBtn.style.cursor = 'not-allowed';
+                        if (recordBtn) {
+                            recordBtn.disabled = true;
+                            recordBtn.style.opacity = '0.5';
+                            recordBtn.style.cursor = 'not-allowed';
+                        }
+                        if (stopBtn) {
+                            stopBtn.disabled = true;
+                            stopBtn.classList.add('hidden');
+                        }
+                        syncBookNextButton();
                     } catch (err) {
-                        if (statusEl) { statusEl.textContent = 'Error al guardar. Intenta de nuevo.'; statusEl.className = 'status-text error'; }
+                        if (statusEl) { statusEl.textContent = 'Error al guardar. Intenta de nuevo.'; statusEl.className = 'status-text error'; statusEl.style.display = 'block'; }
                         submitBtn.disabled = false;
                     }
                 });
@@ -559,8 +594,10 @@ function initMoment1() {
         ).join('');
 
         photoContent.innerHTML = `
-            <div class="photo-pairs-grid">${pairsMarkup}</div>
-            ${unpairedList.length > 0 ? `<div class="photo-singles-wrap"><p class="photo-singles-title">Bandejas sin pareja</p><div class="photo-singles-grid">${singlesMarkup}</div></div>` : ''}
+            <div class="photo-pairs-grid">
+                ${pairsMarkup}
+                ${unpairedList.length > 0 ? `<div class="photo-singles-wrap"><p class="photo-singles-title">Bandejas sin pareja</p><div class="photo-singles-grid">${singlesMarkup}</div></div>` : ''}
+            </div>
         `;
         pairsPhotoArea.classList.remove('hidden');
     };
@@ -717,10 +754,6 @@ function initMoment1() {
         if (flipbook) {
             flipbook.style.display = 'none';
         }
-        if (nextBtn) {
-            nextBtn.style.display = 'none';
-            nextBtn.disabled = true;
-        }
         if (soundToggle) {
             soundToggle.style.display = 'none';
         }
@@ -744,16 +777,13 @@ function initMoment1() {
         if (m1Q2Verified) {
             showM1Q2FinalQuestion();
         }
+        syncBookNextButton();
     };
 
     const showProblemSection3 = () => {
         if (!problemSection3) return;
         if (flipbook) {
             flipbook.style.display = 'none';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = 'none';
-            nextBtn.disabled = true;
         }
         if (soundToggle) {
             soundToggle.style.display = 'none';
@@ -782,16 +812,13 @@ function initMoment1() {
                 studentCodeM3.textContent = getStudentHeaderText();
             }
         }
+        syncBookNextButton();
     };
 
     const showProblemSection4 = () => {
         if (!problemSection4) return;
         if (flipbook) {
             flipbook.style.display = 'none';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = 'none';
-            nextBtn.disabled = true;
         }
         if (soundToggle) {
             soundToggle.style.display = 'none';
@@ -816,6 +843,7 @@ function initMoment1() {
             m4BookInitialized = true;
             initMoment4();
         }
+        syncBookNextButton();
     };
 
     const hideProblemSection = () => {
@@ -901,14 +929,27 @@ function initMoment1() {
             }
 
             if (isOnSheet11) {
-                 if (!m1Q2Verified) return;
-                 event.preventDefault();
-                 event.stopImmediatePropagation();
-                showM1Q2FinalQuestion();
-                if (nextBtn) {
-                    nextBtn.disabled = true;
+                if (!m1Q2Submitted) {
+                    return;
                 }
-                 return;
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                playForwardTurnTransition(problemSection2, () => {
+                    showProblemSection3();
+                });
+                return;
+            }
+
+            if (isOnSheet12) {
+                if (!m3Q1Submitted) {
+                    return;
+                }
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                playForwardTurnTransition(problemSection3, () => {
+                    showProblemSection4();
+                });
+                return;
             }
 
             // Solo abrir Situación 1 cuando YA estamos en la última página del cuento (página 9)
@@ -985,10 +1026,6 @@ function initMoment1() {
         console.log('✅ Listener de cambio de página del cuento configurado');
     }
 
-    if (!m1Moment3AdvanceListenerAttached) {
-        document.addEventListener('moment3:problem1-submitted', showProblemSection4);
-        m1Moment3AdvanceListenerAttached = true;
-    }
 }
 
 // ========================================
@@ -1769,7 +1806,7 @@ function initMoment2Audio() {
         }
     };
     
-    const checkInterval = setInterval(checkEvidence, 500);
+    let checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
         // Bloquear botón inmediatamente y permanentemente
@@ -1956,6 +1993,7 @@ function initProblemM3Q1() {
             
             statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
+            m3Q1Submitted = true;
             
             // Bloquear edición
             boardState.disabled = true;
@@ -1964,12 +2002,23 @@ function initProblemM3Q1() {
             
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
-            document.getElementById(recordBtnId).disabled = true;
-            
-            // Avanzar a la página 13 del libro
-            setTimeout(() => {
-                document.dispatchEvent(new CustomEvent('moment3:problem1-submitted'));
-            }, 1000);
+            const recordBtn = document.getElementById(recordBtnId);
+            const stopBtn = document.getElementById(stopBtnId);
+            if (recordBtn) {
+                recordBtn.disabled = true;
+                recordBtn.style.opacity = '0.5';
+                recordBtn.style.cursor = 'not-allowed';
+            }
+            if (stopBtn) {
+                stopBtn.disabled = true;
+                stopBtn.classList.add('hidden');
+            }
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+            }
             
         } catch (error) {
             console.error('Error:', error);
