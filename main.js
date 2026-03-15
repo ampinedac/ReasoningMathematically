@@ -502,22 +502,27 @@ function initMoment1() {
     };
 
     if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
+        // Capturar antes del handler del flipbook para distinguir 8->9 de 9->10
+        nextBtn.addEventListener('click', (event) => {
             if (!problemSection.classList.contains('hidden')) {
                 return;
             }
 
+            // Solo abrir Situación 1 cuando YA estamos en la última página del cuento (página 9)
             if (isAtLastStoryPage) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
                 if (showProblemTimer) {
                     clearTimeout(showProblemTimer);
                 }
 
-                // Dejar sentir el final del giro y luego mostrar la página 10
+                // Pequeño delay para mantener sensación de continuidad
                 showProblemTimer = setTimeout(() => {
                     showProblemSection();
                 }, 220);
             }
-        });
+        }, true);
     }
 
     if (prevBtn) {
