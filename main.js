@@ -427,6 +427,7 @@ function initMoment1() {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const soundToggle = document.getElementById('soundToggle');
+    let showProblemTimer = null;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
 
@@ -438,29 +439,41 @@ function initMoment1() {
         const isLastPage = Boolean(event?.detail?.isLastPage);
 
         if (isLastPage) {
-            if (flipbook) {
-                flipbook.style.display = 'none';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = 'none';
-            }
-            if (soundToggle) {
-                soundToggle.style.display = 'none';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
+            if (showProblemTimer) {
+                clearTimeout(showProblemTimer);
             }
 
-            problemSection.classList.remove('hidden');
-            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Esperar a que termine el giro de página del flipbook para conservar continuidad visual
+            showProblemTimer = setTimeout(() => {
+                if (flipbook) {
+                    flipbook.style.display = 'none';
+                }
+                if (nextBtn) {
+                    nextBtn.style.display = 'none';
+                }
+                if (soundToggle) {
+                    soundToggle.style.display = 'none';
+                }
+                if (prevBtn) {
+                    prevBtn.style.display = '';
+                }
 
-            if (m1Q1Submitted) {
-                applyM1Q1SubmittedLock();
-            } else if (!m1ProblemInitialized) {
-                m1ProblemInitialized = true;
-                initProblemQ1();
-            }
+                problemSection.classList.remove('hidden');
+                problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                if (m1Q1Submitted) {
+                    applyM1Q1SubmittedLock();
+                } else if (!m1ProblemInitialized) {
+                    m1ProblemInitialized = true;
+                    initProblemQ1();
+                }
+            }, 1250);
         } else {
+            if (showProblemTimer) {
+                clearTimeout(showProblemTimer);
+                showProblemTimer = null;
+            }
+
             if (flipbook) {
                 flipbook.style.display = '';
             }

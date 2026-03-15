@@ -28,6 +28,9 @@
     .q1-left-page h3{margin-top:0}
     .q1-left-page p{color:inherit;font-weight:400}
     .q1-left-page .question{color:#000;font-weight:400;margin-top:12px}
+    #problemQ1Section .q1-left-page h3,
+    #problemQ1Section .q1-left-page p,
+    #problemQ1Section .q1-left-page .question{font-size:clamp(0.85rem,1.8vw,1.2rem) !important;line-height:1.6}
     .q1-book-spread .q1-right-page{flex:0 0 50%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px}
 
     /* Centrar título, herramientas y tablero en la columna derecha */
@@ -37,6 +40,15 @@
     .q1-right-page .board-container{max-width:95%;margin:0 auto}
     .board-wrapper{max-width:100%;margin:0 auto}
     .drawing-board{margin:0 auto;display:block}
+    /* Situación 1 derecha: centrar iconos, compactar tablero y dejar acciones visibles */
+    #problemQ1Section .q1-right-page .board-tools{justify-content:center !important}
+    #problemQ1Section .q1-right-page .board-container{max-width:92%;margin:6px auto 4px}
+    #problemQ1Section .q1-right-page .drawing-board{max-height:400px !important}
+    #problemQ1Section .q1-right-page .audio-controls,
+    #problemQ1Section .q1-right-page .submit-section{display:inline-flex;align-items:center;gap:10px;margin:8px 6px 0;vertical-align:middle}
+    #problemQ1Section .q1-right-page .audio-controls{flex-direction:row}
+    #problemQ1Section .q1-right-page .submit-section{justify-content:center;text-align:center}
+    #problemQ1Section .q1-right-page .submit-section .status-text{margin:0}
 
     /* Aplicar tamaño máximo, centrar y comportamiento responsive a todos los tableros */
     .board-container{width:100%;max-width:1200px;margin:0 auto;padding:12px;box-sizing:border-box;border-radius:10px}
@@ -80,6 +92,8 @@
     }
     /* Asegurar estilo consistente del botón cuando se reduce */
     #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
+    #problemQ1Section.q1-book-spread{position:relative}
+    #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
     </style>
 </head>
 <body>
@@ -243,6 +257,7 @@
                                 <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
                             </div>
                         </div>
+                        <div class="page-number">9</div>
                     </div>
                     
                     <!-- Navigation Controls dentro del libro -->
