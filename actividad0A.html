@@ -64,11 +64,7 @@
     /* Cajas específicas solicitadas por el usuario en la pantalla de bienvenida */
     /* Igual ancho que el panel claro (max-width:720px) y opacidad al 75% */
     /* Cajas pequeñas: fondo blanco casi opaco (ligeramente transparente) */
-    /* Igualar espacios verticales entre título, subtítulo y caja principal */
-    :root { --welcome-gap: 24px; }
-    #welcomeScreen .user-rect{width:100%;max-width:720px;margin:var(--welcome-gap) auto;background:rgba(255,255,255,0.95);border-radius:14px;padding:12px 16px;box-sizing:border-box;text-align:center;display:block}
-    /* Asegurar que la caja principal (welcome-box) tenga la misma separación superior */
-    #welcomeScreen .welcome-box{margin:var(--welcome-gap) auto 0}
+    #welcomeScreen .user-rect{width:100%;max-width:720px;margin:12px auto;background:rgba(255,255,255,0.95);border-radius:14px;padding:12px 16px;box-sizing:border-box;text-align:center;display:block}
     /* quitar .user-rect-bottom: el recuadro inferior se elimina según petición */
     #welcomeScreen .user-rect .main-title, #welcomeScreen .user-rect .activity-subtitle{margin:0}
     /* Hacer que el campo de código y el botón tengan el mismo ancho (3/4 del panel) y estén centrados */
