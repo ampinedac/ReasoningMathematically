@@ -88,6 +88,9 @@ let m4_magicLives = 3; // Sistema de vidas mágicas
 let m4_isFinalizing = false;
 let m4_returnHomeTimeout = null;
 let m4_questions = [];
+let m4_completed = false;
+let m4_reflectionSelected = false;
+let m4_closeTriggered = false;
 
 // ========================================
 // INICIALIZACIÓN
@@ -434,6 +437,7 @@ function initMoment1() {
     const problemSection3 = document.getElementById('problemQ3Section');
     const problemSection3b = document.getElementById('problemQ3Section2');
     const problemSection4 = document.getElementById('problemQ4Section');
+    const problemSection5 = document.getElementById('problemQ5Section');
     const m1Q2FinalQuestion = document.getElementById('m1Q2FinalQuestion');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
@@ -447,6 +451,7 @@ function initMoment1() {
     let isOnSheet12 = false;
     let isOnSheet13 = false;
     let isOnSheet14 = false;
+    let isOnSheet15 = false;
     let isSpecialPageTransitioning = false;
     let m1Q2Verified = false;
     let m1Q2AudioInitialized = false;
@@ -480,6 +485,11 @@ function initMoment1() {
         problemSection4.classList.add('hidden');
     };
 
+    const hideProblemSection5 = () => {
+        if (!problemSection5) return;
+        problemSection5.classList.add('hidden');
+    };
+
     const syncBookNextButton = () => {
         if (!nextBtn) return;
 
@@ -502,8 +512,15 @@ function initMoment1() {
         }
 
         if (isOnSheet14) {
-            nextBtn.style.display = 'none';
-            nextBtn.disabled = true;
+            nextBtn.style.display = m4_completed ? '' : 'none';
+            nextBtn.disabled = !m4_completed;
+            return;
+        }
+
+        if (isOnSheet15) {
+            nextBtn.style.display = '';
+            nextBtn.disabled = !m4_reflectionSelected;
+            return;
         }
     };
 
@@ -566,7 +583,7 @@ function initMoment1() {
         }
         goToCocinaBtn.disabled = false;
         goToCocinaBtn.removeAttribute('aria-disabled');
-        goToCocinaBtn.textContent = '🍳 Ir a la cocina a organizar';
+        goToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
     };
 
     const buildPairsPhoto = () => {
@@ -752,11 +769,13 @@ function initMoment1() {
         hideProblemSection3();
         hideProblemSection3b();
         hideProblemSection4();
+        hideProblemSection5();
         isOnSheet10 = true;
         isOnSheet11 = false;
         isOnSheet12 = false;
         isOnSheet13 = false;
         isOnSheet14 = false;
+        isOnSheet15 = false;
 
         if (m1Q1Submitted) {
             applyM1Q1SubmittedLock();
@@ -783,6 +802,7 @@ function initMoment1() {
         hideProblemSection3();
         hideProblemSection3b();
         hideProblemSection4();
+        hideProblemSection5();
         problemSection2.classList.remove('hidden');
         problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
@@ -792,6 +812,7 @@ function initMoment1() {
         isOnSheet12 = false;
         isOnSheet13 = false;
         isOnSheet14 = false;
+        isOnSheet15 = false;
         updateCocinaButtonState();
         initSheet11Trays();
         if (m1Q2Verified) {
@@ -816,6 +837,7 @@ function initMoment1() {
         hideProblemSection2();
         hideProblemSection3b();
         hideProblemSection4();
+        hideProblemSection5();
         problemSection3.classList.remove('hidden');
         problemSection3.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
@@ -825,6 +847,7 @@ function initMoment1() {
         isOnSheet12 = true;
         isOnSheet13 = false;
         isOnSheet14 = false;
+        isOnSheet15 = false;
 
         if (!m3BookInitialized) {
             m3BookInitialized = true;
@@ -860,6 +883,7 @@ function initMoment1() {
         hideProblemSection2();
         hideProblemSection3();
         hideProblemSection4();
+        hideProblemSection5();
         problemSection3b.classList.remove('hidden');
         problemSection3b.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
@@ -869,6 +893,7 @@ function initMoment1() {
         isOnSheet12 = false;
         isOnSheet13 = true;
         isOnSheet14 = false;
+        isOnSheet15 = false;
 
         syncBookNextButton();
     };
@@ -889,6 +914,7 @@ function initMoment1() {
         hideProblemSection2();
         hideProblemSection3();
         hideProblemSection3b();
+        hideProblemSection5();
         problemSection4.classList.remove('hidden');
         problemSection4.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
@@ -898,11 +924,83 @@ function initMoment1() {
         isOnSheet12 = false;
         isOnSheet13 = false;
         isOnSheet14 = true;
+        isOnSheet15 = false;
 
         if (!m4BookInitialized) {
             m4BookInitialized = true;
             initMoment4();
         }
+        syncBookNextButton();
+    };
+
+    const showProblemSection5 = () => {
+        if (!problemSection5) return;
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+
+        problemSection.classList.add('hidden');
+        hideProblemSection2();
+        hideProblemSection3();
+        hideProblemSection3b();
+        hideProblemSection4();
+        problemSection5.classList.remove('hidden');
+        problemSection5.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+
+        isOnSheet10 = false;
+        isOnSheet11 = false;
+        isOnSheet12 = false;
+        isOnSheet13 = false;
+        isOnSheet14 = false;
+        isOnSheet15 = true;
+        syncBookNextButton();
+    };
+
+    const closeBookAndReturnToActivities = () => {
+        if (m4_closeTriggered) return;
+        m4_closeTriggered = true;
+
+        const wrapper = document.querySelector('.flipbook-wrapper');
+        if (wrapper) {
+            wrapper.classList.add('book-closing');
+        }
+
+        if (prevBtn) {
+            prevBtn.style.display = 'none';
+            prevBtn.disabled = true;
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+            nextBtn.disabled = true;
+        }
+
+        const existingOverlay = document.getElementById('bookClosingOverlay');
+        if (!existingOverlay) {
+            const overlay = document.createElement('div');
+            overlay.id = 'bookClosingOverlay';
+            overlay.className = 'book-closing-overlay';
+            overlay.innerHTML = '<div class="book-closing-card"><h3>📚 Cerrando el libro...</h3><p>Regresando a la página de actividades.</p></div>';
+            document.body.appendChild(overlay);
+        }
+
+        if (m4_returnHomeTimeout) {
+            clearTimeout(m4_returnHomeTimeout);
+        }
+        m4_returnHomeTimeout = setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 5000);
+    };
+
+    const updateMoment4ReflectionSelection = () => {
+        const checkedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+        m4_reflectionSelected = checkedOptions.length > 0;
         syncBookNextButton();
     };
 
@@ -936,16 +1034,21 @@ function initMoment1() {
         if (problemSection4) {
             problemSection4.classList.remove('turning-forward');
         }
+        if (problemSection5) {
+            problemSection5.classList.remove('turning-forward');
+        }
         problemSection.classList.add('hidden');
         hideProblemSection2();
         hideProblemSection3();
         hideProblemSection3b();
         hideProblemSection4();
+        hideProblemSection5();
         isOnSheet10 = false;
         isOnSheet11 = false;
         isOnSheet12 = false;
         isOnSheet13 = false;
         isOnSheet14 = false;
+        isOnSheet15 = false;
     };
 
     const syncM1WithFlipbookPage = (event) => {
@@ -1029,6 +1132,28 @@ function initMoment1() {
                 return;
             }
 
+            if (isOnSheet14) {
+                if (!m4_completed) {
+                    return;
+                }
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                playForwardTurnTransition(problemSection4, () => {
+                    showProblemSection5();
+                });
+                return;
+            }
+
+            if (isOnSheet15) {
+                if (!m4_reflectionSelected) {
+                    return;
+                }
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                closeBookAndReturnToActivities();
+                return;
+            }
+
             // Solo abrir Situación 1 cuando YA estamos en la última página del cuento (página 9)
             if (isAtLastStoryPage) {
                 event.preventDefault();
@@ -1057,6 +1182,13 @@ function initMoment1() {
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 showProblemSection3b();
+                return;
+            }
+
+            if (isOnSheet15) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                showProblemSection4();
                 return;
             }
 
@@ -1098,6 +1230,15 @@ function initMoment1() {
     }
 
     updateCocinaButtonState();
+
+    document.querySelectorAll('input[name="m4Reflection"]').forEach((option) => {
+        option.addEventListener('change', updateMoment4ReflectionSelection);
+    });
+
+    document.addEventListener('moment4:completed', () => {
+        m4_completed = true;
+        syncBookNextButton();
+    });
 
     // Estado inicial: en el cuento no se muestra la respuesta
     if (problemSection && !problemSection.classList.contains('hidden')) {
@@ -1987,8 +2128,8 @@ function showPrompt1(choice) {
     const placeholder = document.getElementById('m3Q1Placeholder');
     
     const prompts = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
+        yes: 'Explica cómo lo sabes',
+        no: '¿Con qué números crees que no funcionaría?',
         unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
     };
     
@@ -2008,8 +2149,8 @@ function showPrompt2(choice) {
     const placeholder = document.getElementById('m3Q2Placeholder');
     
     const prompts = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
+        yes: 'Explica cómo lo sabes',
+        no: '¿Con qué números crees que no funcionaría?',
         unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
     };
     
@@ -2207,6 +2348,9 @@ function initMoment4() {
     m4_errorsConsecutiveMax = 0;
     m4_magicLives = 3;
     m4_isFinalizing = false;
+    m4_completed = false;
+    m4_reflectionSelected = false;
+    m4_closeTriggered = false;
     if (m4_returnHomeTimeout) {
         clearTimeout(m4_returnHomeTimeout);
         m4_returnHomeTimeout = null;
@@ -2216,6 +2360,10 @@ function initMoment4() {
     const finalSection = document.getElementById('finalQuestionSection');
     if (finalSection) {
         finalSection.classList.add('hidden');
+    }
+    const magicTheme = document.querySelector('#problemQ4Section .magic-theme');
+    if (magicTheme) {
+        magicTheme.classList.remove('m4-final-only');
     }
 
     document.getElementById('studentCodeM4').textContent = getStudentHeaderText();
@@ -2592,6 +2740,10 @@ async function finalizeMoment4() {
         // Mostrar pantalla final
         const finalSection = document.getElementById('finalQuestionSection');
         finalSection.classList.remove('hidden');
+        const magicTheme = document.querySelector('#problemQ4Section .magic-theme');
+        if (magicTheme) {
+            magicTheme.classList.add('m4-final-only');
+        }
         
         // Celebración si termina con al menos 1 vida
         if (m4_magicLives > 0) {
@@ -2603,12 +2755,12 @@ async function finalizeMoment4() {
             
             const finalBox = finalSection.querySelector('.final-box');
             finalBox.innerHTML = `
-                <h3 style="color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);">🎉 ¡Increíble! 🎉</h3>
-                <p class="final-question" style="font-size: 1.4em; color: #fff; margin: 20px 0;">
+                <h3 class="m4-special-title">🎉 ¡Increíble! 🎉</h3>
+                <p class="final-question m4-special-message">
                     ¡Completaste todos los desafíos sin perder ninguna vida mágica! ✨
                 </p>
-                <p style="font-size: 1.6em; color: #ffd700; font-weight: bold; margin: 25px 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);">
-                    🌟 Puedes reclamar <strong style="font-size: 1.3em;">3 PUNTOS POSITIVOS</strong> 🌟
+                <p class="m4-special-points">
+                    🌟 Puedes reclamar <strong>3 PUNTOS POSITIVOS</strong> 🌟
                 </p>
                 <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
                 <p class="thank-you-sub">¡Gracias por participar!</p>
@@ -2621,19 +2773,14 @@ async function finalizeMoment4() {
                 totalPointsEl.textContent = points;
             }
         }
-
-        statusText.textContent = 'Completado ✅ Regresando al inicio...';
-        m4_returnHomeTimeout = setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 8000);
+        m4_completed = true;
+        statusText.textContent = 'Completado ✅ Continúa con la siguiente página.';
+        document.dispatchEvent(new CustomEvent('moment4:completed'));
         
     } catch (error) {
         console.error('Error:', error);
-        statusText.textContent = 'Error al guardar. Regresando al inicio...';
+        statusText.textContent = 'Error al guardar. Intenta de nuevo.';
         statusText.className = 'status-text error';
-        m4_returnHomeTimeout = setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 5000);
     }
 }
 

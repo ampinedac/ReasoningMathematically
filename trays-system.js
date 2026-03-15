@@ -387,10 +387,43 @@ class TraysSystem {
     
     // Reorganizar layout después de emparejar/desemparejar
     reorganizeLayout() {
-        // Los wrappers ocupan 2 columnas (span 2)
-        // Las bandejas solas ocupan 1 columna
-        // El CSS grid se encarga automáticamente del flujo
-        console.log('📐 Layout reorganizado automáticamente por CSS Grid');
+        // Reordenar nodos por orden base para evitar encimes visuales
+        // y forzar redistribución limpia de bandejas libres.
+        const groups = [];
+        const seen = new Set();
+
+        this.BASE_TRAYS.forEach((trayData) => {
+            const id = trayData.id;
+            if (seen.has(id)) return;
+
+            const mateId = this.pairings.get(id);
+            if (mateId) {
+                const pairKey = [id, mateId].sort().join('-');
+                const wrapper = this.container.querySelector(`.tray-pair-wrapper[data-pair="${pairKey}"]`);
+                if (wrapper) {
+                    groups.push(wrapper);
+                    seen.add(id);
+                    seen.add(mateId);
+                    return;
+                }
+            }
+
+            const tray = this.getTrayElement(id);
+            if (tray) {
+                groups.push(tray);
+                seen.add(id);
+            }
+        });
+
+        // Si hay wrappers huérfanos, conservarlos al final para no perder estado visual.
+        this.container.querySelectorAll('.tray-pair-wrapper').forEach((wrapper) => {
+            if (!groups.includes(wrapper)) {
+                groups.push(wrapper);
+            }
+        });
+
+        groups.forEach((node) => this.container.appendChild(node));
+        console.log('📐 Layout redistribuido: pares y bandejas libres reordenados');
         this.scheduleResponsiveSizing();
     }
     
