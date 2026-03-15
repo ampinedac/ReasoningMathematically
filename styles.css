@@ -81,6 +81,11 @@ section.screen::before {
     z-index: 0;
 }
 
+section.screen > * {
+    position: relative;
+    z-index: 1;
+}
+
 /* ===== PROGRESS INDICATOR ===== */
 .progress-container {
     position: fixed;
