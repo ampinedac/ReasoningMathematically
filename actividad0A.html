@@ -97,6 +97,16 @@
     #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
     #problemQ1Section.q1-book-spread{position:relative}
     #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
+    #problemQ2Section.q1-book-spread{position:relative}
+    #problemQ2Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
+    #problemQ2Section .q1-left-page p{width:92%;max-width:460px;margin:8px auto;text-align:justify;line-height:1.45}
+    #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:8px auto;text-align:justify;font-size:clamp(0.9rem,1.45vw,1.05rem)}
+    #problemQ2Section .q1-right-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+    #problemQ2Section .trays-container{width:100%;max-width:100%;grid-template-columns:repeat(4, minmax(0, 1fr)) !important;gap:14px !important;padding:14px !important;min-height:auto}
+    #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1;min-height:0 !important;height:auto;padding:10px}
+    #problemQ2Section .trays-container .tray-grid{max-width:100%;max-height:100%}
+    #problemQ2Section .q1-right-page .btn{margin-top:10px}
+    #problemQ2Section .q1-right-page .feedback-text{min-height:30px;padding:8px 10px;font-size:0.95rem}
     .author-credit{position:fixed;top:10px;right:14px;z-index:1200;font-size:12px;line-height:1;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.78);color:#2a3d55;font-weight:700;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(0,0,0,0.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
     @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
     </style>
@@ -265,6 +275,23 @@
                         </div>
                         <div class="page-number">10</div>
                     </div>
+
+                    <!-- HOJA 11: BANDEJAS -->
+                    <div id="problemQ2Section" class="hidden q1-book-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Situación 2</h3>
+                            <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Cada tarjeta muestra una forma diferente de organizarlas.</p>
+                            <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos:</strong></p>
+                            <p class="instruction-hint">💡 Arrastra las bandejas para juntarlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
+                        </div>
+
+                        <div class="evidence-section q1-right-page">
+                            <div id="traysAreaM1Q2" class="trays-container"></div>
+                            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">Verificar emparejamientos</button>
+                            <p id="traysFeedbackM1Q2" class="feedback-text"></p>
+                        </div>
+                        <div class="page-number">11</div>
+                    </div>
                     
                     <!-- Navigation Controls dentro del libro -->
                     <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
@@ -288,7 +315,7 @@
             <div class="problem-box">
                 <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Cada tarjeta muestra una forma diferente de organizarlas.</p>
                 <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos:</strong></p>
-                <p class="instruction-hint">💡 Arrastra las bandejas para juntarlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
+                <p class="instruction-hint">💡 Selecciona dos bandejas para unirlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
             </div>
 
             <!-- ÁREA DE BANDEJAS -->

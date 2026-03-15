@@ -423,21 +423,72 @@ function initMoment1() {
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
     const problemSection = document.getElementById('problemQ1Section');
+    const problemSection2 = document.getElementById('problemQ2Section');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const soundToggle = document.getElementById('soundToggle');
     let showProblemTimer = null;
     let isAtLastStoryPage = false;
+    let traysM1Q2Initialized = false;
+    let isOnSheet10 = false;
+    let isOnSheet11 = false;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+
+    const hideProblemSection2 = () => {
+        if (!problemSection2) return;
+        problemSection2.classList.add('hidden');
+    };
+
+    const initSheet11Trays = () => {
+        if (traysM1Q2Initialized) return;
+
+        try {
+            if (traysSystem) {
+                traysSystem.destroy();
+                traysSystem = null;
+            }
+
+            traysSystem = new TraysSystem('traysAreaM1Q2');
+            traysM1Q2Initialized = true;
+
+            const verifyBtn = document.getElementById('verifyTraysBtnM1Q2');
+            const feedback = document.getElementById('traysFeedbackM1Q2');
+
+            if (verifyBtn && feedback) {
+                verifyBtn.addEventListener('click', () => {
+                    const pairs = traysSystem.getPairings();
+                    const results = traysSystem.validatePairings();
+                    const allCorrect = results.length > 0 && results.every(r => r.isCorrect);
+
+                    if (pairs.length < 4) {
+                        feedback.textContent = 'Aún faltan emparejamientos por hacer.';
+                        feedback.className = 'feedback-text info';
+                        return;
+                    }
+
+                    if (allCorrect) {
+                        feedback.textContent = '¡Excelente! Todas las parejas tienen la misma cantidad.';
+                        feedback.className = 'feedback-text success';
+                    } else {
+                        feedback.textContent = 'Hay parejas con cantidades distintas. Revisa e intenta de nuevo.';
+                        feedback.className = 'feedback-text error';
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('❌ Error al inicializar bandejas de hoja 11:', error);
+        }
+    };
 
     const showProblemSection = () => {
         if (flipbook) {
             flipbook.style.display = 'none';
         }
         if (nextBtn) {
-            nextBtn.style.display = 'none';
+            nextBtn.style.display = '';
+            nextBtn.disabled = !m1Q1Submitted;
         }
         if (soundToggle) {
             soundToggle.style.display = 'none';
@@ -454,12 +505,46 @@ function initMoment1() {
             problemSection.classList.remove('page-enter');
         }, 900);
 
+        hideProblemSection2();
+        isOnSheet10 = true;
+        isOnSheet11 = false;
+
         if (m1Q1Submitted) {
             applyM1Q1SubmittedLock();
         } else if (!m1ProblemInitialized) {
             m1ProblemInitialized = true;
             initProblemQ1();
         }
+    };
+
+    const showProblemSection2 = () => {
+        if (!problemSection2) return;
+
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+            nextBtn.disabled = true;
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+
+        problemSection.classList.add('hidden');
+        problemSection2.classList.remove('hidden');
+        problemSection2.classList.add('page-enter');
+        problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+            problemSection2.classList.remove('page-enter');
+        }, 900);
+
+        isOnSheet10 = false;
+        isOnSheet11 = true;
+        initSheet11Trays();
     };
 
     const hideProblemSection = () => {
@@ -481,6 +566,9 @@ function initMoment1() {
 
         problemSection.classList.remove('page-enter');
         problemSection.classList.add('hidden');
+        hideProblemSection2();
+        isOnSheet10 = false;
+        isOnSheet11 = false;
     };
 
     const syncM1WithFlipbookPage = (event) => {
@@ -510,7 +598,17 @@ function initMoment1() {
     if (nextBtn) {
         // Capturar antes del handler del flipbook para distinguir 8->9 de 9->10
         nextBtn.addEventListener('click', (event) => {
-            if (!problemSection.classList.contains('hidden')) {
+            if (isOnSheet10) {
+                if (!m1Q1Submitted) {
+                    return;
+                }
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                showProblemSection2();
+                return;
+            }
+
+            if (isOnSheet11) {
                 return;
             }
 
@@ -534,7 +632,14 @@ function initMoment1() {
     if (prevBtn) {
         // En la página 10 (Situación 1), volver exactamente a la página 9 del cuento
         prevBtn.addEventListener('click', (event) => {
-            if (!problemSection.classList.contains('hidden')) {
+            if (isOnSheet11) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                showProblemSection();
+                return;
+            }
+
+            if (isOnSheet10) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 if (showProblemTimer) {
@@ -653,6 +758,13 @@ function initProblemQ1() {
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.5';
             submitBtn.style.cursor = 'not-allowed';
+
+            // Al enviar en la hoja 10, habilitar la flecha derecha para pasar a la hoja 11
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+            }
             
             // Bloquear edición
             boardState.disabled = true;
@@ -664,11 +776,7 @@ function initProblemQ1() {
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Continuar automáticamente al Momento 2 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment2Screen');
-                initMoment2();
-            }, 1000);
+            // Ya no salta automáticamente de pantalla: la flecha derecha lleva a la hoja 11
             
         } catch (error) {
             console.error('Error al enviar:', error);
