@@ -1,5 +1,5 @@
 // main.js - Lógica principal de la aplicación
-import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
+import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
 import { estudiantesData } from './assets/estudiantes-data.js';
 
 console.log('✅ Firebase cargado correctamente');
@@ -90,7 +90,17 @@ let m4_returnHomeTimeout = null;
 let m4_questions = [];
 let m4_completed = false;
 let m4_reflectionSelected = false;
+let m4_reflectionSaved = false;
+let m4_reflectionSaving = false;
 let m4_closeTriggered = false;
+
+const M4_REFLECTION_OPTION_MAP = {
+    'facil': 'facil',
+    'interesante': 'interesante',
+    'dificil': 'dificil',
+    'pensar-mucho': 'pensarMucho',
+    'confusa': 'confusa'
+};
 
 // ========================================
 // INICIALIZACIÓN
@@ -998,9 +1008,191 @@ function initMoment1() {
         }, 5000);
     };
 
-    const updateMoment4ReflectionSelection = () => {
+    const getMoment4ReflectionSelection = () => {
+        const checkedOptions = Array.from(document.querySelectorAll('input[name="m4Reflection"]:checked'));
+        const values = checkedOptions.map((option) => option.value);
+        const labels = checkedOptions.map((option) => {
+            const label = option.closest('label');
+            return (label?.textContent || option.value).trim();
+        });
+
+        return { values, labels };
+    };
+
+    const getParticipantIdentifier = () => {
+        const participantName = [studentInfo?.nombre, studentInfo?.apellidos]
+            .filter(Boolean)
+            .join(' ')
+            .trim();
+
+        const effectiveIdentifier = (studentCode === '0000' && participantName)
+            ? participantName
+            : studentCode;
+
+        const storageSafeIdentifier = String(effectiveIdentifier || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9_-]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+
+        return storageSafeIdentifier || 'invitado';
+    };
+
+    const saveMoment4ReflectionStats = async (selectedValues, selectedLabels) => {
+        if (!db) {
+            throw new Error('Firestore no está disponible para actualizar estadísticas.');
+        }
+
+        const selectedFields = selectedValues
+            .map((value) => M4_REFLECTION_OPTION_MAP[value])
+            .filter(Boolean);
+
+        const uniqueSelectedFields = Array.from(new Set(selectedFields));
+        const participantIdentifier = getParticipantIdentifier();
+        const responseRef = doc(db, 'reflectionResponses', `act0_m4_${participantIdentifier}`);
+        const statsRef = doc(db, 'stats', 'act0_m4_reflection');
+
+        await runTransaction(db, async (transaction) => {
+            const previousResponseSnapshot = await transaction.get(responseRef);
+            const statsSnapshot = await transaction.get(statsRef);
+
+            const previousSelectedFields = Array.isArray(previousResponseSnapshot.data()?.selectedFields)
+                ? previousResponseSnapshot.data().selectedFields
+                : [];
+
+            const counters = {
+                facil: Number(statsSnapshot.data()?.facil || 0),
+                interesante: Number(statsSnapshot.data()?.interesante || 0),
+                dificil: Number(statsSnapshot.data()?.dificil || 0),
+                pensarMucho: Number(statsSnapshot.data()?.pensarMucho || 0),
+                confusa: Number(statsSnapshot.data()?.confusa || 0),
+                totalResponses: Number(statsSnapshot.data()?.totalResponses || 0)
+            };
+
+            const counterKeys = ['facil', 'interesante', 'dificil', 'pensarMucho', 'confusa'];
+            counterKeys.forEach((key) => {
+                const wasSelected = previousSelectedFields.includes(key);
+                const isSelected = uniqueSelectedFields.includes(key);
+
+                if (wasSelected && !isSelected) {
+                    counters[key] = Math.max(0, counters[key] - 1);
+                }
+
+                if (!wasSelected && isSelected) {
+                    counters[key] += 1;
+                }
+            });
+
+            if (!previousResponseSnapshot.exists()) {
+                counters.totalResponses += 1;
+            }
+
+            transaction.set(responseRef, {
+                participantIdentifier,
+                activity: 'act0',
+                moment: 'm4',
+                tag: 'reflection-final',
+                selectedOptions: selectedValues,
+                selectedLabels,
+                selectedFields: uniqueSelectedFields,
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+
+            transaction.set(statsRef, {
+                activity: 'act0',
+                moment: 'm4',
+                tag: 'reflection-final',
+                facil: counters.facil,
+                interesante: counters.interesante,
+                dificil: counters.dificil,
+                pensarMucho: counters.pensarMucho,
+                confusa: counters.confusa,
+                totalResponses: counters.totalResponses,
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+        });
+    };
+
+    const saveMoment4Reflection = async () => {
+        if (m4_reflectionSaved) return true;
+        if (m4_reflectionSaving) return false;
+
+        const { values, labels } = getMoment4ReflectionSelection();
+        if (values.length === 0 || values.length > 2) {
+            const hint = document.querySelector('#problemQ5Section .reflection-hint');
+            if (hint) {
+                hint.textContent = values.length > 2
+                    ? 'Puedes seleccionar máximo dos opciones.'
+                    : 'Selecciona al menos una opción para continuar.';
+            }
+            return false;
+        }
+
+        const nextButton = document.getElementById('nextBtn');
+        const hint = document.querySelector('#problemQ5Section .reflection-hint');
+        m4_reflectionSaving = true;
+
+        if (nextButton) {
+            nextButton.disabled = true;
+        }
+        if (hint) {
+            hint.textContent = 'Guardando tu respuesta...';
+        }
+
+        try {
+            await submitEvidence({
+                moment: 'm4',
+                tag: 'reflection-final',
+                data: {
+                    selectedOptions: values,
+                    selectedLabels: labels,
+                    selectedCount: values.length
+                },
+                boardBlob: null,
+                audioBlob: null
+            });
+
+            await saveMoment4ReflectionStats(values, labels);
+
+            m4_reflectionSaved = true;
+            if (hint) {
+                hint.textContent = 'Respuesta guardada. Puedes continuar.';
+            }
+            return true;
+        } catch (error) {
+            console.error('❌ Error al guardar reflexión final:', error);
+            if (hint) {
+                hint.textContent = 'No se pudo guardar. Revisa internet e intenta de nuevo.';
+            }
+            return false;
+        } finally {
+            m4_reflectionSaving = false;
+            syncBookNextButton();
+        }
+    };
+
+    const updateMoment4ReflectionSelection = (event) => {
         const checkedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
-        m4_reflectionSelected = checkedOptions.length > 0;
+        const hint = document.querySelector('#problemQ5Section .reflection-hint');
+
+        if (checkedOptions.length > 2 && event?.target) {
+            event.target.checked = false;
+        }
+
+        const validCheckedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+        m4_reflectionSelected = validCheckedOptions.length > 0 && validCheckedOptions.length <= 2;
+        m4_reflectionSaved = false;
+
+        if (hint) {
+            if (validCheckedOptions.length === 0) {
+                hint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+            } else if (validCheckedOptions.length >= 2) {
+                hint.textContent = 'Ya seleccionaste el máximo de dos opciones.';
+            } else {
+                hint.textContent = 'Puedes seleccionar una opción más (máximo dos).';
+            }
+        }
+
         syncBookNextButton();
     };
 
@@ -1077,7 +1269,7 @@ function initMoment1() {
 
     if (nextBtn) {
         // Capturar antes del handler del flipbook para distinguir 8->9 de 9->10
-        nextBtn.addEventListener('click', (event) => {
+        nextBtn.addEventListener('click', async (event) => {
             if (isSpecialPageTransitioning) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
@@ -1150,6 +1342,12 @@ function initMoment1() {
                 }
                 event.preventDefault();
                 event.stopImmediatePropagation();
+
+                const saved = await saveMoment4Reflection();
+                if (!saved) {
+                    return;
+                }
+
                 closeBookAndReturnToActivities();
                 return;
             }
@@ -2350,6 +2548,8 @@ function initMoment4() {
     m4_isFinalizing = false;
     m4_completed = false;
     m4_reflectionSelected = false;
+    m4_reflectionSaved = false;
+    m4_reflectionSaving = false;
     m4_closeTriggered = false;
     if (m4_returnHomeTimeout) {
         clearTimeout(m4_returnHomeTimeout);
@@ -2364,6 +2564,10 @@ function initMoment4() {
     const magicTheme = document.querySelector('#problemQ4Section .magic-theme');
     if (magicTheme) {
         magicTheme.classList.remove('m4-final-only');
+    }
+    const problemQ4Section = document.getElementById('problemQ4Section');
+    if (problemQ4Section) {
+        problemQ4Section.classList.remove('m4-final-only');
     }
 
     document.getElementById('studentCodeM4').textContent = getStudentHeaderText();
@@ -2743,6 +2947,10 @@ async function finalizeMoment4() {
         const magicTheme = document.querySelector('#problemQ4Section .magic-theme');
         if (magicTheme) {
             magicTheme.classList.add('m4-final-only');
+        }
+        const problemQ4Section = document.getElementById('problemQ4Section');
+        if (problemQ4Section) {
+            problemQ4Section.classList.add('m4-final-only');
         }
         
         // Celebración si termina con al menos 1 vida

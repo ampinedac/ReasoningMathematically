@@ -3,7 +3,7 @@
 
 // Importar funciones necesarias del SDK
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, addDoc, doc, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 // Your web app's Firebase configuration
@@ -33,7 +33,7 @@ try {
 export { db, storage };
 
 // Exportar funciones de Firestore
-export { collection, addDoc, serverTimestamp };
+export { collection, addDoc, doc, runTransaction, serverTimestamp };
 
 // Exportar funciones de Storage
 export { ref, uploadBytes, getDownloadURL };

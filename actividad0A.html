@@ -158,12 +158,12 @@
     .cocina-header{text-align:center;padding:18px 20px 12px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.22);flex-shrink:0}
     .cocina-header h2{margin:0 0 4px;font-size:clamp(1.3rem,3vw,2rem);font-family:'Comic Sans MS',cursive;text-shadow:2px 2px 4px rgba(0,0,0,0.28)}
     .cocina-header p{margin:0;font-size:clamp(0.9rem,2vw,1.1rem);opacity:0.95}
-    .cocina-body{flex:1;padding:6px 96px 10px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;overflow:visible;position:relative}
+    .cocina-body{flex:1;padding:26px 96px 12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;overflow:hidden;position:relative}
     .cocina-body::before,
     .cocina-body::after{position:absolute;top:22px;bottom:22px;width:78px;border-radius:24px;background:linear-gradient(180deg,#a66b3f 0%,#8a572d 48%,#6f4523 100%);border:4px solid rgba(111,69,35,0.8);box-shadow:inset 0 0 0 4px rgba(255,235,200,0.14),0 12px 24px rgba(90,56,26,0.22);color:#fff4de;font-size:2rem;line-height:1.9;white-space:pre;text-align:center;padding-top:20px;pointer-events:none;opacity:0.96}
     .cocina-body::before{content:'🥖\A🍞\A🧁\A🥣\A🥐';left:18px}
     .cocina-body::after{content:'🧈\A🥨\A🍪\A☕\A🫓';right:18px}
-    .cocina-body .trays-container{width:min(100%,1080px);max-width:1080px;flex:0 0 auto;min-height:420px;height:auto;max-height:none;grid-template-columns:repeat(4,1fr) !important;grid-auto-flow:row dense;grid-auto-rows:minmax(140px, auto);align-content:start !important;gap:clamp(10px,1.4vw,18px) !important;padding:clamp(12px,1.8vw,24px) !important;justify-items:stretch;overflow:visible;border-radius:28px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 3px rgba(255,232,198,0.16),inset 0 0 0 10px rgba(84,50,26,0.22),0 16px 34px rgba(84,50,26,0.28);position:relative}
+    .cocina-body .trays-container{width:min(100%,1040px);max-width:1040px;flex:0 0 auto;min-height:420px;height:auto;max-height:none;margin-top:12px;margin-bottom:20px;grid-template-columns:repeat(4,1fr) !important;grid-auto-flow:row dense;grid-auto-rows:minmax(140px, auto);align-content:start !important;gap:clamp(10px,1.4vw,18px) !important;padding:clamp(12px,1.8vw,24px) !important;justify-items:stretch;overflow:visible;border-radius:28px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 3px rgba(255,232,198,0.16),inset 0 0 0 10px rgba(84,50,26,0.22),0 16px 34px rgba(84,50,26,0.28);position:relative}
     .cocina-body .trays-container::before{content:'';position:absolute;inset:0;border-radius:28px;background:linear-gradient(25deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 16%,rgba(82,47,23,0.08) 16%,rgba(82,47,23,0.08) 32%,rgba(255,255,255,0.03) 32%,rgba(255,255,255,0.03) 48%,rgba(82,47,23,0.08) 48%,rgba(82,47,23,0.08) 64%,rgba(255,255,255,0.03) 64%,rgba(255,255,255,0.03) 80%,rgba(82,47,23,0.08) 80%,rgba(82,47,23,0.08) 100%);mix-blend-mode:soft-light;pointer-events:none}
     #cocinaScreen .trays-container,
     #cocinaScreen .trays-container *{cursor:url('assets/images/hand-point-cursor.svg') 16 12, grab !important}
@@ -173,10 +173,10 @@
     #cocinaScreen .tray-card{width:100%;aspect-ratio:1/1 !important;height:auto !important;min-height:0 !important;padding:clamp(8px,1.1vw,12px);box-sizing:border-box}
     #cocinaScreen .tray-grid{width:100%;height:100%;max-width:none;max-height:none}
     #cocinaScreen .tray-item-image{width:110%;height:110%;max-width:none;max-height:none}
-    .cocina-controls{padding:10px 20px 14px;text-align:center;background:linear-gradient(180deg,rgba(255,248,239,0.9),rgba(247,231,209,0.88));border-top:2px solid rgba(146,96,54,0.22);display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0}
-    .cocina-controls .btn-primary{font-size:clamp(0.95rem,2vw,1.15rem);padding:12px 32px}
-    @media (max-width:1200px){.cocina-body{padding-left:74px;padding-right:74px}.cocina-body .trays-container{width:min(100%,980px);grid-auto-rows:minmax(130px, auto)}}
-    @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:16px 20px 18px;overflow:visible}.cocina-body::before,.cocina-body::after{display:none}.cocina-body .trays-container{width:100%;max-width:760px;flex:none;height:auto;max-height:none;grid-template-columns:repeat(2,minmax(0,1fr)) !important;grid-template-rows:auto !important;gap:14px !important;padding:18px !important}#cocinaScreen .tray-card{aspect-ratio:1/1 !important;height:auto !important}}
+    .cocina-controls{padding:18px 20px 20px;text-align:center;background:transparent;border-top:none;display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;position:relative;z-index:3}
+    .cocina-controls .btn-primary{font-size:clamp(0.95rem,2vw,1.15rem);padding:12px 32px;margin-top:6px}
+    @media (max-width:1200px){.cocina-body{padding-left:74px;padding-right:74px}.cocina-body .trays-container{width:min(100%,960px);grid-auto-rows:minmax(130px, auto)}}
+    @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:22px 20px 14px;overflow:hidden}.cocina-body::before,.cocina-body::after{display:none}.cocina-body .trays-container{margin-top:8px;margin-bottom:14px;width:100%;max-width:760px;flex:none;height:auto;max-height:none;grid-template-columns:repeat(2,minmax(0,1fr)) !important;grid-template-rows:auto !important;gap:14px !important;padding:18px !important}#cocinaScreen .tray-card{aspect-ratio:1/1 !important;height:auto !important}}
 
     /* ===== BOTÓN IR A COCINA ===== */
     #problemQ2Section .btn-cocina{display:block;width:92%;max-width:460px;margin:18px auto 0;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;border:none;border-radius:16px;padding:16px 24px;font-size:clamp(1rem,1.8vw,1.25rem);font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.38);transition:all 0.3s;text-shadow:1px 1px 2px rgba(0,0,0,0.18)}
@@ -295,6 +295,8 @@
     #problemQ4Section .magic-theme.m4-final-only .student-code-display,
     #problemQ4Section .magic-theme.m4-final-only .magic-lives-container,
     #problemQ4Section .magic-theme.m4-final-only .items-container{display:none !important}
+    #problemQ4Section .magic-theme.m4-final-only ~ .q1-left-page .magic-lives-container,
+    #problemQ4Section.m4-final-only .q1-left-page .magic-lives-container{display:none !important}
     #problemQ4Section .magic-theme.m4-final-only{display:flex;align-items:center;justify-content:center;padding:24px !important}
     #problemQ4Section .magic-theme.m4-final-only #finalQuestionSection{width:min(100%,780px);margin:0 auto}
     #problemQ4Section .final-box{background:linear-gradient(135deg,#f4fbff 0%,#dff4ea 55%,#fff4d8 100%);border:2px solid rgba(245,158,11,0.45);border-radius:20px;padding:38px 30px;text-align:center;margin:8px 0;color:#17324d;box-shadow:0 14px 34px rgba(10,42,67,0.24)}
@@ -717,10 +719,6 @@
                                 <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
                                 <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
                             </div>
-                        </div>
-
-                        <div class="q1-right-page magic-theme">
-                            <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
                             <div class="magic-lives-container">
                                 <span class="magic-label">✨ Vidas mágicas:</span>
                                 <div id="magicLives" class="magic-lives">
@@ -729,6 +727,10 @@
                                     <span class="magic-heart">❤️</span>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="q1-right-page magic-theme">
+                            <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
                             <div class="items-container">
                                 <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
                                 <div id="itemsWrapper"></div>
@@ -755,13 +757,13 @@
                                 <h3>¡Llegaste al final del cuento! 🌟</h3>
                                 <p>Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
                                 <p>Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
-                                <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta tarea.</p>
+                                <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
                             </div>
                         </div>
 
                         <div class="q1-right-page">
                             <div class="reflection-card">
-                                <h4>Esta tarea fue:</h4>
+                                <h4>Esta actividad fue:</h4>
                                 <div class="reflection-options">
                                     <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
                                     <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
@@ -769,7 +771,7 @@
                                     <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
                                     <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
                                 </div>
-                                <p class="reflection-hint">Selecciona al menos una opción para continuar.</p>
+                                <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
                             </div>
                         </div>
                         <div class="page-number">15</div>
@@ -860,7 +862,7 @@
 
     <!-- Scripts -->
     <script src="trays-system.js?v=2026031503"></script>
-    <script type="module" src="main.js?v=2026031512"></script>
+    <script type="module" src="main.js?v=2026031515"></script>
     <script src="app.js?v=2026031503"></script>
 </body>
 </html>
