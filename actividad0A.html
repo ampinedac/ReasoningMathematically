@@ -98,13 +98,24 @@
     #problemQ1Section.q1-book-spread{position:relative}
     #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
     #problemQ2Section.q1-book-spread{position:relative}
+    #problemQ2Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;width:95%;max-width:none;min-height:600px;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd}
+    #problemQ2Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
     #problemQ2Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
+    #problemQ2Section .q1-left-page,
+    #problemQ2Section .q1-right-page{margin:0;max-width:none;min-height:600px;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
+    #problemQ2Section .problem-box{background:transparent;border:0;box-shadow:none;padding:20px}
+    #problemQ2Section .q1-left-page h3,
+    #problemQ2Section .q1-left-page p,
+    #problemQ2Section .q1-left-page .instruction-hint{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+    #problemQ2Section .q1-left-page h3{margin-top:0;margin-bottom:8px}
     #problemQ2Section .q1-left-page p{width:92%;max-width:460px;margin:8px auto;text-align:justify;line-height:1.45}
-    #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:8px auto;text-align:justify;font-size:clamp(0.9rem,1.45vw,1.05rem)}
+    #problemQ2Section .q1-left-page p{margin-bottom:6px}
+    #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:8px auto 0;text-align:justify;background:transparent;border:0;padding:0}
     #problemQ2Section .q1-right-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
     #problemQ2Section .trays-container{width:100%;max-width:100%;grid-template-columns:repeat(4, minmax(0, 1fr)) !important;gap:14px !important;padding:14px !important;min-height:auto}
-    #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1;min-height:0 !important;height:auto;padding:10px}
-    #problemQ2Section .trays-container .tray-grid{max-width:100%;max-height:100%}
+    #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1;min-height:0 !important;height:auto;padding:10px;overflow:hidden}
+    #problemQ2Section .trays-container .tray-grid{max-width:100%;max-height:100%;overflow:hidden;justify-items:center;align-items:center;gap:2px}
+    #problemQ2Section .trays-container .tray-item{font-size:0.82rem !important;line-height:1 !important}
     #problemQ2Section .q1-right-page .btn{margin-top:10px}
     #problemQ2Section .q1-right-page .feedback-text{min-height:30px;padding:8px 10px;font-size:0.95rem}
     .author-credit{position:fixed;top:10px;right:14px;z-index:1200;font-size:12px;line-height:1;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.78);color:#2a3d55;font-weight:700;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(0,0,0,0.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
