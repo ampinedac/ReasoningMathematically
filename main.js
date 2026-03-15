@@ -19,6 +19,7 @@ let pairs = [];
 let traysSystem = null; // Nueva instancia del sistema de bandejas
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
+let m1Moment3AdvanceListenerAttached = false;
 let m1Q1Submitted = false;
 
 function getM1Q1StorageKey() {
@@ -71,6 +72,7 @@ function applyM1Q1SubmittedLock() {
 let m3_a = 0;
 let m3_b = 0;
 let m3_choice = null;
+let m3Q1EvidenceInitialized = false;
 
 // Datos de Momento 4
 let m4_currentItem = 1;
@@ -424,6 +426,8 @@ function initMoment1() {
 
     const problemSection = document.getElementById('problemQ1Section');
     const problemSection2 = document.getElementById('problemQ2Section');
+    const problemSection3 = document.getElementById('problemQ3Section');
+    const problemSection4 = document.getElementById('problemQ4Section');
     const m1Q2FinalQuestion = document.getElementById('m1Q2FinalQuestion');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
@@ -434,9 +438,13 @@ function initMoment1() {
     let traysM1Q2Initialized = false;
     let isOnSheet10 = false;
     let isOnSheet11 = false;
+    let isOnSheet12 = false;
+    let isOnSheet13 = false;
     let isSpecialPageTransitioning = false;
     let m1Q2Verified = false;
     let m1Q2AudioInitialized = false;
+    let m3BookInitialized = false;
+    let m4BookInitialized = false;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
     const cocinaScreen = document.getElementById('cocinaScreen');
@@ -448,6 +456,16 @@ function initMoment1() {
         if (m1Q2FinalQuestion) {
             m1Q2FinalQuestion.classList.add('hidden');
         }
+    };
+
+    const hideProblemSection3 = () => {
+        if (!problemSection3) return;
+        problemSection3.classList.add('hidden');
+    };
+
+    const hideProblemSection4 = () => {
+        if (!problemSection4) return;
+        problemSection4.classList.add('hidden');
     };
 
     const showM1Q2FinalQuestion = () => {
@@ -475,6 +493,9 @@ function initMoment1() {
                         });
                         if (statusEl) { statusEl.textContent = '✅ ¡Guardado!'; statusEl.className = 'status-text success-text'; }
                         submitBtn.disabled = true;
+                        setTimeout(() => {
+                            showProblemSection3();
+                        }, 900);
                     } catch (err) {
                         if (statusEl) { statusEl.textContent = 'Error al guardar. Intenta de nuevo.'; statusEl.className = 'status-text error'; }
                         submitBtn.disabled = false;
@@ -484,10 +505,25 @@ function initMoment1() {
         }
     };
 
+    const updateCocinaButtonState = () => {
+        if (!goToCocinaBtn) return;
+        if (m1Q2Verified) {
+            goToCocinaBtn.disabled = true;
+            goToCocinaBtn.setAttribute('aria-disabled', 'true');
+            goToCocinaBtn.textContent = '✅ Organización completada';
+            return;
+        }
+        goToCocinaBtn.disabled = false;
+        goToCocinaBtn.removeAttribute('aria-disabled');
+        goToCocinaBtn.textContent = '🍳 Ir a la cocina a organizar';
+    };
+
     const buildPairsPhoto = () => {
         const photoContent = document.getElementById('pairsPhotoContent');
         const pairsPhotoArea = document.getElementById('pairsPhotoArea');
         if (!photoContent || !pairsPhotoArea || !traysSystem) return;
+
+        const panoSrc = traysSystem.pandebonoImageSrc || 'assets/images/pandebono.png';
         const seen = new Set();
         const pairsList = [];
         traysSystem.pairings.forEach((mateId, trayId) => {
@@ -499,17 +535,33 @@ function initMoment1() {
                 if (t1 && t2) pairsList.push([t1, t2]);
             }
         });
+
+        const pairedIds = new Set([...traysSystem.pairings.keys()]);
+        const unpairedList = traysSystem.BASE_TRAYS.filter(t => !pairedIds.has(t.id));
+
         const makeMiniGrid = (tray) => {
-            const cells = Array(tray.total).fill('<span class="photo-pano">🫓</span>').join('');
-            return `<div class="photo-tray-grid" style="display:grid;grid-template-columns:repeat(${tray.cols},1fr);gap:1px">${cells}</div>`;
+            const cells = Array.from({ length: tray.total }, () =>
+                `<span class="photo-pano"><img src="${panoSrc}" alt="Pandebono" class="photo-pano-img"></span>`
+            ).join('');
+            return `<div class="photo-tray-grid" style="display:grid;grid-template-columns:repeat(${tray.cols},1fr);grid-template-rows:repeat(${tray.rows},1fr)">${cells}</div>`;
         };
-        photoContent.innerHTML = pairsList.map(([a, b]) =>
+
+        const pairsMarkup = pairsList.map(([a, b]) =>
             `<div class="photo-pair">
-                <div class="photo-tray">${makeMiniGrid(a)}<small>${a.rows}×${a.cols}=${a.total}</small></div>
+                <div class="photo-tray">${makeMiniGrid(a)}</div>
                 <span class="photo-equal">⟷</span>
-                <div class="photo-tray">${makeMiniGrid(b)}<small>${b.rows}×${b.cols}=${b.total}</small></div>
+                <div class="photo-tray">${makeMiniGrid(b)}</div>
             </div>`
         ).join('');
+
+        const singlesMarkup = unpairedList.map((tray) =>
+            `<div class="photo-single">${makeMiniGrid(tray)}</div>`
+        ).join('');
+
+        photoContent.innerHTML = `
+            <div class="photo-pairs-grid">${pairsMarkup}</div>
+            ${unpairedList.length > 0 ? `<div class="photo-singles-wrap"><p class="photo-singles-title">Bandejas sin pareja</p><div class="photo-singles-grid">${singlesMarkup}</div></div>` : ''}
+        `;
         pairsPhotoArea.classList.remove('hidden');
     };
 
@@ -558,6 +610,7 @@ function initMoment1() {
                         }
                         traysSystem.container.style.pointerEvents = 'none';
                         m1Q2Verified = true;
+                        updateCocinaButtonState();
                         setTimeout(() => {
                             hideCocinaScreen();
                             showM1Q2FinalQuestion();
@@ -591,6 +644,7 @@ function initMoment1() {
 
     const showCocinaScreen = () => {
         if (!cocinaScreen) return;
+        if (m1Q2Verified) return;
         problemSection2.classList.add('hidden');
         cocinaScreen.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -642,8 +696,12 @@ function initMoment1() {
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
 
         hideProblemSection2();
+        hideProblemSection3();
+        hideProblemSection4();
         isOnSheet10 = true;
         isOnSheet11 = false;
+        isOnSheet12 = false;
+        isOnSheet13 = false;
 
         if (m1Q1Submitted) {
             applyM1Q1SubmittedLock();
@@ -671,13 +729,93 @@ function initMoment1() {
         }
 
         problemSection.classList.add('hidden');
+        hideProblemSection3();
+        hideProblemSection4();
         problemSection2.classList.remove('hidden');
         problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
 
         isOnSheet10 = false;
         isOnSheet11 = true;
+        isOnSheet12 = false;
+        isOnSheet13 = false;
+        updateCocinaButtonState();
         initSheet11Trays();
+        if (m1Q2Verified) {
+            showM1Q2FinalQuestion();
+        }
+    };
+
+    const showProblemSection3 = () => {
+        if (!problemSection3) return;
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+            nextBtn.disabled = true;
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+
+        problemSection.classList.add('hidden');
+        hideProblemSection2();
+        hideProblemSection4();
+        problemSection3.classList.remove('hidden');
+        problemSection3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+
+        isOnSheet10 = false;
+        isOnSheet11 = false;
+        isOnSheet12 = true;
+        isOnSheet13 = false;
+
+        if (!m3BookInitialized) {
+            m3BookInitialized = true;
+            initMoment3();
+            const studentCodeM3 = document.getElementById('studentCodeM3');
+            if (studentCodeM3) {
+                studentCodeM3.textContent = getStudentHeaderText();
+            }
+        }
+    };
+
+    const showProblemSection4 = () => {
+        if (!problemSection4) return;
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = 'none';
+            nextBtn.disabled = true;
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+        }
+
+        problemSection.classList.add('hidden');
+        hideProblemSection2();
+        hideProblemSection3();
+        problemSection4.classList.remove('hidden');
+        problemSection4.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+
+        isOnSheet10 = false;
+        isOnSheet11 = false;
+        isOnSheet12 = false;
+        isOnSheet13 = true;
+
+        if (!m4BookInitialized) {
+            m4BookInitialized = true;
+            initMoment4();
+        }
     };
 
     const hideProblemSection = () => {
@@ -701,10 +839,20 @@ function initMoment1() {
         if (problemSection2) {
             problemSection2.classList.remove('turning-forward');
         }
+        if (problemSection3) {
+            problemSection3.classList.remove('turning-forward');
+        }
+        if (problemSection4) {
+            problemSection4.classList.remove('turning-forward');
+        }
         problemSection.classList.add('hidden');
         hideProblemSection2();
+        hideProblemSection3();
+        hideProblemSection4();
         isOnSheet10 = false;
         isOnSheet11 = false;
+        isOnSheet12 = false;
+        isOnSheet13 = false;
     };
 
     const syncM1WithFlipbookPage = (event) => {
@@ -787,6 +935,20 @@ function initMoment1() {
     if (prevBtn) {
         // En la página 10 (Situación 1), volver exactamente a la página 9 del cuento
         prevBtn.addEventListener('click', (event) => {
+            if (isOnSheet13) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                showProblemSection3();
+                return;
+            }
+
+            if (isOnSheet12) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                showProblemSection2();
+                return;
+            }
+
             if (isOnSheet11) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
@@ -810,6 +972,8 @@ function initMoment1() {
         goToCocinaBtn.addEventListener('click', showCocinaScreen);
     }
 
+    updateCocinaButtonState();
+
     // Estado inicial: en el cuento no se muestra la respuesta
     if (problemSection && !problemSection.classList.contains('hidden')) {
         problemSection.classList.add('hidden');
@@ -819,6 +983,11 @@ function initMoment1() {
         document.addEventListener('flipbook:pagechange', syncM1WithFlipbookPage);
         m1FlipbookListenerAttached = true;
         console.log('✅ Listener de cambio de página del cuento configurado');
+    }
+
+    if (!m1Moment3AdvanceListenerAttached) {
+        document.addEventListener('moment3:problem1-submitted', showProblemSection4);
+        m1Moment3AdvanceListenerAttached = true;
     }
 }
 
@@ -1464,7 +1633,7 @@ function verifyTraysPairings() {
         
         // Mostrar pregunta final
         setTimeout(() => {
-            const finalSection = document.getElementById('finalQuestionSection');
+            const finalSection = document.getElementById('finalQuestionSectionM2');
             if (finalSection) {
                 finalSection.classList.remove('hidden');
                 initMoment2Audio();
@@ -1550,7 +1719,7 @@ function verifyPairings_OLD() {
         
         // Mostrar pregunta final
         setTimeout(() => {
-            document.getElementById('finalQuestionSection').classList.remove('hidden');
+            document.getElementById('finalQuestionSectionM2').classList.remove('hidden');
             initMoment2Audio();
         }, 1000);
         
@@ -1658,7 +1827,10 @@ function initMoment2Audio() {
 // ========================================
 
 function initMoment3() {
-    document.getElementById('studentCodeM3').textContent = getStudentHeaderText();
+    const studentCodeM3 = document.getElementById('studentCodeM3');
+    if (studentCodeM3) {
+        studentCodeM3.textContent = getStudentHeaderText();
+    }
     
     // Radio buttons para Problema 1
     const radiosQ1 = document.querySelectorAll('input[name="truthQ1"]');
@@ -1679,15 +1851,19 @@ function initMoment3() {
     });
     
     // Botón continuar a M4
-    document.getElementById('continueToM4Btn').addEventListener('click', () => {
-        showScreen('moment4Screen');
-        initMoment4();
-    });
+    const continueToM4Btn = document.getElementById('continueToM4Btn');
+    if (continueToM4Btn) {
+        continueToM4Btn.addEventListener('click', () => {
+            showScreen('moment4Screen');
+            initMoment4();
+        });
+    }
 }
 
 function showPrompt1(choice) {
     const promptSection = document.getElementById('promptSection1');
     const promptText = document.getElementById('promptText1');
+    const placeholder = document.getElementById('m3Q1Placeholder');
     
     const prompts = {
         yes: 'Explica detalladamente cómo lo sabes.',
@@ -1697,6 +1873,9 @@ function showPrompt1(choice) {
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
+    if (placeholder) {
+        placeholder.classList.add('hidden');
+    }
     
     // Inicializar tablero y audio para problema 1
     initProblemM3Q1();
@@ -1720,6 +1899,9 @@ function showPrompt2(choice) {
 }
 
 function initProblemM3Q1() {
+    if (m3Q1EvidenceInitialized) return;
+    m3Q1EvidenceInitialized = true;
+
     const canvasId = 'boardCanvasM3Q1';
     const recordBtnId = 'recordBtnM3Q1';
     const stopBtnId = 'stopBtnM3Q1';
@@ -1784,10 +1966,9 @@ function initProblemM3Q1() {
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Mostrar Problema 2
+            // Avanzar a la página 13 del libro
             setTimeout(() => {
-                document.getElementById('problem2Section').classList.remove('hidden');
-                document.getElementById('problem2Section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.dispatchEvent(new CustomEvent('moment3:problem1-submitted'));
             }, 1000);
             
         } catch (error) {

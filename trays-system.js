@@ -148,9 +148,9 @@ class TraysSystem {
             const cellHeight = innerHeight / trayData.rows;
             const cellSize = Math.max(4, Math.min(cellWidth, cellHeight));
 
-            // Escalar con el tamaño real de la bandeja para que siempre quepan todos los panes
-            const emojiPx = Math.max(6, Math.min(36, Math.floor(cellSize * 0.72)));
-            const gapPx = Math.max(0, Math.min(6, Math.floor(cellSize * 0.08)));
+            // Escalar para que se vean mas grandes sin perder legibilidad del arreglo
+            const emojiPx = Math.max(10, Math.min(52, Math.floor(cellSize * 0.86)));
+            const gapPx = Math.max(2, Math.min(12, Math.floor(cellSize * 0.14)));
 
             grid.style.gap = `${gapPx}px`;
             items.forEach(item => {
