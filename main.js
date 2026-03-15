@@ -452,8 +452,36 @@ function initMoment1() {
 
     const showM1Q2FinalQuestion = () => {
         if (!m1Q2FinalQuestion) return;
+        buildPairsPhoto();
         m1Q2FinalQuestion.classList.remove('hidden');
         m1Q2FinalQuestion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (!m1Q2AudioInitialized) {
+            m1Q2AudioInitialized = true;
+            const audioState = initAudio('recordBtnM1Q2', 'stopBtnM1Q2', 'audioStatusM1Q2');
+            const submitBtn = document.getElementById('submitM1Q2');
+            if (submitBtn && audioState) {
+                const checkAudio = setInterval(() => {
+                    if (audioState.audioBlob) { submitBtn.disabled = false; clearInterval(checkAudio); }
+                }, 500);
+                submitBtn.addEventListener('click', async () => {
+                    submitBtn.disabled = true;
+                    const statusEl = document.getElementById('statusM1Q2');
+                    if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.className = 'status-text loading'; }
+                    try {
+                        await submitEvidence({
+                            moment: 'm1', tag: 'q2-final',
+                            data: { question: '¿Por qué bandejas distintas tienen la misma cantidad?' },
+                            boardBlob: null, audioBlob: audioState.audioBlob
+                        });
+                        if (statusEl) { statusEl.textContent = '✅ ¡Guardado!'; statusEl.className = 'status-text success-text'; }
+                        submitBtn.disabled = true;
+                    } catch (err) {
+                        if (statusEl) { statusEl.textContent = 'Error al guardar. Intenta de nuevo.'; statusEl.className = 'status-text error'; }
+                        submitBtn.disabled = false;
+                    }
+                });
+            }
+        }
     };
 
     const buildPairsPhoto = () => {
@@ -487,7 +515,6 @@ function initMoment1() {
 
     const initSheet11Trays = () => {
         if (traysM1Q2Initialized) return;
-        try {
         try {
             if (traysSystem) {
                 traysSystem.destroy();
@@ -531,11 +558,10 @@ function initMoment1() {
                         }
                         traysSystem.container.style.pointerEvents = 'none';
                         m1Q2Verified = true;
-                        // Mostrar botón siguiente para continuar
-                        if (nextBtn) {
-                            nextBtn.style.display = '';
-                            nextBtn.disabled = false;
-                        }
+                        setTimeout(() => {
+                            hideCocinaScreen();
+                            showM1Q2FinalQuestion();
+                        }, 1500);
                         return;
                     }
 
@@ -561,6 +587,23 @@ function initMoment1() {
         } catch (error) {
             console.error('❌ Error al inicializar bandejas de hoja 11:', error);
         }
+    };
+
+    const showCocinaScreen = () => {
+        if (!cocinaScreen) return;
+        problemSection2.classList.add('hidden');
+        cocinaScreen.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+        initSheet11Trays();
+    };
+    const hideCocinaScreen = () => {
+        if (!cocinaScreen) return;
+        cocinaScreen.classList.add('hidden');
+        document.body.style.overflow = '';
+        problemSection2.classList.remove('hidden');
+        problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
     };
 
     const playForwardTurnTransition = (fromEl, onMidTurn) => {
@@ -761,6 +804,10 @@ function initMoment1() {
                 hideProblemSection();
             }
         }, true);
+    }
+
+    if (goToCocinaBtn) {
+        goToCocinaBtn.addEventListener('click', showCocinaScreen);
     }
 
     // Estado inicial: en el cuento no se muestra la respuesta
