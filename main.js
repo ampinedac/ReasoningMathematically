@@ -433,6 +433,7 @@ function initMoment1() {
     let traysM1Q2Initialized = false;
     let isOnSheet10 = false;
     let isOnSheet11 = false;
+    let isSpecialPageTransitioning = false;
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
 
@@ -458,23 +459,47 @@ function initMoment1() {
 
             if (verifyBtn && feedback) {
                 verifyBtn.addEventListener('click', () => {
-                    const pairs = traysSystem.getPairings();
                     const results = traysSystem.validatePairings();
-                    const allCorrect = results.length > 0 && results.every(r => r.isCorrect);
+                    const correctPairs = results.filter(r => r.isCorrect).length;
+                    const incorrectPairs = results.filter(r => !r.isCorrect).length;
 
-                    if (pairs.length < 4) {
-                        feedback.textContent = 'Aún faltan emparejamientos por hacer.';
-                        feedback.className = 'feedback-text info';
+                    // Detectar si quedan pares válidos entre las bandejas sin emparejar
+                    const pairedIds = new Set([...traysSystem.pairings.keys()]);
+                    const unpairedTrays = traysSystem.BASE_TRAYS.filter(t => !pairedIds.has(t.id));
+                    let validPairRemains = false;
+                    outer: for (let i = 0; i < unpairedTrays.length; i++) {
+                        for (let j = i + 1; j < unpairedTrays.length; j++) {
+                            if (unpairedTrays[i].total === unpairedTrays[j].total) {
+                                validPairRemains = true;
+                                break outer;
+                            }
+                        }
+                    }
+
+                    // Todas las parejas correctas y no quedan más pares posibles → éxito
+                    if (incorrectPairs === 0 && !validPairRemains) {
+                        feedback.textContent = '¡Excelente! Has encontrado todas las parejas posibles.';
+                        feedback.className = 'feedback-text success';
                         return;
                     }
 
-                    if (allCorrect) {
-                        feedback.textContent = '¡Excelente! Todas las parejas tienen la misma cantidad.';
-                        feedback.className = 'feedback-text success';
-                    } else {
-                        feedback.textContent = 'Hay parejas con cantidades distintas. Revisa e intenta de nuevo.';
+                    // Hay parejas incorrectas
+                    if (incorrectPairs > 0) {
+                        const hint = correctPairs > 0
+                            ? ` Tienes ${correctPairs} ${correctPairs === 1 ? 'pareja correcta' : 'parejas correctas'}.`
+                            : '';
+                        feedback.textContent = `Hay ${incorrectPairs === 1 ? 'una pareja' : 'parejas'} con cantidades distintas.${hint} Revisa e intenta de nuevo.`;
                         feedback.className = 'feedback-text error';
+                        return;
                     }
+
+                    // Todo correcto hasta ahora, pero aún quedan pares válidos por hacer
+                    if (correctPairs > 0) {
+                        feedback.textContent = `Vas bien: tienes ${correctPairs} ${correctPairs === 1 ? 'pareja correcta' : 'parejas correctas'}. Aún puedes hacer más emparejamientos.`;
+                    } else {
+                        feedback.textContent = 'Aún no tienes emparejamientos. ¡Selecciona dos bandejas para comenzar!';
+                    }
+                    feedback.className = 'feedback-text info';
                 });
             }
         } catch (error) {
@@ -482,18 +507,23 @@ function initMoment1() {
         }
     };
 
-    const runBookSectionEnterAnimation = (sectionEl, direction = 'forward') => {
-        if (!sectionEl) return;
+    const playForwardTurnTransition = (fromEl, onMidTurn) => {
+        if (!fromEl || isSpecialPageTransitioning) return;
 
-        sectionEl.classList.remove('page-enter-forward', 'page-enter-backward');
-        sectionEl.classList.add(direction === 'backward' ? 'page-enter-backward' : 'page-enter-forward');
+        isSpecialPageTransitioning = true;
+        fromEl.classList.add('turning-forward');
 
         setTimeout(() => {
-            sectionEl.classList.remove('page-enter-forward', 'page-enter-backward');
-        }, 900);
+            onMidTurn();
+        }, 600);
+
+        setTimeout(() => {
+            fromEl.classList.remove('turning-forward');
+            isSpecialPageTransitioning = false;
+        }, 1200);
     };
 
-    const showProblemSection = (direction = 'forward') => {
+    const showProblemSection = () => {
         if (flipbook) {
             flipbook.style.display = 'none';
         }
@@ -509,7 +539,6 @@ function initMoment1() {
         }
 
         problemSection.classList.remove('hidden');
-        runBookSectionEnterAnimation(problemSection, direction);
         problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         hideProblemSection2();
@@ -524,7 +553,7 @@ function initMoment1() {
         }
     };
 
-    const showProblemSection2 = (direction = 'forward') => {
+    const showProblemSection2 = () => {
         if (!problemSection2) return;
 
         if (flipbook) {
@@ -543,7 +572,6 @@ function initMoment1() {
 
         problemSection.classList.add('hidden');
         problemSection2.classList.remove('hidden');
-        runBookSectionEnterAnimation(problemSection2, direction);
         problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         isOnSheet10 = false;
@@ -568,7 +596,10 @@ function initMoment1() {
             soundToggle.style.display = '';
         }
 
-        problemSection.classList.remove('page-enter-forward', 'page-enter-backward');
+        problemSection.classList.remove('turning-forward');
+        if (problemSection2) {
+            problemSection2.classList.remove('turning-forward');
+        }
         problemSection.classList.add('hidden');
         hideProblemSection2();
         isOnSheet10 = false;
@@ -602,13 +633,21 @@ function initMoment1() {
     if (nextBtn) {
         // Capturar antes del handler del flipbook para distinguir 8->9 de 9->10
         nextBtn.addEventListener('click', (event) => {
+            if (isSpecialPageTransitioning) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return;
+            }
+
             if (isOnSheet10) {
                 if (!m1Q1Submitted) {
                     return;
                 }
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                showProblemSection2();
+                playForwardTurnTransition(problemSection, () => {
+                    showProblemSection2();
+                });
                 return;
             }
 
@@ -625,10 +664,14 @@ function initMoment1() {
                     clearTimeout(showProblemTimer);
                 }
 
-                // Pequeño delay para mantener sensación de continuidad
-                showProblemTimer = setTimeout(() => {
+                const currentStoryPage = flipbook ? flipbook.querySelector('.page.active') : null;
+                if (currentStoryPage) {
+                    playForwardTurnTransition(currentStoryPage, () => {
+                        showProblemSection();
+                    });
+                } else {
                     showProblemSection();
-                }, 220);
+                }
             }
         }, true);
     }
@@ -639,7 +682,7 @@ function initMoment1() {
             if (isOnSheet11) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                showProblemSection('backward');
+                showProblemSection();
                 return;
             }
 
