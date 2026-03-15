@@ -85,6 +85,7 @@ let m4_errorsConsecutiveMax = 0;
 let m4_magicLives = 3; // Sistema de vidas mágicas
 let m4_isFinalizing = false;
 let m4_returnHomeTimeout = null;
+let m4_questions = [];
 
 // ========================================
 // INICIALIZACIÓN
@@ -806,6 +807,13 @@ function initMoment1() {
 
         if (!m3BookInitialized) {
             m3BookInitialized = true;
+            // Número aleatorio entre 3 y 7 para la ecuación de sobres
+            const nums = [3, 4, 5, 6, 7];
+            const fixedNum = nums[Math.floor(Math.random() * nums.length)];
+            ['q3FixedNum1', 'q3FixedNum2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = fixedNum;
+            });
             initMoment3();
             const studentCodeM3 = document.getElementById('studentCodeM3');
             if (studentCodeM3) {
@@ -1798,7 +1806,7 @@ function initMoment2Audio() {
         
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
@@ -1939,14 +1947,12 @@ function initProblemM3Q1() {
     if (m3Q1EvidenceInitialized) return;
     m3Q1EvidenceInitialized = true;
 
-    const canvasId = 'boardCanvasM3Q1';
     const recordBtnId = 'recordBtnM3Q1';
     const stopBtnId = 'stopBtnM3Q1';
     const statusId = 'audioStatusM3Q1';
     const submitBtnId = 'submitM3Q1';
     const statusTextId = 'statusM3Q1';
     
-    const boardState = initBoard(canvasId);
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
@@ -1957,7 +1963,7 @@ function initProblemM3Q1() {
         
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
@@ -1981,7 +1987,7 @@ function initProblemM3Q1() {
         statusText.className = 'status-text loading';
         
         try {
-            const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
+            const boardBlob = null;
             
             await submitEvidence({
                 moment: 'm3',
@@ -1995,13 +2001,6 @@ function initProblemM3Q1() {
             statusText.className = 'status-text success';
             m3Q1Submitted = true;
             
-            // Bloquear edición
-            boardState.disabled = true;
-            const canvas = document.getElementById(canvasId);
-            canvas.style.pointerEvents = 'none';
-            
-            const evidenceSection = canvas.closest('.evidence-section');
-            evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             const recordBtn = document.getElementById(recordBtnId);
             const stopBtn = document.getElementById(stopBtnId);
             if (recordBtn) {
@@ -2053,7 +2052,7 @@ function initProblemM3Q2() {
         
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
@@ -2187,22 +2186,28 @@ function generateMoment4Questions() {
         });
     });
     
+    m4_questions = questions;
+
     const wrapper = document.getElementById('itemsWrapper');
-    wrapper.innerHTML = ''; // Limpiar contenedor
-    
-    questions.forEach((q, index) => {
-        const itemNum = index + 1;
-        const itemBox = document.createElement('div');
-        itemBox.className = 'item-box hidden';
-        itemBox.dataset.item = itemNum;
-        
-        itemBox.innerHTML = `
-            <div class="item-equation">${q.equation}</div>
+    wrapper.innerHTML = '<div id="m4ActiveItem" class="item-box"></div>';
+}
+
+function showItem(itemNum) {
+    const activeBox = document.getElementById('m4ActiveItem');
+    const question = m4_questions[itemNum - 1];
+
+    if (!activeBox || !question) {
+        return;
+    }
+
+    const renderQuestion = () => {
+        activeBox.innerHTML = `
+            <div class="item-equation">${question.equation}</div>
             <div style="text-align: center; margin-top: 20px;">
-                <input type="number" 
-                       class="item-input" 
-                       data-answer="${q.answer}"
-                       data-full-equation="${q.fullEquation}"
+                <input type="number"
+                       class="item-input"
+                       data-answer="${question.answer}"
+                       data-full-equation="${question.fullEquation}"
                        data-attempts="0"
                        placeholder="?"
                        min="1"
@@ -2211,30 +2216,35 @@ function generateMoment4Questions() {
             </div>
             <div class="item-feedback" style="margin-top: 15px; font-size: 1.2em; min-height: 50px;"></div>
         `;
-        
-        wrapper.appendChild(itemBox);
-    });
-}
 
-function showItem(itemNum) {
-    document.querySelectorAll('.item-box').forEach(box => {
-        if (parseInt(box.dataset.item) === itemNum) {
-            box.classList.remove('hidden');
-            
-            // Agregar evento al botón comprobar
-            const checkBtn = box.querySelector('.check-answer-btn');
-            const input = box.querySelector('.item-input');
-            
-            checkBtn.addEventListener('click', () => validateItem(input, box));
-            
-            // Prevenir validación automática al escribir
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkBtn.click();
-                }
-            });
-        }
-    });
+        const checkBtn = activeBox.querySelector('.check-answer-btn');
+        const input = activeBox.querySelector('.item-input');
+
+        checkBtn.addEventListener('click', () => validateItem(input, activeBox));
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkBtn.click();
+            }
+        });
+
+        input.focus();
+    };
+
+    if (!activeBox.hasChildNodes()) {
+        renderQuestion();
+        return;
+    }
+
+    activeBox.classList.add('item-box-transition-out');
+    setTimeout(() => {
+        renderQuestion();
+        activeBox.classList.remove('item-box-transition-out');
+        activeBox.classList.add('item-box-transition-in');
+        setTimeout(() => {
+            activeBox.classList.remove('item-box-transition-in');
+        }, 260);
+    }, 220);
 }
 
 // ========================================

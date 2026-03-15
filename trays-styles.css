@@ -123,6 +123,7 @@
     width: 100%;
     max-width: 240px;
     max-height: 240px;
+    place-items: center;
 }
 
 .tray-item {
