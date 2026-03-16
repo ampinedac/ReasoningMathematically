@@ -177,6 +177,15 @@
         margin-top: 12px;
     }
 
+    .activity-0b #moment1Screen #problemQ1Section .sale-label-image {
+        display: inline-block;
+        width: clamp(140px, 24vw, 240px);
+        max-width: 100%;
+        height: auto;
+        vertical-align: middle;
+        margin-right: 6px;
+    }
+
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page h4 {
         font-size: clamp(1.05rem, 1.65vw, 1.45rem);
         line-height: 1.25;
@@ -215,6 +224,25 @@
         background-position: center;
     }
 
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: nowrap;
+        margin-top: 8px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row .audio-controls,
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row .submit-section {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
     .activity-0b #problemQ1Section .problem-page-number {
         position: absolute;
         left: 50%;
@@ -228,14 +256,19 @@
         top: 50%;
         transform: translateY(-50%);
         z-index: 12;
+        width: 62px;
+        height: 62px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
     }
 
     .activity-0b #problemQ1Section #prevBtnQ1 {
-        left: -48px;
+        left: 14px;
     }
 
     .activity-0b #problemQ1Section #nextBtnQ1 {
-        right: -48px;
+        right: 14px;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
@@ -256,6 +289,207 @@
 
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section .status-text {
         margin: 0;
+    }
+
+    .activity-0b #problemQ2Section.q1-book-spread {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        width: 95%;
+        max-width: none;
+        min-height: 600px;
+        margin: 0 auto;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        background: #fdfdfd;
+        position: relative;
+    }
+
+    .activity-0b #problemQ2Section.q1-book-spread::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        background: rgba(0, 0, 0, 0.08);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page,
+    .activity-0b #problemQ2Section .q1-right-page {
+        margin: 0;
+        max-width: none;
+        min-height: 600px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 28px;
+        background: var(--page-bg-light);
+        background-image:
+            linear-gradient(90deg,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 85%,
+                rgba(0,0,0,0.02) 92%,
+                rgba(0,0,0,0.05) 96%,
+                rgba(0,0,0,0.08) 100%),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(0, 0, 0, 0.02) 24px,
+                rgba(0, 0, 0, 0.02) 25px
+            );
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page h3 {
+        font-size: clamp(1.2rem, 2vw, 1.5rem) !important;
+        color: #d97825;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-card {
+        width: 92%;
+        max-width: 480px;
+        margin: 14px auto 0;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(63, 94, 251, 0.2);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-title {
+        margin: 0 0 8px;
+        font-size: clamp(0.92rem, 1.5vw, 1.08rem);
+        font-weight: 700;
+        color: #2f3f87;
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-list {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-list li {
+        margin: 0;
+        font-size: clamp(0.92rem, 1.5vw, 1.08rem);
+        line-height: 1.35;
+        text-align: left;
+        color: #233047;
+    }
+
+    .activity-0b #problemQ2Section .btn-cocina {
+        display: block;
+        width: 92%;
+        max-width: 480px;
+        margin: 18px auto 0;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        padding: 16px 24px;
+        font-size: clamp(1rem, 1.8vw, 1.25rem);
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.38);
+        transition: all 0.3s;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+    }
+
+    .activity-0b #problemQ2Section .btn-cocina:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 26px rgba(249, 115, 22, 0.52);
+    }
+
+    .activity-0b #problemQ2Section .page-number {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        z-index: 6;
+    }
+
+    .activity-0b .cocina-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        background: linear-gradient(180deg, #fff9f1 0%, #f7e8d1 58%, #efd4af 100%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .activity-0b .cocina-overlay.hidden {
+        display: none !important;
+    }
+
+    .activity-0b .cocina-header {
+        text-align: center;
+        padding: 18px 20px 12px;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.22);
+        flex-shrink: 0;
+    }
+
+    .activity-0b .cocina-header h2 {
+        margin: 0 0 4px;
+        font-size: clamp(1.3rem, 3vw, 2rem);
+    }
+
+    .activity-0b .cocina-header p {
+        margin: 0;
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        opacity: 0.95;
+    }
+
+    .activity-0b .cocina-body {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .activity-0b .cocina-body .trays-container {
+        width: min(100%, 1240px);
+        max-width: 1240px;
+        min-height: 520px;
+    }
+
+    .activity-0b .cocina-controls {
+        padding: 18px 20px 20px;
+        text-align: center;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 {
+        margin-top: 18px;
     }
 
     .activity-0b .evidence-section .audio-controls,
@@ -330,12 +564,40 @@
             background-size: 24px 24px;
         }
 
+        .activity-0b #problemQ2Section.q1-book-spread {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .activity-0b #problemQ2Section.q1-book-spread::before {
+            display: none;
+        }
+
+        .activity-0b #problemQ2Section .q1-left-page,
+        .activity-0b #problemQ2Section .q1-right-page {
+            min-height: auto;
+            padding: 18px;
+        }
+
+        .activity-0b .cocina-body {
+            padding: 12px;
+        }
+
+        .activity-0b .cocina-body .trays-container {
+            min-height: 420px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
         .activity-0b #problemQ1Section #prevBtnQ1 {
-            left: -18px;
+            left: 8px;
         }
 
         .activity-0b #problemQ1Section #nextBtnQ1 {
-            right: -18px;
+            right: 8px;
         }
 
         .activity-0b #moment1Screen #flipbook .story-page .story-text {
@@ -475,8 +737,8 @@
                 <div class="page-number problem-page-number">8</div>
                 <div class="problem-box q1-left-page">
                     <h3>Situación 1</h3>
-                    <p><strong>Primera venta:</strong> 7 bolsitas con 3 panes de bono cada una.</p>
-                    <p><strong>Segunda venta:</strong> 3 bolsitas con 7 panes de bono cada una.</p>
+                    <p><img src="assets/images/PrimeraVenta.png" alt="Primera venta" class="sale-label-image"> 7 bolsitas con 3 panes de bono cada una.</p>
+                    <p><img src="assets/images/SegundaVenta.png" alt="Segunda venta" class="sale-label-image"> 3 bolsitas con 7 panes de bono cada una.</p>
                     <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
                     <p class="question">Explica cómo lo sabes. Argumenta tu respuesta.</p>
                 </div>
@@ -497,17 +759,19 @@
                         <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
                     </div>
 
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM1Q1" class="audio-status"></span>
-                    </div>
+                    <div class="q1-action-row">
+                        <!-- Audio -->
+                        <div class="audio-controls">
+                            <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                            <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                            <span id="audioStatusM1Q1" class="audio-status"></span>
+                        </div>
 
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM1Q1" class="status-text"></p>
-                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
+                        <!-- Enviar -->
+                        <div class="submit-section">
+                            <p id="statusM1Q1" class="status-text"></p>
+                            <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -522,52 +786,72 @@
                 <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
             </div>
 
-            <!-- INTRODUCCIÓN -->
-            <div class="problem-box">
-                <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora los deben organizar por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
-                <p><strong>Tu misión es unir los pedidos que tienen la misma cantidad de panes de bono:</strong></p>
-                <p class="instruction-hint">💡 Arrastra los pedidos para juntarlos. Recuerda: solo puedes unir los que tienen la misma cantidad.</p>
-            </div>
-
-            <!-- ÁREA DE BANDEJAS -->
-            <div id="traysGameSection">
-                <div id="traysArea" class="trays-container">
-                    <!-- Las 8 bandejas se generarán aquí dinámicamente -->
-                </div>
-                
-                <div class="game-controls">
-                    <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
-                    <p id="traysFeedback" class="feedback-text"></p>
-                </div>
-            </div>
-
-            <!-- PREGUNTA FINAL -->
-            <div id="finalQuestionSection" class="hidden">
-                <div class="problem-box">
-                    <h3>¡Excelente trabajo!</h3>
-                    <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
-                    <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
-                </div>
-
-                <!-- SOLO AUDIO -->
-                <div class="evidence-section">
-                    <h4>Graba tu explicación:</h4>
-                    
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM2" class="audio-status"></span>
+            <div id="problemQ2Section" class="q1-book-spread">
+                <div class="problem-box q1-left-page">
+                    <h3>Situación 2</h3>
+                    <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora deben organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
+                    <div class="q2-guide-card">
+                        <p class="q2-guide-title">Guía rápida</p>
+                        <ul class="q2-guide-list">
+                            <li>1. Entra a la cocina.</li>
+                            <li>2. Empareja pedidos con la misma cantidad de panes.</li>
+                            <li>3. Verifica y regresa al libro para explicar.</li>
+                        </ul>
                     </div>
+                    <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
+                    <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
+                </div>
 
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM2" class="status-text"></p>
-                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                <div class="evidence-section q1-right-page" id="q2RightPage">
+                    <div id="finalQuestionSectionM2" class="hidden">
+                        <div class="problem-box">
+                            <h3>¡Excelente trabajo!</h3>
+                            <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
+                            <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                        </div>
+
+                        <div class="evidence-section">
+                            <h4>Graba tu explicación:</h4>
+
+                            <div class="audio-controls">
+                                <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
+                                <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <span id="audioStatusM2" class="audio-status"></span>
+                            </div>
+
+                            <div class="submit-section">
+                                <p id="statusM2" class="status-text"></p>
+                                <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                            </div>
+                        </div>
+
+                        <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
                     </div>
                 </div>
+                <div class="page-number">11</div>
+            </div>
 
-                <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
+            <div id="cocinaScreen" class="cocina-overlay hidden" aria-hidden="true">
+                <div class="cocina-header">
+                    <h2>👩‍🍳 Cocina de Doña Alicia</h2>
+                    <p>Empareja los pedidos que tienen la misma cantidad de panes de bono.</p>
+                </div>
+
+                <div class="cocina-body">
+                    <div id="traysGameSection">
+                        <div id="traysArea" class="trays-container">
+                            <!-- Las 8 bandejas se generan dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cocina-controls">
+                    <div class="game-controls">
+                        <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
+                        <p id="traysFeedback" class="feedback-text"></p>
+                    </div>
+                    <button id="closeCocinaBtnM2" class="btn btn-secondary">Volver al cuento</button>
+                </div>
             </div>
         </div>
     </section>
@@ -808,7 +1092,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026022103"></script>
-    <script type="module" src="main-0b.js?v=2026031415"></script>
+    <script type="module" src="main-0b.js?v=2026031511"></script>
     <script src="app.js?v=2026031401"></script>
 </body>
 </html>

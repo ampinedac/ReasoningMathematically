@@ -34,8 +34,6 @@ function getM1Q1StorageKey() {
 function applyM1Q1SubmittedLock() {
     const statusText = document.getElementById('statusM1Q1');
     const submitBtn = document.getElementById('submitM1Q1');
-    const recordBtn = document.getElementById('recordBtnM1Q1');
-    const stopBtn = document.getElementById('stopBtnM1Q1');
     const canvas = document.getElementById('boardCanvasM1Q1');
     const evidenceSection = canvas ? canvas.closest('.evidence-section') : null;
 
@@ -48,14 +46,6 @@ function applyM1Q1SubmittedLock() {
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-    }
-
-    if (recordBtn) {
-        recordBtn.disabled = true;
-    }
-
-    if (stopBtn) {
-        stopBtn.disabled = true;
     }
 
     if (canvas) {
@@ -652,7 +642,6 @@ function initProblemQ1() {
             // Deshabilitar solo los botones de herramientas de ESTE momento
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
-            document.getElementById(recordBtnId).disabled = true;
             
             // Continuar automáticamente al Momento 2 después de un breve delay
             setTimeout(() => {
@@ -705,6 +694,47 @@ function initMoment2() {
     } catch (error) {
         console.error('❌ Error al inicializar sistema de bolsas:', error);
     }
+
+    const showCocinaScreenM2 = () => {
+        const cocinaScreen = document.getElementById('cocinaScreen');
+        if (!cocinaScreen) return;
+        cocinaScreen.classList.remove('hidden');
+        cocinaScreen.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+    };
+
+    const hideCocinaScreenM2 = () => {
+        const cocinaScreen = document.getElementById('cocinaScreen');
+        if (!cocinaScreen) return;
+        cocinaScreen.classList.add('hidden');
+        cocinaScreen.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+    };
+
+    const goToCocinaBtn = document.getElementById('goToCocinaBtn');
+    if (goToCocinaBtn) {
+        const newGoToCocinaBtn = goToCocinaBtn.cloneNode(true);
+        goToCocinaBtn.parentNode.replaceChild(newGoToCocinaBtn, goToCocinaBtn);
+        newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
+    }
+
+    const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
+    if (closeCocinaBtn) {
+        const newCloseCocinaBtn = closeCocinaBtn.cloneNode(true);
+        closeCocinaBtn.parentNode.replaceChild(newCloseCocinaBtn, closeCocinaBtn);
+        newCloseCocinaBtn.disabled = true;
+        newCloseCocinaBtn.title = 'Debes verificar emparejamientos correctos para volver al cuento.';
+        newCloseCocinaBtn.addEventListener('click', hideCocinaScreenM2);
+    }
+
+    const finalSectionM2 = document.getElementById('finalQuestionSectionM2');
+    if (finalSectionM2) {
+        finalSectionM2.classList.add('hidden');
+    }
+
+    hideCocinaScreenM2();
     
     // Configurar botón de verificación
     const verifyBtn = document.getElementById('verifyTraysBtn');
@@ -1185,11 +1215,25 @@ function verifyTraysPairings() {
         // Deshabilitar el botón
         document.getElementById('verifyTraysBtn').disabled = true;
         
-        // Mostrar pregunta final
+        // Cerrar cocina y volver al cuento (hoja 11), análogo a 0A
         setTimeout(() => {
-            const finalSection = document.getElementById('finalQuestionSection');
+            const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
+            if (closeCocinaBtn) {
+                closeCocinaBtn.disabled = false;
+                closeCocinaBtn.title = '';
+            }
+
+            const cocinaScreen = document.getElementById('cocinaScreen');
+            if (cocinaScreen) {
+                cocinaScreen.classList.add('hidden');
+                cocinaScreen.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            const finalSection = document.getElementById('finalQuestionSectionM2');
             if (finalSection) {
                 finalSection.classList.remove('hidden');
+                finalSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 initMoment2Audio();
             }
         }, 1000);
