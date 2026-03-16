@@ -578,8 +578,8 @@ body.flipbook-on-cover #flipbook::after {
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 12px;
-    padding: 9% 8% 6% !important;
+    gap: 18px;
+    padding: 12% 8% 10% !important;
     overflow: hidden;
     z-index: 14;
 }
@@ -646,7 +646,7 @@ body.flipbook-on-cover #flipbook::after {
     gap: 10px;
     text-align: center;
     line-height: 1;
-    margin: 18% 0 3% 0;
+    margin: 12% 0 2% 0;
     padding: 0 12%;
     position: relative;
     z-index: 4;
@@ -663,10 +663,10 @@ body.flipbook-on-cover #flipbook::after {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px 12px;
+    padding: 11px 22px 13px;
     border-radius: 999px;
     font-family: 'Trebuchet MS', 'Comic Sans MS', cursive;
-    font-size: clamp(1.45rem, 2.05vw, 1.95rem);
+    font-size: clamp(1.55rem, 2.2vw, 2.05rem);
     font-weight: 900;
     line-height: 1;
     text-transform: none;
@@ -709,12 +709,12 @@ body.flipbook-on-cover #flipbook::after {
 .cover-subtitle {
     position: relative;
     z-index: 4;
-    margin: 0;
-    max-width: 78%;
+    margin: 4px 0 2px;
+    max-width: 80%;
     text-align: center;
     color: rgba(103, 66, 32, 0.82);
-    font-size: clamp(1.1rem, 1.28vw, 1.22rem);
-    line-height: 1.5;
+    font-size: clamp(1.2rem, 1.42vw, 1.34rem);
+    line-height: 1.58;
 }
 
 .cover-leer-btn {
@@ -722,9 +722,9 @@ body.flipbook-on-cover #flipbook::after {
     color: #fff;
     border: 2px solid rgba(255, 235, 193, 0.45);
     border-radius: 40px;
-    padding: 16px 42px;
+    padding: 17px 46px;
     font-family: 'Trebuchet MS', 'Verdana', sans-serif;
-    font-size: clamp(1.15rem, 1.55vw, 1.35rem);
+    font-size: clamp(1.18rem, 1.62vw, 1.4rem);
     font-weight: 800;
     cursor: pointer;
     box-shadow: 0 10px 24px rgba(175, 65, 12, 0.34);
@@ -753,7 +753,7 @@ body.flipbook-on-cover #flipbook::after {
 
 @media (max-width: 960px) {
     .cover-book-title {
-        margin-top: 22%;
+        margin-top: 18%;
         padding: 0 8%;
     }
 
@@ -762,13 +762,17 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     .cover-word-chip {
-        padding: 8px 15px 10px;
-        font-size: clamp(1.08rem, 3.8vw, 1.34rem);
+        padding: 9px 16px 11px;
+        font-size: clamp(1.14rem, 4vw, 1.42rem);
     }
 
     .cover-subtitle {
         max-width: 84%;
-        font-size: clamp(1rem, 3.2vw, 1.08rem);
+        font-size: clamp(1.06rem, 3.4vw, 1.14rem);
+    }
+
+    .cover-leer-btn {
+        padding: 15px 34px;
     }
 }
 
