@@ -436,6 +436,8 @@ function initMoment1() {
     const prevBtnQ1 = document.getElementById('prevBtnQ1');
     const nextBtnQ1 = document.getElementById('nextBtnQ1');
     const soundToggle = document.getElementById('soundToggle');
+    const progressText = document.getElementById('progressText');
+    const progressBar = document.getElementById('progressBar');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
     let m1TransitioningToQ1 = false;
@@ -482,6 +484,14 @@ function initMoment1() {
                 nextBtnQ1.style.display = '';
                 nextBtnQ1.disabled = !m1Q1Submitted;
             }
+
+            if (progressText) {
+                progressText.textContent = 'Páginas 15 y 16 de 16';
+            }
+            if (progressBar) {
+                progressBar.style.setProperty('--progress', '100%');
+            }
+            document.documentElement.style.setProperty('--flipbook-progress', '100%');
 
             problemSection.classList.remove('hidden');
             problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -707,7 +717,7 @@ function initProblemQ1() {
                 localStorage.setItem(m1StorageKey, 'true');
             }
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente ✅ Ya puedes pasar a la siguiente página.';
             statusText.className = 'status-text success';
             
             // Mantener botón deshabilitado permanentemente
@@ -723,12 +733,13 @@ function initProblemQ1() {
             // Deshabilitar solo los botones de herramientas de ESTE momento
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
-            
-            // Continuar automáticamente al Momento 2 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment2Screen');
-                initMoment2();
-            }, 1000);
+
+            const nextBtnQ1 = document.getElementById('nextBtnQ1');
+            if (nextBtnQ1) {
+                nextBtnQ1.disabled = false;
+                nextBtnQ1.style.opacity = '1';
+                nextBtnQ1.style.cursor = 'pointer';
+            }
             
         } catch (error) {
             console.error('Error al enviar:', error);
@@ -863,6 +874,16 @@ function initMoment2() {
             }
         });
     }
+
+    const progressText = document.getElementById('progressText');
+    const progressBar = document.getElementById('progressBar');
+    if (progressText) {
+        progressText.textContent = 'Páginas 17 y 18 del libro';
+    }
+    if (progressBar) {
+        progressBar.style.setProperty('--progress', '100%');
+    }
+    document.documentElement.style.setProperty('--flipbook-progress', '100%');
 
     const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
     if (closeCocinaBtn) {
