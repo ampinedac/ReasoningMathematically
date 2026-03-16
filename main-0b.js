@@ -783,6 +783,69 @@ function initMoment2() {
         newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
     }
 
+    const prevBtnQ2 = document.getElementById('prevBtnQ2');
+    if (prevBtnQ2) {
+        const newPrevBtnQ2 = prevBtnQ2.cloneNode(true);
+        prevBtnQ2.parentNode.replaceChild(newPrevBtnQ2, prevBtnQ2);
+        newPrevBtnQ2.addEventListener('click', () => {
+            showScreen('moment1Screen');
+            initMoment1();
+
+            const problemSection = document.getElementById('problemQ1Section');
+            const flipbookSection = document.getElementById('flipbookSection');
+            const flipbook = document.getElementById('flipbook');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtnQ1 = document.getElementById('prevBtnQ1');
+            const nextBtnQ1 = document.getElementById('nextBtnQ1');
+            const soundToggle = document.getElementById('soundToggle');
+
+            if (problemSection) {
+                problemSection.classList.remove('hidden');
+            }
+            if (flipbookSection) {
+                flipbookSection.style.display = 'none';
+            }
+            if (flipbook) {
+                flipbook.style.display = 'none';
+            }
+            if (prevBtn) {
+                prevBtn.style.display = 'none';
+            }
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+                nextBtn.onclick = null;
+            }
+            if (soundToggle) {
+                soundToggle.style.display = 'none';
+            }
+            if (prevBtnQ1) {
+                prevBtnQ1.style.display = '';
+            }
+            if (nextBtnQ1) {
+                nextBtnQ1.style.display = '';
+                nextBtnQ1.disabled = !m1Q1Submitted;
+            }
+
+            if (typeof window.playPageTurnSound === 'function') {
+                window.playPageTurnSound();
+            }
+        });
+    }
+
+    const nextBtnQ2 = document.getElementById('nextBtnQ2');
+    if (nextBtnQ2) {
+        const newNextBtnQ2 = nextBtnQ2.cloneNode(true);
+        nextBtnQ2.parentNode.replaceChild(newNextBtnQ2, nextBtnQ2);
+        newNextBtnQ2.addEventListener('click', () => {
+            showScreen('moment3Screen');
+            initMoment3();
+            if (typeof window.playPageTurnSound === 'function') {
+                window.playPageTurnSound();
+            }
+        });
+    }
+
     const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
     if (closeCocinaBtn) {
         const newCloseCocinaBtn = closeCocinaBtn.cloneNode(true);

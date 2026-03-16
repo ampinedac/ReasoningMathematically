@@ -133,6 +133,15 @@
         margin: 12px auto;
     }
 
+    .activity-0b #moment1Screen #flipbook,
+    .activity-0b #moment1Screen #problemQ1Section.q1-book-spread,
+    .activity-0b #problemQ2Section.q1-book-spread {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .activity-0b #moment1Screen #flipbook .story-page .story-text {
         font-size: clamp(1.15rem, 1.65vw, 1.55rem) !important;
         line-height: 1.5 !important;
@@ -381,7 +390,7 @@
     }
 
     .activity-0b #problemQ2Section .q1-left-page > p {
-        font-size: clamp(1.05rem, 1.7vw, 1.22rem) !important;
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem) !important;
         line-height: 1.45 !important;
         width: 92%;
         max-width: 480px;
@@ -404,7 +413,7 @@
 
     .activity-0b #problemQ2Section .q2-guide-title {
         margin: 0 0 8px;
-        font-size: clamp(1.05rem, 1.7vw, 1.22rem);
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem);
         font-weight: 700;
         color: #2f3f87;
         text-align: left;
@@ -419,18 +428,21 @@
 
     .activity-0b #problemQ2Section .q2-guide-list li {
         margin: 0;
-        font-size: clamp(1.05rem, 1.7vw, 1.22rem);
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem);
         line-height: 1.45;
         text-align: left;
         color: #233047;
     }
 
     .activity-0b #problemQ2Section .instruction-hint {
-        font-size: clamp(1.05rem, 1.7vw, 1.22rem) !important;
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem) !important;
         line-height: 1.45;
         width: 92%;
         max-width: 480px;
         margin: 10px auto 0;
+        background: #fff8e8;
+        border-left: 4px solid #ffd46a;
+        color: #6f5b1f;
     }
 
     .activity-0b #problemQ2Section .btn-cocina {
@@ -462,6 +474,26 @@
         bottom: 12px;
         transform: translateX(-50%);
         z-index: 6;
+    }
+
+    .activity-0b #problemQ2Section .q2-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 12;
+        width: 62px;
+        height: 62px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ2Section #prevBtnQ2 {
+        left: -24px;
+    }
+
+    .activity-0b #problemQ2Section #nextBtnQ2 {
+        right: -24px;
     }
 
     .activity-0b .cocina-overlay {
@@ -558,6 +590,23 @@
         line-height: 1.4 !important;
         text-align: left !important;
         font-weight: 500;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions .audio-controls,
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions .submit-section {
+        margin: 0;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions .status-text {
+        display: none;
     }
 
     .activity-0b #moment2Screen #finalQuestionSectionM2 .evidence-section {
@@ -1053,7 +1102,7 @@
 
     @media (max-width: 980px) {
         .activity-0b #moment1Screen .container {
-            width: 97vw;
+            width: 95vw;
             padding: 6px 8px;
         }
 
@@ -1094,6 +1143,33 @@
             height: 54px;
         }
 
+        .activity-0b #problemQ2Section .q2-nav-btn {
+            width: 54px;
+            height: 54px;
+        }
+
+        .activity-0b #problemQ2Section #prevBtnQ2 {
+            left: -18px;
+        }
+
+        .activity-0b #problemQ2Section #nextBtnQ2 {
+            right: -18px;
+        }
+
+
+        .activity-0b #problemQ2Section .q2-nav-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        .activity-0b #problemQ2Section #prevBtnQ2 {
+            left: -14px;
+        }
+
+        .activity-0b #problemQ2Section #nextBtnQ2 {
+            right: -14px;
+        }
         .activity-0b #moment4Screen .m4-left-page .magic-lives-container,
         .activity-0b #moment4Screen .m4-left-page .m4-story-card,
         .activity-0b #moment4ReflectionSection .reflection-card,
@@ -1548,15 +1624,17 @@
             </div>
 
             <div id="problemQ2Section" class="q1-book-spread">
+                <button id="prevBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página anterior">←</button>
+                <button id="nextBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página siguiente">→</button>
                 <div class="problem-box q1-left-page">
                     <h3>Situación 2</h3>
                     <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora deben organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
                     <div class="q2-guide-card">
                         <p class="q2-guide-title">Guía rápida</p>
                         <ul class="q2-guide-list">
-                            <li>1. Entra a la cocina.</li>
-                            <li>2. Empareja pedidos con la misma cantidad de panes.</li>
-                            <li>3. Verifica y regresa al libro para explicar.</li>
+                            <li>1. Haz clic en una bolsa para seleccionarla.</li>
+                            <li>2. Haz clic en otra bolsa para formar el par.</li>
+                            <li>3. Repite hasta armar todas las parejas posibles.</li>
                         </ul>
                     </div>
                     <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
@@ -1569,20 +1647,18 @@
                             <h3>Para pensar 🤔</h3>
                             <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
                             <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
-                        </div>
 
-                        <div class="evidence-section">
-                            <h4>Graba tu explicación:</h4>
+                            <div class="m2-inline-actions">
+                                <div class="audio-controls">
+                                    <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
+                                    <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                    <span id="audioStatusM2" class="audio-status"></span>
+                                </div>
 
-                            <div class="audio-controls">
-                                <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                                <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
-                                <span id="audioStatusM2" class="audio-status"></span>
-                            </div>
-
-                            <div class="submit-section">
-                                <p id="statusM2" class="status-text"></p>
-                                <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                                <div class="submit-section">
+                                    <p id="statusM2" class="status-text"></p>
+                                    <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                                </div>
                             </div>
                         </div>
 
@@ -1898,7 +1974,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031515"></script>
-    <script type="module" src="main-0b.js?v=2026031517"></script>
+    <script type="module" src="main-0b.js?v=2026031518"></script>
     <script src="app.js?v=2026031517"></script>
 </body>
 </html>
