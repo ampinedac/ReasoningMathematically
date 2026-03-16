@@ -452,7 +452,7 @@ function initMoment1() {
         }
         if (nextBtn) {
             nextBtn.style.display = '';
-            nextBtn.disabled = !m1Q1Submitted;
+            nextBtn.disabled = false;
             nextBtn.onclick = null;
         }
         if (soundToggle) {
@@ -495,6 +495,15 @@ function initMoment1() {
             }
             if (flipbook) {
                 flipbook.style.display = '';
+            }
+            if (prevBtn) {
+                prevBtn.style.display = '';
+                prevBtn.disabled = false;
+            }
+            if (nextBtn) {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+                nextBtn.onclick = showQ1FromLastStoryPage;
             }
             if (soundToggle) {
                 soundToggle.style.display = '';
