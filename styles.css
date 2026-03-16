@@ -617,38 +617,8 @@ body.flipbook-on-cover #flipbook::after {
     z-index: 2;
 }
 
-.cover-sticker {
-    position: absolute;
-    width: clamp(74px, 8vw, 96px);
-    height: clamp(74px, 8vw, 96px);
-    border-radius: 50%;
-    border: 3px solid rgba(227, 183, 118, 0.95);
-    background: radial-gradient(circle at 32% 26%, #fffdf8 0%, #fff4dc 48%, #ffe7b7 100%);
-    color: #8a4e14;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: clamp(1.3rem, 1.95vw, 1.75rem);
-    font-weight: 800;
-    box-shadow: 0 10px 18px rgba(178, 119, 41, 0.18);
-}
-
-.sticker-1 { top: 20%; left: 6%; }
-.sticker-2 { top: 37%; left: 4%; }
-.sticker-3 { top: 56%; left: 7%; }
-.sticker-4 { top: 20%; right: 6%; }
-.sticker-5 { top: 38%; right: 4%; }
-.sticker-6 { top: 57%; right: 7%; }
-.sticker-7 {
-    bottom: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: clamp(86px, 8.6vw, 106px);
-    height: clamp(86px, 8.6vw, 106px);
-    border-color: rgba(227, 183, 118, 0.95);
-    color: #8a4e14;
-    font-size: clamp(1.3rem, 1.8vw, 1.55rem);
-    border-radius: 50%;
+.cover-stickers {
+    display: none;
 }
 
 .cover-math-row {
@@ -676,7 +646,7 @@ body.flipbook-on-cover #flipbook::after {
     gap: 10px;
     text-align: center;
     line-height: 1;
-    margin: 14% 0 2% 0;
+    margin: 18% 0 3% 0;
     padding: 0 12%;
     position: relative;
     z-index: 4;
@@ -693,10 +663,10 @@ body.flipbook-on-cover #flipbook::after {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 18px 10px;
+    padding: 10px 20px 12px;
     border-radius: 999px;
     font-family: 'Trebuchet MS', 'Comic Sans MS', cursive;
-    font-size: clamp(1.25rem, 1.8vw, 1.72rem);
+    font-size: clamp(1.45rem, 2.05vw, 1.95rem);
     font-weight: 900;
     line-height: 1;
     text-transform: none;
@@ -740,11 +710,11 @@ body.flipbook-on-cover #flipbook::after {
     position: relative;
     z-index: 4;
     margin: 0;
-    max-width: 70%;
+    max-width: 78%;
     text-align: center;
     color: rgba(103, 66, 32, 0.82);
-    font-size: clamp(0.98rem, 1.1vw, 1.08rem);
-    line-height: 1.45;
+    font-size: clamp(1.1rem, 1.28vw, 1.22rem);
+    line-height: 1.5;
 }
 
 .cover-leer-btn {
@@ -782,15 +752,8 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 @media (max-width: 960px) {
-    .cover-sticker {
-        width: clamp(54px, 11vw, 68px);
-        height: clamp(54px, 11vw, 68px);
-        border-width: 3px;
-        font-size: clamp(1rem, 3.8vw, 1.2rem);
-    }
-
     .cover-book-title {
-        margin-top: 12%;
+        margin-top: 22%;
         padding: 0 8%;
     }
 
@@ -799,18 +762,13 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     .cover-word-chip {
-        padding: 7px 14px 9px;
-        font-size: clamp(1rem, 3.5vw, 1.25rem);
+        padding: 8px 15px 10px;
+        font-size: clamp(1.08rem, 3.8vw, 1.34rem);
     }
 
     .cover-subtitle {
         max-width: 84%;
-        font-size: clamp(0.92rem, 3vw, 1rem);
-    }
-
-    .sticker-7 {
-        width: clamp(72px, 16vw, 88px);
-        height: clamp(72px, 16vw, 88px);
+        font-size: clamp(1rem, 3.2vw, 1.08rem);
     }
 }
 
