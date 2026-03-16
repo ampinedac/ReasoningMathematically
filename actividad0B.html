@@ -181,7 +181,11 @@
         display: block;
         width: clamp(140px, 24vw, 240px);
         max-width: 100%;
-        height: auto;
+        /* La imagen PNG tiene 38% de transparencia en la parte inferior;
+           aspect-ratio + object-fit recorta esa zona invisible */
+        aspect-ratio: 1536 / 640;
+        object-fit: cover;
+        object-position: top center;
         margin: 0;
     }
 
@@ -376,6 +380,16 @@
         text-align: center;
     }
 
+    .activity-0b #problemQ2Section .q1-left-page > p {
+        font-size: clamp(1.05rem, 1.7vw, 1.22rem) !important;
+        line-height: 1.45 !important;
+        width: 92%;
+        max-width: 480px;
+        margin: 0 auto 10px;
+        text-align: justify;
+        color: #222;
+    }
+
     .activity-0b #problemQ2Section .q2-guide-card {
         width: 92%;
         max-width: 480px;
@@ -390,7 +404,7 @@
 
     .activity-0b #problemQ2Section .q2-guide-title {
         margin: 0 0 8px;
-        font-size: clamp(0.92rem, 1.5vw, 1.08rem);
+        font-size: clamp(1.05rem, 1.7vw, 1.22rem);
         font-weight: 700;
         color: #2f3f87;
         text-align: left;
@@ -405,10 +419,18 @@
 
     .activity-0b #problemQ2Section .q2-guide-list li {
         margin: 0;
-        font-size: clamp(0.92rem, 1.5vw, 1.08rem);
-        line-height: 1.35;
+        font-size: clamp(1.05rem, 1.7vw, 1.22rem);
+        line-height: 1.45;
         text-align: left;
         color: #233047;
+    }
+
+    .activity-0b #problemQ2Section .instruction-hint {
+        font-size: clamp(1.05rem, 1.7vw, 1.22rem) !important;
+        line-height: 1.45;
+        width: 92%;
+        max-width: 480px;
+        margin: 10px auto 0;
     }
 
     .activity-0b #problemQ2Section .btn-cocina {
@@ -557,6 +579,12 @@
     .activity-0b #moment2Screen #finalQuestionSectionM2 .submit-section {
         margin-top: 6px;
         justify-content: flex-start;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .btn-audio,
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .btn-primary {
+        font-size: clamp(0.75rem, 1.1vw, 0.88rem) !important;
+        padding: 7px 14px !important;
     }
 
     .activity-0b #moment2Screen #finalQuestionSectionM2 .status-text {
@@ -1473,7 +1501,7 @@
                         <p class="sale-description">3 bolsitas con 7 panes de bono cada una.</p>
                     </div>
                     <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
-                    <p class="question">Explica cómo lo sabes. Argumenta tu respuesta.</p>
+                    <p class="question">Explica cómo lo sabes.</p>
                 </div>
 
                 <!-- TABLERO Y AUDIO -->
