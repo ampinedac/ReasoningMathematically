@@ -250,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function showPage(pageIndex, direction = 'forward') {
         const oldPage = pages[currentPage];
         const newPage = pages[pageIndex];
-        const flipbookEl = document.getElementById('flipbook');
         
         if (!newPage) return;
         
@@ -263,19 +262,8 @@ document.addEventListener('DOMContentLoaded', function() {
         pages.forEach(page => {
             page.classList.remove('turning-forward', 'turning-backward', 'turned', 'active');
         });
-
-        if (flipbookEl) {
-            flipbookEl.classList.remove('spread-turn-forward', 'spread-turn-backward');
-        }
         
         if (direction === 'forward') {
-            if (flipbookEl) {
-                flipbookEl.classList.add('spread-turn-forward');
-                setTimeout(() => {
-                    flipbookEl.classList.remove('spread-turn-forward');
-                }, TURN_DURATION_MS);
-            }
-
             // Voltear hacia adelante
             if (oldPage) {
                 oldPage.classList.add('turning-forward');
@@ -290,13 +278,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }, TURN_HALF_MS);
             
         } else {
-            if (flipbookEl) {
-                flipbookEl.classList.add('spread-turn-backward');
-                setTimeout(() => {
-                    flipbookEl.classList.remove('spread-turn-backward');
-                }, TURN_DURATION_MS);
-            }
-
             // Voltear hacia atrás
             newPage.classList.remove('turned');
             newPage.classList.add('turning-backward');
