@@ -278,6 +278,124 @@ section.screen > * {
     z-index: 10;
 }
 
+#flipbook .page.page-static-left {
+    opacity: 1;
+    clip-path: inset(0 50% 0 0);
+    pointer-events: none;
+    z-index: 12;
+}
+
+#flipbook .page.page-static-right {
+    opacity: 1;
+    clip-path: inset(0 0 0 50%);
+    pointer-events: none;
+    z-index: 12;
+}
+
+#flipbook .page.page-under-right {
+    opacity: 1;
+    clip-path: inset(0 0 0 50%);
+    pointer-events: none;
+    z-index: 6;
+}
+
+#flipbook .page.page-under-left {
+    opacity: 1;
+    clip-path: inset(0 50% 0 0);
+    pointer-events: none;
+    z-index: 6;
+}
+
+#flipbook .page-turn-leaf {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    pointer-events: none;
+    transform-style: preserve-3d;
+    z-index: 28;
+}
+
+#flipbook .page-turn-leaf.forward {
+    left: 50%;
+    transform-origin: left center;
+    animation: leafTurnForward var(--book-turn-duration) var(--book-turn-ease) forwards;
+}
+
+#flipbook .page-turn-leaf.backward {
+    left: 0;
+    transform-origin: right center;
+    animation: leafTurnBackward var(--book-turn-duration) var(--book-turn-ease) forwards;
+}
+
+#flipbook .page-turn-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    backface-visibility: hidden;
+    background: var(--page-bg-light);
+}
+
+#flipbook .page-turn-leaf.forward .page-turn-face.front {
+    border-radius: 0 10px 10px 0;
+    box-shadow: inset -24px 0 46px rgba(0, 0, 0, 0.18), 8px 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+#flipbook .page-turn-leaf.forward .page-turn-face.back {
+    border-radius: 10px 0 0 10px;
+    box-shadow: inset 22px 0 42px rgba(0, 0, 0, 0.12), -8px 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+#flipbook .page-turn-leaf.backward .page-turn-face.front {
+    border-radius: 10px 0 0 10px;
+    box-shadow: inset 24px 0 46px rgba(0, 0, 0, 0.18), -8px 10px 24px rgba(0, 0, 0, 0.16);
+}
+
+#flipbook .page-turn-leaf.backward .page-turn-face.back {
+    border-radius: 0 10px 10px 0;
+    box-shadow: inset -22px 0 42px rgba(0, 0, 0, 0.12), 8px 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+#flipbook .page-turn-face.back {
+    transform: rotateY(180deg);
+}
+
+@keyframes leafTurnForward {
+    0% {
+        transform: perspective(2000px) rotateY(0deg);
+    }
+    35% {
+        transform: perspective(2000px) rotateY(-52deg);
+    }
+    55% {
+        transform: perspective(2000px) rotateY(-96deg);
+    }
+    82% {
+        transform: perspective(2000px) rotateY(-150deg);
+    }
+    100% {
+        transform: perspective(2000px) rotateY(-180deg);
+    }
+}
+
+@keyframes leafTurnBackward {
+    0% {
+        transform: perspective(2000px) rotateY(0deg);
+    }
+    35% {
+        transform: perspective(2000px) rotateY(52deg);
+    }
+    55% {
+        transform: perspective(2000px) rotateY(96deg);
+    }
+    82% {
+        transform: perspective(2000px) rotateY(150deg);
+    }
+    100% {
+        transform: perspective(2000px) rotateY(180deg);
+    }
+}
+
 #flipbook .page.turning-forward {
     animation: flipForward var(--book-turn-duration) var(--book-turn-ease) forwards;
     transform-origin: right center;
@@ -505,64 +623,66 @@ body.flipbook-on-cover #flipbook::after {
 
 .cover-sticker {
     position: absolute;
-    width: clamp(40px, 4.3vw, 58px);
-    height: clamp(40px, 4.3vw, 58px);
+    width: clamp(62px, 7vw, 84px);
+    height: clamp(62px, 7vw, 84px);
     border-radius: 50%;
-    border: 3px solid rgba(115, 166, 224, 0.82);
-    background: radial-gradient(circle at 32% 26%, #ffffff 0%, #eef6ff 44%, #dbeaff 100%);
-    color: #345680;
+    border: 4px solid rgba(112, 170, 229, 0.95);
+    background: radial-gradient(circle at 32% 26%, #fffdf8 0%, #f4fbff 48%, #ddecff 100%);
+    color: #446894;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(1rem, 1.35vw, 1.25rem);
+    font-size: clamp(1.25rem, 1.8vw, 1.65rem);
     font-weight: 800;
-    box-shadow: 0 4px 8px rgba(56, 90, 138, 0.18);
+    box-shadow: 0 8px 18px rgba(70, 108, 158, 0.22);
 }
 
-.sticker-1 { top: 21%; left: 10%; }
-.sticker-2 { top: 34%; left: 6%; }
-.sticker-3 { top: 50%; left: 10%; }
-.sticker-4 { top: 23%; right: 9%; }
-.sticker-5 { top: 39%; right: 6%; }
-.sticker-6 { top: 55%; right: 10%; }
+.sticker-1 { top: 22%; left: 6.5%; }
+.sticker-2 { top: 38%; left: 3%; }
+.sticker-3 { top: 56%; left: 7%; }
+.sticker-4 { top: 20%; right: 6%; }
+.sticker-5 { top: 43%; right: 2.5%; }
+.sticker-6 { top: 63%; right: 6%; }
 .sticker-7 {
-    bottom: 17%;
+    bottom: 15%;
     left: 50%;
     transform: translateX(-50%);
-    width: clamp(56px, 6.2vw, 82px);
-    border-color: rgba(122, 175, 232, 0.88);
-    color: #2f5a8b;
-    font-size: clamp(0.75rem, 1vw, 0.95rem);
+    width: clamp(84px, 9vw, 108px);
+    height: clamp(58px, 6.6vw, 76px);
+    border-color: rgba(112, 170, 229, 0.95);
+    color: #355b8e;
+    font-size: clamp(1rem, 1.2vw, 1.15rem);
+    border-radius: 999px;
 }
 
 .cover-math-row {
     display: flex;
     gap: 10px;
-    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    font-size: clamp(0.9rem, 1.05vw, 1.02rem);
     font-weight: 900;
-    color: rgba(122, 54, 8, 0.35);
+    color: rgba(126, 78, 31, 0.58);
     user-select: none;
     letter-spacing: 0.6px;
     flex-wrap: wrap;
     justify-content: center;
-    background: rgba(255, 245, 218, 0.55);
-    border: 1px dashed rgba(169, 92, 25, 0.28);
-    border-radius: 24px;
-    padding: 5px 10px;
+    background: rgba(255, 247, 226, 0.88);
+    border: 2px dashed rgba(217, 170, 111, 0.55);
+    border-radius: 999px;
+    padding: 8px 18px;
     position: relative;
     z-index: 4;
 }
 
 .cover-book-title {
     font-family: 'Segoe Print', 'Comic Sans MS', 'Trebuchet MS', cursive;
-    font-size: clamp(1.38rem, 2.05vw, 2rem);
+    font-size: clamp(1.65rem, 2.6vw, 2.45rem);
     font-weight: 800;
     color: #5a2008;
     text-align: center;
-    text-shadow: 0 2px 0 rgba(255, 249, 236, 0.7), 0 5px 14px rgba(135, 62, 10, 0.2);
-    line-height: 1.18;
-    margin: 12% 0 2% 0;
-    padding: 0 3%;
+    text-shadow: 0 2px 0 rgba(255, 249, 236, 0.7), 0 6px 14px rgba(135, 62, 10, 0.18);
+    line-height: 1.12;
+    margin: 17% 0 3% 0;
+    padding: 0 10%;
     position: relative;
     z-index: 4;
 }
@@ -570,7 +690,7 @@ body.flipbook-on-cover #flipbook::after {
 .cover-cta-wrap {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
     position: relative;
     z-index: 4;
 }
@@ -580,24 +700,36 @@ body.flipbook-on-cover #flipbook::after {
     color: #fff;
     border: 2px solid rgba(255, 235, 193, 0.45);
     border-radius: 40px;
-    padding: 12px 30px;
+    padding: 16px 38px;
     font-family: 'Trebuchet MS', 'Verdana', sans-serif;
-    font-size: clamp(1rem, 1.45vw, 1.25rem);
+    font-size: clamp(1.15rem, 1.55vw, 1.35rem);
     font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 7px 18px rgba(175, 65, 12, 0.38);
+    box-shadow: 0 10px 24px rgba(175, 65, 12, 0.34);
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     letter-spacing: 0.2px;
     position: relative;
     z-index: 4;
 }
 
+.cover-flork-badge {
+    width: clamp(92px, 9.6vw, 116px);
+    height: clamp(92px, 9.6vw, 116px);
+    border-radius: 50%;
+    background: rgba(255, 249, 240, 0.96);
+    border: 3px solid rgba(224, 189, 132, 0.7);
+    box-shadow: 0 8px 18px rgba(168, 124, 63, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .cover-flork {
-    width: clamp(68px, 8vw, 92px);
+    width: 78%;
     height: auto;
-    color: rgba(58, 32, 23, 0.94);
-    filter: drop-shadow(0 2px 2px rgba(255, 255, 255, 0.4));
-    transform: translateY(2px);
+    color: rgba(69, 39, 27, 0.98);
+    filter: drop-shadow(0 2px 1px rgba(255, 255, 255, 0.55));
+    transform: translateY(1px);
 }
 
 .cover-leer-btn:hover {
@@ -619,22 +751,28 @@ body.flipbook-on-cover #flipbook::after {
 
 @media (max-width: 960px) {
     .cover-sticker {
-        width: clamp(34px, 8.2vw, 46px);
-        height: clamp(34px, 8.2vw, 46px);
-        border-width: 2px;
-        font-size: clamp(0.9rem, 3.2vw, 1.05rem);
+        width: clamp(50px, 10vw, 62px);
+        height: clamp(50px, 10vw, 62px);
+        border-width: 3px;
+        font-size: clamp(1rem, 3.6vw, 1.18rem);
     }
 
     .cover-book-title {
-        margin-top: 16%;
+        margin-top: 22%;
+        padding: 0 8%;
     }
 
     .cover-cta-wrap {
-        gap: 6px;
+        gap: 8px;
+    }
+
+    .cover-flork-badge {
+        width: clamp(72px, 15vw, 88px);
+        height: clamp(72px, 15vw, 88px);
     }
 
     .cover-flork {
-        width: clamp(58px, 13vw, 76px);
+        width: 76%;
     }
 }
 

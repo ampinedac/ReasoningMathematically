@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 0;
     let currentSpeech = null; // Almacenar el objeto de narración actual
     let completionEventDispatched = false;
+    let isTurning = false;
     const TURN_DURATION_MS = 1050;
     const TURN_HALF_MS = Math.round(TURN_DURATION_MS / 2);
 
@@ -246,25 +247,86 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.nextBtn.disabled = !allowNextOnLastPageForActivity0B && page === CONFIG.totalPages - 1;
     }
 
-    // ===== PAGE DISPLAY =====
-    function showPage(pageIndex, direction = 'forward') {
+    function clearTemporaryTurnLayers() {
+        document.querySelectorAll('#flipbook .page-turn-leaf').forEach(layer => layer.remove());
+    }
+
+    function resetPageTurnState() {
+        pages.forEach(page => {
+            page.classList.remove(
+                'turning-forward',
+                'turning-backward',
+                'turned',
+                'active',
+                'page-static-left',
+                'page-static-right',
+                'page-under-left',
+                'page-under-right'
+            );
+        });
+    }
+
+    function createTurnContent(sourcePage, visibleHalf) {
+        const clone = sourcePage.cloneNode(true);
+        clone.classList.remove(
+            'turning-forward',
+            'turning-backward',
+            'turned',
+            'active',
+            'page-static-left',
+            'page-static-right',
+            'page-under-left',
+            'page-under-right'
+        );
+        clone.classList.add('page-turn-source');
+
+        clone.style.left = visibleHalf === 'right' ? '-100%' : '0';
+        clone.style.top = '0';
+        clone.style.width = '200%';
+        clone.style.height = '100%';
+        clone.style.transform = 'none';
+        clone.style.opacity = '1';
+        clone.style.pointerEvents = 'none';
+        clone.style.zIndex = '1';
+        clone.style.margin = '0';
+
+        return clone;
+    }
+
+    function createTurnLeaf({ frontPage, frontHalf, backPage, backHalf, direction }) {
+        const leaf = document.createElement('div');
+        leaf.className = `page-turn-leaf ${direction}`;
+
+        const frontFace = document.createElement('div');
+        frontFace.className = 'page-turn-face front';
+        frontFace.appendChild(createTurnContent(frontPage, frontHalf));
+
+        const backFace = document.createElement('div');
+        backFace.className = 'page-turn-face back';
+        backFace.appendChild(createTurnContent(backPage, backHalf));
+
+        leaf.appendChild(frontFace);
+        leaf.appendChild(backFace);
+
+        return leaf;
+    }
+
+    function finishPageTurn(pageIndex) {
+        clearTemporaryTurnLayers();
+        resetPageTurnState();
+        currentPage = pageIndex;
+        pages[pageIndex].classList.add('active');
+        updateProgress(pageIndex);
+        isTurning = false;
+    }
+
+    function showSimplePage(pageIndex, direction) {
         const oldPage = pages[currentPage];
         const newPage = pages[pageIndex];
-        
-        if (!newPage) return;
-        
-        // Detener narración al cambiar de página
-        stopNarration();
-        CONFIG.narrationEnabled = false;
-        updateSoundButton();
-        
-        // Limpiar todas las clases de animación
-        pages.forEach(page => {
-            page.classList.remove('turning-forward', 'turning-backward', 'turned', 'active');
-        });
-        
+
+        resetPageTurnState();
+
         if (direction === 'forward') {
-            // Voltear hacia adelante
             if (oldPage) {
                 oldPage.classList.add('turning-forward');
                 setTimeout(() => {
@@ -272,16 +334,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     oldPage.classList.add('turned');
                 }, TURN_DURATION_MS);
             }
-            
+
             setTimeout(() => {
                 newPage.classList.add('active');
             }, TURN_HALF_MS);
-            
         } else {
-            // Voltear hacia atrás
             newPage.classList.remove('turned');
             newPage.classList.add('turning-backward');
-            
+
             setTimeout(() => {
                 newPage.classList.remove('turning-backward');
                 newPage.classList.add('active');
@@ -290,10 +350,76 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }, TURN_DURATION_MS);
         }
+
+        setTimeout(() => {
+            currentPage = pageIndex;
+            updateProgress(pageIndex);
+            isTurning = false;
+        }, TURN_DURATION_MS);
+    }
+
+    // ===== PAGE DISPLAY =====
+    function showPage(pageIndex, direction = 'forward') {
+        const oldPage = pages[currentPage];
+        const newPage = pages[pageIndex];
         
-        currentPage = pageIndex;
-        updateProgress(pageIndex);
+        if (!newPage || isTurning) return;
+
+        isTurning = true;
+        
+        // Detener narración al cambiar de página
+        stopNarration();
+        CONFIG.narrationEnabled = false;
+        updateSoundButton();
+
+        clearTemporaryTurnLayers();
+
+        const usesCoverTurn = oldPage?.classList.contains('book-cover-page') || newPage.classList.contains('book-cover-page');
+        if (usesCoverTurn) {
+            showSimplePage(pageIndex, direction);
+            playPageTurnSound();
+            return;
+        }
+
         playPageTurnSound();
+
+        resetPageTurnState();
+
+        const flipbook = document.getElementById('flipbook');
+        if (!flipbook || !oldPage) {
+            showSimplePage(pageIndex, direction);
+            return;
+        }
+
+        if (direction === 'forward') {
+            oldPage.classList.add('page-static-left');
+            newPage.classList.add('page-under-right', 'active');
+
+            const leaf = createTurnLeaf({
+                frontPage: oldPage,
+                frontHalf: 'right',
+                backPage: newPage,
+                backHalf: 'left',
+                direction: 'forward'
+            });
+
+            flipbook.appendChild(leaf);
+            leaf.addEventListener('animationend', () => finishPageTurn(pageIndex), { once: true });
+        } else {
+            oldPage.classList.add('page-static-right');
+            newPage.classList.add('page-under-left', 'active');
+
+            const leaf = createTurnLeaf({
+                frontPage: oldPage,
+                frontHalf: 'left',
+                backPage: newPage,
+                backHalf: 'right',
+                direction: 'backward'
+            });
+
+            flipbook.appendChild(leaf);
+            leaf.addEventListener('animationend', () => finishPageTurn(pageIndex), { once: true });
+        }
     }
 
     // ===== NAVIGATION =====
