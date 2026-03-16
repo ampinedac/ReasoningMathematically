@@ -8,10 +8,14 @@
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px !important;
     padding: 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background:
+        radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 28%),
+        radial-gradient(circle at 82% 76%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 34%),
+        repeating-linear-gradient(90deg, rgba(101, 67, 33, 0.18) 0 6px, rgba(0, 0, 0, 0) 6px 34px),
+        linear-gradient(140deg, #b07b45 0%, #9a6736 36%, #7b4f29 100%);
     border-radius: 12px;
     min-height: 500px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 14px 34px rgba(72, 44, 19, 0.34);
     align-items: start;
 }
 
@@ -23,7 +27,7 @@
     justify-content: center;
     grid-column: span 2;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 250, 240, 0.2);
     border-radius: 16px;
     animation: pairAppear 0.5s ease-out;
 }

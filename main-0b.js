@@ -34,12 +34,14 @@ function getM1Q1StorageKey() {
 function applyM1Q1SubmittedLock() {
     const statusText = document.getElementById('statusM1Q1');
     const submitBtn = document.getElementById('submitM1Q1');
+    const recordBtn = document.getElementById('recordBtnM1Q1');
+    const stopBtn = document.getElementById('stopBtnM1Q1');
     const canvas = document.getElementById('boardCanvasM1Q1');
     const evidenceSection = canvas ? canvas.closest('.evidence-section') : null;
 
     if (statusText) {
-        statusText.textContent = '✅ Ya enviaste esta respuesta. Puedes volver al cuento con la flecha izquierda.';
-        statusText.className = 'status-text success';
+        statusText.textContent = '';
+        statusText.className = 'status-text';
     }
 
     if (submitBtn) {
@@ -48,12 +50,23 @@ function applyM1Q1SubmittedLock() {
         submitBtn.style.cursor = 'not-allowed';
     }
 
+    if (recordBtn) {
+        recordBtn.disabled = true;
+        recordBtn.style.opacity = '0.5';
+        recordBtn.style.cursor = 'not-allowed';
+    }
+
+    if (stopBtn) {
+        stopBtn.disabled = true;
+        stopBtn.classList.add('hidden');
+    }
+
     if (canvas) {
-        canvas.style.pointerEvents = 'none';
+        canvas.style.pointerEvents = '';
     }
 
     if (evidenceSection) {
-        evidenceSection.querySelectorAll('.tool-btn').forEach(btn => btn.disabled = true);
+        evidenceSection.querySelectorAll('.tool-btn').forEach(btn => btn.disabled = false);
     }
 }
 
@@ -71,6 +84,9 @@ let m4_errorsConsecutiveMax = 0;
 let m4_magicLives = 3; // Sistema de vidas mágicas
 let m4_isFinalizing = false;
 let m4_returnHomeTimeout = null;
+let m4_reflectionSelected = false;
+let m4_reflectionSaved = false;
+let m4_reflectionSaving = false;
 
 // ========================================
 // INICIALIZACIÓN
@@ -423,6 +439,48 @@ function initMoment1() {
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
 
+    const showQ1FromLastStoryPage = () => {
+        if (!problemSection) {
+            return;
+        }
+
+        if (flipbookSection) {
+            flipbookSection.style.display = 'none';
+        }
+        if (flipbook) {
+            flipbook.style.display = 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = '';
+            nextBtn.disabled = !m1Q1Submitted;
+            nextBtn.onclick = null;
+        }
+        if (soundToggle) {
+            soundToggle.style.display = 'none';
+        }
+        if (prevBtn) {
+            prevBtn.style.display = '';
+            prevBtn.disabled = false;
+        }
+        if (prevBtnQ1) {
+            prevBtnQ1.style.display = '';
+        }
+        if (nextBtnQ1) {
+            nextBtnQ1.style.display = '';
+            nextBtnQ1.disabled = !m1Q1Submitted;
+        }
+
+        problemSection.classList.remove('hidden');
+        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        if (m1Q1Submitted) {
+            applyM1Q1SubmittedLock();
+        } else if (!m1ProblemInitialized) {
+            m1ProblemInitialized = true;
+            initProblemQ1();
+        }
+    };
+
     const syncM1WithFlipbookPage = (event) => {
         if (!problemSection) {
             return;
@@ -431,40 +489,32 @@ function initMoment1() {
         const isLastPage = Boolean(event?.detail?.isLastPage);
 
         if (isLastPage) {
+            // Mantener visible la página 7 y abrir Situación 1 solo al pulsar siguiente.
             if (flipbookSection) {
-                flipbookSection.style.display = 'none';
+                flipbookSection.style.display = '';
             }
             if (flipbook) {
-                flipbook.style.display = 'none';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = !m1Q1Submitted;
+                flipbook.style.display = '';
             }
             if (soundToggle) {
-                soundToggle.style.display = 'none';
+                soundToggle.style.display = '';
             }
             if (prevBtn) {
                 prevBtn.style.display = '';
                 prevBtn.disabled = false;
             }
+            if (nextBtn) {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+                nextBtn.onclick = showQ1FromLastStoryPage;
+            }
             if (prevBtnQ1) {
-                prevBtnQ1.style.display = '';
+                prevBtnQ1.style.display = 'none';
             }
             if (nextBtnQ1) {
-                nextBtnQ1.style.display = '';
-                nextBtnQ1.disabled = !m1Q1Submitted;
+                nextBtnQ1.style.display = 'none';
             }
-
-            problemSection.classList.remove('hidden');
-            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-            if (m1Q1Submitted) {
-                applyM1Q1SubmittedLock();
-            } else if (!m1ProblemInitialized) {
-                m1ProblemInitialized = true;
-                initProblemQ1();
-            }
+            problemSection.classList.add('hidden');
         } else {
             if (flipbookSection) {
                 flipbookSection.style.display = '';
@@ -477,6 +527,7 @@ function initMoment1() {
             }
             if (nextBtn) {
                 nextBtn.style.display = '';
+                nextBtn.onclick = null;
             }
             if (soundToggle) {
                 soundToggle.style.display = '';
@@ -544,11 +595,6 @@ function initMoment1() {
 
 function initProblemQ1() {
     console.log('🔧 Inicializando Problema Q1...');
-
-    if (m1Q1Submitted) {
-        applyM1Q1SubmittedLock();
-        return;
-    }
     
     const canvasId = 'boardCanvasM1Q1';
     const recordBtnId = 'recordBtnM1Q1';
@@ -582,11 +628,19 @@ function initProblemQ1() {
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
         // Solo requiere audio (tablero opcional)
-        submitBtn.disabled = !hasAudio;
+        submitBtn.disabled = m1Q1Submitted || !hasAudio;
+
+        // Si ya grabó o ya envió, no puede volver a grabar.
+        recordBtn.disabled = m1Q1Submitted || hasAudio;
+        recordBtn.style.opacity = recordBtn.disabled ? '0.5' : '1';
+        recordBtn.style.cursor = recordBtn.disabled ? 'not-allowed' : 'pointer';
         
         // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
-        if (!hasAudio) {
+        if (m1Q1Submitted) {
+            statusText.textContent = '';
+            statusText.className = 'status-text';
+        } else if (!hasAudio) {
             statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
@@ -1472,6 +1526,7 @@ function showPrompt1(choice) {
 function showPrompt2(choice) {
     const promptSection = document.getElementById('promptSection2');
     const promptText = document.getElementById('promptText2');
+    const choicePlaceholder = document.getElementById('m3Q2ChoicePlaceholder');
     
     const prompts = {
         yes: 'Explica detalladamente cómo lo sabes.',
@@ -1481,6 +1536,9 @@ function showPrompt2(choice) {
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
+    if (choicePlaceholder) {
+        choicePlaceholder.classList.add('hidden');
+    }
     
     // Inicializar tablero y audio para problema 2
     initProblemM3Q2();
@@ -1670,9 +1728,21 @@ function initMoment4() {
     m4_errorsConsecutiveMax = 0;
     m4_magicLives = 3;
     m4_isFinalizing = false;
+    m4_reflectionSelected = false;
+    m4_reflectionSaved = false;
+    m4_reflectionSaving = false;
     if (m4_returnHomeTimeout) {
         clearTimeout(m4_returnHomeTimeout);
         m4_returnHomeTimeout = null;
+    }
+
+    const mainSpread = document.getElementById('moment4MainSpread');
+    const reflectionSection = document.getElementById('moment4ReflectionSection');
+    if (mainSpread) {
+        mainSpread.classList.remove('hidden');
+    }
+    if (reflectionSection) {
+        reflectionSection.classList.add('hidden');
     }
 
     document.querySelectorAll('.magic-heart').forEach(heart => heart.classList.remove('lost'));
@@ -1681,6 +1751,43 @@ function initMoment4() {
         finalSection.classList.add('hidden');
     }
 
+    const reflectionHint = document.querySelector('#moment4ReflectionSection .reflection-hint');
+    const reflectionStatus = document.getElementById('m4ReflectionStatus');
+    const finishBtn = document.getElementById('finishM4Btn');
+
+    if (reflectionHint) {
+        reflectionHint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+    }
+    if (reflectionStatus) {
+        reflectionStatus.textContent = '';
+    }
+    if (finishBtn) {
+        finishBtn.disabled = true;
+        finishBtn.style.opacity = '0.5';
+        finishBtn.style.cursor = 'not-allowed';
+        finishBtn.onclick = async () => {
+            const saved = await saveMoment4Reflection();
+            if (saved) {
+                const statusText = document.getElementById('m4ReflectionStatus');
+                if (statusText) {
+                    statusText.textContent = 'Respuesta guardada. Cerrando libro...';
+                }
+                if (m4_returnHomeTimeout) {
+                    clearTimeout(m4_returnHomeTimeout);
+                }
+                m4_returnHomeTimeout = setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2200);
+            }
+        };
+    }
+
+    document.querySelectorAll('input[name="m4Reflection"]').forEach((checkbox) => {
+        checkbox.checked = false;
+        checkbox.disabled = false;
+        checkbox.onchange = updateMoment4ReflectionSelection;
+    });
+
     document.getElementById('studentCodeM4').textContent = getStudentHeaderText();
     
     // Generar las 6 preguntas
@@ -1688,6 +1795,124 @@ function initMoment4() {
     
     // Mostrar primer ítem
     showItem(1);
+}
+
+function getMoment4ReflectionSelection() {
+    const checkedOptions = Array.from(document.querySelectorAll('input[name="m4Reflection"]:checked'));
+    const values = checkedOptions.map((option) => option.value);
+    const labels = checkedOptions.map((option) => {
+        const label = option.closest('label');
+        return (label?.textContent || option.value).trim();
+    });
+
+    return { values, labels };
+}
+
+function updateMoment4ReflectionSelection(event) {
+    const checkedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+    const hint = document.querySelector('#moment4ReflectionSection .reflection-hint');
+    const statusText = document.getElementById('m4ReflectionStatus');
+
+    if (checkedOptions.length > 2 && event?.target) {
+        event.target.checked = false;
+    }
+
+    const validCheckedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+    m4_reflectionSelected = validCheckedOptions.length > 0 && validCheckedOptions.length <= 2;
+    m4_reflectionSaved = false;
+
+    if (statusText) {
+        statusText.textContent = '';
+    }
+
+    if (hint) {
+        if (validCheckedOptions.length === 0) {
+            hint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+        } else if (validCheckedOptions.length >= 2) {
+            hint.textContent = 'Ya seleccionaste el máximo de dos opciones.';
+        } else {
+            hint.textContent = 'Puedes seleccionar una opción más (máximo dos).';
+        }
+    }
+
+    const finishBtn = document.getElementById('finishM4Btn');
+    if (finishBtn) {
+        finishBtn.disabled = !m4_reflectionSelected || m4_reflectionSaving;
+        finishBtn.style.opacity = finishBtn.disabled ? '0.5' : '1';
+        finishBtn.style.cursor = finishBtn.disabled ? 'not-allowed' : 'pointer';
+    }
+}
+
+async function saveMoment4Reflection() {
+    if (m4_reflectionSaved) return true;
+    if (m4_reflectionSaving) return false;
+
+    const { values, labels } = getMoment4ReflectionSelection();
+    const hint = document.querySelector('#moment4ReflectionSection .reflection-hint');
+    const statusText = document.getElementById('m4ReflectionStatus');
+
+    if (values.length === 0 || values.length > 2) {
+        if (hint) {
+            hint.textContent = values.length > 2
+                ? 'Puedes seleccionar máximo dos opciones.'
+                : 'Selecciona al menos una opción para continuar.';
+        }
+        return false;
+    }
+
+    const finishBtn = document.getElementById('finishM4Btn');
+    m4_reflectionSaving = true;
+    if (finishBtn) {
+        finishBtn.disabled = true;
+    }
+    if (statusText) {
+        statusText.textContent = 'Guardando tu respuesta...';
+    }
+
+    try {
+        await submitEvidence({
+            moment: 'm4',
+            tag: 'reflection-final',
+            data: {
+                selectedOptions: values,
+                selectedLabels: labels,
+                selectedCount: values.length
+            },
+            boardBlob: null,
+            audioBlob: null
+        });
+
+        m4_reflectionSaved = true;
+        if (statusText) {
+            statusText.textContent = 'Respuesta guardada.';
+        }
+        return true;
+    } catch (error) {
+        console.error('❌ Error al guardar reflexión final:', error);
+        if (statusText) {
+            statusText.textContent = 'No se pudo guardar. Revisa internet e intenta de nuevo.';
+        }
+        if (finishBtn) {
+            finishBtn.disabled = false;
+        }
+        return false;
+    } finally {
+        m4_reflectionSaving = false;
+        updateMoment4ReflectionSelection();
+    }
+}
+
+function showMoment4ReflectionPage() {
+    const mainSpread = document.getElementById('moment4MainSpread');
+    const reflectionSection = document.getElementById('moment4ReflectionSection');
+
+    if (mainSpread) {
+        mainSpread.classList.add('hidden');
+    }
+    if (reflectionSection) {
+        reflectionSection.classList.remove('hidden');
+        reflectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function generateMoment4Questions() {
@@ -2075,10 +2300,10 @@ async function finalizeMoment4() {
             }
         }
 
-        statusText.textContent = 'Completado ✅ Regresando al inicio...';
-        m4_returnHomeTimeout = setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 8000);
+        statusText.textContent = 'Completado ✅';
+        setTimeout(() => {
+            showMoment4ReflectionPage();
+        }, 2200);
         
     } catch (error) {
         console.error('Error:', error);
