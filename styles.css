@@ -643,27 +643,12 @@ body.flipbook-on-cover #flipbook::after {
     bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
-    width: clamp(106px, 10vw, 128px);
-    height: clamp(62px, 6.8vw, 78px);
+    width: clamp(86px, 8.6vw, 106px);
+    height: clamp(86px, 8.6vw, 106px);
     border-color: rgba(227, 183, 118, 0.95);
     color: #8a4e14;
-    font-size: clamp(1rem, 1.18vw, 1.12rem);
-    border-radius: 999px;
-}
-
-.cover-kicker {
-    position: relative;
-    z-index: 4;
-    margin-top: 10%;
-    padding: 8px 18px;
-    border-radius: 999px;
-    background: rgba(255, 246, 225, 0.9);
-    border: 2px dashed rgba(221, 172, 104, 0.55);
-    color: #b46c1c;
-    font-family: 'Trebuchet MS', 'Verdana', sans-serif;
-    font-size: clamp(0.9rem, 1.05vw, 1rem);
-    font-weight: 800;
-    letter-spacing: 0.3px;
+    font-size: clamp(1.3rem, 1.8vw, 1.55rem);
+    border-radius: 50%;
 }
 
 .cover-math-row {
@@ -688,70 +673,66 @@ body.flipbook-on-cover #flipbook::after {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     text-align: center;
     line-height: 1;
-    margin: 8% 0 2% 0;
+    margin: 14% 0 2% 0;
     padding: 0 12%;
     position: relative;
     z-index: 4;
 }
 
-.cover-bubble-line {
+.cover-word-line {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 4px;
+    gap: 10px;
 }
 
-.cover-bubble-gap {
-    width: 14px;
-}
-
-.cover-bubble-letter {
+.cover-word-chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 0.72em;
+    padding: 8px 18px 10px;
+    border-radius: 999px;
     font-family: 'Trebuchet MS', 'Comic Sans MS', cursive;
-    font-size: clamp(1.55rem, 2.3vw, 2.2rem);
+    font-size: clamp(1.25rem, 1.8vw, 1.72rem);
     font-weight: 900;
     line-height: 1;
-    text-transform: uppercase;
+    text-transform: none;
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid rgba(255, 255, 255, 0.98);
+    box-shadow: 0 7px 0 rgba(150, 120, 92, 0.22), 0 10px 18px rgba(0, 0, 0, 0.1);
     text-shadow:
-        -3px -3px 0 #ffffff,
-        3px -3px 0 #ffffff,
-        -3px 3px 0 #ffffff,
-        3px 3px 0 #ffffff,
-        0 5px 0 rgba(125, 112, 95, 0.28),
-        2px 7px 0 rgba(0, 0, 0, 0.12);
+        0 1px 0 rgba(255, 255, 255, 0.75),
+        0 2px 0 rgba(0, 0, 0, 0.08);
 }
 
-.cover-bubble-line .cover-bubble-letter:nth-child(odd) {
-    transform: rotate(-3deg);
+.cover-word-line .cover-word-chip:nth-child(odd) {
+    transform: rotate(-2deg);
 }
 
-.cover-bubble-line .cover-bubble-letter:nth-child(even) {
-    transform: rotate(3deg);
+.cover-word-line .cover-word-chip:nth-child(even) {
+    transform: rotate(2deg);
 }
 
-.cover-bubble-letter.tone-1 {
+.cover-word-chip.tone-1 {
     color: #ff4fa3;
 }
 
-.cover-bubble-letter.tone-2 {
+.cover-word-chip.tone-2 {
     color: #35a9ff;
 }
 
-.cover-bubble-letter.tone-3 {
+.cover-word-chip.tone-3 {
     color: #2bc85e;
 }
 
-.cover-bubble-letter.tone-4 {
+.cover-word-chip.tone-4 {
     color: #ffb21d;
 }
 
-.cover-bubble-letter.tone-5 {
+.cover-word-chip.tone-5 {
     color: #a45cff;
 }
 
@@ -813,27 +794,13 @@ body.flipbook-on-cover #flipbook::after {
         padding: 0 8%;
     }
 
-    .cover-bubble-line {
-        gap: 2px;
+    .cover-word-line {
+        gap: 6px;
     }
 
-    .cover-bubble-gap {
-        width: 10px;
-    }
-
-    .cover-bubble-letter {
-        font-size: clamp(1.25rem, 4.2vw, 1.6rem);
-        text-shadow:
-            -2px -2px 0 #ffffff,
-            2px -2px 0 #ffffff,
-            -2px 2px 0 #ffffff,
-            2px 2px 0 #ffffff,
-            0 4px 0 rgba(125, 112, 95, 0.24),
-            2px 5px 0 rgba(0, 0, 0, 0.1);
-    }
-
-    .cover-kicker {
-        margin-top: 18%;
+    .cover-word-chip {
+        padding: 7px 14px 9px;
+        font-size: clamp(1rem, 3.5vw, 1.25rem);
     }
 
     .cover-subtitle {
@@ -842,7 +809,8 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     .sticker-7 {
-        width: clamp(88px, 18vw, 104px);
+        width: clamp(72px, 16vw, 88px);
+        height: clamp(72px, 16vw, 88px);
     }
 }
 
