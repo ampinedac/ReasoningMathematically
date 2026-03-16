@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=2026031420">
+    <link rel="stylesheet" href="styles.css?v=2026031615">
     <link rel="stylesheet" href="trays-styles.css?v=2026031420">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
@@ -415,9 +415,21 @@
                         </svg>
                     </button>
                     <div id="flipbook">
-                        
+
+                        <!-- PORTADA CERRADA DEL LIBRO -->
+                        <div class="page book-cover-page active">
+                            <div class="cover-math-row" aria-hidden="true">
+                                <span>+</span><span>×</span><span>÷</span><span>=</span><span>3</span><span>7</span>
+                            </div>
+                            <h2 class="cover-book-title">El secreto de las bandejas<br>de Doña Alicia</h2>
+                            <button class="cover-leer-btn" onclick="document.getElementById('nextBtn').click()">📖 Léeme</button>
+                            <div class="cover-math-row" aria-hidden="true">
+                                <span>3</span><span>×</span><span>7</span><span>=</span><span>7</span><span>×</span><span>3</span>
+                            </div>
+                        </div>
+
                         <!-- Story Page 1 -->
-                        <div class="page story-page active">
+                        <div class="page story-page">
                             <div class="page-number">1</div>
                             <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
                             <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
@@ -863,6 +875,6 @@
     <!-- Scripts -->
     <script src="trays-system.js?v=2026031503"></script>
     <script type="module" src="main.js?v=2026031515"></script>
-    <script src="app.js?v=2026031503"></script>
+    <script src="app.js?v=2026031615"></script>
 </body>
 </html>

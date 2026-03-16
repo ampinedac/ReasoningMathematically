@@ -438,47 +438,63 @@ function initMoment1() {
     const soundToggle = document.getElementById('soundToggle');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+    let m1TransitioningToQ1 = false;
 
     const showQ1FromLastStoryPage = () => {
-        if (!problemSection) {
+        if (!problemSection || m1TransitioningToQ1) {
             return;
         }
 
-        if (flipbookSection) {
-            flipbookSection.style.display = 'none';
-        }
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = '';
-            nextBtn.disabled = false;
-            nextBtn.onclick = null;
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-            prevBtn.disabled = false;
-        }
-        if (prevBtnQ1) {
-            prevBtnQ1.style.display = '';
-        }
-        if (nextBtnQ1) {
-            nextBtnQ1.style.display = '';
-            nextBtnQ1.disabled = !m1Q1Submitted;
+        m1TransitioningToQ1 = true;
+
+        const activeStoryPage = flipbook ? flipbook.querySelector('.page.active') : null;
+        if (activeStoryPage) {
+            activeStoryPage.classList.add('turning-forward');
+            setTimeout(() => {
+                activeStoryPage.classList.remove('turning-forward');
+                activeStoryPage.classList.add('turned');
+            }, 1050);
         }
 
-        problemSection.classList.remove('hidden');
-        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+            if (flipbookSection) {
+                flipbookSection.style.display = 'none';
+            }
+            if (flipbook) {
+                flipbook.style.display = 'none';
+            }
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+                nextBtn.disabled = false;
+                nextBtn.onclick = null;
+            }
+            if (soundToggle) {
+                soundToggle.style.display = 'none';
+            }
+            if (prevBtn) {
+                prevBtn.style.display = 'none';
+                prevBtn.disabled = false;
+            }
+            if (prevBtnQ1) {
+                prevBtnQ1.style.display = '';
+            }
+            if (nextBtnQ1) {
+                nextBtnQ1.style.display = '';
+                nextBtnQ1.disabled = !m1Q1Submitted;
+            }
 
-        if (m1Q1Submitted) {
-            applyM1Q1SubmittedLock();
-        } else if (!m1ProblemInitialized) {
-            m1ProblemInitialized = true;
-            initProblemQ1();
-        }
+            problemSection.classList.remove('hidden');
+            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            if (m1Q1Submitted) {
+                applyM1Q1SubmittedLock();
+            } else if (!m1ProblemInitialized) {
+                m1ProblemInitialized = true;
+                initProblemQ1();
+            }
+
+            m1TransitioningToQ1 = false;
+        }, 520);
     };
 
     const syncM1WithFlipbookPage = (event) => {
@@ -490,6 +506,7 @@ function initMoment1() {
 
         if (isLastPage) {
             // Mantener visible la página 7 y abrir Situación 1 solo al pulsar siguiente.
+            m1TransitioningToQ1 = false;
             if (flipbookSection) {
                 flipbookSection.style.display = '';
             }
@@ -508,15 +525,6 @@ function initMoment1() {
             if (soundToggle) {
                 soundToggle.style.display = '';
             }
-            if (prevBtn) {
-                prevBtn.style.display = '';
-                prevBtn.disabled = false;
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-                nextBtn.onclick = showQ1FromLastStoryPage;
-            }
             if (prevBtnQ1) {
                 prevBtnQ1.style.display = 'none';
             }
@@ -525,6 +533,7 @@ function initMoment1() {
             }
             problemSection.classList.add('hidden');
         } else {
+            m1TransitioningToQ1 = false;
             if (flipbookSection) {
                 flipbookSection.style.display = '';
             }
@@ -562,6 +571,15 @@ function initMoment1() {
             }
             if (flipbook) {
                 flipbook.style.display = '';
+            }
+            if (prevBtn) {
+                prevBtn.style.display = '';
+                prevBtn.disabled = false;
+            }
+            if (nextBtn) {
+                nextBtn.style.display = '';
+                nextBtn.disabled = false;
+                nextBtn.onclick = showQ1FromLastStoryPage;
             }
             if (soundToggle) {
                 soundToggle.style.display = '';

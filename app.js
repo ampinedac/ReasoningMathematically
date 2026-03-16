@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 0;
     let currentSpeech = null; // Almacenar el objeto de narración actual
     let completionEventDispatched = false;
+    const TURN_DURATION_MS = 1050;
+    const TURN_HALF_MS = Math.round(TURN_DURATION_MS / 2);
 
     // ===== DOM ELEMENTS =====
     const pages = document.querySelectorAll('#flipbook .page');
@@ -28,6 +30,24 @@ document.addEventListener('DOMContentLoaded', function() {
         nextBtn: document.getElementById('nextBtn'),
         soundToggle: document.getElementById('soundToggle')
     };
+
+    function applyRealBookPageNumbers() {
+        const storyPages = document.querySelectorAll('#flipbook .story-page');
+
+        storyPages.forEach((storyPage, spreadIndex) => {
+            const pageNumber = storyPage.querySelector('.page-number');
+            if (!pageNumber) return;
+
+            const leftPageNumber = (spreadIndex * 2) + 1;
+            const rightPageNumber = leftPageNumber + 1;
+
+            pageNumber.classList.add('book-spread-number');
+            pageNumber.innerHTML = `
+                <span class="page-number-left">${leftPageNumber}</span>
+                <span class="page-number-right">${rightPageNumber}</span>
+            `;
+        });
+    }
 
     // ===== WEB AUDIO API - REALISTIC PAGE TURN SOUND =====
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -215,6 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateNavButtons(page) {
+        if (page === 0) {
+            document.body.classList.add('flipbook-on-cover');
+        } else {
+            document.body.classList.remove('flipbook-on-cover');
+        }
         elements.prevBtn.disabled = page === 0;
         const allowNextOnLastPageForActivity0B = document.body.classList.contains('activity-0b')
             && page === CONFIG.totalPages - 1;
@@ -225,6 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function showPage(pageIndex, direction = 'forward') {
         const oldPage = pages[currentPage];
         const newPage = pages[pageIndex];
+        const flipbookEl = document.getElementById('flipbook');
         
         if (!newPage) return;
         
@@ -237,22 +263,40 @@ document.addEventListener('DOMContentLoaded', function() {
         pages.forEach(page => {
             page.classList.remove('turning-forward', 'turning-backward', 'turned', 'active');
         });
+
+        if (flipbookEl) {
+            flipbookEl.classList.remove('spread-turn-forward', 'spread-turn-backward');
+        }
         
         if (direction === 'forward') {
+            if (flipbookEl) {
+                flipbookEl.classList.add('spread-turn-forward');
+                setTimeout(() => {
+                    flipbookEl.classList.remove('spread-turn-forward');
+                }, TURN_DURATION_MS);
+            }
+
             // Voltear hacia adelante
             if (oldPage) {
                 oldPage.classList.add('turning-forward');
                 setTimeout(() => {
                     oldPage.classList.remove('turning-forward');
                     oldPage.classList.add('turned');
-                }, 1200);
+                }, TURN_DURATION_MS);
             }
             
             setTimeout(() => {
                 newPage.classList.add('active');
-            }, 600);
+            }, TURN_HALF_MS);
             
         } else {
+            if (flipbookEl) {
+                flipbookEl.classList.add('spread-turn-backward');
+                setTimeout(() => {
+                    flipbookEl.classList.remove('spread-turn-backward');
+                }, TURN_DURATION_MS);
+            }
+
             // Voltear hacia atrás
             newPage.classList.remove('turned');
             newPage.classList.add('turning-backward');
@@ -263,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (oldPage) {
                     oldPage.classList.remove('active');
                 }
-            }, 1200);
+            }, TURN_DURATION_MS);
         }
         
         currentPage = pageIndex;
@@ -386,6 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initKeyboardNavigation();
         initTouchSupport();
         updateSoundButton();
+        applyRealBookPageNumbers();
         
         // Show first story page without animation
         pages[0].classList.add('active');
