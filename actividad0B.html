@@ -1018,6 +1018,76 @@
         margin: 14px auto 0;
     }
 
+    .activity-0b #moment4Screen .m4-right-page .m4-answer-row {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 980px) {
+        .activity-0b #moment1Screen .container {
+            width: 97vw;
+            padding: 6px 8px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section.q1-book-spread,
+        .activity-0b #problemQ2Section.q1-book-spread,
+        .activity-0b #moment3Screen #problem2Section.m3-book-spread,
+        .activity-0b #moment4Screen .m4-book-spread {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .activity-0b #problemQ2Section.q1-book-spread::before,
+        .activity-0b #moment3Screen #problem2Section.m3-book-spread::before,
+        .activity-0b #moment4Screen .m4-book-spread::before {
+            display: none;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page,
+        .activity-0b #problemQ2Section .q1-left-page,
+        .activity-0b #problemQ2Section .q1-right-page,
+        .activity-0b #moment3Screen #problem2Section .m3-book-left,
+        .activity-0b #moment3Screen #problem2Section .m3-book-right,
+        .activity-0b #moment4Screen .m4-left-page,
+        .activity-0b #moment4Screen .m4-right-page {
+            min-height: auto;
+            padding: 20px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page #boardCanvasM1Q1,
+        .activity-0b #moment3Screen #promptSection2 .drawing-board,
+        .activity-0b #moment3Screen #promptSection1 .drawing-board {
+            height: clamp(240px, 42vh, 420px) !important;
+        }
+
+        .activity-0b #problemQ1Section .q1-nav-btn {
+            width: 54px;
+            height: 54px;
+        }
+
+        .activity-0b #moment4Screen .m4-left-page .magic-lives-container,
+        .activity-0b #moment4Screen .m4-left-page .m4-story-card,
+        .activity-0b #moment4ReflectionSection .reflection-card,
+        .activity-0b #moment4ReflectionSection .final-story-card {
+            width: 100%;
+            max-width: none;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-equation {
+            font-size: clamp(2rem, 5.5vw, 2.9rem);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-input {
+            width: clamp(76px, 10vw, 94px);
+            font-size: clamp(1.7rem, 4.8vw, 2.4rem);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .check-answer-btn {
+            font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+        }
+    }
+
     @media (max-width: 768px) {
         .activity-0b #welcomeScreen .user-rect {
             max-width: 100%;
@@ -1168,6 +1238,108 @@
         .activity-0b #moment4ReflectionSection .reflection-card,
         .activity-0b #moment4ReflectionSection .final-story-card {
             width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .activity-0b {
+            font-size: 18px;
+        }
+
+        .activity-0b #moment1Screen .container,
+        .activity-0b #moment2Screen .container,
+        .activity-0b #moment3Screen .container,
+        .activity-0b #moment4Screen .container {
+            width: 98vw;
+            padding: 4px;
+            margin: 8px auto;
+        }
+
+        .activity-0b #moment1Screen #flipbook .story-page .story-text {
+            font-size: clamp(0.98rem, 4.4vw, 1.14rem) !important;
+            line-height: 1.38 !important;
+        }
+
+        .activity-0b #problemQ1Section .q1-nav-btn {
+            width: 46px;
+            height: 46px;
+            top: auto;
+            bottom: 14px;
+            transform: none;
+        }
+
+        .activity-0b #problemQ1Section #prevBtnQ1 {
+            left: 10px;
+        }
+
+        .activity-0b #problemQ1Section #nextBtnQ1 {
+            right: 10px;
+        }
+
+        .activity-0b #problemQ1Section .problem-page-number,
+        .activity-0b #problemQ2Section .page-number,
+        .activity-0b #moment3Screen #problem2Section .page-number,
+        .activity-0b #moment4Screen .m4-book-spread > .page-number {
+            bottom: 8px;
+            font-size: 1.5rem;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page,
+        .activity-0b #problemQ2Section .q1-left-page,
+        .activity-0b #problemQ2Section .q1-right-page,
+        .activity-0b #moment3Screen #problem2Section .m3-book-left,
+        .activity-0b #moment3Screen #problem2Section .m3-book-right,
+        .activity-0b #moment4Screen .m4-left-page,
+        .activity-0b #moment4Screen .m4-right-page,
+        .activity-0b #moment4ReflectionSection .m4-left-page,
+        .activity-0b #moment4ReflectionSection .m4-right-page {
+            padding: 14px;
+        }
+
+        .activity-0b #problemQ2Section .btn-cocina,
+        .activity-0b #moment4ReflectionSection #finishM4Btn {
+            width: 100%;
+            max-width: none;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .m4-answer-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .check-answer-btn {
+            margin-left: 0 !important;
+            width: min(100%, 220px);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-equation {
+            font-size: clamp(1.55rem, 7vw, 2.05rem);
+            gap: 8px;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-input {
+            width: 82px;
+            font-size: 1.8rem;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-box {
+            padding: 16px 12px;
+        }
+
+        .activity-0b #moment4ReflectionSection .reflection-option {
+            align-items: flex-start;
+            font-size: 0.98rem;
+        }
+
+        .activity-0b #moment4ReflectionSection .reflection-hint,
+        .activity-0b #moment4ReflectionSection .reflection-status,
+        .activity-0b #moment4Screen .m4-right-page #moment4Status,
+        .activity-0b #moment4Screen .m4-right-page #pointsStatus {
+            font-size: 0.9rem;
+            line-height: 1.35;
         }
     }
     </style>
@@ -1699,6 +1871,6 @@
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031515"></script>
     <script type="module" src="main-0b.js?v=2026031517"></script>
-    <script src="app.js?v=2026031516"></script>
+    <script src="app.js?v=2026031517"></script>
 </body>
 </html>

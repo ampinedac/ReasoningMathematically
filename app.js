@@ -216,7 +216,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateNavButtons(page) {
         elements.prevBtn.disabled = page === 0;
-        elements.nextBtn.disabled = page === CONFIG.totalPages - 1;
+        const allowNextOnLastPageForActivity0B = document.body.classList.contains('activity-0b')
+            && page === CONFIG.totalPages - 1;
+        elements.nextBtn.disabled = !allowNextOnLastPageForActivity0B && page === CONFIG.totalPages - 1;
     }
 
     // ===== PAGE DISPLAY =====

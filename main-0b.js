@@ -1970,7 +1970,7 @@ function generateMoment4Questions() {
         
         itemBox.innerHTML = `
             <div class="item-equation">${q.equation}</div>
-            <div style="text-align: center; margin-top: 20px;">
+            <div class="m4-answer-row">
                 <input type="number" 
                        class="item-input" 
                        data-answer="${q.answer}"
