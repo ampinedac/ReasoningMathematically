@@ -427,6 +427,8 @@ function initMoment1() {
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const prevBtnQ1 = document.getElementById('prevBtnQ1');
+    const nextBtnQ1 = document.getElementById('nextBtnQ1');
     const soundToggle = document.getElementById('soundToggle');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
@@ -446,13 +448,22 @@ function initMoment1() {
                 flipbook.style.display = 'none';
             }
             if (nextBtn) {
-                nextBtn.style.display = 'none';
+                nextBtn.style.display = '';
+                nextBtn.disabled = !m1Q1Submitted;
             }
             if (soundToggle) {
                 soundToggle.style.display = 'none';
             }
             if (prevBtn) {
                 prevBtn.style.display = '';
+                prevBtn.disabled = false;
+            }
+            if (prevBtnQ1) {
+                prevBtnQ1.style.display = '';
+            }
+            if (nextBtnQ1) {
+                nextBtnQ1.style.display = '';
+                nextBtnQ1.disabled = !m1Q1Submitted;
             }
 
             problemSection.classList.remove('hidden');
@@ -480,10 +491,50 @@ function initMoment1() {
             if (soundToggle) {
                 soundToggle.style.display = '';
             }
+            if (prevBtnQ1) {
+                prevBtnQ1.style.display = 'none';
+            }
+            if (nextBtnQ1) {
+                nextBtnQ1.style.display = 'none';
+            }
 
             problemSection.classList.add('hidden');
         }
     };
+
+    if (prevBtnQ1) {
+        prevBtnQ1.onclick = () => {
+            if (problemSection) {
+                problemSection.classList.add('hidden');
+            }
+            if (flipbookSection) {
+                flipbookSection.style.display = '';
+            }
+            if (flipbook) {
+                flipbook.style.display = '';
+            }
+            if (soundToggle) {
+                soundToggle.style.display = '';
+            }
+            if (nextBtnQ1) {
+                nextBtnQ1.style.display = 'none';
+            }
+            if (prevBtnQ1) {
+                prevBtnQ1.style.display = 'none';
+            }
+            if (typeof window.playPageTurnSound === 'function') {
+                window.playPageTurnSound();
+            }
+        };
+    }
+
+    if (nextBtnQ1) {
+        nextBtnQ1.onclick = () => {
+            if (!m1Q1Submitted) return;
+            showScreen('moment2Screen');
+            initMoment2();
+        };
+    }
 
     // Estado inicial: en el cuento no se muestra la respuesta
     if (problemSection && !problemSection.classList.contains('hidden')) {

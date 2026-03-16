@@ -114,6 +114,13 @@
         margin-top: 10px;
     }
 
+    .activity-0b #confirmationScreen .main-title,
+    .activity-0b #confirmationScreen .confirmation-question {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+        text-align: center;
+    }
+
     .activity-0b #moment1Screen .container {
         background: transparent;
         backdrop-filter: none;
@@ -126,11 +133,30 @@
         margin: 12px auto;
     }
 
+    .activity-0b #moment1Screen #flipbook .story-page .story-text {
+        font-size: clamp(1.15rem, 1.65vw, 1.55rem) !important;
+        line-height: 1.5 !important;
+        letter-spacing: -0.1px;
+    }
+
     .activity-0b #moment1Screen #problemQ1Section .q1-left-page h3 {
         font-size: clamp(1.15rem, 2vw, 1.4rem) !important;
         margin-top: 0;
         margin-bottom: 8px;
         color: #d97825;
+        text-align: center;
+        width: 100%;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section.q1-book-spread {
+        position: relative;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-left-page p,
@@ -158,6 +184,13 @@
         text-align: center;
     }
 
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .board-tools {
         justify-content: center !important;
         gap: 10px;
@@ -165,12 +198,44 @@
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .board-container {
-        max-width: 92%;
+        width: 98%;
+        max-width: 98%;
         margin: 6px auto 4px;
     }
 
-    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .drawing-board {
-        max-height: 400px !important;
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page #boardCanvasM1Q1 {
+        width: 100% !important;
+        height: clamp(300px, 50vh, 620px) !important;
+        max-height: none !important;
+        background-color: #ffffff;
+        background-image:
+            linear-gradient(to right, rgba(52, 73, 94, 0.08) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(52, 73, 94, 0.08) 1px, transparent 1px);
+        background-size: 30px 30px;
+        background-position: center;
+    }
+
+    .activity-0b #problemQ1Section .problem-page-number {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
+
+    .activity-0b #problemQ1Section .q1-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 12;
+    }
+
+    .activity-0b #problemQ1Section #prevBtnQ1 {
+        left: -48px;
+    }
+
+    .activity-0b #problemQ1Section #nextBtnQ1 {
+        right: -48px;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
@@ -250,9 +315,32 @@
             width: 75%;
         }
 
+        .activity-0b #confirmationScreen .main-title,
+        .activity-0b #confirmationScreen .confirmation-question {
+            font-size: 24px !important;
+        }
+
         .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
         .activity-0b #moment1Screen #problemQ1Section .q1-right-page {
             padding: 18px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page #boardCanvasM1Q1 {
+            height: clamp(260px, 42vh, 420px) !important;
+            background-size: 24px 24px;
+        }
+
+        .activity-0b #problemQ1Section #prevBtnQ1 {
+            left: -18px;
+        }
+
+        .activity-0b #problemQ1Section #nextBtnQ1 {
+            right: -18px;
+        }
+
+        .activity-0b #moment1Screen #flipbook .story-page .story-text {
+            font-size: clamp(1.05rem, 2.7vw, 1.25rem) !important;
+            line-height: 1.45 !important;
         }
 
         .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
@@ -382,6 +470,9 @@
 
             <!-- SITUACIÓN 1 -->
             <div id="problemQ1Section" class="hidden q1-book-spread">
+                <button id="prevBtnQ1" class="nav-btn q1-nav-btn" aria-label="Página anterior">←</button>
+                <button id="nextBtnQ1" class="nav-btn q1-nav-btn" aria-label="Página siguiente">→</button>
+                <div class="page-number problem-page-number">8</div>
                 <div class="problem-box q1-left-page">
                     <h3>Situación 1</h3>
                     <p><strong>Primera venta:</strong> 7 bolsitas con 3 panes de bono cada una.</p>
