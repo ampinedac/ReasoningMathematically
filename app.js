@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSpeech = null; // Almacenar el objeto de narración actual
     let completionEventDispatched = false;
     let isTurning = false;
-    const TURN_DURATION_MS = 1050;
+    const TURN_DURATION_MS = 920;
     const TURN_HALF_MS = Math.round(TURN_DURATION_MS / 2);
 
     // ===== DOM ELEMENTS =====
@@ -542,6 +542,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show first story page without animation
         pages[0].classList.add('active');
         updateProgress(0);
+
+        window.flipbookControls = {
+            goToPage,
+            nextPage,
+            previousPage,
+            getCurrentPage: () => currentPage,
+            getTotalPages: () => pages.length
+        };
 
         console.log('📖 Flipbook initialized successfully!');
     }

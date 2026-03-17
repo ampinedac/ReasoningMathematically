@@ -17,9 +17,93 @@ let totalPages = 0;
 let trays = [];
 let pairs = [];
 let traysSystem = null; // Nueva instancia del sistema de bandejas
+let m2CurrentSpread = 0;
+let m2OrderCompleted = false;
+let m2ExplanationSubmitted = false;
+let m2SnapshotData = null;
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
+let m1FlipbookPageHandler = null;
 let m1Q1Submitted = false;
+
+function parseTrayNumber(trayId) {
+    return Number.parseInt(String(trayId || '').replace('tray-', ''), 10);
+}
+
+function buildMoment2SnapshotData() {
+    if (!traysSystem) return null;
+
+    const trayMap = new Map(traysSystem.BASE_TRAYS.map(tray => [tray.id, tray]));
+    const rawPairs = traysSystem.getPairings();
+    const pairedSet = new Set();
+
+    const pairsData = rawPairs.map(([idA, idB]) => {
+        const trayA = trayMap.get(idA);
+        const trayB = trayMap.get(idB);
+        if (!trayA || !trayB) return null;
+
+        pairedSet.add(idA);
+        pairedSet.add(idB);
+
+        return {
+            left: trayA,
+            right: trayB
+        };
+    }).filter(Boolean);
+
+    const singlesData = traysSystem.BASE_TRAYS
+        .filter(tray => !pairedSet.has(tray.id))
+        .map(tray => ({ tray }));
+
+    return {
+        pairs: pairsData,
+        singles: singlesData
+    };
+}
+
+function renderMoment2Snapshot(targetId) {
+    const container = document.getElementById(targetId);
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (!m2SnapshotData) {
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'm2-photo-card single';
+        emptyCard.innerHTML = '<p class="m2-photo-title">Aún no hay foto</p><p class="m2-photo-body">Ve a la cocina, organiza y verifica para ver aquí tu resultado.</p>';
+        container.appendChild(emptyCard);
+        return;
+    }
+
+    m2SnapshotData.pairs.forEach((pairInfo, index) => {
+        const leftOrder = parseTrayNumber(pairInfo.left.id);
+        const rightOrder = parseTrayNumber(pairInfo.right.id);
+
+        const card = document.createElement('div');
+        card.className = 'm2-photo-card pair';
+        card.innerHTML = `
+            <p class="m2-photo-title">Pareja ${index + 1}</p>
+            <p class="m2-photo-body">Pedido ${leftOrder} (${pairInfo.left.rows}x${pairInfo.left.cols}) con Pedido ${rightOrder} (${pairInfo.right.rows}x${pairInfo.right.cols})</p>
+        `;
+        container.appendChild(card);
+    });
+
+    m2SnapshotData.singles.forEach((singleInfo) => {
+        const orderNum = parseTrayNumber(singleInfo.tray.id);
+        const card = document.createElement('div');
+        card.className = 'm2-photo-card single';
+        card.innerHTML = `
+            <p class="m2-photo-title">Sin pareja</p>
+            <p class="m2-photo-body">Pedido ${orderNum} (${singleInfo.tray.rows}x${singleInfo.tray.cols})</p>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function renderMoment2Snapshots() {
+    renderMoment2Snapshot('m2PreviewPage18');
+    renderMoment2Snapshot('m2PreviewPage19');
+}
 
 function getM1Q1StorageKey() {
     if (!studentCode) return null;
@@ -428,202 +512,73 @@ function initMoment1() {
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
-    const problemSection = document.getElementById('problemQ1Section');
-    const flipbookSection = document.getElementById('flipbookSection');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const prevBtnQ1 = document.getElementById('prevBtnQ1');
-    const nextBtnQ1 = document.getElementById('nextBtnQ1');
-    const soundToggle = document.getElementById('soundToggle');
-    const progressText = document.getElementById('progressText');
-    const progressBar = document.getElementById('progressBar');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
-    let m1TransitioningToQ1 = false;
+    const q1PageIndex = flipbook ? flipbook.querySelectorAll('.page').length - 1 : -1;
 
-    const showQ1FromLastStoryPage = () => {
-        if (!problemSection || m1TransitioningToQ1) {
+    const goToMoment2FromQ1 = () => {
+        if (!m1Q1Submitted) {
+            return;
+        }
+        showScreen('moment2Screen');
+        initMoment2();
+    };
+
+    const syncM1WithFlipbookPage = (event) => {
+        if (q1PageIndex < 0) {
             return;
         }
 
-        m1TransitioningToQ1 = true;
+        const currentFlipbookPage = Number.isInteger(event?.detail?.page)
+            ? event.detail.page
+            : (window.flipbookControls?.getCurrentPage?.() ?? 0);
+        const isQ1Page = currentFlipbookPage === q1PageIndex;
 
-        const activeStoryPage = flipbook ? flipbook.querySelector('.page.active') : null;
-        if (activeStoryPage) {
-            activeStoryPage.classList.add('turning-forward');
-            setTimeout(() => {
-                activeStoryPage.classList.remove('turning-forward');
-                activeStoryPage.classList.add('turned');
-            }, 1050);
+        if (nextBtn) {
+            nextBtn.onclick = null;
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+
+            if (isQ1Page) {
+                if (m1Q1Submitted) {
+                    nextBtn.onclick = goToMoment2FromQ1;
+                } else {
+                    nextBtn.disabled = true;
+                    nextBtn.style.opacity = '0.5';
+                    nextBtn.style.cursor = 'not-allowed';
+                }
+            }
         }
 
-        setTimeout(() => {
-            if (flipbookSection) {
-                flipbookSection.style.display = 'none';
-            }
-            if (flipbook) {
-                flipbook.style.display = 'none';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = 'none';
-                nextBtn.disabled = false;
-                nextBtn.onclick = null;
-            }
-            if (soundToggle) {
-                soundToggle.style.display = 'none';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = 'none';
-                prevBtn.disabled = false;
-            }
-            if (prevBtnQ1) {
-                prevBtnQ1.style.display = '';
-            }
-            if (nextBtnQ1) {
-                nextBtnQ1.style.display = '';
-                nextBtnQ1.disabled = !m1Q1Submitted;
-            }
-
-            if (progressText) {
-                progressText.textContent = 'Páginas 15 y 16 de 16';
-            }
-            if (progressBar) {
-                progressBar.style.setProperty('--progress', '100%');
-            }
-            document.documentElement.style.setProperty('--flipbook-progress', '100%');
-
-            problemSection.classList.remove('hidden');
-            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+        if (isQ1Page) {
             if (m1Q1Submitted) {
                 applyM1Q1SubmittedLock();
             } else if (!m1ProblemInitialized) {
                 m1ProblemInitialized = true;
                 initProblemQ1();
             }
-
-            m1TransitioningToQ1 = false;
-        }, 520);
-    };
-
-    const syncM1WithFlipbookPage = (event) => {
-        if (!problemSection) {
-            return;
-        }
-
-        const isLastPage = Boolean(event?.detail?.isLastPage);
-
-        if (isLastPage) {
-            // Mantener visible la página 7 y abrir Situación 1 solo al pulsar siguiente.
-            m1TransitioningToQ1 = false;
-            if (flipbookSection) {
-                flipbookSection.style.display = '';
-            }
-            if (flipbook) {
-                flipbook.style.display = '';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
-                prevBtn.disabled = false;
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-                nextBtn.onclick = showQ1FromLastStoryPage;
-            }
-            if (soundToggle) {
-                soundToggle.style.display = '';
-            }
-            if (prevBtnQ1) {
-                prevBtnQ1.style.display = 'none';
-            }
-            if (nextBtnQ1) {
-                nextBtnQ1.style.display = 'none';
-            }
-            problemSection.classList.add('hidden');
-        } else {
-            m1TransitioningToQ1 = false;
-            if (flipbookSection) {
-                flipbookSection.style.display = '';
-            }
-            if (flipbook) {
-                flipbook.style.display = '';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.onclick = null;
-            }
-            if (soundToggle) {
-                soundToggle.style.display = '';
-            }
-            if (prevBtnQ1) {
-                prevBtnQ1.style.display = 'none';
-            }
-            if (nextBtnQ1) {
-                nextBtnQ1.style.display = 'none';
-            }
-
-            problemSection.classList.add('hidden');
         }
     };
 
-    if (prevBtnQ1) {
-        prevBtnQ1.onclick = () => {
-            if (problemSection) {
-                problemSection.classList.add('hidden');
-            }
-            if (flipbookSection) {
-                flipbookSection.style.display = '';
-            }
-            if (flipbook) {
-                flipbook.style.display = '';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
-                prevBtn.disabled = false;
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-                nextBtn.onclick = showQ1FromLastStoryPage;
-            }
-            if (soundToggle) {
-                soundToggle.style.display = '';
-            }
-            if (nextBtnQ1) {
-                nextBtnQ1.style.display = 'none';
-            }
-            if (prevBtnQ1) {
-                prevBtnQ1.style.display = 'none';
-            }
-            if (typeof window.playPageTurnSound === 'function') {
-                window.playPageTurnSound();
-            }
-        };
+    if (m1FlipbookPageHandler) {
+        document.removeEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     }
-
-    if (nextBtnQ1) {
-        nextBtnQ1.onclick = () => {
-            if (!m1Q1Submitted) return;
-            showScreen('moment2Screen');
-            initMoment2();
-        };
-    }
-
-    // Estado inicial: en el cuento no se muestra la respuesta
-    if (problemSection && !problemSection.classList.contains('hidden')) {
-        problemSection.classList.add('hidden');
-    }
-
+    m1FlipbookPageHandler = syncM1WithFlipbookPage;
+    document.addEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     if (!m1FlipbookListenerAttached) {
-        document.addEventListener('flipbook:pagechange', syncM1WithFlipbookPage);
         m1FlipbookListenerAttached = true;
         console.log('✅ Listener de cambio de página del cuento configurado');
     }
+
+    if (prevBtn) {
+        prevBtn.style.opacity = '1';
+        prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+    }
+    syncM1WithFlipbookPage();
 }
 
 // ========================================
@@ -734,11 +689,15 @@ function initProblemQ1() {
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
 
-            const nextBtnQ1 = document.getElementById('nextBtnQ1');
-            if (nextBtnQ1) {
-                nextBtnQ1.disabled = false;
-                nextBtnQ1.style.opacity = '1';
-                nextBtnQ1.style.cursor = 'pointer';
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+                nextBtn.onclick = () => {
+                    showScreen('moment2Screen');
+                    initMoment2();
+                };
             }
             
         } catch (error) {
@@ -787,6 +746,11 @@ function initMoment2() {
         console.error('❌ Error al inicializar sistema de bolsas:', error);
     }
 
+    m2CurrentSpread = 0;
+    m2OrderCompleted = false;
+    m2ExplanationSubmitted = false;
+    m2SnapshotData = null;
+
     const showCocinaScreenM2 = () => {
         const cocinaScreen = document.getElementById('cocinaScreen');
         if (!cocinaScreen) return;
@@ -809,51 +773,59 @@ function initMoment2() {
     if (goToCocinaBtn) {
         const newGoToCocinaBtn = goToCocinaBtn.cloneNode(true);
         goToCocinaBtn.parentNode.replaceChild(newGoToCocinaBtn, goToCocinaBtn);
+        newGoToCocinaBtn.disabled = false;
+        newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
+        newGoToCocinaBtn.title = '';
         newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
     }
+
+    const spreads = Array.from(document.querySelectorAll('#problemQ2Section .m2-spread'));
+    const updateMoment2SpreadUI = () => {
+        spreads.forEach((spread, index) => {
+            spread.classList.toggle('active', index === m2CurrentSpread);
+        });
+
+        const prevBtnQ2Ref = document.getElementById('prevBtnQ2');
+        const nextBtnQ2Ref = document.getElementById('nextBtnQ2');
+        const lastSpreadIndex = Math.max(0, spreads.length - 1);
+
+        if (prevBtnQ2Ref) {
+            prevBtnQ2Ref.disabled = false;
+        }
+
+        if (nextBtnQ2Ref) {
+            if (m2CurrentSpread < 1 && !m2OrderCompleted) {
+                nextBtnQ2Ref.disabled = true;
+                nextBtnQ2Ref.title = 'Completa la organización en cocina para avanzar.';
+                nextBtnQ2Ref.style.opacity = '0.5';
+            } else if (m2CurrentSpread === lastSpreadIndex && !m2ExplanationSubmitted) {
+                nextBtnQ2Ref.disabled = true;
+                nextBtnQ2Ref.title = 'Primero envía tu explicación de la página 18.';
+                nextBtnQ2Ref.style.opacity = '0.5';
+            } else {
+                nextBtnQ2Ref.disabled = false;
+                nextBtnQ2Ref.title = '';
+                nextBtnQ2Ref.style.opacity = '1';
+            }
+        }
+    };
 
     const prevBtnQ2 = document.getElementById('prevBtnQ2');
     if (prevBtnQ2) {
         const newPrevBtnQ2 = prevBtnQ2.cloneNode(true);
         prevBtnQ2.parentNode.replaceChild(newPrevBtnQ2, prevBtnQ2);
         newPrevBtnQ2.addEventListener('click', () => {
-            showScreen('moment1Screen');
-            initMoment1();
+            if (m2CurrentSpread > 0) {
+                m2CurrentSpread -= 1;
+                updateMoment2SpreadUI();
+            } else {
+                showScreen('moment1Screen');
+                initMoment1();
 
-            const problemSection = document.getElementById('problemQ1Section');
-            const flipbookSection = document.getElementById('flipbookSection');
-            const flipbook = document.getElementById('flipbook');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtnQ1 = document.getElementById('prevBtnQ1');
-            const nextBtnQ1 = document.getElementById('nextBtnQ1');
-            const soundToggle = document.getElementById('soundToggle');
-
-            if (problemSection) {
-                problemSection.classList.remove('hidden');
-            }
-            if (flipbookSection) {
-                flipbookSection.style.display = 'none';
-            }
-            if (flipbook) {
-                flipbook.style.display = 'none';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = 'none';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = 'none';
-                nextBtn.onclick = null;
-            }
-            if (soundToggle) {
-                soundToggle.style.display = 'none';
-            }
-            if (prevBtnQ1) {
-                prevBtnQ1.style.display = '';
-            }
-            if (nextBtnQ1) {
-                nextBtnQ1.style.display = '';
-                nextBtnQ1.disabled = !m1Q1Submitted;
+                const totalFlipbookPages = window.flipbookControls?.getTotalPages?.();
+                if (Number.isInteger(totalFlipbookPages) && totalFlipbookPages > 0) {
+                    window.flipbookControls.goToPage(totalFlipbookPages - 1);
+                }
             }
 
             if (typeof window.playPageTurnSound === 'function') {
@@ -867,8 +839,14 @@ function initMoment2() {
         const newNextBtnQ2 = nextBtnQ2.cloneNode(true);
         nextBtnQ2.parentNode.replaceChild(newNextBtnQ2, nextBtnQ2);
         newNextBtnQ2.addEventListener('click', () => {
-            showScreen('moment3Screen');
-            initMoment3();
+            const lastSpreadIndex = Math.max(0, spreads.length - 1);
+            if (m2CurrentSpread < lastSpreadIndex) {
+                m2CurrentSpread += 1;
+                updateMoment2SpreadUI();
+            } else {
+                showScreen('moment3Screen');
+                initMoment3();
+            }
             if (typeof window.playPageTurnSound === 'function') {
                 window.playPageTurnSound();
             }
@@ -878,7 +856,7 @@ function initMoment2() {
     const progressText = document.getElementById('progressText');
     const progressBar = document.getElementById('progressBar');
     if (progressText) {
-        progressText.textContent = 'Páginas 17 y 18 del libro';
+        progressText.textContent = 'Páginas 17 a 22 del libro';
     }
     if (progressBar) {
         progressBar.style.setProperty('--progress', '100%');
@@ -899,6 +877,9 @@ function initMoment2() {
         finalSectionM2.classList.add('hidden');
     }
 
+    renderMoment2Snapshots();
+    updateMoment2SpreadUI();
+
     hideCocinaScreenM2();
     
     // Configurar botón de verificación
@@ -912,17 +893,6 @@ function initMoment2() {
     }
     
     // Botón continuar a M3
-    const continueBtn = document.getElementById('continueToM3Btn');
-    if (continueBtn) {
-        // Remover event listeners previos
-        const newContinueBtn = continueBtn.cloneNode(true);
-        continueBtn.parentNode.replaceChild(newContinueBtn, continueBtn);
-        
-        newContinueBtn.addEventListener('click', () => {
-            showScreen('moment3Screen');
-            initMoment3();
-        });
-    }
 }
 
 // ========================================
@@ -1376,9 +1346,20 @@ function verifyTraysPairings() {
     if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {
         feedback.textContent = `🎉 ¡Perfecto! Todos los ${totalPairs} emparejamientos son correctos.`;
         feedback.className = 'feedback-text success';
+
+        m2OrderCompleted = true;
+        m2SnapshotData = buildMoment2SnapshotData();
+        renderMoment2Snapshots();
         
         // Deshabilitar el botón
         document.getElementById('verifyTraysBtn').disabled = true;
+
+        const goToCocinaBtn = document.getElementById('goToCocinaBtn');
+        if (goToCocinaBtn) {
+            goToCocinaBtn.disabled = true;
+            goToCocinaBtn.textContent = '✅ Organización completada';
+            goToCocinaBtn.title = 'Ya verificaste la organización correctamente.';
+        }
         
         // Cerrar cocina y volver al cuento (hoja 11), análogo a 0A
         setTimeout(() => {
@@ -1400,6 +1381,13 @@ function verifyTraysPairings() {
                 finalSection.classList.remove('hidden');
                 finalSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 initMoment2Audio();
+            }
+
+            const nextBtnQ2 = document.getElementById('nextBtnQ2');
+            if (nextBtnQ2) {
+                nextBtnQ2.disabled = false;
+                nextBtnQ2.title = '';
+                nextBtnQ2.style.opacity = '1';
             }
         }, 1000);
         
@@ -1532,7 +1520,7 @@ function initMoment2Audio() {
         }
     };
     
-    const checkInterval = setInterval(checkEvidence, 500);
+    let checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
         // Bloquear botón inmediatamente y permanentemente
@@ -1559,17 +1547,19 @@ function initMoment2Audio() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente ✅ Ya puedes avanzar en el libro.';
             statusText.className = 'status-text success';
+
+            m2ExplanationSubmitted = true;
+            const nextBtnQ2 = document.getElementById('nextBtnQ2');
+            if (nextBtnQ2) {
+                nextBtnQ2.disabled = false;
+                nextBtnQ2.title = '';
+                nextBtnQ2.style.opacity = '1';
+            }
             
             // Deshabilitar botón de grabar también
             document.getElementById(recordBtnId).disabled = true;
-            
-            // Continuar automáticamente al Momento 3 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment3Screen');
-                initMoment3();
-            }, 1000);
             
         } catch (error) {
             console.error('Error:', error);

@@ -10,7 +10,7 @@
     --shadow-dark: rgba(0, 0, 0, 0.7);
     --accent: #ff6b6b;
     --transition: 0.3s ease;
-    --book-turn-duration: 1.05s;
+    --book-turn-duration: 0.92s;
     --book-turn-ease: cubic-bezier(0.32, 0.02, 0.2, 1);
 }
 

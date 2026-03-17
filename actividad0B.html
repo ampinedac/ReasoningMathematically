@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0B - El Misterio de las Sumas Repetidas</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=2026031615">
+    <link rel="stylesheet" href="styles.css?v=2026031702">
     <link rel="stylesheet" href="trays-styles.css?v=2026031515">
     <link rel="stylesheet" href="bags-styles-0b.css?v=2026031515">
     <!-- ResponsiveVoice para voces más expresivas -->
@@ -159,6 +159,27 @@
 
     .activity-0b #moment1Screen #problemQ1Section.q1-book-spread {
         position: relative;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section.page {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section.q1-book-spread {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 100%;
+        height: 100%;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-left-page,
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-right-page {
+        min-height: 100%;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-left-page {
@@ -322,6 +343,156 @@
 
     .activity-0b #problemQ1Section #nextBtnQ1 {
         right: 14px;
+    }
+
+    .activity-0b #problemQ2Section {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        min-height: 600px;
+        width: 100%;
+        position: relative;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread.active {
+        display: grid;
+    }
+
+    .activity-0b .m2-preview-card {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto 14px;
+        border-radius: 14px;
+        border: 2px dashed rgba(48, 77, 112, 0.28);
+        background: linear-gradient(150deg, #f7fbff, #eef6ff);
+        padding: 14px;
+    }
+
+    .activity-0b .m2-preview-card h4 {
+        margin: 0 0 10px;
+        text-align: center;
+        color: #1d4f7a;
+        font-size: 1rem;
+    }
+
+    .activity-0b .m2-preview-note {
+        margin: 8px 0 0;
+        font-size: 0.92rem;
+        line-height: 1.35;
+        color: #355a76;
+        text-align: center;
+    }
+
+    .activity-0b .m2-photo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .activity-0b .m2-photo-card {
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 8px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .activity-0b .m2-photo-card.pair {
+        border-left: 5px solid #3b82f6;
+    }
+
+    .activity-0b .m2-photo-card.single {
+        border-left: 5px solid #f59e0b;
+    }
+
+    .activity-0b .m2-photo-title {
+        margin: 0 0 4px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #1d3550;
+    }
+
+    .activity-0b .m2-photo-body {
+        margin: 0;
+        font-size: 0.78rem;
+        line-height: 1.3;
+        color: #27384a;
+        text-align: left;
+    }
+
+    .activity-0b #goToCocinaBtn[disabled] {
+        opacity: 0.75;
+        cursor: not-allowed;
+        background: linear-gradient(135deg, #6f8fa7, #4d6a82);
+    }
+
+    .activity-0b .m2-secret-title {
+        margin: 0 0 10px;
+        text-align: center;
+        color: #b95414;
+        font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+    }
+
+    .activity-0b .m2-secret-text {
+        margin: 0 0 12px;
+        font-size: 0.9rem;
+        line-height: 1.35;
+        color: #1f3142;
+        text-align: left;
+    }
+
+    .activity-0b .m2-mul-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid rgba(27, 64, 95, 0.18);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .activity-0b .m2-mul-table th,
+    .activity-0b .m2-mul-table td {
+        border-bottom: 1px solid rgba(27, 64, 95, 0.14);
+        padding: 6px;
+        font-size: 0.75rem;
+        line-height: 1.25;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .activity-0b .m2-mul-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .activity-0b .m2-mul-table th {
+        background: #eef6ff;
+        color: #234a6b;
+        font-weight: 700;
+    }
+
+    .activity-0b .m2-mul-table input {
+        width: 56px;
+        border: 1px solid rgba(27, 64, 95, 0.3);
+        border-radius: 6px;
+        padding: 4px 6px;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    .activity-0b .m2-spread-21 {
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .activity-0b .m2-spread-21 .problem-box {
+        max-width: 90%;
+        margin: 0 auto;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
@@ -1657,66 +1828,56 @@
                             <p class="story-text">Cuando termina, sonríe orgulloso. —“¡Me encanta ayudar!”, dice mientras mira todas las bolsitas listas para entregar. Doña Alicia le da una palmadita en el hombro. —“Compartir con cuidado también es una forma de querer.” Y juntos siguen preparando más pedidos para el barrio.</p>
                         </div>
 
+                        <!-- Story Page 8 (Páginas 15 y 16): Situación 1 -->
+                        <div id="problemQ1Section" class="page story-page q1-book-spread problem-q1-page">
+                            <div class="page-number">8</div>
+                            <div class="problem-box q1-left-page">
+                                <h3>Situación 1</h3>
+                                <div class="sale-block sale-block-ventas">
+                                    <img src="assets/images/Ventas.png" alt="Ventas" class="sale-label-image ventas-image">
+                                </div>
+                                <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
+                                <p class="question">Explica cómo lo sabes.</p>
+                            </div>
+
+                            <!-- TABLERO Y AUDIO -->
+                            <div class="evidence-section q1-right-page">
+                                <h4>Puedes usar el tablero:</h4>
+
+                                <!-- Tablero -->
+                                <div class="board-container">
+                                    <div class="board-tools">
+                                        <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                        <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                        <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                        <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                        <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                    </div>
+                                    <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
+                                </div>
+
+                                <div class="q1-action-row">
+                                    <!-- Audio -->
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM1Q1" class="audio-status"></span>
+                                    </div>
+
+                                    <!-- Enviar -->
+                                    <div class="submit-section">
+                                        <p id="statusM1Q1" class="status-text"></p>
+                                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     
                     <!-- Navigation Controls dentro del libro -->
                     <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
                     <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
-                </div>
-            </div>
-
-            <!-- SITUACIÓN 1 -->
-            <div id="problemQ1Section" class="hidden q1-book-spread">
-                <button id="prevBtnQ1" class="nav-btn q1-nav-btn" aria-label="Página anterior">←</button>
-                <button id="nextBtnQ1" class="nav-btn q1-nav-btn" aria-label="Página siguiente">→</button>
-                <div class="page-number problem-page-number book-spread-number">
-                    <span class="page-number-left">15</span>
-                    <span class="page-number-right">16</span>
-                </div>
-                <div class="problem-box q1-left-page">
-                    <h3>Situación 1</h3>
-                    <div class="sale-block">
-                        <img src="assets/images/PrimeraVenta.png" alt="Primera venta" class="sale-label-image">
-                        <p class="sale-description">7 bolsitas con 3 panes de bono cada una.</p>
-                    </div>
-                    <div class="sale-block">
-                        <img src="assets/images/SegundaVenta.png" alt="Segunda venta" class="sale-label-image">
-                        <p class="sale-description">3 bolsitas con 7 panes de bono cada una.</p>
-                    </div>
-                    <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
-                    <p class="question">Explica cómo lo sabes.</p>
-                </div>
-
-                <!-- TABLERO Y AUDIO -->
-                <div class="evidence-section q1-right-page">
-                    <h4>Puedes usar el tablero:</h4>
-                    
-                    <!-- Tablero -->
-                    <div class="board-container">
-                        <div class="board-tools">
-                            <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                            <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                            <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                            <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                            <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
-                        </div>
-                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
-                    </div>
-
-                    <div class="q1-action-row">
-                        <!-- Audio -->
-                        <div class="audio-controls">
-                            <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                            <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                            <span id="audioStatusM1Q1" class="audio-status"></span>
-                        </div>
-
-                        <!-- Enviar -->
-                        <div class="submit-section">
-                            <p id="statusM1Q1" class="status-text"></p>
-                            <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1733,47 +1894,146 @@
             <div id="problemQ2Section" class="q1-book-spread">
                 <button id="prevBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página anterior">←</button>
                 <button id="nextBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página siguiente">→</button>
-                <div class="page-number book-spread-number">
-                    <span class="page-number-left">17</span>
-                    <span class="page-number-right">18</span>
-                </div>
-                <div class="problem-box q1-left-page">
-                    <h3>Situación 2</h3>
-                    <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora deben organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
-                    <div class="q2-guide-card">
-                        <p class="q2-guide-title">Guía rápida</p>
-                        <ul class="q2-guide-list">
-                            <li>1. Haz clic en una bolsa para seleccionarla.</li>
-                            <li>2. Haz clic en otra bolsa para formar el par.</li>
-                            <li>3. Repite hasta armar todas las parejas posibles.</li>
-                        </ul>
+                <div class="m2-spread active" data-spread="0">
+                    <div class="page-number book-spread-number">
+                        <span class="page-number-left">17</span>
+                        <span class="page-number-right">18</span>
                     </div>
-                    <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
-                    <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
-                </div>
+                    <div class="problem-box q1-left-page">
+                        <h3>Situación 2</h3>
+                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora deben organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
+                        <div class="q2-guide-card">
+                            <p class="q2-guide-title">Guía rápida</p>
+                            <ul class="q2-guide-list">
+                                <li>1. Haz clic en una bolsa para seleccionarla.</li>
+                                <li>2. Haz clic en otra bolsa para formar el par.</li>
+                                <li>3. Repite hasta armar todas las parejas posibles.</li>
+                            </ul>
+                        </div>
+                        <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
+                        <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
+                    </div>
 
-                <div class="evidence-section q1-right-page" id="q2RightPage">
-                    <div id="finalQuestionSectionM2" class="hidden">
-                        <div class="problem-box">
-                            <h3>Para pensar 🤔</h3>
-                            <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
-                            <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                    <div class="evidence-section q1-right-page" id="q2RightPage">
+                        <div class="m2-preview-card">
+                            <h4>Foto de tu organización</h4>
+                            <div id="m2PreviewPage18" class="m2-photo-grid"></div>
+                            <p class="m2-preview-note">Esta vista previa te ayuda a responder la pregunta de comparación.</p>
+                        </div>
 
-                            <div class="m2-inline-actions">
-                                <div class="audio-controls">
-                                    <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                                    <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
-                                    <span id="audioStatusM2" class="audio-status"></span>
-                                </div>
+                        <div id="finalQuestionSectionM2" class="hidden">
+                            <div class="problem-box">
+                                <h3>Para pensar 🤔</h3>
+                                <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
+                                <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
 
-                                <div class="submit-section">
-                                    <p id="statusM2" class="status-text"></p>
-                                    <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                                <div class="m2-inline-actions">
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
+                                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM2" class="audio-status"></span>
+                                    </div>
+
+                                    <div class="submit-section">
+                                        <p id="statusM2" class="status-text"></p>
+                                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
+                <div class="m2-spread" data-spread="1">
+                    <div class="page-number book-spread-number">
+                        <span class="page-number-left">19</span>
+                        <span class="page-number-right">20</span>
+                    </div>
+                    <div class="problem-box q1-left-page">
+                        <h3>Tu organización en una foto</h3>
+                        <p>Observa de nuevo cómo quedaron las parejas y los pedidos sin pareja.</p>
+                        <div class="m2-preview-card">
+                            <h4>Foto del orden logrado</h4>
+                            <div id="m2PreviewPage19" class="m2-photo-grid"></div>
+                        </div>
+                        <p class="instruction-hint">Ahora usa esta foto para escribir cada situación como multiplicación.</p>
+                    </div>
+
+                    <div class="evidence-section q1-right-page">
+                        <h3 class="m2-secret-title">Las bolsas secretas</h3>
+                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo. Esta vez utilizarás bolsas con números secretos. Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
+                        <table class="m2-mul-table" aria-label="Tabla de multiplicaciones de pedidos">
+                            <thead>
+                                <tr>
+                                    <th>Pedido 3</th>
+                                    <th>Por</th>
+                                    <th>Total</th>
+                                    <th>Pedido 7</th>
+                                    <th>Por</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" aria-label="Bolsas pedido 3"></td>
+                                    <td>× <input type="text" aria-label="Panes pedido 3"></td>
+                                    <td>= <input type="text" aria-label="Total pedido 3"></td>
+                                    <td><input type="text" aria-label="Bolsas pedido 7"></td>
+                                    <td>× <input type="text" aria-label="Panes pedido 7"></td>
+                                    <td>= <input type="text" aria-label="Total pedido 7"></td>
+                                </tr>
+                                <tr>
+                                    <th>Pedido 2</th>
+                                    <th>Por</th>
+                                    <th>Total</th>
+                                    <th>Pedido 6</th>
+                                    <th>Por</th>
+                                    <th>Total</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" aria-label="Bolsas pedido 2"></td>
+                                    <td>× <input type="text" aria-label="Panes pedido 2"></td>
+                                    <td>= <input type="text" aria-label="Total pedido 2"></td>
+                                    <td><input type="text" aria-label="Bolsas pedido 6"></td>
+                                    <td>× <input type="text" aria-label="Panes pedido 6"></td>
+                                    <td>= <input type="text" aria-label="Total pedido 6"></td>
+                                </tr>
+                                <tr>
+                                    <th>Pedido 4</th>
+                                    <th>Por</th>
+                                    <th>Total</th>
+                                    <th>Pedido 8</th>
+                                    <th>Por</th>
+                                    <th>Total</th>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" aria-label="Bolsas pedido 4"></td>
+                                    <td>× <input type="text" aria-label="Panes pedido 4"></td>
+                                    <td>= <input type="text" aria-label="Total pedido 4"></td>
+                                    <td><input type="text" aria-label="Bolsas pedido 8"></td>
+                                    <td>× <input type="text" aria-label="Panes pedido 8"></td>
+                                    <td>= <input type="text" aria-label="Total pedido 8"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="m2-spread" data-spread="2">
+                    <div class="page-number book-spread-number">
+                        <span class="page-number-left">21</span>
+                        <span class="page-number-right">22</span>
+                    </div>
+                    <div class="problem-box q1-left-page m2-spread-21">
+                        <h3>Página 21</h3>
+                        <p>Revisa tus ideas y prepara tu explicación final para continuar con el siguiente momento.</p>
+                        <p class="instruction-hint">Cuando estés listo(a), pulsa la flecha derecha para continuar.</p>
+                    </div>
+                    <div class="evidence-section q1-right-page m2-spread-21">
+                        <div class="problem-box">
+                            <h3>Resumen del reto</h3>
+                            <p>Identificaste parejas con la misma cantidad, registraste información en formato de multiplicación y conectaste el orden con el producto.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2084,7 +2344,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031515"></script>
-    <script type="module" src="main-0b.js?v=2026031610"></script>
-    <script src="app.js?v=2026031615"></script>
+    <script type="module" src="main-0b.js?v=2026031702"></script>
+    <script src="app.js?v=2026031702"></script>
 </body>
 </html>
