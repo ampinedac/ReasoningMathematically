@@ -805,12 +805,32 @@ function initMoment2() {
             newGoToCocinaBtn.disabled = false;
             newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
             newGoToCocinaBtn.title = '';
-            newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
+            newGoToCocinaBtn.addEventListener('click', () => {
+                if (!traysSystem) {
+                    try {
+                        traysSystem = new TraysSystem('traysArea');
+                    } catch (error) {
+                        console.error('❌ No se pudo abrir cocina: sistema de bolsas no disponible', error);
+                        const feedback = document.getElementById('traysFeedback');
+                        if (feedback) {
+                            feedback.textContent = 'No fue posible cargar la cocina. Recarga la página e inténtalo de nuevo.';
+                            feedback.className = 'feedback-text error';
+                        }
+                        return;
+                    }
+                }
+
+                showCocinaScreenM2();
+            });
         }
     }
 
+    const pendingCard = document.getElementById('m2PendingCard');
     const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
     const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
+    if (pendingCard) {
+        pendingCard.classList.toggle('hidden', m2OrderCompleted);
+    }
     if (previewCard18) {
         previewCard18.classList.toggle('hidden', !m2OrderCompleted);
     }
@@ -1615,6 +1635,10 @@ function verifyTraysPairings() {
 
         const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
         const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
+        const pendingCard = document.getElementById('m2PendingCard');
+        if (pendingCard) {
+            pendingCard.classList.add('hidden');
+        }
         if (previewCard18) {
             previewCard18.classList.remove('hidden');
         }
