@@ -185,13 +185,22 @@
         height: 100%;
         margin: 0;
         border: 0;
-        border-radius: 0;
+        border-radius: 10px;
         box-shadow: none;
+        overflow: hidden;
     }
 
     .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-left-page,
     .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-right-page {
         min-height: 100%;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-left-page {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-right-page {
+        border-radius: 0 10px 10px 0;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-left-page {
@@ -341,11 +350,11 @@
     }
 
     .activity-0b #problemQ1Section .problem-page-number.book-spread-number .page-number-left {
-        left: 5%;
+        left: 2.2%;
     }
 
     .activity-0b #problemQ1Section .problem-page-number.book-spread-number .page-number-right {
-        right: 5%;
+        right: 2.2%;
     }
 
     .activity-0b #problemQ1Section .q1-nav-btn {
@@ -559,6 +568,20 @@
         font-size: 0.8rem;
     }
 
+    .activity-0b .m2-mul-actions {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .activity-0b #m2MulTableFeedback {
+        margin: 0;
+        min-height: 1.25rem;
+        flex: 1;
+    }
+
     .activity-0b .m2-spread-21 {
         text-align: center;
         justify-content: center;
@@ -575,12 +598,24 @@
         align-items: flex-start;
     }
 
+    .activity-0b #problemQ2Section .m2-spread[data-spread="2"] .m2-problem1-left {
+        justify-content: center;
+    }
+
     .activity-0b #problemQ2Section .m2-problem1-left .m2-secret-title,
     .activity-0b #problemQ2Section .m2-problem1-left .m2-secret-text,
     .activity-0b #problemQ2Section .m2-problem1-left .question {
         width: 100%;
         max-width: none;
         text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="2"] .m2-problem1-left .question {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.35;
+        color: #1f3142;
+        font-weight: 400;
     }
 
     .activity-0b #problemQ2Section .m2-problem1-left .envelope-equation {
@@ -591,6 +626,12 @@
     .activity-0b #problemQ2Section .m2-problem1-right {
         justify-content: center;
         align-items: stretch;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="2"] .m2-problem1-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .activity-0b #problemQ2Section .m2-p21-radio-group {
@@ -628,10 +669,15 @@
         border-radius: 12px;
         background: #ffffff;
         padding: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
     }
 
     .activity-0b #problemQ2Section .m2-q1-associated .prompt-box {
         margin: 0;
+        width: 100%;
     }
 
     .activity-0b #problemQ2Section .m2-q1-associated .prompt-box p {
@@ -643,12 +689,32 @@
 
     .activity-0b #problemQ2Section .m2-q1-associated .audio-controls,
     .activity-0b #problemQ2Section .m2-q1-associated .submit-section {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 10px;
-        margin-top: 10px;
+        gap: 8px;
+        margin-top: 4px;
         justify-content: flex-start;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #recordBtnM2Q1,
+    .activity-0b #problemQ2Section .m2-q1-associated #stopBtnM2Q1,
+    .activity-0b #problemQ2Section .m2-q1-associated #submitM2Q1 {
+        font-size: 0.78rem;
+        padding: 6px 10px;
+        min-height: 34px;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #submitM2Q1 {
+        min-width: 88px;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #statusM2Q1 {
+        display: none;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #audioStatusM2Q1 {
+        display: none;
     }
 
     .activity-0b #problemQ2Section .m2-spread[data-spread="1"] .q1-right-page {
@@ -751,8 +817,8 @@
         aspect-ratio: auto;
         min-height: 0;
         margin: 0 auto;
-        border-radius: 18px;
-        overflow: visible;
+        border-radius: 10px;
+        overflow: hidden;
         border: 1px solid rgba(0, 0, 0, 0.1);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         background: #fdfdfd;
@@ -803,6 +869,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #problemQ2Section .q1-right-page {
+        border-radius: 0 10px 10px 0;
     }
 
     .activity-0b #problemQ2Section .q1-left-page h3 {
@@ -892,11 +963,11 @@
     }
 
     .activity-0b #problemQ2Section .page-number.book-spread-number .page-number-left {
-        left: 5%;
+        left: 2.2%;
     }
 
     .activity-0b #problemQ2Section .page-number.book-spread-number .page-number-right {
-        right: 5%;
+        right: 2.2%;
     }
 
     .activity-0b #problemQ2Section .q2-nav-btn {
@@ -1168,7 +1239,7 @@
         max-width: none;
         min-height: 600px;
         margin: 16px auto 0;
-        border-radius: 18px;
+        border-radius: 10px;
         overflow: hidden;
         border: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -1193,6 +1264,14 @@
         min-height: 600px;
         padding: 28px;
         background: #f7f7f9;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-book-left {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-book-right {
+        border-radius: 0 10px 10px 0;
     }
 
     .activity-0b #moment3Screen #problem2Section .m3-book-left {
@@ -1293,10 +1372,16 @@
 
     .activity-0b #moment3Screen #problem2Section .page-number {
         position: absolute;
-        left: 50%;
+        left: auto;
+        right: 2.2%;
         bottom: 12px;
-        transform: translateX(-50%);
+        transform: none;
         z-index: 6;
+        font-size: 1.05rem;
+        font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.45);
+        font-style: normal;
     }
 
     .activity-0b #moment4Screen {
@@ -1310,7 +1395,7 @@
         width: 95%;
         min-height: 620px;
         margin: 10px auto 0;
-        border-radius: 20px;
+        border-radius: 10px;
         overflow: hidden;
         border: 1px solid rgba(0, 0, 0, 0.12);
         box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
@@ -1337,6 +1422,14 @@
         padding: 24px;
         position: relative;
         z-index: 2;
+    }
+
+    .activity-0b #moment4Screen .m4-left-page {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page {
+        border-radius: 0 10px 10px 0;
     }
 
     .activity-0b #moment4Screen .m4-left-page {
@@ -1475,11 +1568,11 @@
     }
 
     .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-left {
-        left: 5%;
+        left: 2.2%;
     }
 
     .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-right {
-        right: 5%;
+        right: 2.2%;
     }
 
     .activity-0b #moment4ReflectionSection .m4-left-page,
@@ -2213,7 +2306,7 @@
                         <h3>Tu organización en una foto</h3>
                         <p>Observa de nuevo cómo quedaron las parejas y los pedidos sin pareja.</p>
                         <div class="m2-preview-card">
-                            <h4>Foto del orden logrado</h4>
+                            
                             <div id="m2PreviewPage19" class="m2-photo-grid"></div>
                         </div>
                     </div>
@@ -2231,28 +2324,28 @@
                                 <tr class="m2-mul-label-row">
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th># panes de bono en la bolsa</th>
+                                    <th>#panes</th>
                                     <th>Igual</th>
-                                    <th>Total panes de bono</th>
+                                    <th>#panes</th>
                                     <th class="m2-mul-separator" aria-hidden="true"></th>
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th># panes de bono en la bolsa</th>
+                                    <th>#panes</th>
                                     <th>Igual</th>
-                                    <th>Total panes de bono</th>
+                                    <th>#panes</th>
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 3"></td>
-                                    <td class="m2-mul-symbol">Símbolo por</td>
-                                    <td><input type="text" aria-label="Panes por bolsa pedido 3"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 3"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="Total panes pedido 3"></td>
+                                    <td><input type="text" aria-label="#panes pedido 3"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 7"></td>
-                                    <td class="m2-mul-symbol">Símbolo por</td>
-                                    <td><input type="text" aria-label="Panes por bolsa pedido 7"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 7"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="Total panes pedido 7"></td>
+                                    <td><input type="text" aria-label="#panes pedido 7"></td>
                                 </tr>
 
                                 <tr class="m2-mul-block-title">
@@ -2263,28 +2356,28 @@
                                 <tr class="m2-mul-label-row">
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th># panes de bono en la bolsa</th>
+                                    <th>#panes</th>
                                     <th>Igual</th>
-                                    <th>Total panes de bono</th>
+                                    <th>#panes</th>
                                     <th class="m2-mul-separator" aria-hidden="true"></th>
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th># panes de bono en la bolsa</th>
+                                    <th>#panes</th>
                                     <th>Igual</th>
-                                    <th>Total panes de bono</th>
+                                    <th>#panes</th>
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 2"></td>
-                                    <td class="m2-mul-symbol">Símbolo por</td>
-                                    <td><input type="text" aria-label="Panes por bolsa pedido 2"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 2"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="Total panes pedido 2"></td>
+                                    <td><input type="text" aria-label="#panes pedido 2"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 6"></td>
-                                    <td class="m2-mul-symbol">Símbolo por</td>
-                                    <td><input type="text" aria-label="Panes por bolsa pedido 6"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 6"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="Total panes pedido 6"></td>
+                                    <td><input type="text" aria-label="#panes pedido 6"></td>
                                 </tr>
 
                                 <tr class="m2-mul-block-title">
@@ -2295,31 +2388,35 @@
                                 <tr class="m2-mul-label-row">
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th># panes de bono en la bolsa</th>
+                                    <th>#panes</th>
                                     <th>Igual</th>
-                                    <th>Total panes de bono</th>
+                                    <th>#panes</th>
                                     <th class="m2-mul-separator" aria-hidden="true"></th>
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th># panes de bono en la bolsa</th>
+                                    <th>#panes</th>
                                     <th>Igual</th>
-                                    <th>Total panes de bono</th>
+                                    <th>#panes</th>
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 4"></td>
-                                    <td class="m2-mul-symbol">Símbolo por</td>
-                                    <td><input type="text" aria-label="Panes por bolsa pedido 4"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 4"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="Total panes pedido 4"></td>
+                                    <td><input type="text" aria-label="#panes pedido 4"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 8"></td>
-                                    <td class="m2-mul-symbol">Símbolo por</td>
-                                    <td><input type="text" aria-label="Panes por bolsa pedido 8"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 8"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="Total panes pedido 8"></td>
+                                    <td><input type="text" aria-label="#panes pedido 8"></td>
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="m2-mul-actions">
+                            <button id="verifyMulTableBtn" class="btn btn-primary" type="button">Verificar tabla</button>
+                            <p id="m2MulTableFeedback" class="feedback-text" aria-live="polite"></p>
+                        </div>
                     </div>
                 </div>
 
@@ -2706,7 +2803,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031709"></script>
-    <script type="module" src="main-0b.js?v=2026031712"></script>
+    <script type="module" src="main-0b.js?v=2026031716"></script>
     <script src="app.js?v=2026031702"></script>
 </body>
 </html>

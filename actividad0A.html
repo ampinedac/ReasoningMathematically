@@ -158,13 +158,11 @@
     .cocina-header{text-align:center;padding:18px 20px 12px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.22);flex-shrink:0}
     .cocina-header h2{margin:0 0 4px;font-size:clamp(1.3rem,3vw,2rem);font-family:'Comic Sans MS',cursive;text-shadow:2px 2px 4px rgba(0,0,0,0.28)}
     .cocina-header p{margin:0;font-size:clamp(0.9rem,2vw,1.1rem);opacity:0.95}
-    .cocina-body{flex:1;padding:26px 96px 12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:0;overflow:hidden;position:relative}
+    .cocina-body{flex:0 0 auto;padding:18px 14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:auto;overflow:visible;position:relative}
     .cocina-body::before,
-    .cocina-body::after{position:absolute;top:22px;bottom:22px;width:78px;border-radius:24px;background:linear-gradient(180deg,#a66b3f 0%,#8a572d 48%,#6f4523 100%);border:4px solid rgba(111,69,35,0.8);box-shadow:inset 0 0 0 4px rgba(255,235,200,0.14),0 12px 24px rgba(90,56,26,0.22);color:#fff4de;font-size:2rem;line-height:1.9;white-space:pre;text-align:center;padding-top:20px;pointer-events:none;opacity:0.96}
-    .cocina-body::before{content:'🥖\A🍞\A🧁\A🥣\A🥐';left:18px}
-    .cocina-body::after{content:'🧈\A🥨\A🍪\A☕\A🫓';right:18px}
-    .cocina-body .trays-container{width:min(100%,1040px);max-width:1040px;flex:0 0 auto;min-height:420px;height:auto;max-height:none;margin-top:12px;margin-bottom:20px;grid-template-columns:repeat(4,1fr) !important;grid-auto-flow:row dense;grid-auto-rows:minmax(140px, auto);align-content:start !important;gap:clamp(10px,1.4vw,18px) !important;padding:clamp(12px,1.8vw,24px) !important;justify-items:stretch;overflow:visible;border-radius:28px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 3px rgba(255,232,198,0.16),inset 0 0 0 10px rgba(84,50,26,0.22),0 16px 34px rgba(84,50,26,0.28);position:relative}
-    .cocina-body .trays-container::before{content:'';position:absolute;inset:0;border-radius:28px;background:linear-gradient(25deg,rgba(255,255,255,0.08) 0%,rgba(255,255,255,0.02) 16%,rgba(82,47,23,0.08) 16%,rgba(82,47,23,0.08) 32%,rgba(255,255,255,0.03) 32%,rgba(255,255,255,0.03) 48%,rgba(82,47,23,0.08) 48%,rgba(82,47,23,0.08) 64%,rgba(255,255,255,0.03) 64%,rgba(255,255,255,0.03) 80%,rgba(82,47,23,0.08) 80%,rgba(82,47,23,0.08) 100%);mix-blend-mode:soft-light;pointer-events:none}
+    .cocina-body::after{content:none !important;display:none !important}
+    .cocina-body .trays-container{width:min(100%,1320px);max-width:1320px;flex:0 0 auto;min-height:560px;height:auto;max-height:none;margin-top:8px;margin-bottom:14px;grid-template-columns:repeat(4,1fr) !important;grid-auto-flow:row dense;grid-auto-rows:minmax(140px, auto);align-content:start !important;gap:clamp(10px,1.4vw,18px) !important;padding:clamp(12px,1.8vw,24px) !important;justify-items:stretch;overflow:visible;border-radius:20px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 2px rgba(255,232,198,0.16),0 10px 24px rgba(84,50,26,0.24);position:relative}
+    .cocina-body .trays-container::before{content:none}
     #cocinaScreen .trays-container,
     #cocinaScreen .trays-container *{cursor:url('assets/images/hand-point-cursor.svg') 16 12, grab !important}
     #cocinaScreen .trays-container:active,
@@ -175,8 +173,8 @@
     #cocinaScreen .tray-item-image{width:110%;height:110%;max-width:none;max-height:none}
     .cocina-controls{padding:18px 20px 20px;text-align:center;background:transparent;border-top:none;display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;position:relative;z-index:3}
     .cocina-controls .btn-primary{font-size:clamp(0.95rem,2vw,1.15rem);padding:12px 32px;margin-top:6px}
-    @media (max-width:1200px){.cocina-body{padding-left:74px;padding-right:74px}.cocina-body .trays-container{width:min(100%,960px);grid-auto-rows:minmax(130px, auto)}}
-    @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:22px 20px 14px;overflow:hidden}.cocina-body::before,.cocina-body::after{display:none}.cocina-body .trays-container{margin-top:8px;margin-bottom:14px;width:100%;max-width:760px;flex:none;height:auto;max-height:none;grid-template-columns:repeat(2,minmax(0,1fr)) !important;grid-template-rows:auto !important;gap:14px !important;padding:18px !important}#cocinaScreen .tray-card{aspect-ratio:1/1 !important;height:auto !important}}
+    @media (max-width:1200px){.cocina-body{padding:16px 12px 10px}.cocina-body .trays-container{width:min(100%,1100px);min-height:500px;grid-auto-rows:minmax(130px, auto)}}
+    @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:14px 10px 10px;overflow:visible}.cocina-body .trays-container{margin-top:8px;margin-bottom:10px;width:100%;max-width:760px;flex:none;height:auto;max-height:none;min-height:auto;grid-template-columns:repeat(2,minmax(0,1fr)) !important;grid-template-rows:auto !important;gap:14px !important;padding:14px !important}#cocinaScreen .tray-card{aspect-ratio:1/1 !important;height:auto !important}}
 
     /* ===== BOTÓN IR A COCINA ===== */
     #problemQ2Section .btn-cocina{display:block;width:92%;max-width:460px;margin:18px auto 0;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;border:none;border-radius:16px;padding:16px 24px;font-size:clamp(1rem,1.8vw,1.25rem);font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.38);transition:all 0.3s;text-shadow:1px 1px 2px rgba(0,0,0,0.18)}

@@ -21,6 +21,8 @@ let m2CurrentSpread = 0;
 let m2OrderCompleted = false;
 let m2ExplanationSubmitted = false;
 let m2SnapshotData = null;
+let m2Q1AudioCheckInterval = null;
+let m2Q1AssociatedSubmitted = false;
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
 let m1FlipbookPageHandler = null;
@@ -554,13 +556,16 @@ function initMoment1() {
         }
 
         if (prevBtn) {
-            prevBtn.style.opacity = '1';
-            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
-
             if (isBridgePage) {
                 prevBtn.disabled = true;
                 prevBtn.style.opacity = '0.5';
                 prevBtn.style.cursor = 'not-allowed';
+            } else {
+                // Al salir de la página puente, reactivar siempre "anterior"
+                // para permitir volver desde 15-16 al cuento.
+                prevBtn.disabled = false;
+                prevBtn.style.opacity = '1';
+                prevBtn.style.cursor = 'pointer';
             }
         }
 
@@ -969,17 +974,29 @@ function initMoment2() {
         statusText.textContent = '';
         statusText.className = 'status-text';
 
-        const checkAudio = setInterval(() => {
+        if (m2Q1AssociatedSubmitted) {
+            if (m2Q1AudioCheckInterval) {
+                clearInterval(m2Q1AudioCheckInterval);
+                m2Q1AudioCheckInterval = null;
+            }
+
+            newRecordBtn.disabled = true;
+            newStopBtn.disabled = true;
+            newStopBtn.classList.add('hidden');
+            newSubmitBtn.disabled = true;
+
+            m2ExplanationSubmitted = true;
+            updateMoment2SpreadUI();
+            return;
+        }
+
+        if (m2Q1AudioCheckInterval) {
+            clearInterval(m2Q1AudioCheckInterval);
+        }
+
+        m2Q1AudioCheckInterval = setInterval(() => {
             const hasAudio = audioState.audioBlob !== null;
             newSubmitBtn.disabled = !hasAudio;
-
-            if (!hasAudio) {
-                statusText.textContent = '🎤 Graba tu explicación';
-                statusText.className = 'status-text';
-            } else {
-                statusText.textContent = '✅ Listo para enviar';
-                statusText.className = 'status-text success';
-            }
         }, 500);
 
         newSubmitBtn.addEventListener('click', async () => {
@@ -1001,10 +1018,21 @@ function initMoment2() {
                     audioBlob: audioState.audioBlob
                 });
 
-                clearInterval(checkAudio);
+                if (m2Q1AudioCheckInterval) {
+                    clearInterval(m2Q1AudioCheckInterval);
+                    m2Q1AudioCheckInterval = null;
+                }
                 statusText.textContent = 'Guardado exitosamente ✅';
                 statusText.className = 'status-text success';
                 newRecordBtn.disabled = true;
+                newStopBtn.disabled = true;
+                newStopBtn.classList.add('hidden');
+                newSubmitBtn.disabled = true;
+
+                m2Q1AssociatedSubmitted = true;
+
+                m2ExplanationSubmitted = true;
+                updateMoment2SpreadUI();
             } catch (error) {
                 console.error('Error al guardar audio asociado M2:', error);
                 statusText.textContent = 'Error al guardar. Intenta de nuevo.';
@@ -1015,6 +1043,96 @@ function initMoment2() {
     };
 
     setupMoment2AssociatedAudio();
+
+    const setupMoment2MulTableValidation = () => {
+        const verifyMulBtn = document.getElementById('verifyMulTableBtn');
+        const feedback = document.getElementById('m2MulTableFeedback');
+        const entryRows = Array.from(document.querySelectorAll('#problemQ2Section .m2-mul-table .m2-mul-entry-row'));
+
+        if (!verifyMulBtn || !feedback || entryRows.length < 3) {
+            return;
+        }
+
+        const newVerifyMulBtn = verifyMulBtn.cloneNode(true);
+        verifyMulBtn.parentNode.replaceChild(newVerifyMulBtn, verifyMulBtn);
+        feedback.textContent = '';
+        feedback.className = 'feedback-text';
+
+        newVerifyMulBtn.addEventListener('click', () => {
+            const traySource = traysSystem?.BASE_TRAYS || [];
+            const trayByPedido = new Map(
+                traySource.map(tray => [Number(tray.pedido), tray])
+            );
+
+            const pedidoPairs = [
+                [3, 7],
+                [2, 6],
+                [4, 8]
+            ];
+
+            let emptyValues = false;
+            let wrongValues = 0;
+
+            pedidoPairs.forEach((pair, rowIndex) => {
+                const row = entryRows[rowIndex];
+                if (!row) {
+                    wrongValues += 1;
+                    return;
+                }
+
+                const inputs = Array.from(row.querySelectorAll('input'));
+                if (inputs.length < 6) {
+                    wrongValues += 1;
+                    return;
+                }
+
+                pair.forEach((pedido, sideIndex) => {
+                    const expected = trayByPedido.get(pedido);
+                    if (!expected) {
+                        wrongValues += 1;
+                        return;
+                    }
+
+                    const offset = sideIndex * 3;
+                    const values = [
+                        Number.parseInt((inputs[offset]?.value || '').trim(), 10),
+                        Number.parseInt((inputs[offset + 1]?.value || '').trim(), 10),
+                        Number.parseInt((inputs[offset + 2]?.value || '').trim(), 10)
+                    ];
+
+                    if (values.some(Number.isNaN)) {
+                        emptyValues = true;
+                        return;
+                    }
+
+                    const isCorrect =
+                        values[0] === Number(expected.bags) &&
+                        values[1] === Number(expected.itemsPerBag) &&
+                        values[2] === Number(expected.total);
+
+                    if (!isCorrect) {
+                        wrongValues += 1;
+                    }
+                });
+            });
+
+            if (emptyValues) {
+                feedback.textContent = 'Completa todos los espacios de la tabla antes de verificar.';
+                feedback.className = 'feedback-text info';
+                return;
+            }
+
+            if (wrongValues === 0) {
+                feedback.textContent = '¡Excelente! Los datos de la tabla coinciden con los pedidos.';
+                feedback.className = 'feedback-text success';
+            } else {
+                feedback.textContent = `Hay ${wrongValues} dato(s) que no coinciden con los pedidos. Revisa y vuelve a intentar.`;
+                feedback.className = 'feedback-text error';
+            }
+        });
+    };
+
+    setupMoment2MulTableValidation();
 
     const verifyBtn = document.getElementById('verifyTraysBtn');
     if (verifyBtn) {
