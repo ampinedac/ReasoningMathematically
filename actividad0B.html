@@ -364,7 +364,8 @@
     .activity-0b #problemQ2Section .m2-spread {
         display: none;
         grid-template-columns: 1fr 1fr;
-        min-height: 600px;
+        min-height: 100%;
+        height: 100%;
         width: 100%;
         position: relative;
         grid-column: 1 / -1;
@@ -607,9 +608,10 @@
         display: block;
         grid-template-columns: 1fr 1fr;
         gap: 0;
-        width: 95%;
-        max-width: none;
-        min-height: 600px;
+        width: 95vw;
+        max-width: 95vw;
+        aspect-ratio: 3 / 2;
+        min-height: 0;
         margin: 0 auto;
         border-radius: 18px;
         overflow: visible;
@@ -635,7 +637,8 @@
     .activity-0b #problemQ2Section .q1-right-page {
         margin: 0;
         max-width: none;
-        min-height: 600px;
+        min-height: 100%;
+        height: 100%;
         border: 0;
         border-radius: 0;
         box-shadow: none;
@@ -1568,6 +1571,7 @@
         .activity-0b #problemQ2Section.q1-book-spread {
             grid-template-columns: 1fr;
             min-height: auto;
+            aspect-ratio: auto;
         }
 
         .activity-0b #problemQ2Section.q1-book-spread::before {
@@ -1845,7 +1849,7 @@
 
                         <!-- PORTADA CERRADA DEL LIBRO -->
                         <div class="page book-cover-page active">
-                            <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de Doña Alicia">
                                 <span class="cover-word-line">
                                     <span class="cover-word-chip tone-1">El</span>
                                     <span class="cover-word-chip tone-2">secreto</span>
@@ -2003,11 +2007,7 @@
                     </div>
 
                     <div class="evidence-section q1-right-page" id="q2RightPage">
-                        <div class="m2-preview-card">
-                            <h4>Foto de tu organización</h4>
-                            <div id="m2PreviewPage18" class="m2-photo-grid"></div>
-                            <p class="m2-preview-note">Esta vista previa te ayuda a responder la pregunta de comparación.</p>
-                        </div>
+                        
 
                         <div id="finalQuestionSectionM2" class="hidden">
                             <div class="problem-box">
@@ -2432,7 +2432,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031515"></script>
-    <script type="module" src="main-0b.js?v=2026031704"></script>
+    <script type="module" src="main-0b.js?v=2026031706"></script>
     <script src="app.js?v=2026031702"></script>
 </body>
 </html>

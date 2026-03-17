@@ -25,6 +25,7 @@ let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
 let m1FlipbookPageHandler = null;
 let m1Q1Submitted = false;
+let m1GoToMoment2WithTurn = null;
 
 function parseTrayNumber(trayId) {
     return Number.parseInt(String(trayId || '').replace('tray-', ''), 10);
@@ -64,6 +65,11 @@ function buildMoment2SnapshotData() {
 function renderMoment2Snapshot(targetId) {
     const container = document.getElementById(targetId);
     if (!container) return;
+
+    if (!m2OrderCompleted) {
+        container.innerHTML = '';
+        return;
+    }
 
     container.innerHTML = `
         <p class="m2-photo-fixed-text">📸 Así quedaron tus parejas:</p>
@@ -526,6 +532,7 @@ function initMoment1() {
             m1TransitioningToMoment2 = false;
         }, 620);
     };
+    m1GoToMoment2WithTurn = goToMoment2FromQ1;
 
     const syncM1WithFlipbookPage = (event) => {
         if (q1PageIndex < 0) {
@@ -694,10 +701,9 @@ function initProblemQ1() {
                 nextBtn.disabled = false;
                 nextBtn.style.opacity = '1';
                 nextBtn.style.cursor = 'pointer';
-                nextBtn.onclick = () => {
-                    showScreen('moment2Screen');
-                    initMoment2();
-                };
+                if (typeof m1GoToMoment2WithTurn === 'function') {
+                    nextBtn.onclick = m1GoToMoment2WithTurn;
+                }
             }
             
         } catch (error) {
@@ -777,6 +783,15 @@ function initMoment2() {
         newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
         newGoToCocinaBtn.title = '';
         newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
+    }
+
+    const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
+    const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
+    if (previewCard18) {
+        previewCard18.classList.add('hidden');
+    }
+    if (previewCard19) {
+        previewCard19.classList.add('hidden');
     }
 
     const spreads = Array.from(document.querySelectorAll('#problemQ2Section .m2-spread'));
@@ -1350,6 +1365,15 @@ function verifyTraysPairings() {
         m2OrderCompleted = true;
         m2SnapshotData = buildMoment2SnapshotData();
         renderMoment2Snapshots();
+
+        const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
+        const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
+        if (previewCard18) {
+            previewCard18.classList.remove('hidden');
+        }
+        if (previewCard19) {
+            previewCard19.classList.remove('hidden');
+        }
         
         // Deshabilitar el botón
         document.getElementById('verifyTraysBtn').disabled = true;
