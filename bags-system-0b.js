@@ -299,15 +299,12 @@ class TraysSystem {
         wrapper.style.justifyContent = 'center';
         wrapper.style.gridColumn = 'span 2'; // Ocupa 2 columnas
         wrapper.style.border = `4px solid ${color}`;
-        wrapper.style.boxShadow = `0 0 0 4px ${color}22`;
         
         // Marcar bandejas como emparejadas
         tray1.classList.add('paired');
         tray2.classList.add('paired');
         tray1.style.borderColor = color;
         tray2.style.borderColor = color;
-        tray1.style.boxShadow = `0 0 0 3px ${color}33`;
-        tray2.style.boxShadow = `0 0 0 3px ${color}33`;
         
         // Mover bandejas al wrapper
         const parent = tray1.parentElement;
@@ -348,10 +345,8 @@ class TraysSystem {
         // Limpiar estilos
         tray1.classList.remove('paired');
         tray1.style.borderColor = '';
-        tray1.style.boxShadow = '';
         tray2.classList.remove('paired');
         tray2.style.borderColor = '';
-        tray2.style.boxShadow = '';
         
         // Reorganizar layout
         this.reorganizeLayout();

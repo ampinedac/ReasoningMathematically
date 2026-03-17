@@ -856,9 +856,16 @@ function initMoment2() {
                 showScreen('moment1Screen');
                 initMoment1();
 
-                const totalFlipbookPages = window.flipbookControls?.getTotalPages?.();
-                if (Number.isInteger(totalFlipbookPages) && totalFlipbookPages > 0) {
-                    window.flipbookControls.goToPage(totalFlipbookPages - 1);
+                const flipbookPages = Array.from(document.querySelectorAll('#flipbook .page'));
+                const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+
+                if (q1PageIndex >= 0) {
+                    window.flipbookControls?.goToPage?.(q1PageIndex);
+                } else {
+                    const totalFlipbookPages = window.flipbookControls?.getTotalPages?.();
+                    if (Number.isInteger(totalFlipbookPages) && totalFlipbookPages > 1) {
+                        window.flipbookControls?.goToPage?.(totalFlipbookPages - 2);
+                    }
                 }
             }
 
@@ -910,6 +917,104 @@ function initMoment2() {
     if (finalSectionM2) {
         finalSectionM2.classList.toggle('hidden', !m2OrderCompleted);
     }
+
+    const m2PromptSectionQ1 = document.getElementById('m2PromptSectionQ1');
+    const m2PromptTextQ1 = document.getElementById('m2PromptTextQ1');
+    const m2TruthQ1Radios = Array.from(document.querySelectorAll('input[name="truthQ1M2"]'));
+    const m2PromptMapQ1 = {
+        yes: 'Explica detalladamente cómo lo sabes.',
+        no: '¿Con qué número crees que no funcionaría?',
+        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
+    };
+
+    if (m2PromptSectionQ1) {
+        m2PromptSectionQ1.classList.add('hidden');
+    }
+    if (m2PromptTextQ1) {
+        m2PromptTextQ1.textContent = '';
+    }
+    m2TruthQ1Radios.forEach(radio => {
+        radio.checked = false;
+        radio.onchange = (event) => {
+            const choice = event.target.value;
+            if (m2PromptTextQ1) {
+                m2PromptTextQ1.textContent = m2PromptMapQ1[choice] || '';
+            }
+            if (m2PromptSectionQ1) {
+                m2PromptSectionQ1.classList.remove('hidden');
+            }
+        };
+    });
+
+    const setupMoment2AssociatedAudio = () => {
+        const recordBtn = document.getElementById('recordBtnM2Q1');
+        const stopBtn = document.getElementById('stopBtnM2Q1');
+        const submitBtn = document.getElementById('submitM2Q1');
+        const statusText = document.getElementById('statusM2Q1');
+
+        if (!recordBtn || !stopBtn || !submitBtn || !statusText) {
+            return;
+        }
+
+        const newRecordBtn = recordBtn.cloneNode(true);
+        const newStopBtn = stopBtn.cloneNode(true);
+        const newSubmitBtn = submitBtn.cloneNode(true);
+        recordBtn.parentNode.replaceChild(newRecordBtn, recordBtn);
+        stopBtn.parentNode.replaceChild(newStopBtn, stopBtn);
+        submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+
+        const audioState = initAudio('recordBtnM2Q1', 'stopBtnM2Q1', 'audioStatusM2Q1');
+
+        newSubmitBtn.disabled = true;
+        statusText.textContent = '';
+        statusText.className = 'status-text';
+
+        const checkAudio = setInterval(() => {
+            const hasAudio = audioState.audioBlob !== null;
+            newSubmitBtn.disabled = !hasAudio;
+
+            if (!hasAudio) {
+                statusText.textContent = '🎤 Graba tu explicación';
+                statusText.className = 'status-text';
+            } else {
+                statusText.textContent = '✅ Listo para enviar';
+                statusText.className = 'status-text success';
+            }
+        }, 500);
+
+        newSubmitBtn.addEventListener('click', async () => {
+            if (!audioState.audioBlob) return;
+
+            newSubmitBtn.disabled = true;
+            statusText.textContent = 'Subiendo evidencia...';
+            statusText.className = 'status-text loading';
+
+            try {
+                await submitEvidence({
+                    moment: 'm2',
+                    tag: 'q1-associated-audio',
+                    data: {
+                        question: 'Problema 1 asociado en página 22',
+                        choice: document.querySelector('input[name="truthQ1M2"]:checked')?.value || null
+                    },
+                    boardBlob: null,
+                    audioBlob: audioState.audioBlob
+                });
+
+                clearInterval(checkAudio);
+                statusText.textContent = 'Guardado exitosamente ✅';
+                statusText.className = 'status-text success';
+                newRecordBtn.disabled = true;
+            } catch (error) {
+                console.error('Error al guardar audio asociado M2:', error);
+                statusText.textContent = 'Error al guardar. Intenta de nuevo.';
+                statusText.className = 'status-text error';
+                newSubmitBtn.disabled = false;
+            }
+        });
+    };
+
+    setupMoment2AssociatedAudio();
 
     const verifyBtn = document.getElementById('verifyTraysBtn');
     if (verifyBtn) {
@@ -2145,6 +2250,8 @@ function showItem(itemNum) {
                     checkBtn.click();
                 }
             });
+        } else {
+            box.classList.add('hidden');
         }
     });
 }
@@ -2323,6 +2430,7 @@ function validateItem(input, itemBox) {
         
         // Avanzar al siguiente ítem
         setTimeout(() => {
+            itemBox.classList.add('hidden');
             m4_currentItem++;
             if (m4_currentItem <= 6) {
                 showItem(m4_currentItem);
@@ -2374,6 +2482,7 @@ function validateItem(input, itemBox) {
             // Si todavía hay vidas, continuar con la siguiente pregunta
             if (m4_magicLives > 0) {
                 setTimeout(() => {
+                    itemBox.classList.add('hidden');
                     m4_currentItem++;
                     if (m4_currentItem <= 6) {
                         showItem(m4_currentItem);

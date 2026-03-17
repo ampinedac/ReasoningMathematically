@@ -148,8 +148,8 @@
 
     .activity-0b #moment1Screen #flipbook,
     .activity-0b #moment1Screen #problemQ1Section.q1-book-spread {
-        width: 95vw !important;
-        max-width: 95vw !important;
+        width: 95% !important;
+        max-width: 95% !important;
         margin-left: auto;
         margin-right: auto;
     }
@@ -489,6 +489,7 @@
 
     .activity-0b .m2-mul-table {
         width: 100%;
+        table-layout: fixed;
         border-collapse: separate;
         border-spacing: 0;
         border: 1px solid rgba(27, 64, 95, 0.18);
@@ -517,8 +518,40 @@
         font-weight: 700;
     }
 
+    .activity-0b .m2-mul-table .m2-mul-block-title th {
+        background: #e8f2fc;
+        font-size: 0.8rem;
+        padding: 7px 6px;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-label-row th {
+        font-size: 0.64rem;
+        line-height: 1.2;
+        padding: 5px 4px;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-entry-row td {
+        padding: 5px 4px;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-separator {
+        width: 8px;
+        min-width: 8px;
+        padding: 0;
+        background: #ffffff;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-symbol {
+        font-size: 0.64rem;
+        font-weight: 700;
+        color: #355a76;
+        white-space: nowrap;
+    }
+
     .activity-0b .m2-mul-table input {
-        width: 56px;
+        width: 100%;
+        min-width: 42px;
+        max-width: 64px;
         border: 1px solid rgba(27, 64, 95, 0.3);
         border-radius: 6px;
         padding: 4px 6px;
@@ -535,6 +568,93 @@
     .activity-0b .m2-spread-21 .problem-box {
         max-width: 90%;
         margin: 0 auto;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-left {
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-left .m2-secret-title,
+    .activity-0b #problemQ2Section .m2-problem1-left .m2-secret-text,
+    .activity-0b #problemQ2Section .m2-problem1-left .question {
+        width: 100%;
+        max-width: none;
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-left .envelope-equation {
+        margin: 10px auto 14px;
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-right {
+        justify-content: center;
+        align-items: stretch;
+    }
+
+    .activity-0b #problemQ2Section .m2-p21-radio-group {
+        display: grid;
+        gap: 10px;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 540px;
+    }
+
+    .activity-0b #problemQ2Section .m2-p21-radio-group .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 2px solid #dbe4f7;
+        border-radius: 12px;
+        background: #f7f8fb;
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        color: #2f3a4d;
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .m2-p21-radio-group input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: #8a95b0;
+        flex: 0 0 auto;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #ffffff;
+        padding: 12px;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated .prompt-box {
+        margin: 0;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated .prompt-box p {
+        margin: 0;
+        text-align: left;
+        font-size: 0.95rem;
+        line-height: 1.35;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated .audio-controls,
+    .activity-0b #problemQ2Section .m2-q1-associated .submit-section {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="1"] .q1-right-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
@@ -756,6 +876,11 @@
         width: 100%;
         transform: none;
         text-align: unset;
+        font-size: 1.05rem;
+        font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.45);
+        font-style: normal;
         pointer-events: none;
         z-index: 10;
     }
@@ -1332,6 +1457,29 @@
         bottom: 12px;
         transform: translateX(-50%);
         z-index: 3;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number {
+        left: 0;
+        right: 0;
+        width: 100%;
+        transform: none;
+        text-align: unset;
+        pointer-events: none;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-left,
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-right {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-left {
+        left: 5%;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-right {
+        right: 5%;
     }
 
     .activity-0b #moment4ReflectionSection .m4-left-page,
@@ -2030,7 +2178,6 @@
 
                     <div class="evidence-section q1-right-page" id="q2RightPage">
                         <div class="m2-preview-card hidden">
-                            <h4>Foto del orden logrado</h4>
                             <div id="m2PreviewPage18" class="m2-photo-grid"></div>
                         </div>
 
@@ -2069,63 +2216,107 @@
                             <h4>Foto del orden logrado</h4>
                             <div id="m2PreviewPage19" class="m2-photo-grid"></div>
                         </div>
-                        <p class="instruction-hint">Ahora usa esta foto para escribir cada situación como multiplicación.</p>
                     </div>
 
                     <div class="evidence-section q1-right-page">
                         <h3 class="m2-secret-title">Las bolsas secretas</h3>
                         <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo. Esta vez utilizarás bolsas con números secretos. Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
                         <table class="m2-mul-table" aria-label="Tabla de multiplicaciones de pedidos">
-                            <thead>
-                                <tr>
-                                    <th>Pedido 3</th>
-                                    <th>Por</th>
-                                    <th>Total</th>
-                                    <th>Pedido 7</th>
-                                    <th>Por</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
                             <tbody>
-                                <tr>
-                                    <td><input type="text" aria-label="Bolsas pedido 3"></td>
-                                    <td>× <input type="text" aria-label="Panes pedido 3"></td>
-                                    <td>= <input type="text" aria-label="Total pedido 3"></td>
-                                    <td><input type="text" aria-label="Bolsas pedido 7"></td>
-                                    <td>× <input type="text" aria-label="Panes pedido 7"></td>
-                                    <td>= <input type="text" aria-label="Total pedido 7"></td>
+                                <tr class="m2-mul-block-title">
+                                    <th colspan="5">Pedido 3</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th colspan="5">Pedido 7</th>
                                 </tr>
-                                <tr>
-                                    <th>Pedido 2</th>
+                                <tr class="m2-mul-label-row">
+                                    <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>Total</th>
-                                    <th>Pedido 6</th>
+                                    <th># panes de bono en la bolsa</th>
+                                    <th>Igual</th>
+                                    <th>Total panes de bono</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>Total</th>
+                                    <th># panes de bono en la bolsa</th>
+                                    <th>Igual</th>
+                                    <th>Total panes de bono</th>
                                 </tr>
-                                <tr>
-                                    <td><input type="text" aria-label="Bolsas pedido 2"></td>
-                                    <td>× <input type="text" aria-label="Panes pedido 2"></td>
-                                    <td>= <input type="text" aria-label="Total pedido 2"></td>
-                                    <td><input type="text" aria-label="Bolsas pedido 6"></td>
-                                    <td>× <input type="text" aria-label="Panes pedido 6"></td>
-                                    <td>= <input type="text" aria-label="Total pedido 6"></td>
+                                <tr class="m2-mul-entry-row">
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 3"></td>
+                                    <td class="m2-mul-symbol">Símbolo por</td>
+                                    <td><input type="text" aria-label="Panes por bolsa pedido 3"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="Total panes pedido 3"></td>
+                                    <td class="m2-mul-separator" aria-hidden="true"></td>
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 7"></td>
+                                    <td class="m2-mul-symbol">Símbolo por</td>
+                                    <td><input type="text" aria-label="Panes por bolsa pedido 7"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="Total panes pedido 7"></td>
                                 </tr>
-                                <tr>
-                                    <th>Pedido 4</th>
-                                    <th>Por</th>
-                                    <th>Total</th>
-                                    <th>Pedido 8</th>
-                                    <th>Por</th>
-                                    <th>Total</th>
+
+                                <tr class="m2-mul-block-title">
+                                    <th colspan="5">Pedido 2</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th colspan="5">Pedido 6</th>
                                 </tr>
-                                <tr>
-                                    <td><input type="text" aria-label="Bolsas pedido 4"></td>
-                                    <td>× <input type="text" aria-label="Panes pedido 4"></td>
-                                    <td>= <input type="text" aria-label="Total pedido 4"></td>
-                                    <td><input type="text" aria-label="Bolsas pedido 8"></td>
-                                    <td>× <input type="text" aria-label="Panes pedido 8"></td>
-                                    <td>= <input type="text" aria-label="Total pedido 8"></td>
+                                <tr class="m2-mul-label-row">
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th># panes de bono en la bolsa</th>
+                                    <th>Igual</th>
+                                    <th>Total panes de bono</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th># panes de bono en la bolsa</th>
+                                    <th>Igual</th>
+                                    <th>Total panes de bono</th>
+                                </tr>
+                                <tr class="m2-mul-entry-row">
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 2"></td>
+                                    <td class="m2-mul-symbol">Símbolo por</td>
+                                    <td><input type="text" aria-label="Panes por bolsa pedido 2"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="Total panes pedido 2"></td>
+                                    <td class="m2-mul-separator" aria-hidden="true"></td>
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 6"></td>
+                                    <td class="m2-mul-symbol">Símbolo por</td>
+                                    <td><input type="text" aria-label="Panes por bolsa pedido 6"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="Total panes pedido 6"></td>
+                                </tr>
+
+                                <tr class="m2-mul-block-title">
+                                    <th colspan="5">Pedido 4</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th colspan="5">Pedido 8</th>
+                                </tr>
+                                <tr class="m2-mul-label-row">
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th># panes de bono en la bolsa</th>
+                                    <th>Igual</th>
+                                    <th>Total panes de bono</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th># panes de bono en la bolsa</th>
+                                    <th>Igual</th>
+                                    <th>Total panes de bono</th>
+                                </tr>
+                                <tr class="m2-mul-entry-row">
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 4"></td>
+                                    <td class="m2-mul-symbol">Símbolo por</td>
+                                    <td><input type="text" aria-label="Panes por bolsa pedido 4"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="Total panes pedido 4"></td>
+                                    <td class="m2-mul-separator" aria-hidden="true"></td>
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 8"></td>
+                                    <td class="m2-mul-symbol">Símbolo por</td>
+                                    <td><input type="text" aria-label="Panes por bolsa pedido 8"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="Total panes pedido 8"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -2137,15 +2328,66 @@
                         <span class="page-number-left">21</span>
                         <span class="page-number-right">22</span>
                     </div>
-                    <div class="problem-box q1-left-page m2-spread-21">
-                        <h3>Página 21</h3>
-                        <p>Revisa tus ideas y prepara tu explicación final para continuar con el siguiente momento.</p>
-                        <p class="instruction-hint">Cuando estés listo(a), pulsa la flecha derecha para continuar.</p>
+                    <div class="problem-box q1-left-page m2-problem1-left">
+                        <h3 class="m2-secret-title">Las bolsas secretas</h3>
+                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo.</p>
+                        <p class="m2-secret-text">Esta vez utilizarás bolsas con números secretos.</p>
+                        <p class="m2-secret-text">Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
+
+                        <div class="problem-box" style="width:100%;max-width:none;padding:0;border:0;background:transparent;box-shadow:none;">
+                            <h3>Problema 1</h3>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
+                                    <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
+                                    <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <span class="number">4</span>
+                                <span class="operator">=</span>
+                                <span class="number">4</span>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
+                                    <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
+                                    <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro de la bolsa verde?</p>
+                        </div>
                     </div>
-                    <div class="evidence-section q1-right-page m2-spread-21">
-                        <div class="problem-box">
-                            <h3>Resumen del reto</h3>
-                            <p>Identificaste parejas con la misma cantidad, registraste información en formato de multiplicación y conectaste el orden con el producto.</p>
+
+                    <div class="evidence-section q1-right-page m2-problem1-right">
+                        <div class="radio-group m2-p21-radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1M2" value="yes">
+                                Sí, creo que es verdadera
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1M2" value="no">
+                                No, creo que no es verdadera
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1M2" value="unsure">
+                                No estoy segura
+                            </label>
+                        </div>
+
+                        <div id="m2PromptSectionQ1" class="m2-q1-associated hidden">
+                            <div class="prompt-box">
+                                <p id="m2PromptTextQ1"></p>
+                            </div>
+                            <div class="audio-controls">
+                                <button id="recordBtnM2Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                                <button id="stopBtnM2Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <span id="audioStatusM2Q1" class="audio-status"></span>
+                            </div>
+                            <div class="submit-section">
+                                <p id="statusM2Q1" class="status-text"></p>
+                                <button id="submitM2Q1" class="btn btn-primary" disabled>Enviar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2223,13 +2465,14 @@
                                 Sí, creo que es verdadera
                             </label>
                             <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="no">
+                                No, creo que no es verdadera
+                            </label>
+                            <label class="radio-label">
                                 <input type="radio" name="truthQ1" value="unsure">
                                 No estoy segura
                             </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ1" value="no">
-                                Creo que no es verdadera
-                            </label>
+
                         </div>
                     </div>
                 </div>
@@ -2418,7 +2661,10 @@
                     </div>
                 </div>
 
-                <div class="page-number">11</div>
+                <div class="page-number book-spread-number">
+                    <span class="page-number-left">23</span>
+                    <span class="page-number-right">24</span>
+                </div>
             </div>
 
             <div id="moment4ReflectionSection" class="m4-book-spread hidden">
@@ -2446,7 +2692,10 @@
                         <button id="finishM4Btn" class="btn btn-primary" disabled>Finalizar actividad</button>
                     </div>
                 </div>
-                <div class="page-number">12</div>
+                <div class="page-number book-spread-number">
+                    <span class="page-number-left">25</span>
+                    <span class="page-number-right">26</span>
+                </div>
             </div>
 
             <!-- Canvas para efectos mágicos -->
@@ -2456,8 +2705,8 @@
     </section>
 
     <!-- Scripts -->
-    <script src="bags-system-0b.js?v=2026031515"></script>
-    <script type="module" src="main-0b.js?v=2026031708"></script>
+    <script src="bags-system-0b.js?v=2026031709"></script>
+    <script type="module" src="main-0b.js?v=2026031712"></script>
     <script src="app.js?v=2026031702"></script>
 </body>
 </html>
