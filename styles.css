@@ -636,19 +636,19 @@ body.flipbook-on-cover #flipbook::after {
 
 #flipbook .book-cover-page .cover-word-line {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
-    gap: 12px;
+    gap: 8px;
 }
 
 #flipbook .book-cover-page .cover-word-chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px 14px;
+    padding: 10px 20px 12px;
     border-radius: 999px;
     font-family: 'Trebuchet MS', 'Comic Sans MS', cursive;
-    font-size: clamp(1.68rem, 2.35vw, 2.2rem);
+    font-size: clamp(1.46rem, 2.05vw, 1.9rem);
     font-weight: 900;
     line-height: 1;
     text-transform: none;
@@ -768,12 +768,12 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     #flipbook .book-cover-page .cover-word-line {
-        gap: 6px;
+        gap: 5px;
     }
 
     #flipbook .book-cover-page .cover-word-chip {
-        padding: 9px 16px 11px;
-        font-size: clamp(1.18rem, 4vw, 1.46rem);
+        padding: 8px 13px 10px;
+        font-size: clamp(1.02rem, 3.35vw, 1.22rem);
     }
 
     #flipbook .book-cover-page .cover-subtitle {
