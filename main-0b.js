@@ -65,39 +65,10 @@ function renderMoment2Snapshot(targetId) {
     const container = document.getElementById(targetId);
     if (!container) return;
 
-    container.innerHTML = '';
-
-    if (!m2SnapshotData) {
-        const emptyCard = document.createElement('div');
-        emptyCard.className = 'm2-photo-card single';
-        emptyCard.innerHTML = '<p class="m2-photo-title">Aún no hay foto</p><p class="m2-photo-body">Ve a la cocina, organiza y verifica para ver aquí tu resultado.</p>';
-        container.appendChild(emptyCard);
-        return;
-    }
-
-    m2SnapshotData.pairs.forEach((pairInfo, index) => {
-        const leftOrder = parseTrayNumber(pairInfo.left.id);
-        const rightOrder = parseTrayNumber(pairInfo.right.id);
-
-        const card = document.createElement('div');
-        card.className = 'm2-photo-card pair';
-        card.innerHTML = `
-            <p class="m2-photo-title">Pareja ${index + 1}</p>
-            <p class="m2-photo-body">Pedido ${leftOrder} (${pairInfo.left.rows}x${pairInfo.left.cols}) con Pedido ${rightOrder} (${pairInfo.right.rows}x${pairInfo.right.cols})</p>
-        `;
-        container.appendChild(card);
-    });
-
-    m2SnapshotData.singles.forEach((singleInfo) => {
-        const orderNum = parseTrayNumber(singleInfo.tray.id);
-        const card = document.createElement('div');
-        card.className = 'm2-photo-card single';
-        card.innerHTML = `
-            <p class="m2-photo-title">Sin pareja</p>
-            <p class="m2-photo-body">Pedido ${orderNum} (${singleInfo.tray.rows}x${singleInfo.tray.cols})</p>
-        `;
-        container.appendChild(card);
-    });
+    container.innerHTML = `
+        <p class="m2-photo-fixed-text">📸 Así quedaron tus parejas:</p>
+        <img src="assets/images/BolsasFoto.png" alt="Así quedaron tus parejas" class="m2-photo-fixed-image">
+    `;
 }
 
 function renderMoment2Snapshots() {
@@ -518,13 +489,42 @@ function initMoment1() {
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
     const q1PageIndex = flipbook ? flipbook.querySelectorAll('.page').length - 1 : -1;
+    let m1TransitioningToMoment2 = false;
 
     const goToMoment2FromQ1 = () => {
-        if (!m1Q1Submitted) {
+        if (!m1Q1Submitted || m1TransitioningToMoment2) {
             return;
         }
-        showScreen('moment2Screen');
-        initMoment2();
+
+        m1TransitioningToMoment2 = true;
+
+        const flipbookSection = document.getElementById('flipbookSection');
+        if (flipbookSection) {
+            flipbookSection.classList.add('m1-turn-out');
+        }
+
+        if (typeof window.playPageTurnSound === 'function') {
+            window.playPageTurnSound();
+        }
+
+        setTimeout(() => {
+            if (flipbookSection) {
+                flipbookSection.classList.remove('m1-turn-out');
+            }
+
+            showScreen('moment2Screen');
+            initMoment2();
+
+            const moment2Screen = document.getElementById('moment2Screen');
+            if (moment2Screen) {
+                moment2Screen.classList.add('turn-in');
+                setTimeout(() => {
+                    moment2Screen.classList.remove('turn-in');
+                }, 520);
+            }
+
+            m1TransitioningToMoment2 = false;
+        }, 620);
     };
 
     const syncM1WithFlipbookPage = (event) => {

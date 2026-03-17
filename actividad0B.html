@@ -229,6 +229,17 @@
         gap: 4px;
     }
 
+    .activity-0b #moment1Screen #problemQ1Section .sale-block-ventas {
+        width: 100%;
+        max-width: none;
+        align-items: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .ventas-image {
+        width: 70%;
+        max-width: 70%;
+    }
+
     .activity-0b #moment1Screen #problemQ1Section .sale-description {
         margin: 0 !important;
         width: 100% !important;
@@ -356,6 +367,7 @@
         min-height: 600px;
         width: 100%;
         position: relative;
+        grid-column: 1 / -1;
     }
 
     .activity-0b #problemQ2Section .m2-spread.active {
@@ -388,9 +400,25 @@
     }
 
     .activity-0b .m2-photo-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px;
+        display: block;
+    }
+
+    .activity-0b .m2-photo-fixed-text {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1f4f7a;
+        text-align: center;
+    }
+
+    .activity-0b .m2-photo-fixed-image {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.14);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
     .activity-0b .m2-photo-card {
@@ -515,8 +543,68 @@
         margin: 0;
     }
 
+    .activity-0b #flipbookSection {
+        transform-origin: center center;
+    }
+
+    .activity-0b #flipbookSection.m1-turn-out {
+        pointer-events: none;
+    }
+
+    .activity-0b #flipbookSection.m1-turn-out #flipbook {
+        animation: m1ToM2PageTurn 620ms cubic-bezier(0.2, 0.62, 0.2, 1) forwards;
+        transform-origin: left center;
+    }
+
+    .activity-0b #flipbookSection.m1-turn-out #flipbook::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgba(20, 34, 48, 0) 52%, rgba(20, 34, 48, 0.18) 76%, rgba(20, 34, 48, 0.28) 100%);
+        animation: m1ToM2Shade 620ms ease forwards;
+        z-index: 40;
+    }
+
+    .activity-0b #moment2Screen.turn-in #problemQ2Section {
+        animation: m2FromPageTurn 500ms cubic-bezier(0.22, 0.75, 0.24, 1) both;
+        transform-origin: right center;
+    }
+
+    @keyframes m1ToM2PageTurn {
+        0% {
+            transform: perspective(2200px) rotateY(0deg) translateX(0);
+            opacity: 1;
+        }
+        58% {
+            transform: perspective(2200px) rotateY(-16deg) translateX(-1%);
+            opacity: 0.96;
+        }
+        100% {
+            transform: perspective(2200px) rotateY(-30deg) translateX(-3%);
+            opacity: 0.18;
+        }
+    }
+
+    @keyframes m1ToM2Shade {
+        0% { opacity: 0; }
+        60% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+
+    @keyframes m2FromPageTurn {
+        0% {
+            transform: perspective(2200px) rotateY(20deg) translateX(2%);
+            opacity: 0.16;
+        }
+        100% {
+            transform: perspective(2200px) rotateY(0deg) translateX(0);
+            opacity: 1;
+        }
+    }
+
     .activity-0b #problemQ2Section.q1-book-spread {
-        display: grid;
+        display: block;
         grid-template-columns: 1fr 1fr;
         gap: 0;
         width: 95%;
@@ -1842,7 +1930,7 @@
 
                             <!-- TABLERO Y AUDIO -->
                             <div class="evidence-section q1-right-page">
-                                <h4>Puedes usar el tablero:</h4>
+                                <h4>Puedes utilizar el tablero:</h4>
 
                                 <!-- Tablero -->
                                 <div class="board-container">
@@ -2344,7 +2432,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031515"></script>
-    <script type="module" src="main-0b.js?v=2026031702"></script>
+    <script type="module" src="main-0b.js?v=2026031704"></script>
     <script src="app.js?v=2026031702"></script>
 </body>
 </html>
