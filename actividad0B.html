@@ -1021,26 +1021,6 @@
         z-index: 6;
     }
 
-    .activity-0b #problemQ2Section .q2-nav-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 12;
-        width: 62px;
-        height: 62px;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .activity-0b #problemQ2Section #prevBtnQ2 {
-        left: -24px;
-    }
-
-    .activity-0b #problemQ2Section #nextBtnQ2 {
-        right: -24px;
-    }
-
     .activity-0b .cocina-overlay {
         position: fixed;
         top: 0;
@@ -1088,10 +1068,9 @@
         overflow: visible;
     }
 
-    /* En 0B no usamos barras laterales decorativas */
+    /* Pseudo-elementos de barras laterales deshabilitados */
     .activity-0b .cocina-body::before,
     .activity-0b .cocina-body::after {
-        content: none !important;
         display: none !important;
     }
 
@@ -1264,6 +1243,10 @@
         min-height: 600px;
         padding: 28px;
         background: #f7f7f9;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
     }
 
     .activity-0b #moment3Screen #problem2Section .m3-book-left {
@@ -1272,20 +1255,6 @@
 
     .activity-0b #moment3Screen #problem2Section .m3-book-right {
         border-radius: 0 10px 10px 0;
-    }
-
-    .activity-0b #moment3Screen #problem2Section .m3-book-left {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 16px;
-    }
-
-    .activity-0b #moment3Screen #problem2Section .m3-book-right {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 16px;
     }
 
     .activity-0b #moment3Screen #problem2Section h3 {
@@ -1426,18 +1395,15 @@
 
     .activity-0b #moment4Screen .m4-left-page {
         border-radius: 10px 0 0 10px;
-    }
-
-    .activity-0b #moment4Screen .m4-right-page {
-        border-radius: 0 10px 10px 0;
-    }
-
-    .activity-0b #moment4Screen .m4-left-page {
         background: #f7f7fa;
         display: flex;
         flex-direction: column;
         justify-content: center;
         gap: 18px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page {
+        border-radius: 0 10px 10px 0;
     }
 
     .activity-0b #moment4Screen .m4-left-page h3 {
@@ -1741,20 +1707,6 @@
             width: 54px;
             height: 54px;
         }
-
-        .activity-0b #problemQ2Section .q2-nav-btn {
-            width: 54px;
-            height: 54px;
-        }
-
-        .activity-0b #problemQ2Section #prevBtnQ2 {
-            left: -18px;
-        }
-
-        .activity-0b #problemQ2Section #nextBtnQ2 {
-            right: -18px;
-        }
-
 
         .activity-0b #problemQ2Section .q2-nav-btn {
             width: 50px;
