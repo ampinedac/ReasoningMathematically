@@ -494,7 +494,9 @@ function initMoment1() {
     const nextBtn = document.getElementById('nextBtn');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
-    const q1PageIndex = flipbook ? flipbook.querySelectorAll('.page').length - 1 : -1;
+    const flipbookPages = flipbook ? Array.from(flipbook.querySelectorAll('.page')) : [];
+    const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+    const bridgePageIndex = flipbookPages.findIndex(page => page.id === 'm1ToM2BridgePage');
     let m1TransitioningToMoment2 = false;
 
     const goToMoment2FromQ1 = () => {
@@ -504,20 +506,7 @@ function initMoment1() {
 
         m1TransitioningToMoment2 = true;
 
-        const flipbookSection = document.getElementById('flipbookSection');
-        if (flipbookSection) {
-            flipbookSection.classList.add('m1-turn-out');
-        }
-
-        if (typeof window.playPageTurnSound === 'function') {
-            window.playPageTurnSound();
-        }
-
         setTimeout(() => {
-            if (flipbookSection) {
-                flipbookSection.classList.remove('m1-turn-out');
-            }
-
             showScreen('moment2Screen');
             initMoment2();
 
@@ -530,7 +519,7 @@ function initMoment1() {
             }
 
             m1TransitioningToMoment2 = false;
-        }, 620);
+        }, 80);
     };
     m1GoToMoment2WithTurn = goToMoment2FromQ1;
 
@@ -543,6 +532,7 @@ function initMoment1() {
             ? event.detail.page
             : (window.flipbookControls?.getCurrentPage?.() ?? 0);
         const isQ1Page = currentFlipbookPage === q1PageIndex;
+        const isBridgePage = currentFlipbookPage === bridgePageIndex;
 
         if (nextBtn) {
             nextBtn.onclick = null;
@@ -551,14 +541,32 @@ function initMoment1() {
             nextBtn.style.cursor = 'pointer';
 
             if (isQ1Page) {
-                if (m1Q1Submitted) {
-                    nextBtn.onclick = goToMoment2FromQ1;
-                } else {
+                if (!m1Q1Submitted) {
                     nextBtn.disabled = true;
                     nextBtn.style.opacity = '0.5';
                     nextBtn.style.cursor = 'not-allowed';
                 }
+            } else if (isBridgePage) {
+                nextBtn.disabled = true;
+                nextBtn.style.opacity = '0.5';
+                nextBtn.style.cursor = 'not-allowed';
             }
+        }
+
+        if (prevBtn) {
+            prevBtn.style.opacity = '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+
+            if (isBridgePage) {
+                prevBtn.disabled = true;
+                prevBtn.style.opacity = '0.5';
+                prevBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        if (isBridgePage) {
+            goToMoment2FromQ1();
+            return;
         }
 
         if (isQ1Page) {
@@ -701,9 +709,14 @@ function initProblemQ1() {
                 nextBtn.disabled = false;
                 nextBtn.style.opacity = '1';
                 nextBtn.style.cursor = 'pointer';
-                if (typeof m1GoToMoment2WithTurn === 'function') {
-                    nextBtn.onclick = m1GoToMoment2WithTurn;
-                }
+            }
+
+            if (typeof m1FlipbookPageHandler === 'function') {
+                m1FlipbookPageHandler({
+                    detail: {
+                        page: window.flipbookControls?.getCurrentPage?.() ?? 0
+                    }
+                });
             }
             
         } catch (error) {
@@ -753,9 +766,9 @@ function initMoment2() {
     }
 
     m2CurrentSpread = 0;
-    m2OrderCompleted = false;
-    m2ExplanationSubmitted = false;
-    m2SnapshotData = null;
+    if (!m2OrderCompleted) {
+        m2SnapshotData = null;
+    }
 
     const showCocinaScreenM2 = () => {
         const cocinaScreen = document.getElementById('cocinaScreen');
@@ -779,19 +792,25 @@ function initMoment2() {
     if (goToCocinaBtn) {
         const newGoToCocinaBtn = goToCocinaBtn.cloneNode(true);
         goToCocinaBtn.parentNode.replaceChild(newGoToCocinaBtn, goToCocinaBtn);
-        newGoToCocinaBtn.disabled = false;
-        newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
-        newGoToCocinaBtn.title = '';
-        newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
+        if (m2OrderCompleted) {
+            newGoToCocinaBtn.disabled = true;
+            newGoToCocinaBtn.textContent = '✅ Organización completada';
+            newGoToCocinaBtn.title = 'Ya verificaste la organización correctamente.';
+        } else {
+            newGoToCocinaBtn.disabled = false;
+            newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
+            newGoToCocinaBtn.title = '';
+            newGoToCocinaBtn.addEventListener('click', showCocinaScreenM2);
+        }
     }
 
     const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
     const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
     if (previewCard18) {
-        previewCard18.classList.add('hidden');
+        previewCard18.classList.toggle('hidden', !m2OrderCompleted);
     }
     if (previewCard19) {
-        previewCard19.classList.add('hidden');
+        previewCard19.classList.toggle('hidden', !m2OrderCompleted);
     }
 
     const spreads = Array.from(document.querySelectorAll('#problemQ2Section .m2-spread'));
@@ -889,7 +908,12 @@ function initMoment2() {
 
     const finalSectionM2 = document.getElementById('finalQuestionSectionM2');
     if (finalSectionM2) {
-        finalSectionM2.classList.add('hidden');
+        finalSectionM2.classList.toggle('hidden', !m2OrderCompleted);
+    }
+
+    const verifyBtn = document.getElementById('verifyTraysBtn');
+    if (verifyBtn) {
+        verifyBtn.disabled = m2OrderCompleted;
     }
 
     renderMoment2Snapshots();
@@ -898,11 +922,11 @@ function initMoment2() {
     hideCocinaScreenM2();
     
     // Configurar botón de verificación
-    const verifyBtn = document.getElementById('verifyTraysBtn');
     if (verifyBtn) {
         // Remover event listeners previos
         const newVerifyBtn = verifyBtn.cloneNode(true);
         verifyBtn.parentNode.replaceChild(newVerifyBtn, verifyBtn);
+        newVerifyBtn.disabled = m2OrderCompleted;
         
         newVerifyBtn.addEventListener('click', verifyTraysPairings);
     }

@@ -133,9 +133,21 @@
         margin: 12px auto;
     }
 
+    .activity-0b #moment2Screen .container {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        width: min(96vw, 1800px);
+        height: 96dvh;
+        padding: 8px 10px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 8px;
+        margin: 12px auto;
+    }
+
     .activity-0b #moment1Screen #flipbook,
-    .activity-0b #moment1Screen #problemQ1Section.q1-book-spread,
-    .activity-0b #problemQ2Section.q1-book-spread {
+    .activity-0b #moment1Screen #problemQ1Section.q1-book-spread {
         width: 95vw !important;
         max-width: 95vw !important;
         margin-left: auto;
@@ -236,8 +248,8 @@
     }
 
     .activity-0b #moment1Screen #problemQ1Section .ventas-image {
-        width: 70%;
-        max-width: 70%;
+        width: 78%;
+        max-width: 78%;
     }
 
     .activity-0b #moment1Screen #problemQ1Section .sale-description {
@@ -358,7 +370,7 @@
 
     .activity-0b #problemQ2Section {
         position: relative;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .activity-0b #problemQ2Section .m2-spread {
@@ -369,6 +381,7 @@
         width: 100%;
         position: relative;
         grid-column: 1 / -1;
+        overflow: hidden;
     }
 
     .activity-0b #problemQ2Section .m2-spread.active {
@@ -544,6 +557,10 @@
         margin: 0;
     }
 
+    .activity-0b #moment1Screen #flipbook #m1ToM2BridgePage {
+        background: var(--page-bg-light);
+    }
+
     .activity-0b #flipbookSection {
         transform-origin: center center;
     }
@@ -608,9 +625,10 @@
         display: block;
         grid-template-columns: 1fr 1fr;
         gap: 0;
-        width: 95vw;
-        max-width: 95vw;
-        aspect-ratio: 3 / 2;
+        width: 95%;
+        max-width: none;
+        height: 95%;
+        aspect-ratio: auto;
         min-height: 0;
         margin: 0 auto;
         border-radius: 18px;
@@ -1965,6 +1983,10 @@
                             </div>
                         </div>
 
+                        <div id="m1ToM2BridgePage" class="page story-page m1-bridge-page" aria-hidden="true">
+                            <div class="page-number">9</div>
+                        </div>
+
                     </div>
                     
                     <!-- Navigation Controls dentro del libro -->
@@ -1993,7 +2015,7 @@
                     </div>
                     <div class="problem-box q1-left-page">
                         <h3>Situación 2</h3>
-                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora deben organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
+                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora debes organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
                         <div class="q2-guide-card">
                             <p class="q2-guide-title">Guía rápida</p>
                             <ul class="q2-guide-list">
@@ -2007,7 +2029,10 @@
                     </div>
 
                     <div class="evidence-section q1-right-page" id="q2RightPage">
-                        
+                        <div class="m2-preview-card hidden">
+                            <h4>Foto del orden logrado</h4>
+                            <div id="m2PreviewPage18" class="m2-photo-grid"></div>
+                        </div>
 
                         <div id="finalQuestionSectionM2" class="hidden">
                             <div class="problem-box">
@@ -2432,7 +2457,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031515"></script>
-    <script type="module" src="main-0b.js?v=2026031706"></script>
+    <script type="module" src="main-0b.js?v=2026031708"></script>
     <script src="app.js?v=2026031702"></script>
 </body>
 </html>

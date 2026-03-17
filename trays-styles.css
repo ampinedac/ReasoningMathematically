@@ -6,6 +6,7 @@
 .trays-container {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
+    grid-auto-flow: row dense;
     gap: 20px !important;
     padding: 30px;
     background:
