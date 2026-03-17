@@ -628,7 +628,7 @@ body.flipbook-on-cover #flipbook::after {
     gap: 12px;
     text-align: center;
     line-height: 1;
-    margin: 0;
+    margin: 4% 0 0;
     padding: 0 9%;
     position: relative;
     z-index: 4;
@@ -692,7 +692,8 @@ body.flipbook-on-cover #flipbook::after {
     position: relative;
     z-index: 4;
     margin: 0;
-    max-width: 74%;
+    max-width: 32ch;
+    width: 88%;
     text-align: center;
     color: rgba(103, 66, 32, 0.82);
     font-size: clamp(1.28rem, 1.55vw, 1.45rem);
@@ -736,7 +737,7 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .book-cover-page .cover-leer-image {
-    width: clamp(210px, 28vw, 330px);
+    width: clamp(126px, 16.8vw, 198px);
     height: auto;
     display: block;
     filter: drop-shadow(0 8px 16px rgba(175, 65, 12, 0.24));
@@ -763,7 +764,7 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     #flipbook .book-cover-page .cover-book-title {
-        margin-top: 0;
+        margin-top: 6%;
         padding: 0 8%;
     }
 
@@ -777,7 +778,8 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     #flipbook .book-cover-page .cover-subtitle {
-        max-width: 84%;
+        max-width: 31ch;
+        width: 92%;
         font-size: clamp(1.08rem, 3.4vw, 1.16rem);
     }
 
@@ -786,7 +788,7 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     #flipbook .book-cover-page .cover-leer-image {
-        width: clamp(180px, 48vw, 270px);
+        width: clamp(108px, 28.8vw, 162px);
     }
 }
 
