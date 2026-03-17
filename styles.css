@@ -577,9 +577,9 @@ body.flipbook-on-cover #flipbook::after {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: center !important;
     gap: 18px;
-    padding: 12% 8% 10% !important;
+    padding: 9% 8% 9% !important;
     overflow: hidden;
     z-index: 14;
 }
@@ -621,52 +621,34 @@ body.flipbook-on-cover #flipbook::after {
     display: none;
 }
 
-.cover-math-row {
-    display: flex;
-    gap: 10px;
-    font-size: clamp(0.95rem, 1vw, 1rem);
-    font-weight: 900;
-    color: rgba(126, 78, 31, 0.58);
-    user-select: none;
-    letter-spacing: 0.6px;
-    flex-wrap: wrap;
-    justify-content: center;
-    background: rgba(255, 247, 226, 0.88);
-    border: 2px dashed rgba(217, 170, 111, 0.55);
-    border-radius: 999px;
-    padding: 8px 18px;
-    position: relative;
-    z-index: 4;
-}
-
-.cover-book-title {
+#flipbook .book-cover-page .cover-book-title {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     text-align: center;
     line-height: 1;
-    margin: 12% 0 2% 0;
-    padding: 0 12%;
+    margin: 0;
+    padding: 0 9%;
     position: relative;
     z-index: 4;
 }
 
-.cover-word-line {
+#flipbook .book-cover-page .cover-word-line {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-.cover-word-chip {
+#flipbook .book-cover-page .cover-word-chip {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 11px 22px 13px;
+    padding: 12px 24px 14px;
     border-radius: 999px;
     font-family: 'Trebuchet MS', 'Comic Sans MS', cursive;
-    font-size: clamp(1.55rem, 2.2vw, 2.05rem);
+    font-size: clamp(1.68rem, 2.35vw, 2.2rem);
     font-weight: 900;
     line-height: 1;
     text-transform: none;
@@ -678,51 +660,52 @@ body.flipbook-on-cover #flipbook::after {
         0 2px 0 rgba(0, 0, 0, 0.08);
 }
 
-.cover-word-line .cover-word-chip:nth-child(odd) {
+#flipbook .book-cover-page .cover-word-line .cover-word-chip:nth-child(odd) {
     transform: rotate(-2deg);
 }
 
-.cover-word-line .cover-word-chip:nth-child(even) {
+#flipbook .book-cover-page .cover-word-line .cover-word-chip:nth-child(even) {
     transform: rotate(2deg);
 }
 
-.cover-word-chip.tone-1 {
+#flipbook .book-cover-page .cover-word-chip.tone-1 {
     color: #ff4fa3;
 }
 
-.cover-word-chip.tone-2 {
+#flipbook .book-cover-page .cover-word-chip.tone-2 {
     color: #35a9ff;
 }
 
-.cover-word-chip.tone-3 {
+#flipbook .book-cover-page .cover-word-chip.tone-3 {
     color: #2bc85e;
 }
 
-.cover-word-chip.tone-4 {
+#flipbook .book-cover-page .cover-word-chip.tone-4 {
     color: #ffb21d;
 }
 
-.cover-word-chip.tone-5 {
+#flipbook .book-cover-page .cover-word-chip.tone-5 {
     color: #a45cff;
 }
 
-.cover-subtitle {
+#flipbook .book-cover-page .cover-subtitle {
     position: relative;
     z-index: 4;
-    margin: 4px 0 2px;
-    max-width: 80%;
+    margin: 0;
+    max-width: 74%;
     text-align: center;
     color: rgba(103, 66, 32, 0.82);
-    font-size: clamp(1.2rem, 1.42vw, 1.34rem);
-    line-height: 1.58;
+    font-size: clamp(1.28rem, 1.55vw, 1.45rem);
+    line-height: 1.52;
+    font-style: italic;
 }
 
-.cover-leer-btn {
+#flipbook .book-cover-page .cover-leer-btn {
     background: linear-gradient(135deg, #f07b24 0%, #d65f16 52%, #b94a10 100%);
     color: #fff;
     border: 2px solid rgba(255, 235, 193, 0.45);
     border-radius: 40px;
-    padding: 17px 46px;
+    padding: 17px 44px;
     font-family: 'Trebuchet MS', 'Verdana', sans-serif;
     font-size: clamp(1.18rem, 1.62vw, 1.4rem);
     font-weight: 800;
@@ -734,14 +717,37 @@ body.flipbook-on-cover #flipbook::after {
     z-index: 4;
 }
 
-.cover-leer-btn:hover {
+#flipbook .book-cover-page .cover-leer-btn:hover {
     transform: scale(1.07);
     box-shadow: 0 8px 28px rgba(175, 65, 12, 0.58);
 }
 
-.cover-leer-btn:active {
+#flipbook .book-cover-page .cover-leer-btn:active {
     transform: scale(0.96);
     box-shadow: 0 3px 12px rgba(175, 65, 12, 0.4);
+}
+
+#flipbook .book-cover-page .cover-leer-image-btn {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    line-height: 0;
+}
+
+#flipbook .book-cover-page .cover-leer-image {
+    width: clamp(210px, 28vw, 330px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 8px 16px rgba(175, 65, 12, 0.24));
+}
+
+#flipbook .book-cover-page .cover-leer-image-btn:hover {
+    transform: translateY(-1px) scale(1.03);
+}
+
+#flipbook .book-cover-page .cover-leer-image-btn:active {
+    transform: translateY(0) scale(0.98);
 }
 
 /* Animación de apertura: tapa de libro real (giro desde el lomo izquierdo) */
@@ -752,27 +758,35 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 @media (max-width: 960px) {
-    .cover-book-title {
-        margin-top: 18%;
+    #flipbook .book-cover-page {
+        padding: 12% 8% 12% !important;
+    }
+
+    #flipbook .book-cover-page .cover-book-title {
+        margin-top: 0;
         padding: 0 8%;
     }
 
-    .cover-word-line {
+    #flipbook .book-cover-page .cover-word-line {
         gap: 6px;
     }
 
-    .cover-word-chip {
+    #flipbook .book-cover-page .cover-word-chip {
         padding: 9px 16px 11px;
-        font-size: clamp(1.14rem, 4vw, 1.42rem);
+        font-size: clamp(1.18rem, 4vw, 1.46rem);
     }
 
-    .cover-subtitle {
+    #flipbook .book-cover-page .cover-subtitle {
         max-width: 84%;
-        font-size: clamp(1.06rem, 3.4vw, 1.14rem);
+        font-size: clamp(1.08rem, 3.4vw, 1.16rem);
     }
 
-    .cover-leer-btn {
+    #flipbook .book-cover-page .cover-leer-btn {
         padding: 15px 34px;
+    }
+
+    #flipbook .book-cover-page .cover-leer-image {
+        width: clamp(180px, 48vw, 270px);
     }
 }
 
