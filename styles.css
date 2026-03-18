@@ -3187,6 +3187,11 @@ body.flipbook-on-cover #flipbook::after {
     width: auto !important;
     max-width: none !important;
     flex: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
     grid-column: auto !important;
     min-height: 0 !important;
     height: 100% !important;

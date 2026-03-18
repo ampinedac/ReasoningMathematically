@@ -422,60 +422,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function turnForwardToExternal(externalPage, onMidTurn) {
-        const oldPage = pages[currentPage];
-        const flipbook = document.getElementById('flipbook');
-
-        if (!externalPage || !oldPage || !flipbook || isTurning) {
-            return false;
-        }
-
-        isTurning = true;
-
-        stopNarration();
-        CONFIG.narrationEnabled = false;
-        updateSoundButton();
-
-        clearTemporaryTurnLayers();
-        resetPageTurnState();
-        playPageTurnSound();
-
-        oldPage.classList.add('page-static-left', 'active');
-
-        const leaf = createTurnLeaf({
-            frontPage: oldPage,
-            frontHalf: 'right',
-            backPage: externalPage,
-            backHalf: 'left',
-            direction: 'forward'
-        });
-
-        let midTurnExecuted = false;
-
-        flipbook.appendChild(leaf);
-
-        setTimeout(() => {
-            midTurnExecuted = true;
-            if (typeof onMidTurn === 'function') {
-                onMidTurn();
-            }
-        }, TURN_HALF_MS);
-
-        leaf.addEventListener('animationend', () => {
-            if (!midTurnExecuted && typeof onMidTurn === 'function') {
-                onMidTurn();
-            }
-
-            clearTemporaryTurnLayers();
-            resetPageTurnState();
-            oldPage.classList.add('active');
-            updateProgress(currentPage);
-            isTurning = false;
-        }, { once: true });
-
-        return true;
-    }
-
     // ===== NAVIGATION =====
     function goToPage(pageIndex, direction = null) {
         if (pageIndex >= 0 && pageIndex < pages.length && pageIndex !== currentPage) {
@@ -601,7 +547,6 @@ document.addEventListener('DOMContentLoaded', function() {
             goToPage,
             nextPage,
             previousPage,
-            turnForwardToExternal,
             getCurrentPage: () => currentPage,
             getTotalPages: () => pages.length
         };

@@ -25,9 +25,7 @@
     /* Subtítulo: quitar caja y usar texto más visible con sombra sutil */
     .activity-subtitle{background:none;padding:0;color:#0b2a3a;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,0.12);display:block;margin-bottom:10px}
 
-    /* Ajustes para Situación 1: centrar izquierda y agrandar tablero */
-    .q1-book-spread{gap:22px}
-    .q1-left-page{display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px;box-sizing:border-box}
+    /* Ajustes tipográficos para Situación 1 */
     .q1-left-page h3{margin-top:0}
     .q1-left-page p{color:inherit;font-weight:400}
     .q1-left-page .question{color:#000;font-weight:400;margin-top:12px}
@@ -38,7 +36,6 @@
     #moment1Screen #problemQ1Section .q1-left-page p,
     #moment1Screen #problemQ1Section .q1-left-page .question{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px;width:92%;max-width:460px;margin-left:auto;margin-right:auto;text-align:justify}
     #moment1Screen #problemQ1Section .q1-left-page .situation-image{width:92%;max-width:460px;margin:8px auto 10px}
-    .q1-book-spread .q1-right-page{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px}
 
     /* Centrar título, herramientas y tablero en la columna derecha */
     .q1-right-page h4, .q1-right-page .board-tools{width:100%;display:flex;justify-content:center;align-items:center}
@@ -100,7 +97,6 @@
     /* Asegurar estilo consistente del botón cuando se reduce */
     #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
     #moment1Screen{--a0-book-height:min(80dvh, 720px)}
-    #moment1Screen .flipbook-wrapper{max-width:none}
     #problemQ1Section .page-number.book-spread-number,
     #problemQ2Section .page-number.book-spread-number,
     #problemQ3Section .page-number.book-spread-number,
@@ -131,9 +127,7 @@
     #problemQ3Section2 .page-number.book-spread-number .page-number-right,
     #problemQ4Section .page-number.book-spread-number .page-number-right,
     #problemQ5Section .page-number.book-spread-number .page-number-right{right:2.2%}
-    #problemQ1Section.q1-book-spread{position:relative}
     #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
-    #problemQ2Section.q1-book-spread{position:relative}
     #problemQ2Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
     #problemQ2Section .problem-box{background:transparent;border:0;box-shadow:none;padding:20px;display:flex;flex-direction:column;justify-content:center;height:100%}
     #problemQ2Section .q1-left-page h3,
