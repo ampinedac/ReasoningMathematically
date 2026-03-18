@@ -495,7 +495,6 @@ function initMoment1() {
         } else if (currentFlipbookPage === q3bPageIndex) {
             nextBtn.disabled = !m3Q2Submitted;
         } else if (currentFlipbookPage === q4PageIndex) {
-            nextBtn.style.display = m4_completed ? '' : 'none';
             nextBtn.disabled = !m4_completed;
         } else if (currentFlipbookPage === q5PageIndex) {
             nextBtn.disabled = !m4_reflectionSelected;

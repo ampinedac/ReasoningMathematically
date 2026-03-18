@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=2026031801">
-    <link rel="stylesheet" href="trays-styles.css?v=2026031420">
+    <link rel="stylesheet" href="styles.css?v=2026031810">
+    <link rel="stylesheet" href="trays-styles.css?v=2026031810">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
     <style>
@@ -26,8 +26,8 @@
     .activity-subtitle{background:none;padding:0;color:#0b2a3a;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,0.12);display:block;margin-bottom:10px}
 
     /* Ajustes para Situación 1: centrar izquierda y agrandar tablero */
-    .q1-book-spread{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;justify-content:space-between}
-    .q1-left-page{flex:0 0 46%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px;box-sizing:border-box}
+    .q1-book-spread{gap:22px}
+    .q1-left-page{display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px;box-sizing:border-box}
     .q1-left-page h3{margin-top:0}
     .q1-left-page p{color:inherit;font-weight:400}
     .q1-left-page .question{color:#000;font-weight:400;margin-top:12px}
@@ -38,7 +38,7 @@
     #moment1Screen #problemQ1Section .q1-left-page p,
     #moment1Screen #problemQ1Section .q1-left-page .question{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px;width:92%;max-width:460px;margin-left:auto;margin-right:auto;text-align:justify}
     #moment1Screen #problemQ1Section .q1-left-page .situation-image{width:92%;max-width:460px;margin:8px auto 10px}
-    .q1-book-spread .q1-right-page{flex:0 0 50%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px}
+    .q1-book-spread .q1-right-page{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px}
 
     /* Centrar título, herramientas y tablero en la columna derecha */
     .q1-right-page h4, .q1-right-page .board-tools{width:100%;display:flex;justify-content:center;align-items:center}
@@ -169,10 +169,6 @@
         #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:8px !important;padding:8px !important}
     }
     @media (max-width:900px){
-        #problemQ2Section.q1-book-spread{grid-template-columns:1fr;min-height:auto}
-        #problemQ2Section.q1-book-spread::before{display:none}
-        #problemQ2Section .q1-left-page,
-        #problemQ2Section .q1-right-page{min-height:auto;padding:18px}
         #problemQ2Section .q1-right-page{padding-top:8px}
         #problemQ2Section .q1-right-page .btn{margin-top:8px}
         #problemQ2Section .page-number{bottom:8px}
@@ -822,8 +818,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="trays-system.js?v=2026031503"></script>
-    <script type="module" src="main.js?v=2026031801"></script>
-    <script src="app.js?v=2026031717"></script>
+    <script src="trays-system.js?v=2026031810"></script>
+    <script type="module" src="main.js?v=2026031810"></script>
+    <script src="app.js?v=2026031810"></script>
 </body>
 </html>
