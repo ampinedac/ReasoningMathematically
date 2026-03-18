@@ -17,6 +17,9 @@ let totalPages = 0;
 let traysSystem = null; // Nueva instancia del sistema de bandejas
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
+let m1FlipbookPageHandler = null;
+let m1NextGuardHandler = null;
+let m1Moment4CompletedHandler = null;
 let m1Moment3AdvanceListenerAttached = false;
 let m1Q1Submitted = false;
 let m1Q2Submitted = false;
@@ -451,16 +454,7 @@ function initMoment1() {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const soundToggle = document.getElementById('soundToggle');
-    let showProblemTimer = null;
-    let isAtLastStoryPage = false;
     let traysM1Q2Initialized = false;
-    let isOnSheet10 = false;
-    let isOnSheet11 = false;
-    let isOnSheet12 = false;
-    let isOnSheet13 = false;
-    let isOnSheet14 = false;
-    let isOnSheet15 = false;
-    let isSpecialPageTransitioning = false;
     let m1Q2Verified = false;
     let m1Q2AudioInitialized = false;
     let m3BookInitialized = false;
@@ -470,65 +464,46 @@ function initMoment1() {
     const cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
-    const hideProblemSection2 = () => {
-        if (!problemSection2) return;
-        problemSection2.classList.add('hidden');
-        if (m1Q2FinalQuestion) {
-            m1Q2FinalQuestion.classList.add('hidden');
-        }
-    };
+    const flipbookPages = flipbook ? Array.from(flipbook.querySelectorAll('.page')) : [];
+    const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+    const q2PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
+    const q3PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
+    const q3bPageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section2');
+    const q4PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
+    const q5PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
 
-    const hideProblemSection3 = () => {
-        if (!problemSection3) return;
-        problemSection3.classList.add('hidden');
-    };
-
-    const hideProblemSection3b = () => {
-        if (!problemSection3b) return;
-        problemSection3b.classList.add('hidden');
-    };
-
-    const hideProblemSection4 = () => {
-        if (!problemSection4) return;
-        problemSection4.classList.add('hidden');
-    };
-
-    const hideProblemSection5 = () => {
-        if (!problemSection5) return;
-        problemSection5.classList.add('hidden');
-    };
+    const getCurrentFlipbookPage = (event) => Number.isInteger(event?.detail?.page)
+        ? event.detail.page
+        : (window.flipbookControls?.getCurrentPage?.() ?? 0);
 
     const syncBookNextButton = () => {
         if (!nextBtn) return;
 
-        if (isOnSheet11) {
-            nextBtn.style.display = '';
+        const currentFlipbookPage = getCurrentFlipbookPage();
+
+        nextBtn.style.display = '';
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+
+        if (currentFlipbookPage === q1PageIndex) {
+            nextBtn.disabled = !m1Q1Submitted;
+        } else if (currentFlipbookPage === q2PageIndex) {
             nextBtn.disabled = !m1Q2Submitted;
-            return;
-        }
-
-        if (isOnSheet12) {
-            nextBtn.style.display = '';
+        } else if (currentFlipbookPage === q3PageIndex) {
             nextBtn.disabled = !m3Q1Submitted;
-            return;
-        }
-
-        if (isOnSheet13) {
-            nextBtn.style.display = '';
+        } else if (currentFlipbookPage === q3bPageIndex) {
             nextBtn.disabled = !m3Q2Submitted;
-            return;
-        }
-
-        if (isOnSheet14) {
+        } else if (currentFlipbookPage === q4PageIndex) {
             nextBtn.style.display = m4_completed ? '' : 'none';
             nextBtn.disabled = !m4_completed;
-            return;
+        } else if (currentFlipbookPage === q5PageIndex) {
+            nextBtn.disabled = !m4_reflectionSelected;
         }
 
-        if (isOnSheet15) {
-            nextBtn.style.display = '';
-            nextBtn.disabled = !m4_reflectionSelected;
-            return;
+        if (nextBtn.disabled) {
+            nextBtn.style.opacity = '0.5';
+            nextBtn.style.cursor = 'not-allowed';
         }
     };
 
@@ -723,252 +698,17 @@ function initMoment1() {
     const showCocinaScreen = () => {
         if (!cocinaScreen) return;
         if (m1Q2Verified) return;
-        problemSection2.classList.add('hidden');
         cocinaScreen.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         initSheet11Trays();
     };
+
     const hideCocinaScreen = () => {
         if (!cocinaScreen) return;
         cocinaScreen.classList.add('hidden');
         document.body.style.overflow = '';
-        problemSection2.classList.remove('hidden');
-        problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-    };
-
-    const playForwardTurnTransition = (fromEl, onMidTurn) => {
-        if (!fromEl || isSpecialPageTransitioning) return;
-
-        isSpecialPageTransitioning = true;
-        fromEl.classList.add('turning-forward');
-
-        setTimeout(() => {
-            onMidTurn();
-        }, 600);
-
-        setTimeout(() => {
-            fromEl.classList.remove('turning-forward');
-            isSpecialPageTransitioning = false;
-        }, 1200);
-    };
-
-    const showProblemSection = () => {
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = '';
-            nextBtn.disabled = !m1Q1Submitted;
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.remove('hidden');
-        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-
-        hideProblemSection2();
-        hideProblemSection3();
-        hideProblemSection3b();
-        hideProblemSection4();
-        hideProblemSection5();
-        isOnSheet10 = true;
-        isOnSheet11 = false;
-        isOnSheet12 = false;
-        isOnSheet13 = false;
-        isOnSheet14 = false;
-        isOnSheet15 = false;
-
-        if (m1Q1Submitted) {
-            applyM1Q1SubmittedLock();
-        } else if (!m1ProblemInitialized) {
-            m1ProblemInitialized = true;
-            initProblemQ1();
-        }
-    };
-
-    const showProblemSection2 = () => {
-        if (!problemSection2) return;
-
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.add('hidden');
-        hideProblemSection3();
-        hideProblemSection3b();
-        hideProblemSection4();
-        hideProblemSection5();
-        problemSection2.classList.remove('hidden');
-        problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-
-        isOnSheet10 = false;
-        isOnSheet11 = true;
-        isOnSheet12 = false;
-        isOnSheet13 = false;
-        isOnSheet14 = false;
-        isOnSheet15 = false;
-        updateCocinaButtonState();
-        initSheet11Trays();
-        if (m1Q2Verified) {
-            showM1Q2FinalQuestion();
-        }
-        syncBookNextButton();
-    };
-
-    const showProblemSection3 = () => {
-        if (!problemSection3) return;
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.add('hidden');
-        hideProblemSection2();
-        hideProblemSection3b();
-        hideProblemSection4();
-        hideProblemSection5();
-        problemSection3.classList.remove('hidden');
-        problemSection3.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-
-        isOnSheet10 = false;
-        isOnSheet11 = false;
-        isOnSheet12 = true;
-        isOnSheet13 = false;
-        isOnSheet14 = false;
-        isOnSheet15 = false;
-
-        if (!m3BookInitialized) {
-            m3BookInitialized = true;
-            // Número aleatorio entre 3 y 7 para la ecuación de sobres
-            const nums = [3, 4, 5, 6, 7];
-            const fixedNum = nums[Math.floor(Math.random() * nums.length)];
-            ['q3FixedNum1', 'q3FixedNum2'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = fixedNum;
-            });
-            initMoment3();
-            const studentCodeM3 = document.getElementById('studentCodeM3');
-            if (studentCodeM3) {
-                studentCodeM3.textContent = getStudentHeaderText();
-            }
-        }
-        syncBookNextButton();
-    };
-
-    const showProblemSection3b = () => {
-        if (!problemSection3b) return;
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.add('hidden');
-        hideProblemSection2();
-        hideProblemSection3();
-        hideProblemSection4();
-        hideProblemSection5();
-        problemSection3b.classList.remove('hidden');
-        problemSection3b.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-
-        isOnSheet10 = false;
-        isOnSheet11 = false;
-        isOnSheet12 = false;
-        isOnSheet13 = true;
-        isOnSheet14 = false;
-        isOnSheet15 = false;
-
-        syncBookNextButton();
-    };
-
-    const showProblemSection4 = () => {
-        if (!problemSection4) return;
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.add('hidden');
-        hideProblemSection2();
-        hideProblemSection3();
-        hideProblemSection3b();
-        hideProblemSection5();
-        problemSection4.classList.remove('hidden');
-        problemSection4.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-
-        isOnSheet10 = false;
-        isOnSheet11 = false;
-        isOnSheet12 = false;
-        isOnSheet13 = false;
-        isOnSheet14 = true;
-        isOnSheet15 = false;
-
-        if (!m4BookInitialized) {
-            m4BookInitialized = true;
-            initMoment4();
-        }
-        syncBookNextButton();
-    };
-
-    const showProblemSection5 = () => {
-        if (!problemSection5) return;
-        if (flipbook) {
-            flipbook.style.display = 'none';
-        }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.add('hidden');
-        hideProblemSection2();
-        hideProblemSection3();
-        hideProblemSection3b();
-        hideProblemSection4();
-        problemSection5.classList.remove('hidden');
-        problemSection5.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
-
-        isOnSheet10 = false;
-        isOnSheet11 = false;
-        isOnSheet12 = false;
-        isOnSheet13 = false;
-        isOnSheet14 = false;
-        isOnSheet15 = true;
-        syncBookNextButton();
     };
 
     const closeBookAndReturnToActivities = () => {
@@ -1194,237 +934,118 @@ function initMoment1() {
         syncBookNextButton();
     };
 
-    const hideProblemSection = () => {
-        if (flipbook) {
-            flipbook.style.display = '';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = '';
-            if (isAtLastStoryPage) {
-                nextBtn.disabled = false;
-            }
-        }
-        if (soundToggle) {
-            soundToggle.style.display = '';
-        }
-
-        problemSection.classList.remove('turning-forward');
-        if (problemSection2) {
-            problemSection2.classList.remove('turning-forward');
-        }
-        if (problemSection3) {
-            problemSection3.classList.remove('turning-forward');
-        }
-        if (problemSection3b) {
-            problemSection3b.classList.remove('turning-forward');
-        }
-        if (problemSection4) {
-            problemSection4.classList.remove('turning-forward');
-        }
-        if (problemSection5) {
-            problemSection5.classList.remove('turning-forward');
-        }
-        problemSection.classList.add('hidden');
-        hideProblemSection2();
-        hideProblemSection3();
-        hideProblemSection3b();
-        hideProblemSection4();
-        hideProblemSection5();
-        isOnSheet10 = false;
-        isOnSheet11 = false;
-        isOnSheet12 = false;
-        isOnSheet13 = false;
-        isOnSheet14 = false;
-        isOnSheet15 = false;
-    };
-
     const syncM1WithFlipbookPage = (event) => {
-        if (!problemSection) {
+        if (!problemSection || !flipbook) {
             return;
         }
 
-        const isLastPage = Boolean(event?.detail?.isLastPage);
-        isAtLastStoryPage = isLastPage;
+        const currentFlipbookPage = getCurrentFlipbookPage(event);
+        const isProblemPage = [q1PageIndex, q2PageIndex, q3PageIndex, q3bPageIndex, q4PageIndex, q5PageIndex].includes(currentFlipbookPage);
 
-        if (showProblemTimer) {
-            clearTimeout(showProblemTimer);
-            showProblemTimer = null;
+        if (soundToggle) {
+            soundToggle.style.display = isProblemPage ? 'none' : '';
         }
 
-        // La página 9 debe permanecer visible; la Situación 1 (página 10) se abre al dar siguiente
-        hideProblemSection();
-
-        if (isLastPage && nextBtn) {
-            // app.js deshabilita el botón al final; lo reactivamos para permitir pasar a la página 10
-            setTimeout(() => {
-                nextBtn.disabled = false;
-            }, 0);
+        if (prevBtn) {
+            prevBtn.style.display = '';
+            prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
         }
+
+        if (currentFlipbookPage === q1PageIndex) {
+            if (m1Q1Submitted) {
+                applyM1Q1SubmittedLock();
+            } else if (!m1ProblemInitialized) {
+                m1ProblemInitialized = true;
+                initProblemQ1();
+            }
+        }
+
+        if (currentFlipbookPage === q2PageIndex) {
+            updateCocinaButtonState();
+            initSheet11Trays();
+            if (m1Q2Verified) {
+                showM1Q2FinalQuestion();
+            }
+        }
+
+        if (currentFlipbookPage === q3PageIndex && !m3BookInitialized) {
+            m3BookInitialized = true;
+            const nums = [3, 4, 5, 6, 7];
+            const fixedNum = nums[Math.floor(Math.random() * nums.length)];
+            ['q3FixedNum1', 'q3FixedNum2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = fixedNum;
+            });
+            initMoment3();
+            const studentCodeM3 = document.getElementById('studentCodeM3');
+            if (studentCodeM3) {
+                studentCodeM3.textContent = getStudentHeaderText();
+            }
+        }
+
+        if (currentFlipbookPage === q4PageIndex && !m4BookInitialized) {
+            m4BookInitialized = true;
+            initMoment4();
+        }
+
+        syncBookNextButton();
     };
 
+    if (m1NextGuardHandler && nextBtn) {
+        nextBtn.removeEventListener('click', m1NextGuardHandler, true);
+    }
+
     if (nextBtn) {
-        // Capturar antes del handler del flipbook para distinguir 8->9 de 9->10
-        nextBtn.addEventListener('click', async (event) => {
-            if (isSpecialPageTransitioning) {
+        m1NextGuardHandler = async (event) => {
+            const currentFlipbookPage = getCurrentFlipbookPage();
+
+            if (currentFlipbookPage === q1PageIndex && !m1Q1Submitted) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 return;
             }
 
-            if (isOnSheet10) {
-                if (!m1Q1Submitted) {
-                    return;
-                }
+            if (currentFlipbookPage === q2PageIndex && !m1Q2Submitted) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                playForwardTurnTransition(problemSection, () => {
-                    showProblemSection2();
-                });
                 return;
             }
 
-            if (isOnSheet11) {
-                if (!m1Q2Submitted) {
-                    return;
-                }
+            if (currentFlipbookPage === q3PageIndex && !m3Q1Submitted) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                playForwardTurnTransition(problemSection2, () => {
-                    showProblemSection3();
-                });
                 return;
             }
 
-            if (isOnSheet12) {
-                if (!m3Q1Submitted) {
-                    return;
-                }
+            if (currentFlipbookPage === q3bPageIndex && !m3Q2Submitted) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                playForwardTurnTransition(problemSection3, () => {
-                    showProblemSection3b();
-                });
                 return;
             }
 
-            if (isOnSheet13) {
-                if (!m3Q2Submitted) {
-                    return;
-                }
+            if (currentFlipbookPage === q4PageIndex && !m4_completed) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                playForwardTurnTransition(problemSection3b, () => {
-                    showProblemSection4();
-                });
                 return;
             }
 
-            if (isOnSheet14) {
-                if (!m4_completed) {
-                    return;
-                }
+            if (currentFlipbookPage === q5PageIndex) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                playForwardTurnTransition(problemSection4, () => {
-                    showProblemSection5();
-                });
-                return;
-            }
 
-            if (isOnSheet15) {
                 if (!m4_reflectionSelected) {
                     return;
                 }
-                event.preventDefault();
-                event.stopImmediatePropagation();
 
                 const saved = await saveMoment4Reflection();
-                if (!saved) {
-                    return;
-                }
-
-                closeBookAndReturnToActivities();
-                return;
-            }
-
-            // Solo abrir Situación 1 cuando YA estamos en la última página del cuento (página 9)
-            if (isAtLastStoryPage) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-
-                if (showProblemTimer) {
-                    clearTimeout(showProblemTimer);
-                }
-
-                const externalTurnStarted = window.flipbookControls?.turnForwardToExternal?.(problemSection, () => {
-                    showProblemSection();
-                });
-
-                if (!externalTurnStarted) {
-                    const currentStoryPage = flipbook ? flipbook.querySelector('.page.active') : null;
-                    if (currentStoryPage) {
-                        playForwardTurnTransition(currentStoryPage, () => {
-                            showProblemSection();
-                        });
-                    } else {
-                        showProblemSection();
-                    }
+                if (saved) {
+                    closeBookAndReturnToActivities();
                 }
             }
-        }, true);
-    }
+        };
 
-    if (prevBtn) {
-        // En la página 10 (Situación 1), volver exactamente a la página 9 del cuento
-        prevBtn.addEventListener('click', (event) => {
-            if (isOnSheet14) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                showProblemSection3b();
-                return;
-            }
-
-            if (isOnSheet15) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                showProblemSection4();
-                return;
-            }
-
-            if (isOnSheet13) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                showProblemSection3();
-                return;
-            }
-
-            if (isOnSheet12) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                showProblemSection2();
-                return;
-            }
-
-            if (isOnSheet11) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                showProblemSection();
-                return;
-            }
-
-            if (isOnSheet10) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                if (showProblemTimer) {
-                    clearTimeout(showProblemTimer);
-                    showProblemTimer = null;
-                }
-                hideProblemSection();
-            }
-        }, true);
+        nextBtn.addEventListener('click', m1NextGuardHandler, true);
     }
 
     if (goToCocinaBtn) {
@@ -1437,21 +1058,27 @@ function initMoment1() {
         option.addEventListener('change', updateMoment4ReflectionSelection);
     });
 
-    document.addEventListener('moment4:completed', () => {
+    if (m1Moment4CompletedHandler) {
+        document.removeEventListener('moment4:completed', m1Moment4CompletedHandler);
+    }
+
+    m1Moment4CompletedHandler = () => {
         m4_completed = true;
         syncBookNextButton();
-    });
+    };
 
-    // Estado inicial: en el cuento no se muestra la respuesta
-    if (problemSection && !problemSection.classList.contains('hidden')) {
-        problemSection.classList.add('hidden');
+    document.addEventListener('moment4:completed', m1Moment4CompletedHandler);
+
+    if (m1FlipbookPageHandler) {
+        document.removeEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     }
 
-    if (!m1FlipbookListenerAttached) {
-        document.addEventListener('flipbook:pagechange', syncM1WithFlipbookPage);
-        m1FlipbookListenerAttached = true;
-        console.log('✅ Listener de cambio de página del cuento configurado');
-    }
+    m1FlipbookPageHandler = syncM1WithFlipbookPage;
+    document.addEventListener('flipbook:pagechange', m1FlipbookPageHandler);
+    m1FlipbookListenerAttached = true;
+    console.log('✅ Listener de cambio de página del cuento configurado');
+
+    syncM1WithFlipbookPage();
 
 }
 

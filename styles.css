@@ -1010,6 +1010,22 @@ body.flipbook-on-cover #flipbook::after {
     transform: translateX(-50%);
 }
 
+#flipbook .page.q1-book-spread {
+    padding: 0;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: none;
+    gap: 0;
+    align-items: stretch;
+    justify-items: stretch;
+    text-align: left;
+}
+
+#flipbook .page.q1-book-spread::after {
+    content: none;
+}
+
 .story-page .emoji-large {
     grid-area: emoji;
     display: flex;
