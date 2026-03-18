@@ -3165,8 +3165,8 @@ body.flipbook-on-cover #flipbook::after {
 #moment1Screen #flipbook .page.q1-book-spread {
     width: 100% !important;
     max-width: none !important;
-    height: 100% !important;
-    min-height: 0 !important;
+    height: auto !important;
+    min-height: 95% !important;
     max-height: none !important;
     margin: 0 !important;
     border-radius: 0;
@@ -3176,7 +3176,7 @@ body.flipbook-on-cover #flipbook::after {
     gap: 0 !important;
     align-items: stretch !important;
     justify-items: stretch !important;
-    overflow: hidden !important;
+    overflow: visible !important;
 }
 
 #moment1Screen #flipbook .page.q1-book-spread::before {
@@ -3194,9 +3194,9 @@ body.flipbook-on-cover #flipbook::after {
     text-align: center;
     padding: 20px;
     grid-column: auto !important;
-    min-height: 0 !important;
-    height: 100% !important;
-    overflow: auto;
+    min-height: 95% !important;
+    height: auto !important;
+    overflow: visible;
     margin: 0 !important;
     box-sizing: border-box !important;
 }

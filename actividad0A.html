@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=2026031813">
+    <link rel="stylesheet" href="styles.css?v=2026031814">
     <link rel="stylesheet" href="trays-styles.css?v=2026031813">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
@@ -310,6 +310,37 @@
     #m1Q2FinalQuestion .audio-status{font-size:0.82rem;line-height:1.1;font-weight:700;white-space:nowrap;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
     #m1Q2FinalQuestion #submitM1Q2{margin-left:0}
     #statusM1Q2{display:none;font-size:0.82rem;margin-top:6px;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+
+    /* Normalización tipográfica global: texto uniforme y títulos ligeramente mayores */
+    #moment1Screen{
+        --a0-body-font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+        --a0-title-font-size: clamp(1rem, 2.05vw, 1.35rem);
+        --a0-body-line-height: 1.5;
+    }
+
+    #moment1Screen #flipbook .page :is(
+        p, li, label, input, textarea, select, button,
+        .story-text, .question, .instruction-hint, .confirmation-question,
+        .radio-label, .feedback-text, .status-text, .activity-subtitle,
+        .student-code-display, .audio-status, .page-number, .problem-box p
+    ){
+        font-size: var(--a0-body-font-size) !important;
+        line-height: var(--a0-body-line-height) !important;
+    }
+
+    #moment1Screen #flipbook .page :is(
+        h1, h2, h3, h4, h5, h6,
+        [class*="title"]
+    ){
+        font-size: var(--a0-title-font-size) !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Mantener la portada con su escala visual propia */
+    #moment1Screen #flipbook .page .cover-book-title{
+        font-size: clamp(2rem, 4.6vw, 3.2rem) !important;
+        line-height: 1.1 !important;
+    }
 
     </style>
 </head>
