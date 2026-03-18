@@ -101,37 +101,6 @@
     #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
     #moment1Screen{--a0-book-height:min(80dvh, 720px)}
     #moment1Screen .flipbook-wrapper{max-width:none}
-    #moment1Screen #flipbook,
-    #problemQ1Section.q1-book-spread,
-    #problemQ2Section.q1-book-spread,
-    #problemQ3Section.q1-book-spread,
-    #problemQ3Section2.q1-book-spread,
-    #problemQ4Section.q1-book-spread,
-    #problemQ5Section.q1-book-spread{width:min(95%, calc(var(--a0-book-height) * 1.5));height:var(--a0-book-height);min-height:var(--a0-book-height);max-height:var(--a0-book-height);margin:0 auto}
-    #problemQ1Section.q1-book-spread,
-    #problemQ2Section.q1-book-spread,
-    #problemQ3Section.q1-book-spread,
-    #problemQ3Section2.q1-book-spread,
-    #problemQ4Section.q1-book-spread,
-    #problemQ5Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd}
-    #problemQ1Section.q1-book-spread::before,
-    #problemQ2Section.q1-book-spread::before,
-    #problemQ3Section.q1-book-spread::before,
-    #problemQ3Section2.q1-book-spread::before,
-    #problemQ4Section.q1-book-spread::before,
-    #problemQ5Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
-    #problemQ1Section .q1-left-page,
-    #problemQ1Section .q1-right-page,
-    #problemQ2Section .q1-left-page,
-    #problemQ2Section .q1-right-page,
-    #problemQ3Section .q1-left-page,
-    #problemQ3Section .q1-right-page,
-    #problemQ3Section2 .q1-left-page,
-    #problemQ3Section2 .q1-right-page,
-    #problemQ4Section .q1-left-page,
-    #problemQ4Section .q1-right-page,
-    #problemQ5Section .q1-left-page,
-    #problemQ5Section .q1-right-page{margin:0;max-width:none;min-height:100%;height:100%;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
     #problemQ1Section .page-number.book-spread-number,
     #problemQ2Section .page-number.book-spread-number,
     #problemQ3Section .page-number.book-spread-number,
@@ -165,11 +134,7 @@
     #problemQ1Section.q1-book-spread{position:relative}
     #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
     #problemQ2Section.q1-book-spread{position:relative}
-    #problemQ2Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;width:95%;max-width:none;min-height:600px;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd}
-    #problemQ2Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
     #problemQ2Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
-    #problemQ2Section .q1-left-page,
-    #problemQ2Section .q1-right-page{margin:0;max-width:none;min-height:600px;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
     #problemQ2Section .problem-box{background:transparent;border:0;box-shadow:none;padding:20px;display:flex;flex-direction:column;justify-content:center;height:100%}
     #problemQ2Section .q1-left-page h3,
     #problemQ2Section .q1-left-page p,
@@ -264,22 +229,6 @@
     @media (max-width:850px){.photo-pairs-grid{grid-template-columns:1fr}}
 
     /* Páginas 12 y 13 dentro del libro */
-    #problemQ3Section.q1-book-spread,
-    #problemQ3Section2.q1-book-spread,
-    #problemQ4Section.q1-book-spread,
-    #problemQ5Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;width:95%;max-width:none;min-height:600px;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd;position:relative}
-    #problemQ3Section.q1-book-spread::before,
-    #problemQ3Section2.q1-book-spread::before,
-    #problemQ4Section.q1-book-spread::before,
-    #problemQ5Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
-    #problemQ3Section .q1-left-page,
-    #problemQ3Section .q1-right-page,
-    #problemQ3Section2 .q1-left-page,
-    #problemQ3Section2 .q1-right-page,
-    #problemQ4Section .q1-left-page,
-    #problemQ4Section .q1-right-page,
-    #problemQ5Section .q1-left-page,
-    #problemQ5Section .q1-right-page{margin:0;max-width:none;min-height:600px;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
     #problemQ3Section .problem-box,
     #problemQ3Section2 .problem-box,
     #problemQ4Section .problem-box,
@@ -323,37 +272,6 @@
     #problemQ3Section2 .radio-group{display:grid;gap:10px;margin-top:12px}
     @media (max-width:900px){
         #moment1Screen{--a0-book-height:min(74dvh, 620px)}
-        #moment1Screen #flipbook,
-        #problemQ1Section.q1-book-spread,
-        #problemQ2Section.q1-book-spread,
-        #problemQ3Section.q1-book-spread,
-        #problemQ3Section2.q1-book-spread,
-        #problemQ4Section.q1-book-spread,
-        #problemQ5Section.q1-book-spread{width:95%;height:auto;min-height:auto;max-height:none}
-        #problemQ1Section.q1-book-spread,
-        #problemQ2Section.q1-book-spread,
-        #problemQ3Section.q1-book-spread,
-        #problemQ3Section2.q1-book-spread,
-        #problemQ4Section.q1-book-spread,
-        #problemQ5Section.q1-book-spread{grid-template-columns:1fr}
-        #problemQ1Section.q1-book-spread::before,
-        #problemQ2Section.q1-book-spread::before,
-        #problemQ3Section.q1-book-spread::before,
-        #problemQ3Section2.q1-book-spread::before,
-        #problemQ4Section.q1-book-spread::before,
-        #problemQ5Section.q1-book-spread::before{display:none}
-        #problemQ1Section .q1-left-page,
-        #problemQ1Section .q1-right-page,
-        #problemQ2Section .q1-left-page,
-        #problemQ2Section .q1-right-page,
-        #problemQ3Section .q1-left-page,
-        #problemQ3Section .q1-right-page,
-        #problemQ3Section2 .q1-left-page,
-        #problemQ3Section2 .q1-right-page,
-        #problemQ4Section .q1-left-page,
-        #problemQ4Section .q1-right-page,
-        #problemQ5Section .q1-left-page,
-        #problemQ5Section .q1-right-page{height:auto;min-height:auto;padding:18px}
     }
     #problemQ3Section2 .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
     #problemQ3Section2 .radio-label input{margin-top:4px}
@@ -426,25 +344,6 @@
     #problemQ4Section .magic-canvas{z-index:4}
     #problemQ4Section .confetti-canvas{z-index:3}
     #problemQ4Section #finalQuestionSection{position:relative;z-index:5}
-    @media (max-width:900px){
-        #problemQ3Section.q1-book-spread,
-        #problemQ3Section2.q1-book-spread,
-        #problemQ4Section.q1-book-spread,
-        #problemQ5Section.q1-book-spread{grid-template-columns:1fr;min-height:auto}
-        #problemQ3Section.q1-book-spread::before,
-        #problemQ3Section2.q1-book-spread::before,
-        #problemQ4Section.q1-book-spread::before,
-        #problemQ5Section.q1-book-spread::before{display:none}
-        #problemQ3Section .q1-left-page,
-        #problemQ3Section .q1-right-page,
-        #problemQ3Section2 .q1-left-page,
-        #problemQ3Section2 .q1-right-page,
-        #problemQ4Section .q1-left-page,
-        #problemQ4Section .q1-right-page,
-        #problemQ5Section .q1-left-page,
-        #problemQ5Section .q1-right-page{min-height:auto;padding:18px}
-    }
-
     /* Ajustes página derecha pág 11 */
     #q2RightPage{display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto}
     #m1Q2FinalQuestion{font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
@@ -454,92 +353,6 @@
     #m1Q2FinalQuestion #submitM1Q2{margin-left:0}
     #statusM1Q2{display:none;font-size:0.82rem;margin-top:6px;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
 
-    /* Ajuste fino del libro unificado: las páginas 19-30 ahora viven dentro de #flipbook
-       y deben ignorar las dimensiones antiguas pensadas para bloques externos. */
-    #moment1Screen .flipbook-wrapper{
-        position:relative;
-        width:min(100%, 1220px);
-        padding:12px 78px 18px;
-        box-sizing:border-box;
-        min-height:calc(var(--a0-book-height) + 24px);
-    }
-    #moment1Screen #flipbook{
-        width:100% !important;
-        max-width:1080px;
-        height:var(--a0-book-height) !important;
-        min-height:var(--a0-book-height) !important;
-        max-height:var(--a0-book-height) !important;
-        margin:0 auto !important;
-    }
-    #moment1Screen #flipbook .page.q1-book-spread{
-        width:100% !important;
-        max-width:none !important;
-        height:100% !important;
-        min-height:0 !important;
-        max-height:none !important;
-        margin:0 !important;
-        border-radius:10px;
-        display:grid !important;
-        grid-template-columns:1fr 1fr !important;
-        grid-template-rows:1fr !important;
-        gap:0 !important;
-        align-items:stretch !important;
-        justify-items:stretch !important;
-        overflow:hidden !important;
-    }
-    #moment1Screen #flipbook .page.q1-book-spread::before{display:block !important}
-    #moment1Screen #flipbook .page.q1-book-spread .q1-left-page,
-    #moment1Screen #flipbook .page.q1-book-spread .q1-right-page{
-        width:auto !important;
-        max-width:none !important;
-        flex:none !important;
-        grid-column:auto !important;
-        min-height:0 !important;
-        height:100% !important;
-        overflow:auto;
-        margin:0 !important;
-        box-sizing:border-box !important;
-    }
-    #moment1Screen #flipbook .page.q1-book-spread .problem-box,
-    #moment1Screen #flipbook .page.q1-book-spread .evidence-section{
-        width:100% !important;
-        max-width:none !important;
-    }
-    #moment1Screen .flipbook-wrapper .nav-btn{
-        top:50%;
-        transform:translateY(-50%);
-        width:56px;
-        height:56px;
-        z-index:120;
-    }
-    #moment1Screen .flipbook-wrapper #prevBtn{left:12px}
-    #moment1Screen .flipbook-wrapper #nextBtn{right:12px}
-    @media (max-width:900px){
-        #moment1Screen .flipbook-wrapper{
-            width:100%;
-            padding:10px 14px 64px;
-            min-height:auto;
-        }
-        #moment1Screen #flipbook{
-            max-width:none;
-            height:auto !important;
-            min-height:auto !important;
-            max-height:none !important;
-        }
-        #moment1Screen #flipbook .page.q1-book-spread{
-            grid-template-columns:1fr !important;
-        }
-        #moment1Screen #flipbook .page.q1-book-spread::before{display:none !important}
-        #moment1Screen .flipbook-wrapper .nav-btn{
-            top:auto;
-            bottom:10px;
-            transform:none;
-            width:44px;
-            height:44px;
-        }
-        #moment1Screen .flipbook-wrapper #prevBtn{left:calc(50% - 58px)}
-        #moment1Screen .flipbook-wrapper #nextBtn{left:calc(50% + 14px);right:auto}
-    }
     </style>
 </head>
 <body>
