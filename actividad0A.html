@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=2026031718">
+    <link rel="stylesheet" href="styles.css?v=2026031719">
     <link rel="stylesheet" href="trays-styles.css?v=2026031420">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
@@ -453,6 +453,71 @@
     #m1Q2FinalQuestion .audio-status{font-size:0.82rem;line-height:1.1;font-weight:700;white-space:nowrap;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
     #m1Q2FinalQuestion #submitM1Q2{margin-left:0}
     #statusM1Q2{display:none;font-size:0.82rem;margin-top:6px;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+
+    /* Ajuste fino del libro unificado: las páginas 19-30 ahora viven dentro de #flipbook
+       y deben ignorar las dimensiones antiguas pensadas para bloques externos. */
+    #moment1Screen .flipbook-wrapper{
+        position:relative;
+        width:min(100%, 1220px);
+        padding:12px 78px 18px;
+        box-sizing:border-box;
+        min-height:calc(var(--a0-book-height) + 24px);
+    }
+    #moment1Screen #flipbook{
+        width:100% !important;
+        max-width:1080px;
+        height:var(--a0-book-height) !important;
+        min-height:var(--a0-book-height) !important;
+        max-height:var(--a0-book-height) !important;
+        margin:0 auto !important;
+    }
+    #moment1Screen #flipbook .page.q1-book-spread{
+        width:100% !important;
+        height:100% !important;
+        min-height:0 !important;
+        max-height:none !important;
+        margin:0 !important;
+        border-radius:10px;
+    }
+    #moment1Screen #flipbook .page.q1-book-spread::before{display:block !important}
+    #moment1Screen #flipbook .page.q1-book-spread .q1-left-page,
+    #moment1Screen #flipbook .page.q1-book-spread .q1-right-page{
+        min-height:0 !important;
+        height:100% !important;
+        overflow:auto;
+    }
+    #moment1Screen .flipbook-wrapper .nav-btn{
+        top:50%;
+        transform:translateY(-50%);
+        width:56px;
+        height:56px;
+        z-index:120;
+    }
+    #moment1Screen .flipbook-wrapper #prevBtn{left:12px}
+    #moment1Screen .flipbook-wrapper #nextBtn{right:12px}
+    @media (max-width:900px){
+        #moment1Screen .flipbook-wrapper{
+            width:100%;
+            padding:10px 14px 64px;
+            min-height:auto;
+        }
+        #moment1Screen #flipbook{
+            max-width:none;
+            height:auto !important;
+            min-height:auto !important;
+            max-height:none !important;
+        }
+        #moment1Screen #flipbook .page.q1-book-spread::before{display:none !important}
+        #moment1Screen .flipbook-wrapper .nav-btn{
+            top:auto;
+            bottom:10px;
+            transform:none;
+            width:44px;
+            height:44px;
+        }
+        #moment1Screen .flipbook-wrapper #prevBtn{left:calc(50% - 58px)}
+        #moment1Screen .flipbook-wrapper #nextBtn{left:calc(50% + 14px);right:auto}
+    }
     </style>
 </head>
 <body>
@@ -923,7 +988,7 @@
 
     <!-- Scripts -->
     <script src="trays-system.js?v=2026031503"></script>
-    <script type="module" src="main.js?v=2026031718"></script>
+    <script type="module" src="main.js?v=2026031719"></script>
     <script src="app.js?v=2026031717"></script>
 </body>
 </html>
