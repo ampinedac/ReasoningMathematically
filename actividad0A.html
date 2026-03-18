@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=2026031719">
+    <link rel="stylesheet" href="styles.css?v=2026031801">
     <link rel="stylesheet" href="trays-styles.css?v=2026031420">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
@@ -473,18 +473,37 @@
     }
     #moment1Screen #flipbook .page.q1-book-spread{
         width:100% !important;
+        max-width:none !important;
         height:100% !important;
         min-height:0 !important;
         max-height:none !important;
         margin:0 !important;
         border-radius:10px;
+        display:grid !important;
+        grid-template-columns:1fr 1fr !important;
+        grid-template-rows:1fr !important;
+        gap:0 !important;
+        align-items:stretch !important;
+        justify-items:stretch !important;
+        overflow:hidden !important;
     }
     #moment1Screen #flipbook .page.q1-book-spread::before{display:block !important}
     #moment1Screen #flipbook .page.q1-book-spread .q1-left-page,
     #moment1Screen #flipbook .page.q1-book-spread .q1-right-page{
+        width:auto !important;
+        max-width:none !important;
+        flex:none !important;
+        grid-column:auto !important;
         min-height:0 !important;
         height:100% !important;
         overflow:auto;
+        margin:0 !important;
+        box-sizing:border-box !important;
+    }
+    #moment1Screen #flipbook .page.q1-book-spread .problem-box,
+    #moment1Screen #flipbook .page.q1-book-spread .evidence-section{
+        width:100% !important;
+        max-width:none !important;
     }
     #moment1Screen .flipbook-wrapper .nav-btn{
         top:50%;
@@ -506,6 +525,9 @@
             height:auto !important;
             min-height:auto !important;
             max-height:none !important;
+        }
+        #moment1Screen #flipbook .page.q1-book-spread{
+            grid-template-columns:1fr !important;
         }
         #moment1Screen #flipbook .page.q1-book-spread::before{display:none !important}
         #moment1Screen .flipbook-wrapper .nav-btn{
@@ -988,7 +1010,7 @@
 
     <!-- Scripts -->
     <script src="trays-system.js?v=2026031503"></script>
-    <script type="module" src="main.js?v=2026031719"></script>
+    <script type="module" src="main.js?v=2026031801"></script>
     <script src="app.js?v=2026031717"></script>
 </body>
 </html>
