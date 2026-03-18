@@ -3140,7 +3140,8 @@ body.flipbook-on-cover #flipbook::after {
 
 #moment1Screen .flipbook-wrapper {
     position: relative;
-    width: min(100%, 1220px);
+    width: 100%;
+    max-width: none;
     height: 100%;
     min-height: calc(var(--a0-book-height) + 24px);
     margin: 0;
@@ -3152,8 +3153,8 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #moment1Screen #flipbook {
-    width: 100% !important;
-    max-width: 1080px;
+    width: 95% !important;
+    max-width: none;
     height: var(--a0-book-height) !important;
     min-height: var(--a0-book-height) !important;
     max-height: var(--a0-book-height) !important;

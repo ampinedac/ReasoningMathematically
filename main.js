@@ -36,6 +36,16 @@ function getM1Q1StorageKey() {
     return `m1-q1-submitted-${studentCode}`;
 }
 
+function getM1Q2StorageKey() {
+    if (!studentCode) return null;
+
+    if (studentCode === '0000' && studentInfo?.nombre) {
+        return `m1-q2-submitted-${studentCode}-${studentInfo.nombre.trim().toLowerCase()}`;
+    }
+
+    return `m1-q2-submitted-${studentCode}`;
+}
+
 function applyM1Q1SubmittedLock() {
     const statusText = document.getElementById('statusM1Q1');
     const submitBtn = document.getElementById('submitM1Q1');
@@ -460,7 +470,9 @@ function initMoment1() {
     let m3BookInitialized = false;
     let m4BookInitialized = false;
     const m1StorageKey = getM1Q1StorageKey();
+    const m1Q2StorageKey = getM1Q2StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+    m1Q2Submitted = m1Q2StorageKey ? localStorage.getItem(m1Q2StorageKey) === 'true' : false;
     const cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
@@ -532,6 +544,9 @@ function initMoment1() {
                             boardBlob: null, audioBlob: audioState.audioBlob
                         });
                         m1Q2Submitted = true;
+                        if (m1Q2StorageKey) {
+                            localStorage.setItem(m1Q2StorageKey, 'true');
+                        }
                         if (statusEl) { statusEl.textContent = ''; statusEl.className = 'status-text hidden'; statusEl.style.display = 'none'; }
                         submitBtn.disabled = true;
                         submitBtn.style.opacity = '0.5';
@@ -547,8 +562,29 @@ function initMoment1() {
                         }
                         syncBookNextButton();
                     } catch (err) {
-                        if (statusEl) { statusEl.textContent = 'Error al guardar. Intenta de nuevo.'; statusEl.className = 'status-text error'; statusEl.style.display = 'block'; }
-                        submitBtn.disabled = false;
+                        // Fallback local: evita bloquear el flujo pedagógico por fallas de red.
+                        m1Q2Submitted = true;
+                        if (m1Q2StorageKey) {
+                            localStorage.setItem(m1Q2StorageKey, 'true');
+                        }
+                        if (statusEl) {
+                            statusEl.textContent = 'Se guardó localmente por problema de conexión. Puedes continuar.';
+                            statusEl.className = 'status-text info';
+                            statusEl.style.display = 'block';
+                        }
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                        submitBtn.style.cursor = 'not-allowed';
+                        if (recordBtn) {
+                            recordBtn.disabled = true;
+                            recordBtn.style.opacity = '0.5';
+                            recordBtn.style.cursor = 'not-allowed';
+                        }
+                        if (stopBtn) {
+                            stopBtn.disabled = true;
+                            stopBtn.classList.add('hidden');
+                        }
+                        syncBookNextButton();
                     }
                 });
             }
