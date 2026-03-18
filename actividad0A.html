@@ -99,6 +99,69 @@
     }
     /* Asegurar estilo consistente del botón cuando se reduce */
     #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
+    #moment1Screen{--a0-book-height:min(80dvh, 720px)}
+    #moment1Screen .flipbook-wrapper{max-width:none}
+    #moment1Screen #flipbook,
+    #problemQ1Section.q1-book-spread,
+    #problemQ2Section.q1-book-spread,
+    #problemQ3Section.q1-book-spread,
+    #problemQ3Section2.q1-book-spread,
+    #problemQ4Section.q1-book-spread,
+    #problemQ5Section.q1-book-spread{width:min(95%, calc(var(--a0-book-height) * 1.5));height:var(--a0-book-height);min-height:var(--a0-book-height);max-height:var(--a0-book-height);margin:0 auto}
+    #problemQ1Section.q1-book-spread,
+    #problemQ2Section.q1-book-spread,
+    #problemQ3Section.q1-book-spread,
+    #problemQ3Section2.q1-book-spread,
+    #problemQ4Section.q1-book-spread,
+    #problemQ5Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd}
+    #problemQ1Section.q1-book-spread::before,
+    #problemQ2Section.q1-book-spread::before,
+    #problemQ3Section.q1-book-spread::before,
+    #problemQ3Section2.q1-book-spread::before,
+    #problemQ4Section.q1-book-spread::before,
+    #problemQ5Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
+    #problemQ1Section .q1-left-page,
+    #problemQ1Section .q1-right-page,
+    #problemQ2Section .q1-left-page,
+    #problemQ2Section .q1-right-page,
+    #problemQ3Section .q1-left-page,
+    #problemQ3Section .q1-right-page,
+    #problemQ3Section2 .q1-left-page,
+    #problemQ3Section2 .q1-right-page,
+    #problemQ4Section .q1-left-page,
+    #problemQ4Section .q1-right-page,
+    #problemQ5Section .q1-left-page,
+    #problemQ5Section .q1-right-page{margin:0;max-width:none;min-height:100%;height:100%;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
+    #problemQ1Section .page-number.book-spread-number,
+    #problemQ2Section .page-number.book-spread-number,
+    #problemQ3Section .page-number.book-spread-number,
+    #problemQ3Section2 .page-number.book-spread-number,
+    #problemQ4Section .page-number.book-spread-number,
+    #problemQ5Section .page-number.book-spread-number{left:0;right:0;width:100%;transform:none;text-align:unset;pointer-events:none}
+    #problemQ1Section .page-number.book-spread-number .page-number-left,
+    #problemQ1Section .page-number.book-spread-number .page-number-right,
+    #problemQ2Section .page-number.book-spread-number .page-number-left,
+    #problemQ2Section .page-number.book-spread-number .page-number-right,
+    #problemQ3Section .page-number.book-spread-number .page-number-left,
+    #problemQ3Section .page-number.book-spread-number .page-number-right,
+    #problemQ3Section2 .page-number.book-spread-number .page-number-left,
+    #problemQ3Section2 .page-number.book-spread-number .page-number-right,
+    #problemQ4Section .page-number.book-spread-number .page-number-left,
+    #problemQ4Section .page-number.book-spread-number .page-number-right,
+    #problemQ5Section .page-number.book-spread-number .page-number-left,
+    #problemQ5Section .page-number.book-spread-number .page-number-right{position:absolute;bottom:0}
+    #problemQ1Section .page-number.book-spread-number .page-number-left,
+    #problemQ2Section .page-number.book-spread-number .page-number-left,
+    #problemQ3Section .page-number.book-spread-number .page-number-left,
+    #problemQ3Section2 .page-number.book-spread-number .page-number-left,
+    #problemQ4Section .page-number.book-spread-number .page-number-left,
+    #problemQ5Section .page-number.book-spread-number .page-number-left{left:2.2%}
+    #problemQ1Section .page-number.book-spread-number .page-number-right,
+    #problemQ2Section .page-number.book-spread-number .page-number-right,
+    #problemQ3Section .page-number.book-spread-number .page-number-right,
+    #problemQ3Section2 .page-number.book-spread-number .page-number-right,
+    #problemQ4Section .page-number.book-spread-number .page-number-right,
+    #problemQ5Section .page-number.book-spread-number .page-number-right{right:2.2%}
     #problemQ1Section.q1-book-spread{position:relative}
     #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
     #problemQ2Section.q1-book-spread{position:relative}
@@ -258,6 +321,40 @@
     #problemQ3Section2 .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
     #problemQ3Section2 .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
     #problemQ3Section2 .radio-group{display:grid;gap:10px;margin-top:12px}
+    @media (max-width:900px){
+        #moment1Screen{--a0-book-height:min(74dvh, 620px)}
+        #moment1Screen #flipbook,
+        #problemQ1Section.q1-book-spread,
+        #problemQ2Section.q1-book-spread,
+        #problemQ3Section.q1-book-spread,
+        #problemQ3Section2.q1-book-spread,
+        #problemQ4Section.q1-book-spread,
+        #problemQ5Section.q1-book-spread{width:95%;height:auto;min-height:auto;max-height:none}
+        #problemQ1Section.q1-book-spread,
+        #problemQ2Section.q1-book-spread,
+        #problemQ3Section.q1-book-spread,
+        #problemQ3Section2.q1-book-spread,
+        #problemQ4Section.q1-book-spread,
+        #problemQ5Section.q1-book-spread{grid-template-columns:1fr}
+        #problemQ1Section.q1-book-spread::before,
+        #problemQ2Section.q1-book-spread::before,
+        #problemQ3Section.q1-book-spread::before,
+        #problemQ3Section2.q1-book-spread::before,
+        #problemQ4Section.q1-book-spread::before,
+        #problemQ5Section.q1-book-spread::before{display:none}
+        #problemQ1Section .q1-left-page,
+        #problemQ1Section .q1-right-page,
+        #problemQ2Section .q1-left-page,
+        #problemQ2Section .q1-right-page,
+        #problemQ3Section .q1-left-page,
+        #problemQ3Section .q1-right-page,
+        #problemQ3Section2 .q1-left-page,
+        #problemQ3Section2 .q1-right-page,
+        #problemQ4Section .q1-left-page,
+        #problemQ4Section .q1-right-page,
+        #problemQ5Section .q1-left-page,
+        #problemQ5Section .q1-right-page{height:auto;min-height:auto;padding:18px}
+    }
     #problemQ3Section2 .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
     #problemQ3Section2 .radio-label input{margin-top:4px}
     #problemQ3Section2 .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
@@ -544,7 +641,7 @@
                                 <p id="statusM1Q1" class="status-text"></p>
                             </div>
                         </div>
-                        <div class="page-number">10</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">19</span><span class="page-number-right">20</span></div>
                     </div>
 
                     <!-- HOJA 11: BANDEJAS -->
@@ -584,7 +681,7 @@
                                 <p id="statusM1Q2" class="status-text"></p>
                             </div>
                         </div>
-                        <div class="page-number">11</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">21</span><span class="page-number-right">22</span></div>
                     </div>
 
                     <div id="problemQ3Section" class="hidden q1-book-spread">
@@ -654,7 +751,7 @@
                                 Elige una opción para activar este espacio de explicación.
                             </div>
                         </div>
-                        <div class="page-number">12</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">23</span><span class="page-number-right">24</span></div>
                     </div>
 
                     <div id="problemQ3Section2" class="hidden q1-book-spread">
@@ -730,7 +827,7 @@
                                 Elige una opción para activar este espacio de explicación.
                             </div>
                         </div>
-                        <div class="page-number">13</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">25</span><span class="page-number-right">26</span></div>
                     </div>
 
                     <div id="problemQ4Section" class="hidden q1-book-spread">
@@ -770,7 +867,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="page-number">14</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">27</span><span class="page-number-right">28</span></div>
                     </div>
 
                     <div id="problemQ5Section" class="hidden q1-book-spread">
@@ -796,7 +893,7 @@
                                 <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
                             </div>
                         </div>
-                        <div class="page-number">15</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">29</span><span class="page-number-right">30</span></div>
                     </div>
                     
                     <!-- Navigation Controls dentro del libro -->
@@ -824,67 +921,9 @@
         </div>
     </div>
 
-    <!-- MOMENTO 2: Emparejamiento de Bandejas -->
-    <section id="moment2Screen" class="screen">
-        <div class="container">
-            <div class="header">
-                <!-- Momento 2: Organizando pandebonos -->
-                <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
-            </div>
-
-            <!-- INTRODUCCIÓN -->
-            <div class="problem-box">
-                <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Cada tarjeta muestra una forma diferente de organizarlas.</p>
-                <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos:</strong></p>
-                <p class="instruction-hint">💡 Selecciona dos bandejas para unirlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
-            </div>
-
-            <!-- ÁREA DE BANDEJAS -->
-            <div id="traysGameSection">
-                <div id="traysArea" class="trays-container">
-                    <!-- Las 8 bandejas se generarán aquí dinámicamente -->
-                </div>
-                
-                <div class="game-controls">
-                    <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
-                    <p id="traysFeedback" class="feedback-text"></p>
-                </div>
-            </div>
-
-            <!-- PREGUNTA FINAL -->
-            <div id="finalQuestionSectionM2" class="hidden">
-                <div class="problem-box">
-                    <h3>¡Excelente trabajo!</h3>
-                    <p class="question">En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
-                    <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
-                </div>
-
-                <!-- SOLO AUDIO -->
-                <div class="evidence-section">
-                    <h4>Graba tu explicación:</h4>
-                    
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM2" class="audio-status"></span>
-                    </div>
-
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM2" class="status-text"></p>
-                        <button id="submitM2" class="btn btn-primary" disabled>Enviar ✈️</button>
-                    </div>
-                </div>
-
-                <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
-            </div>
-        </div>
-    </section>
-
     <!-- Scripts -->
     <script src="trays-system.js?v=2026031503"></script>
-    <script type="module" src="main.js?v=2026031515"></script>
-    <script src="app.js?v=2026031615"></script>
+    <script type="module" src="main.js?v=2026031717"></script>
+    <script src="app.js?v=2026031717"></script>
 </body>
 </html>
