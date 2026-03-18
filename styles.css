@@ -1073,12 +1073,12 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .page .page-number.book-spread-number {
-    left: 0;
-    right: 0;
-    width: 100%;
+    left: 50%;
+    right: auto;
+    width: auto;
     bottom: 10px;
-    transform: none;
-    text-align: unset;
+    transform: translateX(-50%);
+    text-align: center;
     font-size: 1.05rem;
     color: rgba(0, 0, 0, 0.45);
     font-style: normal;
@@ -1088,16 +1088,16 @@ body.flipbook-on-cover #flipbook::after {
 
 #flipbook .page .page-number.book-spread-number .page-number-left,
 #flipbook .page .page-number.book-spread-number .page-number-right {
-    position: absolute;
-    bottom: 0;
+    position: static;
+    bottom: auto;
 }
 
 #flipbook .page .page-number.book-spread-number .page-number-left {
-    left: 5%;
+    display: none;
 }
 
 #flipbook .page .page-number.book-spread-number .page-number-right {
-    right: 5%;
+    right: auto;
 }
 
 .emoji-large {
@@ -3168,7 +3168,7 @@ body.flipbook-on-cover #flipbook::after {
     min-height: 0 !important;
     max-height: none !important;
     margin: 0 !important;
-    border-radius: 10px;
+    border-radius: 0;
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     grid-template-rows: 1fr !important;
@@ -3179,7 +3179,7 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #moment1Screen #flipbook .page.q1-book-spread::before {
-    display: block !important;
+    display: none !important;
 }
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-left-page,
