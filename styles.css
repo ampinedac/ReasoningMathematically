@@ -1073,12 +1073,12 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .page .page-number.book-spread-number {
-    left: 50%;
-    right: auto;
-    width: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
     bottom: 10px;
-    transform: translateX(-50%);
-    text-align: center;
+    transform: none;
+    text-align: unset;
     font-size: 1.05rem;
     color: rgba(0, 0, 0, 0.45);
     font-style: normal;
@@ -1088,16 +1088,16 @@ body.flipbook-on-cover #flipbook::after {
 
 #flipbook .page .page-number.book-spread-number .page-number-left,
 #flipbook .page .page-number.book-spread-number .page-number-right {
-    position: static;
-    bottom: auto;
+    position: absolute;
+    bottom: 0;
 }
 
 #flipbook .page .page-number.book-spread-number .page-number-left {
-    display: none;
+    left: 5%;
 }
 
 #flipbook .page .page-number.book-spread-number .page-number-right {
-    right: auto;
+    right: 5%;
 }
 
 .emoji-large {
@@ -3204,6 +3204,12 @@ body.flipbook-on-cover #flipbook::after {
 #moment1Screen #flipbook .page.q1-book-spread .evidence-section {
     width: 100% !important;
     max-width: none !important;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
 }
 
 #moment1Screen .flipbook-wrapper .nav-btn {
