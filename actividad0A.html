@@ -1000,9 +1000,39 @@
     <script src="trays-system.js?v=2026031813"></script>
     <script type="module" src="main.js?v=2026031813"></script>
     <script src="app.js?v=2026031813"></script>
-</body>
+<body>
+    <div class="author-credit">Por: Ángela Pineda</div>
+    <!-- PANTALLA DE BIENVENIDA -->
+    <section id="welcomeScreen" class="screen active">
+        <div class="user-rect">
+            <h1 class="main-title">Actividad 0A</h1>
+        </div>
+        <div class="user-rect">
+            <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
+        </div>
+        <div class="user-rect">
+                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+                <p id="welcomeError" class="error-text hidden"></p>
+        </div>
+    </section>
 
-<style>
+    <!-- PANTALLA DE CONFIRMACIÓN -->
+    <section id="confirmationScreen" class="screen">
+        <h1 class="main-title">Confirmación</h1>
+        <div class="container">
+            <div class="welcome-box">
+                <p id="confirmationQuestion" class="confirmation-question"></p>
+                <div class="confirmation-buttons">
+                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
+                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ...resto del contenido... -->
+</body>
 /* --- Bakery Kitchen Environment --- */
 .bakery-kitchen-bg {
     position: relative;
