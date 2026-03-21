@@ -1,3 +1,26 @@
+#flipbook .q1-right-page p,
+#flipbook .q1-right-page .story-text {
+    text-align: center !important;
+}
+#flipbook .page.page-static-left .q1-left-page,
+#flipbook .page.page-static-right .q1-right-page,
+#flipbook .page.page-under-right .q1-right-page,
+#flipbook .page.page-under-left .q1-left-page {
+    max-width: 48vw !important;
+    min-width: 260px !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+#flipbook .page.page-static-left .q1-right-page,
+#flipbook .page.page-static-right .q1-left-page {
+    display: none !important;
+}
 #flipbook .q1-book-spread {
         flex-direction: row !important;
         align-items: stretch !important;
@@ -711,14 +734,19 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .book-cover-page {
-    width: 95vw !important;
-    height: 95vh !important;
-    max-width: 95vw !important;
+    width: min(48vw, 440px) !important;
+    height: min(80vh, 720px) !important;
+    max-width: 100vw !important;
     max-height: 95vh !important;
-    min-width: 0;
-    min-height: 0;
-    left: 50% !important;
-    transform: translateX(-50%) rotateY(0deg);
+    min-width: 220px;
+    min-height: 320px;
+    margin: 0 auto 24px auto !important;
+    position: relative;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    transform: none !important;
     transform-origin: center center !important;
     border-radius: 14px !important;
     border: 2px solid rgba(140, 66, 12, 0.25);
@@ -1252,16 +1280,18 @@ body.flipbook-on-cover #flipbook::after {
     bottom: 0;
 }
 
+/* Numeración pegada a la esquina inferior izquierda */
 #flipbook .page .page-number.book-spread-number .page-number-left {
-    left: 0;
-    bottom: 0;
-    margin-left: 2px;
+    left: 18px;
+    bottom: 18px;
+    margin-left: 0;
 }
 
+/* Numeración pegada a la esquina inferior derecha */
 #flipbook .page .page-number.book-spread-number .page-number-right {
-    right: 0;
-    bottom: 0;
-    margin-right: 2px;
+    right: 18px;
+    bottom: 18px;
+    margin-right: 0;
 }
 
 .emoji-large {

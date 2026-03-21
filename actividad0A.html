@@ -10,58 +10,58 @@
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
     <style>
-    /* Tipografia unificada en toda la Actividad 0A */
-    html, body, body *{font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important}
+    /* Unificar tamaño de fuente a 14px en toda la actividad 0A */
+    html, body, body * { font-family: 'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important; font-size: 14px !important; }
 
     /* Tipografía y alineación global */
-    body{font-size:20px;line-height:1.5;color:#222}
+    body { font-size: 14px !important; line-height: 1.5; color: #222; }
     /* Por defecto todo el texto (p, listas, labels) debe ir justificado, excepto títulos */
-    p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p{font-size:13px;text-align:justify}
+    p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p { font-size: 14px !important; text-align: justify; }
     /* Mantener el título centrado y con su estilo habitual */
-    .main-title{display:block;text-align:center}
+    .main-title { display: block; text-align: center; }
     /* Centrar imágenes principales */
-    .story-image, .situation-image{display:block;margin:0 auto;max-width:100%;height:auto}
+    .story-image, .situation-image { display: block; margin: 0 auto; max-width: 100%; height: auto; }
 
     /* Subtítulo: quitar caja y usar texto más visible con sombra sutil */
-    .activity-subtitle{background:none;padding:0;color:#0b2a3a;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,0.12);display:block;margin-bottom:10px}
+    .activity-subtitle { background: none; padding: 0; color: #0b2a3a; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.12); display: block; margin-bottom: 10px; font-size: 14px !important; }
 
     /* Ajustes tipográficos para Situación 1 */
-    .q1-left-page h3{margin-top:0}
-    .q1-left-page p{color:inherit;font-weight:400}
-    .q1-left-page .question{color:#000;font-weight:400;margin-top:12px}
+    .q1-left-page h3 { margin-top: 0; font-size: 14px !important; }
+    .q1-left-page p { color: inherit; font-weight: 400; font-size: 14px !important; }
+    .q1-left-page .question { color: #000; font-weight: 400; margin-top: 12px; font-size: 14px !important; }
     #problemQ1Section .q1-left-page h3,
     #problemQ1Section .q1-left-page p,
-    #problemQ1Section .q1-left-page .question{font-size:clamp(0.85rem,1.8vw,1.2rem) !important;line-height:1.6}
-    #moment1Screen #problemQ1Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important}
+    #problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.6; }
+    #moment1Screen #problemQ1Section .q1-left-page h3 { font-size: 14px !important; }
     #moment1Screen #problemQ1Section .q1-left-page p,
-    #moment1Screen #problemQ1Section .q1-left-page .question{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px;width:92%;max-width:460px;margin-left:auto;margin-right:auto;text-align:justify}
-    #moment1Screen #problemQ1Section .q1-left-page .situation-image{width:92%;max-width:460px;margin:8px auto 10px}
+    #moment1Screen #problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.35 !important; letter-spacing: -0.2px; width: 92%; max-width: 460px; margin-left: auto; margin-right: auto; text-align: justify; }
+    #moment1Screen #problemQ1Section .q1-left-page .situation-image { width: 92%; max-width: 460px; margin: 8px auto 10px; }
 
     /* Centrar título, herramientas y tablero en la columna derecha */
-    .q1-right-page h4, .q1-right-page .board-tools{width:100%;display:flex;justify-content:center;align-items:center}
-    .q1-right-page .board-tools{gap:10px;margin-bottom:8px}
-    .q1-right-page .board-tools .tool-btn{flex:0 0 auto}
-    .q1-right-page .board-container{max-width:95%;margin:0 auto}
-    .board-wrapper{max-width:100%;margin:0 auto}
-    .drawing-board{margin:0 auto;display:block}
+    .q1-right-page h4, .q1-right-page .board-tools { width: 100%; display: flex; justify-content: center; align-items: center; font-size: 14px !important; }
+    .q1-right-page .board-tools { gap: 10px; margin-bottom: 8px; }
+    .q1-right-page .board-tools .tool-btn { flex: 0 0 auto; font-size: 14px !important; }
+    .q1-right-page .board-container { max-width: 95%; margin: 0 auto; }
+    .board-wrapper { max-width: 100%; margin: 0 auto; }
+    .drawing-board { margin: 0 auto; display: block; }
     /* Situación 1 derecha: centrar iconos, compactar tablero y dejar acciones visibles */
-    #problemQ1Section .q1-right-page .board-tools{justify-content:center !important}
-    #problemQ1Section .q1-right-page .board-container{max-width:92%;margin:6px auto 4px}
-    #problemQ1Section .q1-right-page .drawing-board{max-height:400px !important}
+    #problemQ1Section .q1-right-page .board-tools { justify-content: center !important; }
+    #problemQ1Section .q1-right-page .board-container { max-width: 92%; margin: 6px auto 4px; }
+    #problemQ1Section .q1-right-page .drawing-board { max-height: 400px !important; }
     #problemQ1Section .q1-right-page .audio-controls,
-    #problemQ1Section .q1-right-page .submit-section{display:inline-flex;align-items:center;gap:10px;margin:8px 6px 0;vertical-align:middle}
-    #problemQ1Section .q1-right-page .audio-controls{flex-direction:row;flex-wrap:nowrap;justify-content:center}
-    #problemQ1Section .q1-right-page .submit-section{justify-content:center;text-align:center}
-    #problemQ1Section .q1-right-page .submit-section .status-text{margin:0}
+    #problemQ1Section .q1-right-page .submit-section { display: inline-flex; align-items: center; gap: 10px; margin: 8px 6px 0; vertical-align: middle; font-size: 14px !important; }
+    #problemQ1Section .q1-right-page .audio-controls { flex-direction: row; flex-wrap: nowrap; justify-content: center; }
+    #problemQ1Section .q1-right-page .submit-section { justify-content: center; text-align: center; }
+    #problemQ1Section .q1-right-page .submit-section .status-text { margin: 0; font-size: 14px !important; }
 
     /* Aplicar tamaño máximo, centrar y comportamiento responsive a todos los tableros */
-    .board-container{width:100%;max-width:1200px;margin:0 auto;padding:12px;box-sizing:border-box;border-radius:10px}
+    .board-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 12px; box-sizing: border-box; border-radius: 10px; }
 
     /* Estructura interna del tablero: grid solo dentro del tablero */
-    .board-wrapper{position:relative;width:100%;border-radius:6px}
-    .board-grid{position:absolute;inset:10px;border-radius:6px;pointer-events:none;z-index:1;background-image: linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px);background-size:36px 36px;}
+    .board-wrapper { position: relative; width: 100%; border-radius: 6px; }
+    .board-grid { position: absolute; inset: 10px; border-radius: 6px; pointer-events: none; z-index: 1; background-image: linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px); background-size: 36px 36px; }
     /* Hacer el canvas transparente y por encima de la cuadricula */
-    .drawing-board{position:relative;z-index:2;width:100% !important;height:auto !important;max-height:1100px;background:transparent;border-radius:6px;display:block}
+    .drawing-board { position: relative; z-index: 2; width: 100% !important; height: auto !important; max-height: 1100px; background: transparent; border-radius: 6px; display: block; }
      /* Mantener el patrón de fondo global para conservar el diseño original */
      /* La cuadricula del tablero sigue apareciendo únicamente dentro de .board-grid */
 
@@ -431,7 +431,7 @@
                                 <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
                             </div>
                             <div class="q1-right-page">
-                                <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                                <p class="story-text" style="font-size:14px !important;">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
                             </div>
                             <div class="page-number book-spread-number"><span class="page-number-left">1</span><span class="page-number-right">2</span></div>
                         </div>
@@ -442,7 +442,7 @@
                                 <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
                             </div>
                             <div class="q1-right-page">
-                                <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                                <p class="story-text" style="font-size:14px !important;">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
                             </div>
                             <div class="page-number book-spread-number"><span class="page-number-left">3</span><span class="page-number-right">4</span></div>
                         </div>
@@ -477,7 +477,7 @@
                             <div class="q1-right-page">
                                 <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
                             </div>
-                            <div class="page-number book-spread-number"><span class="page-number-left">9</span><span class="page-number-right"></span></div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">9</span><span class="page-number-right">10</span></div>
                         </div>
 
                         <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
@@ -528,9 +528,7 @@
                         <div id="problemQ2Section" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
                             <h3>Situación 2</h3>
-                            <div style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
-                                <img src="assets/images/BandejasFoto.png" alt="Bandejas de pandebonos" style="max-width:95%;height:auto;border-radius:14px;box-shadow:0 4px 18px #0002;">
-                            </div>
+                            <!-- Imagen de bandejas movida a la página 22, solo visible al regresar de la cocina -->
                             <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos</p>
                             <div class="q2-guide-card">
                                 <p class="q2-guide-title">Guía rápida</p>
@@ -545,6 +543,10 @@
                         </div>
 
                         <div class="q1-right-page" id="q2RightPage">
+                            <!-- Imagen de bandejas SOLO visible al regresar de la cocina -->
+                            <div id="bandejasFotoRegreso" class="hidden" style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
+                                <img src="assets/images/BandejasFoto.png" alt="Bandejas de pandebonos" style="max-width:95%;height:auto;border-radius:14px;box-shadow:0 4px 18px #0002;">
+                            </div>
                             <!-- Foto de los pares (se genera al completar la cocina) -->
                             <div id="pairsPhotoArea" class="pairs-photo hidden">
                                 <p class="pairs-photo-title">📸 Así quedaron tus parejas:</p>
@@ -959,62 +961,1383 @@
 </style>
 
 <style>
-/* Unificar tamaño de spreads de actividades con las del cuento */
-.activity-spread {
-    width: 100%;
-    max-width: 1200px;
-    min-height: var(--a0-book-height, 720px);
-    margin: 0 auto 24px auto;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: center;
-    background: rgba(255,255,255,0.96);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px rgba(120, 72, 24, 0.08);
-    box-sizing: border-box;
+/* Unificar tamaño de fuente a 14px en toda la actividad 0A */
+html, body, body * { font-family: 'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important; font-size: 14px !important; }
+
+/* Tipografía y alineación global */
+body { font-size: 14px !important; line-height: 1.5; color: #222; }
+/* Por defecto todo el texto (p, listas, labels) debe ir justificado, excepto títulos */
+p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p { font-size: 14px !important; text-align: justify; }
+/* Mantener el título centrado y con su estilo habitual */
+.main-title { display: block; text-align: center; }
+/* Centrar imágenes principales */
+.story-image, .situation-image { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+/* Subtítulo: quitar caja y usar texto más visible con sombra sutil */
+.activity-subtitle { background: none; padding: 0; color: #0b2a3a; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.12); display: block; margin-bottom: 10px; font-size: 14px !important; }
+
+/* Ajustes tipográficos para Situación 1 */
+.q1-left-page h3 { margin-top: 0; font-size: 14px !important; }
+.q1-left-page p { color: inherit; font-weight: 400; font-size: 14px !important; }
+.q1-left-page .question { color: #000; font-weight: 400; margin-top: 12px; font-size: 14px !important; }
+#problemQ1Section .q1-left-page h3,
+#problemQ1Section .q1-left-page p,
+#problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.6; }
+#moment1Screen #problemQ1Section .q1-left-page h3 { font-size: 14px !important; }
+#moment1Screen #problemQ1Section .q1-left-page p,
+#moment1Screen #problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.35 !important; letter-spacing: -0.2px; width: 92%; max-width: 460px; margin-left: auto; margin-right: auto; text-align: justify; }
+#moment1Screen #problemQ1Section .q1-left-page .situation-image { width: 92%; max-width: 460px; margin: 8px auto 10px; }
+
+/* Centrar título, herramientas y tablero en la columna derecha */
+.q1-right-page h4, .q1-right-page .board-tools { width: 100%; display: flex; justify-content: center; align-items: center; font-size: 14px !important; }
+.q1-right-page .board-tools { gap: 10px; margin-bottom: 8px; }
+.q1-right-page .board-tools .tool-btn { flex: 0 0 auto; font-size: 14px !important; }
+.q1-right-page .board-container { max-width: 95%; margin: 0 auto; }
+.board-wrapper { max-width: 100%; margin: 0 auto; }
+.drawing-board { margin: 0 auto; display: block; }
+/* Situación 1 derecha: centrar iconos, compactar tablero y dejar acciones visibles */
+#problemQ1Section .q1-right-page .board-tools { justify-content: center !important; }
+#problemQ1Section .q1-right-page .board-container { max-width: 92%; margin: 6px auto 4px; }
+#problemQ1Section .q1-right-page .drawing-board { max-height: 400px !important; }
+#problemQ1Section .q1-right-page .audio-controls,
+#problemQ1Section .q1-right-page .submit-section { display: inline-flex; align-items: center; gap: 10px; margin: 8px 6px 0; vertical-align: middle; font-size: 14px !important; }
+#problemQ1Section .q1-right-page .audio-controls { flex-direction: row; flex-wrap: nowrap; justify-content: center; }
+#problemQ1Section .q1-right-page .submit-section { justify-content: center; text-align: center; }
+#problemQ1Section .q1-right-page .submit-section .status-text { margin: 0; font-size: 14px !important; }
+
+/* Aplicar tamaño máximo, centrar y comportamiento responsive a todos los tableros */
+.board-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 12px; box-sizing: border-box; border-radius: 10px; }
+
+/* Estructura interna del tablero: grid solo dentro del tablero */
+.board-wrapper { position: relative; width: 100%; border-radius: 6px; }
+.board-grid { position: absolute; inset: 10px; border-radius: 6px; pointer-events: none; z-index: 1; background-image: linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px); background-size: 36px 36px; }
+/* Hacer el canvas transparente y por encima de la cuadricula */
+.drawing-board { position: relative; z-index: 2; width: 100% !important; height: auto !important; max-height: 1100px; background: transparent; border-radius: 6px; display: block; }
+ #moment1Screen .container{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;padding:8px 10px;border-radius:14px;box-shadow:none;width:95vw;max-width:none;margin:12px auto}
+  /* Quitar el recuadro blanco grande solo en la pantalla de bienvenida */
+  #welcomeScreen .container{background:transparent;padding:28px;border-radius:14px;box-shadow:none;max-width:880px;margin:20px auto}
+  /* Forzar que elementos internos tengan el mismo ancho y queden centrados */
+  #welcomeScreen .container, #moment1Screen .container, #welcomeScreen .container * , #moment1Screen .container * {box-sizing:border-box}
+  #welcomeScreen .main-title, #moment1Screen .main-title, #welcomeScreen .activity-subtitle, #moment1Screen .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
+  /* Hacer las cajas internas un poco más delgadas que el panel principal */
+  #welcomeScreen .welcome-box, #moment1Screen .problem-box, #moment1Screen .welcome-box{width:100%;max-width:720px;margin:0 auto;padding:0;background:transparent}
+  /* Cajas específicas solicitadas por el usuario en la pantalla de bienvenida */
+  /* Igual ancho que el panel claro (max-width:720px) y opacidad al 75% */
+  /* Cajas pequeñas: fondo blanco casi opaco (ligeramente transparente) */
+  #welcomeScreen .user-rect{width:100%;max-width:720px;margin:12px auto;background:rgb(200,230,255);border-radius:14px;padding:12px 16px;box-sizing:border-box;text-align:center;display:block}
+  /* quitar .user-rect-bottom: el recuadro inferior se elimina según petición */
+  #welcomeScreen .user-rect .main-title, #welcomeScreen .user-rect .activity-subtitle{margin:0}
+  /* Hacer que el campo de código y el botón tengan el mismo ancho (3/4 del panel) y estén centrados */
+  #welcomeScreen .welcome-box .chalk-input,
+  #welcomeScreen .welcome-box .btn {
+      width:75%;
+      max-width:640px;
+      margin:12px auto;
+      display:block;
+      box-sizing:border-box;
+  }
+  /* Asegurar estilo consistente del botón cuando se reduce */
+  #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
+  #moment1Screen{--a0-book-height:min(80dvh, 720px)}
+  #problemQ2Section .problem-box{background:transparent;border:0;box-shadow:none;padding:20px;display:flex;flex-direction:column;justify-content:center;height:100%}
+  #problemQ2Section .q1-left-page h3,
+  #problemQ2Section .q1-left-page p,
+  #problemQ2Section .q1-left-page .instruction-hint{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+  #problemQ2Section .q1-left-page h3{margin-top:0;margin-bottom:8px;font-size:clamp(1.15rem,2vw,1.4rem) !important}
+  #problemQ2Section .q1-left-page p{width:92%;max-width:460px;margin:8px auto;text-align:justify;line-height:1.45}
+  #problemQ2Section .q1-left-page p{margin-bottom:6px}
+  #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:14px auto 0;text-align:left;padding:10px 14px;border-radius:12px;background:rgba(255,248,230,0.85);border:1px solid rgba(251,191,36,0.35);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+  #problemQ2Section .q2-guide-card{width:92%;max-width:460px;margin:14px auto 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.72);border:1px solid rgba(63,94,251,0.2);box-shadow:0 4px 10px rgba(0,0,0,0.05);text-align:left}
+  #problemQ2Section .q2-guide-title{margin:0 0 8px;font-size:clamp(0.92rem,1.5vw,1.08rem);font-weight:700;color:#2f3f87;text-align:left}
+  #problemQ2Section .q2-guide-list{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+  #problemQ2Section .q2-guide-list li{margin:0;font-size:clamp(0.92rem,1.5vw,1.08rem);line-height:1.35;text-align:left;color:#233047}
+  #problemQ2Section .q2-example{margin:10px 0 0;font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.35;color:#2f3f87;font-weight:600;text-align:left}
+  #problemQ2Section .q1-right-page{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:14px !important}
+  #problemQ2Section .trays-container{width:100%;flex:1;min-height:0;grid-template-columns:repeat(4, minmax(0, 1fr)) !important;gap:10px !important;padding:12px !important;align-content:start !important}
+  #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1 !important;min-height:0 !important;height:auto !important;width:100%;padding:5px;overflow:hidden;font-size:clamp(0.75rem,1.4vw,1.1rem)}
+  #problemQ2Section .trays-container .tray-grid{width:100%;height:100%;max-width:none;max-height:none;overflow:visible;justify-items:center;align-items:center;gap:1px}
+  #problemQ2Section .trays-container .tray-item{line-height:1 !important}
+  #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important}
+  #problemQ2Section .trays-container > .tray-card:nth-child(7):nth-last-child(2){grid-column:1;justify-self:end}
+  #problemQ2Section .trays-container > .tray-card:nth-child(8):nth-last-child(1){grid-column:3;justify-self:start}
+  #problemQ2Section .q2-verify-row{display:flex;flex-direction:row;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  #problemQ2Section .q2-verify-row .btn{flex-shrink:0;font-size:0.8rem !important;padding:5px 14px !important;font-family:inherit !important}
+  #problemQ2Section .q2-verify-row .feedback-text{flex:1;min-width:0;margin:0;padding:6px 10px;font-size:0.8rem !important;min-height:0}
+  #problemQ2Section .q2-final-question{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.8);border:1px solid rgba(63,94,251,0.2);text-align:left}
+  #problemQ2Section .q2-final-question p{margin:0 0 8px;width:100%;max-width:none;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:left}
+  #problemQ2Section .q2-final-question p:last-child{margin-bottom:0}
+  @media (max-width:1200px){
+      #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:10px !important;padding:10px !important}
+  }
+  @media (max-width:900px){
+      #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:8px !important;padding:8px !important}
+  }
+  @media (max-width:900px){
+      #problemQ2Section .q1-right-page{padding-top:8px}
+      #problemQ2Section .q1-right-page .btn{margin-top:8px}
+      #problemQ2Section .page-number{bottom:8px}
+  }
+  .author-credit{position:fixed;top:10px;right:14px;z-index:1200;font-size:12px;line-height:1;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.78);color:#2a3d55;font-weight:700;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(0,0,0,0.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
+
+  /* ===== PANTALLA COCINA ===== */
+  .cocina-overlay{position:fixed;top:0;left:0;width:100vw;height:100dvh;background:#fff;z-index:9999;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+  .cocina-overlay.hidden{display:none !important}
+  .cocina-header{text-align:center;padding:18px 20px 12px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.22);flex-shrink:0}
+  .cocina-header h2{margin:0 0 4px;font-size:clamp(1.3rem,3vw,2rem);font-family:'Comic Sans MS',cursive;text-shadow:2px 2px 4px rgba(0,0,0,0.28)}
+  .cocina-header p{margin:0;font-size:clamp(0.9rem,2vw,1.1rem);opacity:0.95}
+  .cocina-body{flex:0 0 auto;padding:18px 14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:auto;overflow:visible;position:relative}
+  .cocina-body::before,
+  .cocina-body::after{content:none !important;display:none !important}
+  .cocina-body .trays-container{width:min(100%,1320px);max-width:1320px;flex:0 0 auto;min-height:560px;height:auto;max-height:none;margin-top:8px;margin-bottom:14px;grid-template-columns:repeat(4,1fr) !important;grid-auto-flow:row dense;grid-auto-rows:minmax(140px, auto);align-content:start !important;gap:clamp(10px,1.4vw,18px) !important;padding:clamp(12px,1.8vw,24px) !important;justify-items:stretch;overflow:visible;border-radius:20px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 2px rgba(255,232,198,0.16),0 10px 24px rgba(84,50,26,0.24);position:relative}
+  .cocina-body .trays-container::before{content:none}
+  #cocinaScreen .trays-container,
+  #cocinaScreen .trays-container *{cursor:url('assets/images/hand-point-cursor.svg') 16 12, grab !important}
+  #cocinaScreen .trays-container:active,
+  #cocinaScreen .trays-container:active *,
+  #cocinaScreen .tray-card:active{cursor:url('assets/images/hand-grab-cursor.svg') 16 14, grabbing !important}
+  #cocinaScreen .tray-card{width:100%;aspect-ratio:1/1 !important;height:auto !important;min-height:0 !important;padding:clamp(8px,1.1vw,12px);box-sizing:border-box}
+  #cocinaScreen .tray-grid{width:100%;height:100%;max-width:none;max-height:none}
+  #cocinaScreen .tray-item-image{width:110%;height:110%;max-width:none;max-height:none}
+  .cocina-controls{padding:18px 20px 20px;text-align:center;background:transparent;border-top:none;display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;position:relative;z-index:3}
+  .cocina-controls .btn-primary{font-size:clamp(0.95rem,2vw,1.15rem);padding:12px 32px;margin-top:6px}
+  @media (max-width:1200px){.cocina-body{padding:16px 12px 10px}.cocina-body .trays-container{width:min(100%,1100px);min-height:500px;grid-auto-rows:minmax(130px, auto)}}
+  @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:14px 10px 10px;overflow:visible}.cocina-body .trays-container{margin-top:8px;margin-bottom:10px;width:100%;max-width:760px;flex:none;height:auto;max-height:none;min-height:auto;grid-template-columns:repeat(2,minmax(0,1fr)) !important;grid-template-rows:auto !important;gap:14px !important;padding:14px !important}#cocinaScreen .tray-card{aspect-ratio:1/1 !important;height:auto !important}}
+
+  /* ===== BOTÓN IR A COCINA ===== */
+  #problemQ2Section .btn-cocina{display:block;width:92%;max-width:460px;margin:18px auto 0;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;border:none;border-radius:16px;padding:16px 24px;font-size:clamp(1rem,1.8vw,1.25rem);font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.38);transition:all 0.3s;text-shadow:1px 1px 2px rgba(0,0,0,0.18)}
+  #problemQ2Section .btn-cocina:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 26px rgba(249,115,22,0.52)}
+  #problemQ2Section .btn-cocina:active{transform:translateY(-1px) scale(1)}
+  #problemQ2Section .btn-cocina:disabled{background:linear-gradient(135deg,#9ca3af 0%,#6b7280 100%);cursor:not-allowed;box-shadow:none;transform:none;opacity:0.92}
+  #problemQ2Section .btn-cocina:disabled:hover{transform:none;box-shadow:none}
+
+  /* ===== FOTO DE PARES ===== */
+  .pairs-photo{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:2px solid #86efac;border-radius:14px;padding:14px 12px;margin-bottom:14px;overflow-y:auto;max-height:52%}
+  .pairs-photo-title{font-size:clamp(0.85rem,1.4vw,1rem);font-weight:700;color:#166534;margin:0 0 10px;text-align:center}
+  .pairs-photo-content{display:flex;flex-direction:column;gap:10px}
+  .photo-pairs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .photo-pair{display:flex;align-items:center;gap:8px;background:white;border-radius:10px;padding:8px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);justify-content:center;min-height:88px}
+  .photo-tray{display:flex;align-items:center;justify-content:center;min-width:70px}
+  .photo-tray-grid{gap:2px;justify-items:center;align-items:center}
+  .photo-pano{display:flex;align-items:center;justify-content:center;width:14px;height:14px;line-height:1}
+  .photo-pano-img{width:100%;height:100%;object-fit:contain;display:block}
+  .photo-equal{font-size:1.4em;font-weight:bold;color:#16a34a;flex-shrink:0}
+  .photo-singles-wrap{background:rgba(255,255,255,0.92);border:1px dashed rgba(22,101,52,0.35);border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:flex;flex-direction:column;justify-content:center;min-height:88px}
+  .photo-singles-title{margin:0 0 6px;text-align:center;font-size:0.82rem;font-weight:700;color:#166534}
+  .photo-singles-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
+  .photo-single{background:white;border-radius:8px;padding:6px 8px;box-shadow:0 1px 5px rgba(0,0,0,0.08)}
+  @media (max-width:850px){.photo-pairs-grid{grid-template-columns:1fr}}
+
+  /* Páginas 12 y 13 dentro del libro */
+  #problemQ3Section .problem-box,
+  #problemQ3Section2 .problem-box,
+  #problemQ4Section .problem-box,
+  #problemQ5Section .problem-box{background:transparent;border:0;box-shadow:none;padding:0;display:flex;flex-direction:column;justify-content:flex-start;height:100%}
+  .book-story-card{width:92%;max-width:470px;margin:14px auto 0;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.76);border:1px solid rgba(63,94,251,0.18);box-shadow:0 4px 10px rgba(0,0,0,0.05)}
+  .book-story-card p{margin:0 0 10px}
+  .book-story-card p:last-child{margin-bottom:0}
+  #problemQ3Section .envelope-equation{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:16px auto 10px}
+  #problemQ3Section .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
+  #problemQ3Section .question-section{width:92%;max-width:470px;margin:10px auto 0;text-align:left}
+  #problemQ3Section .radio-group{display:grid;gap:10px;margin-top:12px}
+  #problemQ3Section .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left}
+  #problemQ3Section .radio-label input{margin-top:4px}
+  #problemQ3Section .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  #problemQ3Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:10px;margin-bottom:14px}
+  #problemQ3Section .q1-left-page p,
+  #problemQ3Section .q1-left-page .question,
+  #problemQ3Section .radio-label{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+  #problemQ3Section .q1-left-page .book-story-card{width:96%;max-width:540px;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none}
+  #problemQ3Section .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+  #problemQ3Section .q1-right-page{display:flex !important;flex-direction:column;justify-content:center !important;align-items:stretch;padding:14px 28px !important}
+  #problemQ3Section .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
+  #problemQ3Section .prompt-box{margin:0 auto 14px;max-width:480px;width:100%;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid rgba(59,130,246,0.2)}
+  #problemQ3Section .prompt-box p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400 !important;color:#222 !important;text-align:center}
+  #problemQ3Section .evidence-section{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+  #problemQ3Section #promptSection1 .evidence-section{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px}
+  #problemQ3Section #promptSection1 .evidence-section h4{flex-basis:100%;margin:0 0 2px;text-align:center;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400;color:#222}
+  #problemQ3Section #promptSection1 .audio-controls,
+  #problemQ3Section #promptSection1 .submit-section{display:inline-flex !important;flex-direction:row !important;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;margin:0 !important}
+  #problemQ3Section #promptSection1 .evidence-section{row-gap:10px;column-gap:12px}
+  #problemQ3Section #promptSection1 #audioStatusM3Q1,
+  #problemQ3Section #promptSection1 .audio-controls .audio-status,
+  #problemQ3Section #promptSection1 #statusM3Q1{display:none !important}
+  #problemQ3Section #promptSection1 .btn{font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+  #problemQ3Section .board-container{max-width:92%;margin:6px auto 4px}
+  #problemQ3Section .audio-controls,
+  #problemQ3Section .submit-section{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  #problemQ3Section2 .envelope-equation{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:16px auto 10px}
+  #problemQ3Section2 .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
+  #problemQ3Section2 .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
+  #problemQ3Section2 .radio-group{display:grid;gap:10px;margin-top:12px}
+  @media (max-width:900px){
+      #moment1Screen{--a0-book-height:min(74dvh, 620px)}
+  }
+  #problemQ3Section2 .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+  #problemQ3Section2 .radio-label input{margin-top:4px}
+  #problemQ3Section2 .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  #problemQ3Section2 .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:10px;margin-bottom:14px}
+  #problemQ3Section2 .q1-left-page .book-story-card{width:96%;max-width:540px;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none}
+  #problemQ3Section2 .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+  #problemQ3Section2 .q1-right-page{display:flex !important;flex-direction:column;justify-content:center !important;align-items:stretch;padding:14px 28px !important}
+  #problemQ3Section2 .prompt-box{margin:0 auto 14px;max-width:480px;width:100%;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid rgba(59,130,246,0.2)}
+  #problemQ3Section2 .prompt-box p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400 !important;color:#222 !important;text-align:center}
+  #problemQ3Section2 .evidence-section{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+  #problemQ3Section2 #promptSection2 .evidence-section{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px}
+  #problemQ3Section2 #promptSection2 .evidence-section h4{flex-basis:100%;margin:0 0 2px;text-align:center;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400;color:#222}
+  #problemQ3Section2 #promptSection2 .audio-controls,
+  #problemQ3Section2 #promptSection2 .submit-section{display:inline-flex !important;flex-direction:row !important;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;margin:0 !important}
+  #problemQ3Section2 #promptSection2 .evidence-section{row-gap:10px;column-gap:12px}
+  #problemQ3Section2 #promptSection2 #audioStatusM3Q2,
+  #problemQ3Section2 #promptSection2 .audio-controls .audio-status,
+  #problemQ3Section2 #promptSection2 #statusM3Q2{display:none !important}
+  #problemQ3Section2 #promptSection2 .btn{font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+  #problemQ3Section2 .audio-controls,
+  #problemQ3Section2 .submit-section{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .book-placeholder{max-width:430px;margin:0 auto;padding:18px 20px;border-radius:14px;background:rgba(255,248,230,0.9);border:1px solid rgba(251,191,36,0.35);text-align:center;color:#5b4b1f;font-weight:700}
+  #problemQ4Section .q1-left-page{display:flex;flex-direction:column;justify-content:center}
+  #problemQ4Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:0;margin-bottom:8px}
+  #problemQ4Section .q1-left-page .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+  #problemQ4Section .q1-left-page .magic-lives-container{margin-top:18px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15)}
+  #problemQ4Section .q1-left-page .magic-label{color:#1a1a2e;font-weight:700;font-size:clamp(0.92rem,1.5vw,1.08rem)}
+  #problemQ4Section .magic-theme{position:relative;overflow:hidden;border-radius:20px;padding:18px;background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important}
+  #problemQ4Section .student-code-display{text-align:center;margin-bottom:12px}
+  #problemQ4Section .items-container{margin:20px auto 0;max-width:100%}
+  #problemQ4Section .magic-instruction{font-size:clamp(1.15rem,2vw,1.4rem) !important;line-height:1.35 !important}
+  #problemQ4Section .magic-lives-container{margin-top:0}
+  #problemQ4Section .magic-theme.m4-final-only .student-code-display,
+  #problemQ4Section .magic-theme.m4-final-only .magic-lives-container,
+  #problemQ4Section .magic-theme.m4-final-only .items-container{display:none !important}
+  #problemQ4Section .magic-theme.m4-final-only ~ .q1-left-page .magic-lives-container,
+  #problemQ4Section.m4-final-only .q1-left-page .magic-lives-container{display:none !important}
+  #problemQ4Section .magic-theme.m4-final-only{display:flex;align-items:center;justify-content:center;padding:24px !important}
+  #problemQ4Section .magic-theme.m4-final-only #finalQuestionSection{width:min(100%,780px);margin:0 auto}
+  #problemQ4Section .final-box{background:linear-gradient(135deg,#f4fbff 0%,#dff4ea 55%,#fff4d8 100%);border:2px solid rgba(245,158,11,0.45);border-radius:20px;padding:38px 30px;text-align:center;margin:8px 0;color:#17324d;box-shadow:0 14px 34px rgba(10,42,67,0.24)}
+  #problemQ4Section .final-box h3{font-size:2.2em;margin-bottom:14px;color:#0f766e;text-shadow:none}
+  #problemQ4Section .final-question{font-size:1.4em;margin:14px 0;font-weight:700;color:#1d4ed8}
+  #problemQ4Section .thank-you{font-size:1.35em;margin-top:18px;color:#7a5200}
+  #problemQ4Section .thank-you-sub{font-size:1.05em;color:#334155}
+  #problemQ4Section .m4-special-title{color:#0f766e;text-shadow:none}
+  #problemQ4Section .m4-special-message{font-size:1.35em;color:#1e3a8a;margin:16px 0}
+  #problemQ4Section .m4-special-points{font-size:1.25em;color:#92400e;font-weight:700;margin:20px 0}
+  #problemQ4Section .m4-special-points strong{font-size:1.18em;color:#b45309}
+  #problemQ5Section .q1-left-page{display:flex;justify-content:center;align-items:center}
+  #problemQ5Section .final-story-card{width:94%;max-width:520px;padding:24px 22px;border-radius:18px;background:linear-gradient(135deg,#fff9ec 0%,#f0f9ff 100%);border:1px solid rgba(251,146,60,0.35);box-shadow:0 10px 22px rgba(15,23,42,0.12)}
+  #problemQ5Section .final-story-card h3{margin:0 0 12px;font-size:clamp(1.2rem,2.1vw,1.6rem);color:#9a3412;text-align:center}
+  #problemQ5Section .final-story-card p{font-size:clamp(0.95rem,1.55vw,1.1rem) !important;line-height:1.5 !important;color:#1f2937;margin:0 0 10px;text-align:justify}
+  #problemQ5Section .final-story-card p:last-child{margin-bottom:0}
+  #problemQ5Section .q1-right-page{display:flex;justify-content:center;align-items:center}
+  #problemQ5Section .reflection-card{width:94%;max-width:480px;padding:24px 22px;border-radius:18px;background:linear-gradient(145deg,#0f172a 0%,#1e3a8a 100%);box-shadow:0 14px 26px rgba(15,23,42,0.35);border:1px solid rgba(96,165,250,0.35)}
+  #problemQ5Section .reflection-card h4{margin:0 0 16px;font-size:clamp(1.1rem,1.9vw,1.4rem);color:#f8fafc;text-align:center}
+  #problemQ5Section .reflection-options{display:grid;gap:10px}
+  #problemQ5Section .reflection-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(148,163,184,0.35);color:#e2e8f0;font-size:clamp(0.95rem,1.5vw,1.05rem);text-align:left;cursor:pointer}
+  #problemQ5Section .reflection-option input{accent-color:#f59e0b;transform:scale(1.12)}
+  #problemQ5Section .reflection-hint{margin-top:14px;color:#cbd5e1;font-size:0.92rem;text-align:center}
+  .flipbook-wrapper.book-closing{animation:bookClosePulse 0.7s ease-in-out forwards}
+  .book-closing-overlay{position:fixed;inset:0;background:rgba(7,18,40,0.72);display:flex;align-items:center;justify-content:center;z-index:12000;padding:20px}
+  .book-closing-card{background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 100%);border:1px solid rgba(30,64,175,0.3);border-radius:18px;padding:26px 24px;max-width:440px;width:100%;text-align:center;box-shadow:0 18px 34px rgba(15,23,42,0.32)}
+  .book-closing-card h3{margin:0 0 10px;color:#1e3a8a;font-size:1.35rem}
+  .book-closing-card p{margin:0;color:#334155;font-size:1rem;text-align:center}
+  @keyframes bookClosePulse{0%{transform:scale(1);opacity:1}100%{transform:scale(0.94);opacity:0.15}}
+  #problemQ4Section .magic-canvas,
+  #problemQ4Section .confetti-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  #problemQ4Section .magic-canvas{z-index:4}
+  #problemQ4Section .confetti-canvas{z-index:3}
+  #problemQ4Section #finalQuestionSection{position:relative;z-index:5}
+  /* Ajustes página derecha pág 11 */
+  #q2RightPage{display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto}
+  #m1Q2FinalQuestion{font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+  #m1Q2FinalQuestion .audio-controls{margin-top:12px;display:flex;flex-direction:row !important;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+  #m1Q2FinalQuestion .btn{font-size:0.82rem !important;padding:6px 14px !important;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important}
+  #m1Q2FinalQuestion .audio-status{font-size:0.82rem;line-height:1.1;font-weight:700;white-space:nowrap;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+  #m1Q2FinalQuestion #submitM1Q2{margin-left:0}
+  #statusM1Q2{display:none;font-size:0.82rem;margin-top:6px;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+
+  /* Normalización tipográfica global: texto uniforme y títulos ligeramente mayores */
+  #moment1Screen{
+      --a0-body-font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+      --a0-title-font-size: clamp(1rem, 2.05vw, 1.35rem);
+      --a0-body-line-height: 1.5;
+  }
+
+  #moment1Screen #flipbook .page :is(
+      p, li, label, input, textarea, select, button,
+      .story-text, .question, .instruction-hint, .confirmation-question,
+      .radio-label, .feedback-text, .status-text, .activity-subtitle,
+      .student-code-display, .audio-status, .page-number, .problem-box p
+  ){
+      font-size: var(--a0-body-font-size) !important;
+      line-height: var(--a0-body-line-height) !important;
+  }
+
+  #moment1Screen #flipbook .page :is(
+      h1, h2, h3, h4, h5, h6,
+      [class*="title"]
+  ){
+      font-size: var(--a0-title-font-size) !important;
+      line-height: 1.3 !important;
+  }
+
+  /* Mantener la portada con su escala visual propia */
+  #moment1Screen #flipbook .page .cover-book-title{
+      font-size: clamp(2rem, 4.6vw, 3.2rem) !important;
+      line-height: 1.1 !important;
+  }
+
+  </style>
+</head>
+<body>
+    <div class="author-credit">Por: Ángela Pineda</div>
+    <!-- PANTALLA DE BIENVENIDA -->
+    <section id="welcomeScreen" class="screen active">
+        <div class="user-rect">
+            <h1 class="main-title">Actividad 0A</h1>
+        </div>
+        <div class="user-rect">
+            <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
+        </div>
+        <div class="user-rect">
+                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+                <p id="welcomeError" class="error-text hidden"></p>
+        </div>
+    </section>
+
+    <!-- PANTALLA DE CONFIRMACIÓN -->
+    <section id="confirmationScreen" class="screen">
+        <h1 class="main-title">Confirmación</h1>
+        <div class="container">
+            <div class="welcome-box">
+                <p id="confirmationQuestion" class="confirmation-question"></p>
+                <div class="confirmation-buttons">
+                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
+                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 1: Cuento + Problema Q1 -->
+    <section id="moment1Screen" class="screen">
+        <div class="panel">
+        <div class="container">
+            <div class="header">
+                <!-- Momento 1: El cuento de Doña Alicia -->
+                <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
+            </div>
+
+            <!-- FLIPBOOK 3D DEL CUENTO -->
+            <div id="flipbookSection">
+
+                <!-- Flipbook Container -->
+                <div class="flipbook-wrapper">
+                    <!-- Botón de sonido en esquina superior derecha -->
+                    <button id="soundToggle" class="sound-toggle" aria-label="Activar/Desactivar sonido">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="speaker-icon" d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
+                            <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line class="mute-line" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: none;"/>
+                        </svg>
+                    </button>
+                    <div id="flipbook">
+
+                        <!-- PORTADA CERRADA DEL LIBRO -->
+                        <div class="page book-cover-page flipbook-page active">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-1">El</span>
+                                    <span class="cover-word-chip tone-2">secreto</span>
+                                    <span class="cover-word-chip tone-3">de</span>
+                                    <span class="cover-word-chip tone-4">las</span>
+                                </span>
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-5">bandejas</span>
+                                </span>
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-2">de</span>
+                                    <span class="cover-word-chip tone-1">Doña</span>
+                                    <span class="cover-word-chip tone-4">Alicia</span>
+                                </span>
+                            </h2>
+                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+                            <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
+                                <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+                            </button>
+                        </div>
+
+
+                        <!-- Story Spread 1-2 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">1</span><span class="page-number-right">2</span></div>
+                        </div>
+
+                        <!-- Story Spread 3-4 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">3</span><span class="page-number-right">4</span></div>
+                        </div>
+
+                        <!-- Story Spread 5-6 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">5</span><span class="page-number-right">6</span></div>
+                        </div>
+
+                        <!-- Story Spread 7-8 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebono" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">7</span><span class="page-number-right">8</span></div>
+                        </div>
+
+                        <!-- Story Spread 9 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">9</span><span class="page-number-right">10</span></div>
+                        </div>
+
+                        <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
+                        <div id="problemQ1Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Situación 1</h3>
+                            <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
+                            <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
+                            <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
+                        </div>
+
+                        <!-- TABLERO Y AUDIO -->
+                        <div class="q1-right-page">
+                            <h4>Puedes utilizar el tablero</h4>
+                            
+                            <!-- Tablero -->
+                            <div class="board-container">
+                                <div class="board-tools">
+                                    <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                    <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                </div>
+                                <div class="board-wrapper">
+                                    <div class="board-grid"></div>
+                                    <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Audio -->
+                            <div class="audio-controls">
+                                <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                <span id="audioStatusM1Q1" class="audio-status"></span>
+                            </div>
+
+                            <!-- Enviar -->
+                            <div class="submit-section">
+                                <p id="statusM1Q1" class="status-text"></p>
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">19</span><span class="page-number-right">20</span></div>
+                    </div>
+
+                    <!-- HOJA 11: BANDEJAS -->
+                        <div id="problemQ2Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Situación 2</h3>
+                            <!-- Imagen de bandejas movida a la página 22, solo visible al regresar de la cocina -->
+                            <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos</p>
+                            <div class="q2-guide-card">
+                                <p class="q2-guide-title">Guía rápida</p>
+                                <ul class="q2-guide-list">
+                                    <li>1. Haz clic en una bandeja para seleccionarla.</li>
+                                    <li>2. Haz clic en otra bandeja para formar el par.</li>
+                                    <li>3. Repite hasta armar todas las parejas posibles.</li>
+                                </ul>
+                            </div>
+                            <p class="instruction-hint">💡 Solo puedes unir bandejas con la misma cantidad de pandebonos.</p>
+                            <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
+                        </div>
+
+                        <div class="q1-right-page" id="q2RightPage">
+                            <!-- Imagen de bandejas SOLO visible al regresar de la cocina -->
+                            <div id="bandejasFotoRegreso" class="hidden" style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
+                                <img src="assets/images/BandejasFoto.png" alt="Bandejas de pandebonos" style="max-width:95%;height:auto;border-radius:14px;box-shadow:0 4px 18px #0002;">
+                            </div>
+                            <!-- Foto de los pares (se genera al completar la cocina) -->
+                            <div id="pairsPhotoArea" class="pairs-photo hidden">
+                                <p class="pairs-photo-title">📸 Así quedaron tus parejas:</p>
+                                <div id="pairsPhotoContent" class="pairs-photo-content"></div>
+                            </div>
+                            <!-- Pregunta final + audio (se activa al completar la cocina) -->
+                            <div id="m1Q2FinalQuestion" class="q2-final-question hidden">
+                                <p><strong>Para pensar 🤔</strong></p>
+                                <p>En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
+                                <p>¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                                <div class="audio-controls">
+                                    <button id="recordBtnM1Q2" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                    <button id="stopBtnM1Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                    <button id="submitM1Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    <span id="audioStatusM1Q2" class="audio-status"></span>
+                                </div>
+                                <p id="statusM1Q2" class="status-text"></p>
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">21</span><span class="page-number-right">22</span></div>
+                    </div>
+
+                        <div id="problemQ3Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Los sobres secretos 1️⃣</h3>
+                            <div class="book-story-card">
+                                <p>Como Daniel organizó muy bien las bandejas, Doña Alicia le propuso un reto nuevo.</p>
+                                <p>Esta vez no usarían pandebonos, sino sobres con números secretos.</p>
+                                <p><strong>Regla del juego:</strong> los sobres del mismo color guardan el mismo número.</p>
+                            </div>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <span id="q3FixedNum1" class="number">4</span>
+                                <span class="operator">=</span>
+                                <span id="q3FixedNum2" class="number">4</span>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <p class="q3-inline-question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
+                        </div>
+
+                        <div class="q1-right-page">
+                            <div class="question-section">
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ1" value="yes">
+                                        Sí, creo que es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ1" value="no">
+                                        No, creo que no es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ1" value="unsure">
+                                        No estoy segura.
+                                    </label>
+
+                                </div>
+                            </div>
+                            <div id="promptSection1" class="hidden">
+                                <div class="prompt-box">
+                                    <p id="promptText1"></p>
+                                </div>
+                                <div class="evidence-section">
+                                    <h4>Graba tu explicación</h4>
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar audio</button>
+                                        <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM3Q1" class="audio-status"></span>
+                                    </div>
+                                    <div class="submit-section">
+                                        <p id="statusM3Q1" class="status-text"></p>
+                                        <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="m3Q1Placeholder" class="book-placeholder">
+                                Elige una opción para activar este espacio de explicación.
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">23</span><span class="page-number-right">24</span></div>
+                    </div>
+
+                        <div id="problemQ3Section2" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Los sobres secretos 2️⃣</h3>
+                            <div class="book-story-card">
+                                <p>Ahora aparece un nuevo reto con dos sobres de color diferente.</p>
+                                <p>Recuerda: sobres del mismo color guardan el mismo número.</p>
+                            </div>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">=</span>
+                                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <p class="q3-inline-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                        </div>
+
+                        <div class="q1-right-page">
+                            <div class="question-section">
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="yes">
+                                        Sí, creo que es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="unsure">
+                                        No estoy segura.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="no">
+                                        Creo que no es verdadera.
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="promptSection2" class="hidden">
+                                <div class="prompt-box">
+                                    <p id="promptText2"></p>
+                                </div>
+                                <div class="evidence-section">
+                                    <h4>Graba tu explicación</h4>
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar audio</button>
+                                        <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM3Q2" class="audio-status"></span>
+                                    </div>
+                                    <div class="submit-section">
+                                        <p id="statusM3Q2" class="status-text"></p>
+                                        <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="m3Q2Placeholder" class="book-placeholder">
+                                Elige una opción para activar este espacio de explicación.
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">25</span><span class="page-number-right">26</span></div>
+                    </div>
+
+                        <div id="problemQ4Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>El reto final</h3>
+                            <div class="book-story-card">
+                                <p>Después de pensar con bandejas y con sobres, Doña Alicia sonrió y le dijo a Daniel: “Ahora sí viene el reto final”.</p>
+                                <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
+                                <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
+                            </div>
+                            <div class="magic-lives-container">
+                                <span class="magic-label">✨ Vidas mágicas:</span>
+                                <div id="magicLives" class="magic-lives">
+                                    <span class="magic-heart">❤️</span>
+                                    <span class="magic-heart">❤️</span>
+                                    <span class="magic-heart">❤️</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="q1-right-page magic-theme">
+                            <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+                            <div class="items-container">
+                                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
+                                <div id="itemsWrapper"></div>
+                                <p id="moment4Status" class="status-text"></p>
+                                <p id="pointsStatus" class="points-status hidden"></p>
+                            </div>
+                            <canvas id="magicCanvas" class="magic-canvas"></canvas>
+                            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+                            <div id="finalQuestionSection" class="hidden">
+                                <div class="final-box">
+                                    <h3>¡Felicitaciones! 🎉</h3>
+                                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
+                                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
+                                    <p class="thank-you-sub">¡Gracias por participar!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">27</span><span class="page-number-right">28</span></div>
+                    </div>
+
+                        <div id="problemQ5Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <div class="final-story-card">
+                                <h3>¡Llegaste al final del cuento! 🌟</h3>
+                                <p>Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
+                                <p>Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
+                                <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
+                            </div>
+                        </div>
+
+                        <div class="q1-right-page">
+                            <div class="reflection-card">
+                                <h4>Esta actividad fue:</h4>
+                                <div class="reflection-options">
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="dificil"> difícil</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
+                                </div>
+                                <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">29</span><span class="page-number-right">30</span></div>
+                    </div>
+                    
+                    </div>
+
+                    <!-- Navigation Controls dentro del libro -->
+                    <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
+                    <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- COCINA: Pantalla completa para el juego de bandejas -->
+    <div id="cocinaScreen" class="cocina-overlay hidden">
+        <div class="cocina-header">
+            <h2>👩‍🍳 La cocina de Doña Alicia</h2>
+            <p>Une las bandejas que tienen la misma cantidad de pandebonos</p>
+        </div>
+        <div class="cocina-body">
+            <!-- Ambiente de panadería alrededor de la mesa -->
+            <div class="bakery-kitchen-bg">
+                <div class="bakery-wall"></div>
+                <div class="bakery-shelf">
+                    <div class="bakery-shelf-item pan">🥖</div>
+                    <div class="bakery-shelf-item pan">🥐</div>
+                    <div class="bakery-shelf-item pan">🍞</div>
+                    <div class="bakery-shelf-item pan">🥨</div>
+                </div>
+                <div class="bakery-oven">
+                    <div class="oven-door"></div>
+                    <div class="oven-window"></div>
+                </div>
+                <div class="bakery-utensils">
+                    <span class="utensil">🥄</span>
+                    <span class="utensil">🍳</span>
+                    <span class="utensil">🧂</span>
+                </div>
+                <!-- Mesa central con bandejas -->
+                <div class="bakery-table-center">
+                    <div id="traysAreaM1Q2" class="trays-container"></div>
+                </div>
+                <div class="bakery-floor"></div>
+            </div>
+        </div>
+        <div class="cocina-controls">
+            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">✅ Verificar emparejamientos</button>
+            <p id="traysFeedbackM1Q2" class="feedback-text"></p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="trays-system.js?v=2026031813"></script>
+    <script type="module" src="main.js?v=2026031813"></script>
+    <script src="app.js?v=2026031813"></script>
+</body>
+
+<style>
+/* --- Bakery Kitchen Environment --- */
+.bakery-kitchen-bg {
     position: relative;
-}
-.activity-spread > .problem-box,
-.activity-spread > .q1-left-page,
-.activity-spread > .q1-right-page {
-    flex: 1 1 0;
-    min-width: 0;
-    min-height: 0;
-    padding: 32px 24px;
+    width: 100%;
+    min-height: 600px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    background: linear-gradient(180deg, #fff7e6 0%, #ffe0b2 100%);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(120, 72, 24, 0.08);
+    overflow: visible;
+}
+.bakery-wall {
+    width: 100%;
+    height: 120px;
+    background: repeating-linear-gradient(90deg, #ffe0b2 0 40px, #ffd699 40px 80px);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    box-shadow: 0 2px 8px rgba(120,72,24,0.06);
+}
+.bakery-shelf {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 36px;
+    background: #e0b97a;
+    border-radius: 8px 8px 12px 12px;
+    box-shadow: 0 2px 8px rgba(120,72,24,0.10);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    z-index: 2;
+}
+.bakery-shelf-item {
+    font-size: 2rem;
+    margin: 0 8px;
+    filter: drop-shadow(0 2px 2px #bfa76a44);
+}
+.bakery-oven {
+    position: absolute;
+    right: 40px;
+    bottom: 120px;
+    width: 90px;
+    height: 110px;
+    background: #bca27a;
+    border-radius: 16px 16px 24px 24px;
+    box-shadow: 0 4px 16px #bfa76a33;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+.oven-door {
+    width: 70px;
+    height: 50px;
+    background: #8d6e4a;
+    border-radius: 0 0 16px 16px;
+    margin-top: 40px;
+    box-shadow: 0 2px 8px #6d4c1e33;
+}
+.oven-window {
+    width: 36px;
+    height: 18px;
+    background: #fffde7;
+    border-radius: 8px;
+    margin: 8px auto 0;
+    box-shadow: 0 1px 4px #fffde799;
+}
+.bakery-utensils {
+    position: absolute;
+    left: 40px;
+    bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+}
+.bakery-utensils .utensil {
+    font-size: 1.7rem;
+    filter: drop-shadow(0 1px 2px #bfa76a44);
+}
+.bakery-table-center {
+    position: relative;
+    z-index: 3;
+    width: 98%;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    background: transparent;
-    box-shadow: none;
+    background: #fffbe7;
+    border-radius: 24px 24px 32px 32px;
+    box-shadow: 0 6px 32px #bfa76a22;
+    padding: 32px 12px 36px 12px;
 }
-.activity-spread > .q1-right-page {
-    align-items: stretch;
-}
-@media (max-width: 1200px) {
-    .activity-spread {
-        max-width: 99vw;
-        min-height: 540px;
-        padding: 0 2vw;
-    }
-    .activity-spread > .problem-box,
-    .activity-spread > .q1-left-page,
-    .activity-spread > .q1-right-page {
-        padding: 18px 8px;
-    }
+.bakery-floor {
+    width: 100%;
+    height: 60px;
+    background: repeating-linear-gradient(90deg, #e0b97a 0 40px, #d6a86a 40px 80px);
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 -2px 8px #bfa76a33;
+    margin-top: -16px;
 }
 @media (max-width: 900px) {
-    .activity-spread {
-        flex-direction: column;
-        min-height: 0;
-        max-width: 99vw;
-        padding: 0 1vw;
-    }
-    .activity-spread > .problem-box,
-    .activity-spread > .q1-left-page,
-    .activity-spread > .q1-right-page {
-        padding: 10px 4px;
-    }
+    .bakery-shelf { width: 180px; }
+    .bakery-oven, .bakery-utensils { bottom: 80px; }
+    .bakery-table-center { max-width: 99vw; padding: 12px 2vw 18px 2vw; }
+    .bakery-floor { height: 36px; }
+}
+@media (max-width: 600px) {
+    .bakery-shelf { width: 120px; }
+    .bakery-oven, .bakery-utensils { display: none; }
+    .bakery-table-center { padding: 4vw 1vw 10vw 1vw; }
 }
 </style>
-</html>
+
+<style>
+/* Unificar tamaño de fuente a 14px en toda la actividad 0A */
+html, body, body * { font-family: 'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important; font-size: 14px !important; }
+
+/* Tipografía y alineación global */
+body { font-size: 14px !important; line-height: 1.5; color: #222; }
+/* Por defecto todo el texto (p, listas, labels) debe ir justificado, excepto títulos */
+p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p { font-size: 14px !important; text-align: justify; }
+/* Mantener el título centrado y con su estilo habitual */
+.main-title { display: block; text-align: center; }
+/* Centrar imágenes principales */
+.story-image, .situation-image { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+/* Subtítulo: quitar caja y usar texto más visible con sombra sutil */
+.activity-subtitle { background: none; padding: 0; color: #0b2a3a; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.12); display: block; margin-bottom: 10px; font-size: 14px !important; }
+
+/* Ajustes tipográficos para Situación 1 */
+.q1-left-page h3 { margin-top: 0; font-size: 14px !important; }
+.q1-left-page p { color: inherit; font-weight: 400; font-size: 14px !important; }
+.q1-left-page .question { color: #000; font-weight: 400; margin-top: 12px; font-size: 14px !important; }
+#problemQ1Section .q1-left-page h3,
+#problemQ1Section .q1-left-page p,
+#problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.6; }
+#moment1Screen #problemQ1Section .q1-left-page h3 { font-size: 14px !important; }
+#moment1Screen #problemQ1Section .q1-left-page p,
+#moment1Screen #problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.35 !important; letter-spacing: -0.2px; width: 92%; max-width: 460px; margin-left: auto; margin-right: auto; text-align: justify; }
+#moment1Screen #problemQ1Section .q1-left-page .situation-image { width: 92%; max-width: 460px; margin: 8px auto 10px; }
+
+/* Centrar título, herramientas y tablero en la columna derecha */
+.q1-right-page h4, .q1-right-page .board-tools { width: 100%; display: flex; justify-content: center; align-items: center; font-size: 14px !important; }
+.q1-right-page .board-tools { gap: 10px; margin-bottom: 8px; }
+.q1-right-page .board-tools .tool-btn { flex: 0 0 auto; font-size: 14px !important; }
+.q1-right-page .board-container { max-width: 95%; margin: 0 auto; }
+.board-wrapper { max-width: 100%; margin: 0 auto; }
+.drawing-board { margin: 0 auto; display: block; }
+/* Situación 1 derecha: centrar iconos, compactar tablero y dejar acciones visibles */
+#problemQ1Section .q1-right-page .board-tools { justify-content: center !important; }
+#problemQ1Section .q1-right-page .board-container { max-width: 92%; margin: 6px auto 4px; }
+#problemQ1Section .q1-right-page .drawing-board { max-height: 400px !important; }
+#problemQ1Section .q1-right-page .audio-controls,
+#problemQ1Section .q1-right-page .submit-section { display: inline-flex; align-items: center; gap: 10px; margin: 8px 6px 0; vertical-align: middle; font-size: 14px !important; }
+#problemQ1Section .q1-right-page .audio-controls { flex-direction: row; flex-wrap: nowrap; justify-content: center; }
+#problemQ1Section .q1-right-page .submit-section { justify-content: center; text-align: center; }
+#problemQ1Section .q1-right-page .submit-section .status-text { margin: 0; font-size: 14px !important; }
+
+/* Aplicar tamaño máximo, centrar y comportamiento responsive a todos los tableros */
+.board-container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 12px; box-sizing: border-box; border-radius: 10px; }
+
+/* Estructura interna del tablero: grid solo dentro del tablero */
+.board-wrapper { position: relative; width: 100%; border-radius: 6px; }
+.board-grid { position: absolute; inset: 10px; border-radius: 6px; pointer-events: none; z-index: 1; background-image: linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px); background-size: 36px 36px; }
+/* Hacer el canvas transparente y por encima de la cuadricula */
+.drawing-board { position: relative; z-index: 2; width: 100% !important; height: auto !important; max-height: 1100px; background: transparent; border-radius: 6px; display: block; }
+ #moment1Screen .container{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;padding:8px 10px;border-radius:14px;box-shadow:none;width:95vw;max-width:none;margin:12px auto}
+  /* Quitar el recuadro blanco grande solo en la pantalla de bienvenida */
+  #welcomeScreen .container{background:transparent;padding:28px;border-radius:14px;box-shadow:none;max-width:880px;margin:20px auto}
+  /* Forzar que elementos internos tengan el mismo ancho y queden centrados */
+  #welcomeScreen .container, #moment1Screen .container, #welcomeScreen .container * , #moment1Screen .container * {box-sizing:border-box}
+  #welcomeScreen .main-title, #moment1Screen .main-title, #welcomeScreen .activity-subtitle, #moment1Screen .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
+  /* Hacer las cajas internas un poco más delgadas que el panel principal */
+  #welcomeScreen .welcome-box, #moment1Screen .problem-box, #moment1Screen .welcome-box{width:100%;max-width:720px;margin:0 auto;padding:0;background:transparent}
+  /* Cajas específicas solicitadas por el usuario en la pantalla de bienvenida */
+  /* Igual ancho que el panel claro (max-width:720px) y opacidad al 75% */
+  /* Cajas pequeñas: fondo blanco casi opaco (ligeramente transparente) */
+  #welcomeScreen .user-rect{width:100%;max-width:720px;margin:12px auto;background:rgb(200,230,255);border-radius:14px;padding:12px 16px;box-sizing:border-box;text-align:center;display:block}
+  /* quitar .user-rect-bottom: el recuadro inferior se elimina según petición */
+  #welcomeScreen .user-rect .main-title, #welcomeScreen .user-rect .activity-subtitle{margin:0}
+  /* Hacer que el campo de código y el botón tengan el mismo ancho (3/4 del panel) y estén centrados */
+  #welcomeScreen .welcome-box .chalk-input,
+  #welcomeScreen .welcome-box .btn {
+      width:75%;
+      max-width:640px;
+      margin:12px auto;
+      display:block;
+      box-sizing:border-box;
+  }
+  /* Asegurar estilo consistente del botón cuando se reduce */
+  #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
+  #moment1Screen{--a0-book-height:min(80dvh, 720px)}
+  #problemQ2Section .problem-box{background:transparent;border:0;box-shadow:none;padding:20px;display:flex;flex-direction:column;justify-content:center;height:100%}
+  #problemQ2Section .q1-left-page h3,
+  #problemQ2Section .q1-left-page p,
+  #problemQ2Section .q1-left-page .instruction-hint{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+  #problemQ2Section .q1-left-page h3{margin-top:0;margin-bottom:8px;font-size:clamp(1.15rem,2vw,1.4rem) !important}
+  #problemQ2Section .q1-left-page p{width:92%;max-width:460px;margin:8px auto;text-align:justify;line-height:1.45}
+  #problemQ2Section .q1-left-page p{margin-bottom:6px}
+  #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:14px auto 0;text-align:left;padding:10px 14px;border-radius:12px;background:rgba(255,248,230,0.85);border:1px solid rgba(251,191,36,0.35);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+  #problemQ2Section .q2-guide-card{width:92%;max-width:460px;margin:14px auto 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.72);border:1px solid rgba(63,94,251,0.2);box-shadow:0 4px 10px rgba(0,0,0,0.05);text-align:left}
+  #problemQ2Section .q2-guide-title{margin:0 0 8px;font-size:clamp(0.92rem,1.5vw,1.08rem);font-weight:700;color:#2f3f87;text-align:left}
+  #problemQ2Section .q2-guide-list{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+  #problemQ2Section .q2-guide-list li{margin:0;font-size:clamp(0.92rem,1.5vw,1.08rem);line-height:1.35;text-align:left;color:#233047}
+  #problemQ2Section .q2-example{margin:10px 0 0;font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.35;color:#2f3f87;font-weight:600;text-align:left}
+  #problemQ2Section .q1-right-page{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:14px !important}
+  #problemQ2Section .trays-container{width:100%;flex:1;min-height:0;grid-template-columns:repeat(4, minmax(0, 1fr)) !important;gap:10px !important;padding:12px !important;align-content:start !important}
+  #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1 !important;min-height:0 !important;height:auto !important;width:100%;padding:5px;overflow:hidden;font-size:clamp(0.75rem,1.4vw,1.1rem)}
+  #problemQ2Section .trays-container .tray-grid{width:100%;height:100%;max-width:none;max-height:none;overflow:visible;justify-items:center;align-items:center;gap:1px}
+  #problemQ2Section .trays-container .tray-item{line-height:1 !important}
+  #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important}
+  #problemQ2Section .trays-container > .tray-card:nth-child(7):nth-last-child(2){grid-column:1;justify-self:end}
+  #problemQ2Section .trays-container > .tray-card:nth-child(8):nth-last-child(1){grid-column:3;justify-self:start}
+  #problemQ2Section .q2-verify-row{display:flex;flex-direction:row;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
+  #problemQ2Section .q2-verify-row .btn{flex-shrink:0;font-size:0.8rem !important;padding:5px 14px !important;font-family:inherit !important}
+  #problemQ2Section .q2-verify-row .feedback-text{flex:1;min-width:0;margin:0;padding:6px 10px;font-size:0.8rem !important;min-height:0}
+  #problemQ2Section .q2-final-question{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.8);border:1px solid rgba(63,94,251,0.2);text-align:left}
+  #problemQ2Section .q2-final-question p{margin:0 0 8px;width:100%;max-width:none;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:left}
+  #problemQ2Section .q2-final-question p:last-child{margin-bottom:0}
+  @media (max-width:1200px){
+      #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:10px !important;padding:10px !important}
+  }
+  @media (max-width:900px){
+      #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:8px !important;padding:8px !important}
+  }
+  @media (max-width:900px){
+      #problemQ2Section .q1-right-page{padding-top:8px}
+      #problemQ2Section .q1-right-page .btn{margin-top:8px}
+      #problemQ2Section .page-number{bottom:8px}
+  }
+  .author-credit{position:fixed;top:10px;right:14px;z-index:1200;font-size:12px;line-height:1;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.78);color:#2a3d55;font-weight:700;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(0,0,0,0.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
+
+  /* ===== PANTALLA COCINA ===== */
+  .cocina-overlay{position:fixed;top:0;left:0;width:100vw;height:100dvh;background:#fff;z-index:9999;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+  .cocina-overlay.hidden{display:none !important}
+  .cocina-header{text-align:center;padding:18px 20px 12px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.22);flex-shrink:0}
+  .cocina-header h2{margin:0 0 4px;font-size:clamp(1.3rem,3vw,2rem);font-family:'Comic Sans MS',cursive;text-shadow:2px 2px 4px rgba(0,0,0,0.28)}
+  .cocina-header p{margin:0;font-size:clamp(0.9rem,2vw,1.1rem);opacity:0.95}
+  .cocina-body{flex:0 0 auto;padding:18px 14px 10px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:auto;overflow:visible;position:relative}
+  .cocina-body::before,
+  .cocina-body::after{content:none !important;display:none !important}
+  .cocina-body .trays-container{width:min(100%,1320px);max-width:1320px;flex:0 0 auto;min-height:560px;height:auto;max-height:none;margin-top:8px;margin-bottom:14px;grid-template-columns:repeat(4,1fr) !important;grid-auto-flow:row dense;grid-auto-rows:minmax(140px, auto);align-content:start !important;gap:clamp(10px,1.4vw,18px) !important;padding:clamp(12px,1.8vw,24px) !important;justify-items:stretch;overflow:visible;border-radius:20px;background:linear-gradient(180deg,#9b6a3f 0%,#7a4d28 52%,#633b1d 100%) !important;box-shadow:inset 0 0 0 2px rgba(255,232,198,0.16),0 10px 24px rgba(84,50,26,0.24);position:relative}
+  .cocina-body .trays-container::before{content:none}
+  #cocinaScreen .trays-container,
+  #cocinaScreen .trays-container *{cursor:url('assets/images/hand-point-cursor.svg') 16 12, grab !important}
+  #cocinaScreen .trays-container:active,
+  #cocinaScreen .trays-container:active *,
+  #cocinaScreen .tray-card:active{cursor:url('assets/images/hand-grab-cursor.svg') 16 14, grabbing !important}
+  #cocinaScreen .tray-card{width:100%;aspect-ratio:1/1 !important;height:auto !important;min-height:0 !important;padding:clamp(8px,1.1vw,12px);box-sizing:border-box}
+  #cocinaScreen .tray-grid{width:100%;height:100%;max-width:none;max-height:none}
+  #cocinaScreen .tray-item-image{width:110%;height:110%;max-width:none;max-height:none}
+  .cocina-controls{padding:18px 20px 20px;text-align:center;background:transparent;border-top:none;display:flex;flex-direction:column;align-items:center;gap:8px;flex-shrink:0;position:relative;z-index:3}
+  .cocina-controls .btn-primary{font-size:clamp(0.95rem,2vw,1.15rem);padding:12px 32px;margin-top:6px}
+  @media (max-width:1200px){.cocina-body{padding:16px 12px 10px}.cocina-body .trays-container{width:min(100%,1100px);min-height:500px;grid-auto-rows:minmax(130px, auto)}}
+  @media (max-width:900px){.cocina-overlay{overflow-y:auto}.cocina-body{padding:14px 10px 10px;overflow:visible}.cocina-body .trays-container{margin-top:8px;margin-bottom:10px;width:100%;max-width:760px;flex:none;height:auto;max-height:none;min-height:auto;grid-template-columns:repeat(2,minmax(0,1fr)) !important;grid-template-rows:auto !important;gap:14px !important;padding:14px !important}#cocinaScreen .tray-card{aspect-ratio:1/1 !important;height:auto !important}}
+
+  /* ===== BOTÓN IR A COCINA ===== */
+  #problemQ2Section .btn-cocina{display:block;width:92%;max-width:460px;margin:18px auto 0;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;border:none;border-radius:16px;padding:16px 24px;font-size:clamp(1rem,1.8vw,1.25rem);font-weight:700;cursor:pointer;box-shadow:0 6px 20px rgba(249,115,22,0.38);transition:all 0.3s;text-shadow:1px 1px 2px rgba(0,0,0,0.18)}
+  #problemQ2Section .btn-cocina:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 26px rgba(249,115,22,0.52)}
+  #problemQ2Section .btn-cocina:active{transform:translateY(-1px) scale(1)}
+  #problemQ2Section .btn-cocina:disabled{background:linear-gradient(135deg,#9ca3af 0%,#6b7280 100%);cursor:not-allowed;box-shadow:none;transform:none;opacity:0.92}
+  #problemQ2Section .btn-cocina:disabled:hover{transform:none;box-shadow:none}
+
+  /* ===== FOTO DE PARES ===== */
+  .pairs-photo{background:linear-gradient(135deg,#f0fdf4 0%,#dcfce7 100%);border:2px solid #86efac;border-radius:14px;padding:14px 12px;margin-bottom:14px;overflow-y:auto;max-height:52%}
+  .pairs-photo-title{font-size:clamp(0.85rem,1.4vw,1rem);font-weight:700;color:#166534;margin:0 0 10px;text-align:center}
+  .pairs-photo-content{display:flex;flex-direction:column;gap:10px}
+  .photo-pairs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .photo-pair{display:flex;align-items:center;gap:8px;background:white;border-radius:10px;padding:8px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);justify-content:center;min-height:88px}
+  .photo-tray{display:flex;align-items:center;justify-content:center;min-width:70px}
+  .photo-tray-grid{gap:2px;justify-items:center;align-items:center}
+  .photo-pano{display:flex;align-items:center;justify-content:center;width:14px;height:14px;line-height:1}
+  .photo-pano-img{width:100%;height:100%;object-fit:contain;display:block}
+  .photo-equal{font-size:1.4em;font-weight:bold;color:#16a34a;flex-shrink:0}
+  .photo-singles-wrap{background:rgba(255,255,255,0.92);border:1px dashed rgba(22,101,52,0.35);border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,0.07);display:flex;flex-direction:column;justify-content:center;min-height:88px}
+  .photo-singles-title{margin:0 0 6px;text-align:center;font-size:0.82rem;font-weight:700;color:#166534}
+  .photo-singles-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
+  .photo-single{background:white;border-radius:8px;padding:6px 8px;box-shadow:0 1px 5px rgba(0,0,0,0.08)}
+  @media (max-width:850px){.photo-pairs-grid{grid-template-columns:1fr}}
+
+  /* Páginas 12 y 13 dentro del libro */
+  #problemQ3Section .problem-box,
+  #problemQ3Section2 .problem-box,
+  #problemQ4Section .problem-box,
+  #problemQ5Section .problem-box{background:transparent;border:0;box-shadow:none;padding:0;display:flex;flex-direction:column;justify-content:flex-start;height:100%}
+  .book-story-card{width:92%;max-width:470px;margin:14px auto 0;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.76);border:1px solid rgba(63,94,251,0.18);box-shadow:0 4px 10px rgba(0,0,0,0.05)}
+  .book-story-card p{margin:0 0 10px}
+  .book-story-card p:last-child{margin-bottom:0}
+  #problemQ3Section .envelope-equation{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:16px auto 10px}
+  #problemQ3Section .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
+  #problemQ3Section .question-section{width:92%;max-width:470px;margin:10px auto 0;text-align:left}
+  #problemQ3Section .radio-group{display:grid;gap:10px;margin-top:12px}
+  #problemQ3Section .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left}
+  #problemQ3Section .radio-label input{margin-top:4px}
+  #problemQ3Section .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  #problemQ3Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:10px;margin-bottom:14px}
+  #problemQ3Section .q1-left-page p,
+  #problemQ3Section .q1-left-page .question,
+  #problemQ3Section .radio-label{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+  #problemQ3Section .q1-left-page .book-story-card{width:96%;max-width:540px;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none}
+  #problemQ3Section .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+  #problemQ3Section .q1-right-page{display:flex !important;flex-direction:column;justify-content:center !important;align-items:stretch;padding:14px 28px !important}
+  #problemQ3Section .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
+  #problemQ3Section .prompt-box{margin:0 auto 14px;max-width:480px;width:100%;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid rgba(59,130,246,0.2)}
+  #problemQ3Section .prompt-box p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400 !important;color:#222 !important;text-align:center}
+  #problemQ3Section .evidence-section{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+  #problemQ3Section #promptSection1 .evidence-section{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px}
+  #problemQ3Section #promptSection1 .evidence-section h4{flex-basis:100%;margin:0 0 2px;text-align:center;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400;color:#222}
+  #problemQ3Section #promptSection1 .audio-controls,
+  #problemQ3Section #promptSection1 .submit-section{display:inline-flex !important;flex-direction:row !important;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;margin:0 !important}
+  #problemQ3Section #promptSection1 .evidence-section{row-gap:10px;column-gap:12px}
+  #problemQ3Section #promptSection1 #audioStatusM3Q1,
+  #problemQ3Section #promptSection1 .audio-controls .audio-status,
+  #problemQ3Section #promptSection1 #statusM3Q1{display:none !important}
+  #problemQ3Section #promptSection1 .btn{font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+  #problemQ3Section .board-container{max-width:92%;margin:6px auto 4px}
+  #problemQ3Section .audio-controls,
+  #problemQ3Section .submit-section{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  #problemQ3Section2 .envelope-equation{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:16px auto 10px}
+  #problemQ3Section2 .q3-inline-question{width:96%;max-width:540px;margin:8px auto 0;color:#222;font-weight:400;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:justify}
+  #problemQ3Section2 .question-section{width:100%;max-width:100%;margin:0 0 16px;text-align:left}
+  #problemQ3Section2 .radio-group{display:grid;gap:10px;margin-top:12px}
+  @media (max-width:900px){
+      #moment1Screen{--a0-book-height:min(74dvh, 620px)}
+  }
+  #problemQ3Section2 .radio-label{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.75);border:1px solid rgba(63,94,251,0.15);text-align:left;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
+  #problemQ3Section2 .radio-label input{margin-top:4px}
+  #problemQ3Section2 .q1-left-page{display:flex;flex-direction:column;justify-content:center;align-items:center}
+  #problemQ3Section2 .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:10px;margin-bottom:14px}
+  #problemQ3Section2 .q1-left-page .book-story-card{width:96%;max-width:540px;margin:0 auto;padding:0;border:0;background:transparent;box-shadow:none}
+  #problemQ3Section2 .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+  #problemQ3Section2 .q1-right-page{display:flex !important;flex-direction:column;justify-content:center !important;align-items:stretch;padding:14px 28px !important}
+  #problemQ3Section2 .prompt-box{margin:0 auto 14px;max-width:480px;width:100%;padding:12px 16px;border-radius:12px;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid rgba(59,130,246,0.2)}
+  #problemQ3Section2 .prompt-box p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400 !important;color:#222 !important;text-align:center}
+  #problemQ3Section2 .evidence-section{background:transparent;border:0;box-shadow:none;padding:0;margin:0}
+  #problemQ3Section2 #promptSection2 .evidence-section{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px}
+  #problemQ3Section2 #promptSection2 .evidence-section h4{flex-basis:100%;margin:0 0 2px;text-align:center;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;font-weight:400;color:#222}
+  #problemQ3Section2 #promptSection2 .audio-controls,
+  #problemQ3Section2 #promptSection2 .submit-section{display:inline-flex !important;flex-direction:row !important;align-items:center;justify-content:center;gap:10px;flex-wrap:nowrap;margin:0 !important}
+  #problemQ3Section2 #promptSection2 .evidence-section{row-gap:10px;column-gap:12px}
+  #problemQ3Section2 #promptSection2 #audioStatusM3Q2,
+  #problemQ3Section2 #promptSection2 .audio-controls .audio-status,
+  #problemQ3Section2 #promptSection2 #statusM3Q2{display:none !important}
+  #problemQ3Section2 #promptSection2 .btn{font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
+  #problemQ3Section2 .audio-controls,
+  #problemQ3Section2 .submit-section{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .book-placeholder{max-width:430px;margin:0 auto;padding:18px 20px;border-radius:14px;background:rgba(255,248,230,0.9);border:1px solid rgba(251,191,36,0.35);text-align:center;color:#5b4b1f;font-weight:700}
+  #problemQ4Section .q1-left-page{display:flex;flex-direction:column;justify-content:center}
+  #problemQ4Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important;margin-top:0;margin-bottom:8px}
+  #problemQ4Section .q1-left-page .book-story-card p{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.45 !important}
+  #problemQ4Section .q1-left-page .magic-lives-container{margin-top:18px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15)}
+  #problemQ4Section .q1-left-page .magic-label{color:#1a1a2e;font-weight:700;font-size:clamp(0.92rem,1.5vw,1.08rem)}
+  #problemQ4Section .magic-theme{position:relative;overflow:hidden;border-radius:20px;padding:18px;background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important}
+  #problemQ4Section .student-code-display{text-align:center;margin-bottom:12px}
+  #problemQ4Section .items-container{margin:20px auto 0;max-width:100%}
+  #problemQ4Section .magic-instruction{font-size:clamp(1.15rem,2vw,1.4rem) !important;line-height:1.35 !important}
+  #problemQ4Section .magic-lives-container{margin-top:0}
+  #problemQ4Section .magic-theme.m4-final-only .student-code-display,
+  #problemQ4Section .magic-theme.m4-final-only .magic-lives-container,
+  #problemQ4Section .magic-theme.m4-final-only .items-container{display:none !important}
+  #problemQ4Section .magic-theme.m4-final-only ~ .q1-left-page .magic-lives-container,
+  #problemQ4Section.m4-final-only .q1-left-page .magic-lives-container{display:none !important}
+  #problemQ4Section .magic-theme.m4-final-only{display:flex;align-items:center;justify-content:center;padding:24px !important}
+  #problemQ4Section .magic-theme.m4-final-only #finalQuestionSection{width:min(100%,780px);margin:0 auto}
+  #problemQ4Section .final-box{background:linear-gradient(135deg,#f4fbff 0%,#dff4ea 55%,#fff4d8 100%);border:2px solid rgba(245,158,11,0.45);border-radius:20px;padding:38px 30px;text-align:center;margin:8px 0;color:#17324d;box-shadow:0 14px 34px rgba(10,42,67,0.24)}
+  #problemQ4Section .final-box h3{font-size:2.2em;margin-bottom:14px;color:#0f766e;text-shadow:none}
+  #problemQ4Section .final-question{font-size:1.4em;margin:14px 0;font-weight:700;color:#1d4ed8}
+  #problemQ4Section .thank-you{font-size:1.35em;margin-top:18px;color:#7a5200}
+  #problemQ4Section .thank-you-sub{font-size:1.05em;color:#334155}
+  #problemQ4Section .m4-special-title{color:#0f766e;text-shadow:none}
+  #problemQ4Section .m4-special-message{font-size:1.35em;color:#1e3a8a;margin:16px 0}
+  #problemQ4Section .m4-special-points{font-size:1.25em;color:#92400e;font-weight:700;margin:20px 0}
+  #problemQ4Section .m4-special-points strong{font-size:1.18em;color:#b45309}
+  #problemQ5Section .q1-left-page{display:flex;justify-content:center;align-items:center}
+  #problemQ5Section .final-story-card{width:94%;max-width:520px;padding:24px 22px;border-radius:18px;background:linear-gradient(135deg,#fff9ec 0%,#f0f9ff 100%);border:1px solid rgba(251,146,60,0.35);box-shadow:0 10px 22px rgba(15,23,42,0.12)}
+  #problemQ5Section .final-story-card h3{margin:0 0 12px;font-size:clamp(1.2rem,2.1vw,1.6rem);color:#9a3412;text-align:center}
+  #problemQ5Section .final-story-card p{font-size:clamp(0.95rem,1.55vw,1.1rem) !important;line-height:1.5 !important;color:#1f2937;margin:0 0 10px;text-align:justify}
+  #problemQ5Section .final-story-card p:last-child{margin-bottom:0}
+  #problemQ5Section .q1-right-page{display:flex;justify-content:center;align-items:center}
+  #problemQ5Section .reflection-card{width:94%;max-width:480px;padding:24px 22px;border-radius:18px;background:linear-gradient(145deg,#0f172a 0%,#1e3a8a 100%);box-shadow:0 14px 26px rgba(15,23,42,0.35);border:1px solid rgba(96,165,250,0.35)}
+  #problemQ5Section .reflection-card h4{margin:0 0 16px;font-size:clamp(1.1rem,1.9vw,1.4rem);color:#f8fafc;text-align:center}
+  #problemQ5Section .reflection-options{display:grid;gap:10px}
+  #problemQ5Section .reflection-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(148,163,184,0.35);color:#e2e8f0;font-size:clamp(0.95rem,1.5vw,1.05rem);text-align:left;cursor:pointer}
+  #problemQ5Section .reflection-option input{accent-color:#f59e0b;transform:scale(1.12)}
+  #problemQ5Section .reflection-hint{margin-top:14px;color:#cbd5e1;font-size:0.92rem;text-align:center}
+  .flipbook-wrapper.book-closing{animation:bookClosePulse 0.7s ease-in-out forwards}
+  .book-closing-overlay{position:fixed;inset:0;background:rgba(7,18,40,0.72);display:flex;align-items:center;justify-content:center;z-index:12000;padding:20px}
+  .book-closing-card{background:linear-gradient(135deg,#ffffff 0%,#e0f2fe 100%);border:1px solid rgba(30,64,175,0.3);border-radius:18px;padding:26px 24px;max-width:440px;width:100%;text-align:center;box-shadow:0 18px 34px rgba(15,23,42,0.32)}
+  .book-closing-card h3{margin:0 0 10px;color:#1e3a8a;font-size:1.35rem}
+  .book-closing-card p{margin:0;color:#334155;font-size:1rem;text-align:center}
+  @keyframes bookClosePulse{0%{transform:scale(1);opacity:1}100%{transform:scale(0.94);opacity:0.15}}
+  #problemQ4Section .magic-canvas,
+  #problemQ4Section .confetti-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  #problemQ4Section .magic-canvas{z-index:4}
+  #problemQ4Section .confetti-canvas{z-index:3}
+  #problemQ4Section #finalQuestionSection{position:relative;z-index:5}
+  /* Ajustes página derecha pág 11 */
+  #q2RightPage{display:flex;flex-direction:column;justify-content:flex-start;overflow-y:auto}
+  #m1Q2FinalQuestion{font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+  #m1Q2FinalQuestion .audio-controls{margin-top:12px;display:flex;flex-direction:row !important;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+  #m1Q2FinalQuestion .btn{font-size:0.82rem !important;padding:6px 14px !important;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important}
+  #m1Q2FinalQuestion .audio-status{font-size:0.82rem;line-height:1.1;font-weight:700;white-space:nowrap;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+  #m1Q2FinalQuestion #submitM1Q2{margin-left:0}
+  #statusM1Q2{display:none;font-size:0.82rem;margin-top:6px;font-family:'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif}
+
+  /* Normalización tipográfica global: texto uniforme y títulos ligeramente mayores */
+  #moment1Screen{
+      --a0-body-font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+      --a0-title-font-size: clamp(1rem, 2.05vw, 1.35rem);
+      --a0-body-line-height: 1.5;
+  }
+
+  #moment1Screen #flipbook .page :is(
+      p, li, label, input, textarea, select, button,
+      .story-text, .question, .instruction-hint, .confirmation-question,
+      .radio-label, .feedback-text, .status-text, .activity-subtitle,
+      .student-code-display, .audio-status, .page-number, .problem-box p
+  ){
+      font-size: var(--a0-body-font-size) !important;
+      line-height: var(--a0-body-line-height) !important;
+  }
+
+  #moment1Screen #flipbook .page :is(
+      h1, h2, h3, h4, h5, h6,
+      [class*="title"]
+  ){
+      font-size: var(--a0-title-font-size) !important;
+      line-height: 1.3 !important;
+  }
+
+  /* Mantener la portada con su escala visual propia */
+  #moment1Screen #flipbook .page .cover-book-title{
+      font-size: clamp(2rem, 4.6vw, 3.2rem) !important;
+      line-height: 1.1 !important;
+  }
+
+  </style>
+</head>
+<body>
+    <div class="author-credit">Por: Ángela Pineda</div>
+    <!-- PANTALLA DE BIENVENIDA -->
+    <section id="welcomeScreen" class="screen active">
+        <div class="user-rect">
+            <h1 class="main-title">Actividad 0A</h1>
+        </div>
+        <div class="user-rect">
+            <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
+        </div>
+        <div class="user-rect">
+                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+                <p id="welcomeError" class="error-text hidden"></p>
+        </div>
+    </section>
+
+    <!-- PANTALLA DE CONFIRMACIÓN -->
+    <section id="confirmationScreen" class="screen">
+        <h1 class="main-title">Confirmación</h1>
+        <div class="container">
+            <div class="welcome-box">
+                <p id="confirmationQuestion" class="confirmation-question"></p>
+                <div class="confirmation-buttons">
+                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
+                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MOMENTO 1: Cuento + Problema Q1 -->
+    <section id="moment1Screen" class="screen">
+        <div class="panel">
+        <div class="container">
+            <div class="header">
+                <!-- Momento 1: El cuento de Doña Alicia -->
+                <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
+            </div>
+
+            <!-- FLIPBOOK 3D DEL CUENTO -->
+            <div id="flipbookSection">
+
+                <!-- Flipbook Container -->
+                <div class="flipbook-wrapper">
+                    <!-- Botón de sonido en esquina superior derecha -->
+                    <button id="soundToggle" class="sound-toggle" aria-label="Activar/Desactivar sonido">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path class="speaker-icon" d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
+                            <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line class="mute-line" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: none;"/>
+                        </svg>
+                    </button>
+                    <div id="flipbook">
+
+                        <!-- PORTADA CERRADA DEL LIBRO -->
+                        <div class="page book-cover-page flipbook-page active">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-1">El</span>
+                                    <span class="cover-word-chip tone-2">secreto</span>
+                                    <span class="cover-word-chip tone-3">de</span>
+                                    <span class="cover-word-chip tone-4">las</span>
+                                </span>
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-5">bandejas</span>
+                                </span>
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-2">de</span>
+                                    <span class="cover-word-chip tone-1">Doña</span>
+                                    <span class="cover-word-chip tone-4">Alicia</span>
+                                </span>
+                            </h2>
+                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+                            <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
+                                <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+                            </button>
+                        </div>
+
+
+                        <!-- Story Spread 1-2 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">1</span><span class="page-number-right">2</span></div>
+                        </div>
+
+                        <!-- Story Spread 3-4 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">3</span><span class="page-number-right">4</span></div>
+                        </div>
+
+                        <!-- Story Spread 5-6 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">5</span><span class="page-number-right">6</span></div>
+                        </div

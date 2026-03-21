@@ -744,6 +744,11 @@ function initMoment1() {
         cocinaScreen.classList.add('hidden');
         document.body.style.overflow = '';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+        // Mostrar la imagen de bandejas al regresar de la cocina
+        const bandejasFotoRegreso = document.getElementById('bandejasFotoRegreso');
+        if (bandejasFotoRegreso) {
+            bandejasFotoRegreso.classList.remove('hidden');
+        }
     };
 
     const closeBookAndReturnToActivities = () => {
@@ -1454,7 +1459,7 @@ function initMoment4() {
     m4_errorsTotal = 0;
     m4_errorsConsecutive = 0;
     m4_errorsConsecutiveMax = 0;
-    m4_magicLives = 3;
+    m4_magicLives = 3; // Sistema de vidas mágicas
     m4_isFinalizing = false;
     m4_completed = false;
     m4_reflectionSelected = false;
@@ -1653,6 +1658,7 @@ function createSpellEffect(itemBox) {
                 // Actualizar posición
                 p.x += p.vx;
                 p.y += p.vy;
+                p.vy += 0.1; // Gravedad
                 p.alpha -= p.decay;
                 
                 // Dibujar partícula
