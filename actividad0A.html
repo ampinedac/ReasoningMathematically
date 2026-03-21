@@ -46,6 +46,40 @@
     .drawing-board { margin: 0 auto; display: block; }
 
     /* Centrado vertical y horizontal de spreads y páginas */
+
+    /* --- Botones de grabar y enviar solo con icono --- */
+    .audio-icon-btn, .send-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border: 2px solid #2f3f87;
+        border-radius: 16px;
+        box-shadow: 0 2px 8px #0001;
+        padding: 0;
+        margin: 0 6px 0 0;
+        width: auto;
+        height: 5vh;
+        min-width: 5vh;
+        min-height: 5vh;
+        cursor: pointer;
+        transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .audio-icon-btn:active, .send-icon-btn:active,
+    .audio-icon-btn:focus, .send-icon-btn:focus {
+        border-color: #d12c1a;
+        box-shadow: 0 4px 16px #d12c1a22;
+        outline: none;
+    }
+    .audio-btn-img, .send-btn-img {
+        display: block;
+        height: 5vh;
+        width: auto;
+        max-width: 8vw;
+        object-fit: contain;
+        pointer-events: none;
+        margin: 0;
+    }
     .q1-book-spread, .activity-spread {
         display: flex;
         flex-direction: row;
@@ -534,9 +568,13 @@
 
                             <!-- Audio -->
                             <div class="audio-controls">
-                                <button id="recordBtnM1Q1" class="btn btn-audio" style="font-size:14px !important;">🎤 Graba tu explicación</button>
+                                <button id="recordBtnM1Q1" class="btn btn-audio audio-icon-btn" type="button">
+                                    <img src="assets/images/grabadora-de-voz.png" alt="Grabar audio" class="audio-btn-img" />
+                                </button>
                                 <button id="stopBtnM1Q1" class="btn btn-audio hidden" style="font-size:14px !important;">⏹️ Detener</button>
-                                <button id="submitM1Q1" class="btn btn-primary" disabled style="font-size:14px !important;">Enviar ✈️</button>
+                                <button id="submitM1Q1" class="btn btn-primary send-icon-btn" type="button" disabled>
+                                    <img src="assets/images/avion.png" alt="Enviar" class="send-btn-img" />
+                                </button>
                                 <span id="audioStatusM1Q1" class="audio-status" style="font-size:14px !important;"></span>
                             </div>
 
@@ -562,7 +600,7 @@
                                     <li style="font-size:14px !important;">3. Repite hasta armar todas las parejas posibles.</li>
                                 </ul>
                             </div>
-                            <p class="instruction-hint" style="font-size:14px !important;">💡 Solo puedes unir bandejas con la misma cantidad de pandebonos.</p>
+                            <!-- Mensaje de advertencia movido a la cocina -->
                             <button id="goToCocinaBtn" class="btn btn-cocina" style="font-size:14px !important;">👩‍🍳 Ir a la cocina a organizar</button>
                         </div>
 
@@ -582,9 +620,13 @@
                                 <p style="font-size:14px !important;">En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
                                 <p style="font-size:14px !important;">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
                                 <div class="audio-controls">
-                                    <button id="recordBtnM1Q2" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                    <button id="recordBtnM1Q2" class="btn btn-audio audio-icon-btn" type="button">
+                                        <img src="assets/images/grabadora-de-voz.png" alt="Grabar audio" class="audio-btn-img" />
+                                    </button>
                                     <button id="stopBtnM1Q2" class="btn btn-audio hidden">⏹️ Detener</button>
-                                    <button id="submitM1Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    <button id="submitM1Q2" class="btn btn-primary send-icon-btn" type="button" disabled>
+                                        <img src="assets/images/avion.png" alt="Enviar" class="send-btn-img" />
+                                    </button>
                                     <span id="audioStatusM1Q2" class="audio-status"></span>
                                 </div>
                                 <p id="statusM1Q2" class="status-text"></p>
@@ -646,13 +688,17 @@
                                 <div class="evidence-section">
                                     <h4 style="font-size:14px !important;">Graba tu explicación</h4>
                                     <div class="audio-controls">
-                                        <button id="recordBtnM3Q1" class="btn btn-audio" style="font-size:14px !important;">🎤 Grabar audio</button>
+                                        <button id="recordBtnM3Q1" class="btn btn-audio audio-icon-btn" type="button">
+                                            <img src="assets/images/grabadora-de-voz.png" alt="Grabar audio" class="audio-btn-img" />
+                                        </button>
                                         <button id="stopBtnM3Q1" class="btn btn-audio hidden" style="font-size:14px !important;">⏹️ Detener</button>
                                         <span id="audioStatusM3Q1" class="audio-status" style="font-size:14px !important;"></span>
                                     </div>
                                     <div class="submit-section">
                                         <p id="statusM3Q1" class="status-text" style="font-size:14px !important;"></p>
-                                        <button id="submitM3Q1" class="btn btn-primary" disabled style="font-size:14px !important;">Enviar ✈️</button>
+                                        <button id="submitM3Q1" class="btn btn-primary send-icon-btn" type="button" disabled>
+                                            <img src="assets/images/avion.png" alt="Enviar" class="send-btn-img" />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -722,13 +768,17 @@
                                 <div class="evidence-section">
                                     <h4 style="font-size:14px !important;">Graba tu explicación</h4>
                                     <div class="audio-controls">
-                                        <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar audio</button>
+                                        <button id="recordBtnM3Q2" class="btn btn-audio audio-icon-btn" type="button">
+                                            <img src="assets/images/grabadora-de-voz.png" alt="Grabar audio" class="audio-btn-img" />
+                                        </button>
                                         <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
                                         <span id="audioStatusM3Q2" class="audio-status"></span>
                                     </div>
                                     <div class="submit-section">
                                         <p id="statusM3Q2" class="status-text"></p>
-                                        <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                        <button id="submitM3Q2" class="btn btn-primary send-icon-btn" type="button" disabled>
+                                            <img src="assets/images/avion.png" alt="Enviar" class="send-btn-img" />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -824,6 +874,7 @@
             <p>Une las bandejas que tienen la misma cantidad de pandebonos</p>
         </div>
         <div class="cocina-body">
+            <p class="instruction-hint" style="font-size:14px !important; margin-bottom: 10px;">💡 Solo puedes unir bandejas con la misma cantidad de pandebonos.</p>
             <!-- Ambiente de panadería alrededor de la mesa -->
             <div class="bakery-kitchen-bg">
                 <div class="bakery-wall"></div>
@@ -1798,7 +1849,7 @@ p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio
     </div>
 
     <!-- Scripts -->
-    <script src="trays-system.js?v=2026031813"></script>
+    <!-- <script src="trays-system.js?v=2026031813"></script> Duplicado eliminado -->
     <script type="module" src="main.js?v=2026031813"></script>
     <script src="app.js?v=2026031813"></script>
 </body>

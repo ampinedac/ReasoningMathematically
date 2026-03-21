@@ -315,7 +315,18 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTemporaryTurnLayers();
         resetPageTurnState();
         currentPage = pageIndex;
-        pages[pageIndex].classList.add('active');
+        // Asegurar visibilidad exclusiva
+        pages.forEach((page, idx) => {
+            if (idx === pageIndex) {
+                page.classList.add('active');
+                page.style.opacity = '';
+                page.style.pointerEvents = '';
+            } else {
+                page.classList.remove('active');
+                page.style.opacity = '0';
+                page.style.pointerEvents = 'none';
+            }
+        });
         updateProgress(pageIndex);
         isTurning = false;
     }
@@ -336,18 +347,36 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             setTimeout(() => {
-                newPage.classList.add('active');
+                // Solo la nueva página visible
+                pages.forEach((page, idx) => {
+                    if (idx === pageIndex) {
+                        page.classList.add('active');
+                        page.style.opacity = '';
+                        page.style.pointerEvents = '';
+                    } else {
+                        page.classList.remove('active');
+                        page.style.opacity = '0';
+                        page.style.pointerEvents = 'none';
+                    }
+                });
             }, TURN_HALF_MS);
         } else {
             newPage.classList.remove('turned');
             newPage.classList.add('turning-backward');
 
             setTimeout(() => {
-                newPage.classList.remove('turning-backward');
-                newPage.classList.add('active');
-                if (oldPage) {
-                    oldPage.classList.remove('active');
-                }
+                // Solo la nueva página visible
+                pages.forEach((page, idx) => {
+                    if (idx === pageIndex) {
+                        page.classList.add('active');
+                        page.style.opacity = '';
+                        page.style.pointerEvents = '';
+                    } else {
+                        page.classList.remove('active');
+                        page.style.opacity = '0';
+                        page.style.pointerEvents = 'none';
+                    }
+                });
             }, TURN_DURATION_MS);
         }
 

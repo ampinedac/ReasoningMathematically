@@ -1,3 +1,5 @@
+// Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
+window.syncBookNextButton = syncBookNextButton;
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
 import { estudiantesData } from './assets/estudiantes-data.js';
@@ -501,7 +503,8 @@ function initMoment1() {
         if (currentFlipbookPage === q1PageIndex) {
             nextBtn.disabled = !m1Q1Submitted;
         } else if (currentFlipbookPage === q2PageIndex) {
-            nextBtn.disabled = !m1Q2Submitted;
+            // Solo habilitar si el usuario fue a la cocina y además grabó y envió el audio
+            nextBtn.disabled = !(m1Q2Verified && m1Q2Submitted);
         } else if (currentFlipbookPage === q3PageIndex) {
             nextBtn.disabled = !m3Q1Submitted;
         } else if (currentFlipbookPage === q3bPageIndex) {
