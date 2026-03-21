@@ -27,8 +27,8 @@
 
     /* Ajustes tipográficos para Situación 1 */
     .q1-left-page h3 { margin-top: 0; font-size: 14px !important; }
-    .q1-left-page p { color: inherit; font-weight: 400; font-size: 14px !important; }
-    .q1-left-page .question { color: #000; font-weight: 400; margin-top: 12px; font-size: 14px !important; }
+    .q1-left-page p { color: inherit; font-weight: 400; font-size: 14px !important; text-align: justify; }
+    .q1-left-page .question { color: #000; font-weight: 400; margin-top: 12px; font-size: 14px !important; text-align: justify; }
     #problemQ1Section .q1-left-page h3,
     #problemQ1Section .q1-left-page p,
     #problemQ1Section .q1-left-page .question { font-size: 14px !important; line-height: 1.6; }
@@ -44,6 +44,30 @@
     .q1-right-page .board-container { max-width: 95%; margin: 0 auto; }
     .board-wrapper { max-width: 100%; margin: 0 auto; }
     .drawing-board { margin: 0 auto; display: block; }
+
+    /* Centrado vertical y horizontal de spreads y páginas */
+    .q1-book-spread, .activity-spread {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: stretch;
+        min-height: 420px;
+    }
+    .q1-left-page, .q1-right-page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        min-height: 350px;
+    }
+    .q1-left-page p, .q1-right-page p, .q1-left-page .story-text, .q1-right-page .story-text, .q1-left-page .question, .q1-right-page .question {
+        text-align: justify !important;
+        width: 92%;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+    }
     /* Situación 1 derecha: centrar iconos, compactar tablero y dejar acciones visibles */
     #problemQ1Section .q1-right-page .board-tools { justify-content: center !important; }
     #problemQ1Section .q1-right-page .board-container { max-width: 92%; margin: 6px auto 4px; }
@@ -453,7 +477,7 @@
                                 <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
                             </div>
                             <div class="q1-right-page">
-                                <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                                <p class="story-text" style="font-size:14px !important;">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
                             </div>
                             <div class="page-number book-spread-number"><span class="page-number-left">5</span><span class="page-number-right">6</span></div>
                         </div>
@@ -464,7 +488,7 @@
                                 <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebono" class="story-image">
                             </div>
                             <div class="q1-right-page">
-                                <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                                <p class="story-text" style="font-size:14px !important;">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
                             </div>
                             <div class="page-number book-spread-number"><span class="page-number-left">7</span><span class="page-number-right">8</span></div>
                         </div>
@@ -475,7 +499,7 @@
                                 <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
                             </div>
                             <div class="q1-right-page">
-                                <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
+                                <p class="story-text" style="font-size:14px !important;">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
                             </div>
                             <div class="page-number book-spread-number"><span class="page-number-left">9</span><span class="page-number-right">10</span></div>
                         </div>
@@ -483,15 +507,15 @@
                         <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
                         <div id="problemQ1Section" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
-                            <h3>Situación 1</h3>
-                            <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
+                            <h3 style="font-size:14px !important;">Situación 1</h3>
+                            <p style="font-size:14px !important;">Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
                             <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
-                            <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
+                            <p class="question" style="font-size:14px !important;">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
                         </div>
 
                         <!-- TABLERO Y AUDIO -->
                         <div class="q1-right-page">
-                            <h4>Puedes utilizar el tablero</h4>
+                            <h4 style="font-size:14px !important;">Puedes utilizar el tablero</h4>
                             
                             <!-- Tablero -->
                             <div class="board-container">
@@ -510,15 +534,15 @@
 
                             <!-- Audio -->
                             <div class="audio-controls">
-                                <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                                <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
-                                <span id="audioStatusM1Q1" class="audio-status"></span>
+                                <button id="recordBtnM1Q1" class="btn btn-audio" style="font-size:14px !important;">🎤 Graba tu explicación</button>
+                                <button id="stopBtnM1Q1" class="btn btn-audio hidden" style="font-size:14px !important;">⏹️ Detener</button>
+                                <button id="submitM1Q1" class="btn btn-primary" disabled style="font-size:14px !important;">Enviar ✈️</button>
+                                <span id="audioStatusM1Q1" class="audio-status" style="font-size:14px !important;"></span>
                             </div>
 
                             <!-- Enviar -->
                             <div class="submit-section">
-                                <p id="statusM1Q1" class="status-text"></p>
+                                <p id="statusM1Q1" class="status-text" style="font-size:14px !important;"></p>
                             </div>
                         </div>
                         <div class="page-number book-spread-number"><span class="page-number-left">19</span><span class="page-number-right">20</span></div>
@@ -527,19 +551,19 @@
                     <!-- HOJA 11: BANDEJAS -->
                         <div id="problemQ2Section" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
-                            <h3>Situación 2</h3>
+                            <h3 style="font-size:14px !important;">Situación 2</h3>
                             <!-- Imagen de bandejas movida a la página 22, solo visible al regresar de la cocina -->
-                            <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos</p>
+                            <p style="font-size:14px !important;">Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos</p>
                             <div class="q2-guide-card">
-                                <p class="q2-guide-title">Guía rápida</p>
+                                <p class="q2-guide-title" style="font-size:14px !important;">Guía rápida</p>
                                 <ul class="q2-guide-list">
-                                    <li>1. Haz clic en una bandeja para seleccionarla.</li>
-                                    <li>2. Haz clic en otra bandeja para formar el par.</li>
-                                    <li>3. Repite hasta armar todas las parejas posibles.</li>
+                                    <li style="font-size:14px !important;">1. Haz clic en una bandeja para seleccionarla.</li>
+                                    <li style="font-size:14px !important;">2. Haz clic en otra bandeja para formar el par.</li>
+                                    <li style="font-size:14px !important;">3. Repite hasta armar todas las parejas posibles.</li>
                                 </ul>
                             </div>
-                            <p class="instruction-hint">💡 Solo puedes unir bandejas con la misma cantidad de pandebonos.</p>
-                            <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
+                            <p class="instruction-hint" style="font-size:14px !important;">💡 Solo puedes unir bandejas con la misma cantidad de pandebonos.</p>
+                            <button id="goToCocinaBtn" class="btn btn-cocina" style="font-size:14px !important;">👩‍🍳 Ir a la cocina a organizar</button>
                         </div>
 
                         <div class="q1-right-page" id="q2RightPage">
@@ -549,14 +573,14 @@
                             </div>
                             <!-- Foto de los pares (se genera al completar la cocina) -->
                             <div id="pairsPhotoArea" class="pairs-photo hidden">
-                                <p class="pairs-photo-title">📸 Así quedaron tus parejas:</p>
+                                <p class="pairs-photo-title" style="font-size:14px !important;">📸 Así quedaron tus parejas:</p>
                                 <div id="pairsPhotoContent" class="pairs-photo-content"></div>
                             </div>
                             <!-- Pregunta final + audio (se activa al completar la cocina) -->
                             <div id="m1Q2FinalQuestion" class="q2-final-question hidden">
-                                <p><strong>Para pensar 🤔</strong></p>
-                                <p>En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
-                                <p>¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                                <p style="font-size:14px !important;"><strong>Para pensar 🤔</strong></p>
+                                <p style="font-size:14px !important;">En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
+                                <p style="font-size:14px !important;">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
                                 <div class="audio-controls">
                                     <button id="recordBtnM1Q2" class="btn btn-audio">🎤 Graba tu explicación</button>
                                     <button id="stopBtnM1Q2" class="btn btn-audio hidden">⏹️ Detener</button>
@@ -571,11 +595,11 @@
 
                         <div id="problemQ3Section" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
-                            <h3>Los sobres secretos 1️⃣</h3>
+                            <h3 style="font-size:14px !important;">Los sobres secretos 1️⃣</h3>
                             <div class="book-story-card">
-                                <p>Como Daniel organizó muy bien las bandejas, Doña Alicia le propuso un reto nuevo.</p>
-                                <p>Esta vez no usarían pandebonos, sino sobres con números secretos.</p>
-                                <p><strong>Regla del juego:</strong> los sobres del mismo color guardan el mismo número.</p>
+                                <p style="font-size:14px !important;">Como Daniel organizó muy bien las bandejas, Doña Alicia le propuso un reto nuevo.</p>
+                                <p style="font-size:14px !important;">Esta vez no usarían pandebonos, sino sobres con números secretos.</p>
+                                <p style="font-size:14px !important;"><strong>Regla del juego:</strong> los sobres del mismo color guardan el mismo número.</p>
                             </div>
                             <div class="envelope-equation">
                                 <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
@@ -594,21 +618,21 @@
                                     <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
                                 </svg>
                             </div>
-                            <p class="q3-inline-question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
+                            <p class="q3-inline-question" style="font-size:14px !important;">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
                         </div>
 
                         <div class="q1-right-page">
                             <div class="question-section">
                                 <div class="radio-group">
-                                    <label class="radio-label">
+                                    <label class="radio-label" style="font-size:14px !important;">
                                         <input type="radio" name="truthQ1" value="yes">
                                         Sí, creo que es verdadera.
                                     </label>
-                                    <label class="radio-label">
+                                    <label class="radio-label" style="font-size:14px !important;">
                                         <input type="radio" name="truthQ1" value="no">
                                         No, creo que no es verdadera.
                                     </label>
-                                    <label class="radio-label">
+                                    <label class="radio-label" style="font-size:14px !important;">
                                         <input type="radio" name="truthQ1" value="unsure">
                                         No estoy segura.
                                     </label>
@@ -617,22 +641,22 @@
                             </div>
                             <div id="promptSection1" class="hidden">
                                 <div class="prompt-box">
-                                    <p id="promptText1"></p>
+                                    <p id="promptText1" style="font-size:14px !important;"></p>
                                 </div>
                                 <div class="evidence-section">
-                                    <h4>Graba tu explicación</h4>
+                                    <h4 style="font-size:14px !important;">Graba tu explicación</h4>
                                     <div class="audio-controls">
-                                        <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar audio</button>
-                                        <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                                        <span id="audioStatusM3Q1" class="audio-status"></span>
+                                        <button id="recordBtnM3Q1" class="btn btn-audio" style="font-size:14px !important;">🎤 Grabar audio</button>
+                                        <button id="stopBtnM3Q1" class="btn btn-audio hidden" style="font-size:14px !important;">⏹️ Detener</button>
+                                        <span id="audioStatusM3Q1" class="audio-status" style="font-size:14px !important;"></span>
                                     </div>
                                     <div class="submit-section">
-                                        <p id="statusM3Q1" class="status-text"></p>
-                                        <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                        <p id="statusM3Q1" class="status-text" style="font-size:14px !important;"></p>
+                                        <button id="submitM3Q1" class="btn btn-primary" disabled style="font-size:14px !important;">Enviar ✈️</button>
                                     </div>
                                 </div>
                             </div>
-                            <div id="m3Q1Placeholder" class="book-placeholder">
+                            <div id="m3Q1Placeholder" class="book-placeholder" style="font-size:14px !important;">
                                 Elige una opción para activar este espacio de explicación.
                             </div>
                         </div>
@@ -641,10 +665,10 @@
 
                         <div id="problemQ3Section2" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
-                            <h3>Los sobres secretos 2️⃣</h3>
+                            <h3 style="font-size:14px !important;">Los sobres secretos 2️⃣</h3>
                             <div class="book-story-card">
-                                <p>Ahora aparece un nuevo reto con dos sobres de color diferente.</p>
-                                <p>Recuerda: sobres del mismo color guardan el mismo número.</p>
+                                <p style="font-size:14px !important;">Ahora aparece un nuevo reto con dos sobres de color diferente.</p>
+                                <p style="font-size:14px !important;">Recuerda: sobres del mismo color guardan el mismo número.</p>
                             </div>
                             <div class="envelope-equation">
                                 <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
@@ -671,21 +695,21 @@
                                     <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
                                 </svg>
                             </div>
-                            <p class="q3-inline-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                            <p class="q3-inline-question" style="font-size:14px !important;">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
                         </div>
 
                         <div class="q1-right-page">
                             <div class="question-section">
                                 <div class="radio-group">
-                                    <label class="radio-label">
+                                    <label class="radio-label" style="font-size:14px !important;">
                                         <input type="radio" name="truthQ2" value="yes">
                                         Sí, creo que es verdadera.
                                     </label>
-                                    <label class="radio-label">
+                                    <label class="radio-label" style="font-size:14px !important;">
                                         <input type="radio" name="truthQ2" value="unsure">
                                         No estoy segura.
                                     </label>
-                                    <label class="radio-label">
+                                    <label class="radio-label" style="font-size:14px !important;">
                                         <input type="radio" name="truthQ2" value="no">
                                         Creo que no es verdadera.
                                     </label>
@@ -693,10 +717,10 @@
                             </div>
                             <div id="promptSection2" class="hidden">
                                 <div class="prompt-box">
-                                    <p id="promptText2"></p>
+                                    <p id="promptText2" style="font-size:14px !important;"></p>
                                 </div>
                                 <div class="evidence-section">
-                                    <h4>Graba tu explicación</h4>
+                                    <h4 style="font-size:14px !important;">Graba tu explicación</h4>
                                     <div class="audio-controls">
                                         <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar audio</button>
                                         <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
@@ -717,38 +741,38 @@
 
                         <div id="problemQ4Section" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
-                            <h3>El reto final</h3>
+                            <h3 style="font-size:14px !important;">El reto final</h3>
                             <div class="book-story-card">
-                                <p>Después de pensar con bandejas y con sobres, Doña Alicia sonrió y le dijo a Daniel: “Ahora sí viene el reto final”.</p>
-                                <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
-                                <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
+                                <p style="font-size:14px !important;">Después de pensar con bandejas y con sobres, Doña Alicia sonrió y le dijo a Daniel: “Ahora sí viene el reto final”.</p>
+                                <p style="font-size:14px !important;">En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
+                                <p style="font-size:14px !important;">Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
                             </div>
                             <div class="magic-lives-container">
-                                <span class="magic-label">✨ Vidas mágicas:</span>
+                                <span class="magic-label" style="font-size:14px !important;">✨ Vidas mágicas:</span>
                                 <div id="magicLives" class="magic-lives">
-                                    <span class="magic-heart">❤️</span>
-                                    <span class="magic-heart">❤️</span>
-                                    <span class="magic-heart">❤️</span>
+                                    <span class="magic-heart" style="font-size:14px !important;">❤️</span>
+                                    <span class="magic-heart" style="font-size:14px !important;">❤️</span>
+                                    <span class="magic-heart" style="font-size:14px !important;">❤️</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="q1-right-page magic-theme">
-                            <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+                            <p class="student-code-display" style="font-size:14px !important;">Código: <span id="studentCodeM4"></span></p>
                             <div class="items-container">
-                                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
+                                <p class="instruction magic-instruction" style="font-size:14px !important;">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
                                 <div id="itemsWrapper"></div>
-                                <p id="moment4Status" class="status-text"></p>
-                                <p id="pointsStatus" class="points-status hidden"></p>
+                                <p id="moment4Status" class="status-text" style="font-size:14px !important;"></p>
+                                <p id="pointsStatus" class="points-status hidden" style="font-size:14px !important;"></p>
                             </div>
                             <canvas id="magicCanvas" class="magic-canvas"></canvas>
                             <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
                             <div id="finalQuestionSection" class="hidden">
                                 <div class="final-box">
-                                    <h3>¡Felicitaciones! 🎉</h3>
-                                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
-                                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
-                                    <p class="thank-you-sub">¡Gracias por participar!</p>
+                                    <h3 style="font-size:14px !important;">¡Felicitaciones! 🎉</h3>
+                                    <p class="final-question" style="font-size:14px !important;">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
+                                    <p class="thank-you" style="font-size:14px !important;">¿El orden de los factores altera el producto o no?</p>
+                                    <p class="thank-you-sub" style="font-size:14px !important;">¡Gracias por participar!</p>
                                 </div>
                             </div>
                         </div>
@@ -758,24 +782,24 @@
                         <div id="problemQ5Section" class="page q1-book-spread activity-spread">
                         <div class="problem-box q1-left-page">
                             <div class="final-story-card">
-                                <h3>¡Llegaste al final del cuento! 🌟</h3>
-                                <p>Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
-                                <p>Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
-                                <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
+                                <h3 style="font-size:14px !important;">¡Llegaste al final del cuento! 🌟</h3>
+                                <p style="font-size:14px !important;">Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
+                                <p style="font-size:14px !important;">Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
+                                <p style="font-size:14px !important;">Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
                             </div>
                         </div>
 
                         <div class="q1-right-page">
                             <div class="reflection-card">
-                                <h4>Esta actividad fue:</h4>
+                                <h4 style="font-size:14px !important;">Esta actividad fue:</h4>
                                 <div class="reflection-options">
-                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
-                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
-                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="dificil"> difícil</label>
-                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
-                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
+                                    <label class="reflection-option" style="font-size:14px !important;"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
+                                    <label class="reflection-option" style="font-size:14px !important;"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
+                                    <label class="reflection-option" style="font-size:14px !important;"><input type="checkbox" name="m4Reflection" value="dificil"> difícil</label>
+                                    <label class="reflection-option" style="font-size:14px !important;"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
+                                    <label class="reflection-option" style="font-size:14px !important;"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
                                 </div>
-                                <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
+                                <p class="reflection-hint" style="font-size:14px !important;">Selecciona al menos una opción para continuar (máximo dos).</p>
                             </div>
                         </div>
                         <div class="page-number book-spread-number"><span class="page-number-left">29</span><span class="page-number-right">30</span></div>

@@ -1260,38 +1260,55 @@ body.flipbook-on-cover #flipbook::after {
     z-index: 5;
 }
 
+/* Numeración de página: solo número, en la esquina exacta */
 #flipbook .page .page-number.book-spread-number {
+    position: absolute;
     left: 0;
     right: 0;
     width: 100%;
-    bottom: 10px;
+    bottom: 0;
     transform: none;
     text-align: unset;
-    font-size: 1.05rem;
-    color: rgba(0, 0, 0, 0.45);
+    font-size: 18px;
+    color: #d12c1a;
     font-style: normal;
     font-weight: 600;
     pointer-events: none;
+    background: none;
+    box-shadow: none;
+    border: none;
+    z-index: 10;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
 }
 
+/* Posicionar los números en las esquinas exactas */
 #flipbook .page .page-number.book-spread-number .page-number-left,
 #flipbook .page .page-number.book-spread-number .page-number-right {
     position: absolute;
-    bottom: 0;
+    bottom: 18px;
+    font-size: 18px;
+    color: #d12c1a;
+    font-weight: 600;
+    background: none;
+    box-shadow: none;
+    border: none;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
 }
 
-/* Numeración pegada a la esquina inferior izquierda */
+/* Esquina inferior izquierda */
 #flipbook .page .page-number.book-spread-number .page-number-left {
-    left: 18px;
-    bottom: 18px;
-    margin-left: 0;
+    left: 22px;
+    text-align: left;
 }
 
-/* Numeración pegada a la esquina inferior derecha */
+/* Esquina inferior derecha */
 #flipbook .page .page-number.book-spread-number .page-number-right {
-    right: 18px;
-    bottom: 18px;
-    margin-right: 0;
+    right: 22px;
+    text-align: right;
 }
 
 .emoji-large {
