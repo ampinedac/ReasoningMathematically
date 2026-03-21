@@ -1,3 +1,38 @@
+#flipbook .q1-book-spread {
+        flex-direction: row !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        gap: 2vw;
+}
+
+#flipbook .q1-left-page, #flipbook .q1-right-page {
+        flex: 1 1 0;
+        min-width: 0;
+        max-width: 48vw;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin: 0 0.5vw;
+        box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+    #flipbook .q1-book-spread {
+        flex-direction: column !important;
+        gap: 1vw;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    #flipbook .q1-left-page, #flipbook .q1-right-page {
+        max-width: 98vw;
+        max-height: 45vh;
+        margin: 0 auto 1vw auto;
+    }
+}
 /* === UNIFICACIÓN DE PÁGINAS FLIPBOOK === */
 .flipbook-page {
     width: 100%;
@@ -312,14 +347,17 @@ section.screen > * {
 
 /* Uniformidad para spreads y portada */
 /* Unificación de estilo para todas las páginas del libro (historia y actividades) */
+/* Spread ocupa el 95% de la pantalla */
 #flipbook .flipbook-page,
 #flipbook .story-page,
 #flipbook .book-cover-page,
 #flipbook .q1-book-spread {
-    width: 100%;
-    max-width: 880px;
-    height: min(80vh, 720px);
-    min-height: 540px;
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    min-width: 0;
+    min-height: 0;
     margin: 0 auto 24px auto;
     background: #fff;
     border-radius: 14px !important;
