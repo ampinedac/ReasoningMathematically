@@ -1,5 +1,5 @@
 // Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
-window.syncBookNextButton = syncBookNextButton;
+// Exponer solo después de definir la función, no al inicio
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
 import { estudiantesData } from './assets/estudiantes-data.js';
@@ -491,6 +491,8 @@ function initMoment1() {
         : (window.flipbookControls?.getCurrentPage?.() ?? 0);
 
     const syncBookNextButton = () => {
+            // Exponer globalmente solo después de definirla
+            window.syncBookNextButton = syncBookNextButton;
         if (!nextBtn) return;
 
         const currentFlipbookPage = getCurrentFlipbookPage();
