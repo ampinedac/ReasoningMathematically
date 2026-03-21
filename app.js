@@ -383,7 +383,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
         playPageTurnSound();
 
-        resetPageTurnState();
+        // Solo ocultar todas menos la actual y la nueva para evitar superposición
+        pages.forEach((page, idx) => {
+            if (idx !== currentPage && idx !== pageIndex) {
+                page.classList.remove(
+                    'turning-forward',
+                    'turning-backward',
+                    'turned',
+                    'active',
+                    'page-static-left',
+                    'page-static-right',
+                    'page-under-left',
+                    'page-under-right'
+                );
+                page.style.opacity = '0';
+                page.style.pointerEvents = 'none';
+            } else {
+                page.style.opacity = '';
+                page.style.pointerEvents = '';
+            }
+        });
 
         const flipbook = document.getElementById('flipbook');
         if (!flipbook || !oldPage) {
