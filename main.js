@@ -460,7 +460,7 @@ function showScreen(screenId) {
 
 function initMoment1() {
     document.getElementById('studentCodeM1').textContent = getStudentHeaderText();
-    
+
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
@@ -495,10 +495,20 @@ function initMoment1() {
     const q4PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
     const q5PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
 
+    // --- ACTIVAR PORTADA SI NINGUNA PÁGINA ESTÁ ACTIVA ---
+    if (flipbookPages.length > 0) {
+        const anyActive = flipbookPages.some(p => p.classList.contains('active'));
+        if (!anyActive) {
+            // Quitar display:none de todas
+            flipbookPages.forEach(p => p.style.display = '');
+            // Activar la portada (primera página)
+            flipbookPages[0].classList.add('active');
+        }
+    }
+
     const getCurrentFlipbookPage = (event) => Number.isInteger(event?.detail?.page)
         ? event.detail.page
         : (window.flipbookControls?.getCurrentPage?.() ?? 0);
-
 
     const syncBookNextButton = () => {
         if (!nextBtn) return;
