@@ -1,5 +1,4 @@
-// Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
-window.syncBookNextButton = syncBookNextButton;
+// (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
 import { estudiantesData } from './assets/estudiantes-data.js';
@@ -490,6 +489,7 @@ function initMoment1() {
         ? event.detail.page
         : (window.flipbookControls?.getCurrentPage?.() ?? 0);
 
+
     const syncBookNextButton = () => {
         if (!nextBtn) return;
 
@@ -520,6 +520,9 @@ function initMoment1() {
             nextBtn.style.cursor = 'not-allowed';
         }
     };
+
+    // Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
+    window.syncBookNextButton = syncBookNextButton;
 
     const showM1Q2FinalQuestion = () => {
         if (!m1Q2FinalQuestion) return;
