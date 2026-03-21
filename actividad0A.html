@@ -139,7 +139,7 @@
     @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
 
     /* ===== PANTALLA COCINA ===== */
-    .cocina-overlay{position:fixed;top:0;left:0;width:100vw;height:100dvh;background:linear-gradient(180deg,#fff9f1 0%,#f7e8d1 58%,#efd4af 100%);background-image:linear-gradient(180deg,rgba(255,255,255,0.38),rgba(255,255,255,0.06)),linear-gradient(90deg,rgba(190,145,90,0.08) 0,rgba(190,145,90,0.08) 1px,transparent 1px,transparent 72px),linear-gradient(0deg,rgba(190,145,90,0.08) 0,rgba(190,145,90,0.08) 1px,transparent 1px,transparent 72px);z-index:9999;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
+    .cocina-overlay{position:fixed;top:0;left:0;width:100vw;height:100dvh;background:#fff;z-index:9999;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
     .cocina-overlay.hidden{display:none !important}
     .cocina-header{text-align:center;padding:18px 20px 12px;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);color:white;box-shadow:0 4px 15px rgba(0,0,0,0.22);flex-shrink:0}
     .cocina-header h2{margin:0 0 4px;font-size:clamp(1.3rem,3vw,2rem);font-family:'Comic Sans MS',cursive;text-shadow:2px 2px 4px rgba(0,0,0,0.28)}
@@ -401,7 +401,7 @@
                     <div id="flipbook">
 
                         <!-- PORTADA CERRADA DEL LIBRO -->
-                        <div class="page book-cover-page active">
+                        <div class="page book-cover-page flipbook-page active">
                             <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
                                 <span class="cover-word-line">
                                     <span class="cover-word-chip tone-1">El</span>
@@ -425,49 +425,49 @@
                         </div>
 
                         <!-- Story Page 1 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">1</div>
                             <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
                             <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
                         </div>
 
                         <!-- Story Page 2 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">2</div>
                             <img src="assets/images/pagina2_cuento_act0_1.png" alt="Doña Alicia amasando" class="story-image">
                             <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
                         </div>
 
                         <!-- Story Page 3 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">3</div>
                             <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
                             <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
                         </div>
 
                         <!-- Story Page 4 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">4</div>
                             <img src="assets/images/pagina4_cuento_act0_1.png" alt="Pandebonos en el horno" class="story-image">
                             <p class="story-text">¡Es hora de entrar al calor! Doña Alicia coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
                         </div>
 
                         <!-- Story Page 5 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">5</div>
                             <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
                             <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
                         </div>
 
                         <!-- Story Page 6 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">6</div>
                             <img src="assets/images/pagina6_cuento_act0_1.png" alt="Organizando bandejas" class="story-image">
                             <p class="story-text">Ahora viene la parte más importante para Doña Alicia: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
                         </div>
 
                         <!-- Story Page 7 -->
-                        <div class="page story-page">
+                        <div class="page story-page flipbook-page">
                             <div class="page-number">7</div>
                             <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebono" class="story-image">
                             <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
@@ -802,7 +802,30 @@
             <p>Une las bandejas que tienen la misma cantidad de pandebonos</p>
         </div>
         <div class="cocina-body">
-            <div id="traysAreaM1Q2" class="trays-container"></div>
+            <!-- Ambiente de panadería alrededor de la mesa -->
+            <div class="bakery-kitchen-bg">
+                <div class="bakery-wall"></div>
+                <div class="bakery-shelf">
+                    <div class="bakery-shelf-item pan">🥖</div>
+                    <div class="bakery-shelf-item pan">🥐</div>
+                    <div class="bakery-shelf-item pan">🍞</div>
+                    <div class="bakery-shelf-item pan">🥨</div>
+                </div>
+                <div class="bakery-oven">
+                    <div class="oven-door"></div>
+                    <div class="oven-window"></div>
+                </div>
+                <div class="bakery-utensils">
+                    <span class="utensil">🥄</span>
+                    <span class="utensil">🍳</span>
+                    <span class="utensil">🧂</span>
+                </div>
+                <!-- Mesa central con bandejas -->
+                <div class="bakery-table-center">
+                    <div id="traysAreaM1Q2" class="trays-container"></div>
+                </div>
+                <div class="bakery-floor"></div>
+            </div>
         </div>
         <div class="cocina-controls">
             <button id="verifyTraysBtnM1Q2" class="btn btn-primary">✅ Verificar emparejamientos</button>
@@ -815,4 +838,127 @@
     <script type="module" src="main.js?v=2026031813"></script>
     <script src="app.js?v=2026031813"></script>
 </body>
+
+<style>
+/* --- Bakery Kitchen Environment --- */
+.bakery-kitchen-bg {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    background: linear-gradient(180deg, #fff7e6 0%, #ffe0b2 100%);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(120, 72, 24, 0.08);
+    overflow: visible;
+}
+.bakery-wall {
+    width: 100%;
+    height: 120px;
+    background: repeating-linear-gradient(90deg, #ffe0b2 0 40px, #ffd699 40px 80px);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    box-shadow: 0 2px 8px rgba(120,72,24,0.06);
+}
+.bakery-shelf {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 36px;
+    background: #e0b97a;
+    border-radius: 8px 8px 12px 12px;
+    box-shadow: 0 2px 8px rgba(120,72,24,0.10);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    z-index: 2;
+}
+.bakery-shelf-item {
+    font-size: 2rem;
+    margin: 0 8px;
+    filter: drop-shadow(0 2px 2px #bfa76a44);
+}
+.bakery-oven {
+    position: absolute;
+    right: 40px;
+    bottom: 120px;
+    width: 90px;
+    height: 110px;
+    background: #bca27a;
+    border-radius: 16px 16px 24px 24px;
+    box-shadow: 0 4px 16px #bfa76a33;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+.oven-door {
+    width: 70px;
+    height: 50px;
+    background: #8d6e4a;
+    border-radius: 0 0 16px 16px;
+    margin-top: 40px;
+    box-shadow: 0 2px 8px #6d4c1e33;
+}
+.oven-window {
+    width: 36px;
+    height: 18px;
+    background: #fffde7;
+    border-radius: 8px;
+    margin: 8px auto 0;
+    box-shadow: 0 1px 4px #fffde799;
+}
+.bakery-utensils {
+    position: absolute;
+    left: 40px;
+    bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 2;
+}
+.bakery-utensils .utensil {
+    font-size: 1.7rem;
+    filter: drop-shadow(0 1px 2px #bfa76a44);
+}
+.bakery-table-center {
+    position: relative;
+    z-index: 3;
+    width: 98%;
+    max-width: 900px;
+    margin: 0 auto;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fffbe7;
+    border-radius: 24px 24px 32px 32px;
+    box-shadow: 0 6px 32px #bfa76a22;
+    padding: 32px 12px 36px 12px;
+}
+.bakery-floor {
+    width: 100%;
+    height: 60px;
+    background: repeating-linear-gradient(90deg, #e0b97a 0 40px, #d6a86a 40px 80px);
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 -2px 8px #bfa76a33;
+    margin-top: -16px;
+}
+@media (max-width: 900px) {
+    .bakery-shelf { width: 180px; }
+    .bakery-oven, .bakery-utensils { bottom: 80px; }
+    .bakery-table-center { max-width: 99vw; padding: 12px 2vw 18px 2vw; }
+    .bakery-floor { height: 36px; }
+}
+@media (max-width: 600px) {
+    .bakery-shelf { width: 120px; }
+    .bakery-oven, .bakery-utensils { display: none; }
+    .bakery-table-center { padding: 4vw 1vw 10vw 1vw; }
+}
+</style>
 </html>
