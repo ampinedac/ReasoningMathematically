@@ -1,3 +1,13 @@
+// --- Ocultar todas las páginas del flipbook ---
+function hideAllFlipbookPages() {
+    const flipbook = document.getElementById('flipbook');
+    if (!flipbook) return;
+    const pages = flipbook.querySelectorAll('.page');
+    pages.forEach(page => {
+        page.style.display = 'none';
+        page.classList.remove('active');
+    });
+}
 // (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
@@ -526,7 +536,6 @@ function initMoment1() {
 
     const showM1Q2FinalQuestion = () => {
         if (!m1Q2FinalQuestion) return;
-        buildPairsPhoto();
         m1Q2FinalQuestion.classList.remove('hidden');
         m1Q2FinalQuestion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (!m1Q2AudioInitialized) {
@@ -610,54 +619,6 @@ function initMoment1() {
         goToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
     };
 
-    const buildPairsPhoto = () => {
-        const photoContent = document.getElementById('pairsPhotoContent');
-        const pairsPhotoArea = document.getElementById('pairsPhotoArea');
-        if (!photoContent || !pairsPhotoArea || !traysSystem) return;
-
-        const panoSrc = traysSystem.pandebonoImageSrc || 'assets/images/pandebono.png';
-        const seen = new Set();
-        const pairsList = [];
-        traysSystem.pairings.forEach((mateId, trayId) => {
-            const key = [trayId, mateId].sort().join('|');
-            if (!seen.has(key)) {
-                seen.add(key);
-                const t1 = traysSystem.BASE_TRAYS.find(t => t.id === trayId);
-                const t2 = traysSystem.BASE_TRAYS.find(t => t.id === mateId);
-                if (t1 && t2) pairsList.push([t1, t2]);
-            }
-        });
-
-        const pairedIds = new Set([...traysSystem.pairings.keys()]);
-        const unpairedList = traysSystem.BASE_TRAYS.filter(t => !pairedIds.has(t.id));
-
-        const makeMiniGrid = (tray) => {
-            const cells = Array.from({ length: tray.total }, () =>
-                `<span class="photo-pano"><img src="${panoSrc}" alt="Pandebono" class="photo-pano-img"></span>`
-            ).join('');
-            return `<div class="photo-tray-grid" style="display:grid;grid-template-columns:repeat(${tray.cols},1fr);grid-template-rows:repeat(${tray.rows},1fr)">${cells}</div>`;
-        };
-
-        const pairsMarkup = pairsList.map(([a, b]) =>
-            `<div class="photo-pair">
-                <div class="photo-tray">${makeMiniGrid(a)}</div>
-                <span class="photo-equal">⟷</span>
-                <div class="photo-tray">${makeMiniGrid(b)}</div>
-            </div>`
-        ).join('');
-
-        const singlesMarkup = unpairedList.map((tray) =>
-            `<div class="photo-single">${makeMiniGrid(tray)}</div>`
-        ).join('');
-
-        photoContent.innerHTML = `
-            <div class="photo-pairs-grid">
-                ${pairsMarkup}
-                ${unpairedList.length > 0 ? `<div class="photo-singles-wrap"><p class="photo-singles-title">Bandejas sin pareja</p><div class="photo-singles-grid">${singlesMarkup}</div></div>` : ''}
-            </div>
-        `;
-        pairsPhotoArea.classList.remove('hidden');
-    };
 
     const initSheet11Trays = () => {
         if (traysM1Q2Initialized) return;
@@ -981,6 +942,8 @@ function initMoment1() {
     };
 
     const syncM1WithFlipbookPage = (event) => {
+            // Oculta todas las páginas antes de mostrar la actual
+            hideAllFlipbookPages();
         if (!problemSection || !flipbook) {
             return;
         }

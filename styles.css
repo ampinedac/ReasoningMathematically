@@ -2472,9 +2472,12 @@ body.flipbook-on-cover #flipbook::after {
 
 .board-container {
     margin: 20px auto;
-    max-width: 90%;
+    max-width: 100%;
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .board-tools {
@@ -2531,8 +2534,13 @@ body.flipbook-on-cover #flipbook::after {
     border-radius: 10px;
     background: white;
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23000" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>') 0 24, crosshair;
-    max-width: 100%;
+    width: 100% !important;
+    height: 420px !important;
+    max-width: 100% !important;
+    max-height: 70vh !important;
+    min-height: 320px;
     touch-action: none; /* Evita scroll en touch */
+}
 }
 
 /* ========================================
@@ -2584,7 +2592,9 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #problemQ1Section .q1-right-page .drawing-board {
-    height: 220px;
+    height: 420px !important;
+    min-height: 320px;
+    max-height: 70vh !important;
 }
 
 .status-text {
@@ -3556,14 +3566,28 @@ body.flipbook-on-cover #flipbook::after {
 
 .tool-icon-black,
 .tool-icon-red {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1;
+}
+/* Cuadrícula más densa para la pizarra */
+.board-grid {
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 2;
+}
 }
 
 .tool-icon-black {
