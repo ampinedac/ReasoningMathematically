@@ -1157,13 +1157,9 @@ function initProblemQ1() {
     
     // Habilitar botón enviar cuando haya evidencia
     const submitBtn = document.getElementById(submitBtnId);
-    
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
-        // Solo requiere audio (tablero opcional)
         submitBtn.disabled = !hasAudio;
-        
-        // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
             statusText.textContent = '';
@@ -1172,25 +1168,19 @@ function initProblemQ1() {
             statusText.textContent = '';
             statusText.className = 'status-text';
         }
+        syncBookNextButton();
     };
-    
-    // Verificar cada vez que se dibuja o graba
     setInterval(checkEvidence, 500);
-    
     // Enviar evidencia
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
-        
         try {
             const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
-            
             await submitEvidence({
                 moment: 'm1',
                 tag: 'q1',
@@ -1198,44 +1188,27 @@ function initProblemQ1() {
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
-
             m1Q1Submitted = true;
             const m1StorageKey = getM1Q1StorageKey();
             if (m1StorageKey) {
                 localStorage.setItem(m1StorageKey, 'true');
             }
-            
             statusText.textContent = '';
             statusText.className = 'status-text hidden';
-            
-            // Mantener botón deshabilitado permanentemente
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.5';
             submitBtn.style.cursor = 'not-allowed';
-
-            // Al enviar en la hoja 10, habilitar la flecha derecha para pasar a la hoja 11
-            const nextBtn = document.getElementById('nextBtn');
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-            }
-            
             // Bloquear edición
             boardState.disabled = true;
             const canvas = document.getElementById(canvasId);
             canvas.style.pointerEvents = 'none';
-            
-            // Deshabilitar solo los botones de herramientas de ESTE momento
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
-            
-            // Ya no salta automáticamente de pantalla: la flecha derecha lleva a la hoja 11
-            
+            syncBookNextButton();
         } catch (error) {
             console.error('Error al enviar:', error);
             console.error('Detalles del error:', error.message);
-            
             let errorMsg = 'Error al guardar. ';
             if (error.message.includes('Firebase no está configurado')) {
                 errorMsg += 'Firebase no disponible. ';
@@ -1243,14 +1216,12 @@ function initProblemQ1() {
                 errorMsg += 'Revisa tu conexión a internet. ';
             }
             errorMsg += 'Intenta de nuevo.';
-            
             statusText.textContent = errorMsg;
             statusText.className = 'status-text error';
-            
-            // Rehabilitar botón solo si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
+            syncBookNextButton();
         }
     });
 }
@@ -1352,7 +1323,6 @@ function initProblemM3Q1() {
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
         submitBtn.disabled = !hasAudio;
-        
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
             statusText.textContent = '';
@@ -1361,26 +1331,19 @@ function initProblemM3Q1() {
             statusText.textContent = '✅ Listo para enviar';
             statusText.className = 'status-text success';
         }
+        syncBookNextButton();
     };
-    
-    const checkInterval = setInterval(checkEvidence, 500);
-    
+    let checkInterval = setInterval(checkEvidence, 500);
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        
-        // Detener el intervalo de verificación
         clearInterval(checkInterval);
-        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
-        
         try {
             const boardBlob = null;
-            
             await submitEvidence({
                 moment: 'm3',
                 tag: 'problema1',
@@ -1388,11 +1351,9 @@ function initProblemM3Q1() {
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
-            
             statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
             m3Q1Submitted = true;
-            
             const recordBtn = document.getElementById(recordBtnId);
             const stopBtn = document.getElementById(stopBtnId);
             if (recordBtn) {
@@ -1404,23 +1365,16 @@ function initProblemM3Q1() {
                 stopBtn.disabled = true;
                 stopBtn.classList.add('hidden');
             }
-
-            const nextBtn = document.getElementById('nextBtn');
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-            }
-            
+            syncBookNextButton();
         } catch (error) {
             console.error('Error:', error);
             statusText.textContent = 'Error al guardar. Intenta de nuevo.';
             statusText.className = 'status-text error';
-            // Solo rehabilitar si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
-            // Reiniciar el intervalo si hay error
             checkInterval = setInterval(checkEvidence, 500);
+            syncBookNextButton();
         }
     });
 }
@@ -1442,7 +1396,6 @@ function initProblemM3Q2() {
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
         submitBtn.disabled = !hasAudio;
-        
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
             statusText.textContent = '';
@@ -1451,26 +1404,19 @@ function initProblemM3Q2() {
             statusText.textContent = '✅ Listo para enviar';
             statusText.className = 'status-text success';
         }
+        syncBookNextButton();
     };
-    
-    const checkInterval = setInterval(checkEvidence, 500);
-    
+    let checkInterval = setInterval(checkEvidence, 500);
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        
-        // Detener el intervalo de verificación
         clearInterval(checkInterval);
-        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
-        
         try {
             const choice2 = document.querySelector('input[name="truthQ2"]:checked')?.value;
-            
             await submitEvidence({
                 moment: 'm3',
                 tag: 'problema2',
@@ -1478,31 +1424,22 @@ function initProblemM3Q2() {
                 boardBlob: null,
                 audioBlob: audioState.audioBlob
             });
-            
             statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
             m3Q2Submitted = true;
-            
             document.getElementById(recordBtnId).disabled = true;
             document.getElementById(stopBtnId).disabled = true;
             document.getElementById(stopBtnId).classList.add('hidden');
-
-            const nextBtn = document.getElementById('nextBtn');
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-            }
-            
+            syncBookNextButton();
         } catch (error) {
             console.error('Error:', error);
             statusText.textContent = 'Error al guardar. Intenta de nuevo.';
             statusText.className = 'status-text error';
-            // Solo rehabilitar si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
-            // Reiniciar el intervalo si hay error
             checkInterval = setInterval(checkEvidence, 500);
+            syncBookNextButton();
         }
     });
 }
