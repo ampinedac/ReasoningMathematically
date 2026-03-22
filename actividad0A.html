@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <!-- Google Fonts: Butterfly Kids y Rancho -->
-    <link href="https://fonts.googleapis.com/css2?family=Butterfly+Kids&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Lobster Two y Rancho -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=2026031814">
     <link rel="stylesheet" href="trays-styles.css?v=2026031813">
@@ -78,7 +78,7 @@
     .story-image, .situation-image { display: block; margin: 0 auto; max-width: 100%; height: auto; }
 
     /* Subtítulo: quitar caja y usar texto más visible con sombra sutil */
-    .activity-subtitle { background: none; padding: 0; color: #0b2a3a; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.12); display: block; margin-bottom: 10px; font-size: 14px !important; }
+    .activity-subtitle { background: none; padding: 0; color: #0b2a3a; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.12); display: block; margin-bottom: 10px; }
 
     /* Ajustes tipográficos para Situación 1 */
     .q1-left-page h3 { margin-top: 0; font-size: 14px !important; }
@@ -194,7 +194,7 @@
      /* La cuadricula del tablero sigue apareciendo únicamente dentro de .board-grid */
 
      /* Aplicar tamaño grande SOLO al título y subtítulo de la pantalla de bienvenida */
-     #welcomeScreen .main-title, #welcomeScreen .activity-subtitle { font-size:30px !important; line-height:1.2 !important; }
+    /* font-size fijo eliminado para usar solo el tamaño responsivo definido en styles.css */
      /* Pantalla de confirmación: título y pregunta en 30px */
      #confirmationScreen .main-title, #confirmationScreen .confirmation-question { font-size:30px !important; line-height:1.2 !important; }
      /* Recuadro blanco principal semitransparente para Momento 1; en la pantalla de bienvenida
@@ -476,9 +476,9 @@
             <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
         </div>
         <div class="user-rect welcome-box">
-            <label for="studentCodeInput" style="font-weight: bold; font-size: 1.3em; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
-            <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="font-size: 1.2em; text-align: center; margin-bottom: 16px;" />
-            <button id="enterBtn" class="btn btn-primary" style="font-size: 1.1em;">Ingresar</button>
+            <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
+            <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
+            <button id="enterBtn" class="btn btn-primary">Ingresar</button>
             <div id="welcomeError" class="hidden" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
         </div>
     </section>

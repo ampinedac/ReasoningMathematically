@@ -2,17 +2,13 @@
 
 /* Pantalla de bienvenida */
 
-#welcomeScreen .main-title {
-    font-size: clamp(2.8rem, 8vw, 6rem) !important;
-}
-#welcomeScreen .activity-subtitle {
-    font-size: clamp(1.8rem, 4vw, 3.5rem) !important;
-}
+#welcomeScreen .main-title,
+#welcomeScreen .activity-subtitle,
 #welcomeScreen label,
 #welcomeScreen #studentCodeInput,
 #welcomeScreen #studentCodeInput::placeholder,
 #welcomeScreen #enterBtn {
-    font-size: clamp(1.2rem, 2.5vw, 2.2rem) !important;
+    font-size: clamp(26px, 4.5vw, 48px) !important;
 }
 
 /* Flipbook y páginas del libro */
@@ -41,11 +37,6 @@
 }
 
 /* Eliminar tamaños fijos en la bienvenida (inline) */
-#welcomeScreen label[style],
-#welcomeScreen #studentCodeInput[style],
-#welcomeScreen #enterBtn[style] {
-    font-size: unset !important;
-}
 /* Fuente Rancho solo para el crédito de autor */
 .author-credit {
     font-family: 'Rancho', cursive !important;
@@ -56,10 +47,10 @@
 #welcomeScreen label,
 #welcomeScreen #studentCodeInput,
 #welcomeScreen #enterBtn {
-    font-family: 'Butterfly Kids', cursive !important;
+    font-family: 'Lobster Two', cursive !important;
 }
 #welcomeScreen #studentCodeInput::placeholder {
-    font-family: 'Butterfly Kids', cursive !important;
+    font-family: 'Lobster Two', cursive !important;
 }
 /* ===== FUENTES PERSONALIZADAS ===== */
 
