@@ -24,6 +24,7 @@ let studentInfo = null; // Información del estudiante (nombre, apellidos, curso
 let currentPage = 1;
 let totalPages = 0;
 let flipbook;
+let flipbookSection;
 
 // Datos de Momento 2 (Juego de Bandejas)
 let traysSystem = null; // Nueva instancia del sistema de bandejas
