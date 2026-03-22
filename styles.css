@@ -1,3 +1,34 @@
+/* === FUENTES LOCALES === */
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Rancho';
+    src: url('assets/Font/Rancho/Rancho-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
 
     /* OVERRIDE FINAL: Forzar fuente y tamaño en portada */
     #flipbook .book-cover-page .cover-book-title {
