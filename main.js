@@ -9,6 +9,7 @@ function hideAllFlipbookPages() {
         page.style.pointerEvents = 'none';
         page.classList.remove('active');
     });
+}
 
 function showFlipbookPage(page) {
     if (!page) return;
@@ -16,7 +17,6 @@ function showFlipbookPage(page) {
     page.style.display = 'flex';
     page.style.opacity = '1';
     page.style.pointerEvents = 'auto';
-}
 }
 // (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
