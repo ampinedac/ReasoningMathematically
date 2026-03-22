@@ -1,3 +1,122 @@
+/* ===== FUENTES PERSONALIZADAS ===== */
+
+/* Títulos seleccionados con Butterfly Kids */
+.main-title,
+.cover-book-title,
+h1,
+h2,
+h3,
+.final-box h3,
+.m2-secret-title {
+    font-family: 'Butterfly Kids', cursive !important;
+    letter-spacing: 0.5px;
+}
+
+/* Texto normal con Rancho, excepto los títulos anteriores */
+body,
+p,
+li,
+span,
+.story-text,
+.activity-card,
+.activity-title,
+.toc-item,
+input,
+textarea,
+label,
+button,
+section,
+div,
+#flipbook .flipbook-page,
+#flipbook .story-page,
+#flipbook .book-cover-page,
+#flipbook .q1-book-spread {
+    font-family: 'Rancho', cursive;
+}
+
+/* Evita que los títulos seleccionados hereden Rancho */
+.main-title,
+.cover-book-title,
+h1,
+h2,
+h3,
+.final-box h3,
+.m2-secret-title {
+    font-family: 'Butterfly Kids', cursive !important;
+}
+/* Mostrar solo el contenido de la página que gira durante la animación */
+#flipbook .page.turning-forward .q1-left-page,
+#flipbook .page.turning-backward .q1-right-page {
+    opacity: 1;
+    pointer-events: auto;
+}
+#flipbook .page.turning-forward .q1-right-page,
+#flipbook .page.turning-backward .q1-left-page {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.2s;
+}
+/* === OVERLAY DE ORIENTACIÓN HORIZONTAL === */
+#orientationOverlay {
+    display: none;
+    position: fixed;
+    z-index: 99999;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(240,245,255,0.98);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    transition: opacity 0.3s;
+}
+#orientationOverlay.active {
+    display: flex;
+}
+.orientation-message {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 6px 32px #0002;
+    padding: 38px 24px 28px 24px;
+    max-width: 90vw;
+    margin: 0 auto;
+    color: #1a237e;
+    font-size: 1.2em;
+    font-family: inherit;
+}
+.orientation-message h2 {
+    margin: 0 0 10px 0;
+    font-size: 2em;
+    color: #0d47a1;
+}
+.orientation-message span {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 10px;
+}
+.orientation-message p {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+@media (max-width: 900px) and (orientation: portrait) {
+    body > *:not(#orientationOverlay) {
+        display: none !important;
+    }
+    #orientationOverlay {
+        display: flex !important;
+        opacity: 1;
+    }
+}
+@media (max-width: 900px) and (orientation: landscape) {
+    #orientationOverlay {
+        display: none !important;
+    }
+    body > *:not(#orientationOverlay) {
+        display: revert !important;
+    }
+}
 #flipbook .q1-right-page p,
 #flipbook .q1-right-page .story-text {
     text-align: center !important;

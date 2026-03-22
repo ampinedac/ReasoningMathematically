@@ -458,7 +458,15 @@
     </style>
 </head>
 <body>
-    <div class="author-credit">Por: Ángela Pineda</div>
+    <div class="author-credit">Por: Ángela María Pineda Chacón</div>
+    <!-- Overlay de orientación para móviles/tabletas -->
+    <div id="orientationOverlay">
+        <div class="orientation-message">
+            <span>🔄</span>
+            <h2>Gira tu dispositivo</h2>
+            <p>Por favor, coloca tu celular o tableta en <b>horizontal</b> para ver el libro correctamente.</p>
+        </div>
+    </div>
     <!-- PANTALLA DE BIENVENIDA -->
     <section id="welcomeScreen" class="screen active">
         <div class="user-rect">
@@ -604,34 +612,33 @@
 
                         <!-- TABLERO Y AUDIO -->
                         <div class="q1-right-page">
-                            <h4>Puedes utilizar el tablero</h4>
-                            
-                            <!-- Tablero -->
-                            <div class="board-container">
-                                <div class="board-tools">
-                                    <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                                    <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                            <div class="evidence-section">
+                                <h4>Puedes utilizar el tablero</h4>
+                                <!-- Tablero -->
+                                <div class="board-container">
+                                    <div class="board-tools">
+                                        <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                        <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                        <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                        <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                        <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                    </div>
+                                    <div class="board-wrapper">
+                                        <div class="board-grid"></div>
+                                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
+                                    </div>
                                 </div>
-                                <div class="board-wrapper">
-                                    <div class="board-grid"></div>
-                                    <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
+                                <!-- Audio -->
+                                <div class="audio-controls">
+                                    <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                    <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                    <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    <span id="audioStatusM1Q1" class="audio-status"></span>
                                 </div>
-                            </div>
-
-                            <!-- Audio -->
-                            <div class="audio-controls">
-                                <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                                <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
-                                <span id="audioStatusM1Q1" class="audio-status"></span>
-                            </div>
-
-                            <!-- Enviar -->
-                            <div class="submit-section">
-                                <p id="statusM1Q1" class="status-text"></p>
+                                <!-- Enviar -->
+                                <div class="submit-section">
+                                    <p id="statusM1Q1" class="status-text"></p>
+                                </div>
                             </div>
                         </div>
                         <div class="page-number book-spread-number"><span class="page-number-left">19</span><span class="page-number-right">20</span></div>
