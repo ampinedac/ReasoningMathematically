@@ -459,6 +459,35 @@ function showScreen(screenId) {
 // ========================================
 
 function initMoment1() {
+        console.log('[initMoment1] Entrando a la pantalla del cuento...');
+        const moment1Screen = document.getElementById('moment1Screen');
+        if (moment1Screen) {
+            moment1Screen.style.display = '';
+            moment1Screen.classList.add('active');
+            console.log('[initMoment1] moment1Screen visible y activa');
+        }
+        const flipbook = document.getElementById('flipbook');
+        if (flipbook) {
+            flipbook.style.display = '';
+            console.log('[initMoment1] flipbook visible');
+            // Forzar visibilidad de la portada
+            const portada = flipbook.querySelector('.book-cover-page');
+            if (portada) {
+                flipbook.querySelectorAll('.page').forEach(p => {
+                    p.classList.remove('active');
+                    p.style.opacity = '0';
+                    p.style.pointerEvents = 'none';
+                });
+                portada.classList.add('active');
+                portada.style.opacity = '';
+                portada.style.pointerEvents = '';
+                console.log('[initMoment1] Portada activada y visible');
+            } else {
+                console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
+            }
+        } else {
+            console.warn('[initMoment1] No se encontró el flipbook');
+        }
     const studentCodeM1 = document.getElementById('studentCodeM1');
     if (studentCodeM1) {
         studentCodeM1.textContent = getStudentHeaderText();

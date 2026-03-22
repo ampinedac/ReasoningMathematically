@@ -588,7 +588,7 @@ document.addEventListener('DOMContentLoaded', function() {
         applyRealBookPageNumbers();
         
 
-        // Refuerzo: buscar portada (book-cover-page) y activarla como primera página
+        // Refuerzo: buscar portada (book-cover-page) y activarla como primera página, con logs
         let portadaIndex = 0;
         for (let i = 0; i < pages.length; i++) {
             if (pages[i].classList.contains('book-cover-page')) {
@@ -608,9 +608,9 @@ document.addEventListener('DOMContentLoaded', function() {
             pages[portadaIndex].style.opacity = '';
             pages[portadaIndex].style.pointerEvents = '';
             updateProgress(portadaIndex);
-            console.log('✅ Portada activada como primera página (índice', portadaIndex, ')');
+            console.log('[app.js:init] Portada activada como primera página (índice', portadaIndex, ')');
         } else {
-            console.warn('⚠️ No se encontró portada, activando primera página por defecto');
+            console.warn('[app.js:init] No se encontró portada, activando primera página por defecto');
             if (pages[0]) {
                 pages[0].classList.add('active');
                 pages[0].style.opacity = '';
@@ -618,6 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateProgress(0);
             }
         }
+        console.log('[app.js:init] Estado de páginas tras inicialización:', Array.from(pages).map((p,i)=>({i,active:p.classList.contains('active'),opacity:p.style.opacity})));
 
         window.flipbookControls = {
             goToPage,
