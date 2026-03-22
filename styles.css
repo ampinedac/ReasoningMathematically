@@ -52,8 +52,8 @@
 /* Flipbook y páginas del libro */
 #flipbook .cover-book-title {
     font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(32px, 4vw, 45px) !important;
-    margin-bottom: 5vh !important;
+    font-size: clamp(40px, 6vw, 50px) !important;
+    margin-bottom: 10vh !important;
 }
 #flipbook .cover-subtitle {
     font-family: 'Rancho', cursive !important;
@@ -1134,7 +1134,7 @@ body.flipbook-on-cover #flipbook::after {
 
 #flipbook .book-cover-page .cover-leer-btn:hover {
     transform: scale(1.07);
-    box-shadow: 0 8px 28px rgba(175, 65, 12, 0.58);
+    box-shadow: none !important;
 }
 
 #flipbook .book-cover-page .cover-leer-btn:active {
