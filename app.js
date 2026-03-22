@@ -403,12 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         clearTemporaryTurnLayers();
 
-        const usesCoverTurn = oldPage?.classList.contains('book-cover-page') || newPage.classList.contains('book-cover-page');
-        if (usesCoverTurn) {
-            showSimplePage(pageIndex, direction);
-            playPageTurnSound();
-            return;
-        }
+        // Eliminar excepción: ahora la portada también usará la animación de hoja
 
         playPageTurnSound();
 
