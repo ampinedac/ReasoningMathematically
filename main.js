@@ -459,7 +459,12 @@ function showScreen(screenId) {
 // ========================================
 
 function initMoment1() {
-    document.getElementById('studentCodeM1').textContent = getStudentHeaderText();
+    const studentCodeM1 = document.getElementById('studentCodeM1');
+    if (studentCodeM1) {
+        studentCodeM1.textContent = getStudentHeaderText();
+    } else {
+        console.error('❌ No se encontró el elemento studentCodeM1');
+    }
 
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
@@ -487,7 +492,21 @@ function initMoment1() {
     const cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
-    const flipbookPages = flipbook ? Array.from(flipbook.querySelectorAll('.page')) : [];
+    if (!flipbook) {
+        console.error('❌ No se encontró el elemento flipbook. El cuento no se puede mostrar.');
+        alert('Error: No se encontró el cuento. Por favor recarga la página o contacta soporte.');
+        return;
+    } else {
+        // Forzar visibilidad del flipbook y su sección
+        flipbook.style.display = '';
+        const flipbookSection = document.getElementById('flipbookSection');
+        if (flipbookSection) flipbookSection.style.display = '';
+        const moment1Screen = document.getElementById('moment1Screen');
+        if (moment1Screen) moment1Screen.style.display = '';
+        console.log('✅ Flipbook y sección visibles');
+    }
+
+    const flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
     const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
     const q2PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
     const q3PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
@@ -503,7 +522,12 @@ function initMoment1() {
             flipbookPages.forEach(p => p.style.display = '');
             // Activar la portada (primera página)
             flipbookPages[0].classList.add('active');
+            console.log('ℹ️ Portada activada automáticamente');
+        } else {
+            console.log('ℹ️ Ya hay una página activa en el flipbook');
         }
+    } else {
+        console.warn('⚠️ No se encontraron páginas en el flipbook');
     }
 
     const getCurrentFlipbookPage = (event) => Number.isInteger(event?.detail?.page)
