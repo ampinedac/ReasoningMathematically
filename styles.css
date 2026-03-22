@@ -1,7 +1,7 @@
 #confirmationScreen,
 #confirmationScreen * {
     font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(26px, 4.5vw, 48px) !important;
+    font-size: clamp(36px, 5vw, 55px) !important;
 }
 /* ===== TAMAÑOS DE FUENTE RESPONSIVOS ===== */
 
@@ -2094,267 +2094,36 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 .confirmation-buttons .btn {
-    width: 150px !important;
-    min-width: 150px !important;
-    max-width: 150px !important;
-    height: 60px !important;
-    font-size: 1.3em;
-    flex-shrink: 0;
-    padding: 15px 20px;
-    margin: 0 !important;
-}
-
-.chalk-text {
-    display: block;
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-.chalk-input {
-    width: 100%;
-    padding: 15px;
-    font-size: 1.3em;
-    border: 3px solid #667eea;
-    border-radius: 10px;
-    text-align: center;
-    font-family: 'Comic Sans MS', cursive;
-    margin-bottom: 20px;
-    transition: border-color 0.3s;
-}
-
-.chalk-input:focus {
-    outline: none;
-    border-color: #764ba2;
-}
-
-.error-text {
-    color: #e74c3c;
-    font-size: 1.1em;
-    margin-top: 10px;
-}
-
-.success-text {
-    color: #27ae60;
-    font-size: 1.1em;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-/* ========================================
-   BOTONES
-   ======================================== */
-
-.btn {
-    padding: 12px 18px;
-    font-size: 1.2em;
-    width: auto !important;
-    min-width: unset !important;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-family: 'Comic Sans MS', cursive;
-    font-weight: bold;
-    transition: all 0.3s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.btn:active {
-    transform: translateY(0);
-}
-
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
-    transition: all 0.3s;
-    font-weight: bold;
-}
-
-.btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
-}
-
-.btn-secondary:active {
-    transform: translateY(0);
-}
-
-.btn-success {
-    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    color: white;
-    margin-top: 20px;
-}
-
-.btn-audio {
-    background: #e74c3c;
-    color: white;
-}
-
-/* ========================================
-   LECTOR DE PDF CON FLIP 3D
-   ======================================== */
-
-.pdf-container {
-    perspective: 2500px;
-    margin: 30px auto 0 auto;
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    height: 100px !important;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
-    position: relative;
-    max-width: 900px;
+    justify-content: center;
+    padding: 0 !important;
+    border-radius: 18px !important;
+    box-sizing: border-box;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
-
-.book {
-    position: relative;
-    width: 800px;
-    height: 600px;
-    transform-style: preserve-3d;
-    transform: rotateY(-5deg);
-    transition: transform 0.5s ease;
-}
-
-.book:hover {
-    transform: rotateY(0deg);
-}
-
-.page {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transform-origin: left center;
-    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
-    transform-style: preserve-3d;
-}
-
-.page.flipping {
-    transform: rotateY(-180deg);
-}
-
-.page-canvas {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    border: 3px solid #8B4513;
-    border-radius: 8px;
-    box-shadow: 
-        0 15px 40px rgba(0, 0, 0, 0.3),
-        inset 0 0 20px rgba(139, 69, 19, 0.05),
-        inset -5px 0 15px rgba(0, 0, 0, 0.1);
-    background: linear-gradient(to right, 
-        #fffef8 0%, 
-        #fffff0 5%, 
-        #fffef8 10%, 
-        #ffffff 100%);
-}
-
-.page-canvas.front {
-    transform: rotateY(0deg);
-}
-
-.page-canvas.back {
-    transform: rotateY(180deg);
-}
-
-.pdf-controls {
-    position: absolute;
-    width: 100%;
-    max-width: 750px;
-    height: calc(100% - 10px);
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 5;
-}
-
-/* Efecto de lomo del libro */
-.pdf-container::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 600px;
-    background: linear-gradient(to right, 
-        rgba(139, 69, 19, 0.3),
-        rgba(139, 69, 19, 0.1),
-        rgba(139, 69, 19, 0.3));
-    box-shadow: 
-        0 0 10px rgba(0, 0, 0, 0.2),
-        inset 0 0 3px rgba(0, 0, 0, 0.4);
-    z-index: 1;
-    pointer-events: none;
-    border-radius: 2px;
-}
-
-#prevPageBtn {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: auto;
-    border-radius: 10px;
-    padding: 15px 20px;
-    font-size: 1.2em;
-}
-
-#nextPageBtn {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: auto;
-    border-radius: 10px;
-    padding: 15px 20px;
-    font-size: 1.2em;
-}
-
-.page-indicator {
-    font-size: 1em;
-    font-weight: bold;
-    color: #667eea;
-    text-align: center;
-    background: white;
-    padding: 8px 20px;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.confirmation-buttons .btn img {
     display: block;
-    margin: 2px auto 0 auto;
-    width: fit-content;
+    margin: 0 auto;
+    max-width: 70px;
+    max-height: 70px;
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
 }
 
-/* Fallback para dispositivos con bajo rendimiento */
-@media (max-width: 768px) {
-    .book {
-        width: 100%;
-        max-width: 600px;
-        height: 450px;
-    }
+#confirmationScreen,
+#confirmationScreen * {
+  font-family: 'Lobster Two', cursive !important;
+  font-size: clamp(36px, 5vw, 55px) !important;
 }
 
-/* ========================================
-   CUENTO HTML (Reemplaza PDF)
+/* ===== CUENTO HTML (Reemplaza PDF)
    ======================================== */
 
 .story-page-content {
