@@ -561,10 +561,15 @@ function initMoment1() {
             p.style.display = '';
         });
         portada.classList.add('active');
-        portada.style.opacity = '';
-        portada.style.pointerEvents = '';
+        portada.style.opacity = '1'; // Forzar visibilidad
+        portada.style.pointerEvents = 'auto';
         portada.style.display = '';
         portada.classList.remove('hidden');
+        // Diagnóstico extra
+        setTimeout(() => {
+            const computed = getComputedStyle(portada);
+            console.log('[Diagnóstico Portada] display:', computed.display, 'visibility:', computed.visibility, 'opacity:', computed.opacity, 'clases:', portada.className);
+        }, 100);
     } else {
         console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
     }
