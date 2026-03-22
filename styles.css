@@ -98,7 +98,6 @@
 
 /* Títulos seleccionados con Butterfly Kids */
 .main-title,
-.cover-book-title,
 h1,
 h2,
 h3,
@@ -130,15 +129,17 @@ div,
     font-family: 'Rancho', cursive;
 }
 
-/* Evita que los títulos seleccionados hereden Rancho */
-.main-title,
-.cover-book-title,
-h1,
-h2,
-h3,
-.final-box h3,
-.m2-secret-title {
-    font-family: 'Butterfly Kids', cursive !important;
+
+/* Forzar fuente Lobster Two solo para el título de la portada */
+#flipbook .book-cover-page .cover-book-title {
+    font-family: 'Lobster Two', cursive !important;
+    font-size: clamp(40px, 6vw, 50px) !important;
+    letter-spacing: 0.5px;
+}
+
+/* Forzar fuente Rancho solo para la descripción de la portada */
+#flipbook .book-cover-page .cover-description {
+    font-family: 'Rancho', cursive !important;
 }
 /* Mostrar solo el contenido de la página que gira durante la animación */
 #flipbook .page.turning-forward .q1-left-page,
