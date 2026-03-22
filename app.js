@@ -587,9 +587,37 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSoundButton();
         applyRealBookPageNumbers();
         
-        // Show first story page without animation
-        pages[0].classList.add('active');
-        updateProgress(0);
+
+        // Refuerzo: buscar portada (book-cover-page) y activarla como primera página
+        let portadaIndex = 0;
+        for (let i = 0; i < pages.length; i++) {
+            if (pages[i].classList.contains('book-cover-page')) {
+                portadaIndex = i;
+                break;
+            }
+        }
+        // Desactivar todas las páginas primero
+        pages.forEach(p => {
+            p.classList.remove('active');
+            p.style.opacity = '0';
+            p.style.pointerEvents = 'none';
+        });
+        // Activar portada
+        if (pages[portadaIndex]) {
+            pages[portadaIndex].classList.add('active');
+            pages[portadaIndex].style.opacity = '';
+            pages[portadaIndex].style.pointerEvents = '';
+            updateProgress(portadaIndex);
+            console.log('✅ Portada activada como primera página (índice', portadaIndex, ')');
+        } else {
+            console.warn('⚠️ No se encontró portada, activando primera página por defecto');
+            if (pages[0]) {
+                pages[0].classList.add('active');
+                pages[0].style.opacity = '';
+                pages[0].style.pointerEvents = '';
+                updateProgress(0);
+            }
+        }
 
         window.flipbookControls = {
             goToPage,
