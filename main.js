@@ -1024,18 +1024,17 @@ function initMoment1() {
     };
 
     const syncM1WithFlipbookPage = (event) => {
-            // Oculta todas las páginas antes de mostrar la actual
-            hideAllFlipbookPages();
-            // Mostrar la página activa
-            const currentFlipbookPage = getCurrentFlipbookPage(event);
-            if (flipbookPages[currentFlipbookPage]) {
-                showFlipbookPage(flipbookPages[currentFlipbookPage]);
-            }
+        // Oculta todas las páginas antes de mostrar la actual
+        hideAllFlipbookPages();
+        // Mostrar la página activa
+        const currentFlipbookPage = getCurrentFlipbookPage(event);
+        if (flipbookPages[currentFlipbookPage]) {
+            showFlipbookPage(flipbookPages[currentFlipbookPage]);
+        }
         if (!problemSection || !flipbook) {
             return;
         }
 
-        const currentFlipbookPage = getCurrentFlipbookPage(event);
         const isProblemPage = [q1PageIndex, q2PageIndex, q3PageIndex, q3bPageIndex, q4PageIndex, q5PageIndex].includes(currentFlipbookPage);
 
         if (soundToggle) {
