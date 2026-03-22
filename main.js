@@ -10,6 +10,15 @@ function hideAllFlipbookPages() {
         page.classList.remove('active');
     });
 }
+
+function showFlipbookPage(page) {
+    if (!page) return;
+    page.classList.add('active');
+    page.style.display = 'flex';
+    page.style.opacity = '1';
+    page.style.pointerEvents = 'auto';
+}
+}
 // (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
@@ -1001,6 +1010,11 @@ function initMoment1() {
     const syncM1WithFlipbookPage = (event) => {
             // Oculta todas las páginas antes de mostrar la actual
             hideAllFlipbookPages();
+            // Mostrar la página activa
+            const currentFlipbookPage = getCurrentFlipbookPage(event);
+            if (flipbookPages[currentFlipbookPage]) {
+                showFlipbookPage(flipbookPages[currentFlipbookPage]);
+            }
         if (!problemSection || !flipbook) {
             return;
         }
