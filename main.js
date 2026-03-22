@@ -471,19 +471,21 @@ function initMoment1() {
         }
         flipbook = document.getElementById('flipbook');
         if (flipbook) {
-            flipbook.style.display = '';
-            console.log('[initMoment1] flipbook visible');
-            // Forzar visibilidad de la portada
+            // Limpiar visibilidad de todas las páginas
+            const pages = flipbook.querySelectorAll('.page');
+            pages.forEach(p => {
+                p.classList.remove('active');
+                p.style.opacity = '0';
+                p.style.pointerEvents = 'none';
+                p.style.display = 'none';
+            });
+            // Mostrar solo la portada
             const portada = flipbook.querySelector('.book-cover-page');
             if (portada) {
-                flipbook.querySelectorAll('.page').forEach(p => {
-                    p.classList.remove('active');
-                    p.style.opacity = '0';
-                    p.style.pointerEvents = 'none';
-                });
                 portada.classList.add('active');
-                portada.style.opacity = '';
-                portada.style.pointerEvents = '';
+                portada.style.opacity = '1';
+                portada.style.pointerEvents = 'auto';
+                portada.style.display = 'flex';
                 console.log('[initMoment1] Portada activada y visible');
             } else {
                 console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
@@ -525,64 +527,7 @@ function initMoment1() {
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
     // Refuerzo de visibilidad y diagnóstico
-    const flipbookSection = document.getElementById('flipbookSection');
-    const moment1ScreenEl = document.getElementById('moment1Screen');
-    if (!flipbook) {
-        console.error('❌ No se encontró el elemento flipbook. El cuento no se puede mostrar.');
-        alert('Error: No se encontró el cuento. Por favor recarga la página o contacta soporte.');
-        return;
-    }
-    // Forzar visibilidad máxima y limpiar cualquier ocultamiento
-    flipbook.style.display = '';
-    flipbook.classList.remove('hidden');
-    flipbook.removeAttribute('aria-hidden');
-    flipbook.style.visibility = 'visible';
-    if (flipbookSection) {
-        flipbookSection.style.display = '';
-        flipbookSection.classList.remove('hidden');
-        flipbookSection.removeAttribute('aria-hidden');
-        flipbookSection.style.visibility = 'visible';
-    } else {
-        console.warn('[initMoment1] No se encontró flipbookSection');
-    }
-    if (moment1ScreenEl) {
-        moment1ScreenEl.style.display = '';
-        moment1ScreenEl.classList.add('active');
-        moment1ScreenEl.removeAttribute('aria-hidden');
-        moment1ScreenEl.style.visibility = 'visible';
-    } else {
-        console.warn('[initMoment1] No se encontró moment1Screen');
-    }
-    // Asegurar que la portada esté activa
-    const portada = flipbook.querySelector('.book-cover-page');
-    if (portada) {
-        flipbook.querySelectorAll('.page').forEach(p => {
-            p.classList.remove('active');
-            p.style.opacity = '0';
-            p.style.pointerEvents = 'none';
-            p.style.display = '';
-        });
-        portada.classList.add('active');
-        portada.style.opacity = '1'; // Forzar visibilidad
-        portada.style.pointerEvents = 'auto';
-        portada.style.display = '';
-        portada.classList.remove('hidden');
-        // Diagnóstico extra
-        setTimeout(() => {
-            const computed = getComputedStyle(portada);
-            console.log('[Diagnóstico Portada] display:', computed.display, 'visibility:', computed.visibility, 'opacity:', computed.opacity, 'clases:', portada.className);
-        }, 100);
-    } else {
-        console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
-    }
-    // Diagnóstico extra: log de estado de visibilidad
-    setTimeout(() => {
-        const rect = flipbook.getBoundingClientRect();
-        console.log('[Diagnóstico Flipbook] display:', getComputedStyle(flipbook).display, 'visibility:', getComputedStyle(flipbook).visibility, 'opacity:', getComputedStyle(flipbook).opacity, 'rect:', rect);
-        if (rect.width === 0 || rect.height === 0) {
-            console.warn('[Diagnóstico Flipbook] El flipbook tiene tamaño 0. Puede estar oculto por CSS externo o layout.');
-        }
-    }, 500);
+    // --- Eliminado todo el refuerzo de visibilidad y diagnóstico anterior ---
 
     const flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
     const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
