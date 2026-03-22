@@ -1,3 +1,18 @@
+/* Fuente Rancho solo para el crédito de autor */
+.author-credit {
+    font-family: 'Rancho', cursive !important;
+}
+/* ===== FUENTE BUTTERFLY KIDS EN BIENVENIDA ===== */
+#welcomeScreen .main-title,
+#welcomeScreen .activity-subtitle,
+#welcomeScreen label,
+#welcomeScreen #studentCodeInput,
+#welcomeScreen #enterBtn {
+    font-family: 'Butterfly Kids', cursive !important;
+}
+#welcomeScreen #studentCodeInput::placeholder {
+    font-family: 'Butterfly Kids', cursive !important;
+}
 /* ===== FUENTES PERSONALIZADAS ===== */
 
 /* Títulos seleccionados con Butterfly Kids */
