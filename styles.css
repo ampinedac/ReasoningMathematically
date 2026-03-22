@@ -1,3 +1,14 @@
+
+    /* OVERRIDE FINAL: Forzar fuente y tamaño en portada */
+    #flipbook .book-cover-page .cover-book-title {
+        font-family: 'Lobster Two', cursive !important;
+        font-size: clamp(40px, 6vw, 50px) !important;
+        letter-spacing: 0.5px !important;
+    }
+    #flipbook .book-cover-page .cover-description {
+        font-family: 'Rancho', cursive !important;
+        font-size: 1.35em !important;
+    }
     font-family: 'Rancho', cursive !important;
 
 /* === OVERRIDE FINAL: ESTILOS DE CONFIRMACIÓN === */
