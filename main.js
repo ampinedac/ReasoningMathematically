@@ -5,6 +5,8 @@ function hideAllFlipbookPages() {
     const pages = flipbook.querySelectorAll('.page');
     pages.forEach(page => {
         page.style.display = 'none';
+        page.style.opacity = '0';
+        page.style.pointerEvents = 'none';
         page.classList.remove('active');
     });
 }
