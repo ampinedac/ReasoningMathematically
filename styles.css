@@ -404,7 +404,7 @@ section.screen > * {
 #flipbook .flipbook-page li,
 #flipbook .story-page li,
 #flipbook .book-cover-page li,
-#flipbook .q1-book-spread li {
+#flipbook .q1-book-spread li,
     display: flex;
     flex-direction: column;
     justify-content: center !important;
@@ -422,7 +422,6 @@ section.screen > * {
     margin-right: auto;
     width: 92%;
     max-width: 460px;
-}
 #flipbook .problem-box,
 #flipbook .q2-guide-card,
 #flipbook .prompt-box {
@@ -891,6 +890,7 @@ body.flipbook-on-cover #flipbook::after {
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
+}
     color: #fff;
     border: 2px solid rgba(255, 235, 193, 0.45);
     border-radius: 40px;
@@ -905,17 +905,16 @@ body.flipbook-on-cover #flipbook::after {
     position: relative;
     z-index: 4;
 }
-/* Eliminar llave de cierre extra */
 
 #flipbook .book-cover-page .cover-leer-btn:hover {
     transform: scale(1.07);
     box-shadow: 0 8px 28px rgba(175, 65, 12, 0.58);
-/* Eliminar llave de cierre extra */
+}
 
 #flipbook .book-cover-page .cover-leer-btn:active {
     transform: scale(0.96);
     box-shadow: 0 3px 12px rgba(175, 65, 12, 0.4);
-/* Eliminar llave de cierre extra */
+}
 
 #flipbook .book-cover-page .cover-leer-image-btn {
     background: transparent;

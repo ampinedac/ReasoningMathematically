@@ -24,7 +24,6 @@ let studentInfo = null; // Información del estudiante (nombre, apellidos, curso
 let currentPage = 1;
 let totalPages = 0;
 let flipbook;
-let flipbookSection;
 
 // Datos de Momento 2 (Juego de Bandejas)
 let traysSystem = null; // Nueva instancia del sistema de bandejas
@@ -531,11 +530,7 @@ function initMoment1() {
         // Forzar visibilidad del flipbook y su sección
         flipbook.style.display = '';
         flipbookSection = document.getElementById('flipbookSection');
-        if (flipbookSection) {
-            flipbookSection.style.display = '';
-        } else {
-            console.warn('⚠️ No se encontró el elemento #flipbookSection en el DOM');
-        }
+        if (flipbookSection) flipbookSection.style.display = '';
         const moment1Screen = document.getElementById('moment1Screen');
         if (moment1Screen) moment1Screen.style.display = '';
         console.log('✅ Flipbook y sección visibles');
