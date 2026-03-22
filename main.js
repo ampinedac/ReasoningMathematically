@@ -1,6 +1,6 @@
 // --- Ocultar todas las páginas del flipbook ---
 function hideAllFlipbookPages() {
-    const flipbook = document.getElementById('flipbook');
+    flipbook = document.getElementById('flipbook');
     if (!flipbook) return;
     const pages = flipbook.querySelectorAll('.page');
     pages.forEach(page => {
@@ -466,7 +466,7 @@ function initMoment1() {
             moment1Screen.classList.add('active');
             console.log('[initMoment1] moment1Screen visible y activa');
         }
-        const flipbook = document.getElementById('flipbook');
+        flipbook = document.getElementById('flipbook');
         if (flipbook) {
             flipbook.style.display = '';
             console.log('[initMoment1] flipbook visible');
@@ -505,7 +505,7 @@ function initMoment1() {
     const problemSection4 = document.getElementById('problemQ4Section');
     const problemSection5 = document.getElementById('problemQ5Section');
     const m1Q2FinalQuestion = document.getElementById('m1Q2FinalQuestion');
-    const flipbook = document.getElementById('flipbook');
+    flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const soundToggle = document.getElementById('soundToggle');
@@ -528,7 +528,7 @@ function initMoment1() {
     } else {
         // Forzar visibilidad del flipbook y su sección
         flipbook.style.display = '';
-        const flipbookSection = document.getElementById('flipbookSection');
+        flipbookSection = document.getElementById('flipbookSection');
         if (flipbookSection) flipbookSection.style.display = '';
         const moment1Screen = document.getElementById('moment1Screen');
         if (moment1Screen) moment1Screen.style.display = '';
