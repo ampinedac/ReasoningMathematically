@@ -19,7 +19,8 @@
 /* Flipbook y páginas del libro */
 #flipbook .cover-book-title {
     font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(28px, 3.5vw, 42px) !important;
+    font-size: clamp(32px, 4vw, 45px) !important;
+    margin-bottom: 5vh !important;
 }
 #flipbook .cover-subtitle {
     font-family: 'Rancho', cursive !important;
@@ -1091,7 +1092,7 @@ body.flipbook-on-cover #flipbook::after {
     font-size: clamp(1.18rem, 1.62vw, 1.4rem);
     font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 10px 24px rgba(175, 65, 12, 0.34);
+    /* box-shadow eliminado */
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     letter-spacing: 0.2px;
     position: relative;
