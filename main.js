@@ -453,11 +453,28 @@ function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
     });
-    
+
     // Agregar 'active' a la pantalla objetivo
     targetScreen.classList.add('active');
+    // Refuerzo: Si es moment1Screen, forzar visibilidad
+    if (screenId === 'moment1Screen') {
+        targetScreen.style.display = '';
+        targetScreen.style.opacity = '1';
+        targetScreen.style.pointerEvents = 'auto';
+        // Refuerzo: forzar visibilidad de la portada
+        const flipbook = document.getElementById('flipbook');
+        if (flipbook) {
+            const portada = flipbook.querySelector('.book-cover-page');
+            if (portada) {
+                portada.style.display = 'flex';
+                portada.style.opacity = '1';
+                portada.style.pointerEvents = 'auto';
+                portada.classList.add('active');
+            }
+        }
+    }
     console.log(`✅ Pantalla ${screenId} activada`);
-    
+
     // Actualizar código estudiantil en encabezados
     if (studentCode) {
         document.querySelectorAll('.student-code-display span').forEach(span => {
