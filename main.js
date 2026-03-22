@@ -9,7 +9,6 @@ function hideAllFlipbookPages() {
         page.style.pointerEvents = 'none';
         page.classList.remove('active');
     });
-}
 
 function showFlipbookPage(page) {
     if (!page) return;
