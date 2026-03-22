@@ -522,38 +522,60 @@ function initMoment1() {
     const cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
-    let flipbookSection = document.getElementById('flipbookSection');
+    // Refuerzo de visibilidad y diagnóstico
+    const flipbookSection = document.getElementById('flipbookSection');
     const moment1ScreenEl = document.getElementById('moment1Screen');
     if (!flipbook) {
         console.error('❌ No se encontró el elemento flipbook. El cuento no se puede mostrar.');
         alert('Error: No se encontró el cuento. Por favor recarga la página o contacta soporte.');
         return;
-    } else {
-        // Forzar visibilidad del flipbook y su sección
-        flipbook.style.display = '';
-        flipbook.classList.remove('hidden');
-        if (flipbookSection) {
-            flipbookSection.style.display = '';
-            flipbookSection.classList.remove('hidden');
-        }
-        if (moment1ScreenEl) {
-            moment1ScreenEl.style.display = '';
-            moment1ScreenEl.classList.add('active');
-        }
-        // Asegurar que la portada esté activa
-        const portada = flipbook.querySelector('.book-cover-page');
-        if (portada) {
-            flipbook.querySelectorAll('.page').forEach(p => {
-                p.classList.remove('active');
-                p.style.opacity = '0';
-                p.style.pointerEvents = 'none';
-            });
-            portada.classList.add('active');
-            portada.style.opacity = '';
-            portada.style.pointerEvents = '';
-        }
-        console.log('✅ Flipbook y sección visibles');
     }
+    // Forzar visibilidad máxima y limpiar cualquier ocultamiento
+    flipbook.style.display = '';
+    flipbook.classList.remove('hidden');
+    flipbook.removeAttribute('aria-hidden');
+    flipbook.style.visibility = 'visible';
+    if (flipbookSection) {
+        flipbookSection.style.display = '';
+        flipbookSection.classList.remove('hidden');
+        flipbookSection.removeAttribute('aria-hidden');
+        flipbookSection.style.visibility = 'visible';
+    } else {
+        console.warn('[initMoment1] No se encontró flipbookSection');
+    }
+    if (moment1ScreenEl) {
+        moment1ScreenEl.style.display = '';
+        moment1ScreenEl.classList.add('active');
+        moment1ScreenEl.removeAttribute('aria-hidden');
+        moment1ScreenEl.style.visibility = 'visible';
+    } else {
+        console.warn('[initMoment1] No se encontró moment1Screen');
+    }
+    // Asegurar que la portada esté activa
+    const portada = flipbook.querySelector('.book-cover-page');
+    if (portada) {
+        flipbook.querySelectorAll('.page').forEach(p => {
+            p.classList.remove('active');
+            p.style.opacity = '0';
+            p.style.pointerEvents = 'none';
+            p.style.display = '';
+        });
+        portada.classList.add('active');
+        portada.style.opacity = '';
+        portada.style.pointerEvents = '';
+        portada.style.display = '';
+        portada.classList.remove('hidden');
+    } else {
+        console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
+    }
+    // Diagnóstico extra: log de estado de visibilidad
+    setTimeout(() => {
+        const rect = flipbook.getBoundingClientRect();
+        console.log('[Diagnóstico Flipbook] display:', getComputedStyle(flipbook).display, 'visibility:', getComputedStyle(flipbook).visibility, 'opacity:', getComputedStyle(flipbook).opacity, 'rect:', rect);
+        if (rect.width === 0 || rect.height === 0) {
+            console.warn('[Diagnóstico Flipbook] El flipbook tiene tamaño 0. Puede estar oculto por CSS externo o layout.');
+        }
+    }, 500);
 
     const flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
     const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
