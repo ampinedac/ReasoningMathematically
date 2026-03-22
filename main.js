@@ -522,7 +522,8 @@ function initMoment1() {
     const cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
-    let flipbookSection;
+    let flipbookSection = document.getElementById('flipbookSection');
+    const moment1ScreenEl = document.getElementById('moment1Screen');
     if (!flipbook) {
         console.error('❌ No se encontró el elemento flipbook. El cuento no se puede mostrar.');
         alert('Error: No se encontró el cuento. Por favor recarga la página o contacta soporte.');
@@ -530,10 +531,27 @@ function initMoment1() {
     } else {
         // Forzar visibilidad del flipbook y su sección
         flipbook.style.display = '';
-        flipbookSection = document.getElementById('flipbookSection');
-        if (flipbookSection) flipbookSection.style.display = '';
-        const moment1Screen = document.getElementById('moment1Screen');
-        if (moment1Screen) moment1Screen.style.display = '';
+        flipbook.classList.remove('hidden');
+        if (flipbookSection) {
+            flipbookSection.style.display = '';
+            flipbookSection.classList.remove('hidden');
+        }
+        if (moment1ScreenEl) {
+            moment1ScreenEl.style.display = '';
+            moment1ScreenEl.classList.add('active');
+        }
+        // Asegurar que la portada esté activa
+        const portada = flipbook.querySelector('.book-cover-page');
+        if (portada) {
+            flipbook.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+                p.style.opacity = '0';
+                p.style.pointerEvents = 'none';
+            });
+            portada.classList.add('active');
+            portada.style.opacity = '';
+            portada.style.pointerEvents = '';
+        }
         console.log('✅ Flipbook y sección visibles');
     }
 
