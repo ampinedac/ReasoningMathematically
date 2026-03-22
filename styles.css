@@ -5,9 +5,10 @@
         font-size: clamp(40px, 6vw, 50px) !important;
         letter-spacing: 0.5px !important;
     }
-    #flipbook .book-cover-page .cover-description {
-        font-size: 1.35em !important;
-    }
+        #flipbook .book-cover-page .cover-description {
+            font-family: 'Rancho', cursive !important;
+            font-size: 1.35em !important;
+        }
 
 /* === OVERRIDE FINAL: ESTILOS DE CONFIRMACIÓN === */
 .confirmation-buttons .btn {
@@ -1068,18 +1069,20 @@ body.flipbook-on-cover #flipbook::after {
     align-items: center;
     justify-content: center;
     padding: 10px 20px 12px;
-    border-radius: 999px;
-    font-family: 'Trebuchet MS', 'Comic Sans MS', cursive;
-    font-size: clamp(1.46rem, 2.05vw, 1.9rem);
-    font-weight: 900;
-    line-height: 1;
-    text-transform: none;
-    background: rgba(255, 255, 255, 0.9);
-    border: 3px solid rgba(255, 255, 255, 0.98);
-    box-shadow: 0 7px 0 rgba(150, 120, 92, 0.22), 0 10px 18px rgba(0, 0, 0, 0.1);
-    text-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.75),
-        0 2px 0 rgba(0, 0, 0, 0.08);
+    #flipbook .book-cover-page .cover-subtitle,
+    #flipbook .book-cover-page .cover-description {
+        font-family: 'Rancho', cursive !important;
+        font-size: clamp(1.28rem, 1.55vw, 1.45rem) !important;
+        text-align: center !important;
+        color: rgba(103, 66, 32, 0.82) !important;
+        line-height: 1.52 !important;
+        font-style: italic !important;
+        margin: 0 auto 2.5vh auto !important;
+        max-width: 32ch !important;
+        width: 88% !important;
+        position: relative;
+        z-index: 4;
+    }
 }
 
 #flipbook .book-cover-page .cover-word-line .cover-word-chip:nth-child(odd) {
