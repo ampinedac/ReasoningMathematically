@@ -1040,6 +1040,9 @@ body.flipbook-on-cover #flipbook::after {
     padding: 0 9%;
     position: relative;
     z-index: 4;
+    font-family: 'Lobster Two', cursive !important;
+    font-size: clamp(40px, 6vw, 50px) !important;
+    letter-spacing: 0.5px;
 }
 
 #flipbook .book-cover-page .cover-word-line {
