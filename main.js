@@ -24,7 +24,6 @@ let studentInfo = null; // Información del estudiante (nombre, apellidos, curso
 let currentPage = 1;
 let totalPages = 0;
 let flipbook;
-let flipbookSection;
 
 // Datos de Momento 2 (Juego de Bandejas)
 let traysSystem = null; // Nueva instancia del sistema de bandejas
@@ -523,6 +522,7 @@ function initMoment1() {
     const cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
+    let flipbookSection;
     if (!flipbook) {
         console.error('❌ No se encontró el elemento flipbook. El cuento no se puede mostrar.');
         alert('Error: No se encontró el cuento. Por favor recarga la página o contacta soporte.');
