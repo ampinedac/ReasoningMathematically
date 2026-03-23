@@ -94,22 +94,6 @@
 
 /* Texto normal: Rancho */
 
-/* ========== RESPONSIVIDAD JERÁRQUICA Y CAJAS INTERNAS ========== */
-
-    /* Contenedor principal del libro: ocupa 95% del viewport */
-     #flipbook {
-     width: 95vw !important;
-     height: 95vh !important;
-     max-width: 95vw !important;
-     max-height: 95vh !important;
-     min-width: 0;
-     min-height: 0;
-     margin: 0 auto;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     box-sizing: border-box;
-     }
 
 /* Portada: 45% ancho, 95% alto, alineada a la derecha */
 #flipbook.book-cover-page {
@@ -130,9 +114,8 @@
 /* Spreads: centrados, 95% ancho/alto */
 #flipbook .q1-book-spread, #flipbook .activity-spread {
     width: 95vw !important;
-    height: 95vh !important;
-    max-width: 95vw !important;
-    max-height: 95vh !important;
+    height: 95vw !important;
+
     margin: 0 auto;
     display: flex !important;
     align-items: center !important;
@@ -157,7 +140,7 @@
     padding: 0.5em 0.7em !important;
     width: 98%;
     box-sizing: border-box;
-    font-size: clamp(1rem, 2vw, 1.3rem) !important;
+    font-size: 3vw !important;
     text-align: justify !important;
 }
 
