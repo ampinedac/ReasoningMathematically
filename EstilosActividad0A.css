@@ -14,6 +14,12 @@
 /* === PERSONALIZACIÓN PANTALLA DE CONFIRMACIÓN === */
 #confirmationScreen .confirmation-question {
     margin-bottom: 2.5rem;
+    font-family: 'Lobster Two', cursive !important;
+    font-size: clamp(2.2rem, 5vw, 3.5rem) !important;
+    color: #222;
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.1;
 }
 
 #confirmationScreen .welcome-box, /* asumiendo que la caja blanca usa welcome-box */
