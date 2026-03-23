@@ -1103,28 +1103,26 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .book-cover-page {
-    width: 45vw !important;
-    height: 95vh !important;
-    max-width: 600px !important;
+    width: 48vw !important;
+    height: 98vh !important;
+    max-width: 98vw !important;
+    max-height: 98vh !important;
     min-width: 220px;
     min-height: 320px;
-    margin: 0 0 24px 0 !important;
-    position: relative;
-    left: 0 !important;
-    right: auto !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    transform: none !important;
-    transform-origin: left center !important;
+    margin: 0 auto !important;
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    transform-origin: center center !important;
     border-radius: 14px !important;
-    border: 2px solid rgba(140, 66, 12, 0.25);
     background:
         radial-gradient(circle at 10% 15%, rgba(255, 255, 255, 0.38) 0 8%, transparent 9%),
         radial-gradient(circle at 80% 78%, rgba(255, 255, 255, 0.26) 0 10%, transparent 11%),
         linear-gradient(165deg, #fff5df 0%, #f8d89a 42%, #efbd6d 70%, #d8873f 100%) !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: flex-start !important;
+    align-items: center !important;
     justify-content: center !important;
     gap: 18px;
     padding: 24px 28px !important;
