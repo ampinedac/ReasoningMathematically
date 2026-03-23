@@ -49,6 +49,7 @@
 #welcomeScreen label,
 #welcomeScreen #enterBtn {
     font-family: 'Rancho', cursive !important;
+    font-size: clamp(26px, 4.5vw, 48px) !important;
 }
 
 
