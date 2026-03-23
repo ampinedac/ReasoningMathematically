@@ -458,6 +458,17 @@
     </style>
 </head>
 <body>
+    [!-- Refuerzo: ocultar cocina siempre al cargar, incluso si algún script externo la muestra --]
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cocina = document.getElementById('cocinaScreen');
+            if (cocina && !cocina.classList.contains('hidden')) {
+                cocina.classList.add('hidden');
+            }
+            // Refuerzo extra: asegurar display:none
+            if (cocina) cocina.style.display = '';
+        });
+    </script>
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
     <!-- Overlay de orientación para móviles/tabletas -->
     <div id="orientationOverlay">
