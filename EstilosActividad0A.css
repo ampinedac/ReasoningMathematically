@@ -1,5 +1,6 @@
-/* === TÍTULO DE PORTADA VISIBLE Y DESTACADO === */
-#flipbook .book-cover-page .cover-book-title {
+#flipbook .book-cover-page .cover-book-title,
+#flipbook .book-cover-page .cover-title,
+#flipbook .book-cover-page h2 {
     font-family: 'Lobster Two', cursive;
     font-size: clamp(3rem, 8vw, 6rem);
     color: #2d2d2d;
@@ -11,16 +12,6 @@
     z-index: 10;
     position: relative;
     background: none;
-}
-/* === TÍTULO DE PORTADA === */
-#flipbook .book-cover-page .cover-book-title,
-#flipbook .book-cover-page h2, /* por si el título es h2 */
-#flipbook .book-cover-page .cover-title {
-    font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(2.5rem, 7vw, 5.5rem) !important;
-    margin-bottom: 10%;
-    text-align: center;
-    line-height: 1.1;
 }
 #author-credit, .author-credit, #authorCredit {
     font-family: 'Rancho', cursive !important;
