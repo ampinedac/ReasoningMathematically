@@ -129,16 +129,126 @@
 }
 /* ===== FUENTES PERSONALIZADAS ===== */
 
-/* Títulos seleccionados con Butterfly Kids */
+
+/* Títulos principales: Lobster Two */
 .main-title,
 h1,
 h2,
 h3,
 .final-box h3,
-.m2-secret-title {
-    font-family: 'Butterfly Kids', cursive !important;
+.m2-secret-title,
+.activity-title,
+.activity-subtitle,
+.section-title {
+    font-family: 'Lobster Two', cursive !important;
     letter-spacing: 0.5px;
 }
+
+/* Texto normal: Rancho */
+body,
+p,
+li,
+span,
+.story-text,
+.activity-card,
+.activity-title,
+.toc-item,
+input,
+textarea,
+label,
+button,
+section,
+div,
+#flipbook .flipbook-page,
+#flipbook .story-page,
+#flipbook .book-cover-page,
+#flipbook .q1-book-spread {
+    font-family: 'Rancho', cursive !important;
+}
+/* ========== RESPONSIVIDAD JERÁRQUICA Y CAJAS INTERNAS ========== */
+
+/* Contenedor principal del libro: ocupa 95% del viewport */
+#flipbook {
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    min-width: 0;
+    min-height: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Portada: 45% ancho, 95% alto, alineada a la derecha */
+#flipbook .book-cover-page {
+    width: 45vw !important;
+    height: 95vh !important;
+    max-width: 440px !important;
+    min-width: 220px;
+    min-height: 320px;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    align-self: flex-end !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    justify-content: center !important;
+    box-sizing: border-box;
+}
+
+/* Spreads: centrados, 95% ancho/alto */
+#flipbook .q1-book-spread, #flipbook .activity-spread {
+    width: 95vw !important;
+    height: 95vh !important;
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+    margin: 0 auto;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box;
+}
+
+/* Cajas internas: 98% de su contenedor, padding y margen auto */
+.internal-box, .problem-box, .prompt-box, .q2-guide-card {
+    width: 98% !important;
+    max-width: 98%;
+    margin: 1.2em auto !important;
+    padding: 1em 1.2em !important;
+    box-sizing: border-box;
+    border-radius: 14px !important;
+    background: #fff9f0;
+}
+
+/* Texto dentro de cajas: margen y padding para no pegarse al borde */
+.internal-box p, .problem-box p, .prompt-box p, .q2-guide-card p, .story-text, .question {
+    margin: 0.5em 0 !important;
+    padding: 0.5em 0.7em !important;
+    width: 98%;
+    box-sizing: border-box;
+    font-size: clamp(1rem, 2vw, 1.3rem) !important;
+    text-align: justify !important;
+}
+
+/* Imágenes y otros elementos internos: hasta 98% de ancho */
+.internal-box img, .problem-box img, .prompt-box img, .q2-guide-card img, .story-text img, .question img {
+    max-width: 98%;
+    height: auto;
+    display: block;
+    margin: 0.5em auto;
+}
+
+/* Ajuste de alto flexible para cajas internas */
+.internal-box, .problem-box, .prompt-box, .q2-guide-card {
+    height: auto !important;
+    max-height: 98%;
+    overflow-y: auto;
+}
+
+/* Modularidad: cada spread/pantalla puede tener su propio ajuste si se requiere */
 
 /* Texto normal con Rancho, excepto los títulos anteriores */
 body,
