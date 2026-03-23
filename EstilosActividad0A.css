@@ -8,7 +8,9 @@
 
 #confirmationScreen .welcome-box, /* asumiendo que la caja blanca usa welcome-box */
 #confirmationScreen .confirmation-box {
-    width: 50%;
+    width: 50vw;
+    min-width: 320px;
+    max-width: 600px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
