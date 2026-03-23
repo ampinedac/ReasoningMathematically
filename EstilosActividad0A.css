@@ -1,0 +1,231 @@
+/* ===== FUENTES PERSONALIZADAS ===== */
+@font-face {
+    font-family: 'Lobster Two';
+/* ===== CSS VARIABLES ===== */
+:root {
+    --bg-light: #f5f5f0;
+    --bg-dark: #1a1a1a;
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+body {
+    font-family: var(--main-font);
+    font-size: unset;
+/* ===== UTILITY CLASSES ===== */
+.hidden {
+    display: none !important;
+/* ===== SCREEN CONTROL - SOLO UNA PANTALLA VISIBLE ===== */
+section.screen {
+    display: none !important;
+/* ===== BOTÓN DE DE SONIDO ===== */
+.sound-toggle {
+    position: absolute;
+/* =====================================================
+    FUENTES PERSONALIZADAS
+    (Usadas en títulos y textos decorativos de la actividad 0A)
+    ===================================================== */
+/* =====================================================
+    VARIABLES CSS GLOBALES
+    (Colores, fuentes, transiciones, etc. para actividad 0A)
+    ===================================================== */
+/* =====================================================
+    RESET Y ESTILOS BASE
+    (Quita márgenes y paddings por defecto, define base)
+    ===================================================== */
+/*
+    Fondo general y fuente principal de la actividad 0A
+    Aplica a todo el body, fondo azul claro y fuente definida en variables
+*/
+/* =====================================================
+    CLASES UTILITARIAS
+    (Ocultar elementos rápidamente)
+    ===================================================== */
+/* =====================================================
+    CONTROL DE PANTALLAS (section.screen)
+    Solo una pantalla visible a la vez (pantalla principal, actividades, etc.)
+    ===================================================== */
+/* =====================================================
+    BOTÓN DE SONIDO (clase .sound-toggle)
+    Botón flotante para activar/desactivar sonido
+    ===================================================== */
+/* =====================================================
+    ESTILOS ESPECÍFICOS PARA actividad0A.html
+    (Agrega aquí los estilos de cada sección, botón o elemento)
+    Ejemplo de referencia:
+    #actividad0A-container { ... }
+    .btn-verificar { ... } // Botón "Verificar respuesta"
+    .problema-box { ... } // Caja de problema principal
+    ===================================================== */
+// ...aquí puedes agregar bloques como:
+/*
+    Contenedor principal de la actividad 0A
+    <div id="actividad0A-container">...</div>
+*/
+#actividad0A-container {
+        background: #f0f0f0;
+        padding: 30px;
+        border-radius: 12px;
+}
+
+/*
+    Botón para verificar respuesta
+    <button class="btn-verificar">Verificar respuesta</button>
+*/
+.btn-verificar {
+        /* estilos aquí */
+}
+
+/*
+    Caja de problema principal
+    <div class="problema-box">...</div>
+*/
+.problema-box {
+        /* estilos aquí */
+}
+/* ===== FUENTES PERSONALIZADAS ===== */
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Rancho';
+    src: url('assets/Font/Rancho/Rancho-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* ===== CSS VARIABLES ===== */
+:root {
+    --bg-light: #f5f5f0;
+    --bg-dark: #1a1a1a;
+    --text-light: #333;
+    --text-dark: #e0e0e0;
+    --page-bg-light: #ffffff;
+    --page-bg-dark: #2a2a2a;
+    --shadow-light: rgba(0, 0, 0, 0.2);
+    --shadow-dark: rgba(0, 0, 0, 0.7);
+    --accent: #ff6b6b;
+    --transition: 0.3s ease;
+    --book-turn-duration: 0.92s;
+    --book-turn-ease: cubic-bezier(0.32, 0.02, 0.2, 1);
+    --main-font: 'Segoe UI', Arial, sans-serif;
+    --main-font-size: 18px;
+}
+
+/* ===== RESET & BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--main-font);
+    font-size: unset;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+    color: var(--text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background var(--transition), color var(--transition);
+    overflow-x: hidden;
+}
+
+/* ===== UTILITY CLASSES ===== */
+.hidden {
+    display: none !important;
+}
+
+/* ===== SCREEN CONTROL - SOLO UNA PANTALLA VISIBLE ===== */
+section.screen {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    width: 100%;
+    min-height: 100vh;
+    left: -9999px !important;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+}
+
+section.screen.active {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    left: 0 !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+section.screen > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== BOTÓN DE DE SONIDO ===== */
+.sound-toggle {
+    position: absolute;
+    top: -50px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 107, 107, 0.95);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.sound-toggle:hover {
+    background: rgba(255, 107, 107, 1);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.sound-toggle:active {
+    transform: scale(0.95);
+}
+
+.sound-toggle svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ...continúa con los estilos específicos para la actividad 0A... */
+
+/* Estilos exclusivos para actividad0A.html */
+
+/* Aquí puedes agregar los estilos específicos para la actividad 0A. */
+
+/* Ejemplo de selector (ajusta según tu HTML):
+#actividad0A-container {
+    background: #f0f0f0;
+    padding: 30px;
+    border-radius: 12px;
+}
+*/

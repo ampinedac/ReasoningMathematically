@@ -1,10 +1,4 @@
-/* === FUENTES LOCALES === */
-@font-face {
-    font-family: 'Lobster Two';
-    src: url('assets/Font/Lobster_Two/LobsterTwo-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
+/* ===== FUENTES PERSONALIZADAS ===== */
 @font-face {
     font-family: 'Lobster Two';
     src: url('assets/Font/Lobster_Two/LobsterTwo-Bold.ttf') format('truetype');
@@ -30,55 +24,6 @@
     font-style: normal;
 }
 
-    /* OVERRIDE FINAL: Forzar fuente y tamaño en portada */
-    #flipbook .book-cover-page .cover-book-title {
-        font-family: 'Lobster Two', cursive !important;
-        font-size: clamp(40px, 6vw, 50px) !important;
-        letter-spacing: 0.5px !important;
-    }
-        #flipbook .book-cover-page .cover-description {
-            font-family: 'Rancho', cursive !important;
-            font-size: 1.35em !important;
-        }
-
-/* === OVERRIDE FINAL: ESTILOS DE CONFIRMACIÓN === */
-.confirmation-buttons .btn {
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
-    height: 110px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 !important;
-    border-radius: 18px !important;
-    box-sizing: border-box;
-    background: #fff9c4 !important; /* amarillo pastel */
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    transition: filter 0.2s, box-shadow 0.2s;
-}
-.confirmation-buttons .btn:hover {
-    filter: brightness(0.85);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.18);
-}
-#confirmationScreen .main-title {
-    font-size: clamp(48px, 7vw, 60px) !important;
-    text-align: center;
-    font-family: 'Lobster Two', cursive !important;
-}
-#confirmationScreen .confirmation-question {
-    text-align: center !important;
-    width: 100%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-#confirmationScreen,
-#confirmationScreen * {
-    font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(36px, 5vw, 55px) !important;
-}
-/* ===== TAMAÑOS DE FUENTE RESPONSIVOS ===== */
 
 /* Pantalla de bienvenida */
 
@@ -91,44 +36,12 @@
     font-size: clamp(26px, 4.5vw, 48px) !important;
 }
 
-/* Flipbook y páginas del libro */
-
-#flipbook .story-text,
-#flipbook .problem-box p,
-#flipbook .q2-guide-title,
-#flipbook .q2-guide-list,
-#flipbook .instruction-hint,
-#flipbook .question,
-#flipbook .final-box,
-#flipbook .evidence-section,
-#flipbook .student-code-display {
-    /* Eliminado: ahora se usa .student-code-corner */
-}
 
 /* Botones generales del libro */
 #flipbook button,
 #flipbook .btn {
     font-size: clamp(1rem, 1.7vw, 1.3rem) !important;
 }
-
-/* Eliminar tamaños fijos en la bienvenida (inline) */
-/* Fuente Rancho solo para el crédito de autor */
-.author-credit {
-    font-family: 'Rancho', cursive !important;
-}
-/* ===== FUENTE BUTTERFLY KIDS EN BIENVENIDA ===== */
-#welcomeScreen .main-title,
-#welcomeScreen .activity-subtitle,
-#welcomeScreen label,
-#welcomeScreen #studentCodeInput,
-#welcomeScreen #enterBtn {
-    font-family: 'Lobster Two', cursive !important;
-}
-#welcomeScreen #studentCodeInput::placeholder {
-    font-family: 'Lobster Two', cursive !important;
-}
-/* ===== FUENTES PERSONALIZADAS ===== */
-
 
 /* Títulos principales: Lobster Two */
 .main-title,
@@ -167,23 +80,23 @@ div,
 }
 /* ========== RESPONSIVIDAD JERÁRQUICA Y CAJAS INTERNAS ========== */
 
-/* Contenedor principal del libro: ocupa 95% del viewport */
-#flipbook {
-    width: 95vw !important;
-    height: 95vh !important;
-    max-width: 95vw !important;
-    max-height: 95vh !important;
-    min-width: 0;
-    min-height: 0;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
+    /* Contenedor principal del libro: ocupa 95% del viewport */
+     #flipbook {
+     width: 95vw !important;
+     height: 95vh !important;
+     max-width: 95vw !important;
+     max-height: 95vh !important;
+     min-width: 0;
+     min-height: 0;
+     margin: 0 auto;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-sizing: border-box;
+     }
 
 /* Portada: 45% ancho, 95% alto, alineada a la derecha */
-#flipbook .book-cover-page {
+#flipbook.book-cover-page {
     width: 45vw !important;
     height: 95vh !important;
     max-width: 440px !important;
@@ -196,8 +109,7 @@ div,
     flex-direction: column !important;
     align-items: flex-end !important;
     justify-content: center !important;
-    box-sizing: border-box;
-}
+    box-sizing: border-box}
 
 /* Spreads: centrados, 95% ancho/alto */
 #flipbook .q1-book-spread, #flipbook .activity-spread {
@@ -248,39 +160,6 @@ div,
     overflow-y: auto;
 }
 
-/* Modularidad: cada spread/pantalla puede tener su propio ajuste si se requiere */
-
-
-/* Texto normal: Rancho, sobrescribe cualquier fuente previa */
-body,
-p,
-li,
-span,
-.story-text,
-.activity-card,
-.activity-title,
-.toc-item,
-input,
-textarea,
-label,
-button,
-section,
-div,
-#flipbook .flipbook-page,
-#flipbook .story-page,
-#flipbook .book-cover-page,
-#flipbook .q1-book-spread,
-#flipbook .story-page-content,
-#flipbook .story-title-page,
-#flipbook .story-page p,
-#flipbook .story-page .story-text,
-#flipbook .book-cover-page p,
-#flipbook .book-cover-page .story-text {
-    font-family: 'Rancho', cursive !important;
-}
-
-
-
 /* Mostrar solo el contenido de la página que gira durante la animación */
 #flipbook .page.turning-forward .q1-left-page,
 #flipbook .page.turning-backward .q1-right-page {
@@ -293,6 +172,7 @@ div,
     pointer-events: none !important;
     transition: opacity 0.2s;
 }
+
 /* === OVERLAY DE ORIENTACIÓN HORIZONTAL === */
 #orientationOverlay {
     display: none;
@@ -310,108 +190,9 @@ div,
 }
 #orientationOverlay.active {
     display: flex;
-}
-.orientation-message {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 6px 32px #0002;
-    padding: 38px 24px 28px 24px;
-    max-width: 90vw;
-    margin: 0 auto;
-    color: #1a237e;
-    font-size: unset;
-    font-family: inherit;
-}
-.orientation-message h2 {
-    margin: 0 0 10px 0;
-    font-size: unset;
-    color: #0d47a1;
-}
-.orientation-message span {
-    font-size: unset;
-    display: block;
-    margin-bottom: 10px;
-}
-.orientation-message p {
-    margin: 0;
-    font-size: unset;
+    opacity: 1;
 }
 
-@media (max-width: 900px) and (orientation: portrait) {
-    body > *:not(#orientationOverlay) {
-        display: none !important;
-    }
-    #orientationOverlay {
-        display: flex !important;
-        opacity: 1;
-    }
-}
-@media (max-width: 900px) and (orientation: landscape) {
-    #orientationOverlay {
-        display: none !important;
-    }
-    body > *:not(#orientationOverlay) {
-        display: revert !important;
-    }
-}
-#flipbook .q1-right-page p,
-#flipbook .q1-right-page .story-text {
-    text-align: center !important;
-}
-#flipbook .page.page-static-left .q1-left-page,
-#flipbook .page.page-static-right .q1-right-page,
-#flipbook .page.page-under-right .q1-right-page,
-#flipbook .page.page-under-left .q1-left-page {
-    max-width: 48vw !important;
-    min-width: 260px !important;
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-sizing: border-box !important;
-    overflow: visible !important;
-}
-
-#flipbook .page.page-static-left .q1-right-page,
-#flipbook .page.page-static-right .q1-left-page {
-    display: none !important;
-}
-#flipbook .q1-book-spread {
-        flex-direction: row !important;
-        align-items: stretch !important;
-        justify-content: center !important;
-        gap: 2vw;
-}
-
-#flipbook .q1-left-page, #flipbook .q1-right-page {
-        flex: 1 1 0;
-        min-width: 0;
-        max-width: 48vw;
-        max-height: 90vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        overflow-y: auto;
-        overflow-x: hidden;
-        margin: 0 0.5vw;
-        box-sizing: border-box;
-}
-
-@media (max-width: 900px) {
-    #flipbook .q1-book-spread {
-        flex-direction: column !important;
-        gap: 1vw;
-        height: auto !important;
-        min-height: 0 !important;
-    }
-    #flipbook .q1-left-page, #flipbook .q1-right-page {
-        max-width: 98vw;
-        max-height: 45vh;
-        margin: 0 auto 1vw auto;
-    }
-}
 /* === UNIFICACIÓN DE PÁGINAS FLIPBOOK === */
 .flipbook-page {
     width: 100%;
@@ -506,73 +287,15 @@ section.screen.active {
 }
 
 /* Patrón matemático de fondo para todas las pantallas */
-section.screen::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.15' fill='%231976d2' font-family='Comic Sans MS' font-weight='bold'%3E%3Ctext x='10' y='30' font-size='28'%3E1%3C/text%3E%3Ctext x='160' y='50' font-size='32'%3E2%3C/text%3E%3Ctext x='80' y='90' font-size='25'%3E3%3C/text%3E%3Ctext x='140' y='130' font-size='30'%3E4%3C/text%3E%3Ctext x='20' y='170' font-size='26'%3E5%3C/text%3E%3Ctext x='50' y='50' font-size='22'%3E+%3C/text%3E%3Ctext x='120' y='90' font-size='24'%3E×%3C/text%3E%3Ctext x='30' y='130' font-size='20'%3E=%3C/text%3E%3C/g%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg width='150' height='150' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='15' fill='none' stroke='%23ff6b6b' stroke-width='3' opacity='0.2'/%3E%3Ccircle cx='120' cy='100' r='20' fill='none' stroke='%23feca57' stroke-width='3' opacity='0.2'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg width='180' height='180' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='90,20 120,70 60,70' fill='none' stroke='%2348bb78' stroke-width='3' opacity='0.2'/%3E%3Cpolygon points='30,130 50,160 10,160' fill='none' stroke='%23ee5a6f' stroke-width='3' opacity='0.2'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg width='160' height='160' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='20' y='20' width='40' height='40' fill='none' stroke='%239b59b6' stroke-width='3' opacity='0.2' rx='5'/%3E%3Crect x='100' y='100' width='35' height='35' fill='none' stroke='%23e67e22' stroke-width='3' opacity='0.2' rx='5'/%3E%3C/svg%3E"),
-        url("data:image/svg+xml,%3Csvg width='140' height='140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='70,15 89.27,30.45 82.35,53.54 57.65,53.54 50.73,30.45' fill='none' stroke='%23e91e63' stroke-width='3' opacity='0.2'/%3E%3Cpolygon points='25,95 33.09,102.27 30.18,112.36 19.82,112.36 16.91,102.27' fill='none' stroke='%2300bcd4' stroke-width='3' opacity='0.2'/%3E%3C/svg%3E");
-    background-size: 200px 200px, 150px 150px, 180px 180px, 160px 160px, 140px 140px;
-    background-position: 0 0, 50px 50px, 100px 30px, 30px 80px, 70px 110px;
-    pointer-events: none;
-    z-index: 0;
-}
+
 
 section.screen > * {
     position: relative;
     z-index: 1;
 }
 
-/* ===== PROGRESS INDICATOR ===== */
-.progress-container {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    right: 80px;
-    z-index: 999;
-}
 
-.progress-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-bar::before {
-    content: '';
-    display: block;
-    height: 100%;
-    width: 0%;
-    background: var(--accent);
-    transition: width 0.5s ease;
-}
-
-.progress-text {
-    text-align: center;
-    font-size: 14px;
-    margin-top: 5px;
-    font-weight: bold;
-}
-
-/* ===== FLIPBOOK WRAPPER ===== */
-.flipbook-wrapper {
-    margin: 80px auto 20px;
-    perspective: 2500px;
-    width: 100%;
-    max-width: 1600px;
-    position: relative;
-}
-
-/* ===== BOT\u00d3N DE SONIDO ===== */
+/* ===== BOTÓN DE DE SONIDO ===== */
 .sound-toggle {
     position: absolute;
     top: -50px;
@@ -671,22 +394,6 @@ section.screen > * {
 }
 
 
-
-/* Uniformidad de tamaño y padding para el contenido de todas las páginas */
-#flipbook .page > *,
-#flipbook .flipbook-page > *,
-#flipbook .story-page > *,
-#flipbook .book-cover-page > *,
-#flipbook .q1-book-spread > * {
-    box-sizing: border-box;
-    max-width: 880px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-}
-
 /* Restaurar la posición, apilamiento y animación del libro */
 #flipbook .page {
     position: absolute;
@@ -727,58 +434,6 @@ section.screen > * {
     z-index: 12;
 }
 
-/* Uniformidad para spreads y portada */
-/* Unificación de estilo para todas las páginas del libro (historia y actividades) */
-/* Spread ocupa el 95% de la pantalla */
-#flipbook .flipbook-page,
-#flipbook .story-page,
-#flipbook .book-cover-page,
-#flipbook .q1-book-spread {
-    width: 95vw !important;
-    height: 95vh !important;
-    max-width: 95vw !important;
-    max-height: 95vh !important;
-    min-width: 0;
-    min-height: 0;
-    margin: 0 auto 24px auto;
-    background: #fff;
-    border-radius: 14px !important;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    padding: 24px 28px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centrado vertical */
-    align-items: center;     /* Centrado horizontal */
-    overflow: hidden;
-    text-align: center;
-    min-height: 320px;
-}
-
-/* Unificar tamaño de letra para el contenido principal de todas las páginas */
-/* Centrado y justificado de textos en todas las páginas del flipbook */
-#flipbook .flipbook-page p,
-#flipbook .story-page p,
-#flipbook .book-cover-page p,
-#flipbook .q1-book-spread p,
-#flipbook .flipbook-page li,
-#flipbook .story-page li,
-#flipbook .book-cover-page li,
-#flipbook .q1-book-spread li,
-#flipbook .flipbook-page .story-text,
-#flipbook .story-page .story-text,
-#flipbook .book-cover-page .story-text,
-#flipbook .q1-book-spread .story-text {
-    text-align: justify !important;
-    margin-left: auto;
-    margin-right: auto;
-    width: 92%;
-    max-width: 600px;
-    font-family: var(--main-font, 'Georgia', 'Times New Roman', serif) !important;
-    font-size: var(--main-font-size, 1.1rem) !important;
-    line-height: 1.5 !important;
-    letter-spacing: -0.2px;
-}
 /* Centrar imágenes y otros elementos hijos en las páginas del flipbook */
 #flipbook .flipbook-page > *,
 #flipbook .story-page > *,
@@ -1109,11 +764,12 @@ body.flipbook-on-cover #flipbook::after {
     max-height: 98vh !important;
     min-width: 220px;
     min-height: 320px;
-    margin: 0 auto !important;
+    margin: auto !important;
     position: absolute !important;
-    top: 50%;
+    top: 1vh;
+    bottom: 1vh;
     left: 50%;
-    transform: translate(-50%, -50%) !important;
+    transform: translateX(-50%) !important;
     transform-origin: center center !important;
     border-radius: 14px !important;
     background:
@@ -1132,31 +788,6 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 /* Sombra del lomo izquierdo del libro */
-#flipbook .book-cover-page::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 22px;
-    background: linear-gradient(to right, rgba(102, 45, 10, 0.62), rgba(102, 45, 10, 0.15), transparent);
-    border-radius: 0;
-    pointer-events: none;
-    z-index: 3;
-}
-
-/* Franja decorativa superior */
-#flipbook .book-cover-page::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 16% 18%, rgba(255, 251, 240, 0.82) 0 10%, transparent 11%),
-        radial-gradient(circle at 78% 80%, rgba(255, 245, 222, 0.5) 0 11%, transparent 12%);
-    pointer-events: none;
-    z-index: 2;
-}
-
 .cover-stickers {
     position: absolute;
     inset: 0;
@@ -1170,131 +801,11 @@ body.flipbook-on-cover #flipbook::after {
 
 #flipbook .book-cover-page .cover-book-title {
     font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(2.5rem, 10vw, 7.5rem) !important;
+    font-size: clamp(10rem, 30vw, 38rem) !important;
     letter-spacing: 0.5px !important;
     line-height: 1.1;
     width: 100%;
-    text-align: left;
-}
-
-#flipbook .book-cover-page .cover-word-line {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 8px;
-}
-
-#flipbook .book-cover-page .cover-word-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px 12px;
-#flipbook .book-cover-page .cover-subtitle,
-#flipbook .book-cover-page .cover-description {
-    font-family: 'Rancho', cursive !important;
-    font-size: clamp(1.2rem, 3vw, 2.8rem) !important;
-    text-align: left !important;
-    color: rgba(103, 66, 32, 0.82) !important;
-    line-height: 1.52 !important;
-    font-style: italic !important;
-    margin: 0 0 2.5vh 0 !important;
-    max-width: 32ch !important;
-    width: 100% !important;
-    position: relative;
-    z-index: 4;
-}
-#flipbook .book-cover-page .cover-word-chip {
-    font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(2.04rem, 6.7vw, 2.44rem) !important; /* Doble del tamaño anterior */
-}
-}
-
-#flipbook .book-cover-page .cover-word-line .cover-word-chip:nth-child(odd) {
-    transform: rotate(-2deg);
-}
-
-#flipbook .book-cover-page .cover-word-line .cover-word-chip:nth-child(even) {
-    transform: rotate(2deg);
-}
-
-#flipbook .book-cover-page .cover-word-chip.tone-1 {
-    color: #ff4fa3;
-}
-
-#flipbook .book-cover-page .cover-word-chip.tone-2 {
-    color: #35a9ff;
-}
-
-#flipbook .book-cover-page .cover-word-chip.tone-3 {
-    color: #2bc85e;
-}
-
-#flipbook .book-cover-page .cover-word-chip.tone-4 {
-    color: #ffb21d;
-}
-
-#flipbook .book-cover-page .cover-word-chip.tone-5 {
-    color: #a45cff;
-}
-
-#flipbook .book-cover-page .cover-subtitle {
-    font-family: 'Rancho', cursive !important;
-}
-
-/* Centrar el botón Léeme en la portada */
-#flipbook .book-cover-page .cover-leer-btn {
-    background: linear-gradient(135deg, #f07b24 0%, #d65f16 52%, #b94a10 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
-    color: #fff;
-    border: 2px solid rgba(255, 235, 193, 0.45);
-    border-radius: 40px;
-    padding: 17px 44px;
-    font-family: 'Trebuchet MS', 'Verdana', sans-serif;
-    font-size: clamp(1.18rem, 1.62vw, 1.4rem);
-    font-weight: 800;
-    cursor: pointer;
-    /* box-shadow eliminado */
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
-    letter-spacing: 0.2px;
-    position: relative;
-    z-index: 4;
-}
-
-#flipbook .book-cover-page .cover-leer-btn:hover {
-    transform: scale(1.07);
-    box-shadow: none !important;
-}
-
-#flipbook .book-cover-page .cover-leer-btn:active {
-    transform: scale(0.96);
-    box-shadow: 0 3px 12px rgba(175, 65, 12, 0.4);
-}
-
-#flipbook .book-cover-page .cover-leer-image-btn {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    line-height: 0;
-}
-
-#flipbook .book-cover-page .cover-leer-image {
-    width: clamp(126px, 16.8vw, 198px);
-    height: auto;
-    display: block;
-    /* Sombra eliminada para evitar doble efecto */
-}
-
-#flipbook .book-cover-page .cover-leer-image-btn:hover {
-    transform: translateY(-1px) scale(1.03);
-}
-
-#flipbook .book-cover-page .cover-leer-image-btn:active {
-    transform: translateY(0) scale(0.98);
+    text-align: center;
 }
 
 /* Animación de apertura: tapa de libro real (giro desde el lomo izquierdo) */
@@ -1424,113 +935,6 @@ body.flipbook-on-cover #flipbook::after {
         opacity: 0;
         filter: brightness(1);
     }
-}
-
-
-/* ===== COVER PAGE ===== */
-.cover-page {
-    background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-    border: 3px solid var(--accent);
-}
-
-.cover-content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.cover-emoji {
-    font-size: unset;
-    animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-}
-
-.cover-title {
-    font-size: unset;
-    color: #2c3e50;
-    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
-    line-height: 1.2;
-    font-weight: 700;
-}
-
-
-
-.start-btn {
-    padding: 15px 40px;
-    font-size: unset;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform var(--transition), box-shadow var(--transition);
-}
-
-.start-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.start-btn:focus {
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-}
-
-/* ===== TABLE OF CONTENTS ===== */
-.toc-page {
-    background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
-}
-
-.toc-title {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: #ffffff;
-    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-    font-weight: 700;
-}
-
-.toc-list {
-    list-style: none;
-    text-align: left;
-    width: 100%;
-    max-width: 320px;
-}
-
-.toc-item {
-    padding: 12px;
-    margin: 8px 0;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform var(--transition), background var(--transition);
-    font-size: 16px;
-    color: #333;
-}
-
-.toc-item:hover {
-    transform: translateX(10px);
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* ===== STORY PAGE ===== */
-.story-page {
-    padding: 15px 20px;
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr auto;
-    gap: 20px;
-    grid-template-areas: 
-        "emoji text"
-        "number number";
-    position: relative;
 }
 
 /* Línea divisoria del libro */
@@ -1665,21 +1069,6 @@ body.flipbook-on-cover #flipbook::after {
     text-align: right;
 }
 
-.emoji-large {
-    font-size: 72px;
-    margin: 20px 0;
-    line-height: 1;
-}
-
-.story-text {
-    font-size: 18px;
-    line-height: 1.8;
-    color: #2c3e50;
-    text-align: justify;
-    max-width: 350px;
-    font-weight: 500;
-}
-
 /* ===== BACK COVER ===== */
 .back-cover {
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
@@ -1732,8 +1121,8 @@ body.flipbook-on-cover #flipbook::after {
     height: 60px;
     padding: 0;
     font-size: 32px;
-    background: rgba(255, 107, 107, 0.9);
-    color: white;
+    background: #025892e6;
+    color: #d1ebfd;
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -1757,8 +1146,8 @@ body.flipbook-on-cover #flipbook::after {
 
 .nav-btn:hover:not(:disabled) {
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
-    background: rgba(255, 107, 107, 1);
+    box-shadow: 0 6px 20px #d1ebfd;
+    background: #025892e6;
 }
 
 .nav-btn:disabled {
@@ -1769,199 +1158,6 @@ body.flipbook-on-cover #flipbook::after {
 .nav-btn:focus {
     outline: 2px solid #fff;
     outline-offset: 2px;
-}
-
-/* ========================================
-   CONTENEDOR GENERAL PARA MOMENTOS
-   ======================================== */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 900px) {
-    #flipbook {
-        max-width: 600px;
-        height: 450px;
-    }
-    
-    #flipbook .page {
-        max-width: 600px;
-        height: 450px;
-        padding: 30px;
-    }
-    
-    .cover-emoji {
-        font-size: 80px;
-    }
-    
-    .cover-title {
-        font-size: 28px;
-    }
-    
-    .emoji-large {
-        font-size: 60px;
-    }
-    
-    .story-text {
-        font-size: var(--main-font-size) !important;
-    }
-}
-
-@media (max-width: 650px) {
-    #flipbook {
-        width: 90%;
-        max-width: 420px;
-        aspect-ratio: 4 / 5;
-    }
-    
-    #flipbook .page {
-        padding: 2.5%;
-        height: 100%;
-    }
-
-    .story-page {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr auto;
-        grid-template-areas:
-            "emoji"
-            "text"
-            "number";
-        gap: 10px;
-        padding: 10px 12px;
-    }
-
-    .story-page::after {
-        display: none;
-    }
-
-    .story-page .story-image {
-        max-width: 72%;
-        max-height: 180px;
-    }
-    
-    .flipbook-wrapper {
-        margin: 80px auto 20px;
-        padding-bottom: 62px;
-    }
-    
-    .story-page .story-text {
-        font-size: var(--main-font-size) !important;
-        line-height: 1.45;
-        width: 100%;
-        max-width: none;
-        margin: 0;
-        padding: 0 4px 8px;
-        overflow-y: auto;
-    }
-    
-    .cover-emoji {
-        font-size: 60px;
-    }
-    
-    .cover-title {
-        font-size: 22px;
-    }
-    
-
-    
-    .emoji-large {
-        font-size: 45px;
-    }
-    
-    .story-text {
-        font-size: var(--main-font-size) !important;
-    }
-    
-    .toc-title {
-        font-size: 24px;
-    }
-    
-    .toc-item {
-        font-size: 13px;
-        padding: 8px;
-    }
-    
-    .controls {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .nav-buttons .nav-btn {
-        width: 100%;
-        max-width: 300px;
-    }
-
-    .flipbook-wrapper .nav-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 24px;
-        top: auto;
-        bottom: 6px;
-        transform: none;
-    }
-
-    .flipbook-wrapper #prevBtn {
-        left: calc(50% - 56px);
-    }
-
-    .flipbook-wrapper #nextBtn {
-        left: calc(50% + 12px);
-        right: auto;
-    }
-
-    .flipbook-wrapper .nav-btn:hover:not(:disabled) {
-        transform: scale(1.06);
-    }
-}
-
-@media (max-width: 450px) {
-    #flipbook {
-        width: 95%;
-        aspect-ratio: 4 / 5;
-    }
-    
-    #flipbook .page {
-        padding: 2%;
-    }
-    
-    .story-page .story-text {
-        font-size: clamp(0.7rem, 3vw, 0.9rem);
-        line-height: 1.4;
-    }
-
-    .story-page .story-image {
-        max-height: 150px;
-    }
-
-    .flipbook-wrapper .nav-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 20px;
-        bottom: 4px;
-    }
-
-    .flipbook-wrapper #prevBtn {
-        left: calc(50% - 50px);
-    }
-
-    .flipbook-wrapper #nextBtn {
-        left: calc(50% + 12px);
-    }
-    
-    .cover-title {
-        font-size: 18px;
-    }
-    
-    .story-text {
-        font-size: 13px;
-    }
 }
 
 /* ===== ACCESSIBILITY ===== */
@@ -1985,69 +1181,6 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 /* ========================================
-   TIPOGRAFÍA Y TÍTULOS
-   ======================================== */
-
-.main-title {
-    font-size: 3em;
-    text-align: center;
-    color: #1d3557;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2),
-                 0 0 20px rgba(29, 53, 87, 0.4);
-    margin-bottom: 20px;
-    line-height: 1.3;
-    padding: 20px;
-    font-weight: bold;
-}
-
-.activity-subtitle {
-    font-size: 1.8em;
-    text-align: center;
-    color: #2d4654;
-    text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.5);
-    margin-bottom: 3px;
-    padding: 0 20px;
-    font-style: italic;
-}
-
-.section-title {
-    font-size: 2em;
-    color: #667eea;
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.header {
-    margin-bottom: 30px;
-    border-bottom: 3px dashed #764ba2;
-    padding-bottom: 15px;
-}
-
-.student-code-display {
-    font-size: 1.1em;
-    color: #764ba2;
-    font-weight: bold;
-    margin: 0;
-    padding: 0.2em 0.8em 0.2em 0.5em;
-    background: none;
-    box-shadow: none;
-    border-radius: 0 0 10px 0;
-    z-index: 10;
-}
-
-.student-code-corner {
-    position: absolute;
-    top: 0.2em;
-    left: 0.2em;
-    text-align: left;
-    opacity: 0.85;
-    pointer-events: none;
-    font-size: clamp(0.85em, 1.2vw, 1.15em);
-    background: none;
-    box-shadow: none;
-}
-
-/* ========================================
    PANTALLA PRINCIPAL
    ======================================== */
 
@@ -2065,7 +1198,7 @@ body.flipbook-on-cover #flipbook::after {
     top: 10px;
     right: 14px;
     z-index: 1200;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1;
     padding: 6px 10px;
     border-radius: 999px;
@@ -2899,9 +2032,7 @@ body.flipbook-on-cover #flipbook::after {
     50% { text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6); }
 }
 
-.magic-theme .student-code-display {
-    /* Eliminado: ahora se usa solo el color principal */
-}
+/* .magic-theme .student-code-display: Eliminado, ahora se usa solo el color principal */
 
 /* Sistema de vidas mágicas */
 .magic-lives-container {

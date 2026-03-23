@@ -1,0 +1,383 @@
+/* =====================================================
+   FUENTES PERSONALIZADAS
+   (Usadas en títulos y textos decorativos)
+   ===================================================== */
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Lobster Two';
+    src: url('assets/Font/Lobster_Two/LobsterTwo-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Rancho';
+    src: url('assets/Font/Rancho/Rancho-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* =====================================================
+   VARIABLES CSS GLOBALES
+   (Colores, fuentes, transiciones, etc.)
+   ===================================================== */
+:root {
+    --bg-light: #f5f5f0;
+    --bg-dark: #1a1a1a;
+    --text-light: #333;
+    --text-dark: #e0e0e0;
+    --page-bg-light: #ffffff;
+    --page-bg-dark: #2a2a2a;
+    --shadow-light: rgba(0, 0, 0, 0.2);
+    --shadow-dark: rgba(0, 0, 0, 0.7);
+    --accent: #ff6b6b;
+    --transition: 0.3s ease;
+    --book-turn-duration: 0.92s;
+    --book-turn-ease: cubic-bezier(0.32, 0.02, 0.2, 1);
+    --main-font: 'Segoe UI', Arial, sans-serif;
+    --main-font-size: 18px;
+}
+
+/* =====================================================
+   RESET Y ESTILOS BASE
+   (Quita márgenes y paddings por defecto, define base)
+   ===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*
+  Fondo general y fuente principal de la pantalla principal (index.html)
+  Aplica a todo el body, fondo azul claro y fuente definida en variables
+*/
+body {
+    font-family: var(--main-font);
+    font-size: unset;
+    /* Fondo matemático SVG + gradiente, ambos visibles */
+    background:
+      linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%),
+      url("data:image/svg+xml,%3Csvg%20width%3D'220'%20height%3D'220'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Ccircle%20cx%3D'110'%20cy%3D'110'%20r%3D'90'%20fill%3D'%23ff0000'%20opacity%3D'0.7'/%3E%3C/svg%3E") repeat;
+    background-size: 340px 340px, cover;
+    background-attachment: fixed;
+    color: var(--text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background var(--transition), color var(--transition);
+    overflow-x: hidden;
+}
+
+/* =====================================================
+   CLASES UTILITARIAS
+   (Ocultar elementos rápidamente)
+   ===================================================== */
+.hidden {
+    display: none !important;
+}
+
+/* =====================================================
+   CONTROL DE PANTALLAS (section.screen)
+   Solo una pantalla visible a la vez (pantalla principal, actividades, etc.)
+   ===================================================== */
+section.screen {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    width: 100%;
+    min-height: 100vh;
+    left: -9999px !important;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%);
+}
+section.screen.active {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    left: 0 !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+section.screen > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* =====================================================
+  ESTILOS EXCLUSIVOS PARA index.html (Pantalla Principal)
+  ===================================================== */
+
+/* =====================================================
+  Patrón matemático de fondo decorativo para la pantalla principal
+  Se aplica como background-image SVG repetido en el body, detrás de todo.
+  ===================================================== */
+
+/*
+  Contenedor principal de la pantalla de inicio
+  Incluye el título, subtítulo y tarjetas de actividades
+  <div class="home-container">
+*/
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+/*
+  Crédito de autor (esquina superior derecha)
+  <div class="author-credit">Por: Ángela Pineda</div>
+*/
+.author-credit {
+    position: fixed;
+    top: 10px;
+    right: 14px;
+    z-index: 1200;
+    font-size: 16px;
+    line-height: 1;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    color: #2a3d55;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(3px); font-family: 'Rancho';
+    -webkit-backdrop-filter: blur(3px);
+}
+/*
+  Fila del título principal y la imagen de bienvenida
+  <div class="home-title-row">
+    <h1 class="home-title">📐 Actividades para Desarrollar Razonamiento Matemático</h1>
+    <img class="home-title-image" ...>
+  </div>
+*/
+.home-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 20px;
+}
+/*
+  Título principal de la pantalla de inicio
+  <h1 class="home-title">📐 Actividades para Desarrollar Razonamiento Matemático</h1>
+*/
+.home-title {
+    font-size: 3.5em;
+    background: linear-gradient(135deg, #5b21b6 0%, #1e40af 50%, #0f172a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    margin-bottom: 0;
+    font-weight: bold;
+    font-family: 'Lobster Two', cursive;
+}
+/*
+  Imagen de bienvenida junto al título
+  <img class="home-title-image" src="assets/images/ImgWelcome.png" alt="Ilustración de bienvenida">
+*/
+.home-title-image {
+    width: clamp(130px, 16vw, 210px);
+    height: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.35));
+}
+/*
+  Subtítulo motivacional bajo el título principal
+  <p class="home-subtitle">¡Vamos a explorar y aprender juntos!</p>
+*/
+.home-subtitle {
+    font-size: 1.8em;
+    color: #1565c0;
+    margin-bottom: 60px;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    font-family: 'Lobster Two', cursive;
+    font-weight: bold;
+}
+/*
+  Contenedor de las tarjetas de actividades
+  <div class="activities-grid">
+    ...botones de actividades...
+  </div>
+*/
+.activities-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch;
+}
+/*
+  Tarjeta de actividad (botón grande)
+  <button id="activity0Btn" class="activity-card"> ... </button>
+  <button id="activity0BBtn" class="activity-card"> ... </button>
+  (Incluye imagen, badge y título de la actividad)
+  Ahora ocupa el 45% del ancho del contenedor y el texto se ajusta automáticamente según el tamaño de pantalla
+*/
+.activity-card {
+    background: linear-gradient(135deg, #6c1bf0 0%, #c873e2 50%, #f171a6 100%);
+    border: none;
+    border-radius: 30px;
+    padding: 0;
+    width: 45%;
+    max-width: 620px;
+    min-width: 260px;
+    height: 200px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3),
+          0 8px 20px rgba(171, 94, 243, 0.4);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 40px;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-family: 'Lobster Two', cursive;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    text-overflow: ellipsis;
+  }
+/*
+  Responsivo: tarjetas de actividad ocupan todo el ancho en pantallas pequeñas
+  y el texto interno se ajusta automáticamente
+*/
+/* El ancho de la tarjeta de actividad es siempre 45% del contenedor, en todos los dispositivos. */
+/* El texto interno se ajusta automáticamente y nunca se desborda. */
+/*
+  Efecto de brillo animado sobre la tarjeta de actividad
+*/
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: shimmer 3s infinite;
+}
+/*
+  Animación de brillo (shimmer) para las tarjetas de actividad
+*/
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+/*
+  Efecto hover: resalta la tarjeta de actividad al pasar el mouse
+*/
+.activity-card:hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4),
+                0 15px 35px rgba(171, 94, 243, 0.6);
+}
+/*
+  Efecto al hacer click (active) en la tarjeta de actividad
+*/
+.activity-card:active {
+    transform: translateY(-10px) scale(1);
+}
+/*
+  Emoji grande en la tarjeta de actividad 0B
+  <span class="activity-emoji">🧭</span>
+*/
+.activity-emoji {
+    font-size: 6em;
+    line-height: 1;
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
+    animation: bounce 2s ease-in-out infinite;
+}
+/*
+  Imagen de ícono en la tarjeta de actividad 0A
+  <img class="activity-icon-image" src="assets/images/pandebono.png" ...>
+*/
+.activity-icon-image {
+    width: 96px;
+    height: 96px;
+    min-width: 96px;
+    flex: 0 0 auto;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
+    animation: bounce 2s ease-in-out infinite;
+}
+/*
+  Ajuste de tamaño para la imagen de la tarjeta "Actividad 0A"
+  <button id="activity0Btn" ...>
+*/
+#activity0Btn .activity-icon-image {
+    width: 88px;
+    height: 88px;
+    min-width: 88px;
+}
+/*
+  Animación de rebote (bounce) para íconos y emojis de actividades
+*/
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+/*
+  Badge de la actividad (círculo con texto "Actividad 0A" o "Actividad 0B")
+  <div class="activity-badge">Actividad 0A</div>
+*/
+.activity-badge {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: white;
+    color: #000000;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-size: 1.3em;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    font-family: 'Lobster Two', cursive;
+}
+/*
+  Título de la actividad dentro de la tarjeta
+  <h2 class="activity-title">¿El orden de los factores altera el producto?</h2>
+  <h2 class="activity-title">El Misterio de las Sumas Repetidas</h2>
+*/
+.activity-title {
+    font-size: 1.9em;
+    color: white;
+    text-align: left;
+    line-height: 1.2;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+    flex: 1;
+    margin-left: 30px;
+    font-family: 'Rancho';
+    font-weight: bold;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    position: relative;
+    z-index: 2;
+}
