@@ -186,7 +186,7 @@ section.screen > * {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(18px 18px 36px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
     margin-bottom: 0;
     font-weight: bold;
     font-family: 'Lobster Two', cursive;
@@ -206,7 +206,7 @@ section.screen > * {
   <p class="home-subtitle">¡Vamos a explorar y aprender juntos!</p>
 */
 .home-subtitle {
-    font-size: 75%;
+    font-size: 280%;
     color: #1565c0;
     margin-bottom: 60px;
     text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
