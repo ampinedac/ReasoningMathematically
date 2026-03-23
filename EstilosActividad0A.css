@@ -1,18 +1,54 @@
-#welcomeScreen label,
-#welcomeScreen #enterBtn {
-    font-family: 'Rancho', !important;
+#author-credit, .author-credit, #authorCredit {
+    font-family: 'Rancho', cursive !important;
 }
+/* === PERSONALIZACIÓN PANTALLA DE CONFIRMACIÓN === */
+#confirmationScreen .confirmation-question {
+    margin-bottom: 2.5rem;
+}
+
+#confirmationScreen .welcome-box, /* asumiendo que la caja blanca usa welcome-box */
+#confirmationScreen .confirmation-box {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+#confirmationScreen .confirmation-buttons {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+#confirmationScreen .confirmation-buttons .btn {
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+#confirmationScreen .confirmation-buttons .btn:hover {
+    background: #fff9c4 !important; /* amarillo pastel */
+    box-shadow: 0 0 12px 2px #fff9c4;
+}
+#welcomeScreen #studentCodeInput {
+    font-family: 'Rancho', cursive !important;
+}
+
 
 /* Pantalla de bienvenida */
 
 #welcomeScreen .main-title,
 #welcomeScreen .activity-subtitle,
-#welcomeScreen label,
 #welcomeScreen #studentCodeInput,
-#welcomeScreen #studentCodeInput::placeholder,
-#welcomeScreen #enterBtn {
+#welcomeScreen #studentCodeInput::placeholder {
     font-size: clamp(26px, 4.5vw, 48px) !important;
-    font-family: Rancho;
+}
+
+#welcomeScreen label,
+#welcomeScreen #enterBtn {
+    font-family: 'Rancho', cursive !important;
 }
 
 
