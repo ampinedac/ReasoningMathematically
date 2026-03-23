@@ -459,16 +459,41 @@
 </head>
 <body>
     [!-- Refuerzo: ocultar cocina siempre al cargar, incluso si algún script externo la muestra --]
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var cocina = document.getElementById('cocinaScreen');
-            if (cocina && !cocina.classList.contains('hidden')) {
-                cocina.classList.add('hidden');
-            }
-            // Refuerzo extra: asegurar display:none
-            if (cocina) cocina.style.display = '';
-        });
-    </script>
+        <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                        var cocina = document.getElementById('cocinaScreen');
+                        if (cocina && !cocina.classList.contains('hidden')) {
+                                cocina.classList.add('hidden');
+                        }
+                        // Refuerzo extra: asegurar display:none
+                        if (cocina) cocina.style.display = '';
+                });
+        </script>
+        <!-- Refuerzo extremo: ocultar cocina persistentemente al cargar y en cambios de visibilidad -->
+        <script>
+            (function() {
+                function hideCocina() {
+                    var cocina = document.getElementById('cocinaScreen');
+                    if (cocina && !cocina.classList.contains('hidden')) {
+                        cocina.classList.add('hidden');
+                    }
+                }
+                // Refuerzo: ocultar varias veces tras cargar
+                document.addEventListener('DOMContentLoaded', function() {
+                    let count = 0;
+                    const maxTries = 20; // 2 segundos
+                    const interval = setInterval(function() {
+                        hideCocina();
+                        count++;
+                        if (count >= maxTries) clearInterval(interval);
+                    }, 100);
+                });
+                // Refuerzo: ocultar si el usuario vuelve a la pestaña
+                document.addEventListener('visibilitychange', function() {
+                    if (!document.hidden) hideCocina();
+                });
+            })();
+        </script>
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
     <!-- Overlay de orientación para móviles/tabletas -->
     <div id="orientationOverlay">
