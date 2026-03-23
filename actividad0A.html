@@ -476,17 +476,6 @@
     </style>
 </head>
 <body>
-    [!-- Refuerzo: ocultar cocina siempre al cargar, incluso si algún script externo la muestra --]
-        <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                        var cocina = document.getElementById('cocinaScreen');
-                        if (cocina && !cocina.classList.contains('hidden')) {
-                                cocina.classList.add('hidden');
-                        }
-                        // Refuerzo extra: asegurar display:none
-                        if (cocina) cocina.style.display = '';
-                });
-        </script>
         <!-- Refuerzo extremo: ocultar cocina persistentemente al cargar y en cambios de visibilidad -->
         <script>
             (function() {
@@ -525,7 +514,6 @@
     <section id="welcomeScreen" class="screen active">
         <div class="user-rect">
             <h1 class="main-title">Actividad 0A</h1>
-            <p style="font-size:2em;color:red;text-align:center;">🚩 PRUEBA COPILOT 🚩</p>
         </div>
         <div class="user-rect">
             <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
@@ -1131,9 +1119,26 @@
 }
 </style>
 
-<style>
-/* Unificar tamaño de fuente a 14px en toda la actividad 0A */
-html, body, body * { font-family: 'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important; font-size: 14px !important; }
+        <style>
+        /* Tipografía responsiva y personalizada */
+        html, body {
+            font-family: 'Rancho', Arial, sans-serif;
+            font-size: clamp(12px, 2.5vw, 18px);
+            line-height: 1.5;
+            color: #222;
+        }
+        /* Títulos con Lobster Two */
+        .main-title,
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Lobster Two', cursive !important;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        /* Resto del texto con Rancho */
+        body, p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p, label, input, textarea, select, button {
+            font-family: 'Rancho', Arial, sans-serif !important;
+            font-weight: 400;
+        }
 
 /* Tipografía y alineación global */
 body { font-size: 14px !important; line-height: 1.5; color: #222; }
@@ -2058,13 +2063,11 @@ p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio
 </style>
 
 <style>
-/* Unificar tamaño de fuente a 14px en toda la actividad 0A */
-html, body, body * { font-family: 'Century Gothic','Avenir Next','Trebuchet MS',Arial,sans-serif !important; font-size: 14px !important; }
 
 /* Tipografía y alineación global */
-body { font-size: 14px !important; line-height: 1.5; color: #222; }
+body { line-height: 1.5; color: #222; }
 /* Por defecto todo el texto (p, listas, labels) debe ir justificado, excepto títulos */
-p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p { font-size: 14px !important; text-align: justify; }
+p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p { text-align: justify; }
 /* Mantener el título centrado y con su estilo habitual */
 .main-title { display: block; text-align: center; }
 /* Centrar imágenes principales */
