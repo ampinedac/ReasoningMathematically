@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+            <style>
+                /* Refuerzo CSS definitivo: cocina siempre oculta salvo que esté activa */
+                #cocinaScreen {
+                    display: none !important;
+                    visibility: hidden !important;
+                    opacity: 0 !important;
+                    pointer-events: none !important;
+                    z-index: -1 !important;
+                }
+                #cocinaScreen.active,
+                #cocinaScreen:not(.hidden) {
+                    display: flex !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                    pointer-events: auto !important;
+                    z-index: 9999 !important;
+                }
+            </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
