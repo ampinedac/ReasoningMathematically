@@ -4,20 +4,8 @@
    ===================================================== */
 @font-face {
     font-family: 'Lobster Two';
-    src: url('assets/Font/Lobster_Two/LobsterTwo-Bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'Lobster Two';
-    src: url('assets/Font/Lobster_Two/LobsterTwo-Italic.ttf') format('truetype');
-    font-weight: normal;
-    font-style: italic;
-}
-@font-face {
-    font-family: 'Lobster Two';
     src: url('assets/Font/Lobster_Two/LobsterTwo-BoldItalic.ttf') format('truetype');
-    font-weight: bold;
+    font-weight: normal;
     font-style: italic;
 }
 @font-face {
@@ -43,9 +31,7 @@
     --accent: #ff6b6b;
     --transition: 0.3s ease;
     --book-turn-duration: 0.92s;
-    --book-turn-ease: cubic-bezier(0.32, 0.02, 0.2, 1);
-    --main-font: 'Segoe UI', Arial, sans-serif;
-    --main-font-size: 18px;
+    --book-turn-ease: cubic-bezier(0.32, 0.02, 0.2, 1)
 }
 
 /* =====================================================
@@ -181,14 +167,14 @@ section.screen > * {
   <h1 class="home-title">📐 Actividades para Desarrollar Razonamiento Matemático</h1>
 */
 .home-title {
-    font-size: 300%;
+    font-size: 6vw;
     background: linear-gradient(135deg, #5b21b6 0%, #1e40af 50%, #0f172a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
     margin-bottom: 0;
-    font-weight: bold;
+    font-weight: normal;
     font-family: 'Lobster Two', cursive;
 }
 /*
@@ -199,14 +185,15 @@ section.screen > * {
     width: clamp(130px, 16vw, 210px);
     height: auto;
     flex-shrink: 0;
-    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.35));
+    filter: drop-shadow(3px 3px 6px rgba(4, 0, 250, 0.527));
+    border-radius: 10px;
 }
 /*
   Subtítulo motivacional bajo el título principal
   <p class="home-subtitle">¡Vamos a explorar y aprender juntos!</p>
 */
 .home-subtitle {
-    font-size: 280%;
+    font-size: 5vw;
     color: #1565c0;
     margin-bottom: 60px;
     text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
@@ -221,7 +208,7 @@ section.screen > * {
 .activities-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 5vw;
     justify-content: center;
     align-items: stretch;
 }
@@ -233,28 +220,18 @@ section.screen > * {
   Ahora ocupa el 45% del ancho del contenedor y el texto se ajusta automáticamente según el tamaño de pantalla
 */
 .activity-card {
-    background: linear-gradient(135deg, #6c1bf0 0%, #c873e2 50%, #f171a6 100%);
-    border: none;
-    border-radius: 30px;
-    padding: 3% 4%;
-    width: 45%;
-    max-width: 48%;
-    min-width: 20%;
-    height: 90%;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3),
-          0 8px 20px rgba(171, 94, 243, 0.4);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 8%; /* 8% de la altura del contenedor inmediato */
-    font-family: 'Lobster Two', cursive;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    text-overflow: ellipsis;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45%;
+  padding: 2vw 2vw;
+  background: linear-gradient(135deg, #6c1bf0 0%, #c873e2 50%, #f171a6 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(91, 4, 163, 0.438);
+  position: relative;
+  font-family: 'Lobster Two';
+  border: none;
 }
 /*
   Responsivo: tarjetas de actividad ocupan todo el ancho en pantallas pequeñas
@@ -263,24 +240,6 @@ section.screen > * {
 /* El ancho de la tarjeta de actividad es siempre 45% del contenedor, en todos los dispositivos. */
 /* El texto interno se ajusta automáticamente y nunca se desborda. */
 /*
-  Efecto de brillo animado sobre la tarjeta de actividad
-*/
-.activity-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent,
-        rgba(255, 255, 255, 0.1),
-        transparent
-    );
-    transform: rotate(45deg);
-    animation: shimmer 3s infinite;
-}
 /*
   Animación de brillo (shimmer) para las tarjetas de actividad
 */
@@ -307,55 +266,52 @@ section.screen > * {
   <span class="activity-emoji">🧭</span>
 */
 .activity-emoji {
-    font-size: 6em;
-    line-height: 1;
-    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
-    animation: bounce 2s ease-in-out infinite;
+    font-size: 6vw;
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3))
 }
 /*
   Imagen de ícono en la tarjeta de actividad 0A
   <img class="activity-icon-image" src="assets/images/pandebono.png" ...>
 */
-.activity-icon-image {
-    width: 96px;
-    height: 96px;
-    min-width: 96px;
-    flex: 0 0 auto;
-    display: block;
-    object-fit: contain;
-    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
-    animation: bounce 2s ease-in-out infinite;
+.activity-icon-image, .activity-emoji {
+  width: 70px;
+  height: 70px;
+  min-width: 70px;
+  min-height: 70px;
+  max-width: 90px;
+  max-height: 90px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
 }
 /*
   Ajuste de tamaño para la imagen de la tarjeta "Actividad 0A"
   <button id="activity0Btn" ...>
 */
 #activity0Btn .activity-icon-image {
-    width: 88px;
-    height: 88px;
-    min-width: 88px;
+  width: 70px;
+  height: 70px;
+  min-width: 70px;
+  min-height: 70px;
+  max-width: 90px;
+  max-height: 90px;
 }
-/*
-  Animación de rebote (bounce) para íconos y emojis de actividades
-*/
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
+
 /*
   Badge de la actividad (círculo con texto "Actividad 0A" o "Actividad 0B")
   <div class="activity-badge">Actividad 0A</div>
 */
 .activity-badge {
     position: absolute;
-    top: 20px;
-    right: 30px;
-    background: white;
+    top: 1vw;
+    right: 1vw;
+    background: rgb(255, 225, 248);
     color: #000000;
-    padding: 10px 25px;
+    padding: 6px 15px;
     border-radius: 50px;
-    font-size: 1.3em;
-    font-weight: bold;
+    font-size: 1.5vw;
+    font-weight: normal;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     font-family: 'Lobster Two', cursive;
 }
@@ -365,17 +321,17 @@ section.screen > * {
   <h2 class="activity-title">El Misterio de las Sumas Repetidas</h2>
 */
 .activity-title {
-    font-size: 1.9em;
-    color: white;
-    text-align: left;
-    line-height: 1.2;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
-    flex: 1;
-    margin-left: 30px;
-    font-family: 'Rancho';
-    font-weight: bold;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    position: relative;
-    z-index: 2;
+  flex: 1;
+  margin-left: 1vw;
+  font-size: 3vw;
+  min-width: 0;
+  color: rgb(255, 255, 255);
+  text-align: justify;
+  line-height: 1;
+  text-shadow: 3px 3px 6px rgba(17, 0, 255, 0.541);
+  font-family: 'Rancho';
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  position: relative;
+  z-index: 2;
 }
