@@ -1,3 +1,10 @@
+#flipbook .book-cover-page img {
+    max-height: 15vh;
+    height: 15%;
+    width: auto;
+    display: block;
+    margin: 0 auto 2rem auto;
+}
 #flipbook .book-cover-page .cover-book-title,
 #flipbook .book-cover-page .cover-title,
 #flipbook .book-cover-page h2 {
