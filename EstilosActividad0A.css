@@ -1,3 +1,13 @@
+/* === TÍTULO DE PORTADA === */
+#flipbook .book-cover-page .cover-book-title,
+#flipbook .book-cover-page h2, /* por si el título es h2 */
+#flipbook .book-cover-page .cover-title {
+    font-family: 'Lobster Two', cursive !important;
+    font-size: clamp(2.5rem, 7vw, 5.5rem) !important;
+    margin-bottom: 10%;
+    text-align: center;
+    line-height: 1.1;
+}
 #author-credit, .author-credit, #authorCredit {
     font-family: 'Rancho', cursive !important;
 }
