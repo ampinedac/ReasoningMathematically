@@ -181,12 +181,12 @@ section.screen > * {
   <h1 class="home-title">📐 Actividades para Desarrollar Razonamiento Matemático</h1>
 */
 .home-title {
-    font-size: 3.5em;
+    font-size: 300%;
     background: linear-gradient(135deg, #5b21b6 0%, #1e40af 50%, #0f172a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+    filter: drop-shadow(18px 18px 36px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
     margin-bottom: 0;
     font-weight: bold;
     font-family: 'Lobster Two', cursive;
@@ -206,7 +206,7 @@ section.screen > * {
   <p class="home-subtitle">¡Vamos a explorar y aprender juntos!</p>
 */
 .home-subtitle {
-    font-size: 1.8em;
+    font-size: 75%;
     color: #1565c0;
     margin-bottom: 60px;
     text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
@@ -236,11 +236,11 @@ section.screen > * {
     background: linear-gradient(135deg, #6c1bf0 0%, #c873e2 50%, #f171a6 100%);
     border: none;
     border-radius: 30px;
-    padding: 0;
+    padding: 3% 4%;
     width: 45%;
-    max-width: 620px;
-    min-width: 260px;
-    height: 200px;
+    max-width: 48%;
+    min-width: 20%;
+    height: 90%;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3),
@@ -250,13 +250,12 @@ section.screen > * {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 30px 40px;
-    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-size: 8%; /* 8% de la altura del contenedor inmediato */
     font-family: 'Lobster Two', cursive;
     word-break: break-word;
     overflow-wrap: anywhere;
     text-overflow: ellipsis;
-  }
+}
 /*
   Responsivo: tarjetas de actividad ocupan todo el ancho en pantallas pequeñas
   y el texto interno se ajusta automáticamente
