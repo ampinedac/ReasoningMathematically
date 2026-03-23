@@ -92,15 +92,7 @@
 }
 
 /* Flipbook y páginas del libro */
-#flipbook .cover-book-title {
-    font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(40px, 6vw, 50px) !important;
-    margin-bottom: 10vh !important;
-}
-#flipbook .cover-subtitle {
-    font-family: 'Rancho', cursive !important;
-    font-size: clamp(1.1rem, 2.5vw, 2rem) !important;
-}
+
 #flipbook .story-text,
 #flipbook .problem-box p,
 #flipbook .q2-guide-title,
@@ -171,17 +163,7 @@ div,
 }
 
 
-/* Forzar fuente Lobster Two solo para el título de la portada */
-#flipbook .book-cover-page .cover-book-title {
-    font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(40px, 6vw, 50px) !important;
-    letter-spacing: 0.5px;
-}
 
-/* Forzar fuente Rancho solo para la descripción de la portada */
-#flipbook .book-cover-page .cover-description {
-    font-family: 'Rancho', cursive !important;
-}
 /* Mostrar solo el contenido de la página que gira durante la animación */
 #flipbook .page.turning-forward .q1-left-page,
 #flipbook .page.turning-backward .q1-right-page {
@@ -1073,19 +1055,9 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .book-cover-page .cover-book-title {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    text-align: center;
-    line-height: 1;
-    margin: 4% 0 0;
-    padding: 0 9%;
-    position: relative;
-    z-index: 4;
     font-family: 'Lobster Two', cursive !important;
     font-size: clamp(40px, 6vw, 50px) !important;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.5px !important;
 }
 
 #flipbook .book-cover-page .cover-word-line {
@@ -1100,20 +1072,20 @@ body.flipbook-on-cover #flipbook::after {
     align-items: center;
     justify-content: center;
     padding: 10px 20px 12px;
-    #flipbook .book-cover-page .cover-subtitle,
-    #flipbook .book-cover-page .cover-description {
-        font-family: 'Rancho', cursive !important;
-        font-size: clamp(1.28rem, 1.55vw, 1.45rem) !important;
-        text-align: center !important;
-        color: rgba(103, 66, 32, 0.82) !important;
-        line-height: 1.52 !important;
-        font-style: italic !important;
-        margin: 0 auto 2.5vh auto !important;
-        max-width: 32ch !important;
-        width: 88% !important;
-        position: relative;
-        z-index: 4;
-    }
+#flipbook .book-cover-page .cover-subtitle,
+#flipbook .book-cover-page .cover-description {
+    font-family: 'Rancho', cursive !important;
+    font-size: clamp(1.28rem, 1.55vw, 1.45rem) !important;
+    text-align: center !important;
+    color: rgba(103, 66, 32, 0.82) !important;
+    line-height: 1.52 !important;
+    font-style: italic !important;
+    margin: 0 auto 2.5vh auto !important;
+    max-width: 32ch !important;
+    width: 88% !important;
+    position: relative;
+    z-index: 4;
+}
 }
 
 #flipbook .book-cover-page .cover-word-line .cover-word-chip:nth-child(odd) {
@@ -1145,16 +1117,7 @@ body.flipbook-on-cover #flipbook::after {
 }
 
 #flipbook .book-cover-page .cover-subtitle {
-    position: relative;
-    z-index: 4;
-    margin: 0;
-    max-width: 32ch;
-    width: 88%;
-    text-align: center;
-    color: rgba(103, 66, 32, 0.82);
-    font-size: clamp(1.28rem, 1.55vw, 1.45rem);
-    line-height: 1.52;
-    font-style: italic;
+    font-family: 'Rancho', cursive !important;
 }
 
 /* Centrar el botón Léeme en la portada */
@@ -1373,12 +1336,7 @@ body.flipbook-on-cover #flipbook::after {
     font-weight: 700;
 }
 
-.cover-subtitle {
-    font-size: unset;
-    color: #34495e;
-    font-style: italic;
-    font-weight: 500;
-}
+
 
 .start-btn {
     padding: 15px 40px;
@@ -1790,9 +1748,7 @@ body.flipbook-on-cover #flipbook::after {
         font-size: 22px;
     }
     
-    .cover-subtitle {
-        font-size: 15px;
-    }
+
     
     .emoji-large {
         font-size: 45px;
