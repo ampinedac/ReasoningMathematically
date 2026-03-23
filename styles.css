@@ -250,7 +250,8 @@ div,
 
 /* Modularidad: cada spread/pantalla puede tener su propio ajuste si se requiere */
 
-/* Texto normal con Rancho, excepto los títulos anteriores */
+
+/* Texto normal: Rancho, sobrescribe cualquier fuente previa */
 body,
 p,
 li,
@@ -268,8 +269,14 @@ div,
 #flipbook .flipbook-page,
 #flipbook .story-page,
 #flipbook .book-cover-page,
-#flipbook .q1-book-spread {
-    font-family: 'Rancho', cursive;
+#flipbook .q1-book-spread,
+#flipbook .story-page-content,
+#flipbook .story-title-page,
+#flipbook .story-page p,
+#flipbook .story-page .story-text,
+#flipbook .book-cover-page p,
+#flipbook .book-cover-page .story-text {
+    font-family: 'Rancho', cursive !important;
 }
 
 
