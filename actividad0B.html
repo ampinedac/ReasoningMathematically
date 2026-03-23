@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0B - El Misterio de las Sumas Repetidas</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
-    <link rel="stylesheet" href="EstilosActividad0B.css?v=2026031702">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="trays-styles.css?v=2026031515">
     <link rel="stylesheet" href="bags-styles-0b.css?v=2026031515">
     <!-- ResponsiveVoice para voces más expresivas -->
@@ -2029,36 +2029,38 @@
 </head>
 <body class="activity-0b">
     <!-- PANTALLA DE BIENVENIDA -->
-    <section id="welcomeScreen" class="screen active">
-        <div class="user-rect">
-            <h1 class="main-title">Actividad 0B</h1>
-        </div>
-        <div class="user-rect">
-            <p class="activity-subtitle">El Misterio de las Sumas Repetidas</p>
-        </div>
-        <div class="user-rect">
-            <div class="welcome-box">
-                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
-                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
-                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
-                <p id="welcomeError" class="error-text hidden"></p>
-            </div>
-        </div>
-    </section>
+<section id="welcomeScreen" class="screen active">
+  <div class="user-rect">
+    <h1 class="main-title">Actividad 0B</h1>
+  </div>
+
+  <div class="user-rect">
+    <p class="activity-subtitle">El Misterio de las Sumas Repetidas</p>
+  </div>
+
+  <div class="user-rect welcome-box">
+    <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+    <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+    <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+    <p id="welcomeError" class="error-text hidden"></p>
+  </div>
+</section>
 
     <!-- PANTALLA DE CONFIRMACIÓN -->
-    <section id="confirmationScreen" class="screen">
-        <h1 class="main-title">Confirmación</h1>
-        <div class="container">
-            <div class="welcome-box">
-                <p id="confirmationQuestion" class="confirmation-question"></p>
-                <div class="confirmation-buttons">
-                    <button id="confirmYesBtn" class="btn btn-success"><img src="assets/images/BTconfirmar.png" alt="Confirmar" style="height:48px;"></button>
-                    <button id="confirmNoBtn" class="btn btn-secondary"><img src="assets/images/BTrechazado.png" alt="Rechazar" style="height:48px;"></button>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section id="confirmationScreen" class="screen">
+       <h1 class="main-title">Confirmación</h1>
+       <div class="welcome-box confirmation-box">
+         <p id="confirmationQuestion" class="confirmation-question"></p>
+         <div class="confirmation-buttons">
+           <button id="confirmYesBtn" class="btn btn-success">
+             <img src="assets/images/BTconfirmar.png" alt="Confirmar">
+           </button>
+           <button id="confirmNoBtn" class="btn btn-secondary">
+             <img src="assets/images/BTrechazado.png" alt="Rechazar">
+           </button>
+         </div>
+       </div>
+      </section>
 
     <!-- MOMENTO 1: Cuento + Problema Q1 -->
     <section id="moment1Screen" class="screen">
