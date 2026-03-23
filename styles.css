@@ -1075,7 +1075,7 @@ body.flipbook-on-cover #flipbook::after {
 #flipbook .book-cover-page .cover-subtitle,
 #flipbook .book-cover-page .cover-description {
     font-family: 'Rancho', cursive !important;
-    font-size: clamp(2.56rem, 3.1vw, 2.9rem) !important; /* Doble del tamaño anterior */
+    font-size: clamp(5.12rem, 6.2vw, 5.8rem) !important; /* Doble del doble */
     text-align: center !important;
     color: rgba(103, 66, 32, 0.82) !important;
     line-height: 1.52 !important;
@@ -1088,6 +1088,7 @@ body.flipbook-on-cover #flipbook::after {
 }
 #flipbook .book-cover-page .cover-word-chip {
     font-family: 'Lobster Two', cursive !important;
+    font-size: clamp(2.04rem, 6.7vw, 2.44rem) !important; /* Doble del tamaño anterior */
 }
 }
 
@@ -1203,7 +1204,7 @@ body.flipbook-on-cover #flipbook::after {
     /* Corregido: regla vacía eliminada */
     #flipbook .book-cover-page .cover-word-chip {
         padding: 8px 13px 10px;
-        font-size: clamp(1.02rem, 3.35vw, 1.22rem);
+        font-size: clamp(2.04rem, 6.7vw, 2.44rem) !important;
     }
 
     #flipbook .book-cover-page .cover-subtitle {
@@ -1237,7 +1238,7 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     #flipbook .book-cover-page .cover-word-chip {
-        font-size: clamp(0.98rem, 3.9vw, 1.2rem);
+        font-size: clamp(1.96rem, 7.8vw, 2.4rem) !important;
         padding: 7px 12px 9px;
     }
 
@@ -1263,7 +1264,7 @@ body.flipbook-on-cover #flipbook::after {
     }
 
     #flipbook .book-cover-page .cover-word-chip {
-        font-size: clamp(0.9rem, 4.1vw, 1.06rem);
+        font-size: clamp(1.8rem, 8.2vw, 2.12rem) !important;
         padding: 6px 10px 8px;
     }
 

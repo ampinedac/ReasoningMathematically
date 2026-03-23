@@ -158,31 +158,18 @@ let m4_reflectionSaving = false;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Aplicación iniciada');
     console.log('📅 Fecha:', new Date().toLocaleString());
-    
-    // Inicialización completada
-    console.log('✅ Sistema inicializado');
-    
-    // Verificar si ya hay código guardado
-    const savedCode = localStorage.getItem('studentCode');
-    if (savedCode) {
-        studentCode = savedCode;
-        console.log('ℹ️ Código guardado encontrado:', studentCode);
-
-        if (savedCode === '0000') {
-            const savedGuestName = localStorage.getItem('guestName');
-            if (savedGuestName) {
-                studentInfo = {
-                    nombre: savedGuestName,
-                    apellidos: '',
-                    curso: 'INVITADO'
-                };
-            }
-        }
-    }
-    
+    // Siempre forzar flujo: bienvenida -> confirmación -> actividad
+    // No cargar datos previos automáticamente, solo después de confirmar
+    studentCode = null;
+    studentInfo = null;
+    // Inicializar pantallas
     initHomeScreen();
     initWelcomeScreen();
     initConfirmationScreen();
+    // Mostrar solo la pantalla de bienvenida al inicio
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    if (welcomeScreen) welcomeScreen.classList.add('active');
 });
 
 // Manejador global de errores
