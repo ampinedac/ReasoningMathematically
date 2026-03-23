@@ -11,6 +11,23 @@
 #author-credit, .author-credit, #authorCredit {
     font-family: 'Rancho', cursive !important;
 }
+
+
+/* Pantalla de bienvenida */
+
+#welcomeScreen .main-title,
+#welcomeScreen .activity-subtitle,
+#welcomeScreen #studentCodeInput,
+#welcomeScreen #studentCodeInput::placeholder {
+    font-size: clamp(26px, 4.5vw, 48px) !important;
+}
+
+#welcomeScreen label,
+#welcomeScreen #enterBtn {
+    font-family: 'Rancho', cursive !important;
+    font-size: clamp(26px, 4.5vw, 48px) !important;
+}
+
 /* === PERSONALIZACIÓN PANTALLA DE CONFIRMACIÓN === */
 #confirmationScreen .confirmation-question {
     margin-bottom: 2.5rem;
@@ -53,23 +70,6 @@
 #welcomeScreen #studentCodeInput {
     font-family: 'Rancho', cursive !important;
 }
-
-
-/* Pantalla de bienvenida */
-
-#welcomeScreen .main-title,
-#welcomeScreen .activity-subtitle,
-#welcomeScreen #studentCodeInput,
-#welcomeScreen #studentCodeInput::placeholder {
-    font-size: clamp(26px, 4.5vw, 48px) !important;
-}
-
-#welcomeScreen label,
-#welcomeScreen #enterBtn {
-    font-family: 'Rancho', cursive !important;
-    font-size: clamp(26px, 4.5vw, 48px) !important;
-}
-
 
 /* Botones generales del libro */
 #flipbook button,
@@ -802,14 +802,7 @@ body.flipbook-on-cover #flipbook::after {
     display: none;
 }
 
-#flipbook .book-cover-page .cover-book-title {
-    font-family: 'Lobster Two', cursive !important;
-    font-size: clamp(10rem, 30vw, 38rem) !important;
-    letter-spacing: 0.5px !important;
-    line-height: 1.1;
-    width: 100%;
-    text-align: center;
-}
+
 
 /* Animación de apertura: tapa de libro real (giro desde el lomo izquierdo) */
 #flipbook .book-cover-page.turning-forward {
@@ -818,96 +811,11 @@ body.flipbook-on-cover #flipbook::after {
     z-index: 24;
 }
 
-@media (max-width: 960px) {
-    #flipbook .book-cover-page {
-        padding: 12% 8% 12% !important;
-    }
 
-    #flipbook .book-cover-page .cover-book-title {
-        margin-top: 6%;
-        padding: 0 8%;
-    }
 
-    #flipbook .book-cover-page .cover-word-line {
-        gap: 5px;
-    }
 
-    /* Corregido: regla vacía eliminada */
-    #flipbook .book-cover-page .cover-word-chip {
-        padding: 8px 13px 10px;
-        font-size: clamp(2.04rem, 6.7vw, 2.44rem) !important;
-    }
 
-    #flipbook .book-cover-page .cover-subtitle {
-        max-width: 31ch;
-        width: 92%;
-        font-size: clamp(1.08rem, 3.4vw, 1.16rem);
-    }
 
-    #flipbook .book-cover-page .cover-leer-btn {
-        padding: 15px 34px;
-    }
-
-    #flipbook .book-cover-page .cover-leer-image {
-        width: clamp(108px, 28.8vw, 162px);
-    }
-}
-
-@media (max-width: 700px) {
-    #flipbook {
-        width: 92%;
-    }
-
-    #flipbook .book-cover-page {
-        padding: 14% 7% 12% !important;
-        gap: 14px;
-    }
-
-    #flipbook .book-cover-page .cover-book-title {
-        margin-top: 9%;
-        gap: 8px;
-    }
-
-    #flipbook .book-cover-page .cover-word-chip {
-        font-size: clamp(1.96rem, 7.8vw, 2.4rem) !important;
-        padding: 7px 12px 9px;
-    }
-
-    #flipbook .book-cover-page .cover-subtitle {
-        max-width: 28ch;
-        font-size: clamp(0.96rem, 3.3vw, 1.06rem);
-        line-height: 1.45;
-    }
-
-    #flipbook .book-cover-page .cover-leer-image {
-        width: clamp(94px, 30vw, 132px);
-    }
-}
-
-@media (max-width: 520px) {
-    #flipbook .book-cover-page {
-        padding: 16% 6% 13% !important;
-    }
-
-    #flipbook .book-cover-page .cover-word-line {
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-
-    #flipbook .book-cover-page .cover-word-chip {
-        font-size: clamp(1.8rem, 8.2vw, 2.12rem) !important;
-        padding: 6px 10px 8px;
-    }
-
-    #flipbook .book-cover-page .cover-subtitle {
-        max-width: 24ch;
-        font-size: clamp(0.9rem, 3.6vw, 0.98rem);
-    }
-
-    #flipbook .book-cover-page .cover-leer-image {
-        width: clamp(86px, 33vw, 118px);
-    }
-}
 
 @keyframes coverFlipOpen {
     0% {
