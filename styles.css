@@ -1,4 +1,10 @@
 /* ========================================
+  UTILIDAD: OCULTAR ELEMENTOS
+  ======================================== */
+.hidden {
+  display: none !important;
+}
+/* ========================================
   REGLAS GENERALES Y VARIABLES
   ========================================
   Ejemplo de selectores: :root, body, html, *, .container
