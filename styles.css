@@ -1,3 +1,11 @@
+#flipbook .book-cover-page {
+  position: relative !important; /* Evita heredar absolute de .page */
+  height: 100% !important;
+  box-sizing: border-box;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
 /* ==== AJUSTE PARA QUE LA PORTADA NO DESBORDE ==== */
 #moment1Screen,
 #moment1Screen .container,
