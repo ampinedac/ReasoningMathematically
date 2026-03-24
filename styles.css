@@ -566,35 +566,23 @@ html, body{
 #flipbook .page-turn-leaf{
   position: absolute; /* Posiciona sobre el contenedor */
   top: 0; /* Arriba */
-  width: 50%; /* Mitad del ancho */
-  height: 100%; /* Ocupa toda la altura */
-  pointer-events: none; /* No interactuable */
-  transform-style: preserve-3d; /* Mantiene el 3D en hijos */
-  z-index: 28; /* Prioridad */
+#flipbook .book-cover-page {
+  position: relative;
+  height: 95vh;
+  max-height: 95vh;
+  width: 50vw;
+  max-width: 640px;
+  margin: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
-
-#flipbook .page-turn-leaf.forward{
-  left: 50%; /* Posiciona a la derecha */
-  transform-origin: left center; /* Origen de giro */
-  animation: leafTurnForward var(--book-turn-duration) var(--book-turn-ease) forwards; /* Animación de giro */
-}
-
-#flipbook .page-turn-leaf.backward{
-  left: 0; /* Posiciona a la izquierda */
-  transform-origin: right center; /* Origen de giro */
-  animation: leafTurnBackward var(--book-turn-duration) var(--book-turn-ease) forwards; /* Animación de giro */
-}
-
-#flipbook .page-turn-face{
-  position: absolute; /* Posiciona sobre el contenedor */
-  inset: 0; /* Ocupa todo el espacio */
-  overflow: hidden; /* Oculta desbordes */
-  backface-visibility: hidden; /* Oculta el reverso */
-  background: var(--page-bg-light); /* Fondo por variable */
-}
-
-#flipbook .page-turn-leaf.forward .page-turn-face.front{
-  border-radius: 0 10px 10px 0;
   box-shadow:
     inset -24px 0 46px rgba(0,0,0,.18),
     8px 10px 24px rgba(0,0,0,.16);
@@ -1044,10 +1032,6 @@ select:focus{
   box-shadow: 0 0 0 4px rgba(59,130,246,.15);
 }
 
-/* ========================================
-  RESPONSIVE (COMPARTIDO)
-  ========================================
-  Ejemplo de selectores: @media, .main-title, .btn-primary
-*/
+
 
 
