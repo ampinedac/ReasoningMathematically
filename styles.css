@@ -60,14 +60,14 @@ html, body{
 
 .author-credit,
 #authorCredit{
-  position: fixed;
-  left: 14px;
-  bottom: 12px;
-  z-index: 60;
-  font-family: 'Rancho', cursive;
-  font-size: clamp(.95rem, 1.4vw, 1.2rem);
-  color: #5b5b5b;
-  opacity: .85;
+  position: fixed; /* Fija el elemento en la pantalla */
+  left: 14px; /* Lo posiciona a 14px del borde izquierdo */
+  bottom: 12px; /* Lo posiciona a 12px del borde inferior */
+  z-index: 60; /* Prioridad de apilamiento */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  font-size: clamp(.95rem, 1.4vw, 1.2rem); /* Tamaño adaptable */
+  color: #5b5b5b; /* Color gris oscuro */
+  opacity: .85; /* Opacidad del texto */
 }
 
 
@@ -79,6 +79,9 @@ html, body{
 
 #welcomeScreen {
   /* Contenedor principal de la pantalla de bienvenida */
+  align-items: center;
+  justify-content: center;
+  
 }
 
 .status-text,
@@ -97,159 +100,159 @@ html, body{
 .welcome-box,
 .confirmation-box{
   /* Caja central con fondo translúcido y borde redondeado */
-  width: min(92vw, 640px);
-  margin: 0 auto;
+  width: min(92vw, 640px); /* Limita el ancho máximo a 640px o 92vw */
+  margin: 0 auto; /* Centra horizontalmente */
   padding: clamp(20px, 3vw, 40px); /* Espaciado interno adaptable */
-  background: rgba(62, 216, 255, 0.589);
-  border: 1px solid rgba(255,255,255,.7);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
+  background: rgba(62, 216, 255, 0.589); /* Fondo azul translúcido */
+  border: 1px solid rgba(255,255,255,.7); /* Borde blanco translúcido */
+  border-radius: 16px; /* Bordes redondeados */
+  box-shadow: var(--shadow-md); /* Sombra mediana */
   backdrop-filter: blur(8px); /* Difumina el fondo detrás de la caja */
 }
 
 .chalk-text,
 #welcomeScreen label{
   /* Texto grande y decorativo, centrado */
-  display: block;
-  margin-bottom: 12px;
-  font-family: 'Rancho', cursive;
-  font-size: clamp(1.6rem, 3vw, 2.5rem);
-  color: #263238;
-  text-align: center;
+  display: block; /* Hace que el elemento sea un bloque */
+  margin-bottom: 12px; /* Espacio inferior */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  font-size: clamp(1.6rem, 3vw, 2.5rem); /* Tamaño adaptable */
+  color: #263238; /* Color gris oscuro */
+  text-align: center; /* Centra el texto */
 }
 
 .chalk-input,
 #studentCodeInput{
   /* Campos de entrada grandes y centrados, con bordes redondeados */
-  width: min(100%, 360px);
-  margin: 0 auto 16px auto;
-  display: block;
-  padding: 12px 18px;
-  border: 2px solid #127afa;
-  border-radius: 16px;
-  background: #fff;
-  color: #111827;
-  text-align: center;
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-  font-family: 'Rancho', cursive;
-  outline: none;
-  transition: border-color .2s ease, box-shadow .2s ease;
+  width: min(100%, 360px); /* Máximo 360px o 100% */
+  margin: 0 auto 16px auto; /* Centrado y espacio inferior */
+  display: block; /* Ocupa todo el ancho disponible */
+  padding: 12px 18px; /* Espaciado interno */
+  border: 2px solid #127afa; /* Borde azul */
+  border-radius: 16px; /* Bordes redondeados */
+  background: #fff; /* Fondo blanco */
+  color: #111827; /* Texto gris oscuro */
+  text-align: center; /* Centra el texto */
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem); /* Tamaño adaptable */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  outline: none; /* Sin contorno por defecto */
+  transition: border-color .2s ease, box-shadow .2s ease; /* Transición suave */
 }
 
 .chalk-input:focus,
 #studentCodeInput:focus{
   /* Efecto visual al enfocar el input */
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+  border-color: #93c5fd; /* Borde azul claro al enfocar */
+  box-shadow: 0 0 0 4px rgba(59,130,246,.15); /* Sombra azul al enfocar */
 }
 
 .error-text,
 #welcomeError{
   /* Mensaje de error destacado en rojo */
-  margin-top: 10px;
-  color: #b91c1c;
-  font-weight: 700;
-  font-size: clamp(1rem, 1.8vw, 1.2rem);
-  text-align: center;
-  font-family: 'Rancho', cursive;
+  margin-top: 10px; /* Espacio superior */
+  color: #b91c1c; /* Rojo para errores */
+  font-weight: 700; /* Negrita */
+  font-size: clamp(1rem, 1.8vw, 1.2rem); /* Tamaño adaptable */
+  text-align: center; /* Centra el texto */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
 }
 
 .btn{
   /* Botón estilizado, con sombra y transición */
-  border: none;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
-  box-shadow: var(--shadow-sm);
-  font-family: 'Rancho', cursive;
+  border: none; /* Sin borde */
+  border-radius: 16px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor a mano */
+  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease; /* Transiciones suaves */
+  box-shadow: var(--shadow-sm); /* Sombra pequeña */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
 }
 
 .btn:hover{
   /* Efecto al pasar el mouse: oscurece y eleva el botón */
-  filter: brightness(.96);
-  transform: translateY(-1px);
+  filter: brightness(.96); /* Oscurece ligeramente */
+  transform: translateY(-1px); /* Eleva el botón */
 }
 
 .btn:active{
   /* Efecto al presionar el botón */
-  transform: translateY(0);
+  transform: translateY(0); /* Vuelve a la posición original */
 }
 
 .btn:disabled{
   /* Botón deshabilitado: semitransparente y sin cursor */
-  opacity: .65;
-  cursor: not-allowed;
+  opacity: .65; /* Semitransparente */
+  cursor: not-allowed; /* Cursor de no permitido */
 }
 
 .btn-primary{
   /* Botón principal con gradiente azul y texto blanco */
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  color: #fff;
-  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  font-weight: 700;
+  padding: 12px 24px; /* Espaciado interno */
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); /* Gradiente azul */
+  color: #fff; /* Texto blanco */
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem); /* Tamaño adaptable */
+  font-weight: 700; /* Negrita */
 }
 
 .btn-success{
   /* Botón de éxito: fondo blanco (puede personalizarse más) */
-  background: #fff;
+  background: #fff; /* Fondo blanco */
 }
 
 .btn-secondary{
   /* Botón secundario: fondo blanco */
-  background: #fff;
+  background: #fff; /* Fondo blanco */
 }
 
 .confirmation-box{
   /* Caja de confirmación centrada y en columna */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex; /* Flexbox */
+  flex-direction: column; /* Dirección columna */
+  align-items: center; /* Centrado horizontal */
 }
 
 .confirmation-question{
   /* Pregunta de confirmación, texto grande y centrado */
-  width: 100%;
-  margin: 0 0 24px 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
-  line-height: 1.25;
-  font-weight: 700;
-  color: #222;
-  text-align: center;
+  width: 100%; /* Ocupa todo el ancho */
+  margin: 0 0 24px 0; /* Espacio inferior */
+  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem); /* Tamaño adaptable */
+  line-height: 1.25; /* Altura de línea */
+  font-weight: 700; /* Negrita */
+  color: #222; /* Gris oscuro */
+  text-align: center; /* Centra el texto */
 }
 
 .confirmation-buttons{
   /* Contenedor de botones de confirmación, alineados y con espacio entre ellos */
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  display: flex; /* Flexbox */
+  gap: 20px; /* Espacio entre botones */
+  justify-content: center; /* Centrado horizontal */
+  align-items: center; /* Centrado vertical */
+  flex-wrap: wrap; /* Permite salto de línea */
 }
 
 .confirmation-buttons .btn{
-  width: 100px;
-  height: 100px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  width: 100px; /* Ancho fijo */
+  height: 100px; /* Alto fijo */
+  padding: 0; /* Sin relleno interno */
+  display: flex; /* Flexbox */
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
+  border-radius: 18px; /* Bordes redondeados */
+  background: #fff; /* Fondo blanco */
+  box-shadow: 0 2px 12px rgba(0,0,0,.08); /* Sombra suave */
 }
 
 .confirmation-buttons .btn:hover{
-  background: #fff9c4;
-  box-shadow: 0 0 12px 2px rgba(255,249,196,.9);
+  background: #fff9c4; /* Fondo amarillo claro al pasar el mouse */
+  box-shadow: 0 0 12px 2px rgba(255,249,196,.9); /* Sombra amarilla */
 }
 
 .confirmation-buttons .btn img{
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-  margin: 0 auto;
+  width: 70px; /* Imagen cuadrada */
+  height: 70px; /* Imagen cuadrada */
+  object-fit: contain; /* Ajusta la imagen sin deformar */
+  margin: 0 auto; /* Centra la imagen */
 }
 
 
@@ -260,25 +263,25 @@ html, body{
 */
 .header{
   /* Cabecera de la página, ocupa todo el ancho */
-  width: 100%;
+  width: 100%; /* Ocupa todo el ancho disponible */
 }
 
 .student-code-display {
   /* Muestra el código del estudiante en la esquina superior izquierda */
-  position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 120;
-  background: rgba(255,255,255,0.92);
-  color: #475467;
-  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
-  font-family: 'Rancho', cursive, Arial, sans-serif;
-  padding: 8px 18px;
-  border-radius: 14px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
-  border: 1.5px solid #d9dee8;
-  text-align: left;
-  pointer-events: none;
+  position: fixed; /* Fija el elemento en la pantalla */
+  top: 16px; /* Distancia desde arriba */
+  left: 16px; /* Distancia desde la izquierda */
+  z-index: 120; /* Prioridad de apilamiento */
+  background: rgba(255,255,255,0.92); /* Fondo blanco translúcido */
+  color: #475467; /* Color de texto gris */
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem); /* Tamaño adaptable */
+  font-family: 'Rancho', cursive, Arial, sans-serif; /* Fuente decorativa */
+  padding: 8px 18px; /* Espaciado interno */
+  border-radius: 14px; /* Bordes redondeados */
+  box-shadow: 0 2px 10px rgba(0,0,0,.08); /* Sombra suave */
+  border: 1.5px solid #d9dee8; /* Borde gris claro */
+  text-align: left; /* Alineación a la izquierda */
+  pointer-events: none; /* No interactuable */
 }
 
 .feedback-text{
@@ -301,31 +304,31 @@ html, body{
 .status-text,
 .audio-status{
   /* Texto de estado y audio, color variable */
-  font-size: clamp(.9rem, 1.4vw, 1rem);
-  color: var(--text-light);
+  font-size: clamp(.9rem, 1.4vw, 1rem); /* Tamaño adaptable */
+  color: var(--text-light); /* Color de texto variable */
 }
 
 .page-number.book-spread-number {
   /* Números de página en la parte inferior de las páginas tipo libro */
-  position: absolute;
-  width: 100%;
-  left: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-  z-index: 20;
+  position: absolute; /* Posiciona sobre el contenido */
+  width: 100%; /* Ocupa todo el ancho */
+  left: 0; /* Desde el borde izquierdo */
+  bottom: 0; /* Desde el borde inferior */
+  display: flex; /* Flexbox */
+  justify-content: space-between; /* Espaciado entre números */
+  pointer-events: none; /* No interactuable */
+  z-index: 20; /* Prioridad de apilamiento */
 }
 .page-number-left, .page-number-right {
   /* Estilo para los números de página izquierdo y derecho */
   color: #3b3b6d; /* Azul oscuro pastel */
-  font-size: clamp(0.7rem, 1.1vw, 1.1rem);
-  font-family: 'Lobster Two', cursive;
-  font-weight: bold;
-  margin-left: 1vw;
-  margin-right: 1vw;
-  margin-bottom: 0.5vw;
-  align-self: flex-end;
+  font-size: clamp(0.7rem, 1.1vw, 1.1rem); /* Tamaño adaptable */
+  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
+  font-weight: bold; /* Negrita */
+  margin-left: 1vw; /* Espacio izquierdo */
+  margin-right: 1vw; /* Espacio derecho */
+  margin-bottom: 0.5vw; /* Espacio inferior */
+  align-self: flex-end; /* Alinea al fondo */
 }
 
 /* ========================================
@@ -334,40 +337,40 @@ html, body{
   Ejemplo de selectores: #orientationOverlay, .orientation-message
 */
 #orientationOverlay{
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 23, 42, .88);
-  z-index: 1000;
-  padding: 24px;
+  position: fixed; /* Fija el overlay en la pantalla */
+  inset: 0; /* Ocupa toda la pantalla */
+  display: none; /* Oculto por defecto */
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+  background: rgba(15, 23, 42, .88); /* Fondo oscuro translúcido */
+  z-index: 1000; /* Prioridad máxima */
+  padding: 24px; /* Espaciado interno */
 }
 
 #orientationOverlay .orientation-message{
-  padding: 24px;
-  border-radius: 20px;
-  background: #fff;
-  text-align: center;
-  box-shadow: var(--shadow-lg);
+  padding: 24px; /* Espaciado interno */
+  border-radius: 20px; /* Bordes redondeados */
+  background: #fff; /* Fondo blanco */
+  text-align: center; /* Centra el texto */
+  box-shadow: var(--shadow-lg); /* Sombra grande */
 }
 
 #orientationOverlay .orientation-message span{
-  display: block;
-  font-size: 3rem;
-  margin-bottom: 10px;
+  display: block; /* Elemento de bloque */
+  font-size: 3rem; /* Tamaño grande */
+  margin-bottom: 10px; /* Espacio inferior */
 }
 
 #orientationOverlay .orientation-message h2{
-  margin: 0 0 10px 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin: 0 0 10px 0; /* Espacio inferior */
+  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
+  font-size: clamp(1.6rem, 3vw, 2.2rem); /* Tamaño adaptable */
 }
 
 #orientationOverlay .orientation-message p{
-  margin: 0;
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: #374151;
+  margin: 0; /* Sin margen */
+  font-size: clamp(1rem, 2vw, 1.2rem); /* Tamaño adaptable */
+  color: #374151; /* Gris oscuro */
 }
 
 /* ========================================
@@ -376,64 +379,64 @@ html, body{
   Ejemplo de selectores: #moment1Screen, #flipbookSection, .flipbook-wrapper
 */
 #moment1Screen{
-  --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem);
-  --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem);
-  --a0-body-line-height: 1.45;
+  --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem); /* Tamaño de fuente base adaptable */
+  --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem); /* Tamaño de título adaptable */
+  --a0-body-line-height: 1.45; /* Altura de línea base */
 }
 
 #moment1Screen.active{
-  height: 100dvh;
-  overflow: hidden;
+  height: 100dvh; /* Ocupa toda la altura de la ventana */
+  overflow: hidden; /* Oculta el desbordamiento */
 }
 
 #moment1Screen .container{
-  width: min(96vw, 1800px);
-  height: 96dvh;
-  padding: 8px 10px;
-  display: grid;
-  grid-template-rows: auto 1fr;
-  gap: 8px;
+  width: min(96vw, 1800px); /* Ancho máximo 1800px o 96vw */
+  height: 96dvh; /* Altura adaptable */
+  padding: 8px 10px; /* Espaciado interno */
+  display: grid; /* Grid layout */
+  grid-template-rows: auto 1fr; /* Filas automáticas y flexibles */
+  gap: 8px; /* Espacio entre filas */
 }
 
 #moment1Screen .header{
-  margin-bottom: 0;
-  padding-bottom: 6px;
+  margin-bottom: 0; /* Sin margen inferior */
+  padding-bottom: 6px; /* Espacio inferior */
 }
 
 #moment1Screen .section-title{
-  margin-bottom: 6px;
-  font-size: clamp(1.1rem, 2.2vw, 1.85rem);
+  margin-bottom: 6px; /* Espacio inferior */
+  font-size: clamp(1.1rem, 2.2vw, 1.85rem); /* Tamaño adaptable */
 }
 
 #moment1Screen .student-code-display{
-  font-size: clamp(.9rem, 1.6vw, 1.1rem);
+  font-size: clamp(.9rem, 1.6vw, 1.1rem); /* Tamaño adaptable */
 }
 
 #moment1Screen #flipbookSection{
-  height: 100%;
-  display: flex;
+  height: 100%; /* Ocupa toda la altura */
+  display: flex; /* Flexbox */
 }
 
 #moment1Screen .flipbook-wrapper{
-  position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: calc(var(--a0-book-height) + 50px);
-  margin: 0;
-  padding: 12px 78px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative; /* Posicionamiento relativo */
+  width: 100%; /* Ocupa todo el ancho */
+  height: 100%; /* Ocupa toda la altura */
+  min-height: calc(var(--a0-book-height) + 50px); /* Altura mínima */
+  margin: 0; /* Sin margen */
+  padding: 12px 78px 18px; /* Espaciado interno */
+  display: flex; /* Flexbox */
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
 }
 
 #flipbook{
-  position: relative;
-  width: 95%;
-  height: var(--a0-book-height);
-  margin: 0 auto;
-  aspect-ratio: auto;
-  perspective: 2200px;
-  transform-style: preserve-3d;
+  position: relative; /* Posicionamiento relativo */
+  width: 95%; /* Ocupa el 95% del contenedor */
+  height: var(--a0-book-height); /* Altura definida por variable */
+  margin: 0 auto; /* Centrado horizontal */
+  aspect-ratio: auto; /* Relación de aspecto automática */
+  perspective: 2200px; /* Perspectiva 3D */
+  transform-style: preserve-3d; /* Mantiene el 3D en hijos */
 }
 
 /* ========================================
@@ -442,64 +445,64 @@ html, body{
   Ejemplo de selectores: #flipbook .page, .page-static-left, .page-static-right
 */
 #flipbook .page{
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  padding: 24px 28px;
-  transform: translateX(-50%) rotateY(0deg);
-  transform-origin: center center;
-  transform-style: preserve-3d;
+  position: absolute; /* Posiciona sobre el contenedor */
+  top: 0; /* Arriba */
+  left: 50%; /* Centrado horizontal */
+  width: 100%; /* Ocupa todo el ancho */
+  height: 100%; /* Ocupa toda la altura */
+  padding: 24px 28px; /* Espaciado interno */
+  transform: translateX(-50%) rotateY(0deg); /* Centrado y sin rotación */
+  transform-origin: center center; /* Origen de transformaciones */
+  transform-style: preserve-3d; /* Mantiene el 3D en hijos */
   transition:
-    transform .4s cubic-bezier(0.645, 0.045, 0.355, 1),
-    opacity .4s ease;
-  backface-visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-  background: var(--surface);
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.08);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
+    transform .4s cubic-bezier(0.645, 0.045, 0.355, 1), /* Transición de transformación */
+    opacity .4s ease; /* Transición de opacidad */
+  backface-visibility: hidden; /* Oculta el reverso */
+  opacity: 0; /* Oculto por defecto */
+  pointer-events: none; /* No interactuable */
+  z-index: 1; /* Prioridad baja */
+  overflow: hidden; /* Oculta desbordes */
+  background: var(--surface); /* Fondo por variable */
+  border-radius: 14px; /* Bordes redondeados */
+  box-shadow: 0 4px 16px rgba(0,0,0,.08); /* Sombra suave */
+  display: flex; /* Flexbox */
+  flex-direction: column; /* Dirección columna */
+  align-items: stretch; /* Estira hijos */
+  justify-content: flex-start; /* Alinea arriba */
 }
 
 #flipbook .page.active{
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 10;
+  opacity: 1; /* Visible */
+  pointer-events: auto; /* Interactuable */
+  z-index: 10; /* Prioridad alta */
 }
 
 #flipbook .page.page-static-left{
-  opacity: 1;
-  clip-path: inset(0 50% 0 0);
-  pointer-events: none;
-  z-index: 12;
+  opacity: 1; /* Visible */
+  clip-path: inset(0 50% 0 0); /* Muestra solo la mitad izquierda */
+  pointer-events: none; /* No interactuable */
+  z-index: 12; /* Prioridad */
 }
 
 #flipbook .page.page-static-right{
-  opacity: 1;
-  clip-path: inset(0 0 0 50%);
-  pointer-events: none;
-  z-index: 12;
+  opacity: 1; /* Visible */
+  clip-path: inset(0 0 0 50%); /* Muestra solo la mitad derecha */
+  pointer-events: none; /* No interactuable */
+  z-index: 12; /* Prioridad */
 }
 
 #flipbook .page.page-under-left{
-  opacity: 1;
-  clip-path: inset(0 50% 0 0);
-  pointer-events: none;
-  z-index: 6;
+  opacity: 1; /* Visible */
+  clip-path: inset(0 50% 0 0); /* Muestra solo la mitad izquierda */
+  pointer-events: none; /* No interactuable */
+  z-index: 6; /* Prioridad baja */
 }
 
 #flipbook .page.page-under-right{
-  opacity: 1;
-  clip-path: inset(0 0 0 50%);
-  pointer-events: none;
-  z-index: 6;
+  opacity: 1; /* Visible */
+  clip-path: inset(0 0 0 50%); /* Muestra solo la mitad derecha */
+  pointer-events: none; /* No interactuable */
+  z-index: 6; /* Prioridad baja */
 }
 
 /* ========================================
@@ -508,33 +511,33 @@ html, body{
   Ejemplo de selectores: .page-turn-leaf, .page-turn-face
 */
 #flipbook .page-turn-leaf{
-  position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  pointer-events: none;
-  transform-style: preserve-3d;
-  z-index: 28;
+  position: absolute; /* Posiciona sobre el contenedor */
+  top: 0; /* Arriba */
+  width: 50%; /* Mitad del ancho */
+  height: 100%; /* Ocupa toda la altura */
+  pointer-events: none; /* No interactuable */
+  transform-style: preserve-3d; /* Mantiene el 3D en hijos */
+  z-index: 28; /* Prioridad */
 }
 
 #flipbook .page-turn-leaf.forward{
-  left: 50%;
-  transform-origin: left center;
-  animation: leafTurnForward var(--book-turn-duration) var(--book-turn-ease) forwards;
+  left: 50%; /* Posiciona a la derecha */
+  transform-origin: left center; /* Origen de giro */
+  animation: leafTurnForward var(--book-turn-duration) var(--book-turn-ease) forwards; /* Animación de giro */
 }
 
 #flipbook .page-turn-leaf.backward{
-  left: 0;
-  transform-origin: right center;
-  animation: leafTurnBackward var(--book-turn-duration) var(--book-turn-ease) forwards;
+  left: 0; /* Posiciona a la izquierda */
+  transform-origin: right center; /* Origen de giro */
+  animation: leafTurnBackward var(--book-turn-duration) var(--book-turn-ease) forwards; /* Animación de giro */
 }
 
 #flipbook .page-turn-face{
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  backface-visibility: hidden;
-  background: var(--page-bg-light);
+  position: absolute; /* Posiciona sobre el contenedor */
+  inset: 0; /* Ocupa todo el espacio */
+  overflow: hidden; /* Oculta desbordes */
+  backface-visibility: hidden; /* Oculta el reverso */
+  background: var(--page-bg-light); /* Fondo por variable */
 }
 
 #flipbook .page-turn-leaf.forward .page-turn-face.front{
