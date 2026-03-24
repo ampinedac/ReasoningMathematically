@@ -66,25 +66,19 @@ body {
     padding: 0;
     transition: background var(--transition), color var(--transition);
     overflow-x: hidden;
+body {
+    font-family: var(--main-font);
+    font-size: unset;
+    color: var(--text-light);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background var(--transition), color var(--transition);
+    overflow-x: hidden;
 }
-
-/* =====================================================
-   CLASES UTILITARIAS
-   (Ocultar elementos rápidamente)
-   ===================================================== */
-.hidden {
-    display: none !important;
-}
-
-/* =====================================================
-   CONTROL DE PANTALLAS (section.screen)
-   Solo una pantalla visible a la vez (pantalla principal, actividades, etc.)
-   ===================================================== */
-section.screen {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    position: absolute !important;
     width: 100%;
     min-height: 100vh;
     left: -9999px !important;
