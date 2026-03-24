@@ -616,28 +616,34 @@ body{
 }
 
 #flipbook .cover-book-title{
-  margin: 0;
+  margin: 0 0 2vh 0;
   font-family: 'Lobster Two', cursive;
-  font-size: 10vh;
-  letter-spacing: 1.2px;
-  text-shadow: 2px 2px 8px #ffe066, 0 2px 2px #fff9c4;
-  color: #1f2b46;
+  font-size: 7vw;
+  font-weight: bold;
+  letter-spacing: 2.5px;
+  text-shadow: 0 4px 24px #ffe066, 0 2px 2px #fff9c4, 0 0 2px #fff;
+  color: #0084ff;
   text-align: center;
-  align-self: flex-start;
   width: 100%;
-  padding-top: 4vh;
+  padding-top: 2vh;
+  line-height: 1.1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #flipbook .cover-subtitle {
-  font-size: 6vh;
-  color: #7c4700;
+  font-size: 3vw;
+  color: #5b3a00;
   font-family: 'Rancho', cursive;
-  margin: 0 auto;
+  margin: 2vh auto 4vh auto;
   text-align: center;
-  text-shadow: 1px 1px 6px #fffbe6;
-  align-self: center;
+  text-shadow: 0 2px 12px #fffbe6, 0 0 2px #fff;
   width: 100%;
-  max-width: 90vw;
+  max-width: 70vw;
+  font-weight: 500;
+  line-height: 1.2;
 }
 /* Ocultar botones de avanzar/retroceder en la portada */
 #flipbook .book-cover-page ~ .nav-btn,
@@ -1136,4 +1142,10 @@ select:focus{
   #orientationOverlay{
     display: flex;
   }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 0 4vw;
 }
