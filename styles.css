@@ -53,13 +53,25 @@ html, body{
 body{
   font-family: 'Rancho', cursive, Arial, sans-serif;
   color: var(--text-main);
-  background-color: #eaf6ff;
+  background: #fff;
+}
+
+/* Fondo de rombos degradé SOLO en la portada del libro */
+.book-cover-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
   background-image:
-    linear-gradient(to bottom, rgba(120, 120, 255, 0.18), rgba(180, 140, 255, 0.18) 80%, rgba(255,255,255,0.12)),
-    url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="none"/><polygon points="20,0 40,20 20,40 0,20" fill="%23b6d0ff"/><polygon points="20,10 30,20 20,30 10,20" fill="%23e0cfff"/></svg>');
-  background-size: 40px 40px;
+    linear-gradient(to bottom, #3b4cc4 0%, #7b7fd6 40%, #b6aee2 70%, #e0cfff 100%),
+    url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="16,0 32,16 16,32 0,16" fill="%23b6d0ff"/></svg>');
+  background-size: 32px 32px;
   background-repeat: repeat;
-  background-attachment: fixed;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
 }
 
 img{
@@ -732,7 +744,7 @@ select{
   align-items: stretch;
   justify-content: stretch;
   box-sizing: border-box;
-  background: none;
+  background: #fff;
   border-radius: 0;
   overflow: visible;
   position: relative;
@@ -767,7 +779,7 @@ select{
   min-width: 0;
   min-height: 0;
   position: relative;
-  background: none;
+  background: #fff;
 }
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-left-page img {
@@ -790,7 +802,7 @@ select{
   margin: 0;
   min-width: 0;
   min-height: 0;
-  background: none;
+  background: #fff;
 }
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-right-page .story-text {

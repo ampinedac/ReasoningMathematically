@@ -12,7 +12,7 @@
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
 </head>
 <body>
-
+<div id="bookCoverBg" class="book-cover-bg" style="display:none;"></div>
         <!-- Refuerzo extremo: ocultar cocina persistentemente al cargar y en cambios de visibilidad -->
         <script>
             (function() {
@@ -36,6 +36,22 @@
                 document.addEventListener('visibilitychange', function() {
                     if (!document.hidden) hideCocina();
                 });
+
+                // Fondo de portada SOLO cuando la portada está activa
+                function updateBookCoverBg() {
+                    var cover = document.querySelector('.book-cover-page.active');
+                    var bg = document.getElementById('bookCoverBg');
+                    if (cover && bg) {
+                        bg.style.display = 'block';
+                    } else if(bg) {
+                        bg.style.display = 'none';
+                    }
+                }
+                document.addEventListener('DOMContentLoaded', updateBookCoverBg);
+                document.addEventListener('click', function(e){
+                    setTimeout(updateBookCoverBg, 100);
+                });
+                // Si usas navegación por teclado o eventos personalizados, puedes llamar updateBookCoverBg() tras cada cambio de página
             })();
         </script>
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
