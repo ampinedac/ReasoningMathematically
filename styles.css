@@ -14,89 +14,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-#flipbook .book-cover-page {
-  position: relative !important; /* Evita heredar absolute de .page */
-  height: 100% !important;
+.book-cover-page {
+  position: relative;
+  height: 95vh;
+  max-height: 95vh;
+  width: 50vw;
+  max-width: 640px;
+  margin: 40px auto;
   box-sizing: border-box;
-  top: 0 !important;
-  left: 0 !important;
-  transform: none !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #c0f6ea 0%, #96f7ef 45%, #97e3ff 100%);
+  border: 3px solid rgba(180, 138, 0, .25);
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  padding: 40px 26px;
+  gap: 18px;
 }
-/* ==== AJUSTE PARA QUE LA PORTADA NO DESBORDE ==== */
-#moment1Screen,
-#moment1Screen .container,
-#moment1Screen #flipbookSection,
-#moment1Screen .flipbook-wrapper,
-#flipbook {
-  height: 100%;
-  box-sizing: border-box;
-}
-
-#flipbook {
-  overflow: hidden;
-}
-
-#flipbook .book-cover-page {
-  height: 100%;
-  box-sizing: border-box;
-}
-
-/* ========================================
-  UTILIDAD: OCULTAR ELEMENTOS
-  ======================================== */
-.hidden { 
-  /* Oculta cualquier elemento al que se le aplique esta clase */
-  display: none !important; /* Fuerza que el elemento no se muestre, sobrescribiendo otros estilos */
-}
-
-/* ========================================
-  REGLAS GENERALES Y VARIABLES
-  ========================================
-  Ejemplo de selectores: :root, body, html, *, .container
-*/
-body { 
-  /* Estilos generales para el cuerpo de la página */
-  font-family: 'Rancho'; /* Fuente principal del proyecto */
-  background: url('assets/images/Fondo.png') no-repeat center center fixed; /* Imagen de fondo centrada y fija */
-  background-size: cover; /* La imagen de fondo cubre toda la pantalla */
-}
-
-:root{ 
-  /* Variables CSS globales */
-  --success: #16a34a; /* Color para éxito */
-  --danger: #dc2626; /* Color para error/peligro */
-  --warning: #f59e0b; /* Color para advertencia */
-  --border: #d9dee8; /* Color de borde */
-  --shadow-sm: 0 2px 10px rgba(0,0,0,.08); /* Sombra pequeña */
-  --shadow-md: 0 8px 24px rgba(0,0,0,.12); /* Sombra mediana */
-  --shadow-lg: 0 18px 50px rgba(0,0,0,.16); /* Sombra grande */
-  --book-turn-duration: 1s; /* Duración de animación de pasar página */
-  --book-turn-ease: cubic-bezier(0.645, 0.045, 0.355, 1); /* Curva de animación de pasar página */
-}
-
-html, body{ 
-  /* Ajustes generales para html y body */
-  margin: 0; /* Elimina el margen por defecto */
-  padding: 0; /* Elimina el padding por defecto */
-  width: 100%; /* Ocupa todo el ancho disponible */
-}
-
-/* ========================================
-  ESTRUCTURA GENERAL DE PANTALLAS
-  ========================================
-  Ejemplo de selectores: .screen, .container, .user-rect
-*/
-.screen{ 
-  /* Oculta todas las pantallas por defecto */
-  display: none; /* No se muestran */
-  width: 100%; /* Ocupan todo el ancho */
-  padding: var(--screen-padding); /* Padding configurable por variable */
-}
-
-.screen.active{ 
-  /* Pantalla activa */
-  display: flex; /* Se muestran */
   flex-direction: column; /* Alineación vertical */
   justify-content: center; /* Distribución vertical */
 }
