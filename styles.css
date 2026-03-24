@@ -607,7 +607,7 @@ body{
 #flipbook .story-page,
 #flipbook .book-cover-page,
 #flipbook .q1-book-spread{
-  width: 100%;
+  width: 45%;
 }
 
 #flipbook .book-cover-page{
