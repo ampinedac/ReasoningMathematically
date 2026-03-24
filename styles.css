@@ -56,39 +56,6 @@ body{
   background: #fff;
 }
 
-/* Fondo de rombos degradé SOLO en la portada del libro */
-.book-cover-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  width: 100vw;
-  height: 100vh;
-  background-image:
-    linear-gradient(to bottom, #3b4cc4 0%, #7b7fd6 40%, #b6aee2 70%, #e0cfff 100%),
-    url('data:image/svg+xml;utf8,<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="16,0 32,16 16,32 0,16" fill="%23b6d0ff"/></svg>');
-  background-size: 32px 32px;
-  background-repeat: repeat;
-  opacity: 1;
-  transition: opacity 0.5s;
-}
-}
-
-img{
-  max-width: 100%;
-  display: block;
-}
-
-button,
-input,
-textarea,
-select{
-  font: inherit;
-}
-
-.hidden{
-  display: none !important;
-}
 
 /* ========================================
    ESTRUCTURA GENERAL DE PANTALLAS
