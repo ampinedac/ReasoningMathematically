@@ -154,7 +154,7 @@ section.screen > * {
   <h1 class="home-title">📐 Actividades para Desarrollar Razonamiento Matemático</h1>
 */
 .home-title {
-    font-size: 10vw;
+    font-size: 5vw;
     background: linear-gradient(135deg, #5b21b6 0%, #1e40af 50%, #0f172a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -180,7 +180,7 @@ section.screen > * {
   <p class="home-subtitle">¡Vamos a explorar y aprender juntos!</p>
 */
 .home-subtitle {
-    font-size: 8vw;
+    font-size: 4vw;
     color: #1565c0;
     margin-bottom: 60px;
     text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
