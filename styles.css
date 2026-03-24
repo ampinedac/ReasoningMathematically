@@ -53,11 +53,12 @@ html, body{
 body{
   font-family: 'Rancho', cursive, Arial, sans-serif;
   color: var(--text-main);
-  background:
-    url('assets/images/fondo-rombos-pastel.svg') center center / cover no-repeat fixed,
-    radial-gradient(circle at top left, rgba(255,255,255,.8), transparent 30%),
-    linear-gradient(135deg, #eef3ff 0%, #f8fafc 45%, #fffaf2 100%);
-  background-size: cover;
+  background-color: #eaf6ff;
+  background-image:
+    linear-gradient(to bottom, rgba(120, 120, 255, 0.18), rgba(180, 140, 255, 0.18) 80%, rgba(255,255,255,0.12)),
+    url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="none"/><polygon points="20,0 40,20 20,40 0,20" fill="%23b6d0ff"/><polygon points="20,10 30,20 20,30 10,20" fill="%23e0cfff"/></svg>');
+  background-size: 40px 40px;
+  background-repeat: repeat;
   background-attachment: fixed;
 }
 
