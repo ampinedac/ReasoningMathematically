@@ -80,8 +80,17 @@ html, body{
   ========================================
   Ejemplo de selectores: #welcomeScreen, .welcome-box, .btn, .main-title
 */
-#welcomeScreen,
-#confirmationScreen{
+
+#welcomeScreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+#confirmationScreen {
   align-items: center;
   text-align: center;
 }
