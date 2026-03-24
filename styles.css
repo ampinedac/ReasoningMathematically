@@ -5,7 +5,8 @@
 */
 body {
   font-family: 'Rancho', cursive, Arial, sans-serif;
-  background: url('C:\Users\Usuario\OneDrive - uan.edu.co\1. Maestría Ed Math\Tesis Maestría\ReasoningMathematically\assets\images\Fondo.png') no-repeat center center fixed;
+  color: var(--text-main);
+  background: url('assets/images/Fondo.png') no-repeat center center fixed;
   background-size: cover;
 }
 :root{
@@ -57,11 +58,6 @@ html, body{
   min-height: 100%;
 }
 
-body{
-  font-family: 'Rancho', cursive, Arial, sans-serif;
-  color: var(--text-main);
-  background: #fff;
-}
 
 
 /* ========================================
