@@ -1,3 +1,21 @@
+/* ==== AJUSTE PARA QUE LA PORTADA NO DESBORDE ==== */
+#moment1Screen,
+#moment1Screen .container,
+#moment1Screen #flipbookSection,
+#moment1Screen .flipbook-wrapper,
+#flipbook {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#flipbook {
+  overflow: hidden;
+}
+
+#flipbook .book-cover-page {
+  height: 100%;
+  box-sizing: border-box;
+}
 
 /* ========================================
   UTILIDAD: OCULTAR ELEMENTOS
