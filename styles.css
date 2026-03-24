@@ -165,187 +165,275 @@
 #ContenedorLibro {
   width: min(96vw, 1800px);
   min-height: 96dvh;
-  padding: 24px 10px 8px 10px;
-  gap: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
 
-#ContenedorLibro .flipbook-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 400px;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
+  /* =============================
+     CONTENEDOR BIENVENIDA
+     ============================= */
+  #ContenedorBienvenida {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Rancho', cursive;
+    font-size: clamp(2.2rem, 3.5vw, 2.8rem);
 
-#ContenedorLibro .page {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  padding: 24px 28px;
-  transform: translateX(-50%) rotateY(0deg);
-  transform-origin: center center;
-  transform-style: preserve-3d;
-  transition:
-    transform .4s cubic-bezier(0.645, 0.045, 0.355, 1),
-    opacity .4s ease;
-  backface-visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-  background: var(--surface);
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.08);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-}
-  margin-bottom: 10px; /* Espacio inferior */
-}
+  #ContenedorBienvenida .welcome-box {
+    width: min(92vw, 640px);
+    padding: clamp(20px, 3vw, 40px);
+    background: rgba(62, 216, 255, 0.589);
+    border: 1px solid rgba(255,255,255,.7);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #ContenedorBienvenida .welcome-box label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: clamp(2rem, 3vw, 2.6rem);
+  }
+  #ContenedorBienvenida .chalk-input {
+    width: min(100%, 360px);
+    margin: 0 auto 16px auto;
+    display: block;
+    padding: 12px 18px;
+    border: 2px solid #127afa;
+    border-radius: 16px;
+    background: #fff;
+    color: #111827;
+    text-align: center;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-family: 'Rancho', cursive;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  #ContenedorBienvenida .chalk-input:focus {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+  }
+  #ContenedorBienvenida .btn {
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    font-family: 'Rancho', cursive;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #fff;
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+    font-weight: 700;
+  }
+  #ContenedorBienvenida .btn:hover {
+    filter: brightness(.96);
+    transform: translateY(-1px);
+  }
+  #ContenedorBienvenida .btn:active {
+    transform: translateY(0);
+  }
+  #ContenedorBienvenida .btn:disabled {
+    opacity: .65;
+    cursor: not-allowed;
+  }
+  #ContenedorBienvenida #welcomeError {
+    margin-top: 10px;
+    color: #b91c1c;
+    font-weight: 700;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    text-align: center;
+    font-family: 'Rancho', cursive;
+  }
 
-#orientationOverlay .orientation-message h2{
-  margin: 0 0 10px 0; /* Espacio inferior */
-  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-  font-size: clamp(1.6rem, 3vw, 2.2rem); /* Tamaño adaptable */
-}
+  /* =============================
+     CONTENEDOR CONFIRMACIÓN
+     ============================= */
+  #ContenedorConfirmacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Rancho', cursive;
+  }
+  #ContenedorConfirmacion .main-title {
+    font-family: 'Lobster Two', cursive;
+    font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+    color: #222;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  #ContenedorConfirmacion .confirmation-box {
+    width: min(92vw, 640px);
+    padding: clamp(20px, 3vw, 40px);
+    background: rgba(62, 216, 255, 0.589);
+    border: 1px solid rgba(255,255,255,.7);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #ContenedorConfirmacion .confirmation-question {
+    width: 100%;
+    margin: 0 0 24px 0;
+    font-family: 'Lobster Two', cursive;
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+    line-height: 1.25;
+    font-weight: 700;
+    color: #222;
+    text-align: center;
+  }
+  #ContenedorConfirmacion .confirmation-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  #ContenedorConfirmacion .confirmation-buttons .btn {
+    width: 100px;
+    height: 100px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,.08);
+  }
+  #ContenedorConfirmacion .confirmation-buttons .btn img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    margin: 0 auto;
+  }
 
-#orientationOverlay .orientation-message p{
-  margin: 0; /* Sin margen */
-  font-size: clamp(1rem, 2vw, 1.2rem); /* Tamaño adaptable */
-  color: #374151; /* Gris oscuro */
-}
+  /* =============================
+     CONTENEDOR PORTADA
+     ============================= */
+  #ContenedorPortada {
+    position: relative;
+    height: 95vh;
+    max-height: 95vh;
+    width: 50vw;
+    max-width: 640px;
+    margin: 40px auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+    border: 3px solid rgba(180, 138, 0, .25);
+    box-shadow: 0 14px 30px rgba(0,0,0,.14);
+    padding: 40px 26px;
+    gap: 18px;
+  }
+  #ContenedorPortada .cover-book-title {
+    font-family: 'Lobster Two', cursive;
+    font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+    color: #0084ff;
+    text-align: center;
+  }
+  #ContenedorPortada .cover-subtitle {
+    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    color: #263238;
+    text-align: center;
+  }
+  #ContenedorPortada .cover-leer-btn {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-/* ========================================
-  FLIPBOOK - CONTENEDOR GENERAL (COMPARTIDO)
-  ========================================
-  Ejemplo de selectores: #moment1Screen, #flipbookSection, .flipbook-wrapper
-*/
-#moment1Screen{
-  --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem); /* Tamaño de fuente base adaptable */
-  --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem); /* Tamaño de título adaptable */
-  --a0-body-line-height: 1.45; /* Altura de línea base */
-}
-
-#moment1Screen.active{
-  height: 100dvh; /* Ocupa toda la altura de la ventana */
-  overflow: hidden; /* Oculta el desbordamiento */
-}
-
-#moment1Screen .container{
-#moment1Screen .container{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: min(96vw, 1800px);
-  min-height: 96dvh;
-  padding: 24px 10px 8px 10px;
-  gap: 12px;
-}
-
-#moment1Screen .header{
-  margin-bottom: 0; /* Sin margen inferior */
-  padding-bottom: 6px; /* Espacio inferior */
-}
-
-#moment1Screen .section-title{
-  margin-bottom: 6px; /* Espacio inferior */
-  font-size: clamp(1.1rem, 2.2vw, 1.85rem); /* Tamaño adaptable */
-}
-
-#moment1Screen .student-code-display{
-  font-size: clamp(.9rem, 1.6vw, 1.1rem); /* Tamaño adaptable */
-}
-
-#moment1Screen #flipbookSection{
-  height: 100%; /* Ocupa toda la altura */
-  display: flex; /* Flexbox */
-}
-
-#moment1Screen .flipbook-wrapper{
-#moment1Screen .flipbook-wrapper{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 400px;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
-#flipbook{
-  position: relative; /* Posicionamiento relativo */
-  width: 95%; /* Ocupa el 95% del contenedor */
-  height: 100%; /* Ocupa toda la altura del contenedor */
-  margin: 0 auto; /* Centrado horizontal */
-  aspect-ratio: auto; /* Relación de aspecto automática */
-  perspective: 2200px; /* Perspectiva 3D */
-  transform-style: preserve-3d; /* Mantiene el 3D en hijos */
-}
-
-  Ejemplo de selectores: #flipbook .page, .page-static-left, .page-static-right
-*/
-#flipbook .page{
-  position: absolute; /* Posiciona sobre el contenedor */
-  top: 0; /* Arriba */
-  left: 50%; /* Centrado horizontal */
-  width: 100%; /* Ocupa todo el ancho */
-  height: 100%; /* Ocupa toda la altura */
-  padding: 24px 28px; /* Espaciado interno */
-  transform: translateX(-50%) rotateY(0deg); /* Centrado y sin rotación */
-  transform-origin: center center; /* Origen de transformaciones */
-  transform-style: preserve-3d; /* Mantiene el 3D en hijos */
-  transition:
-    transform .4s cubic-bezier(0.645, 0.045, 0.355, 1), /* Transición de transformación */
-    opacity .4s ease; /* Transición de opacidad */
-  backface-visibility: hidden; /* Oculta el reverso */
-  opacity: 0; /* Oculto por defecto */
-  pointer-events: none; /* No interactuable */
-  z-index: 1; /* Prioridad baja */
-  overflow: hidden; /* Oculta desbordes */
-  background: var(--surface); /* Fondo por variable */
-  border-radius: 14px; /* Bordes redondeados */
-  box-shadow: 0 4px 16px rgba(0,0,0,.08); /* Sombra suave */
-  display: flex; /* Flexbox */
-  flex-direction: column; /* Dirección columna */
-  align-items: stretch; /* Estira hijos */
-  justify-content: flex-start; /* Alinea arriba */
-}
-
-#flipbook .page.active{
-  opacity: 1; /* Visible */
-  pointer-events: auto; /* Interactuable */
-  z-index: 10; /* Prioridad alta */
-}
-
-#flipbook .page.page-static-left{
-  opacity: 1; /* Visible */
-  clip-path: inset(0 50% 0 0); /* Muestra solo la mitad izquierda */
-  pointer-events: none; /* No interactuable */
-  z-index: 12; /* Prioridad */
-}
-
-#flipbook .page.page-static-right{
-  opacity: 1; /* Visible */
-  clip-path: inset(0 0 0 50%); /* Muestra solo la mitad derecha */
-  pointer-events: none; /* No interactuable */
-  z-index: 12; /* Prioridad */
-}
-
-#flipbook .page.page-under-left{
-  opacity: 1; /* Visible */
-  clip-path: inset(0 50% 0 0); /* Muestra solo la mitad izquierda */
+  /* =============================
+     CONTENEDOR LIBRO (FLIPBOOK)
+     ============================= */
+  #ContenedorLibro {
+    width: min(96vw, 1800px);
+    min-height: 96dvh;
+    padding: 24px 10px 8px 10px;
+    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem);
+    --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem);
+    --a0-body-line-height: 1.45;
+  }
+  #ContenedorLibro .flipbook-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 400px;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  #ContenedorLibro .page {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    padding: 24px 28px;
+    transform: translateX(-50%) rotateY(0deg);
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    transition:
+      transform .4s cubic-bezier(0.645, 0.045, 0.355, 1),
+      opacity .4s ease;
+    backface-visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+  #ContenedorLibro .page.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 10;
+  }
+  #ContenedorLibro .page-number.book-spread-number {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 20;
+  }
+  #ContenedorLibro .page-number-left, #ContenedorLibro .page-number-right {
+    color: #0084ff;
+    font-size: clamp(0.7rem, 1.1vw, 1.1rem);
+    font-family: 'Lobster Two', cursive;
+    font-weight: bold;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-bottom: 0.5vw;
+    align-self: flex-end;
+  }
   pointer-events: none; /* No interactuable */
   z-index: 6; /* Prioridad baja */
 }
