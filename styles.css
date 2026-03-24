@@ -26,29 +26,10 @@ body {
   --shadow-md: 0 8px 24px rgba(0,0,0,.12);
   --shadow-lg: 0 18px 50px rgba(0,0,0,.16);
 
-  --page-bg-light: #fffefb;
-  --page-bg-warm: #fff9f0;
-
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-
-  --screen-padding: clamp(16px, 2vw, 28px);
-  --content-width: min(1200px, 96vw);
 
   --book-turn-duration: 700ms;
   --book-turn-ease: cubic-bezier(0.645, 0.045, 0.355, 1);
 
-  --a0-book-height: clamp(560px, 82vh, 900px);
-  --a0-body-font-size: clamp(0.9rem, 1.2vw, 1.08rem);
-  --a0-title-font-size: clamp(1rem, 2vw, 1.35rem);
-  --a0-body-line-height: 1.45;
-}
-
-*,
-*::before,
-*::after{
-  box-sizing: border-box;
 }
 
 html, body{
@@ -76,38 +57,7 @@ html, body{
   justify-content: center;
 }
 
-.container{
-  width: var(--content-width);
-  margin: 0 auto;
-}
-
-.user-rect{
-  width: min(100%, 900px);
-  margin: 0 auto 18px auto;
-  text-align: center;
-}
-
-.main-title{
-  margin: 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: clamp(2.3rem, 5vw, 4.2rem);
-  line-height: 1.05;
-  color: #1f2b46;
-  text-align: center;
-}
-
-.activity-subtitle{
-  margin: 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
-  line-height: 1.2;
-  color: #344054;
-  text-align: center;
-}
-
 .author-credit,
-#author-credit,
-.authorCredit,
 #authorCredit{
   position: fixed;
   left: 14px;
@@ -182,6 +132,7 @@ html, body{
   font-weight: 700;
   font-size: clamp(1rem, 1.8vw, 1.2rem);
   text-align: center;
+  font-family: 'Rancho', cursive;
 }
 
 .btn{
@@ -281,20 +232,22 @@ html, body{
   width: 100%;
 }
 
-.section-title{
-  margin: 0 0 8px 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: clamp(1.25rem, 2vw, 2rem);
-  line-height: 1.2;
-  text-align: center;
-  color: #1f2937;
-}
 
-.student-code-display{
-  margin: 0;
-  text-align: center;
-    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+.student-code-display {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 120;
+  background: rgba(255,255,255,0.92);
   color: #475467;
+  font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+  font-family: 'Rancho', cursive, Arial, sans-serif;
+  padding: 8px 18px;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+  border: 1.5px solid #d9dee8;
+  text-align: left;
+  pointer-events: none;
 }
 
 .feedback-text{
