@@ -1,6 +1,8 @@
 /* ========================================
-   RESET Y VARIABLES
-   ======================================== */
+  REGLAS GENERALES Y VARIABLES
+  ========================================
+  Ejemplo de selectores: :root, body, html, *, .container
+*/
 :root{
   --bg-main: #f5f7fb;
   --surface: #ffffff;
@@ -58,8 +60,10 @@ body{
 
 
 /* ========================================
-   ESTRUCTURA GENERAL DE PANTALLAS
-   ======================================== */
+  ESTRUCTURA GENERAL DE PANTALLAS
+  ========================================
+  Ejemplo de selectores: .screen, .container, .user-rect
+*/
 .screen{
   display: none;
   min-height: 100dvh;
@@ -117,8 +121,10 @@ body{
 }
 
 /* ========================================
-   WELCOME / CONFIRMACIÓN
-   ======================================== */
+  ESTILOS COMPARTIDOS ENTRE ACTIVIDADES 0A Y 0B
+  ========================================
+  Ejemplo de selectores: #welcomeScreen, .welcome-box, .btn, .main-title
+*/
 #welcomeScreen,
 #confirmationScreen{
   align-items: center;
@@ -269,8 +275,10 @@ body{
 }
 
 /* ========================================
-   CABECERAS Y UTILIDADES INTERNAS
-   ======================================== */
+  CABECERAS Y UTILIDADES INTERNAS
+  ========================================
+  Ejemplo de selectores: .header, .section-title, .student-code-display
+*/
 .header{
   width: 100%;
 }
@@ -334,8 +342,10 @@ body{
 }
 
 /* ========================================
-   OVERLAY DE ORIENTACIÓN
-   ======================================== */
+  OVERLAY DE ORIENTACIÓN
+  ========================================
+  Ejemplo de selectores: #orientationOverlay, .orientation-message
+*/
 #orientationOverlay{
   position: fixed;
   inset: 0;
@@ -375,8 +385,10 @@ body{
 }
 
 /* ========================================
-   FLIPBOOK - CONTENEDOR GENERAL
-   ======================================== */
+  FLIPBOOK - CONTENEDOR GENERAL (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: #moment1Screen, #flipbookSection, .flipbook-wrapper
+*/
 #moment1Screen{
   --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem);
   --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem);
@@ -444,8 +456,10 @@ body{
 }
 
 /* ========================================
-   FLIPBOOK - PÁGINAS BASE
-   ======================================== */
+  FLIPBOOK - PÁGINAS BASE (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: #flipbook .page, .page-static-left, .page-static-right
+*/
 #flipbook .page{
   position: absolute;
   top: 0;
@@ -508,8 +522,10 @@ body{
 }
 
 /* ========================================
-   FLIPBOOK - HOJA DE GIRO
-   ======================================== */
+  FLIPBOOK - HOJA DE GIRO (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: .page-turn-leaf, .page-turn-face
+*/
 #flipbook .page-turn-leaf{
   position: absolute;
   top: 0;
@@ -581,8 +597,10 @@ body{
 }
 
 /* ========================================
-   PORTADA / STORY PAGE / SPREADS
-   ======================================== */
+  ESTILOS ESPECÍFICOS ACTIVIDAD 0A (PORTADA, STORY PAGE)
+  ========================================
+  Ejemplo de selectores: .book-cover-page, .cover-book-title, .cover-subtitle
+*/
 #flipbook .flipbook-page,
 #flipbook .story-page,
 #flipbook .book-cover-page,
@@ -653,10 +671,6 @@ body{
   transform: scale(1.08) rotate(-2deg);
   filter: drop-shadow(0 8px 28px #ffd700ee) drop-shadow(0 0 16px #fffbe6);
 }
-  line-height: 1.1;
-  text-align: center;
-  color: #5b3a00;
-}
 
 .story-page-content{
   position: relative;
@@ -699,8 +713,10 @@ body{
 }
 
 /* ========================================
-   SPREAD DE PREGUNTA Q1
-   ======================================== */
+  ESTILOS ESPECÍFICOS ACTIVIDAD 0A (SPREAD Q1)
+  ========================================
+  Ejemplo de selectores: .q1-book-spread, .q1-left-page, .q1-right-page
+*/
 #moment1Screen #flipbook .page.q1-book-spread {
   width: 100%;
   height: 100%;
@@ -811,11 +827,6 @@ body{
   margin-bottom: 0.5vw;
   align-self: flex-end;
 }
-  min-height: 95%;
-  height: auto;
-  overflow: visible;
-  margin: 0;
-}
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-left-page > *,
 #moment1Screen #flipbook .page.q1-book-spread .q1-right-page > *,
@@ -894,8 +905,10 @@ body{
 }
 
 /* ========================================
-   TIPOGRAFÍA INTERNA DEL FLIPBOOK
-   ======================================== */
+  TIPOGRAFÍA INTERNA DEL FLIPBOOK (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: .story-text, .question, .activity-subtitle
+*/
 #moment1Screen #flipbook .page :is(
   p, li, label, input, textarea, select, button,
   .story-text, .question, .instruction-hint, .confirmation-question,
@@ -915,8 +928,10 @@ body{
 }
 
 /* ========================================
-   BOTONES DE NAVEGACIÓN / SONIDO / TOOLS
-   ======================================== */
+  BOTONES DE NAVEGACIÓN / SONIDO / TOOLS (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: .sound-toggle, .nav-btn, #prevBtn, #nextBtn
+*/
 .sound-toggle,
 .nav-btn{
   position: absolute;
@@ -974,8 +989,10 @@ body{
 }
 
 /* ========================================
-   TARJETAS / CAMPOS / MINI COMPONENTES
-   ======================================== */
+  TARJETAS / CAMPOS / MINI COMPONENTES (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: .formula, .question, .radio-label
+*/
 .formula{
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
@@ -1017,8 +1034,10 @@ select:focus{
 }
 
 /* ========================================
-   RESPONSIVE
-   ======================================== */
+  RESPONSIVE (COMPARTIDO)
+  ========================================
+  Ejemplo de selectores: @media, .main-title, .btn-primary
+*/
 @media (max-width: 900px){
   #moment1Screen .container{
     width: 98vw;
@@ -1123,3 +1142,9 @@ select:focus{
     display: flex;
   }
 }
+
+/* ========================================
+   ESTILOS ESPECÍFICOS ACTIVIDAD 0B
+   ========================================
+   Ejemplo de selectores: (agregar aquí los selectores exclusivos de 0B)
+*/
