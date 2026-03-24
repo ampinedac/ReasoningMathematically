@@ -3,6 +3,12 @@
   ========================================
   Ejemplo de selectores: :root, body, html, *, .container
 */
+body {
+  font-family: 'Rancho', cursive, Arial, sans-serif;
+  color: var(--text-main);
+  background: url('C:\Users\Usuario\OneDrive - uan.edu.co\1. Maestría Ed Math\Tesis Maestría\ReasoningMathematically\assets\images\Fondo.png') no-repeat center center fixed;
+  background-size: cover;
+}
 :root{
   --bg-main: #f5f7fb;
   --surface: #ffffff;
