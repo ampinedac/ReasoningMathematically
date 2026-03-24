@@ -79,13 +79,17 @@ html, body{
 
 #welcomeScreen {
   /* Contenedor principal de la pantalla de bienvenida */
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Centrado horizontal */
+  justify-content: center; /* Centrado vertical */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  font-size: clamp(2.2rem, 3.5vw, 2.8rem); /* Tamaño adaptable */
+    /* Afecta a la pantalla de bienvenida: contiene los textos "Actividad 0A", "¿El orden de los factores altera el producto?", "Escribe tu código estudiantil:", botón "Ingresar" y mensajes de error */
   
 }
 
 .status-text,
 .audio-status{
+  /* Afecta a los textos de estado y audio, por ejemplo: mensajes de audio, "Graba tu explicación", etc. */
   /* Texto de estado y audio, centrado y con tamaño adaptable */
   font-size: clamp(.9rem, 1.4vw, 1rem);
   text-align: center;
@@ -99,6 +103,7 @@ html, body{
 
 .welcome-box,
 .confirmation-box{
+  /* Afecta a los cuadros centrales de bienvenida y confirmación, donde aparecen textos como "Escribe tu código estudiantil:", mensajes de error y botones de acción */
   /* Caja central con fondo translúcido y borde redondeado */
   width: min(92vw, 640px); /* Limita el ancho máximo a 640px o 92vw */
   margin: 0 auto; /* Centra horizontalmente */
@@ -112,11 +117,11 @@ html, body{
 
 .chalk-text,
 #welcomeScreen label{
+  /* Afecta al texto: "Escribe tu código estudiantil:" en la pantalla de bienvenida */
   /* Este bloque da estilo al texto: "Escribe tu código estudiantil:" en la pantalla de bienvenida */
   /* Texto grande y decorativo, centrado */
   display: block; /* Hace que el elemento sea un bloque */
   margin-bottom: 12px; /* Espacio inferior */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
   font-size: clamp(3.6rem, 6vw, 5.5rem); /* Tamaño adaptable */
   color: #263238; /* Color gris oscuro */
   text-align: center; /* Centra el texto */
@@ -124,6 +129,7 @@ html, body{
 
 .chalk-input,
 #studentCodeInput{
+  /* Afecta al campo de entrada donde el usuario escribe su código estudiantil (input) */
   /* Campos de entrada grandes y centrados, con bordes redondeados */
   width: min(100%, 360px); /* Máximo 360px o 100% */
   margin: 0 auto 16px auto; /* Centrado y espacio inferior */
@@ -149,6 +155,7 @@ html, body{
 
 .error-text,
 #welcomeError{
+  /* Afecta a los mensajes de error como "Código incorrecto" o validaciones en la pantalla de bienvenida */
   /* Mensaje de error destacado en rojo */
   margin-top: 10px; /* Espacio superior */
   color: #b91c1c; /* Rojo para errores */
@@ -159,6 +166,7 @@ html, body{
 }
 
 .btn{
+  /* Afecta a todos los botones de la interfaz, como "Ingresar", "Confirmar", "Rechazar", "Graba tu explicación", etc. */
   /* Botón estilizado, con sombra y transición */
   border: none; /* Sin borde */
   border-radius: 16px; /* Bordes redondeados */
