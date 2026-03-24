@@ -627,27 +627,37 @@ body{
   max-height: 28vh;
   margin: 0 auto 1.2rem auto;
 }
+#flipbook .cover-leer-image {
+  filter: drop-shadow(0 4px 18px #ff00885a) drop-shadow(0 0 8px #f3a0f9);
+  border-radius: 32px;
+  transition: transform 0.18s, filter 0.18s;
+}
+#flipbook .cover-leer-image:hover {
+  transform: scale(1.08) rotate(-2deg);
+  filter: drop-shadow(0 8px 28px #ff00885a) drop-shadow(0 0 16px #f3a0f9);
+}
 
 #flipbook .cover-book-title{
   margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(5.8rem, 10vw, 8.2rem);
+  font-size: 10vw;
   letter-spacing: 1.2px;
-  text-shadow: 2px 2px 8px #ffe066, 0 2px 2px #fff9c4;
+  text-shadow: 2px 2px 8px #ff66ed98, 0 2px 2px #c1bdf7d1;
 }
 
 #flipbook .cover-subtitle {
-  font-size: clamp(4.1rem, 7vw, 5.2rem);
+  font-size: 8vw;
   color: #7c4700;
   font-family: 'Rancho', cursive;
   margin-bottom: 2.2rem;
   text-align: center;
-  text-shadow: 1px 1px 6px #fffbe6;
+  text-shadow: 1px 1px 6px #fae6ff;
 }
-/* Ocultar botones de avanzar/retroceder en la portada */
-#flipbook .book-cover-page ~ .flipbook-wrapper .nav-btn,
-#flipbook .book-cover-page ~ .flipbook-wrapper #prevBtn,
-#flipbook .book-cover-page ~ .flipbook-wrapper #nextBtn {
+
+/* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
+#flipbook .book-cover-page.active ~ .flipbook-wrapper .nav-btn,
+#flipbook .book-cover-page.active ~ .flipbook-wrapper #prevBtn,
+#flipbook .book-cover-page.active ~ .flipbook-wrapper #nextBtn {
   display: none !important;
 }
 
@@ -660,18 +670,6 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#flipbook .cover-leer-image {
-  width: clamp(140px, 22vw, 220px) !important;
-  height: auto;
-  filter: drop-shadow(0 4px 18px #ffd700cc) drop-shadow(0 0 8px #fffbe6);
-  border-radius: 32px;
-  transition: transform 0.18s, filter 0.18s;
-}
-#flipbook .cover-leer-image:hover {
-  transform: scale(1.08) rotate(-2deg);
-  filter: drop-shadow(0 8px 28px #ffd700ee) drop-shadow(0 0 16px #fffbe6);
 }
 
 .story-page-content{
