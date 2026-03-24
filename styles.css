@@ -390,15 +390,12 @@ body{
 }
 
 #moment1Screen .container{
-  width: 95vw;
-  height: 95vh;
-  min-width: 0;
-  min-height: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
+  width: min(96vw, 1800px);
+  height: 96dvh;
+  padding: 8px 10px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 8px;
 }
 
 #moment1Screen .header{
@@ -594,18 +591,14 @@ body{
 }
 
 #flipbook .book-cover-page{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: stretch;
-  height: 95vh;
-  width: 95vw;
-  min-height: 0;
-  min-width: 0;
-  background: linear-gradient(135deg, #fff7db 0%, #fff1b8 45%, #fcd34d 100%);
+  justify-content: center;
+  align-items: center;
+  background:
+    linear-gradient(135deg, #fff7db 0%, #fff1b8 45%, #fcd34d 100%);
   border: 3px solid rgba(180, 138, 0, .25);
-  box-shadow: 0 8px 32px #ffe06644, 0 2px 2px #fff9c4;
-  padding: 0;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,.45),
+    0 14px 30px rgba(0,0,0,.14);
 }
 
 #flipbook .book-cover-page img{
@@ -616,33 +609,25 @@ body{
 }
 
 #flipbook .cover-book-title{
-  margin: 0;
+  margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: 10vh;
+  font-size: clamp(3.8rem, 8vw, 6.2rem);
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ffe066, 0 2px 2px #fff9c4;
-  color: #1f2b46;
-  text-align: center;
-  align-self: flex-start;
-  width: 100%;
-  padding-top: 4vh;
 }
 
 #flipbook .cover-subtitle {
-  font-size: 6vh;
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
   color: #7c4700;
   font-family: 'Rancho', cursive;
-  margin: 0 auto;
+  margin-bottom: 2.2rem;
   text-align: center;
   text-shadow: 1px 1px 6px #fffbe6;
-  align-self: center;
-  width: 100%;
-  max-width: 90vw;
 }
 /* Ocultar botones de avanzar/retroceder en la portada */
-#flipbook .book-cover-page ~ .nav-btn,
-#flipbook .book-cover-page ~ #prevBtn,
-#flipbook .book-cover-page ~ #nextBtn {
+#flipbook .book-cover-page ~ .flipbook-wrapper .nav-btn,
+#flipbook .book-cover-page ~ .flipbook-wrapper #prevBtn,
+#flipbook .book-cover-page ~ .flipbook-wrapper #nextBtn {
   display: none !important;
 }
 
@@ -651,20 +636,15 @@ body{
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
-  margin: 0 auto 4vh auto !important;
+  margin: 0 auto !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-end;
 }
 
 #flipbook .cover-leer-image {
-  width: 12vh !important;
-  height: 12vh !important;
-  min-width: 80px;
-  min-height: 80px;
-  max-width: 220px;
-  max-height: 220px;
+  width: clamp(140px, 22vw, 220px) !important;
+  height: auto;
   filter: drop-shadow(0 4px 18px #ffd700cc) drop-shadow(0 0 8px #fffbe6);
   border-radius: 32px;
   transition: transform 0.18s, filter 0.18s;
@@ -779,11 +759,17 @@ body{
 }
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-right-page {
-  padding: 2vw 3vw;
-  color: #000;
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-  word-break: break-word;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  padding: 3vw 4vw 3vw 2vw;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  background: #fff;
 }
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-right-page .story-text {
