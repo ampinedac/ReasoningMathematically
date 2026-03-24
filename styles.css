@@ -1,19 +1,4 @@
-#flipbook .book-cover-page {
-  position: relative !important;
-  height: 95vh !important;
-  max-height: 95vh !important;
-  width: 50vw !important;
-  max-width: 640px;
-  margin: auto !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+/* --- PORTADA GENERAL SOLO EN BIENVENIDA --- */
 .book-cover-page {
   position: relative;
   height: 95vh;
@@ -26,14 +11,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #c0f6ea 0%, #96f7ef 45%, #97e3ff 100%);
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
   border: 3px solid rgba(180, 138, 0, .25);
   box-shadow: 0 14px 30px rgba(0,0,0,.14);
   padding: 40px 26px;
   gap: 18px;
-}
-  flex-direction: column; /* Alineación vertical */
-  justify-content: center; /* Distribución vertical */
 }
 
 .author-credit,
@@ -65,83 +47,7 @@
   
 }
 
-.status-text,
-.audio-status{
-  /* Afecta a los textos de estado y audio, por ejemplo: mensajes de audio, "Graba tu explicación", etc. */
-  /* Texto de estado y audio, centrado y con tamaño adaptable */
-  font-size: clamp(.9rem, 1.4vw, 1rem);
-  text-align: center;
-}
-
-#confirmationScreen {
-  /* Centra el contenido de la pantalla de confirmación */
-  align-items: center;
-  text-align: center;
-}
-
-.welcome-box,
-.confirmation-box{
-  /* Afecta a los cuadros centrales de bienvenida y confirmación, donde aparecen textos como "Escribe tu código estudiantil:", mensajes de error y botones de acción */
-  /* Caja central con fondo translúcido y borde redondeado */
-  width: min(92vw, 640px); /* Limita el ancho máximo a 640px o 92vw */
-  padding: clamp(20px, 3vw, 40px); /* Espaciado interno adaptable */
-  background: rgba(62, 216, 255, 0.589); /* Fondo azul translúcido */
-  border: 1px solid rgba(255,255,255,.7); /* Borde blanco translúcido */
-  border-radius: 16px; /* Bordes redondeados */
-  box-shadow: var(--shadow-md); /* Sombra mediana */
-  backdrop-filter: blur(8px); /* Difumina el fondo detrás de la caja */
-  display: flex; /* Utiliza flexbox para centrar el contenido */
-  flex-direction: column; /* Alinea el contenido en columna */
-}
-
-.chalk-text,
-#welcomeScreen label{
-  /* Afecta al texto: "Escribe tu código estudiantil:" en la pantalla de bienvenida */
-  /* Este bloque da estilo al texto: "Escribe tu código estudiantil:" en la pantalla de bienvenida */
-  /* Texto grande y decorativo, centrado */
-  display: block; /* Hace que el elemento sea un bloque */
-  margin-bottom: 12px; /* Espacio inferior */
-  font-size: clamp(2.6rem, 5vw, 4.5rem); /* Tamaño adaptable */
-  color: #263238; /* Color gris oscuro */
-  text-align: center; /* Centra el texto */
-}
-
-.chalk-input,
-#studentCodeInput{
-  /* Afecta al campo de entrada donde el usuario escribe su código estudiantil (input) */
-  /* Campos de entrada grandes y centrados, con bordes redondeados */
-  width: min(100%, 360px); /* Máximo 360px o 100% */
-  margin: 0 auto 16px auto; /* Centrado y espacio inferior */
-  display: block; /* Ocupa todo el ancho disponible */
-  padding: 12px 18px; /* Espaciado interno */
-  border: 2px solid #127afa; /* Borde azul */
-  border-radius: 16px; /* Bordes redondeados */
-  background: #fff; /* Fondo blanco */
-  color: #111827; /* Texto gris oscuro */
-  text-align: center; /* Centra el texto */
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem); /* Tamaño adaptable */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
-  outline: none; /* Sin contorno por defecto */
-  transition: border-color .2s ease, box-shadow .2s ease; /* Transición suave */
-}
-
-.chalk-input:focus,
-#studentCodeInput:focus{
-  /* Efecto visual al enfocar el input */
-  border-color: #93c5fd; /* Borde azul claro al enfocar */
-  box-shadow: 0 0 0 4px rgba(59,130,246,.15); /* Sombra azul al enfocar */
-}
-
-.error-text,
-#welcomeError{
-  /* Afecta a los mensajes de error como "Código incorrecto" o validaciones en la pantalla de bienvenida */
-  /* Mensaje de error destacado en rojo */
-  margin-top: 10px; /* Espacio superior */
-  color: #b91c1c; /* Rojo para errores */
-  font-weight: 700; /* Negrita */
-  font-size: clamp(1rem, 1.8vw, 1.2rem); /* Tamaño adaptable */
-  text-align: center; /* Centra el texto */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
+/* --- FIN LIMPIEZA PORTADA --- */
 }
 
 .btn{

@@ -23,14 +23,10 @@
         </div>
     </div>
     <!-- PANTALLA DE BIENVENIDA -->
-    <section id="welcomeScreen" class="screen active">
-        <div class="user-rect">
-            <h1 class="main-title">Actividad 0A</h1>
-        </div>
-        <div class="user-rect">
-            <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
-        </div>
-        <div class="user-rect welcome-box">
+    <section id="welcomeScreen" class="screen active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
+        <h1 class="main-title">Actividad 0A</h1>
+        <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
+        <div class="welcome-box" style="display: flex; flex-direction: column; align-items: center;">
             <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
             <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
             <button id="enterBtn" class="btn btn-primary">Ingresar</button>
