@@ -614,7 +614,7 @@ body{
   justify-content: center;
   align-items: center;
   background:
-    linear-gradient(135deg, #fff7db 0%, #fff1b8 45%, #fcd34d 100%);
+    linear-gradient(135deg, #e9dbff 0%, #dab8ff 45%, #ae75fd 100%);
   border: 3px solid rgba(180, 138, 0, .25);
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,.45),
@@ -631,13 +631,13 @@ body{
 #flipbook .cover-book-title{
   margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(3.8rem, 8vw, 6.2rem);
+  font-size: clamp(5.8rem, 10vw, 8.2rem);
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ffe066, 0 2px 2px #fff9c4;
 }
 
 #flipbook .cover-subtitle {
-  font-size: clamp(2.1rem, 5vw, 3.2rem);
+  font-size: clamp(4.1rem, 7vw, 5.2rem);
   color: #7c4700;
   font-family: 'Rancho', cursive;
   margin-bottom: 2.2rem;
