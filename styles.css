@@ -54,6 +54,7 @@ body{
   font-family: 'Rancho', cursive, Arial, sans-serif;
   color: var(--text-main);
   background:
+    url('assets/images/fondo-matematico.svg') center center/cover no-repeat fixed,
     radial-gradient(circle at top left, rgba(255,255,255,.8), transparent 30%),
     linear-gradient(135deg, #eef3ff 0%, #f8fafc 45%, #fffaf2 100%);
 }
@@ -322,11 +323,40 @@ select{
   color: #dc2626;
 }
 
+
 .status-text,
-.audio-status,
-.page-number{
+.audio-status{
   font-size: clamp(.9rem, 1.4vw, 1rem);
   color: var(--text-light);
+}
+
+.page-number.book-spread-number {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 20;
+}
+.page-number-left {
+  color: #0084ff;
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  font-family: 'Lobster Two', cursive;
+  font-weight: bold;
+  margin-left: 1vw;
+  margin-bottom: 0.5vw;
+  align-self: flex-end;
+}
+.page-number-right {
+  color: #0084ff;
+  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  font-family: 'Lobster Two', cursive;
+  font-weight: bold;
+  margin-right: 1vw;
+  margin-bottom: 0.5vw;
+  align-self: flex-end;
 }
 
 /* ========================================
