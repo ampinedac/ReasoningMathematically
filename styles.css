@@ -1,66 +1,61 @@
+
 /* ========================================
   UTILIDAD: OCULTAR ELEMENTOS
   ======================================== */
-.hidden {
-  display: none !important;
+.hidden { 
+  /* Oculta cualquier elemento al que se le aplique esta clase */
+  display: none !important; /* Fuerza que el elemento no se muestre, sobrescribiendo otros estilos */
 }
+
 /* ========================================
   REGLAS GENERALES Y VARIABLES
   ========================================
   Ejemplo de selectores: :root, body, html, *, .container
 */
-body {
-  font-family: 'Rancho', cursive, Arial, sans-serif;
-  color: var(--text-main);
-  background: url('assets/images/Fondo.png') no-repeat center center fixed;
-  background-size: cover;
-}
-:root{
-  --bg-main: #f5f7fb;
-  --surface: #ffffff;
-  --surface-soft: #fffdf7;
-  --text-main: #1f2937;
-  --text-soft: #4b5563;
-  --text-light: #6b7280;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --success: #16a34a;
-  --danger: #dc2626;
-  --warning: #f59e0b;
-  --border: #d9dee8;
-  --shadow-sm: 0 2px 10px rgba(0,0,0,.08);
-  --shadow-md: 0 8px 24px rgba(0,0,0,.12);
-  --shadow-lg: 0 18px 50px rgba(0,0,0,.16);
-
-
-  --book-turn-duration: 700ms;
-  --book-turn-ease: cubic-bezier(0.645, 0.045, 0.355, 1);
-
+body { 
+  /* Estilos generales para el cuerpo de la página */
+  font-family: 'Rancho'; /* Fuente principal del proyecto */
+  background: url('assets/images/Fondo.png') no-repeat center center fixed; /* Imagen de fondo centrada y fija */
+  background-size: cover; /* La imagen de fondo cubre toda la pantalla */
 }
 
-html, body{
-  margin: 0;
-  padding: 0;
-  width: 100%;
+:root{ 
+  /* Variables CSS globales */
+  --success: #16a34a; /* Color para éxito */
+  --danger: #dc2626; /* Color para error/peligro */
+  --warning: #f59e0b; /* Color para advertencia */
+  --border: #d9dee8; /* Color de borde */
+  --shadow-sm: 0 2px 10px rgba(0,0,0,.08); /* Sombra pequeña */
+  --shadow-md: 0 8px 24px rgba(0,0,0,.12); /* Sombra mediana */
+  --shadow-lg: 0 18px 50px rgba(0,0,0,.16); /* Sombra grande */
+  --book-turn-duration: 1s; /* Duración de animación de pasar página */
+  --book-turn-ease: cubic-bezier(0.645, 0.045, 0.355, 1); /* Curva de animación de pasar página */
 }
 
-
+html, body{ 
+  /* Ajustes generales para html y body */
+  margin: 0; /* Elimina el margen por defecto */
+  padding: 0; /* Elimina el padding por defecto */
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
 
 /* ========================================
   ESTRUCTURA GENERAL DE PANTALLAS
   ========================================
   Ejemplo de selectores: .screen, .container, .user-rect
 */
-.screen{
-  display: none;
-  width: 100%;
-  padding: var(--screen-padding);
+.screen{ 
+  /* Oculta todas las pantallas por defecto */
+  display: none; /* No se muestran */
+  width: 100%; /* Ocupan todo el ancho */
+  padding: var(--screen-padding); /* Padding configurable por variable */
 }
 
-.screen.active{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.screen.active{ 
+  /* Pantalla activa */
+  display: flex; /* Se muestran */
+  flex-direction: column; /* Alineación vertical */
+  justify-content: center; /* Distribución vertical */
 }
 
 .author-credit,
@@ -75,6 +70,7 @@ html, body{
   opacity: .85;
 }
 
+
 /* ========================================
   ESTILOS COMPARTIDOS ENTRE ACTIVIDADES 0A Y 0B
   ========================================
@@ -82,33 +78,38 @@ html, body{
 */
 
 #welcomeScreen {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  /* Contenedor principal de la pantalla de bienvenida */
+}
+
+.status-text,
+.audio-status{
+  /* Texto de estado y audio, centrado y con tamaño adaptable */
+  font-size: clamp(.9rem, 1.4vw, 1rem);
   text-align: center;
 }
 
 #confirmationScreen {
+  /* Centra el contenido de la pantalla de confirmación */
   align-items: center;
   text-align: center;
 }
 
 .welcome-box,
 .confirmation-box{
+  /* Caja central con fondo translúcido y borde redondeado */
   width: min(92vw, 640px);
   margin: 0 auto;
-  padding: clamp(20px, 3vw, 40px);
+  padding: clamp(20px, 3vw, 40px); /* Espaciado interno adaptable */
   background: rgba(62, 216, 255, 0.589);
   border: 1px solid rgba(255,255,255,.7);
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   box-shadow: var(--shadow-md);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px); /* Difumina el fondo detrás de la caja */
 }
 
 .chalk-text,
 #welcomeScreen label{
+  /* Texto grande y decorativo, centrado */
   display: block;
   margin-bottom: 12px;
   font-family: 'Rancho', cursive;
@@ -119,6 +120,7 @@ html, body{
 
 .chalk-input,
 #studentCodeInput{
+  /* Campos de entrada grandes y centrados, con bordes redondeados */
   width: min(100%, 360px);
   margin: 0 auto 16px auto;
   display: block;
@@ -136,12 +138,14 @@ html, body{
 
 .chalk-input:focus,
 #studentCodeInput:focus{
+  /* Efecto visual al enfocar el input */
   border-color: #93c5fd;
   box-shadow: 0 0 0 4px rgba(59,130,246,.15);
 }
 
 .error-text,
 #welcomeError{
+  /* Mensaje de error destacado en rojo */
   margin-top: 10px;
   color: #b91c1c;
   font-weight: 700;
@@ -151,6 +155,7 @@ html, body{
 }
 
 .btn{
+  /* Botón estilizado, con sombra y transición */
   border: none;
   border-radius: 16px;
   cursor: pointer;
@@ -160,20 +165,24 @@ html, body{
 }
 
 .btn:hover{
+  /* Efecto al pasar el mouse: oscurece y eleva el botón */
   filter: brightness(.96);
   transform: translateY(-1px);
 }
 
 .btn:active{
+  /* Efecto al presionar el botón */
   transform: translateY(0);
 }
 
 .btn:disabled{
+  /* Botón deshabilitado: semitransparente y sin cursor */
   opacity: .65;
   cursor: not-allowed;
 }
 
 .btn-primary{
+  /* Botón principal con gradiente azul y texto blanco */
   padding: 12px 24px;
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   color: #fff;
@@ -182,20 +191,24 @@ html, body{
 }
 
 .btn-success{
+  /* Botón de éxito: fondo blanco (puede personalizarse más) */
   background: #fff;
 }
 
 .btn-secondary{
+  /* Botón secundario: fondo blanco */
   background: #fff;
 }
 
 .confirmation-box{
+  /* Caja de confirmación centrada y en columna */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .confirmation-question{
+  /* Pregunta de confirmación, texto grande y centrado */
   width: 100%;
   margin: 0 0 24px 0;
   font-family: 'Lobster Two', cursive;
@@ -207,6 +220,7 @@ html, body{
 }
 
 .confirmation-buttons{
+  /* Contenedor de botones de confirmación, alineados y con espacio entre ellos */
   display: flex;
   gap: 20px;
   justify-content: center;
@@ -238,17 +252,19 @@ html, body{
   margin: 0 auto;
 }
 
+
 /* ========================================
   CABECERAS Y UTILIDADES INTERNAS
   ========================================
   Ejemplo de selectores: .header, .section-title, .student-code-display
 */
 .header{
+  /* Cabecera de la página, ocupa todo el ancho */
   width: 100%;
 }
 
-
 .student-code-display {
+  /* Muestra el código del estudiante en la esquina superior izquierda */
   position: fixed;
   top: 16px;
   left: 16px;
@@ -266,27 +282,31 @@ html, body{
 }
 
 .feedback-text{
+  /* Texto de retroalimentación, debajo de inputs o acciones */
   margin-top: 10px;
   font-size: clamp(.95rem, 1.4vw, 1.05rem);
   color: #475467;
 }
 
 .feedback-text.success{
+  /* Color para mensajes de éxito */
   color: #16a34a;
 }
 
 .feedback-text.error{
+  /* Color para mensajes de error */
   color: #dc2626;
 }
 
-
 .status-text,
 .audio-status{
+  /* Texto de estado y audio, color variable */
   font-size: clamp(.9rem, 1.4vw, 1rem);
   color: var(--text-light);
 }
 
 .page-number.book-spread-number {
+  /* Números de página en la parte inferior de las páginas tipo libro */
   position: absolute;
   width: 100%;
   left: 0;
@@ -297,6 +317,7 @@ html, body{
   z-index: 20;
 }
 .page-number-left, .page-number-right {
+  /* Estilo para los números de página izquierdo y derecho */
   color: #3b3b6d; /* Azul oscuro pastel */
   font-size: clamp(0.7rem, 1.1vw, 1.1rem);
   font-family: 'Lobster Two', cursive;
