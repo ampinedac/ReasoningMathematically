@@ -619,7 +619,7 @@ html, body{
 }
 
 #flipbook .book-cover-page img{
-  width: 10%;
+  width: 50%;
   margin: 0 auto 1.2rem auto;
 }
 #flipbook .cover-leer-image {
@@ -635,7 +635,7 @@ html, body{
 #flipbook .cover-book-title{
   margin: 0 0 24px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: 6vw;
+  font-size: 4vw;
   line-height: 1.08;
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ff66ed53, 0 2px 2px #c1bdf7d1;
@@ -644,7 +644,7 @@ html, body{
 }
 
 #flipbook .cover-subtitle{
-  font-size: 4vw;
+  font-size: 3vw;
   line-height: 1.25;
   color: #00078a;
   font-family: 'Rancho', cursive;

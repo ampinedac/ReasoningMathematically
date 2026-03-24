@@ -13,47 +13,6 @@
 </head>
 <body>
 <div id="bookCoverBg" class="book-cover-bg" style="display:none;"></div>
-        <!-- Refuerzo extremo: ocultar cocina persistentemente al cargar y en cambios de visibilidad -->
-        <script>
-            (function() {
-                function hideCocina() {
-                    var cocina = document.getElementById('cocinaScreen');
-                    if (cocina && !cocina.classList.contains('hidden')) {
-                        cocina.classList.add('hidden');
-                    }
-                }
-                // Refuerzo: ocultar varias veces tras cargar
-                document.addEventListener('DOMContentLoaded', function() {
-                    let count = 0;
-                    const maxTries = 20; // 2 segundos
-                    const interval = setInterval(function() {
-                        hideCocina();
-                        count++;
-                        if (count >= maxTries) clearInterval(interval);
-                    }, 100);
-                });
-                // Refuerzo: ocultar si el usuario vuelve a la pestaña
-                document.addEventListener('visibilitychange', function() {
-                    if (!document.hidden) hideCocina();
-                });
-
-                // Fondo de portada SOLO cuando la portada está activa
-                function updateBookCoverBg() {
-                    var cover = document.querySelector('.book-cover-page.active');
-                    var bg = document.getElementById('bookCoverBg');
-                    if (cover && bg) {
-                        bg.style.display = 'block';
-                    } else if(bg) {
-                        bg.style.display = 'none';
-                    }
-                }
-                document.addEventListener('DOMContentLoaded', updateBookCoverBg);
-                document.addEventListener('click', function(e){
-                    setTimeout(updateBookCoverBg, 100);
-                });
-                // Si usas navegación por teclado o eventos personalizados, puedes llamar updateBookCoverBg() tras cada cambio de página
-            })();
-        </script>
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
     <!-- Overlay de orientación para móviles/tabletas -->
     <div id="orientationOverlay">
@@ -536,6 +495,47 @@
     <!-- <script src="trays-system.js?v=2026031813"></script> Duplicado eliminado -->
     <script type="module" src="main.js?v=2026031813"></script>
     <script src="app.js?v=2026031813"></script>
+    <!-- Refuerzo extremo: ocultar cocina persistentemente al cargar y en cambios de visibilidad -->
+    <script>
+        (function() {
+            function hideCocina() {
+                var cocina = document.getElementById('cocinaScreen');
+                if (cocina && !cocina.classList.contains('hidden')) {
+                    cocina.classList.add('hidden');
+                }
+            }
+            // Refuerzo: ocultar varias veces tras cargar
+            document.addEventListener('DOMContentLoaded', function() {
+                let count = 0;
+                const maxTries = 20; // 2 segundos
+                const interval = setInterval(function() {
+                    hideCocina();
+                    count++;
+                    if (count >= maxTries) clearInterval(interval);
+                }, 100);
+            });
+            // Refuerzo: ocultar si el usuario vuelve a la pestaña
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) hideCocina();
+            });
+
+            // Fondo de portada SOLO cuando la portada está activa
+            function updateBookCoverBg() {
+                var cover = document.querySelector('.book-cover-page.active');
+                var bg = document.getElementById('bookCoverBg');
+                if (cover && bg) {
+                    bg.style.display = 'block';
+                } else if(bg) {
+                    bg.style.display = 'none';
+                }
+            }
+            document.addEventListener('DOMContentLoaded', updateBookCoverBg);
+            document.addEventListener('click', function(e){
+                setTimeout(updateBookCoverBg, 100);
+            });
+            // Si usas navegación por teclado o eventos personalizados, puedes llamar updateBookCoverBg() tras cada cambio de página
+        })();
+    </script>
 
 </body>
 </html>
