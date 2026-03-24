@@ -4,9 +4,6 @@ function hideAllFlipbookPages() {
     if (!flipbook) return;
     const pages = flipbook.querySelectorAll('.page');
     pages.forEach(page => {
-        page.style.display = 'none';
-        page.style.opacity = '0';
-        page.style.pointerEvents = 'none';
         page.classList.remove('active');
     });
 }
@@ -14,9 +11,6 @@ function hideAllFlipbookPages() {
 function showFlipbookPage(page) {
     if (!page) return;
     page.classList.add('active');
-    page.style.display = 'flex';
-    page.style.opacity = '1';
-    page.style.pointerEvents = 'auto';
 }
 // (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
@@ -455,19 +449,11 @@ function showScreen(screenId) {
 
     // Agregar 'active' a la pantalla objetivo
     targetScreen.classList.add('active');
-    // Refuerzo: Si es moment1Screen, forzar visibilidad
     if (screenId === 'moment1Screen') {
-        targetScreen.style.display = '';
-        targetScreen.style.opacity = '1';
-        targetScreen.style.pointerEvents = 'auto';
-        // Refuerzo: forzar visibilidad de la portada
         const flipbook = document.getElementById('flipbook');
         if (flipbook) {
             const portada = flipbook.querySelector('.book-cover-page');
             if (portada) {
-                portada.style.display = 'flex';
-                portada.style.opacity = '1';
-                portada.style.pointerEvents = 'auto';
                 portada.classList.add('active');
             }
         }
@@ -487,37 +473,35 @@ function showScreen(screenId) {
 // ========================================
 
 function initMoment1() {
-        console.log('[initMoment1] Entrando a la pantalla del cuento...');
-        const moment1Screen = document.getElementById('moment1Screen');
-        if (moment1Screen) {
-            moment1Screen.style.display = '';
-            moment1Screen.classList.add('active');
-            console.log('[initMoment1] moment1Screen visible y activa');
-        }
-        flipbook = document.getElementById('flipbook');
-        if (flipbook) {
-            // Limpiar visibilidad de todas las páginas
-            const pages = flipbook.querySelectorAll('.page');
-            pages.forEach(p => {
-                p.classList.remove('active');
-                p.style.opacity = '0';
-                p.style.pointerEvents = 'none';
-                p.style.display = 'none';
-            });
-            // Mostrar solo la portada
-            const portada = flipbook.querySelector('.book-cover-page');
-            if (portada) {
-                portada.classList.add('active');
-                portada.style.opacity = '1';
-                portada.style.pointerEvents = 'auto';
-                portada.style.display = 'flex';
-                console.log('[initMoment1] Portada activada y visible');
-            } else {
-                console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
-            }
+    console.log('[initMoment1] Entrando a la pantalla del cuento...');
+    // Forzar cocinaScreen oculta al iniciar momento 1
+    const cocinaScreen = document.getElementById('cocinaScreen');
+    if (cocinaScreen) {
+        cocinaScreen.classList.add('hidden');
+    }
+    const moment1Screen = document.getElementById('moment1Screen');
+    if (moment1Screen) {
+        moment1Screen.classList.add('active');
+        console.log('[initMoment1] moment1Screen activa');
+    }
+    flipbook = document.getElementById('flipbook');
+    if (flipbook) {
+        // Limpiar visibilidad de todas las páginas
+        const pages = flipbook.querySelectorAll('.page');
+        pages.forEach(p => {
+            p.classList.remove('active');
+        });
+        // Mostrar solo la portada
+        const portada = flipbook.querySelector('.book-cover-page');
+        if (portada) {
+            portada.classList.add('active');
+            console.log('[initMoment1] Portada activada');
         } else {
-            console.warn('[initMoment1] No se encontró el flipbook');
+            console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
         }
+    } else {
+        console.warn('[initMoment1] No se encontró el flipbook');
+    }
     const studentCodeM1 = document.getElementById('studentCodeM1');
     if (studentCodeM1) {
         studentCodeM1.textContent = getStudentHeaderText();

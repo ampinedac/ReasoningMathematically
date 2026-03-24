@@ -549,9 +549,7 @@ html, body{
 #flipbook .flipbook-page,
 #flipbook .story-page,
 #flipbook .book-cover-page,
-#flipbook .q1-book-spread{
-  width: 45%;
-}
+#flipbook .q1-book-spread
 
 #flipbook .book-cover-page{
   display: flex; /* 🔥 importante */
@@ -562,9 +560,11 @@ html, body{
 
   padding: 40px 26px !important;
   gap: 18px;
+  height: 95%;
+  width: 50%;
 
   background:
-    linear-gradient(135deg, #f8f0af 0%, #fce869 45%, #f2cd67 100%);
+    linear-gradient(135deg, #c0f6ea 0%, #96f7ef 45%, #97e3ff 100%);
   border: 3px solid rgba(180, 138, 0, .25);
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,.45),
