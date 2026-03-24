@@ -667,35 +667,23 @@ html, body{
   width: 50%;
   margin: 0 auto 1.2rem auto;
 }
-#flipbook .cover-leer-image {
-  filter: drop-shadow(0 4px 18px #ff00885a) drop-shadow(0 0 8px #f3a0f9);
-  border-radius: 32px;
-  transition: transform 0.18s, filter 0.18s;
+#flipbook .book-cover-page {
+  position: relative;
+  height: 95vh;
+  max-height: 95vh;
+  width: 50vw;
+  max-width: 640px;
+  margin: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
-#flipbook .cover-leer-image:hover {
-  transform: scale(1.08) rotate(-2deg);
-  filter: drop-shadow(0 8px 28px #ff00885a) drop-shadow(0 0 16px #f3a0f9);
-}
-
-#flipbook .cover-book-title{
-  margin: 0 0 24px 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: 4vw;
-  line-height: 1.08;
-  letter-spacing: 1.2px;
-  text-shadow: 2px 2px 8px #ff66ed53, 0 2px 2px #c1bdf7d1;
-  color: #000000;
-  text-align: center;
-}
-
-#flipbook .cover-subtitle{
-  font-size: 3vw;
-  line-height: 1.25;
-  color: #00078a;
-  font-family: 'Rancho', cursive;
-  margin: 0 0 2.4rem 0;
-  text-align: center;
-  text-shadow: 1px 1px 6px #fae6ff;
 }
 
 /* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
