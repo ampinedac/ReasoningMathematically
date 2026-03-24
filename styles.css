@@ -648,7 +648,7 @@ html, body{
 #flipbook .cover-book-title{
   margin: 0 0 24px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(4.2rem, 9vw, 7.2rem) !important;
+  font-size: 5vw;
   line-height: 1.08;
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ff66ed53, 0 2px 2px #c1bdf7d1;
