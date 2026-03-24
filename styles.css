@@ -106,13 +106,14 @@ html, body{
   /* Afecta a los cuadros centrales de bienvenida y confirmación, donde aparecen textos como "Escribe tu código estudiantil:", mensajes de error y botones de acción */
   /* Caja central con fondo translúcido y borde redondeado */
   width: min(92vw, 640px); /* Limita el ancho máximo a 640px o 92vw */
-  margin: 0 auto; /* Centra horizontalmente */
   padding: clamp(20px, 3vw, 40px); /* Espaciado interno adaptable */
   background: rgba(62, 216, 255, 0.589); /* Fondo azul translúcido */
   border: 1px solid rgba(255,255,255,.7); /* Borde blanco translúcido */
   border-radius: 16px; /* Bordes redondeados */
   box-shadow: var(--shadow-md); /* Sombra mediana */
   backdrop-filter: blur(8px); /* Difumina el fondo detrás de la caja */
+  display: flex; /* Utiliza flexbox para centrar el contenido */
+  flex-direction: column; /* Alinea el contenido en columna */
 }
 
 .chalk-text,
