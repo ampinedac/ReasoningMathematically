@@ -648,7 +648,7 @@ html, body{
 #flipbook .cover-book-title{
   margin: 0 0 24px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: 5vw;
+  font-size: 10vw;
   line-height: 1.08;
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ff66ed53, 0 2px 2px #c1bdf7d1;
@@ -658,7 +658,7 @@ html, body{
 }
 
 #flipbook .cover-subtitle{
-  font-size: clamp(2rem, 4.8vw, 3.8rem) !important;
+  font-size: 8vw;
   line-height: 1.25;
   color: #00078a;
   font-family: 'Rancho', cursive;
