@@ -645,14 +645,17 @@ body{
 #flipbook .cover-book-title{
   margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(6rem, 16vw, 12rem);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 1.05;
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ff66ed98, 0 2px 2px #c1bdf7d1;
-  color:black;
+  color: black;
+  text-align: center;
 }
 
-#flipbook .cover-subtitle {
-  font-size: 8vw;
+#flipbook .cover-subtitle{
+  font-size: clamp(1.4rem, 3.2vw, 2.8rem);
+  line-height: 1.15;
   color: #7c4700;
   font-family: 'Rancho', cursive;
   margin-bottom: 2.2rem;
@@ -661,9 +664,10 @@ body{
 }
 
 /* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
-#flipbook .book-cover-page.active ~ .flipbook-wrapper .nav-btn,
-#flipbook .book-cover-page.active ~ .flipbook-wrapper #prevBtn,
-#flipbook .book-cover-page.active ~ .flipbook-wrapper #nextBtn {
+/* Ocultar botones cuando la portada está activa */
+#moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
+#moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
+#moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn {
   display: none !important;
 }
 
@@ -926,11 +930,11 @@ body{
 }
 
 #moment1Screen #flipbook .page :is(
-  h1, h2, h3, h4, h5, h6,
-  [class*="title"]
+    h1, h2, h3, h4, h5, h6,
+    .section-title
 ){
-  font-size: var(--a0-title-font-size);
-  line-height: 1.3;
+    font-size: var(--a0-title-font-size) !important;
+    line-height: 1.3 !important;
 }
 
 /* ========================================
