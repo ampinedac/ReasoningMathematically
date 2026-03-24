@@ -54,9 +54,11 @@ body{
   font-family: 'Rancho', cursive, Arial, sans-serif;
   color: var(--text-main);
   background:
-    url('assets/images/fondo-rombos-pastel.svg') center center/cover no-repeat fixed,
+    url('assets/images/fondo-rombos-pastel.svg') center center / cover no-repeat fixed,
     radial-gradient(circle at top left, rgba(255,255,255,.8), transparent 30%),
     linear-gradient(135deg, #eef3ff 0%, #f8fafc 45%, #fffaf2 100%);
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 img{
@@ -340,20 +342,12 @@ select{
   pointer-events: none;
   z-index: 20;
 }
-.page-number-left {
-  color: #0084ff;
-  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+.page-number-left, .page-number-right {
+  color: #3b3b6d; /* Azul oscuro pastel */
+  font-size: clamp(0.7rem, 1.1vw, 1.1rem);
   font-family: 'Lobster Two', cursive;
   font-weight: bold;
   margin-left: 1vw;
-  margin-bottom: 0.5vw;
-  align-self: flex-end;
-}
-.page-number-right {
-  color: #0084ff;
-  font-size: clamp(1.5rem, 2.5vw, 2.2rem);
-  font-family: 'Lobster Two', cursive;
-  font-weight: bold;
   margin-right: 1vw;
   margin-bottom: 0.5vw;
   align-self: flex-end;
@@ -635,20 +629,26 @@ select{
 }
 
 #flipbook .cover-book-title{
-  margin: 0 0 14px 0;
+  margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-size: clamp(3.8rem, 8vw, 6.2rem);
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ffe066, 0 2px 2px #fff9c4;
 }
 
 #flipbook .cover-subtitle {
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-size: clamp(2.1rem, 5vw, 3.2rem);
   color: #7c4700;
   font-family: 'Rancho', cursive;
   margin-bottom: 2.2rem;
   text-align: center;
   text-shadow: 1px 1px 6px #fffbe6;
+}
+/* Ocultar botones de avanzar/retroceder en la portada */
+#flipbook .book-cover-page ~ .flipbook-wrapper .nav-btn,
+#flipbook .book-cover-page ~ .flipbook-wrapper #prevBtn,
+#flipbook .book-cover-page ~ .flipbook-wrapper #nextBtn {
+  display: none !important;
 }
 
 #flipbook .cover-leer-btn {
@@ -739,59 +739,94 @@ select{
   position: relative;
 }
 
-#moment1Screen #flipbook .page.q1-book-spread::before {
-  content: "";
-  position: absolute;
-  top: 4%;
-  bottom: 4%;
-  left: 50%;
-  width: 2px;
-  background: linear-gradient(to bottom, #e5e7eb 0%, #d1d5db 60%, #e5e7eb 100%);
-  box-shadow: 0 0 12px 2px #d1d5db44;
-  border-radius: 2px;
-  z-index: 5;
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-#moment1Screen #flipbook .page.q1-book-spread::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 18px;
-  background: linear-gradient(to right, #d1d5db22 0%, transparent 100%);
-  z-index: 4;
-  pointer-events: none;
-}
-#moment1Screen #flipbook .page.q1-book-spread .q1-right-page::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 18px;
-  background: linear-gradient(to left, #d1d5db22 0%, transparent 100%);
-  z-index: 4;
-  pointer-events: none;
-}
-
-#moment1Screen #flipbook .page.q1-book-spread::before{
-  display: none;
-}
-
-#moment1Screen #flipbook .page.q1-book-spread .q1-left-page,
-#moment1Screen #flipbook .page.q1-book-spread .q1-right-page{
-  width: auto;
+#moment1Screen #flipbook .page.q1-book-spread {
+  width: 100%;
   max-width: none;
-  flex: none;
+  height: auto;
+  min-height: 95%;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 0;
+  align-items: stretch;
+  justify-items: stretch;
+  overflow: visible;
+}
+
+#moment1Screen #flipbook .page.q1-book-spread .q1-left-page {
+  width: 100%;
+  max-width: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  justify-content: center;
   text-align: center;
-  padding: 20px;
-  grid-column: auto;
+  padding: 0 0 0 0;
+  margin: 0;
+}
+
+#moment1Screen #flipbook .page.q1-book-spread .q1-left-page img {
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+  margin: 0;
+}
+
+#moment1Screen #flipbook .page.q1-book-spread .q1-right-page {
+  width: 100%;
+  max-width: 100%;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  padding: 32px 6vw 32px 3vw;
+  margin: 0;
+}
+
+#moment1Screen #flipbook .page.q1-book-spread .q1-right-page .story-text {
+  font-size: clamp(2.1rem, 4vw, 2.8rem);
+  line-height: 1.25;
+  color: #0084ff;
+  font-family: 'Rancho', cursive;
+  margin: 0;
+  word-break: break-word;
+}
+
+.page-number.book-spread-number {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 20;
+}
+.page-number-left {
+  color: #0084ff;
+  font-size: clamp(0.7rem, 1.1vw, 1.1rem);
+  font-family: 'Lobster Two', cursive;
+  font-weight: bold;
+  margin-left: 1vw;
+  margin-bottom: 0.5vw;
+  align-self: flex-end;
+}
+.page-number-right {
+  color: #0084ff;
+  font-size: clamp(0.7rem, 1.1vw, 1.1rem);
+  font-family: 'Lobster Two', cursive;
+  font-weight: bold;
+  margin-right: 1vw;
+  margin-bottom: 0.5vw;
+  align-self: flex-end;
+}
   min-height: 95%;
   height: auto;
   overflow: visible;
