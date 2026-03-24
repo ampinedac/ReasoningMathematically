@@ -1,84 +1,4 @@
-/* --- PORTADA GENERAL SOLO EN BIENVENIDA --- */
-.book-cover-page {
-  position: relative;
-  height: 95vh;
-  max-height: 95vh;
-  width: 50vw;
-  max-width: 640px;
-  margin: 40px auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
-  border: 3px solid rgba(180, 138, 0, .25);
-  box-shadow: 0 14px 30px rgba(0,0,0,.14);
-  padding: 40px 26px;
-  gap: 18px;
-}
-
-.author-credit,
-#authorCredit{
-  position: fixed; /* Fija el elemento en la pantalla */
-  right: 14px; /* Lo posiciona a 14px del borde derecho */
-  top: 12px; /* Lo posiciona a 12px del borde superior */
-  z-index: 60; /* Prioridad de apilamiento */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
-  font-size: clamp(1rem, 1.9vw, 1.7rem); /* Tamaño adaptable */
-  color: #5b5b5b; /* Color gris oscuro */
-  opacity: .85; /* Opacidad del texto */
-}
-
-
-/* ========================================
-  ESTILOS COMPARTIDOS ENTRE ACTIVIDADES 0A Y 0B
-  ========================================
-  Ejemplo de selectores: #welcomeScreen, .welcome-box, .btn, .main-title
-*/
-
-#welcomeScreen {
-  /* Contenedor principal de la pantalla de bienvenida */
-  align-items: center; /* Centrado horizontal */
-  justify-content: center; /* Centrado vertical */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
-  font-size: clamp(2.2rem, 3.5vw, 2.8rem); /* Tamaño adaptable */
-    /* Afecta a la pantalla de bienvenida: contiene los textos "Actividad 0A", "¿El orden de los factores altera el producto?", "Escribe tu código estudiantil:", botón "Ingresar" y mensajes de error */
-  
-}
-
-/* --- FIN LIMPIEZA PORTADA --- */
-}
-
-.btn{
-  /* Afecta a todos los botones de la interfaz, como "Ingresar", "Confirmar", "Rechazar", "Graba tu explicación", etc. */
-  /* Botón estilizado, con sombra y transición */
-  border: none; /* Sin borde */
-  border-radius: 16px; /* Bordes redondeados */
-  cursor: pointer; /* Cambia el cursor a mano */
-  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease; /* Transiciones suaves */
-  box-shadow: var(--shadow-sm); /* Sombra pequeña */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
-}
-
-.btn:hover{
-  /* Efecto al pasar el mouse: oscurece y eleva el botón */
-  filter: brightness(.96); /* Oscurece ligeramente */
-  transform: translateY(-1px); /* Eleva el botón */
-}
-
-.btn:active{
-  /* Efecto al presionar el botón */
-  transform: translateY(0); /* Vuelve a la posición original */
-}
-
-.btn:disabled{
-  /* Botón deshabilitado: semitransparente y sin cursor */
-  opacity: .65; /* Semitransparente */
-  cursor: not-allowed; /* Cursor de no permitido */
-}
-
-.btn-primary{
+/* Todas las reglas generales han sido eliminadas. Agrega aquí solo reglas específicas bajo los nuevos contenedores: #ContenedorBienvenida, #ContenedorConfirmacion, #ContenedorPortada, #ContenedorLibro */
   /* Botón principal con gradiente azul y texto blanco */
   padding: 12px 24px; /* Espaciado interno */
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); /* Gradiente azul */
@@ -97,12 +17,7 @@
   background: #fff; /* Fondo blanco */
 }
 
-.confirmation-box{
-  /* Caja de confirmación centrada y en columna */
-  display: flex; /* Flexbox */
-  flex-direction: column; /* Dirección columna */
-  align-items: center; /* Centrado horizontal */
-}
+
 
 .confirmation-question{
   /* Pregunta de confirmación, texto grande y centrado */
@@ -284,12 +199,15 @@
 }
 
 #moment1Screen .container{
-  width: min(96vw, 1800px); /* Ancho máximo 1800px o 96vw */
-  height: 96dvh; /* Altura adaptable */
-  padding: 8px 10px; /* Espaciado interno */
-  display: grid; /* Grid layout */
-  grid-template-rows: auto 1fr; /* Filas automáticas y flexibles */
-  gap: 8px; /* Espacio entre filas */
+#moment1Screen .container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: min(96vw, 1800px);
+  min-height: 96dvh;
+  padding: 24px 10px 8px 10px;
+  gap: 12px;
 }
 
 #moment1Screen .header{
@@ -312,15 +230,15 @@
 }
 
 #moment1Screen .flipbook-wrapper{
-  position: relative; /* Posicionamiento relativo */
-  width: 100%; /* Ocupa todo el ancho */
-  height: 100%; /* Ocupa toda la altura */
-  min-height: calc(var(--a0-book-height) + 50px); /* Altura mínima */
-  margin: 0; /* Sin margen */
-  padding: 12px 78px 18px; /* Espaciado interno */
-  display: flex; /* Flexbox */
-  align-items: center; /* Centrado vertical */
-  justify-content: center; /* Centrado horizontal */
+#moment1Screen .flipbook-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 400px;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 #flipbook{
@@ -333,9 +251,6 @@
   transform-style: preserve-3d; /* Mantiene el 3D en hijos */
 }
 
-/* ========================================
-  FLIPBOOK - PÁGINAS BASE (COMPARTIDO)
-  ========================================
   Ejemplo de selectores: #flipbook .page, .page-static-left, .page-static-right
 */
 #flipbook .page{

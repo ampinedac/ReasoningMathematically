@@ -12,9 +12,9 @@
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
 </head>
 <body>
-<div id="bookCoverBg" class="book-cover-bg" style="display:none;"></div>
+
+<div id="ContenedorBienvenida">
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
-    <!-- Overlay de orientación para móviles/tabletas -->
     <div id="orientationOverlay">
         <div class="orientation-message">
             <span>🔄</span>
@@ -22,63 +22,56 @@
             <p>Por favor, coloca tu celular o tableta en <b>horizontal</b> para ver el libro correctamente.</p>
         </div>
     </div>
-    <!-- PANTALLA DE BIENVENIDA -->
-    <section id="welcomeScreen" class="screen active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
+    <div class="bienvenida-main">
         <h1 class="main-title">Actividad 0A</h1>
         <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
-        <div class="welcome-box" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="welcome-box">
             <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
             <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
             <button id="enterBtn" class="btn btn-primary">Ingresar</button>
             <div id="welcomeError" class="hidden" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <!-- PANTALLA DE CONFIRMACIÓN -->
-    <section id="confirmationScreen" class="screen">
-        <h1 class="main-title">Confirmación</h1>
-        <div class="welcome-box confirmation-box">
-                <p id="confirmationQuestion" class="confirmation-question"></p>
-                <div class="confirmation-buttons">
-                    <button id="confirmYesBtn" class="btn btn-success"><img src="assets/images/BTconfirmar.png" alt="Confirmar" style="height:48px;"></button>
-                    <button id="confirmNoBtn" class="btn btn-secondary"><img src="assets/images/BTrechazado.png" alt="Rechazar" style="height:48px;"></button>
-                </div>
+<div id="ContenedorConfirmacion" style="display:none;">
+    <h1 class="main-title">Confirmación</h1>
+    <div class="welcome-box confirmation-box">
+        <p id="confirmationQuestion" class="confirmation-question"></p>
+        <div class="confirmation-buttons">
+            <button id="confirmYesBtn" class="btn btn-success"><img src="assets/images/BTconfirmar.png" alt="Confirmar" style="height:48px;"></button>
+            <button id="confirmNoBtn" class="btn btn-secondary"><img src="assets/images/BTrechazado.png" alt="Rechazar" style="height:48px;"></button>
         </div>
-    </section>
+    </div>
+</div>
 
-    <!-- MOMENTO 1: Cuento + Problema Q1 -->
-    <section id="moment1Screen" class="screen">
-        <div class="container">
-            <div class="header">
-                <!-- Momento 1: El cuento de Doña Alicia -->
-            </div>
+<div id="ContenedorPortada" style="display:none;">
+    <div id="bookCover" class="book-cover-page">
+        <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
+            <span style="color:#0084ff;">El secreto de las bandejas de Doña Alicia </span>
+        </h2>
+        <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+        <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
+            <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+        </button>
+    </div>
+</div>
 
-            <!-- FLIPBOOK 3D DEL CUENTO -->
-            <div id="flipbookSection">
-
-                <!-- Flipbook Container -->
-                <div class="flipbook-wrapper">
-                    <!-- Botón de sonido en esquina superior derecha -->
-                    <button id="soundToggle" class="sound-toggle" aria-label="Activar/Desactivar sonido">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path class="speaker-icon" d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
-                            <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            <line class="mute-line" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: none;"/>
-                        </svg>
-                    </button>
-                    <div id="flipbook">
-
-                        <!-- PORTADA CERRADA DEL LIBRO -->
-        <!-- PORTADA DEL LIBRO FUERA DE FLIPBOOK, AHORA EN LA BIENVENIDA -->
-        <div id="bookCover" class="book-cover-page">
-            <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
-                <span style="color:#0084ff;">El secreto de las bandejas de Doña Alicia </span> 
-            </h2>
-            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
-            <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
-                <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
-            </button>
+<div id="ContenedorLibro" style="display:none;">
+    <div class="container">
+        <div class="header">
+            <!-- Momento 1: El cuento de Doña Alicia -->
         </div>
+        <div id="flipbookSection">
+            <div class="flipbook-wrapper">
+                <button id="soundToggle" class="sound-toggle" aria-label="Activar/Desactivar sonido">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="speaker-icon" d="M11 5L6 9H2v6h4l5 4V5z" fill="currentColor"/>
+                        <path class="sound-waves" d="M15.54 8.46a5 5 0 0 1 0 7.07M18 6a9 9 0 0 1 0 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line class="mute-line" x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display: none;"/>
+                    </svg>
+                </button>
+                <div id="flipbook">
 
 
                         <!-- Story Spread 1-2 (Imagen izquierda, texto derecha) -->
