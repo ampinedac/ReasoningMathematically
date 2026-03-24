@@ -622,7 +622,7 @@ function initMoment1() {
         m1Q2FinalQuestion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         if (!m1Q2AudioInitialized) {
             m1Q2AudioInitialized = true;
-            const audioState = initAudio('recordBtnM1Q2', 'stopBtnM1Q2', 'audioStatusM1Q2');
+            const audioState = initAudio('recordBtnM1Q2', 'audioStatusM1Q2');
             const submitBtn = document.getElementById('submitM1Q2');
             const recordBtn = document.getElementById('recordBtnM1Q2');
             const stopBtn = document.getElementById('stopBtnM1Q2');
@@ -1211,7 +1211,7 @@ function initProblemQ1() {
     }
     
     const boardState = initBoard(canvasId);
-    const audioState = initAudio(recordBtnId, stopBtnId, statusId);
+    const audioState = initAudio(recordBtnId, statusId);
     
     console.log('✅ Board y Audio inicializados');
     
@@ -1376,7 +1376,7 @@ function initProblemM3Q1() {
     const submitBtnId = 'submitM3Q1';
     const statusTextId = 'statusM3Q1';
     
-    const audioState = initAudio(recordBtnId, stopBtnId, statusId);
+    const audioState = initAudio(recordBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
     
@@ -1449,7 +1449,7 @@ function initProblemM3Q2() {
     const submitBtnId = 'submitM3Q2';
     const statusTextId = 'statusM3Q2';
 
-    const audioState = initAudio(recordBtnId, stopBtnId, statusId);
+    const audioState = initAudio(recordBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
     
@@ -2229,78 +2229,73 @@ function initBoard(canvasId) {
 // SISTEMA DE AUDIO (MediaRecorder)
 // ========================================
 
-function initAudio(recordBtnId, stopBtnId, statusId) {
+function initAudio(recordBtnId, statusId) {
     console.log('🎤 Inicializando audio:', recordBtnId);
-    
     const recordBtn = document.getElementById(recordBtnId);
-    const stopBtn = document.getElementById(stopBtnId);
     const status = document.getElementById(statusId);
-    
-    if (!recordBtn || !stopBtn || !status) {
+    if (!recordBtn || !status) {
         console.error('❌ Elementos de audio no encontrados');
-        console.error('recordBtn:', recordBtn);
-        console.error('stopBtn:', stopBtn);
-        console.error('status:', status);
         return { audioBlob: null };
     }
-    
     console.log('✅ Elementos de audio encontrados');
-    
     let mediaRecorder = null;
     let audioChunks = [];
     let audioBlob = null;
-    
+    let isRecording = false;
+    // Imágenes
+    const imgRecord = 'assets/images/grabadora-de-voz.png';
+    const imgStop = 'assets/images/boton-detener.png';
+    // Cambia la imagen del botón según el estado
+    function updateBtnImage() {
+        if (isRecording) {
+            recordBtn.querySelector('img').src = imgStop;
+        } else {
+            recordBtn.querySelector('img').src = imgRecord;
+        }
+    }
     recordBtn.addEventListener('click', async () => {
-        console.log('🔴 Intentando grabar audio...');
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            
-            // Intentar usar codec WebM con Opus
-            const options = { mimeType: 'audio/webm;codecs=opus' };
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                options.mimeType = 'audio/webm';
-            }
-            
-            mediaRecorder = new MediaRecorder(stream, options);
-            audioChunks = [];
-            
-            mediaRecorder.addEventListener('dataavailable', (e) => {
-                audioChunks.push(e.data);
-            });
-            
-            mediaRecorder.addEventListener('stop', () => {
-                audioBlob = new Blob(audioChunks, { type: options.mimeType });
-                status.textContent = '🎤 Audio grabado';
+        if (!isRecording) {
+            // Iniciar grabación
+            console.log('🔴 Intentando grabar audio...');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const options = { mimeType: 'audio/webm;codecs=opus' };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                    options.mimeType = 'audio/webm';
+                }
+                mediaRecorder = new MediaRecorder(stream, options);
+                audioChunks = [];
+                mediaRecorder.addEventListener('dataavailable', (e) => {
+                    audioChunks.push(e.data);
+                });
+                mediaRecorder.addEventListener('stop', () => {
+                    audioBlob = new Blob(audioChunks, { type: options.mimeType });
+                    status.textContent = '🎤 Audio grabado';
+                    status.classList.remove('error-text');
+                    status.classList.add('success-text');
+                    stream.getTracks().forEach(track => track.stop());
+                });
+                mediaRecorder.start();
+                isRecording = true;
+                updateBtnImage();
+                status.textContent = '🔴 Grabando...';
                 status.classList.remove('error-text');
-                status.classList.add('success-text');
-                
-                // Detener todas las pistas del stream
-                stream.getTracks().forEach(track => track.stop());
-            });
-            
-            mediaRecorder.start();
-            
-            recordBtn.classList.add('hidden');
-            stopBtn.classList.remove('hidden');
-            status.textContent = '🔴 Grabando...';
-            status.classList.remove('error-text');
-            
-        } catch (error) {
-            console.error('Error al acceder al micrófono:', error);
-            status.textContent = '❌ Error: El micrófono es OBLIGATORIO. Debes permitir el acceso para continuar.';
-            status.classList.add('error-text');
+            } catch (error) {
+                console.error('Error al acceder al micrófono:', error);
+                status.textContent = '❌ Error: El micrófono es OBLIGATORIO. Debes permitir el acceso para continuar.';
+                status.classList.add('error-text');
+            }
+        } else {
+            // Detener grabación
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                isRecording = false;
+                updateBtnImage();
+            }
         }
     });
-    
-    stopBtn.addEventListener('click', () => {
-        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-            mediaRecorder.stop();
-            
-            stopBtn.classList.add('hidden');
-            recordBtn.classList.remove('hidden');
-        }
-    });
-    
+    // Inicializar imagen
+    updateBtnImage();
     return {
         get audioBlob() { return audioBlob; }
     };
