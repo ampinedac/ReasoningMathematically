@@ -112,11 +112,12 @@ html, body{
 
 .chalk-text,
 #welcomeScreen label{
+  /* Este bloque da estilo al texto: "Escribe tu código estudiantil:" en la pantalla de bienvenida */
   /* Texto grande y decorativo, centrado */
   display: block; /* Hace que el elemento sea un bloque */
   margin-bottom: 12px; /* Espacio inferior */
   font-family: 'Rancho', cursive; /* Fuente decorativa */
-  font-size: clamp(1.6rem, 3vw, 2.5rem); /* Tamaño adaptable */
+  font-size: clamp(3.6rem, 6vw, 5.5rem); /* Tamaño adaptable */
   color: #263238; /* Color gris oscuro */
   text-align: center; /* Centra el texto */
 }
