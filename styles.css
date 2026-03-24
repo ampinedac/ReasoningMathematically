@@ -619,7 +619,7 @@ html, body{
 }
 
 #flipbook .book-cover-page img{
-  width: auto;
+  width: 10%;
   margin: 0 auto 1.2rem auto;
 }
 #flipbook .cover-leer-image {
@@ -904,14 +904,6 @@ html, body{
 ){
   font-size: var(--a0-body-font-size);
   line-height: var(--a0-body-line-height);
-}
-
-#moment1Screen #flipbook .page :is(
-    h1, h2, h3, h4, h5, h6,
-    .section-title
-){
-    font-size: var(--a0-title-font-size) !important;
-    line-height: 1.3 !important;
 }
 
 /* ========================================
