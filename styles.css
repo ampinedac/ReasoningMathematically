@@ -442,7 +442,7 @@ html, body{
 #flipbook{
   position: relative; /* Posicionamiento relativo */
   width: 95%; /* Ocupa el 95% del contenedor */
-  height: var(--a0-book-height); /* Altura definida por variable */
+  height: 100%; /* Ocupa toda la altura del contenedor */
   margin: 0 auto; /* Centrado horizontal */
   aspect-ratio: auto; /* Relación de aspecto automática */
   perspective: 2200px; /* Perspectiva 3D */
