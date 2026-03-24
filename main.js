@@ -28,6 +28,7 @@ let studentInfo = null; // Información del estudiante (nombre, apellidos, curso
 let currentPage = 1;
 let totalPages = 0;
 let flipbook;
+let cocinaScreen;
 
 // Datos de Momento 2 (Juego de Bandejas)
 let traysSystem = null; // Nueva instancia del sistema de bandejas
@@ -475,7 +476,7 @@ function showScreen(screenId) {
 function initMoment1() {
     console.log('[initMoment1] Entrando a la pantalla del cuento...');
     // Forzar cocinaScreen oculta al iniciar momento 1
-    const cocinaScreen = document.getElementById('cocinaScreen');
+    cocinaScreen = document.getElementById('cocinaScreen');
     if (cocinaScreen) {
         cocinaScreen.classList.add('hidden');
     }
@@ -532,7 +533,7 @@ function initMoment1() {
     const m1Q2StorageKey = getM1Q2StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
     m1Q2Submitted = m1Q2StorageKey ? localStorage.getItem(m1Q2StorageKey) === 'true' : false;
-    const cocinaScreen = document.getElementById('cocinaScreen');
+    cocinaScreen = document.getElementById('cocinaScreen');
     const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
     // Refuerzo de visibilidad y diagnóstico
