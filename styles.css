@@ -54,7 +54,7 @@ body{
   font-family: 'Rancho', cursive, Arial, sans-serif;
   color: var(--text-main);
   background:
-    url('assets/images/fondo-matematico.svg') center center/cover no-repeat fixed,
+    url('assets/images/fondo-rombos-pastel.svg') center center/cover no-repeat fixed,
     radial-gradient(circle at top left, rgba(255,255,255,.8), transparent 30%),
     linear-gradient(135deg, #eef3ff 0%, #f8fafc 45%, #fffaf2 100%);
 }
@@ -721,7 +721,7 @@ select{
 /* ========================================
    SPREAD DE PREGUNTA Q1
    ======================================== */
-#moment1Screen #flipbook .page.q1-book-spread{
+#moment1Screen #flipbook .page.q1-book-spread {
   width: 100%;
   max-width: none;
   height: auto;
@@ -736,6 +736,45 @@ select{
   align-items: stretch;
   justify-items: stretch;
   overflow: visible;
+  position: relative;
+}
+
+#moment1Screen #flipbook .page.q1-book-spread::before {
+  content: "";
+  position: absolute;
+  top: 4%;
+  bottom: 4%;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(to bottom, #e5e7eb 0%, #d1d5db 60%, #e5e7eb 100%);
+  box-shadow: 0 0 12px 2px #d1d5db44;
+  border-radius: 2px;
+  z-index: 5;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+#moment1Screen #flipbook .page.q1-book-spread::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 18px;
+  background: linear-gradient(to right, #d1d5db22 0%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+#moment1Screen #flipbook .page.q1-book-spread .q1-right-page::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  background: linear-gradient(to left, #d1d5db22 0%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
 }
 
 #moment1Screen #flipbook .page.q1-book-spread::before{
