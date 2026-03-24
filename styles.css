@@ -1,4 +1,83 @@
-/* Todas las reglas generales han sido eliminadas. Agrega aquí solo reglas específicas bajo los nuevos contenedores: #ContenedorBienvenida, #ContenedorConfirmacion, #ContenedorPortada, #ContenedorLibro */
+/* --- PORTADA GENERAL SOLO EN BIENVENIDA --- */
+.book-cover-page {
+  position: relative;
+  height: 95vh;
+  max-height: 95vh;
+  width: 50vw;
+  max-width: 640px;
+  margin: 40px auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+  border: 3px solid rgba(180, 138, 0, .25);
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  padding: 40px 26px;
+  gap: 18px;
+}
+
+.author-credit,
+#authorCredit{
+  position: fixed; /* Fija el elemento en la pantalla */
+  right: 14px; /* Lo posiciona a 14px del borde derecho */
+  top: 12px; /* Lo posiciona a 12px del borde superior */
+  z-index: 60; /* Prioridad de apilamiento */
+  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  font-size: clamp(1rem, 1.9vw, 1.7rem); /* Tamaño adaptable */
+  color: #5b5b5b; /* Color gris oscuro */
+  opacity: .85; /* Opacidad del texto */
+}
+
+
+/* ========================================
+  ESTILOS COMPARTIDOS ENTRE ACTIVIDADES 0A Y 0B
+  ========================================
+  Ejemplo de selectores: #welcomeScreen, .welcome-box, .btn, .main-title
+*/
+
+/* Contenedor principal de bienvenida: columna y centrado */
+#welcomeScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: 'Rancho', cursive;
+  font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+}
+
+/* --- FIN LIMPIEZA PORTADA --- */
+}
+
+.btn{
+  /* Afecta a todos los botones de la interfaz, como "Ingresar", "Confirmar", "Rechazar", "Graba tu explicación", etc. */
+  /* Botón estilizado, con sombra y transición */
+.welcome-box {
+  width: min(92vw, 640px);
+  padding: clamp(20px, 3vw, 40px);
+  background: rgba(62, 216, 255, 0.589);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.btn:active{
+  /* Efecto al presionar el botón */
+  transform: translateY(0); /* Vuelve a la posición original */
+}
+
+.btn:disabled{
+  /* Botón deshabilitado: semitransparente y sin cursor */
+  opacity: .65; /* Semitransparente */
+  cursor: not-allowed; /* Cursor de no permitido */
+}
+
+.btn-primary{
   /* Botón principal con gradiente azul y texto blanco */
   padding: 12px 24px; /* Espaciado interno */
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); /* Gradiente azul */
