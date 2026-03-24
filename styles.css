@@ -645,9 +645,10 @@ body{
 #flipbook .cover-book-title{
   margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(6rem, 16vw, 12rem);
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ff66ed98, 0 2px 2px #c1bdf7d1;
+  color:black;
 }
 
 #flipbook .cover-subtitle {
