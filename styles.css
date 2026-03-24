@@ -61,8 +61,8 @@ html, body{
 .author-credit,
 #authorCredit{
   position: fixed; /* Fija el elemento en la pantalla */
-  left: 14px; /* Lo posiciona a 14px del borde izquierdo */
-  bottom: 12px; /* Lo posiciona a 12px del borde inferior */
+  right: 14px; /* Lo posiciona a 14px del borde derecho */
+  top: 12px; /* Lo posiciona a 12px del borde superior */
   z-index: 60; /* Prioridad de apilamiento */
   font-family: 'Rancho', cursive; /* Fuente decorativa */
   font-size: clamp(.95rem, 1.4vw, 1.2rem); /* Tamaño adaptable */
@@ -1114,9 +1114,3 @@ select:focus{
     display: flex;
   }
 }
-
-/* ========================================
-   ESTILOS ESPECÍFICOS ACTIVIDAD 0B
-   ========================================
-   Ejemplo de selectores: (agregar aquí los selectores exclusivos de 0B)
-*/
