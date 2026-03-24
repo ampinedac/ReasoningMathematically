@@ -17,9 +17,72 @@ let totalPages = 0;
 let trays = [];
 let pairs = [];
 let traysSystem = null; // Nueva instancia del sistema de bandejas
+let m2CurrentSpread = 0;
+let m2OrderCompleted = false;
+let m2ExplanationSubmitted = false;
+let m2SnapshotData = null;
+let m2Q1AudioCheckInterval = null;
+let m2Q1AssociatedSubmitted = false;
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
+let m1FlipbookPageHandler = null;
 let m1Q1Submitted = false;
+let m1GoToMoment2WithTurn = null;
+
+function parseTrayNumber(trayId) {
+    return Number.parseInt(String(trayId || '').replace('tray-', ''), 10);
+}
+
+function buildMoment2SnapshotData() {
+    if (!traysSystem) return null;
+
+    const trayMap = new Map(traysSystem.BASE_TRAYS.map(tray => [tray.id, tray]));
+    const rawPairs = traysSystem.getPairings();
+    const pairedSet = new Set();
+
+    const pairsData = rawPairs.map(([idA, idB]) => {
+        const trayA = trayMap.get(idA);
+        const trayB = trayMap.get(idB);
+        if (!trayA || !trayB) return null;
+
+        pairedSet.add(idA);
+        pairedSet.add(idB);
+
+        return {
+            left: trayA,
+            right: trayB
+        };
+    }).filter(Boolean);
+
+    const singlesData = traysSystem.BASE_TRAYS
+        .filter(tray => !pairedSet.has(tray.id))
+        .map(tray => ({ tray }));
+
+    return {
+        pairs: pairsData,
+        singles: singlesData
+    };
+}
+
+function renderMoment2Snapshot(targetId) {
+    const container = document.getElementById(targetId);
+    if (!container) return;
+
+    if (!m2OrderCompleted) {
+        container.innerHTML = '';
+        return;
+    }
+
+    container.innerHTML = `
+        <p class="m2-photo-fixed-text">📸 Así quedaron tus parejas:</p>
+        <img src="assets/images/BolsasFoto.png" alt="Así quedaron tus parejas" class="m2-photo-fixed-image">
+    `;
+}
+
+function renderMoment2Snapshots() {
+    renderMoment2Snapshot('m2PreviewPage18');
+    renderMoment2Snapshot('m2PreviewPage19');
+}
 
 function getM1Q1StorageKey() {
     if (!studentCode) return null;
@@ -40,8 +103,8 @@ function applyM1Q1SubmittedLock() {
     const evidenceSection = canvas ? canvas.closest('.evidence-section') : null;
 
     if (statusText) {
-        statusText.textContent = '✅ Ya enviaste esta respuesta. Puedes volver al cuento con la flecha izquierda.';
-        statusText.className = 'status-text success';
+        statusText.textContent = '';
+        statusText.className = 'status-text';
     }
 
     if (submitBtn) {
@@ -52,18 +115,21 @@ function applyM1Q1SubmittedLock() {
 
     if (recordBtn) {
         recordBtn.disabled = true;
+        recordBtn.style.opacity = '0.5';
+        recordBtn.style.cursor = 'not-allowed';
     }
 
     if (stopBtn) {
         stopBtn.disabled = true;
+        stopBtn.classList.add('hidden');
     }
 
     if (canvas) {
-        canvas.style.pointerEvents = 'none';
+        canvas.style.pointerEvents = '';
     }
 
     if (evidenceSection) {
-        evidenceSection.querySelectorAll('.tool-btn').forEach(btn => btn.disabled = true);
+        evidenceSection.querySelectorAll('.tool-btn').forEach(btn => btn.disabled = false);
     }
 }
 
@@ -81,6 +147,9 @@ let m4_errorsConsecutiveMax = 0;
 let m4_magicLives = 3; // Sistema de vidas mágicas
 let m4_isFinalizing = false;
 let m4_returnHomeTimeout = null;
+let m4_reflectionSelected = false;
+let m4_reflectionSaved = false;
+let m4_reflectionSaving = false;
 
 // ========================================
 // INICIALIZACIÓN
@@ -89,31 +158,18 @@ let m4_returnHomeTimeout = null;
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Aplicación iniciada');
     console.log('📅 Fecha:', new Date().toLocaleString());
-    
-    // Inicialización completada
-    console.log('✅ Sistema inicializado');
-    
-    // Verificar si ya hay código guardado
-    const savedCode = localStorage.getItem('studentCode');
-    if (savedCode) {
-        studentCode = savedCode;
-        console.log('ℹ️ Código guardado encontrado:', studentCode);
-
-        if (savedCode === '0000') {
-            const savedGuestName = localStorage.getItem('guestName');
-            if (savedGuestName) {
-                studentInfo = {
-                    nombre: savedGuestName,
-                    apellidos: '',
-                    curso: 'INVITADO'
-                };
-            }
-        }
-    }
-    
+    // Siempre forzar flujo: bienvenida -> confirmación -> actividad
+    // No cargar datos previos automáticamente, solo después de confirmar
+    studentCode = null;
+    studentInfo = null;
+    // Inicializar pantallas
     initHomeScreen();
     initWelcomeScreen();
     initConfirmationScreen();
+    // Mostrar solo la pantalla de bienvenida al inicio
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    if (welcomeScreen) welcomeScreen.classList.add('active');
 });
 
 // Manejador global de errores
@@ -422,72 +478,114 @@ function initMoment1() {
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
-    const problemSection = document.getElementById('problemQ1Section');
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const soundToggle = document.getElementById('soundToggle');
     const m1StorageKey = getM1Q1StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+    const flipbookPages = flipbook ? Array.from(flipbook.querySelectorAll('.page')) : [];
+    const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+    const bridgePageIndex = flipbookPages.findIndex(page => page.id === 'm1ToM2BridgePage');
+    let m1TransitioningToMoment2 = false;
 
-    const syncM1WithFlipbookPage = (event) => {
-        if (!problemSection) {
+    const goToMoment2FromQ1 = () => {
+        if (!m1Q1Submitted || m1TransitioningToMoment2) {
             return;
         }
 
-        const isLastPage = Boolean(event?.detail?.isLastPage);
+        m1TransitioningToMoment2 = true;
 
-        if (isLastPage) {
-            if (flipbook) {
-                flipbook.style.display = 'none';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = 'none';
-            }
-            if (soundToggle) {
-                soundToggle.style.display = 'none';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
+        setTimeout(() => {
+            showScreen('moment2Screen');
+            initMoment2();
+
+            const moment2Screen = document.getElementById('moment2Screen');
+            if (moment2Screen) {
+                moment2Screen.classList.add('turn-in');
+                setTimeout(() => {
+                    moment2Screen.classList.remove('turn-in');
+                }, 520);
             }
 
-            problemSection.classList.remove('hidden');
-            problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            m1TransitioningToMoment2 = false;
+        }, 80);
+    };
+    m1GoToMoment2WithTurn = goToMoment2FromQ1;
 
+    const syncM1WithFlipbookPage = (event) => {
+        if (q1PageIndex < 0) {
+            return;
+        }
+
+        const currentFlipbookPage = Number.isInteger(event?.detail?.page)
+            ? event.detail.page
+            : (window.flipbookControls?.getCurrentPage?.() ?? 0);
+        const isQ1Page = currentFlipbookPage === q1PageIndex;
+        const isBridgePage = currentFlipbookPage === bridgePageIndex;
+
+        if (nextBtn) {
+            nextBtn.onclick = null;
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+
+            if (isQ1Page) {
+                if (!m1Q1Submitted) {
+                    nextBtn.disabled = true;
+                    nextBtn.style.opacity = '0.5';
+                    nextBtn.style.cursor = 'not-allowed';
+                }
+            } else if (isBridgePage) {
+                nextBtn.disabled = true;
+                nextBtn.style.opacity = '0.5';
+                nextBtn.style.cursor = 'not-allowed';
+            }
+        }
+
+        if (prevBtn) {
+            if (isBridgePage) {
+                prevBtn.disabled = true;
+                prevBtn.style.opacity = '0.5';
+                prevBtn.style.cursor = 'not-allowed';
+            } else {
+                // Al salir de la página puente, reactivar siempre "anterior"
+                // para permitir volver desde 15-16 al cuento.
+                prevBtn.disabled = false;
+                prevBtn.style.opacity = '1';
+                prevBtn.style.cursor = 'pointer';
+            }
+        }
+
+        if (isBridgePage) {
+            goToMoment2FromQ1();
+            return;
+        }
+
+        if (isQ1Page) {
             if (m1Q1Submitted) {
                 applyM1Q1SubmittedLock();
             } else if (!m1ProblemInitialized) {
                 m1ProblemInitialized = true;
                 initProblemQ1();
             }
-        } else {
-            if (flipbook) {
-                flipbook.style.display = '';
-            }
-            if (prevBtn) {
-                prevBtn.style.display = '';
-            }
-            if (nextBtn) {
-                nextBtn.style.display = '';
-            }
-            if (soundToggle) {
-                soundToggle.style.display = '';
-            }
-
-            problemSection.classList.add('hidden');
         }
     };
 
-    // Estado inicial: en el cuento no se muestra la respuesta
-    if (problemSection && !problemSection.classList.contains('hidden')) {
-        problemSection.classList.add('hidden');
+    if (m1FlipbookPageHandler) {
+        document.removeEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     }
-
+    m1FlipbookPageHandler = syncM1WithFlipbookPage;
+    document.addEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     if (!m1FlipbookListenerAttached) {
-        document.addEventListener('flipbook:pagechange', syncM1WithFlipbookPage);
         m1FlipbookListenerAttached = true;
         console.log('✅ Listener de cambio de página del cuento configurado');
     }
+
+    if (prevBtn) {
+        prevBtn.style.opacity = '1';
+        prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+    }
+    syncM1WithFlipbookPage();
 }
 
 // ========================================
@@ -496,11 +594,6 @@ function initMoment1() {
 
 function initProblemQ1() {
     console.log('🔧 Inicializando Problema Q1...');
-
-    if (m1Q1Submitted) {
-        applyM1Q1SubmittedLock();
-        return;
-    }
     
     const canvasId = 'boardCanvasM1Q1';
     const recordBtnId = 'recordBtnM1Q1';
@@ -534,11 +627,19 @@ function initProblemQ1() {
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
         // Solo requiere audio (tablero opcional)
-        submitBtn.disabled = !hasAudio;
+        submitBtn.disabled = m1Q1Submitted || !hasAudio;
+
+        // Si ya grabó o ya envió, no puede volver a grabar.
+        recordBtn.disabled = m1Q1Submitted || hasAudio;
+        recordBtn.style.opacity = recordBtn.disabled ? '0.5' : '1';
+        recordBtn.style.cursor = recordBtn.disabled ? 'not-allowed' : 'pointer';
         
         // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
-        if (!hasAudio) {
+        if (m1Q1Submitted) {
+            statusText.textContent = '';
+            statusText.className = 'status-text';
+        } else if (!hasAudio) {
             statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
@@ -578,7 +679,7 @@ function initProblemQ1() {
                 localStorage.setItem(m1StorageKey, 'true');
             }
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente ✅ Ya puedes pasar a la siguiente página.';
             statusText.className = 'status-text success';
             
             // Mantener botón deshabilitado permanentemente
@@ -594,13 +695,21 @@ function initProblemQ1() {
             // Deshabilitar solo los botones de herramientas de ESTE momento
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
-            document.getElementById(recordBtnId).disabled = true;
-            
-            // Continuar automáticamente al Momento 2 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment2Screen');
-                initMoment2();
-            }, 1000);
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+            }
+
+            if (typeof m1FlipbookPageHandler === 'function') {
+                m1FlipbookPageHandler({
+                    detail: {
+                        page: window.flipbookControls?.getCurrentPage?.() ?? 0
+                    }
+                });
+            }
             
         } catch (error) {
             console.error('Error al enviar:', error);
@@ -647,29 +756,412 @@ function initMoment2() {
     } catch (error) {
         console.error('❌ Error al inicializar sistema de bolsas:', error);
     }
+
+    m2CurrentSpread = 0;
+    if (!m2OrderCompleted) {
+        m2SnapshotData = null;
+    }
+
+    const showCocinaScreenM2 = () => {
+        const cocinaScreen = document.getElementById('cocinaScreen');
+        if (!cocinaScreen) return;
+        cocinaScreen.classList.remove('hidden');
+        cocinaScreen.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+    };
+
+    const hideCocinaScreenM2 = () => {
+        const cocinaScreen = document.getElementById('cocinaScreen');
+        if (!cocinaScreen) return;
+        cocinaScreen.classList.add('hidden');
+        cocinaScreen.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+    };
+
+    const goToCocinaBtn = document.getElementById('goToCocinaBtn');
+    if (goToCocinaBtn) {
+        const newGoToCocinaBtn = goToCocinaBtn.cloneNode(true);
+        goToCocinaBtn.parentNode.replaceChild(newGoToCocinaBtn, goToCocinaBtn);
+        if (m2OrderCompleted) {
+            newGoToCocinaBtn.disabled = true;
+            newGoToCocinaBtn.textContent = '✅ Organización completada';
+            newGoToCocinaBtn.title = 'Ya verificaste la organización correctamente.';
+        } else {
+            newGoToCocinaBtn.disabled = false;
+            newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
+            newGoToCocinaBtn.title = '';
+            newGoToCocinaBtn.addEventListener('click', () => {
+                if (!traysSystem) {
+                    try {
+                        traysSystem = new TraysSystem('traysArea');
+                    } catch (error) {
+                        console.error('❌ No se pudo abrir cocina: sistema de bolsas no disponible', error);
+                        const feedback = document.getElementById('traysFeedback');
+                        if (feedback) {
+                            feedback.textContent = 'No fue posible cargar la cocina. Recarga la página e inténtalo de nuevo.';
+                            feedback.className = 'feedback-text error';
+                        }
+                        return;
+                    }
+                }
+
+                showCocinaScreenM2();
+            });
+        }
+    }
+
+    const pendingCard = document.getElementById('m2PendingCard');
+    const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
+    const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
+    if (pendingCard) {
+        pendingCard.classList.toggle('hidden', m2OrderCompleted);
+    }
+    if (previewCard18) {
+        previewCard18.classList.toggle('hidden', !m2OrderCompleted);
+    }
+    if (previewCard19) {
+        previewCard19.classList.toggle('hidden', !m2OrderCompleted);
+    }
+
+    const spreads = Array.from(document.querySelectorAll('#problemQ2Section .m2-spread'));
+    const updateMoment2SpreadUI = () => {
+        spreads.forEach((spread, index) => {
+            spread.classList.toggle('active', index === m2CurrentSpread);
+        });
+
+        const prevBtnQ2Ref = document.getElementById('prevBtnQ2');
+        const nextBtnQ2Ref = document.getElementById('nextBtnQ2');
+        const lastSpreadIndex = Math.max(0, spreads.length - 1);
+
+        if (prevBtnQ2Ref) {
+            prevBtnQ2Ref.disabled = false;
+        }
+
+        if (nextBtnQ2Ref) {
+            if (m2CurrentSpread < 1 && !m2OrderCompleted) {
+                nextBtnQ2Ref.disabled = true;
+                nextBtnQ2Ref.title = 'Completa la organización en cocina para avanzar.';
+                nextBtnQ2Ref.style.opacity = '0.5';
+            } else if (m2CurrentSpread === lastSpreadIndex && !m2ExplanationSubmitted) {
+                nextBtnQ2Ref.disabled = true;
+                nextBtnQ2Ref.title = 'Primero envía tu explicación de la página 18.';
+                nextBtnQ2Ref.style.opacity = '0.5';
+            } else {
+                nextBtnQ2Ref.disabled = false;
+                nextBtnQ2Ref.title = '';
+                nextBtnQ2Ref.style.opacity = '1';
+            }
+        }
+    };
+
+    const prevBtnQ2 = document.getElementById('prevBtnQ2');
+    if (prevBtnQ2) {
+        const newPrevBtnQ2 = prevBtnQ2.cloneNode(true);
+        prevBtnQ2.parentNode.replaceChild(newPrevBtnQ2, prevBtnQ2);
+        newPrevBtnQ2.addEventListener('click', () => {
+            if (m2CurrentSpread > 0) {
+                m2CurrentSpread -= 1;
+                updateMoment2SpreadUI();
+            } else {
+                showScreen('moment1Screen');
+                initMoment1();
+
+                const flipbookPages = Array.from(document.querySelectorAll('#flipbook .page'));
+                const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+
+                if (q1PageIndex >= 0) {
+                    window.flipbookControls?.goToPage?.(q1PageIndex);
+                } else {
+                    const totalFlipbookPages = window.flipbookControls?.getTotalPages?.();
+                    if (Number.isInteger(totalFlipbookPages) && totalFlipbookPages > 1) {
+                        window.flipbookControls?.goToPage?.(totalFlipbookPages - 2);
+                    }
+                }
+            }
+
+            if (typeof window.playPageTurnSound === 'function') {
+                window.playPageTurnSound();
+            }
+        });
+    }
+
+    const nextBtnQ2 = document.getElementById('nextBtnQ2');
+    if (nextBtnQ2) {
+        const newNextBtnQ2 = nextBtnQ2.cloneNode(true);
+        nextBtnQ2.parentNode.replaceChild(newNextBtnQ2, nextBtnQ2);
+        newNextBtnQ2.addEventListener('click', () => {
+            const lastSpreadIndex = Math.max(0, spreads.length - 1);
+            if (m2CurrentSpread < lastSpreadIndex) {
+                m2CurrentSpread += 1;
+                updateMoment2SpreadUI();
+            } else {
+                showScreen('moment3Screen');
+                initMoment3();
+            }
+            if (typeof window.playPageTurnSound === 'function') {
+                window.playPageTurnSound();
+            }
+        });
+    }
+
+    const progressText = document.getElementById('progressText');
+    const progressBar = document.getElementById('progressBar');
+    if (progressText) {
+        progressText.textContent = 'Páginas 17 a 22 del libro';
+    }
+    if (progressBar) {
+        progressBar.style.setProperty('--progress', '100%');
+    }
+    document.documentElement.style.setProperty('--flipbook-progress', '100%');
+
+    const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
+    if (closeCocinaBtn) {
+        const newCloseCocinaBtn = closeCocinaBtn.cloneNode(true);
+        closeCocinaBtn.parentNode.replaceChild(newCloseCocinaBtn, closeCocinaBtn);
+        newCloseCocinaBtn.disabled = true;
+        newCloseCocinaBtn.title = 'Debes verificar emparejamientos correctos para volver al cuento.';
+        newCloseCocinaBtn.addEventListener('click', hideCocinaScreenM2);
+    }
+
+    const finalSectionM2 = document.getElementById('finalQuestionSectionM2');
+    if (finalSectionM2) {
+        finalSectionM2.classList.toggle('hidden', !m2OrderCompleted);
+    }
+
+    const m2PromptSectionQ1 = document.getElementById('m2PromptSectionQ1');
+    const m2PromptTextQ1 = document.getElementById('m2PromptTextQ1');
+    const m2TruthQ1Radios = Array.from(document.querySelectorAll('input[name="truthQ1M2"]'));
+    const m2PromptMapQ1 = {
+        yes: 'Explica detalladamente cómo lo sabes.',
+        no: '¿Con qué número crees que no funcionaría?',
+        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
+    };
+
+    if (m2PromptSectionQ1) {
+        m2PromptSectionQ1.classList.add('hidden');
+    }
+    if (m2PromptTextQ1) {
+        m2PromptTextQ1.textContent = '';
+    }
+    m2TruthQ1Radios.forEach(radio => {
+        radio.checked = false;
+        radio.onchange = (event) => {
+            const choice = event.target.value;
+            if (m2PromptTextQ1) {
+                m2PromptTextQ1.textContent = m2PromptMapQ1[choice] || '';
+            }
+            if (m2PromptSectionQ1) {
+                m2PromptSectionQ1.classList.remove('hidden');
+            }
+        };
+    });
+
+    const setupMoment2AssociatedAudio = () => {
+        const recordBtn = document.getElementById('recordBtnM2Q1');
+        const stopBtn = document.getElementById('stopBtnM2Q1');
+        const submitBtn = document.getElementById('submitM2Q1');
+        const statusText = document.getElementById('statusM2Q1');
+
+        if (!recordBtn || !stopBtn || !submitBtn || !statusText) {
+            return;
+        }
+
+        const newRecordBtn = recordBtn.cloneNode(true);
+        const newStopBtn = stopBtn.cloneNode(true);
+        const newSubmitBtn = submitBtn.cloneNode(true);
+        recordBtn.parentNode.replaceChild(newRecordBtn, recordBtn);
+        stopBtn.parentNode.replaceChild(newStopBtn, stopBtn);
+        submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+
+        const audioState = initAudio('recordBtnM2Q1', 'stopBtnM2Q1', 'audioStatusM2Q1');
+
+        newSubmitBtn.disabled = true;
+        statusText.textContent = '';
+        statusText.className = 'status-text';
+
+        if (m2Q1AssociatedSubmitted) {
+            if (m2Q1AudioCheckInterval) {
+                clearInterval(m2Q1AudioCheckInterval);
+                m2Q1AudioCheckInterval = null;
+            }
+
+            newRecordBtn.disabled = true;
+            newStopBtn.disabled = true;
+            newStopBtn.classList.add('hidden');
+            newSubmitBtn.disabled = true;
+
+            m2ExplanationSubmitted = true;
+            updateMoment2SpreadUI();
+            return;
+        }
+
+        if (m2Q1AudioCheckInterval) {
+            clearInterval(m2Q1AudioCheckInterval);
+        }
+
+        m2Q1AudioCheckInterval = setInterval(() => {
+            const hasAudio = audioState.audioBlob !== null;
+            newSubmitBtn.disabled = !hasAudio;
+        }, 500);
+
+        newSubmitBtn.addEventListener('click', async () => {
+            if (!audioState.audioBlob) return;
+
+            newSubmitBtn.disabled = true;
+            statusText.textContent = 'Subiendo evidencia...';
+            statusText.className = 'status-text loading';
+
+            try {
+                await submitEvidence({
+                    moment: 'm2',
+                    tag: 'q1-associated-audio',
+                    data: {
+                        question: 'Problema 1 asociado en página 22',
+                        choice: document.querySelector('input[name="truthQ1M2"]:checked')?.value || null
+                    },
+                    boardBlob: null,
+                    audioBlob: audioState.audioBlob
+                });
+
+                if (m2Q1AudioCheckInterval) {
+                    clearInterval(m2Q1AudioCheckInterval);
+                    m2Q1AudioCheckInterval = null;
+                }
+                statusText.textContent = 'Guardado exitosamente ✅';
+                statusText.className = 'status-text success';
+                newRecordBtn.disabled = true;
+                newStopBtn.disabled = true;
+                newStopBtn.classList.add('hidden');
+                newSubmitBtn.disabled = true;
+
+                m2Q1AssociatedSubmitted = true;
+
+                m2ExplanationSubmitted = true;
+                updateMoment2SpreadUI();
+            } catch (error) {
+                console.error('Error al guardar audio asociado M2:', error);
+                statusText.textContent = 'Error al guardar. Intenta de nuevo.';
+                statusText.className = 'status-text error';
+                newSubmitBtn.disabled = false;
+            }
+        });
+    };
+
+    setupMoment2AssociatedAudio();
+
+    const setupMoment2MulTableValidation = () => {
+        const verifyMulBtn = document.getElementById('verifyMulTableBtn');
+        const feedback = document.getElementById('m2MulTableFeedback');
+        const entryRows = Array.from(document.querySelectorAll('#problemQ2Section .m2-mul-table .m2-mul-entry-row'));
+
+        if (!verifyMulBtn || !feedback || entryRows.length < 3) {
+            return;
+        }
+
+        const newVerifyMulBtn = verifyMulBtn.cloneNode(true);
+        verifyMulBtn.parentNode.replaceChild(newVerifyMulBtn, verifyMulBtn);
+        feedback.textContent = '';
+        feedback.className = 'feedback-text';
+
+        newVerifyMulBtn.addEventListener('click', () => {
+            const traySource = traysSystem?.BASE_TRAYS || [];
+            const trayByPedido = new Map(
+                traySource.map(tray => [Number(tray.pedido), tray])
+            );
+
+            const pedidoPairs = [
+                [3, 7],
+                [2, 6],
+                [4, 8]
+            ];
+
+            let emptyValues = false;
+            let wrongValues = 0;
+
+            pedidoPairs.forEach((pair, rowIndex) => {
+                const row = entryRows[rowIndex];
+                if (!row) {
+                    wrongValues += 1;
+                    return;
+                }
+
+                const inputs = Array.from(row.querySelectorAll('input'));
+                if (inputs.length < 6) {
+                    wrongValues += 1;
+                    return;
+                }
+
+                pair.forEach((pedido, sideIndex) => {
+                    const expected = trayByPedido.get(pedido);
+                    if (!expected) {
+                        wrongValues += 1;
+                        return;
+                    }
+
+                    const offset = sideIndex * 3;
+                    const values = [
+                        Number.parseInt((inputs[offset]?.value || '').trim(), 10),
+                        Number.parseInt((inputs[offset + 1]?.value || '').trim(), 10),
+                        Number.parseInt((inputs[offset + 2]?.value || '').trim(), 10)
+                    ];
+
+                    if (values.some(Number.isNaN)) {
+                        emptyValues = true;
+                        return;
+                    }
+
+                    const isCorrect =
+                        values[0] === Number(expected.bags) &&
+                        values[1] === Number(expected.itemsPerBag) &&
+                        values[2] === Number(expected.total);
+
+                    if (!isCorrect) {
+                        wrongValues += 1;
+                    }
+                });
+            });
+
+            if (emptyValues) {
+                feedback.textContent = 'Completa todos los espacios de la tabla antes de verificar.';
+                feedback.className = 'feedback-text info';
+                return;
+            }
+
+            if (wrongValues === 0) {
+                feedback.textContent = '¡Excelente! Los datos de la tabla coinciden con los pedidos.';
+                feedback.className = 'feedback-text success';
+            } else {
+                feedback.textContent = `Hay ${wrongValues} dato(s) que no coinciden con los pedidos. Revisa y vuelve a intentar.`;
+                feedback.className = 'feedback-text error';
+            }
+        });
+    };
+
+    setupMoment2MulTableValidation();
+
+    const verifyBtn = document.getElementById('verifyTraysBtn');
+    if (verifyBtn) {
+        verifyBtn.disabled = m2OrderCompleted;
+    }
+
+    renderMoment2Snapshots();
+    updateMoment2SpreadUI();
+
+    hideCocinaScreenM2();
     
     // Configurar botón de verificación
-    const verifyBtn = document.getElementById('verifyTraysBtn');
     if (verifyBtn) {
         // Remover event listeners previos
         const newVerifyBtn = verifyBtn.cloneNode(true);
         verifyBtn.parentNode.replaceChild(newVerifyBtn, verifyBtn);
+        newVerifyBtn.disabled = m2OrderCompleted;
         
         newVerifyBtn.addEventListener('click', verifyTraysPairings);
     }
     
     // Botón continuar a M3
-    const continueBtn = document.getElementById('continueToM3Btn');
-    if (continueBtn) {
-        // Remover event listeners previos
-        const newContinueBtn = continueBtn.cloneNode(true);
-        continueBtn.parentNode.replaceChild(newContinueBtn, continueBtn);
-        
-        newContinueBtn.addEventListener('click', () => {
-            showScreen('moment3Screen');
-            initMoment3();
-        });
-    }
 }
 
 // ========================================
@@ -1123,16 +1615,61 @@ function verifyTraysPairings() {
     if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {
         feedback.textContent = `🎉 ¡Perfecto! Todos los ${totalPairs} emparejamientos son correctos.`;
         feedback.className = 'feedback-text success';
+
+        m2OrderCompleted = true;
+        m2SnapshotData = buildMoment2SnapshotData();
+        renderMoment2Snapshots();
+
+        const previewCard18 = document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card');
+        const previewCard19 = document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card');
+        const pendingCard = document.getElementById('m2PendingCard');
+        if (pendingCard) {
+            pendingCard.classList.add('hidden');
+        }
+        if (previewCard18) {
+            previewCard18.classList.remove('hidden');
+        }
+        if (previewCard19) {
+            previewCard19.classList.remove('hidden');
+        }
         
         // Deshabilitar el botón
         document.getElementById('verifyTraysBtn').disabled = true;
+
+        const goToCocinaBtn = document.getElementById('goToCocinaBtn');
+        if (goToCocinaBtn) {
+            goToCocinaBtn.disabled = true;
+            goToCocinaBtn.textContent = '✅ Organización completada';
+            goToCocinaBtn.title = 'Ya verificaste la organización correctamente.';
+        }
         
-        // Mostrar pregunta final
+        // Cerrar cocina y volver al cuento (hoja 11), análogo a 0A
         setTimeout(() => {
-            const finalSection = document.getElementById('finalQuestionSection');
+            const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
+            if (closeCocinaBtn) {
+                closeCocinaBtn.disabled = false;
+                closeCocinaBtn.title = '';
+            }
+
+            const cocinaScreen = document.getElementById('cocinaScreen');
+            if (cocinaScreen) {
+                cocinaScreen.classList.add('hidden');
+                cocinaScreen.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            const finalSection = document.getElementById('finalQuestionSectionM2');
             if (finalSection) {
                 finalSection.classList.remove('hidden');
+                finalSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 initMoment2Audio();
+            }
+
+            const nextBtnQ2 = document.getElementById('nextBtnQ2');
+            if (nextBtnQ2) {
+                nextBtnQ2.disabled = false;
+                nextBtnQ2.title = '';
+                nextBtnQ2.style.opacity = '1';
             }
         }, 1000);
         
@@ -1265,7 +1802,7 @@ function initMoment2Audio() {
         }
     };
     
-    const checkInterval = setInterval(checkEvidence, 500);
+    let checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
         // Bloquear botón inmediatamente y permanentemente
@@ -1292,17 +1829,19 @@ function initMoment2Audio() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente ✅ Ya puedes avanzar en el libro.';
             statusText.className = 'status-text success';
+
+            m2ExplanationSubmitted = true;
+            const nextBtnQ2 = document.getElementById('nextBtnQ2');
+            if (nextBtnQ2) {
+                nextBtnQ2.disabled = false;
+                nextBtnQ2.title = '';
+                nextBtnQ2.style.opacity = '1';
+            }
             
             // Deshabilitar botón de grabar también
             document.getElementById(recordBtnId).disabled = true;
-            
-            // Continuar automáticamente al Momento 3 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment3Screen');
-                initMoment3();
-            }, 1000);
             
         } catch (error) {
             console.error('Error:', error);
@@ -1370,6 +1909,7 @@ function showPrompt1(choice) {
 function showPrompt2(choice) {
     const promptSection = document.getElementById('promptSection2');
     const promptText = document.getElementById('promptText2');
+    const choicePlaceholder = document.getElementById('m3Q2ChoicePlaceholder');
     
     const prompts = {
         yes: 'Explica detalladamente cómo lo sabes.',
@@ -1379,6 +1919,9 @@ function showPrompt2(choice) {
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
+    if (choicePlaceholder) {
+        choicePlaceholder.classList.add('hidden');
+    }
     
     // Inicializar tablero y audio para problema 2
     initProblemM3Q2();
@@ -1568,9 +2111,21 @@ function initMoment4() {
     m4_errorsConsecutiveMax = 0;
     m4_magicLives = 3;
     m4_isFinalizing = false;
+    m4_reflectionSelected = false;
+    m4_reflectionSaved = false;
+    m4_reflectionSaving = false;
     if (m4_returnHomeTimeout) {
         clearTimeout(m4_returnHomeTimeout);
         m4_returnHomeTimeout = null;
+    }
+
+    const mainSpread = document.getElementById('moment4MainSpread');
+    const reflectionSection = document.getElementById('moment4ReflectionSection');
+    if (mainSpread) {
+        mainSpread.classList.remove('hidden');
+    }
+    if (reflectionSection) {
+        reflectionSection.classList.add('hidden');
     }
 
     document.querySelectorAll('.magic-heart').forEach(heart => heart.classList.remove('lost'));
@@ -1579,6 +2134,43 @@ function initMoment4() {
         finalSection.classList.add('hidden');
     }
 
+    const reflectionHint = document.querySelector('#moment4ReflectionSection .reflection-hint');
+    const reflectionStatus = document.getElementById('m4ReflectionStatus');
+    const finishBtn = document.getElementById('finishM4Btn');
+
+    if (reflectionHint) {
+        reflectionHint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+    }
+    if (reflectionStatus) {
+        reflectionStatus.textContent = '';
+    }
+    if (finishBtn) {
+        finishBtn.disabled = true;
+        finishBtn.style.opacity = '0.5';
+        finishBtn.style.cursor = 'not-allowed';
+        finishBtn.onclick = async () => {
+            const saved = await saveMoment4Reflection();
+            if (saved) {
+                const statusText = document.getElementById('m4ReflectionStatus');
+                if (statusText) {
+                    statusText.textContent = 'Respuesta guardada. Cerrando libro...';
+                }
+                if (m4_returnHomeTimeout) {
+                    clearTimeout(m4_returnHomeTimeout);
+                }
+                m4_returnHomeTimeout = setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2200);
+            }
+        };
+    }
+
+    document.querySelectorAll('input[name="m4Reflection"]').forEach((checkbox) => {
+        checkbox.checked = false;
+        checkbox.disabled = false;
+        checkbox.onchange = updateMoment4ReflectionSelection;
+    });
+
     document.getElementById('studentCodeM4').textContent = getStudentHeaderText();
     
     // Generar las 6 preguntas
@@ -1586,6 +2178,124 @@ function initMoment4() {
     
     // Mostrar primer ítem
     showItem(1);
+}
+
+function getMoment4ReflectionSelection() {
+    const checkedOptions = Array.from(document.querySelectorAll('input[name="m4Reflection"]:checked'));
+    const values = checkedOptions.map((option) => option.value);
+    const labels = checkedOptions.map((option) => {
+        const label = option.closest('label');
+        return (label?.textContent || option.value).trim();
+    });
+
+    return { values, labels };
+}
+
+function updateMoment4ReflectionSelection(event) {
+    const checkedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+    const hint = document.querySelector('#moment4ReflectionSection .reflection-hint');
+    const statusText = document.getElementById('m4ReflectionStatus');
+
+    if (checkedOptions.length > 2 && event?.target) {
+        event.target.checked = false;
+    }
+
+    const validCheckedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+    m4_reflectionSelected = validCheckedOptions.length > 0 && validCheckedOptions.length <= 2;
+    m4_reflectionSaved = false;
+
+    if (statusText) {
+        statusText.textContent = '';
+    }
+
+    if (hint) {
+        if (validCheckedOptions.length === 0) {
+            hint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+        } else if (validCheckedOptions.length >= 2) {
+            hint.textContent = 'Ya seleccionaste el máximo de dos opciones.';
+        } else {
+            hint.textContent = 'Puedes seleccionar una opción más (máximo dos).';
+        }
+    }
+
+    const finishBtn = document.getElementById('finishM4Btn');
+    if (finishBtn) {
+        finishBtn.disabled = !m4_reflectionSelected || m4_reflectionSaving;
+        finishBtn.style.opacity = finishBtn.disabled ? '0.5' : '1';
+        finishBtn.style.cursor = finishBtn.disabled ? 'not-allowed' : 'pointer';
+    }
+}
+
+async function saveMoment4Reflection() {
+    if (m4_reflectionSaved) return true;
+    if (m4_reflectionSaving) return false;
+
+    const { values, labels } = getMoment4ReflectionSelection();
+    const hint = document.querySelector('#moment4ReflectionSection .reflection-hint');
+    const statusText = document.getElementById('m4ReflectionStatus');
+
+    if (values.length === 0 || values.length > 2) {
+        if (hint) {
+            hint.textContent = values.length > 2
+                ? 'Puedes seleccionar máximo dos opciones.'
+                : 'Selecciona al menos una opción para continuar.';
+        }
+        return false;
+    }
+
+    const finishBtn = document.getElementById('finishM4Btn');
+    m4_reflectionSaving = true;
+    if (finishBtn) {
+        finishBtn.disabled = true;
+    }
+    if (statusText) {
+        statusText.textContent = 'Guardando tu respuesta...';
+    }
+
+    try {
+        await submitEvidence({
+            moment: 'm4',
+            tag: 'reflection-final',
+            data: {
+                selectedOptions: values,
+                selectedLabels: labels,
+                selectedCount: values.length
+            },
+            boardBlob: null,
+            audioBlob: null
+        });
+
+        m4_reflectionSaved = true;
+        if (statusText) {
+            statusText.textContent = 'Respuesta guardada.';
+        }
+        return true;
+    } catch (error) {
+        console.error('❌ Error al guardar reflexión final:', error);
+        if (statusText) {
+            statusText.textContent = 'No se pudo guardar. Revisa internet e intenta de nuevo.';
+        }
+        if (finishBtn) {
+            finishBtn.disabled = false;
+        }
+        return false;
+    } finally {
+        m4_reflectionSaving = false;
+        updateMoment4ReflectionSelection();
+    }
+}
+
+function showMoment4ReflectionPage() {
+    const mainSpread = document.getElementById('moment4MainSpread');
+    const reflectionSection = document.getElementById('moment4ReflectionSection');
+
+    if (mainSpread) {
+        mainSpread.classList.add('hidden');
+    }
+    if (reflectionSection) {
+        reflectionSection.classList.remove('hidden');
+        reflectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function generateMoment4Questions() {
@@ -1634,7 +2344,7 @@ function generateMoment4Questions() {
         
         itemBox.innerHTML = `
             <div class="item-equation">${q.equation}</div>
-            <div style="text-align: center; margin-top: 20px;">
+            <div class="m4-answer-row">
                 <input type="number" 
                        class="item-input" 
                        data-answer="${q.answer}"
@@ -1669,6 +2379,8 @@ function showItem(itemNum) {
                     checkBtn.click();
                 }
             });
+        } else {
+            box.classList.add('hidden');
         }
     });
 }
@@ -1847,6 +2559,7 @@ function validateItem(input, itemBox) {
         
         // Avanzar al siguiente ítem
         setTimeout(() => {
+            itemBox.classList.add('hidden');
             m4_currentItem++;
             if (m4_currentItem <= 6) {
                 showItem(m4_currentItem);
@@ -1898,6 +2611,7 @@ function validateItem(input, itemBox) {
             // Si todavía hay vidas, continuar con la siguiente pregunta
             if (m4_magicLives > 0) {
                 setTimeout(() => {
+                    itemBox.classList.add('hidden');
                     m4_currentItem++;
                     if (m4_currentItem <= 6) {
                         showItem(m4_currentItem);
@@ -1973,10 +2687,10 @@ async function finalizeMoment4() {
             }
         }
 
-        statusText.textContent = 'Completado ✅ Regresando al inicio...';
-        m4_returnHomeTimeout = setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 8000);
+        statusText.textContent = 'Completado ✅';
+        setTimeout(() => {
+            showMoment4ReflectionPage();
+        }, 2200);
         
     } catch (error) {
         console.error('Error:', error);

@@ -58,8 +58,8 @@ class TraysSystem {
         this.container.innerHTML = '';
         // El CSS ya define el grid, no sobrescribir aquí
         
-        // Crear copia para barajar (no mutar el original)
-        const shuffledTrays = [...this.BASE_TRAYS].sort(() => Math.random() - 0.5);
+        // Crear orden inicial con desorden real para evitar parejas juntas
+        const shuffledTrays = this.generateInitialTrayOrder();
         
         // Renderizar cada bandeja
         shuffledTrays.forEach((trayData, index) => {
@@ -70,6 +70,58 @@ class TraysSystem {
         this.scheduleResponsiveSizing();
         
         console.log('✅ 8 bandejas renderizadas correctamente');
+    }
+
+    // Genera un orden inicial evitando que bandejas equivalentes queden juntas.
+    generateInitialTrayOrder() {
+        const trayList = [...this.BASE_TRAYS];
+        const canonicalPairs = new Set(['tray-1|tray-2', 'tray-3|tray-4', 'tray-5|tray-6']);
+
+        const scoreOrder = (order) => {
+            let score = 0;
+
+            for (let i = 0; i < order.length - 1; i++) {
+                const current = order[i];
+                const next = order[i + 1];
+
+                // Penalizar adyacencias de mismo total (parejas potenciales).
+                if (current.total === next.total) {
+                    score += 20;
+                }
+
+                // Penalizar adyacencias de parejas "naturales" del set base.
+                const key = [current.id, next.id].sort().join('|');
+                if (canonicalPairs.has(key)) {
+                    score += 10;
+                }
+            }
+
+            return score;
+        };
+
+        const fisherYates = (arr) => {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        };
+
+        let bestOrder = trayList;
+        let bestScore = Infinity;
+
+        for (let attempt = 0; attempt < 250; attempt++) {
+            const candidate = fisherYates([...trayList]);
+            const candidateScore = scoreOrder(candidate);
+
+            if (candidateScore < bestScore) {
+                bestScore = candidateScore;
+                bestOrder = candidate;
+                if (bestScore === 0) break;
+            }
+        }
+
+        return bestOrder;
     }
     
     // Crear elemento de bandeja
@@ -148,9 +200,9 @@ class TraysSystem {
             const cellHeight = innerHeight / trayData.rows;
             const cellSize = Math.max(4, Math.min(cellWidth, cellHeight));
 
-            // Escalar con el tamaño real de la bandeja para que siempre quepan todos los panes
-            const emojiPx = Math.max(6, Math.min(36, Math.floor(cellSize * 0.72)));
-            const gapPx = Math.max(0, Math.min(6, Math.floor(cellSize * 0.08)));
+            // Escalar para que se vean mas grandes sin perder legibilidad del arreglo
+            const emojiPx = Math.max(10, Math.min(52, Math.floor(cellSize * 0.86)));
+            const gapPx = Math.max(2, Math.min(12, Math.floor(cellSize * 0.14)));
 
             grid.style.gap = `${gapPx}px`;
             items.forEach(item => {
@@ -387,10 +439,43 @@ class TraysSystem {
     
     // Reorganizar layout después de emparejar/desemparejar
     reorganizeLayout() {
-        // Los wrappers ocupan 2 columnas (span 2)
-        // Las bandejas solas ocupan 1 columna
-        // El CSS grid se encarga automáticamente del flujo
-        console.log('📐 Layout reorganizado automáticamente por CSS Grid');
+        // Reordenar nodos por orden base para evitar encimes visuales
+        // y forzar redistribución limpia de bandejas libres.
+        const groups = [];
+        const seen = new Set();
+
+        this.BASE_TRAYS.forEach((trayData) => {
+            const id = trayData.id;
+            if (seen.has(id)) return;
+
+            const mateId = this.pairings.get(id);
+            if (mateId) {
+                const pairKey = [id, mateId].sort().join('-');
+                const wrapper = this.container.querySelector(`.tray-pair-wrapper[data-pair="${pairKey}"]`);
+                if (wrapper) {
+                    groups.push(wrapper);
+                    seen.add(id);
+                    seen.add(mateId);
+                    return;
+                }
+            }
+
+            const tray = this.getTrayElement(id);
+            if (tray) {
+                groups.push(tray);
+                seen.add(id);
+            }
+        });
+
+        // Si hay wrappers huérfanos, conservarlos al final para no perder estado visual.
+        this.container.querySelectorAll('.tray-pair-wrapper').forEach((wrapper) => {
+            if (!groups.includes(wrapper)) {
+                groups.push(wrapper);
+            }
+        });
+
+        groups.forEach((node) => this.container.appendChild(node));
+        console.log('📐 Layout redistribuido: pares y bandejas libres reordenados');
         this.scheduleResponsiveSizing();
     }
     

@@ -1,5 +1,20 @@
+// --- Ocultar todas las páginas del flipbook ---
+function hideAllFlipbookPages() {
+    flipbook = document.getElementById('flipbook');
+    if (!flipbook) return;
+    const pages = flipbook.querySelectorAll('.page');
+    pages.forEach(page => {
+        page.classList.remove('active');
+    });
+}
+
+function showFlipbookPage(page) {
+    if (!page) return;
+    page.classList.add('active');
+}
+// (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
-import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
+import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
 import { estudiantesData } from './assets/estudiantes-data.js';
 
 console.log('✅ Firebase cargado correctamente');
@@ -12,14 +27,21 @@ let studentCode = null;
 let studentInfo = null; // Información del estudiante (nombre, apellidos, curso)
 let currentPage = 1;
 let totalPages = 0;
+let flipbook;
+let cocinaScreen;
 
 // Datos de Momento 2 (Juego de Bandejas)
-let trays = [];
-let pairs = [];
 let traysSystem = null; // Nueva instancia del sistema de bandejas
 let m1ProblemInitialized = false;
 let m1FlipbookListenerAttached = false;
+let m1FlipbookPageHandler = null;
+let m1NextGuardHandler = null;
+let m1Moment4CompletedHandler = null;
+let m1Moment3AdvanceListenerAttached = false;
 let m1Q1Submitted = false;
+let m1Q2Submitted = false;
+let m3Q1Submitted = false;
+let m3Q2Submitted = false;
 
 function getM1Q1StorageKey() {
     if (!studentCode) return null;
@@ -29,6 +51,16 @@ function getM1Q1StorageKey() {
     }
 
     return `m1-q1-submitted-${studentCode}`;
+}
+
+function getM1Q2StorageKey() {
+    if (!studentCode) return null;
+
+    if (studentCode === '0000' && studentInfo?.nombre) {
+        return `m1-q2-submitted-${studentCode}-${studentInfo.nombre.trim().toLowerCase()}`;
+    }
+
+    return `m1-q2-submitted-${studentCode}`;
 }
 
 function applyM1Q1SubmittedLock() {
@@ -71,6 +103,8 @@ function applyM1Q1SubmittedLock() {
 let m3_a = 0;
 let m3_b = 0;
 let m3_choice = null;
+let m3Q1EvidenceInitialized = false;
+let m3Q2EvidenceInitialized = false;
 
 // Datos de Momento 4
 let m4_currentItem = 1;
@@ -81,6 +115,20 @@ let m4_errorsConsecutiveMax = 0;
 let m4_magicLives = 3; // Sistema de vidas mágicas
 let m4_isFinalizing = false;
 let m4_returnHomeTimeout = null;
+let m4_questions = [];
+let m4_completed = false;
+let m4_reflectionSelected = false;
+let m4_reflectionSaved = false;
+let m4_reflectionSaving = false;
+let m4_closeTriggered = false;
+
+const M4_REFLECTION_OPTION_MAP = {
+    'facil': 'facil',
+    'interesante': 'interesante',
+    'dificil': 'dificil',
+    'pensar-mucho': 'pensarMucho',
+    'confusa': 'confusa'
+};
 
 // ========================================
 // INICIALIZACIÓN
@@ -399,11 +447,20 @@ function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
     });
-    
+
     // Agregar 'active' a la pantalla objetivo
     targetScreen.classList.add('active');
+    if (screenId === 'moment1Screen') {
+        const flipbook = document.getElementById('flipbook');
+        if (flipbook) {
+            const portada = flipbook.querySelector('.book-cover-page');
+            if (portada) {
+                portada.classList.add('active');
+            }
+        }
+    }
     console.log(`✅ Pantalla ${screenId} activada`);
-    
+
     // Actualizar código estudiantil en encabezados
     if (studentCode) {
         document.querySelectorAll('.student-code-display span').forEach(span => {
@@ -417,45 +474,221 @@ function showScreen(screenId) {
 // ========================================
 
 function initMoment1() {
-    document.getElementById('studentCodeM1').textContent = getStudentHeaderText();
-    
+    console.log('[initMoment1] Entrando a la pantalla del cuento...');
+    // Forzar cocinaScreen oculta al iniciar momento 1
+    cocinaScreen = document.getElementById('cocinaScreen');
+    if (cocinaScreen) {
+        cocinaScreen.classList.add('hidden');
+    }
+    const moment1Screen = document.getElementById('moment1Screen');
+    if (moment1Screen) {
+        moment1Screen.classList.add('active');
+        console.log('[initMoment1] moment1Screen activa');
+    }
+    flipbook = document.getElementById('flipbook');
+    if (flipbook) {
+        // Limpiar visibilidad de todas las páginas
+        const pages = flipbook.querySelectorAll('.page');
+        pages.forEach(p => {
+            p.classList.remove('active');
+        });
+        // Mostrar solo la portada
+        const portada = flipbook.querySelector('.book-cover-page');
+        if (portada) {
+            portada.classList.add('active');
+            console.log('[initMoment1] Portada activada');
+        } else {
+            console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
+        }
+    } else {
+        console.warn('[initMoment1] No se encontró el flipbook');
+    }
+    const studentCodeM1 = document.getElementById('studentCodeM1');
+    if (studentCodeM1) {
+        studentCodeM1.textContent = getStudentHeaderText();
+    } else {
+        console.error('❌ No se encontró el elemento studentCodeM1');
+    }
+
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
     const problemSection = document.getElementById('problemQ1Section');
     const problemSection2 = document.getElementById('problemQ2Section');
+    const problemSection3 = document.getElementById('problemQ3Section');
+    const problemSection3b = document.getElementById('problemQ3Section2');
+    const problemSection4 = document.getElementById('problemQ4Section');
+    const problemSection5 = document.getElementById('problemQ5Section');
     const m1Q2FinalQuestion = document.getElementById('m1Q2FinalQuestion');
-    const flipbook = document.getElementById('flipbook');
+    flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const soundToggle = document.getElementById('soundToggle');
-    let showProblemTimer = null;
-    let isAtLastStoryPage = false;
     let traysM1Q2Initialized = false;
-    let isOnSheet10 = false;
-    let isOnSheet11 = false;
-    let isSpecialPageTransitioning = false;
     let m1Q2Verified = false;
+    let m1Q2AudioInitialized = false;
+    let m3BookInitialized = false;
+    let m4BookInitialized = false;
     const m1StorageKey = getM1Q1StorageKey();
+    const m1Q2StorageKey = getM1Q2StorageKey();
     m1Q1Submitted = m1StorageKey ? localStorage.getItem(m1StorageKey) === 'true' : false;
+    m1Q2Submitted = m1Q2StorageKey ? localStorage.getItem(m1Q2StorageKey) === 'true' : false;
+    cocinaScreen = document.getElementById('cocinaScreen');
+    const goToCocinaBtn = document.getElementById('goToCocinaBtn');
 
-    const hideProblemSection2 = () => {
-        if (!problemSection2) return;
-        problemSection2.classList.add('hidden');
-        if (m1Q2FinalQuestion) {
-            m1Q2FinalQuestion.classList.add('hidden');
+    // Refuerzo de visibilidad y diagnóstico
+    // --- Eliminado todo el refuerzo de visibilidad y diagnóstico anterior ---
+
+    const flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
+    const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+    const q2PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
+    const q3PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
+    const q3bPageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section2');
+    const q4PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
+    const q5PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
+
+    // --- ACTIVAR PORTADA SI NINGUNA PÁGINA ESTÁ ACTIVA ---
+    if (flipbookPages.length > 0) {
+        const anyActive = flipbookPages.some(p => p.classList.contains('active'));
+        if (!anyActive) {
+            // Quitar display:none de todas
+            flipbookPages.forEach(p => p.style.display = '');
+            // Activar la portada (primera página)
+            flipbookPages[0].classList.add('active');
+            console.log('ℹ️ Portada activada automáticamente');
+        } else {
+            console.log('ℹ️ Ya hay una página activa en el flipbook');
+        }
+    } else {
+        console.warn('⚠️ No se encontraron páginas en el flipbook');
+    }
+
+    const getCurrentFlipbookPage = (event) => Number.isInteger(event?.detail?.page)
+        ? event.detail.page
+        : (window.flipbookControls?.getCurrentPage?.() ?? 0);
+
+    const syncBookNextButton = () => {
+        if (!nextBtn) return;
+
+        const currentFlipbookPage = getCurrentFlipbookPage();
+
+        nextBtn.style.display = '';
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+
+        if (currentFlipbookPage === q1PageIndex) {
+            nextBtn.disabled = !m1Q1Submitted;
+        } else if (currentFlipbookPage === q2PageIndex) {
+            // Solo habilitar si el usuario fue a la cocina y además grabó y envió el audio
+            nextBtn.disabled = !(m1Q2Verified && m1Q2Submitted);
+        } else if (currentFlipbookPage === q3PageIndex) {
+            nextBtn.disabled = !m3Q1Submitted;
+        } else if (currentFlipbookPage === q3bPageIndex) {
+            nextBtn.disabled = !m3Q2Submitted;
+        } else if (currentFlipbookPage === q4PageIndex) {
+            nextBtn.disabled = !m4_completed;
+        } else if (currentFlipbookPage === q5PageIndex) {
+            nextBtn.disabled = !m4_reflectionSelected;
+        }
+
+        if (nextBtn.disabled) {
+            nextBtn.style.opacity = '0.5';
+            nextBtn.style.cursor = 'not-allowed';
         }
     };
+
+    // Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
+    window.syncBookNextButton = syncBookNextButton;
 
     const showM1Q2FinalQuestion = () => {
         if (!m1Q2FinalQuestion) return;
         m1Q2FinalQuestion.classList.remove('hidden');
         m1Q2FinalQuestion.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if (!m1Q2AudioInitialized) {
+            m1Q2AudioInitialized = true;
+            const audioState = initAudio('recordBtnM1Q2', 'stopBtnM1Q2', 'audioStatusM1Q2');
+            const submitBtn = document.getElementById('submitM1Q2');
+            const recordBtn = document.getElementById('recordBtnM1Q2');
+            const stopBtn = document.getElementById('stopBtnM1Q2');
+            if (submitBtn && audioState) {
+                const checkAudio = setInterval(() => {
+                    if (audioState.audioBlob) { submitBtn.disabled = false; clearInterval(checkAudio); }
+                }, 500);
+                submitBtn.addEventListener('click', async () => {
+                    submitBtn.disabled = true;
+                    const statusEl = document.getElementById('statusM1Q2');
+                    if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.className = 'status-text loading'; statusEl.style.display = 'block'; }
+                    try {
+                        await submitEvidence({
+                            moment: 'm1', tag: 'q2-final',
+                            data: { question: '¿Por qué bandejas distintas tienen la misma cantidad?' },
+                            boardBlob: null, audioBlob: audioState.audioBlob
+                        });
+                        m1Q2Submitted = true;
+                        if (m1Q2StorageKey) {
+                            localStorage.setItem(m1Q2StorageKey, 'true');
+                        }
+                        if (statusEl) { statusEl.textContent = ''; statusEl.className = 'status-text hidden'; statusEl.style.display = 'none'; }
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                        submitBtn.style.cursor = 'not-allowed';
+                        if (recordBtn) {
+                            recordBtn.disabled = true;
+                            recordBtn.style.opacity = '0.5';
+                            recordBtn.style.cursor = 'not-allowed';
+                        }
+                        if (stopBtn) {
+                            stopBtn.disabled = true;
+                            stopBtn.classList.add('hidden');
+                        }
+                        syncBookNextButton();
+                    } catch (err) {
+                        // Fallback local: evita bloquear el flujo pedagógico por fallas de red.
+                        m1Q2Submitted = true;
+                        if (m1Q2StorageKey) {
+                            localStorage.setItem(m1Q2StorageKey, 'true');
+                        }
+                        if (statusEl) {
+                            statusEl.textContent = 'Se guardó localmente por problema de conexión. Puedes continuar.';
+                            statusEl.className = 'status-text info';
+                            statusEl.style.display = 'block';
+                        }
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                        submitBtn.style.cursor = 'not-allowed';
+                        if (recordBtn) {
+                            recordBtn.disabled = true;
+                            recordBtn.style.opacity = '0.5';
+                            recordBtn.style.cursor = 'not-allowed';
+                        }
+                        if (stopBtn) {
+                            stopBtn.disabled = true;
+                            stopBtn.classList.add('hidden');
+                        }
+                        syncBookNextButton();
+                    }
+                });
+            }
+        }
     };
+
+    const updateCocinaButtonState = () => {
+        if (!goToCocinaBtn) return;
+        if (m1Q2Verified) {
+            goToCocinaBtn.disabled = true;
+            goToCocinaBtn.setAttribute('aria-disabled', 'true');
+            goToCocinaBtn.textContent = '✅ Organización completada';
+            return;
+        }
+        goToCocinaBtn.disabled = false;
+        goToCocinaBtn.removeAttribute('aria-disabled');
+        goToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
+    };
+
 
     const initSheet11Trays = () => {
         if (traysM1Q2Initialized) return;
-
         try {
             if (traysSystem) {
                 traysSystem.destroy();
@@ -499,11 +732,11 @@ function initMoment1() {
                         }
                         traysSystem.container.style.pointerEvents = 'none';
                         m1Q2Verified = true;
-                        // Mostrar botón siguiente para continuar
-                        if (nextBtn) {
-                            nextBtn.style.display = '';
-                            nextBtn.disabled = false;
-                        }
+                        updateCocinaButtonState();
+                        setTimeout(() => {
+                            hideCocinaScreen();
+                            showM1Q2FinalQuestion();
+                        }, 1500);
                         return;
                     }
 
@@ -531,214 +764,402 @@ function initMoment1() {
         }
     };
 
-    const playForwardTurnTransition = (fromEl, onMidTurn) => {
-        if (!fromEl || isSpecialPageTransitioning) return;
-
-        isSpecialPageTransitioning = true;
-        fromEl.classList.add('turning-forward');
-
-        setTimeout(() => {
-            onMidTurn();
-        }, 600);
-
-        setTimeout(() => {
-            fromEl.classList.remove('turning-forward');
-            isSpecialPageTransitioning = false;
-        }, 1200);
+    const showCocinaScreen = () => {
+        if (!cocinaScreen) return;
+        if (m1Q2Verified) return;
+        cocinaScreen.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+        initSheet11Trays();
     };
 
-    const showProblemSection = () => {
-        if (flipbook) {
-            flipbook.style.display = 'none';
+    const hideCocinaScreen = () => {
+        if (!cocinaScreen) return;
+        cocinaScreen.classList.add('hidden');
+        document.body.style.overflow = '';
+        if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
+        // Mostrar la imagen de bandejas al regresar de la cocina
+        const bandejasFotoRegreso = document.getElementById('bandejasFotoRegreso');
+        if (bandejasFotoRegreso) {
+            bandejasFotoRegreso.classList.remove('hidden');
         }
-        if (nextBtn) {
-            nextBtn.style.display = '';
-            nextBtn.disabled = !m1Q1Submitted;
+    };
+
+    const closeBookAndReturnToActivities = () => {
+        if (m4_closeTriggered) return;
+        m4_closeTriggered = true;
+
+        const wrapper = document.querySelector('.flipbook-wrapper');
+        if (wrapper) {
+            wrapper.classList.add('book-closing');
         }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
+
         if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-
-        problemSection.classList.remove('hidden');
-        problemSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        hideProblemSection2();
-        isOnSheet10 = true;
-        isOnSheet11 = false;
-
-        if (m1Q1Submitted) {
-            applyM1Q1SubmittedLock();
-        } else if (!m1ProblemInitialized) {
-            m1ProblemInitialized = true;
-            initProblemQ1();
-        }
-    };
-
-    const showProblemSection2 = () => {
-        if (!problemSection2) return;
-
-        if (flipbook) {
-            flipbook.style.display = 'none';
+            prevBtn.style.display = 'none';
+            prevBtn.disabled = true;
         }
         if (nextBtn) {
             nextBtn.style.display = 'none';
             nextBtn.disabled = true;
         }
-        if (soundToggle) {
-            soundToggle.style.display = 'none';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
+
+        const existingOverlay = document.getElementById('bookClosingOverlay');
+        if (!existingOverlay) {
+            const overlay = document.createElement('div');
+            overlay.id = 'bookClosingOverlay';
+            overlay.className = 'book-closing-overlay';
+            overlay.innerHTML = '<div class="book-closing-card"><h3>📚 Cerrando el libro...</h3><p>Regresando a la página de actividades.</p></div>';
+            document.body.appendChild(overlay);
         }
 
-        problemSection.classList.add('hidden');
-        problemSection2.classList.remove('hidden');
-        problemSection2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        isOnSheet10 = false;
-        isOnSheet11 = true;
-        initSheet11Trays();
+        if (m4_returnHomeTimeout) {
+            clearTimeout(m4_returnHomeTimeout);
+        }
+        m4_returnHomeTimeout = setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 5000);
     };
 
-    const hideProblemSection = () => {
-        if (flipbook) {
-            flipbook.style.display = '';
-        }
-        if (prevBtn) {
-            prevBtn.style.display = '';
-        }
-        if (nextBtn) {
-            nextBtn.style.display = '';
-            if (isAtLastStoryPage) {
-                nextBtn.disabled = false;
-            }
-        }
-        if (soundToggle) {
-            soundToggle.style.display = '';
+    const getMoment4ReflectionSelection = () => {
+        const checkedOptions = Array.from(document.querySelectorAll('input[name="m4Reflection"]:checked'));
+        const values = checkedOptions.map((option) => option.value);
+        const labels = checkedOptions.map((option) => {
+            const label = option.closest('label');
+            return (label?.textContent || option.value).trim();
+        });
+
+        return { values, labels };
+    };
+
+    const getParticipantIdentifier = () => {
+        const participantName = [studentInfo?.nombre, studentInfo?.apellidos]
+            .filter(Boolean)
+            .join(' ')
+            .trim();
+
+        const effectiveIdentifier = (studentCode === '0000' && participantName)
+            ? participantName
+            : studentCode;
+
+        const storageSafeIdentifier = String(effectiveIdentifier || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-zA-Z0-9_-]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+
+        return storageSafeIdentifier || 'invitado';
+    };
+
+    const saveMoment4ReflectionStats = async (selectedValues, selectedLabels) => {
+        if (!db) {
+            throw new Error('Firestore no está disponible para actualizar estadísticas.');
         }
 
-        problemSection.classList.remove('turning-forward');
-        if (problemSection2) {
-            problemSection2.classList.remove('turning-forward');
+        const selectedFields = selectedValues
+            .map((value) => M4_REFLECTION_OPTION_MAP[value])
+            .filter(Boolean);
+
+        const uniqueSelectedFields = Array.from(new Set(selectedFields));
+        const participantIdentifier = getParticipantIdentifier();
+        const responseRef = doc(db, 'reflectionResponses', `act0_m4_${participantIdentifier}`);
+        const statsRef = doc(db, 'stats', 'act0_m4_reflection');
+
+        await runTransaction(db, async (transaction) => {
+            const previousResponseSnapshot = await transaction.get(responseRef);
+            const statsSnapshot = await transaction.get(statsRef);
+
+            const previousSelectedFields = Array.isArray(previousResponseSnapshot.data()?.selectedFields)
+                ? previousResponseSnapshot.data().selectedFields
+                : [];
+
+            const counters = {
+                facil: Number(statsSnapshot.data()?.facil || 0),
+                interesante: Number(statsSnapshot.data()?.interesante || 0),
+                dificil: Number(statsSnapshot.data()?.dificil || 0),
+                pensarMucho: Number(statsSnapshot.data()?.pensarMucho || 0),
+                confusa: Number(statsSnapshot.data()?.confusa || 0),
+                totalResponses: Number(statsSnapshot.data()?.totalResponses || 0)
+            };
+
+            const counterKeys = ['facil', 'interesante', 'dificil', 'pensarMucho', 'confusa'];
+            counterKeys.forEach((key) => {
+                const wasSelected = previousSelectedFields.includes(key);
+                const isSelected = uniqueSelectedFields.includes(key);
+
+                if (wasSelected && !isSelected) {
+                    counters[key] = Math.max(0, counters[key] - 1);
+                }
+
+                if (!wasSelected && isSelected) {
+                    counters[key] += 1;
+                }
+            });
+
+            if (!previousResponseSnapshot.exists()) {
+                counters.totalResponses += 1;
+            }
+
+            transaction.set(responseRef, {
+                participantIdentifier,
+                activity: 'act0',
+                moment: 'm4',
+                tag: 'reflection-final',
+                selectedOptions: selectedValues,
+                selectedLabels,
+                selectedFields: uniqueSelectedFields,
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+
+            transaction.set(statsRef, {
+                activity: 'act0',
+                moment: 'm4',
+                tag: 'reflection-final',
+                facil: counters.facil,
+                interesante: counters.interesante,
+                dificil: counters.dificil,
+                pensarMucho: counters.pensarMucho,
+                confusa: counters.confusa,
+                totalResponses: counters.totalResponses,
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+        });
+    };
+
+    const saveMoment4Reflection = async () => {
+        if (m4_reflectionSaved) return true;
+        if (m4_reflectionSaving) return false;
+
+        const { values, labels } = getMoment4ReflectionSelection();
+        if (values.length === 0 || values.length > 2) {
+            const hint = document.querySelector('#problemQ5Section .reflection-hint');
+            if (hint) {
+                hint.textContent = values.length > 2
+                    ? 'Puedes seleccionar máximo dos opciones.'
+                    : 'Selecciona al menos una opción para continuar.';
+            }
+            return false;
         }
-        problemSection.classList.add('hidden');
-        hideProblemSection2();
-        isOnSheet10 = false;
-        isOnSheet11 = false;
+
+        const nextButton = document.getElementById('nextBtn');
+        const hint = document.querySelector('#problemQ5Section .reflection-hint');
+        m4_reflectionSaving = true;
+
+        if (nextButton) {
+            nextButton.disabled = true;
+        }
+        if (hint) {
+            hint.textContent = 'Guardando tu respuesta...';
+        }
+
+        try {
+            await submitEvidence({
+                moment: 'm4',
+                tag: 'reflection-final',
+                data: {
+                    selectedOptions: values,
+                    selectedLabels: labels,
+                    selectedCount: values.length
+                },
+                boardBlob: null,
+                audioBlob: null
+            });
+
+            await saveMoment4ReflectionStats(values, labels);
+
+            m4_reflectionSaved = true;
+            if (hint) {
+                hint.textContent = 'Respuesta guardada. Puedes continuar.';
+            }
+            return true;
+        } catch (error) {
+            console.error('❌ Error al guardar reflexión final:', error);
+            if (hint) {
+                hint.textContent = 'No se pudo guardar. Revisa internet e intenta de nuevo.';
+            }
+            return false;
+        } finally {
+            m4_reflectionSaving = false;
+            syncBookNextButton();
+        }
+    };
+
+    const updateMoment4ReflectionSelection = (event) => {
+        const checkedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+        const hint = document.querySelector('#problemQ5Section .reflection-hint');
+
+        if (checkedOptions.length > 2 && event?.target) {
+            event.target.checked = false;
+        }
+
+        const validCheckedOptions = document.querySelectorAll('input[name="m4Reflection"]:checked');
+        m4_reflectionSelected = validCheckedOptions.length > 0 && validCheckedOptions.length <= 2;
+        m4_reflectionSaved = false;
+
+        if (hint) {
+            if (validCheckedOptions.length === 0) {
+                hint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+            } else if (validCheckedOptions.length >= 2) {
+                hint.textContent = 'Ya seleccionaste el máximo de dos opciones.';
+            } else {
+                hint.textContent = 'Puedes seleccionar una opción más (máximo dos).';
+            }
+        }
+
+        syncBookNextButton();
     };
 
     const syncM1WithFlipbookPage = (event) => {
-        if (!problemSection) {
+        // Oculta todas las páginas antes de mostrar la actual
+        hideAllFlipbookPages();
+        // Mostrar la página activa
+        const currentFlipbookPage = getCurrentFlipbookPage(event);
+        if (flipbookPages[currentFlipbookPage]) {
+            showFlipbookPage(flipbookPages[currentFlipbookPage]);
+        }
+        if (!problemSection || !flipbook) {
             return;
         }
 
-        const isLastPage = Boolean(event?.detail?.isLastPage);
-        isAtLastStoryPage = isLastPage;
+        const isProblemPage = [q1PageIndex, q2PageIndex, q3PageIndex, q3bPageIndex, q4PageIndex, q5PageIndex].includes(currentFlipbookPage);
 
-        if (showProblemTimer) {
-            clearTimeout(showProblemTimer);
-            showProblemTimer = null;
+        if (soundToggle) {
+            soundToggle.style.display = isProblemPage ? 'none' : '';
         }
 
-        // La página 9 debe permanecer visible; la Situación 1 (página 10) se abre al dar siguiente
-        hideProblemSection();
-
-        if (isLastPage && nextBtn) {
-            // app.js deshabilita el botón al final; lo reactivamos para permitir pasar a la página 10
-            setTimeout(() => {
-                nextBtn.disabled = false;
-            }, 0);
+        if (prevBtn) {
+            prevBtn.style.display = '';
+            prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
         }
+
+        if (currentFlipbookPage === q1PageIndex) {
+            if (m1Q1Submitted) {
+                applyM1Q1SubmittedLock();
+            } else if (!m1ProblemInitialized) {
+                m1ProblemInitialized = true;
+                initProblemQ1();
+            }
+        }
+
+        if (currentFlipbookPage === q2PageIndex) {
+            updateCocinaButtonState();
+            initSheet11Trays();
+            if (m1Q2Verified) {
+                showM1Q2FinalQuestion();
+            }
+        }
+
+        if (currentFlipbookPage === q3PageIndex && !m3BookInitialized) {
+            m3BookInitialized = true;
+            const nums = [3, 4, 5, 6, 7];
+            const fixedNum = nums[Math.floor(Math.random() * nums.length)];
+            ['q3FixedNum1', 'q3FixedNum2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = fixedNum;
+            });
+            initMoment3();
+            const studentCodeM3 = document.getElementById('studentCodeM3');
+            if (studentCodeM3) {
+                studentCodeM3.textContent = getStudentHeaderText();
+            }
+        }
+
+        if (currentFlipbookPage === q4PageIndex && !m4BookInitialized) {
+            m4BookInitialized = true;
+            initMoment4();
+        }
+
+        syncBookNextButton();
     };
 
+    if (m1NextGuardHandler && nextBtn) {
+        nextBtn.removeEventListener('click', m1NextGuardHandler, true);
+    }
+
     if (nextBtn) {
-        // Capturar antes del handler del flipbook para distinguir 8->9 de 9->10
-        nextBtn.addEventListener('click', (event) => {
-            if (isSpecialPageTransitioning) {
+        m1NextGuardHandler = async (event) => {
+            const currentFlipbookPage = getCurrentFlipbookPage();
+
+            if (currentFlipbookPage === q1PageIndex && !m1Q1Submitted) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 return;
             }
 
-            if (isOnSheet10) {
-                if (!m1Q1Submitted) {
+            if (currentFlipbookPage === q2PageIndex && !m1Q2Submitted) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return;
+            }
+
+            if (currentFlipbookPage === q3PageIndex && !m3Q1Submitted) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return;
+            }
+
+            if (currentFlipbookPage === q3bPageIndex && !m3Q2Submitted) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return;
+            }
+
+            if (currentFlipbookPage === q4PageIndex && !m4_completed) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                return;
+            }
+
+            if (currentFlipbookPage === q5PageIndex) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                if (!m4_reflectionSelected) {
                     return;
                 }
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                playForwardTurnTransition(problemSection, () => {
-                    showProblemSection2();
-                });
-                return;
-            }
 
-            if (isOnSheet11) {
-                 if (!m1Q2Verified) return;
-                 event.preventDefault();
-                 event.stopImmediatePropagation();
-                showM1Q2FinalQuestion();
-                if (nextBtn) {
-                    nextBtn.disabled = true;
-                }
-                 return;
-            }
-
-            // Solo abrir Situación 1 cuando YA estamos en la última página del cuento (página 9)
-            if (isAtLastStoryPage) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-
-                if (showProblemTimer) {
-                    clearTimeout(showProblemTimer);
-                }
-
-                const currentStoryPage = flipbook ? flipbook.querySelector('.page.active') : null;
-                if (currentStoryPage) {
-                    playForwardTurnTransition(currentStoryPage, () => {
-                        showProblemSection();
-                    });
-                } else {
-                    showProblemSection();
+                const saved = await saveMoment4Reflection();
+                if (saved) {
+                    closeBookAndReturnToActivities();
                 }
             }
-        }, true);
+        };
+
+        nextBtn.addEventListener('click', m1NextGuardHandler, true);
     }
 
-    if (prevBtn) {
-        // En la página 10 (Situación 1), volver exactamente a la página 9 del cuento
-        prevBtn.addEventListener('click', (event) => {
-            if (isOnSheet11) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                showProblemSection();
-                return;
-            }
-
-            if (isOnSheet10) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                if (showProblemTimer) {
-                    clearTimeout(showProblemTimer);
-                    showProblemTimer = null;
-                }
-                hideProblemSection();
-            }
-        }, true);
+    if (goToCocinaBtn) {
+        goToCocinaBtn.addEventListener('click', showCocinaScreen);
     }
 
-    // Estado inicial: en el cuento no se muestra la respuesta
-    if (problemSection && !problemSection.classList.contains('hidden')) {
-        problemSection.classList.add('hidden');
+    updateCocinaButtonState();
+
+    document.querySelectorAll('input[name="m4Reflection"]').forEach((option) => {
+        option.addEventListener('change', updateMoment4ReflectionSelection);
+    });
+
+    if (m1Moment4CompletedHandler) {
+        document.removeEventListener('moment4:completed', m1Moment4CompletedHandler);
     }
 
-    if (!m1FlipbookListenerAttached) {
-        document.addEventListener('flipbook:pagechange', syncM1WithFlipbookPage);
-        m1FlipbookListenerAttached = true;
-        console.log('✅ Listener de cambio de página del cuento configurado');
+    m1Moment4CompletedHandler = () => {
+        m4_completed = true;
+        syncBookNextButton();
+    };
+
+    document.addEventListener('moment4:completed', m1Moment4CompletedHandler);
+
+    if (m1FlipbookPageHandler) {
+        document.removeEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     }
+
+    m1FlipbookPageHandler = syncM1WithFlipbookPage;
+    document.addEventListener('flipbook:pagechange', m1FlipbookPageHandler);
+    m1FlipbookListenerAttached = true;
+    console.log('✅ Listener de cambio de página del cuento configurado');
+
+    syncM1WithFlipbookPage();
+
 }
 
 // ========================================
@@ -781,13 +1202,9 @@ function initProblemQ1() {
     
     // Habilitar botón enviar cuando haya evidencia
     const submitBtn = document.getElementById(submitBtnId);
-    
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
-        // Solo requiere audio (tablero opcional)
         submitBtn.disabled = !hasAudio;
-        
-        // Mostrar mensaje de qué falta
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
             statusText.textContent = '';
@@ -796,25 +1213,19 @@ function initProblemQ1() {
             statusText.textContent = '';
             statusText.className = 'status-text';
         }
+        syncBookNextButton();
     };
-    
-    // Verificar cada vez que se dibuja o graba
     setInterval(checkEvidence, 500);
-    
     // Enviar evidencia
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
-        
         try {
             const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
-            
             await submitEvidence({
                 moment: 'm1',
                 tag: 'q1',
@@ -822,44 +1233,27 @@ function initProblemQ1() {
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
-
             m1Q1Submitted = true;
             const m1StorageKey = getM1Q1StorageKey();
             if (m1StorageKey) {
                 localStorage.setItem(m1StorageKey, 'true');
             }
-            
             statusText.textContent = '';
             statusText.className = 'status-text hidden';
-            
-            // Mantener botón deshabilitado permanentemente
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.5';
             submitBtn.style.cursor = 'not-allowed';
-
-            // Al enviar en la hoja 10, habilitar la flecha derecha para pasar a la hoja 11
-            const nextBtn = document.getElementById('nextBtn');
-            if (nextBtn) {
-                nextBtn.style.display = '';
-                nextBtn.disabled = false;
-            }
-            
             // Bloquear edición
             boardState.disabled = true;
             const canvas = document.getElementById(canvasId);
             canvas.style.pointerEvents = 'none';
-            
-            // Deshabilitar solo los botones de herramientas de ESTE momento
             const evidenceSection = canvas.closest('.evidence-section');
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
-            
-            // Ya no salta automáticamente de pantalla: la flecha derecha lleva a la hoja 11
-            
+            syncBookNextButton();
         } catch (error) {
             console.error('Error al enviar:', error);
             console.error('Detalles del error:', error.message);
-            
             let errorMsg = 'Error al guardar. ';
             if (error.message.includes('Firebase no está configurado')) {
                 errorMsg += 'Firebase no disponible. ';
@@ -867,707 +1261,12 @@ function initProblemQ1() {
                 errorMsg += 'Revisa tu conexión a internet. ';
             }
             errorMsg += 'Intenta de nuevo.';
-            
             statusText.textContent = errorMsg;
             statusText.className = 'status-text error';
-            
-            // Rehabilitar botón solo si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
-        }
-    });
-}
-
-// ========================================
-// MOMENTO 2: TABLA + PROBLEMA 1
-// ========================================
-
-function initMoment2() {
-    console.log('🎯 Inicializando Momento 2 - Sistema de Bandejas');
-    
-    document.getElementById('studentCodeM2').textContent = getStudentHeaderText();
-    
-    // Destruir instancia previa si existe (evitar duplicados)
-    if (traysSystem) {
-        traysSystem.destroy();
-        traysSystem = null;
-    }
-    
-    // Crear nueva instancia del sistema de bandejas
-    try {
-        traysSystem = new TraysSystem('traysArea');
-        console.log('✅ Sistema de bandejas inicializado');
-    } catch (error) {
-        console.error('❌ Error al inicializar sistema de bandejas:', error);
-    }
-    
-    // Configurar botón de verificación
-    const verifyBtn = document.getElementById('verifyTraysBtn');
-    if (verifyBtn) {
-        // Remover event listeners previos
-        const newVerifyBtn = verifyBtn.cloneNode(true);
-        verifyBtn.parentNode.replaceChild(newVerifyBtn, verifyBtn);
-        
-        newVerifyBtn.addEventListener('click', verifyTraysPairings);
-    }
-    
-    // Botón continuar a M3
-    const continueBtn = document.getElementById('continueToM3Btn');
-    if (continueBtn) {
-        // Remover event listeners previos
-        const newContinueBtn = continueBtn.cloneNode(true);
-        continueBtn.parentNode.replaceChild(newContinueBtn, continueBtn);
-        
-        newContinueBtn.addEventListener('click', () => {
-            showScreen('moment3Screen');
-            initMoment3();
-        });
-    }
-}
-
-// ========================================
-// JUEGO DE BANDEJAS - DRAG AND DROP
-// ========================================
-// NOTA: Esta sección ha sido reemplazada por el nuevo sistema TraysSystem
-// El código antiguo se mantiene comentado por referencia
-
-/*
-// ===== CÓDIGO ANTIGUO (DESHABILITADO) =====
-function createTraysGame_OLD() {
-    const traysData = [
-        { id: 1, rows: 3, cols: 4, total: 12, pairId: 'A' },
-        { id: 2, rows: 4, cols: 3, total: 12, pairId: 'A' },
-        { id: 3, rows: 2, cols: 6, total: 12, pairId: 'B' },
-        { id: 4, rows: 6, cols: 2, total: 12, pairId: 'B' },
-        { id: 5, rows: 5, cols: 3, total: 15, pairId: 'C' },
-        { id: 6, rows: 3, cols: 5, total: 15, pairId: 'C' },
-        { id: 7, rows: 4, cols: 5, total: 20, pairId: 'D' },  // Sin pareja
-        { id: 8, rows: 2, cols: 7, total: 14, pairId: 'E' }   // Sin pareja
-    ];
-    
-    const traysArea = document.getElementById('traysArea');
-    const containerWidth = traysArea.offsetWidth || 900;
-    const containerHeight = 600;
-    
-    // Configurar eventos del contenedor para permitir drop
-    traysArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        return false;
-    });
-    
-    traysArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        return false;
-    });
-    
-    // Sistema de grid para evitar sobreposiciones
-    const cols = 4;
-    const rows = 2;
-    const cellWidth = containerWidth / cols;
-    const cellHeight = containerHeight / rows;
-    const positions = [];
-    
-    // Generar posiciones posibles
-    for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-            positions.push({
-                x: col * cellWidth + (cellWidth - 220) / 2,
-                y: row * cellHeight + (cellHeight - 240) / 2
-            });
-        }
-    }
-    
-    // Barajar posiciones
-    positions.sort(() => Math.random() - 0.5);
-    
-    // Crear bandejas
-    traysData.forEach((data, index) => {
-        const trayCard = document.createElement('div');
-        trayCard.className = 'tray-card';
-        trayCard.dataset.id = data.id;
-        trayCard.dataset.pairId = data.pairId;
-        trayCard.dataset.total = data.total;
-        
-        // Usar posición del grid (sin sobreposiciones)
-        const pos = positions[index];
-        trayCard.style.left = pos.x + 'px';
-        trayCard.style.top = pos.y + 'px';
-        
-        // Grid de pandebonos (SIN etiqueta para que las niñas cuenten)
-        const grid = document.createElement('div');
-        grid.className = 'tray-grid';
-        grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
-        grid.style.gridTemplateRows = `repeat(${data.rows}, 1fr)`;
-        
-        // Ajustar tamaño de emojis según filas/columnas para que todo quepa
-        const maxDimension = Math.max(data.rows, data.cols);
-        let emojiSize = '1.2em';
-        if (maxDimension >= 6) {
-            emojiSize = '0.8em';
-        } else if (maxDimension >= 5) {
-            emojiSize = '0.9em';
-        } else if (maxDimension >= 4) {
-            emojiSize = '1.0em';
-        }
-        
-        // Emojis de pandebonos
-        for (let i = 0; i < data.total; i++) {
-            const pandebono = document.createElement('span');
-            pandebono.textContent = '🫓';
-            pandebono.style.fontSize = emojiSize;
-            grid.appendChild(pandebono);
-        }
-        
-        trayCard.appendChild(grid);
-        traysArea.appendChild(trayCard);
-        
-        // Eventos de mouse para arrastrar (más control que drag & drop nativo)
-        setupDragging(trayCard);
-        
-        trays.push({
-            element: trayCard,
-            data: data,
-            paired: false,
-            pairedWith: null
-        });
-    });
-    
-    // Botón verificar
-    document.getElementById('verifyTraysBtn').addEventListener('click', verifyPairings);
-}
-
-// Sistema de arrastre con mouse (más confiable que drag & drop nativo)
-let currentDraggedTray = null;
-let isDraggingMouse = false;
-let startX = 0;
-let startY = 0;
-let initialLeft = 0;
-let initialTop = 0;
-
-function setupDragging(trayCard) {
-    trayCard.addEventListener('mousedown', function(e) {
-        currentDraggedTray = this;
-        isDraggingMouse = true;
-        
-        // Si estaba emparejada, desemparejarla
-        if (this.classList.contains('paired')) {
-            const myId = parseInt(this.dataset.id);
-            const pairIndex = pairs.findIndex(p => p.includes(myId));
-            
-            if (pairIndex !== -1) {
-                const [id1, id2] = pairs[pairIndex];
-                const otherId = id1 === myId ? id2 : id1;
-                const otherTray = document.querySelector(`.tray-card[data-id="${otherId}"]`);
-                
-                // Buscar el wrapper padre
-                const wrapper = this.closest('.tray-pair-wrapper');
-                if (wrapper) {
-                    const traysContainer = wrapper.parentElement;
-                    const wrapperRect = wrapper.getBoundingClientRect();
-                    const containerRect = traysContainer.getBoundingClientRect();
-                    
-                    // Restaurar posicionamiento absoluto de las bandejas
-                    this.style.position = 'absolute';
-                    this.style.left = (wrapperRect.left - containerRect.left) + 'px';
-                    this.style.top = (wrapperRect.top - containerRect.top) + 'px';
-                    
-                    if (otherTray) {
-                        otherTray.style.position = 'absolute';
-                        otherTray.style.left = (wrapperRect.left - containerRect.left) + 'px';
-                        otherTray.style.top = (wrapperRect.top - containerRect.top) + 'px';
-                        otherTray.classList.remove('paired');
-                    }
-                    
-                    // Mover bandejas de vuelta al contenedor principal
-                    traysContainer.appendChild(this);
-                    if (otherTray) {
-                        traysContainer.appendChild(otherTray);
-                    }
-                    
-                    // Eliminar wrapper
-                    wrapper.remove();
-                }
-                
-                // Remover clase paired
-                this.classList.remove('paired');
-                
-                // Eliminar del array
-                pairs.splice(pairIndex, 1);
-                console.log('🔓 Desemparejada de bandeja', otherId);
-            }
-        }
-        
-        // Guardar posición inicial
-        startX = e.clientX;
-        startY = e.clientY;
-        initialLeft = parseInt(this.style.left) || 0;
-        initialTop = parseInt(this.style.top) || 0;
-        
-        // Estilo visual
-        this.classList.add('dragging');
-        this.style.zIndex = '1000';
-        this.style.cursor = 'grabbing';
-        
-        console.log('🎯 Inicio arrastre:', this.dataset.id);
-        
-        e.preventDefault();
-    });
-}
-
-document.addEventListener('mousemove', function(e) {
-    if (!isDraggingMouse || !currentDraggedTray) return;
-    
-    // Calcular nueva posición
-    const deltaX = e.clientX - startX;
-    const deltaY = e.clientY - startY;
-    
-    currentDraggedTray.style.left = (initialLeft + deltaX) + 'px';
-    currentDraggedTray.style.top = (initialTop + deltaY) + 'px';
-});
-
-document.addEventListener('mouseup', function(e) {
-    if (!isDraggingMouse || !currentDraggedTray) return;
-    
-    console.log('🎯 Fin arrastre');
-    
-    // Restaurar estilo
-    currentDraggedTray.classList.remove('dragging');
-    currentDraggedTray.style.zIndex = 'auto';
-    currentDraggedTray.style.cursor = 'grab';
-    
-    // Verificar si se soltó sobre otra bandeja
-    checkForPairingMouse(e, currentDraggedTray);
-    
-    isDraggingMouse = false;
-    currentDraggedTray = null;
-});
-
-function checkForPairingMouse(e, draggedTray) {
-    // Obtener todas las bandejas bajo el cursor
-    const elementsBelow = document.elementsFromPoint(e.clientX, e.clientY);
-    
-    // Buscar otra bandeja (que no sea la que estamos arrastrando)
-    for (let elem of elementsBelow) {
-        if (elem.classList && elem.classList.contains('tray-card') && elem !== draggedTray) {
-            console.log('🔍 Bandeja encontrada debajo:', elem.dataset.id);
-            
-            // Detectar en qué lado de la bandeja se soltó
-            const rect = elem.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const isLeftSide = e.clientX < centerX;
-            
-            console.log(`📍 Soltada en el lado: ${isLeftSide ? 'IZQUIERDO' : 'DERECHO'}`);
-            
-            tryPairing(draggedTray, elem, isLeftSide);
-            return;
-        }
-    }
-    
-    console.log('❌ No hay bandeja debajo');
-}
-
-function tryPairing(draggedTray, targetTray, isLeftSide) {
-    const id1 = parseInt(draggedTray.dataset.id);
-    const id2 = parseInt(targetTray.dataset.id);
-    
-    console.log(`🔍 Uniendo: Bandeja ${id1} con Bandeja ${id2} (lado ${isLeftSide ? 'izquierdo' : 'derecho'})`);
-    
-    // Permitir emparejar cualquier bandeja con cualquier otra (excepto consigo misma)
-    if (id1 !== id2) {
-        console.log('✅ Uniendo bandejas...');
-        
-        // Si la bandeja objetivo ya está emparejada, desemparejarla primero
-        if (targetTray.classList.contains('paired')) {
-            console.log('🔓 Bandeja objetivo ya emparejada, desemparejando...');
-            const targetId = parseInt(targetTray.dataset.id);
-            const pairIndex = pairs.findIndex(p => p.includes(targetId));
-            
-            if (pairIndex !== -1) {
-                const [id_a, id_b] = pairs[pairIndex];
-                const otherTargetId = id_a === targetId ? id_b : id_a;
-                const otherTargetTray = document.querySelector(`.tray-card[data-id="${otherTargetId}"]`);
-                
-                // Buscar el wrapper padre de targetTray
-                const oldWrapper = targetTray.closest('.tray-pair-wrapper');
-                if (oldWrapper) {
-                    const traysContainer = oldWrapper.parentElement;
-                    const wrapperRect = oldWrapper.getBoundingClientRect();
-                    const containerRect = traysContainer.getBoundingClientRect();
-                    
-                    // Restaurar targetTray
-                    targetTray.style.position = 'absolute';
-                    targetTray.style.left = (wrapperRect.left - containerRect.left) + 'px';
-                    targetTray.style.top = (wrapperRect.top - containerRect.top) + 'px';
-                    targetTray.classList.remove('paired');
-                    traysContainer.appendChild(targetTray);
-                    
-                    // Restaurar la otra bandeja
-                    if (otherTargetTray) {
-                        otherTargetTray.style.position = 'absolute';
-                        otherTargetTray.style.left = (wrapperRect.left - containerRect.left) + 'px';
-                        otherTargetTray.style.top = (wrapperRect.top - containerRect.top) + 'px';
-                        otherTargetTray.classList.remove('paired');
-                        traysContainer.appendChild(otherTargetTray);
-                    }
-                    
-                    // Eliminar wrapper
-                    oldWrapper.remove();
-                }
-                
-                // Eliminar del array
-                pairs.splice(pairIndex, 1);
-            }
-        }
-        
-        // Crear contenedor wrapper para el nuevo par
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('tray-pair-wrapper');
-        wrapper.dataset.pair = `${id1}-${id2}`;
-        
-        // Obtener posición de la bandeja objetivo
-        const rectTarget = targetTray.getBoundingClientRect();
-        const traysContainer = document.getElementById('traysContainer');
-        const containerRect = traysContainer.getBoundingClientRect();
-        
-        // Ajustar posición del wrapper según el lado
-        let wrapperLeft, wrapperTop;
-        if (isLeftSide) {
-            // La arrastrada va a la izquierda, wrapper comienza más a la izquierda
-            wrapperLeft = (rectTarget.left - containerRect.left) - 210; // ancho bandeja + gap
-            wrapperTop = rectTarget.top - containerRect.top;
-        } else {
-            // La arrastrada va a la derecha, wrapper comienza en la posición de la target
-            wrapperLeft = rectTarget.left - containerRect.left;
-            wrapperTop = rectTarget.top - containerRect.top;
-        }
-        
-        // Posicionar wrapper
-        wrapper.style.position = 'absolute';
-        wrapper.style.left = wrapperLeft + 'px';
-        wrapper.style.top = wrapperTop + 'px';
-        
-        // Agregar wrapper al contenedor de bandejas
-        traysContainer.appendChild(wrapper);
-        
-        // Resetear estilos de posicionamiento de las bandejas
-        draggedTray.style.position = 'relative';
-        draggedTray.style.left = '0';
-        draggedTray.style.top = '0';
-        targetTray.style.position = 'relative';
-        targetTray.style.left = '0';
-        targetTray.style.top = '0';
-        
-        // Agregar bandejas al wrapper en el orden correcto
-        if (isLeftSide) {
-            // Arrastrada a la izquierda, objetivo a la derecha
-            wrapper.appendChild(draggedTray);
-            wrapper.appendChild(targetTray);
-        } else {
-            // Objetivo a la izquierda, arrastrada a la derecha
-            wrapper.appendChild(targetTray);
-            wrapper.appendChild(draggedTray);
-        }
-        
-        // Marcar como emparejadas
-        draggedTray.classList.add('paired');
-        targetTray.classList.add('paired');
-        
-        // Hacer el wrapper draggable para mover el par junto
-        setupWrapperDragging(wrapper);
-        
-        // Registrar emparejamiento
-        addPairing(id1, id2);
-        
-        console.log('✨ Bandejas agrupadas en wrapper - la validación ocurrirá al verificar');
-    } else {
-        console.log('❌ No puedes emparejar una bandeja consigo misma');
-    }
-}
-
-function addPairing(id1, id2) {
-    // Eliminar emparejamientos previos de estas bandejas
-    pairs = pairs.filter(p => !p.includes(id1) && !p.includes(id2));
-    
-    // Agregar nuevo emparejamiento
-    pairs.push([id1, id2].sort((a, b) => a - b));
-    
-    console.log('Emparejamientos actuales:', pairs);
-}
-
-// Variables para arrastrar wrappers
-let isDraggingWrapper = false;
-let currentDraggedWrapper = null;
-let wrapperStartX, wrapperStartY, wrapperInitialLeft, wrapperInitialTop;
-
-function setupWrapperDragging(wrapper) {
-    wrapper.addEventListener('mousedown', function(e) {
-        // Solo si el clic es directamente en el wrapper (no en las bandejas)
-        if (e.target === this || e.target.classList.contains('tray-pair-wrapper')) {
-            isDraggingWrapper = true;
-            currentDraggedWrapper = this;
-            
-            wrapperStartX = e.clientX;
-            wrapperStartY = e.clientY;
-            wrapperInitialLeft = parseInt(this.style.left) || 0;
-            wrapperInitialTop = parseInt(this.style.top) || 0;
-            
-            this.style.cursor = 'grabbing';
-            this.style.zIndex = '1000';
-            
-            console.log('📦 Arrastrando par completo');
-            
-            e.stopPropagation();
-            e.preventDefault();
-        }
-    });
-}
-
-// Event listeners globales para arrastrar wrappers
-document.addEventListener('mousemove', function(e) {
-    if (!isDraggingWrapper || !currentDraggedWrapper) return;
-    
-    const deltaX = e.clientX - wrapperStartX;
-    const deltaY = e.clientY - wrapperStartY;
-    
-    currentDraggedWrapper.style.left = (wrapperInitialLeft + deltaX) + 'px';
-    currentDraggedWrapper.style.top = (wrapperInitialTop + deltaY) + 'px';
-});
-
-document.addEventListener('mouseup', function(e) {
-    if (!isDraggingWrapper || !currentDraggedWrapper) return;
-    
-    currentDraggedWrapper.style.cursor = 'grab';
-    currentDraggedWrapper.style.zIndex = 'auto';
-    
-    console.log('📦 Par movido');
-    
-    isDraggingWrapper = false;
-    currentDraggedWrapper = null;
-});
-*/
-// ===== FIN DEL CÓDIGO ANTIGUO =====
-
-// Nueva función de verificación usando el sistema TraysSystem
-function verifyTraysPairings() {
-    if (!traysSystem) {
-        console.error('❌ Sistema de bandejas no inicializado');
-        return;
-    }
-    
-    const results = traysSystem.validatePairings();
-    const feedback = document.getElementById('traysFeedback');
-    
-    if (results.length === 0) {
-        feedback.textContent = '⚠️ No hay emparejamientos. Selecciona dos bandejas para formar cada pareja.';
-        feedback.className = 'feedback-text info';
-        return;
-    }
-    
-    // Contar emparejamientos correctos
-    const correctCount = results.filter(r => r.isCorrect).length;
-    const totalPairs = results.length;
-    
-    console.log('📊 Validación:', { correctCount, totalPairs, results });
-    
-    // Emparejamientos esperados: 3 pares correctos (12-12, 12-12, 15-15)
-    // Bandejas solas: tray-7 (20) y tray-8 (14)
-    const expectedCorrectPairs = 3;
-    
-    if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {
-        feedback.textContent = `🎉 ¡Perfecto! Todos los ${totalPairs} emparejamientos son correctos.`;
-        feedback.className = 'feedback-text success';
-        
-        // Deshabilitar el botón
-        document.getElementById('verifyTraysBtn').disabled = true;
-        
-        // Mostrar pregunta final
-        setTimeout(() => {
-            const finalSection = document.getElementById('finalQuestionSection');
-            if (finalSection) {
-                finalSection.classList.remove('hidden');
-                initMoment2Audio();
-            }
-        }, 1000);
-        
-    } else {
-        let errorMsg = '';
-        
-        if (totalPairs < expectedCorrectPairs) {
-            errorMsg = `🔍 Te faltan emparejamientos. Solo tienes ${totalPairs} de ${expectedCorrectPairs} pares.`;
-        } else if (totalPairs > expectedCorrectPairs) {
-            errorMsg = '� Pista: algunas bandejas no tienen pareja.';
-        } else {
-            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Vuelve a contar y verifica que las parejas estén unidas solo si tienen la misma cantidad.`;
-        }
-        
-        feedback.textContent = errorMsg;
-        feedback.className = 'feedback-text error';
-
-        // iPhone/Safari: evitar glitch visual sin perder el armado actual
-        if (traysSystem?.isTouchDevice) {
-            setTimeout(() => {
-                traysSystem.stabilizeTouchLayout();
-            }, 400);
-        }
-    }
-}
-
-// Función antigua (mantenida por referencia)
-/*
-function verifyPairings_OLD() {
-    const feedback = document.getElementById('traysFeedback');
-    
-    // Emparejamientos correctos
-    const correctPairs = [
-        [1, 2],  // 3x4 y 4x3
-        [3, 4],  // 2x6 y 6x2
-        [5, 6]   // 5x3 y 3x5
-    ];
-    
-    // Bandejas que deben quedar solas
-    const singleTrays = [7, 8];
-    
-    // Verificar que todos los pares correctos estén presentes
-    let allCorrect = true;
-    let missingPairs = [];
-    
-    for (const correctPair of correctPairs) {
-        const found = pairs.some(pair => 
-            (pair[0] === correctPair[0] && pair[1] === correctPair[1]) ||
-            (pair[0] === correctPair[1] && pair[1] === correctPair[0])
-        );
-        
-        if (!found) {
-            allCorrect = false;
-            const tray1 = trays.find(t => t.data.id === correctPair[0]);
-            const tray2 = trays.find(t => t.data.id === correctPair[1]);
-            missingPairs.push(`${tray1.data.rows}×${tray1.data.cols} con ${tray2.data.rows}×${tray2.data.cols}`);
-        }
-    }
-    
-    // Verificar que no hayan emparejado las bandejas solas
-    const wrongPairs = pairs.filter(pair => 
-        singleTrays.includes(pair[0]) || singleTrays.includes(pair[1])
-    );
-    
-    if (wrongPairs.length > 0) {
-        allCorrect = false;
-    }
-    
-    if (allCorrect && pairs.length === 3) {
-        feedback.textContent = '🎉 ¡Perfecto! Todos los emparejamientos son correctos.';
-        feedback.className = 'feedback-text success';
-        
-        // Deshabilitar el juego
-        trays.forEach(t => {
-            t.element.draggable = false;
-            t.element.style.cursor = 'default';
-        });
-        
-        document.getElementById('verifyTraysBtn').disabled = true;
-        
-        // Mostrar pregunta final
-        setTimeout(() => {
-            document.getElementById('finalQuestionSection').classList.remove('hidden');
-            initMoment2Audio();
-        }, 1000);
-        
-    } else {
-        let errorMsg = '🔍 Revisa de nuevo. ';
-        
-        if (pairs.length < 3) {
-            errorMsg += 'Recuerda que debes emparejar las bandejas con la misma cantidad de pandebonos. ';
-        }
-        
-        if (wrongPairs.length > 0) {
-            errorMsg += 'Hay bandejas que no tienen pareja porque tienen cantidades únicas. ';
-        }
-        
-        if (missingPairs.length > 0) {
-            errorMsg += 'Cuenta bien los pandebonos de cada bandeja.';
-        }
-        
-        feedback.textContent = errorMsg;
-        feedback.className = 'feedback-text error';
-    }
-}
-*/
-
-function initMoment2Audio() {
-    const recordBtnId = 'recordBtnM2';
-    const stopBtnId = 'stopBtnM2';
-    const statusId = 'audioStatusM2';
-    const submitBtnId = 'submitM2';
-    const statusTextId = 'statusM2';
-    
-    const audioState = initAudio(recordBtnId, stopBtnId, statusId);
-    
-    const submitBtn = document.getElementById(submitBtnId);
-    
-    const checkEvidence = () => {
-        const hasAudio = audioState.audioBlob !== null;
-        submitBtn.disabled = !hasAudio;
-        
-        const statusText = document.getElementById(statusTextId);
-        if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
-            statusText.className = 'status-text';
-        } else {
-            statusText.textContent = '✅ Listo para enviar';
-            statusText.className = 'status-text success';
-        }
-    };
-    
-    const checkInterval = setInterval(checkEvidence, 500);
-    
-    submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
-        submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.5';
-        submitBtn.style.cursor = 'not-allowed';
-        
-        // Detener el intervalo de verificación
-        clearInterval(checkInterval);
-        
-        const statusText = document.getElementById(statusTextId);
-        statusText.textContent = 'Subiendo evidencia...';
-        statusText.className = 'status-text loading';
-        
-        try {
-            await submitEvidence({
-                moment: 'm2',
-                tag: 'trays_explanation',
-                data: { 
-                    question: '¿Por qué tienen la misma cantidad?',
-                    pairs: pairs
-                },
-                boardBlob: null,
-                audioBlob: audioState.audioBlob
-            });
-            
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
-            statusText.className = 'status-text success';
-            
-            // Deshabilitar botón de grabar también
-            document.getElementById(recordBtnId).disabled = true;
-            
-            // Continuar automáticamente al Momento 3 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment3Screen');
-                initMoment3();
-            }, 1000);
-            
-        } catch (error) {
-            console.error('Error:', error);
-            statusText.textContent = 'Error al guardar. Intenta de nuevo.';
-            statusText.className = 'status-text error';
-            // Solo rehabilitar si hay error
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
-            submitBtn.style.cursor = 'pointer';
-            // Reiniciar el intervalo si hay error
-            checkInterval = setInterval(checkEvidence, 500);
+            syncBookNextButton();
         }
     });
 }
@@ -1577,7 +1276,10 @@ function initMoment2Audio() {
 // ========================================
 
 function initMoment3() {
-    document.getElementById('studentCodeM3').textContent = getStudentHeaderText();
+    const studentCodeM3 = document.getElementById('studentCodeM3');
+    if (studentCodeM3) {
+        studentCodeM3.textContent = getStudentHeaderText();
+    }
     
     // Radio buttons para Problema 1
     const radiosQ1 = document.querySelectorAll('input[name="truthQ1"]');
@@ -1598,24 +1300,31 @@ function initMoment3() {
     });
     
     // Botón continuar a M4
-    document.getElementById('continueToM4Btn').addEventListener('click', () => {
-        showScreen('moment4Screen');
-        initMoment4();
-    });
+    const continueToM4Btn = document.getElementById('continueToM4Btn');
+    if (continueToM4Btn) {
+        continueToM4Btn.addEventListener('click', () => {
+            showScreen('moment4Screen');
+            initMoment4();
+        });
+    }
 }
 
 function showPrompt1(choice) {
     const promptSection = document.getElementById('promptSection1');
     const promptText = document.getElementById('promptText1');
+    const placeholder = document.getElementById('m3Q1Placeholder');
     
     const prompts = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
+        yes: 'Explica cómo lo sabes',
+        no: '¿Con qué números crees que no funcionaría?',
         unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
     };
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
+    if (placeholder) {
+        placeholder.classList.add('hidden');
+    }
     
     // Inicializar tablero y audio para problema 1
     initProblemM3Q1();
@@ -1624,29 +1333,34 @@ function showPrompt1(choice) {
 function showPrompt2(choice) {
     const promptSection = document.getElementById('promptSection2');
     const promptText = document.getElementById('promptText2');
+    const placeholder = document.getElementById('m3Q2Placeholder');
     
     const prompts = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
+        yes: 'Explica cómo lo sabes',
+        no: '¿Con qué números crees que no funcionaría?',
         unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
     };
     
     promptText.textContent = prompts[choice] || '';
     promptSection.classList.remove('hidden');
+    if (placeholder) {
+        placeholder.classList.add('hidden');
+    }
     
     // Inicializar tablero y audio para problema 2
     initProblemM3Q2();
 }
 
 function initProblemM3Q1() {
-    const canvasId = 'boardCanvasM3Q1';
+    if (m3Q1EvidenceInitialized) return;
+    m3Q1EvidenceInitialized = true;
+
     const recordBtnId = 'recordBtnM3Q1';
     const stopBtnId = 'stopBtnM3Q1';
     const statusId = 'audioStatusM3Q1';
     const submitBtnId = 'submitM3Q1';
     const statusTextId = 'statusM3Q1';
     
-    const boardState = initBoard(canvasId);
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
@@ -1654,35 +1368,27 @@ function initProblemM3Q1() {
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
         submitBtn.disabled = !hasAudio;
-        
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
             statusText.className = 'status-text success';
         }
+        syncBookNextButton();
     };
-    
-    const checkInterval = setInterval(checkEvidence, 500);
-    
+    let checkInterval = setInterval(checkEvidence, 500);
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        
-        // Detener el intervalo de verificación
         clearInterval(checkInterval);
-        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
-        
         try {
-            const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
-            
+            const boardBlob = null;
             await submitEvidence({
                 moment: 'm3',
                 tag: 'problema1',
@@ -1690,48 +1396,44 @@ function initProblemM3Q1() {
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
-            
             statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
-            
-            // Bloquear edición
-            boardState.disabled = true;
-            const canvas = document.getElementById(canvasId);
-            canvas.style.pointerEvents = 'none';
-            
-            const evidenceSection = canvas.closest('.evidence-section');
-            evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
-            document.getElementById(recordBtnId).disabled = true;
-            
-            // Mostrar Problema 2
-            setTimeout(() => {
-                document.getElementById('problem2Section').classList.remove('hidden');
-                document.getElementById('problem2Section').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 1000);
-            
+            m3Q1Submitted = true;
+            const recordBtn = document.getElementById(recordBtnId);
+            const stopBtn = document.getElementById(stopBtnId);
+            if (recordBtn) {
+                recordBtn.disabled = true;
+                recordBtn.style.opacity = '0.5';
+                recordBtn.style.cursor = 'not-allowed';
+            }
+            if (stopBtn) {
+                stopBtn.disabled = true;
+                stopBtn.classList.add('hidden');
+            }
+            syncBookNextButton();
         } catch (error) {
             console.error('Error:', error);
             statusText.textContent = 'Error al guardar. Intenta de nuevo.';
             statusText.className = 'status-text error';
-            // Solo rehabilitar si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
-            // Reiniciar el intervalo si hay error
             checkInterval = setInterval(checkEvidence, 500);
+            syncBookNextButton();
         }
     });
 }
 
 function initProblemM3Q2() {
-    const canvasId = 'boardCanvasM3Q2';
+    if (m3Q2EvidenceInitialized) return;
+    m3Q2EvidenceInitialized = true;
+
     const recordBtnId = 'recordBtnM3Q2';
     const stopBtnId = 'stopBtnM3Q2';
     const statusId = 'audioStatusM3Q2';
     const submitBtnId = 'submitM3Q2';
     const statusTextId = 'statusM3Q2';
-    
-    const boardState = initBoard(canvasId);
+
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
     
     const submitBtn = document.getElementById(submitBtnId);
@@ -1739,73 +1441,50 @@ function initProblemM3Q2() {
     const checkEvidence = () => {
         const hasAudio = audioState.audioBlob !== null;
         submitBtn.disabled = !hasAudio;
-        
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
             statusText.textContent = '✅ Listo para enviar';
             statusText.className = 'status-text success';
         }
+        syncBookNextButton();
     };
-    
-    const checkInterval = setInterval(checkEvidence, 500);
-    
+    let checkInterval = setInterval(checkEvidence, 500);
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
-        
-        // Detener el intervalo de verificación
         clearInterval(checkInterval);
-        
         const statusText = document.getElementById(statusTextId);
         statusText.textContent = 'Subiendo evidencia...';
         statusText.className = 'status-text loading';
-        
         try {
-            const boardBlob = boardState.hasDrawing ? await canvasToBlob(canvasId) : null;
-            
             const choice2 = document.querySelector('input[name="truthQ2"]:checked')?.value;
-            
             await submitEvidence({
                 moment: 'm3',
                 tag: 'problema2',
                 data: { choice: choice2 },
-                boardBlob: boardBlob,
+                boardBlob: null,
                 audioBlob: audioState.audioBlob
             });
-            
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente ✅';
             statusText.className = 'status-text success';
-            
-            // Bloquear edición
-            boardState.disabled = true;
-            const canvas = document.getElementById(canvasId);
-            canvas.style.pointerEvents = 'none';
-            
-            const evidenceSection = canvas.closest('.evidence-section');
-            evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
+            m3Q2Submitted = true;
             document.getElementById(recordBtnId).disabled = true;
-            
-            // Continuar automáticamente al Momento 4 después de un breve delay
-            setTimeout(() => {
-                showScreen('moment4Screen');
-                initMoment4();
-            }, 1000);
-            
+            document.getElementById(stopBtnId).disabled = true;
+            document.getElementById(stopBtnId).classList.add('hidden');
+            syncBookNextButton();
         } catch (error) {
             console.error('Error:', error);
             statusText.textContent = 'Error al guardar. Intenta de nuevo.';
             statusText.className = 'status-text error';
-            // Solo rehabilitar si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
-            // Reiniciar el intervalo si hay error
             checkInterval = setInterval(checkEvidence, 500);
+            syncBookNextButton();
         }
     });
 }
@@ -1820,8 +1499,13 @@ function initMoment4() {
     m4_errorsTotal = 0;
     m4_errorsConsecutive = 0;
     m4_errorsConsecutiveMax = 0;
-    m4_magicLives = 3;
+    m4_magicLives = 3; // Sistema de vidas mágicas
     m4_isFinalizing = false;
+    m4_completed = false;
+    m4_reflectionSelected = false;
+    m4_reflectionSaved = false;
+    m4_reflectionSaving = false;
+    m4_closeTriggered = false;
     if (m4_returnHomeTimeout) {
         clearTimeout(m4_returnHomeTimeout);
         m4_returnHomeTimeout = null;
@@ -1831,6 +1515,14 @@ function initMoment4() {
     const finalSection = document.getElementById('finalQuestionSection');
     if (finalSection) {
         finalSection.classList.add('hidden');
+    }
+    const magicTheme = document.querySelector('#problemQ4Section .magic-theme');
+    if (magicTheme) {
+        magicTheme.classList.remove('m4-final-only');
+    }
+    const problemQ4Section = document.getElementById('problemQ4Section');
+    if (problemQ4Section) {
+        problemQ4Section.classList.remove('m4-final-only');
     }
 
     document.getElementById('studentCodeM4').textContent = getStudentHeaderText();
@@ -1876,22 +1568,28 @@ function generateMoment4Questions() {
         });
     });
     
+    m4_questions = questions;
+
     const wrapper = document.getElementById('itemsWrapper');
-    wrapper.innerHTML = ''; // Limpiar contenedor
-    
-    questions.forEach((q, index) => {
-        const itemNum = index + 1;
-        const itemBox = document.createElement('div');
-        itemBox.className = 'item-box hidden';
-        itemBox.dataset.item = itemNum;
-        
-        itemBox.innerHTML = `
-            <div class="item-equation">${q.equation}</div>
+    wrapper.innerHTML = '<div id="m4ActiveItem" class="item-box"></div>';
+}
+
+function showItem(itemNum) {
+    const activeBox = document.getElementById('m4ActiveItem');
+    const question = m4_questions[itemNum - 1];
+
+    if (!activeBox || !question) {
+        return;
+    }
+
+    const renderQuestion = () => {
+        activeBox.innerHTML = `
+            <div class="item-equation">${question.equation}</div>
             <div style="text-align: center; margin-top: 20px;">
-                <input type="number" 
-                       class="item-input" 
-                       data-answer="${q.answer}"
-                       data-full-equation="${q.fullEquation}"
+                <input type="number"
+                       class="item-input"
+                       data-answer="${question.answer}"
+                       data-full-equation="${question.fullEquation}"
                        data-attempts="0"
                        placeholder="?"
                        min="1"
@@ -1900,30 +1598,35 @@ function generateMoment4Questions() {
             </div>
             <div class="item-feedback" style="margin-top: 15px; font-size: 1.2em; min-height: 50px;"></div>
         `;
-        
-        wrapper.appendChild(itemBox);
-    });
-}
 
-function showItem(itemNum) {
-    document.querySelectorAll('.item-box').forEach(box => {
-        if (parseInt(box.dataset.item) === itemNum) {
-            box.classList.remove('hidden');
-            
-            // Agregar evento al botón comprobar
-            const checkBtn = box.querySelector('.check-answer-btn');
-            const input = box.querySelector('.item-input');
-            
-            checkBtn.addEventListener('click', () => validateItem(input, box));
-            
-            // Prevenir validación automática al escribir
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    checkBtn.click();
-                }
-            });
-        }
-    });
+        const checkBtn = activeBox.querySelector('.check-answer-btn');
+        const input = activeBox.querySelector('.item-input');
+
+        checkBtn.addEventListener('click', () => validateItem(input, activeBox));
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkBtn.click();
+            }
+        });
+
+        input.focus();
+    };
+
+    if (!activeBox.hasChildNodes()) {
+        renderQuestion();
+        return;
+    }
+
+    activeBox.classList.add('item-box-transition-out');
+    setTimeout(() => {
+        renderQuestion();
+        activeBox.classList.remove('item-box-transition-out');
+        activeBox.classList.add('item-box-transition-in');
+        setTimeout(() => {
+            activeBox.classList.remove('item-box-transition-in');
+        }, 260);
+    }, 220);
 }
 
 // ========================================
@@ -1995,6 +1698,7 @@ function createSpellEffect(itemBox) {
                 // Actualizar posición
                 p.x += p.vx;
                 p.y += p.vy;
+                p.vy += 0.1; // Gravedad
                 p.alpha -= p.decay;
                 
                 // Dibujar partícula
@@ -2196,6 +1900,14 @@ async function finalizeMoment4() {
         // Mostrar pantalla final
         const finalSection = document.getElementById('finalQuestionSection');
         finalSection.classList.remove('hidden');
+        const magicTheme = document.querySelector('#problemQ4Section .magic-theme');
+        if (magicTheme) {
+            magicTheme.classList.add('m4-final-only');
+        }
+        const problemQ4Section = document.getElementById('problemQ4Section');
+        if (problemQ4Section) {
+            problemQ4Section.classList.add('m4-final-only');
+        }
         
         // Celebración si termina con al menos 1 vida
         if (m4_magicLives > 0) {
@@ -2207,12 +1919,12 @@ async function finalizeMoment4() {
             
             const finalBox = finalSection.querySelector('.final-box');
             finalBox.innerHTML = `
-                <h3 style="color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);">🎉 ¡Increíble! 🎉</h3>
-                <p class="final-question" style="font-size: 1.4em; color: #fff; margin: 20px 0;">
+                <h3 class="m4-special-title">🎉 ¡Increíble! 🎉</h3>
+                <p class="final-question m4-special-message">
                     ¡Completaste todos los desafíos sin perder ninguna vida mágica! ✨
                 </p>
-                <p style="font-size: 1.6em; color: #ffd700; font-weight: bold; margin: 25px 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);">
-                    🌟 Puedes reclamar <strong style="font-size: 1.3em;">3 PUNTOS POSITIVOS</strong> 🌟
+                <p class="m4-special-points">
+                    🌟 Puedes reclamar <strong>3 PUNTOS POSITIVOS</strong> 🌟
                 </p>
                 <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
                 <p class="thank-you-sub">¡Gracias por participar!</p>
@@ -2225,19 +1937,14 @@ async function finalizeMoment4() {
                 totalPointsEl.textContent = points;
             }
         }
-
-        statusText.textContent = 'Completado ✅ Regresando al inicio...';
-        m4_returnHomeTimeout = setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 8000);
+        m4_completed = true;
+        statusText.textContent = 'Completado ✅ Continúa con la siguiente página.';
+        document.dispatchEvent(new CustomEvent('moment4:completed'));
         
     } catch (error) {
         console.error('Error:', error);
-        statusText.textContent = 'Error al guardar. Regresando al inicio...';
+        statusText.textContent = 'Error al guardar. Intenta de nuevo.';
         statusText.className = 'status-text error';
-        m4_returnHomeTimeout = setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 5000);
     }
 }
 

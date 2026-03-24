@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 0;
     let currentSpeech = null; // Almacenar el objeto de narración actual
     let completionEventDispatched = false;
+    let isTurning = false;
+    const TURN_DURATION_MS = 920;
+    const TURN_HALF_MS = Math.round(TURN_DURATION_MS / 2);
 
     // ===== DOM ELEMENTS =====
     const pages = document.querySelectorAll('#flipbook .page');
@@ -28,6 +31,24 @@ document.addEventListener('DOMContentLoaded', function() {
         nextBtn: document.getElementById('nextBtn'),
         soundToggle: document.getElementById('soundToggle')
     };
+
+    function applyRealBookPageNumbers() {
+        const storyPages = document.querySelectorAll('#flipbook .story-page');
+
+        storyPages.forEach((storyPage, spreadIndex) => {
+            const pageNumber = storyPage.querySelector('.page-number');
+            if (!pageNumber) return;
+
+            const leftPageNumber = (spreadIndex * 2) + 1;
+            const rightPageNumber = leftPageNumber + 1;
+
+            pageNumber.classList.add('book-spread-number');
+            pageNumber.innerHTML = `
+                <span class="page-number-left">${leftPageNumber}</span>
+                <span class="page-number-right">${rightPageNumber}</span>
+            `;
+        });
+    }
 
     // ===== WEB AUDIO API - REALISTIC PAGE TURN SOUND =====
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -85,6 +106,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.warn('Audio playback failed:', e);
         }
     }
+
+    // Exponer globalmente para que main.js pueda usarla en páginas 10 y 11
+    window.playPageTurnSound = playPageTurnSound;
 
     // ===== TOGGLE SONIDO =====
     function toggleNarration() {
@@ -212,8 +236,155 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateNavButtons(page) {
+        if (page === 0) {
+            document.body.classList.add('flipbook-on-cover');
+        } else {
+            document.body.classList.remove('flipbook-on-cover');
+        }
         elements.prevBtn.disabled = page === 0;
-        elements.nextBtn.disabled = page === CONFIG.totalPages - 1;
+        const allowNextOnLastPageForActivity0B = document.body.classList.contains('activity-0b')
+            && page === CONFIG.totalPages - 1;
+        elements.nextBtn.disabled = !allowNextOnLastPageForActivity0B && page === CONFIG.totalPages - 1;
+    }
+
+    function clearTemporaryTurnLayers() {
+        document.querySelectorAll('#flipbook .page-turn-leaf').forEach(layer => layer.remove());
+    }
+
+    function resetPageTurnState() {
+        pages.forEach(page => {
+            page.classList.remove(
+                'turning-forward',
+                'turning-backward',
+                'turned',
+                'active',
+                'page-static-left',
+                'page-static-right',
+                'page-under-left',
+                'page-under-right'
+            );
+        });
+    }
+
+    function createTurnContent(sourcePage, visibleHalf) {
+        const clone = sourcePage.cloneNode(true);
+        clone.classList.remove(
+            'turning-forward',
+            'turning-backward',
+            'turned',
+            'active',
+            'page-static-left',
+            'page-static-right',
+            'page-under-left',
+            'page-under-right'
+        );
+        clone.classList.add('page-turn-source');
+
+        clone.style.left = visibleHalf === 'right' ? '-100%' : '0';
+        clone.style.top = '0';
+        clone.style.width = '200%';
+        clone.style.height = '100%';
+        clone.style.transform = 'none';
+        clone.style.opacity = '1';
+        clone.style.pointerEvents = 'none';
+        clone.style.zIndex = '1';
+        clone.style.margin = '0';
+
+        return clone;
+    }
+
+    function createTurnLeaf({ frontPage, frontHalf, backPage, backHalf, direction }) {
+        const leaf = document.createElement('div');
+        leaf.className = `page-turn-leaf ${direction}`;
+
+        const frontFace = document.createElement('div');
+        frontFace.className = 'page-turn-face front';
+        frontFace.appendChild(createTurnContent(frontPage, frontHalf));
+
+        const backFace = document.createElement('div');
+        backFace.className = 'page-turn-face back';
+        backFace.appendChild(createTurnContent(backPage, backHalf));
+
+        leaf.appendChild(frontFace);
+        leaf.appendChild(backFace);
+
+        return leaf;
+    }
+
+    function finishPageTurn(pageIndex) {
+        clearTemporaryTurnLayers();
+        resetPageTurnState();
+        currentPage = pageIndex;
+        // Asegurar visibilidad exclusiva
+        pages.forEach((page, idx) => {
+            if (idx === pageIndex) {
+                page.classList.add('active');
+                page.style.opacity = '';
+                page.style.pointerEvents = '';
+            } else {
+                page.classList.remove('active');
+                page.style.opacity = '0';
+                page.style.pointerEvents = 'none';
+            }
+        });
+        updateProgress(pageIndex);
+        isTurning = false;
+    }
+
+    function showSimplePage(pageIndex, direction) {
+        const oldPage = pages[currentPage];
+        const newPage = pages[pageIndex];
+
+        resetPageTurnState();
+
+        if (direction === 'forward') {
+            if (oldPage) {
+                oldPage.classList.add('turning-forward');
+                setTimeout(() => {
+                    oldPage.classList.remove('turning-forward');
+                    oldPage.classList.add('turned');
+                }, TURN_DURATION_MS);
+            }
+
+            setTimeout(() => {
+                // Solo la nueva página visible
+                pages.forEach((page, idx) => {
+                    if (idx === pageIndex) {
+                        page.classList.add('active');
+                        page.style.opacity = '';
+                        page.style.pointerEvents = '';
+                    } else {
+                        page.classList.remove('active');
+                        page.style.opacity = '0';
+                        page.style.pointerEvents = 'none';
+                    }
+                });
+            }, TURN_HALF_MS);
+        } else {
+            newPage.classList.remove('turned');
+            newPage.classList.add('turning-backward');
+
+            setTimeout(() => {
+                // Solo la nueva página visible
+                pages.forEach((page, idx) => {
+                    if (idx === pageIndex) {
+                        page.classList.add('active');
+                        page.style.opacity = '';
+                        page.style.pointerEvents = '';
+                    } else {
+                        page.classList.remove('active');
+                        page.style.opacity = '0';
+                        page.style.pointerEvents = 'none';
+                    }
+                });
+            }, TURN_DURATION_MS);
+        }
+
+        setTimeout(() => {
+            currentPage = pageIndex;
+            updateProgress(pageIndex);
+            isTurning = false;
+        }, TURN_DURATION_MS);
     }
 
     // ===== PAGE DISPLAY =====
@@ -221,49 +392,77 @@ document.addEventListener('DOMContentLoaded', function() {
         const oldPage = pages[currentPage];
         const newPage = pages[pageIndex];
         
-        if (!newPage) return;
+        if (!newPage || isTurning) return;
+
+        isTurning = true;
         
         // Detener narración al cambiar de página
         stopNarration();
         CONFIG.narrationEnabled = false;
         updateSoundButton();
-        
-        // Limpiar todas las clases de animación
-        pages.forEach(page => {
-            page.classList.remove('turning-forward', 'turning-backward', 'turned', 'active');
-        });
-        
-        if (direction === 'forward') {
-            // Voltear hacia adelante
-            if (oldPage) {
-                oldPage.classList.add('turning-forward');
-                setTimeout(() => {
-                    oldPage.classList.remove('turning-forward');
-                    oldPage.classList.add('turned');
-                }, 1200);
-            }
-            
-            setTimeout(() => {
-                newPage.classList.add('active');
-            }, 600);
-            
-        } else {
-            // Voltear hacia atrás
-            newPage.classList.remove('turned');
-            newPage.classList.add('turning-backward');
-            
-            setTimeout(() => {
-                newPage.classList.remove('turning-backward');
-                newPage.classList.add('active');
-                if (oldPage) {
-                    oldPage.classList.remove('active');
-                }
-            }, 1200);
-        }
-        
-        currentPage = pageIndex;
-        updateProgress(pageIndex);
+
+        clearTemporaryTurnLayers();
+
+        // Eliminar excepción: ahora la portada también usará la animación de hoja
+
         playPageTurnSound();
+
+        // Solo ocultar todas menos la actual y la nueva para evitar superposición
+        pages.forEach((page, idx) => {
+            if (idx !== currentPage && idx !== pageIndex) {
+                page.classList.remove(
+                    'turning-forward',
+                    'turning-backward',
+                    'turned',
+                    'active',
+                    'page-static-left',
+                    'page-static-right',
+                    'page-under-left',
+                    'page-under-right'
+                );
+                page.style.opacity = '0';
+                page.style.pointerEvents = 'none';
+            } else {
+                page.style.opacity = '';
+                page.style.pointerEvents = '';
+            }
+        });
+
+        const flipbook = document.getElementById('flipbook');
+        if (!flipbook || !oldPage) {
+            showSimplePage(pageIndex, direction);
+            return;
+        }
+
+        if (direction === 'forward') {
+            oldPage.classList.add('page-static-left');
+            newPage.classList.add('page-under-right', 'active');
+
+            const leaf = createTurnLeaf({
+                frontPage: oldPage,
+                frontHalf: 'right',
+                backPage: newPage,
+                backHalf: 'left',
+                direction: 'forward'
+            });
+
+            flipbook.appendChild(leaf);
+            leaf.addEventListener('animationend', () => finishPageTurn(pageIndex), { once: true });
+        } else {
+            oldPage.classList.add('page-static-right');
+            newPage.classList.add('page-under-left', 'active');
+
+            const leaf = createTurnLeaf({
+                frontPage: oldPage,
+                frontHalf: 'left',
+                backPage: newPage,
+                backHalf: 'right',
+                direction: 'backward'
+            });
+
+            flipbook.appendChild(leaf);
+            leaf.addEventListener('animationend', () => finishPageTurn(pageIndex), { once: true });
+        }
     }
 
     // ===== NAVIGATION =====
@@ -381,10 +580,48 @@ document.addEventListener('DOMContentLoaded', function() {
         initKeyboardNavigation();
         initTouchSupport();
         updateSoundButton();
+        applyRealBookPageNumbers();
         
-        // Show first story page without animation
-        pages[0].classList.add('active');
-        updateProgress(0);
+
+        // Refuerzo: buscar portada (book-cover-page) y activarla como primera página, con logs
+        let portadaIndex = 0;
+        for (let i = 0; i < pages.length; i++) {
+            if (pages[i].classList.contains('book-cover-page')) {
+                portadaIndex = i;
+                break;
+            }
+        }
+        // Desactivar todas las páginas primero
+        pages.forEach(p => {
+            p.classList.remove('active');
+            p.style.opacity = '0';
+            p.style.pointerEvents = 'none';
+        });
+        // Activar portada
+        if (pages[portadaIndex]) {
+            pages[portadaIndex].classList.add('active');
+            pages[portadaIndex].style.opacity = '';
+            pages[portadaIndex].style.pointerEvents = '';
+            updateProgress(portadaIndex);
+            console.log('[app.js:init] Portada activada como primera página (índice', portadaIndex, ')');
+        } else {
+            console.warn('[app.js:init] No se encontró portada, activando primera página por defecto');
+            if (pages[0]) {
+                pages[0].classList.add('active');
+                pages[0].style.opacity = '';
+                pages[0].style.pointerEvents = '';
+                updateProgress(0);
+            }
+        }
+        console.log('[app.js:init] Estado de páginas tras inicialización:', Array.from(pages).map((p,i)=>({i,active:p.classList.contains('active'),opacity:p.style.opacity})));
+
+        window.flipbookControls = {
+            goToPage,
+            nextPage,
+            previousPage,
+            getCurrentPage: () => currentPage,
+            getTotalPages: () => pages.length
+        };
 
         console.log('📖 Flipbook initialized successfully!');
     }

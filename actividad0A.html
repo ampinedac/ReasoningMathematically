@@ -4,154 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0A - ¿El orden de los factores altera el producto?</title>
-    <link rel="icon" type="image/png" href="assets/images/pandebono.png">
-    <link rel="stylesheet" href="styles.css?v=2026031420">
-    <link rel="stylesheet" href="trays-styles.css?v=2026031420">
-    <!-- ResponsiveVoice para voces más expresivas -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="trays-styles.css?v=2026031813">
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
-    <style>
-    /* Tipografía y alineación global */
-    body{font-size:20px;line-height:1.5;color:#222}
-    /* Por defecto todo el texto (p, listas, labels) debe ir justificado, excepto títulos */
-    p, li, .story-text, .question, .instruction-hint, .confirmation-question, .radio-label, .feedback-text, .status-text, .activity-subtitle, .student-code-display, .problem-box p{font-size:13px;text-align:justify}
-    /* Mantener el título centrado y con su estilo habitual */
-    .main-title{display:block;text-align:center}
-    /* Centrar imágenes principales */
-    .story-image, .situation-image{display:block;margin:0 auto;max-width:100%;height:auto}
-
-    /* Subtítulo: quitar caja y usar texto más visible con sombra sutil */
-    .activity-subtitle{background:none;padding:0;color:#0b2a3a;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,0.12);display:block;margin-bottom:10px}
-
-    /* Ajustes para Situación 1: centrar izquierda y agrandar tablero */
-    .q1-book-spread{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;justify-content:space-between}
-    .q1-left-page{flex:0 0 46%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px;box-sizing:border-box}
-    .q1-left-page h3{margin-top:0}
-    .q1-left-page p{color:inherit;font-weight:400}
-    .q1-left-page .question{color:#000;font-weight:400;margin-top:12px}
-    #problemQ1Section .q1-left-page h3,
-    #problemQ1Section .q1-left-page p,
-    #problemQ1Section .q1-left-page .question{font-size:clamp(0.85rem,1.8vw,1.2rem) !important;line-height:1.6}
-    #moment1Screen #problemQ1Section .q1-left-page h3{font-size:clamp(1.15rem,2vw,1.4rem) !important}
-    #moment1Screen #problemQ1Section .q1-left-page p,
-    #moment1Screen #problemQ1Section .q1-left-page .question{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px;width:92%;max-width:460px;margin-left:auto;margin-right:auto;text-align:justify}
-    #moment1Screen #problemQ1Section .q1-left-page .situation-image{width:92%;max-width:460px;margin:8px auto 10px}
-    .q1-book-spread .q1-right-page{flex:0 0 50%;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px}
-
-    /* Centrar título, herramientas y tablero en la columna derecha */
-    .q1-right-page h4, .q1-right-page .board-tools{width:100%;display:flex;justify-content:center;align-items:center}
-    .q1-right-page .board-tools{gap:10px;margin-bottom:8px}
-    .q1-right-page .board-tools .tool-btn{flex:0 0 auto}
-    .q1-right-page .board-container{max-width:95%;margin:0 auto}
-    .board-wrapper{max-width:100%;margin:0 auto}
-    .drawing-board{margin:0 auto;display:block}
-    /* Situación 1 derecha: centrar iconos, compactar tablero y dejar acciones visibles */
-    #problemQ1Section .q1-right-page .board-tools{justify-content:center !important}
-    #problemQ1Section .q1-right-page .board-container{max-width:92%;margin:6px auto 4px}
-    #problemQ1Section .q1-right-page .drawing-board{max-height:400px !important}
-    #problemQ1Section .q1-right-page .audio-controls,
-    #problemQ1Section .q1-right-page .submit-section{display:inline-flex;align-items:center;gap:10px;margin:8px 6px 0;vertical-align:middle}
-    #problemQ1Section .q1-right-page .audio-controls{flex-direction:row;flex-wrap:nowrap;justify-content:center}
-    #problemQ1Section .q1-right-page .submit-section{justify-content:center;text-align:center}
-    #problemQ1Section .q1-right-page .submit-section .status-text{margin:0}
-
-    /* Aplicar tamaño máximo, centrar y comportamiento responsive a todos los tableros */
-    .board-container{width:100%;max-width:1200px;margin:0 auto;padding:12px;box-sizing:border-box;border-radius:10px}
-
-    /* Estructura interna del tablero: grid solo dentro del tablero */
-    .board-wrapper{position:relative;width:100%;border-radius:6px}
-    .board-grid{position:absolute;inset:10px;border-radius:6px;pointer-events:none;z-index:1;background-image: linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px);background-size:36px 36px;}
-    /* Hacer el canvas transparente y por encima de la cuadricula */
-    .drawing-board{position:relative;z-index:2;width:100% !important;height:auto !important;max-height:1100px;background:transparent;border-radius:6px;display:block}
-     /* Mantener el patrón de fondo global para conservar el diseño original */
-     /* La cuadricula del tablero sigue apareciendo únicamente dentro de .board-grid */
-
-     /* Aplicar tamaño grande SOLO al título y subtítulo de la pantalla de bienvenida */
-     #welcomeScreen .main-title, #welcomeScreen .activity-subtitle { font-size:30px !important; line-height:1.2 !important; }
-     /* Pantalla de confirmación: título y pregunta en 30px */
-     #confirmationScreen .main-title, #confirmationScreen .confirmation-question { font-size:30px !important; line-height:1.2 !important; }
-     /* Recuadro blanco principal semitransparente para Momento 1; en la pantalla de bienvenida
-         queremos quitar el recuadro grande y usar cajas específicas (.user-rect) */
-    #moment1Screen .container{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;padding:8px 10px;border-radius:14px;box-shadow:none;width:95vw;max-width:none;margin:12px auto}
-     /* Quitar el recuadro blanco grande solo en la pantalla de bienvenida */
-     #welcomeScreen .container{background:transparent;padding:28px;border-radius:14px;box-shadow:none;max-width:880px;margin:20px auto}
-    /* Forzar que elementos internos tengan el mismo ancho y queden centrados */
-    #welcomeScreen .container, #moment1Screen .container, #welcomeScreen .container * , #moment1Screen .container * {box-sizing:border-box}
-    #welcomeScreen .main-title, #moment1Screen .main-title, #welcomeScreen .activity-subtitle, #moment1Screen .activity-subtitle{max-width:100%;text-align:center;margin-left:auto;margin-right:auto}
-    /* Hacer las cajas internas un poco más delgadas que el panel principal */
-    #welcomeScreen .welcome-box, #moment1Screen .problem-box, #moment1Screen .welcome-box{width:100%;max-width:720px;margin:0 auto;padding:0;background:transparent}
-    /* Cajas específicas solicitadas por el usuario en la pantalla de bienvenida */
-    /* Igual ancho que el panel claro (max-width:720px) y opacidad al 75% */
-    /* Cajas pequeñas: fondo blanco casi opaco (ligeramente transparente) */
-    #welcomeScreen .user-rect{width:100%;max-width:720px;margin:12px auto;background:rgb(200,230,255);border-radius:14px;padding:12px 16px;box-sizing:border-box;text-align:center;display:block}
-    /* quitar .user-rect-bottom: el recuadro inferior se elimina según petición */
-    #welcomeScreen .user-rect .main-title, #welcomeScreen .user-rect .activity-subtitle{margin:0}
-    /* Hacer que el campo de código y el botón tengan el mismo ancho (3/4 del panel) y estén centrados */
-    #welcomeScreen .welcome-box .chalk-input,
-    #welcomeScreen .welcome-box .btn {
-        width:75%;
-        max-width:640px;
-        margin:12px auto;
-        display:block;
-        box-sizing:border-box;
-    }
-    /* Asegurar estilo consistente del botón cuando se reduce */
-    #welcomeScreen .welcome-box .btn{padding:12px 18px;text-align:center}
-    #problemQ1Section.q1-book-spread{position:relative}
-    #problemQ1Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
-    #problemQ2Section.q1-book-spread{position:relative}
-    #problemQ2Section.q1-book-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;width:95%;max-width:none;min-height:600px;margin:0 auto;border-radius:18px;overflow:hidden;border:1px solid rgba(0,0,0,0.1);box-shadow:0 8px 24px rgba(0,0,0,0.12);background:#fdfdfd}
-    #problemQ2Section.q1-book-spread::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:2px;background:rgba(0,0,0,0.08);transform:translateX(-50%);pointer-events:none}
-    #problemQ2Section .page-number{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:6}
-    #problemQ2Section .q1-left-page,
-    #problemQ2Section .q1-right-page{margin:0;max-width:none;min-height:600px;border:0;border-radius:0;box-shadow:none;padding:28px;background:var(--page-bg-light);background-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 85%, rgba(0,0,0,0.02) 92%, rgba(0,0,0,0.05) 96%, rgba(0,0,0,0.08) 100%),repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(0,0,0,0.02) 24px, rgba(0,0,0,0.02) 25px)}
-    #problemQ2Section .problem-box{background:transparent;border:0;box-shadow:none;padding:20px;display:flex;flex-direction:column;justify-content:center;height:100%}
-    #problemQ2Section .q1-left-page h3,
-    #problemQ2Section .q1-left-page p,
-    #problemQ2Section .q1-left-page .instruction-hint{font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;letter-spacing:-0.2px}
-    #problemQ2Section .q1-left-page h3{margin-top:0;margin-bottom:8px;font-size:clamp(1.15rem,2vw,1.4rem) !important}
-    #problemQ2Section .q1-left-page p{width:92%;max-width:460px;margin:8px auto;text-align:justify;line-height:1.45}
-    #problemQ2Section .q1-left-page p{margin-bottom:6px}
-    #problemQ2Section .q1-left-page .instruction-hint{width:92%;max-width:460px;margin:14px auto 0;text-align:left;padding:10px 14px;border-radius:12px;background:rgba(255,248,230,0.85);border:1px solid rgba(251,191,36,0.35);box-shadow:0 2px 8px rgba(0,0,0,0.04);font-size:clamp(0.92rem,1.5vw,1.08rem) !important}
-    #problemQ2Section .q2-guide-card{width:92%;max-width:460px;margin:14px auto 0;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.72);border:1px solid rgba(63,94,251,0.2);box-shadow:0 4px 10px rgba(0,0,0,0.05);text-align:left}
-    #problemQ2Section .q2-guide-title{margin:0 0 8px;font-size:clamp(0.92rem,1.5vw,1.08rem);font-weight:700;color:#2f3f87;text-align:left}
-    #problemQ2Section .q2-guide-list{margin:0;padding:0;list-style:none;display:grid;gap:6px}
-    #problemQ2Section .q2-guide-list li{margin:0;font-size:clamp(0.92rem,1.5vw,1.08rem);line-height:1.35;text-align:left;color:#233047}
-    #problemQ2Section .q2-example{margin:10px 0 0;font-size:clamp(0.8rem,1.1vw,0.9rem);line-height:1.35;color:#2f3f87;font-weight:600;text-align:left}
-    #problemQ2Section .q1-right-page{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;padding:14px !important}
-    #problemQ2Section .trays-container{width:100%;flex:1;min-height:0;grid-template-columns:repeat(4, minmax(0, 1fr)) !important;gap:10px !important;padding:12px !important;align-content:start !important}
-    #problemQ2Section .trays-container .tray-card{aspect-ratio:1/1 !important;min-height:0 !important;height:auto !important;width:100%;padding:5px;overflow:hidden;font-size:clamp(0.75rem,1.4vw,1.1rem)}
-    #problemQ2Section .trays-container .tray-grid{width:100%;height:100%;max-width:none;max-height:none;overflow:visible;justify-items:center;align-items:center;gap:1px}
-    #problemQ2Section .trays-container .tray-item{line-height:1 !important}
-    #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important}
-    #problemQ2Section .trays-container > .tray-card:nth-child(7):nth-last-child(2){grid-column:1;justify-self:end}
-    #problemQ2Section .trays-container > .tray-card:nth-child(8):nth-last-child(1){grid-column:3;justify-self:start}
-    #problemQ2Section .q2-verify-row{display:flex;flex-direction:row;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap}
-    #problemQ2Section .q2-verify-row .btn{flex-shrink:0;font-size:0.8rem !important;padding:5px 14px !important;font-family:inherit !important}
-    #problemQ2Section .q2-verify-row .feedback-text{flex:1;min-width:0;margin:0;padding:6px 10px;font-size:0.8rem !important;min-height:0}
-    #problemQ2Section .q2-final-question{margin-top:12px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,0.8);border:1px solid rgba(63,94,251,0.2);text-align:left}
-    #problemQ2Section .q2-final-question p{margin:0 0 8px;width:100%;max-width:none;font-size:clamp(0.92rem,1.5vw,1.08rem) !important;line-height:1.35 !important;text-align:left}
-    #problemQ2Section .q2-final-question p:last-child{margin-bottom:0}
-    @media (max-width:1200px){
-        #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:10px !important;padding:10px !important}
-    }
-    @media (max-width:900px){
-        #problemQ2Section .trays-container{grid-template-columns:repeat(3, minmax(0, 1fr)) !important;gap:8px !important;padding:8px !important}
-    }
-    @media (max-width:900px){
-        #problemQ2Section.q1-book-spread{grid-template-columns:1fr;min-height:auto}
-        #problemQ2Section.q1-book-spread::before{display:none}
-        #problemQ2Section .q1-left-page,
-        #problemQ2Section .q1-right-page{min-height:auto;padding:18px}
-        #problemQ2Section .q1-right-page{padding-top:8px}
-        #problemQ2Section .q1-right-page .btn{margin-top:8px}
-        #problemQ2Section .page-number{bottom:8px}
-    }
-    .author-credit{position:fixed;top:10px;right:14px;z-index:1200;font-size:12px;line-height:1;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.78);color:#2a3d55;font-weight:700;letter-spacing:0.2px;box-shadow:0 2px 10px rgba(0,0,0,0.08);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-    @media (max-width:700px){.author-credit{font-size:11px;top:8px;right:10px;padding:5px 8px}}
-    </style>
 </head>
 <body>
-    <div class="author-credit">Por: Ángela Pineda</div>
+<div id="bookCoverBg" class="book-cover-bg" style="display:none;"></div>
+    <div class="author-credit">Por: Ángela María Pineda Chacón</div>
+    <!-- Overlay de orientación para móviles/tabletas -->
+    <div id="orientationOverlay">
+        <div class="orientation-message">
+            <span>🔄</span>
+            <h2>Gira tu dispositivo</h2>
+            <p>Por favor, coloca tu celular o tableta en <b>horizontal</b> para ver el libro correctamente.</p>
+        </div>
+    </div>
     <!-- PANTALLA DE BIENVENIDA -->
     <section id="welcomeScreen" class="screen active">
         <div class="user-rect">
@@ -160,35 +30,31 @@
         <div class="user-rect">
             <p class="activity-subtitle">¿El orden de los factores altera el producto?</p>
         </div>
-        <div class="user-rect">
-                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
-                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
-                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
-                <p id="welcomeError" class="error-text hidden"></p>
+        <div class="user-rect welcome-box">
+            <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
+            <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
+            <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+            <div id="welcomeError" class="hidden" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
         </div>
     </section>
 
     <!-- PANTALLA DE CONFIRMACIÓN -->
     <section id="confirmationScreen" class="screen">
         <h1 class="main-title">Confirmación</h1>
-        <div class="container">
-            <div class="welcome-box">
+        <div class="welcome-box confirmation-box">
                 <p id="confirmationQuestion" class="confirmation-question"></p>
                 <div class="confirmation-buttons">
-                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
-                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
+                    <button id="confirmYesBtn" class="btn btn-success"><img src="assets/images/BTconfirmar.png" alt="Confirmar" style="height:48px;"></button>
+                    <button id="confirmNoBtn" class="btn btn-secondary"><img src="assets/images/BTrechazado.png" alt="Rechazar" style="height:48px;"></button>
                 </div>
-            </div>
         </div>
     </section>
 
     <!-- MOMENTO 1: Cuento + Problema Q1 -->
     <section id="moment1Screen" class="screen">
-        <div class="panel">
         <div class="container">
             <div class="header">
                 <!-- Momento 1: El cuento de Doña Alicia -->
-                <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
             </div>
 
             <!-- FLIPBOOK 3D DEL CUENTO -->
@@ -205,452 +71,471 @@
                         </svg>
                     </button>
                     <div id="flipbook">
-                        
-                        <!-- Story Page 1 -->
-                        <div class="page story-page active">
-                            <div class="page-number">1</div>
-                            <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
-                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+
+                        <!-- PORTADA CERRADA DEL LIBRO -->
+                        <div class="page book-cover-page flipbook-page active">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
+                                <span style="color:#0084ff;">El secreto de las bandejas de Doña Alicia </span> 
+                            </h2>
+                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+                            <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
+                                <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+                            </button>
                         </div>
 
-                        <!-- Story Page 2 -->
-                        <div class="page story-page">
-                            <div class="page-number">2</div>
-                            <img src="assets/images/pagina2_cuento_act0_1.png" alt="Doña Alicia amasando" class="story-image">
-                            <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Ella amasa la masa con mucha fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta con voz dulce mientras prepara sus famosos pandebonos.</p>
+
+                        <!-- Story Spread 1-2 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <img src="assets/images/pagina1_cuento_act0_1.png" alt="Doña Alicia en su panadería" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">1</span><span class="page-number-right">2</span></div>
                         </div>
 
-                        <!-- Story Page 3 -->
-                        <div class="page story-page">
-                            <div class="page-number">3</div>
-                            <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
-                            <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                        <!-- Story Spread 3-4 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <img src="assets/images/pagina3_cuento_act0_1.png" alt="Daniel ayudando" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Daniel, su pequeño vecino de cinco años, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">3</span><span class="page-number-right">4</span></div>
                         </div>
 
-                        <!-- Story Page 4 -->
-                        <div class="page story-page">
-                            <div class="page-number">4</div>
-                            <img src="assets/images/pagina4_cuento_act0_1.png" alt="Pandebonos en el horno" class="story-image">
-                            <p class="story-text">¡Es hora de entrar al calor! Doña Alicia coloca las bolitas en el horno con mucho cuidado. Pronto, un olor delicioso inunda toda la calle, avisando a los niños que el tesoro está casi listo.</p>
+                        <!-- Story Spread 5-6 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">5</span><span class="page-number-right">6</span></div>
                         </div>
 
-                        <!-- Story Page 5 -->
-                        <div class="page story-page">
-                            <div class="page-number">5</div>
-                            <img src="assets/images/pagina5_cuento_act0_1.png" alt="Pandebonos frescos" class="story-image">
-                            <p class="story-text">¡Ding! El horno se abre y sale un vaporcito con olor a gloria. Los pandebonos ahora brillan como soles recién horneados. Están doraditos, crujientes por fuera y muy esponjosos por dentro.</p>
+                        <!-- Story Spread 7-8 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebono" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">7</span><span class="page-number-right">8</span></div>
                         </div>
 
-                        <!-- Story Page 6 -->
-                        <div class="page story-page">
-                            <div class="page-number">6</div>
-                            <img src="assets/images/pagina6_cuento_act0_1.png" alt="Organizando bandejas" class="story-image">
-                            <p class="story-text">Ahora viene la parte más importante para Doña Alicia: el orden. Ella saca sus bandejas de plata preferidas. Para ella, organizar los panes es una forma de decir "te quiero" a cada niño del barrio.</p>
+                        <!-- Story Spread 9-10 (Imagen izquierda, texto derecha) -->
+                        <div class="page q1-book-spread">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
+                            </div>
+                            <div class="q1-right-page">
+                                <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">9</span><span class="page-number-right">10</span></div>
                         </div>
 
-                        <!-- Story Page 7 -->
-                        <div class="page story-page">
-                            <div class="page-number">7</div>
-                            <img src="assets/images/pagina7_cuento_act0_1.png" alt="Daniel contando pandebono" class="story-image">
-                            <p class="story-text">Daniel ayuda a contar para que todo sea justo. "Una para Sarita, una para Luchi, una para Alejo…", dice el niño mientras señala con su dedo. Los pandebonos quedan alineados en filas perfectas, como soldaditos de queso listos para una misión.</p>
-                        </div>
-
-                        <!-- Story Page 8 -->
-                        <div class="page story-page">
-                            <div class="page-number">8</div>
-                            <img src="assets/images/pagina8_cuento_act0_1.png" alt="Compartiendo con orden" class="story-image">
-                            <p class="story-text">"Mira, Daniel", dice Doña Alicia con ternura. "Cuando ponemos las cosas en orden y las repartimos con cuidado, nos aseguramos de que nadie se quede sin su bocado. Compartir con orden es compartir con el corazón".</p>
-                        </div>
-
-                        <!-- Story Page 9 -->
-                        <div class="page story-page">
-                            <div class="page-number">9</div>
-                            <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
-                            <p class="story-text">Gracias al orden de las bandejas, cada niño recibe su pandebono tibio y una caricia. Doña Alicia y Daniel sonríen felices porque saben que la mejor receta del mundo no es solo el queso, sino el cariño y el amor al compartir.</p>
-                        </div>
-
-                    </div>
-
-                    <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
-                    <div id="problemQ1Section" class="hidden q1-book-spread">
-                        <div class="problem-box q1-left-page">
-                            <h3>Situación 1</h3>
-                            <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
-                            <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
-                            <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
-                        </div>
-
-                        <!-- TABLERO Y AUDIO -->
-                        <div class="evidence-section q1-right-page">
-                            <h4>Puedes utilizar el tablero</h4>
-                            
-                            <!-- Tablero -->
-                            <div class="board-container">
-                                <div class="board-tools">
-                                    <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                                    <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
-                                </div>
-                                <div class="board-wrapper">
-                                    <div class="board-grid"></div>
-                                    <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
+                        <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
+                        <div id="problemQ1Section" class="page q1-book-spread activity-spread">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <div class="problem-box">
+                                    <h3>Situación 1</h3>
+                                    <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
+                                    <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
+                                    <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
                                 </div>
                             </div>
-
-                            <!-- Audio -->
-                            <div class="audio-controls">
-                                <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                                <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
-                                <span id="audioStatusM1Q1" class="audio-status"></span>
+                            <div class="q1-right-page">
+                                <div class="evidence-section">
+                                    <h4>Puedes utilizar el tablero</h4>
+                                    <!-- Tablero -->
+                                    <div class="board-container">
+                                        <div class="board-tools">
+                                            <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                            <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                            <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                            <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                            <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                        </div>
+                                        <div class="board-wrapper">
+                                            <div class="board-grid"></div>
+                                            <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
+                                        </div>
+                                    </div>
+                                    <!-- Audio -->
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                        <span id="audioStatusM1Q1" class="audio-status"></span>
+                                    </div>
+                                    <!-- Enviar -->
+                                    <div class="submit-section">
+                                        <p id="statusM1Q1" class="status-text"></p>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- Enviar -->
-                            <div class="submit-section">
-                                <p id="statusM1Q1" class="status-text"></p>
-                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">11</span><span class="page-number-right">12</span></div>
                         </div>
-                        <div class="page-number">10</div>
-                    </div>
 
                     <!-- HOJA 11: BANDEJAS -->
-                    <div id="problemQ2Section" class="hidden q1-book-spread">
-                        <div class="problem-box q1-left-page">
-                            <h3>Situación 2</h3>
-                            <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos</p>
-                            <div class="q2-guide-card">
-                                <p class="q2-guide-title">Guía rápida</p>
-                                <ul class="q2-guide-list">
-                                    <li>1. Haz clic en una bandeja para seleccionarla.</li>
-                                    <li>2. Haz clic en otra bandeja para formar el par.</li>
-                                    <li>3. Repite hasta armar todas las parejas posibles.</li>
-                                </ul>
+
+                        <div id="problemQ2Section" class="page q1-book-spread activity-spread" style="position:relative;">
+                            <div class="q1-left-page">
+                                <span id="studentCodeM1" class="student-code-display"></span>
+                                <div class="problem-box">
+                                    <h3>Situación 2</h3>
+                                    <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos</p>
+                                    <div class="q2-guide-card">
+                                        <p class="q2-guide-title">Guía rápida</p>
+                                        <ul class="q2-guide-list">
+                                            <li>1. Haz clic en una bandeja para seleccionarla.</li>
+                                            <li>2. Haz clic en otra bandeja para formar el par.</li>
+                                            <li>3. Repite hasta armar todas las parejas posibles.</li>
+                                        </ul>
+                                    </div>
+                                    <p class="instruction-hint">💡 Solo puedes unir bandejas con la misma cantidad de pandebonos.</p>
+                                    <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
+                                </div>
                             </div>
-                            <p class="instruction-hint">💡 Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
+                            <div class="q1-right-page" id="q2RightPage">
+                                <!-- Imagen de bandejas SOLO visible al regresar de la cocina -->
+                                <div id="bandejasFotoRegreso" class="hidden" style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
+                                    <img src="assets/images/BandejasFoto.png" alt="Bandejas de pandebonos" style="max-width:95%;height:auto;border-radius:14px;box-shadow:0 4px 18px #0002;">
+                                </div>
+                                <!-- Foto de los pares (se genera al completar la cocina) -->
+                                <!-- Pregunta final + audio (se activa al completar la cocina) -->
+                                <div id="m1Q2FinalQuestion" class="q2-final-question hidden">
+                                    <p><strong>Para pensar 🤔</strong></p>
+                                    <p>En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
+                                    <p>¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM1Q2" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                        <button id="stopBtnM1Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="submitM1Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                        <span id="audioStatusM1Q2" class="audio-status"></span>
+                                    </div>
+                                    <p id="statusM1Q2" class="status-text"></p>
+                                </div>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">13</span><span class="page-number-right">14</span></div>
                         </div>
 
-                        <div class="evidence-section q1-right-page">
-                            <div id="traysAreaM1Q2" class="trays-container"></div>
-                            <div class="q2-verify-row">
-                                <button id="verifyTraysBtnM1Q2" class="btn btn-primary">Verificar emparejamientos</button>
-                                <p id="traysFeedbackM1Q2" class="feedback-text"></p>
+                        <div id="problemQ3Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Los sobres secretos 1️⃣</h3>
+                            <div class="book-story-card">
+                                <p>Como Daniel organizó muy bien las bandejas, Doña Alicia le propuso un reto nuevo.</p>
+                                <p>Esta vez no usarían pandebonos, sino sobres con números secretos.</p>
+                                <p><strong>Regla del juego:</strong> los sobres del mismo color guardan el mismo número.</p>
                             </div>
-                            <div id="m1Q2FinalQuestion" class="q2-final-question hidden">
-                                <p><strong>Pregunta final</strong></p>
-                                <p>En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
-                                <p>¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <span id="q3FixedNum1" class="number">4</span>
+                                <span class="operator">=</span>
+                                <span id="q3FixedNum2" class="number">4</span>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <p class="q3-inline-question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
+                        </div>
+
+                        <div class="q1-right-page">
+                            <div class="question-section">
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ1" value="yes">
+                                        Sí, creo que es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ1" value="no">
+                                        No, creo que no es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ1" value="unsure">
+                                        No estoy segura.
+                                    </label>
+
+                                </div>
+                            </div>
+                            <div id="promptSection1" class="hidden">
+                                <div class="prompt-box">
+                                    <p id="promptText1"></p>
+                                </div>
+                                <div class="evidence-section">
+                                    <h4>Graba tu explicación</h4>
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar audio</button>
+                                        <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM3Q1" class="audio-status"></span>
+                                    </div>
+                                    <div class="submit-section">
+                                        <p id="statusM3Q1" class="status-text"></p>
+                                        <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="m3Q1Placeholder" class="book-placeholder">
+                                Elige una opción para activar este espacio de explicación.
                             </div>
                         </div>
-                        <div class="page-number">11</div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">23</span><span class="page-number-right">24</span></div>
+                    </div>
+
+                        <div id="problemQ3Section2" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>Los sobres secretos 2️⃣</h3>
+                            <div class="book-story-card">
+                                <p>Ahora aparece un nuevo reto con dos sobres de color diferente.</p>
+                                <p>Recuerda: sobres del mismo color guardan el mismo número.</p>
+                            </div>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">=</span>
+                                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
+                                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
+                                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <p class="q3-inline-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                        </div>
+
+                        <div class="q1-right-page">
+                            <div class="question-section">
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="yes">
+                                        Sí, creo que es verdadera.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="unsure">
+                                        No estoy segura.
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="truthQ2" value="no">
+                                        Creo que no es verdadera.
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="promptSection2" class="hidden">
+                                <div class="prompt-box">
+                                    <p id="promptText2"></p>
+                                </div>
+                                <div class="evidence-section">
+                                    <h4>Graba tu explicación</h4>
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar audio</button>
+                                        <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM3Q2" class="audio-status"></span>
+                                    </div>
+                                    <div class="submit-section">
+                                        <p id="statusM3Q2" class="status-text"></p>
+                                        <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="m3Q2Placeholder" class="book-placeholder">
+                                Elige una opción para activar este espacio de explicación.
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">25</span><span class="page-number-right">26</span></div>
+                    </div>
+
+                        <div id="problemQ4Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <h3>El reto final</h3>
+                            <div class="book-story-card">
+                                <p>Después de pensar con bandejas y con sobres, Doña Alicia sonrió y le dijo a Daniel: “Ahora sí viene el reto final”.</p>
+                                <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
+                                <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
+                            </div>
+                            <div class="magic-lives-container">
+                                <span class="magic-label">✨ Vidas mágicas:</span>
+                                <div id="magicLives" class="magic-lives">
+                                    <span class="magic-heart">❤️</span>
+                                    <span class="magic-heart">❤️</span>
+                                    <span class="magic-heart">❤️</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="q1-right-page magic-theme">
+                            <!-- Código de estudiante se moverá a la esquina superior izquierda de la página -->
+                            <div class="items-container">
+                                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
+                                <div id="itemsWrapper"></div>
+                                <p id="moment4Status" class="status-text"></p>
+                                <p id="pointsStatus" class="points-status hidden"></p>
+                            </div>
+                            <canvas id="magicCanvas" class="magic-canvas"></canvas>
+                            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
+                            <div id="finalQuestionSection" class="hidden">
+                                <div class="final-box">
+                                    <h3>¡Felicitaciones! 🎉</h3>
+                                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
+                                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
+                                    <p class="thank-you-sub">¡Gracias por participar!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">27</span><span class="page-number-right">28</span></div>
+                    </div>
+
+                        <div id="problemQ5Section" class="page q1-book-spread activity-spread">
+                        <div class="problem-box q1-left-page">
+                            <div class="final-story-card">
+                                <h3>¡Llegaste al final del cuento! 🌟</h3>
+                                <p>Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
+                                <p>Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
+                                <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
+                            </div>
+                        </div>
+
+                        <div class="q1-right-page">
+                            <div class="reflection-card">
+                                <h4>Esta actividad fue:</h4>
+                                <div class="reflection-options">
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="dificil"> difícil</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
+                                    <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
+                                </div>
+                                <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
+                            </div>
+                        </div>
+                        <div class="page-number book-spread-number"><span class="page-number-left">29</span><span class="page-number-right">30</span></div>
                     </div>
                     
+                    </div>
+
                     <!-- Navigation Controls dentro del libro -->
                     <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
                     <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
                 </div>
             </div>
         </div>
-        </div>
-        </div>
     </section>
 
-    <!-- MOMENTO 2: Emparejamiento de Bandejas -->
-    <section id="moment2Screen" class="screen">
-        <div class="container">
-            <div class="header">
-                <!-- Momento 2: Organizando pandebonos -->
-                <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
-            </div>
-
-            <!-- INTRODUCCIÓN -->
-            <div class="problem-box">
-                <p>Doña Alicia y Daniel prepararon varias bandejas de pandebonos. Cada tarjeta muestra una forma diferente de organizarlas.</p>
-                <p><strong>Tu misión es unir las bandejas que tienen la misma cantidad de pandebonos:</strong></p>
-                <p class="instruction-hint">💡 Selecciona dos bandejas para unirlas. Recuerda: solo puedes unir las que tienen la misma cantidad.</p>
-            </div>
-
-            <!-- ÁREA DE BANDEJAS -->
-            <div id="traysGameSection">
-                <div id="traysArea" class="trays-container">
-                    <!-- Las 8 bandejas se generarán aquí dinámicamente -->
+    <!-- COCINA: Pantalla completa para el juego de bandejas -->
+    <div id="cocinaScreen" class="cocina-overlay hidden">
+        <div class="cocina-header">
+            <h2>👩‍🍳 La cocina de Doña Alicia</h2>
+            <p>Une las bandejas que tienen la misma cantidad de pandebonos</p>
+        </div>
+        <div class="cocina-body">
+            <!-- Ambiente de panadería alrededor de la mesa -->
+            <div class="bakery-kitchen-bg">
+                <div class="bakery-wall"></div>
+                <div class="bakery-shelf">
+                    <div class="bakery-shelf-item pan">🥖</div>
+                    <div class="bakery-shelf-item pan">🥐</div>
+                    <div class="bakery-shelf-item pan">🍞</div>
+                    <div class="bakery-shelf-item pan">🥨</div>
                 </div>
-                
-                <div class="game-controls">
-                    <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
-                    <p id="traysFeedback" class="feedback-text"></p>
+                <div class="bakery-oven">
+                    <div class="oven-door"></div>
+                    <div class="oven-window"></div>
                 </div>
-            </div>
-
-            <!-- PREGUNTA FINAL -->
-            <div id="finalQuestionSection" class="hidden">
-                <div class="problem-box">
-                    <h3>¡Excelente trabajo!</h3>
-                    <p class="question">En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
-                    <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                <div class="bakery-utensils">
+                    <span class="utensil">🥄</span>
+                    <span class="utensil">🍳</span>
+                    <span class="utensil">🧂</span>
                 </div>
-
-                <!-- SOLO AUDIO -->
-                <div class="evidence-section">
-                    <h4>Graba tu explicación:</h4>
-                    
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM2" class="audio-status"></span>
-                    </div>
-
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM2" class="status-text"></p>
-                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
-                    </div>
+                <!-- Mesa central con bandejas -->
+                <div class="bakery-table-center">
+                    <div id="traysAreaM1Q2" class="trays-container"></div>
                 </div>
-
-                <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
+                <div class="bakery-floor"></div>
             </div>
         </div>
-    </section>
-
-    <!-- MOMENTO 3: Los sobres misteriosos -->
-    <section id="moment3Screen" class="screen">
-        <div class="container">
-            <div class="header">
-                <!-- Momento 3: Los sobres misteriosos -->
-                <p class="student-code-display">Código: <span id="studentCodeM3"></span></p>
-            </div>
-
-            <div class="problem-box">
-                <p><strong>En cada sobre hay un número secreto.</strong></p>
-                <ul style="font-size: 1.1em; line-height: 1.8; margin: 15px 0; padding-left: 40px;">
-                    <li>Los sobres del mismo color guardan el mismo número.</li>
-                    <li>Los sobres de diferente color guardan números diferentes.</li>
-                </ul>
-            </div>
-
-            <!-- PROBLEMA 1 -->
-            <div id="problem1Section">
-                <div class="problem-box">
-                    <h3>Problema 1</h3>
-                    <div class="envelope-equation">
-                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                        </svg>
-                        <span class="operator">×</span>
-                        <span class="number">4</span>
-                        <span class="operator">=</span>
-                        <span class="number">4</span>
-                        <span class="operator">×</span>
-                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="question-section">
-                        <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ1" value="yes">
-                                Sí, creo que es verdadera
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ1" value="unsure">
-                                No estoy segura
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ1" value="no">
-                                Creo que no es verdadera
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="promptSection1" class="hidden">
-                    <div class="prompt-box">
-                        <p id="promptText1"></p>
-                    </div>
-
-                    <!-- TABLERO Y AUDIO -->
-                    <div class="evidence-section">
-                        <h4>Usa el tablero y el audio para explicar:</h4>
-                        
-                        <!-- Tablero -->
-                        <div class="board-container">
-                            <div class="board-tools">
-                                <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                                <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                                <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                                <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
-                            </div>
-                            <div class="board-wrapper">
-                                <div class="board-grid"></div>
-                                <canvas id="boardCanvasM3Q1" class="drawing-board" width="1200" height="1100"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Audio -->
-                        <div class="audio-controls">
-                            <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar Audio</button>
-                            <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                            <span id="audioStatusM3Q1" class="audio-status"></span>
-                        </div>
-
-                        <!-- Enviar -->
-                        <div class="submit-section">
-                            <p id="statusM3Q1" class="status-text"></p>
-                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar Problema 1</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PROBLEMA 2 (oculto hasta que se envíe el primero) -->
-            <div id="problem2Section" class="hidden">
-                <div class="problem-box">
-                    <h3>Problema 2</h3>
-                    <div class="envelope-equation">
-                        <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
-                            <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
-                            <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
-                            <path d="M5 10 L30 30 L55 10 Z" fill="#64B5F6" opacity="0.7"/>
-                        </svg>
-                        <span class="operator">×</span>
-                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                        </svg>
-                        <span class="operator">=</span>
-                        <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                            <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                            <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                            <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                        </svg>
-                        <span class="operator">×</span>
-                        <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
-                            <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
-                            <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
-                            <path d="M5 10 L30 30 L55 10 Z" fill="#64B5F6" opacity="0.7"/>
-                        </svg>
-                    </div>
-                    
-                    <div class="question-section">
-                        <p class="question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ2" value="yes">
-                                Sí
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ2" value="unsure">
-                                No estoy segura
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ2" value="no">
-                                No
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="promptSection2" class="hidden">
-                    <div class="prompt-box">
-                        <p id="promptText2"></p>
-                    </div>
-
-                    <!-- TABLERO Y AUDIO -->
-                    <div class="evidence-section">
-                        <h4>Usa el tablero y elaudio para explicar:</h4>
-                        
-                        <!-- Tablero -->
-                        <div class="board-container">
-                            <div class="board-tools">
-                                <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                                <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                                <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                                <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
-                            </div>
-                            <div class="board-wrapper">
-                                <div class="board-grid"></div>
-                                <canvas id="boardCanvasM3Q2" class="drawing-board" width="1200" height="1100"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Audio -->
-                        <div class="audio-controls">
-                            <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
-                            <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
-                            <span id="audioStatusM3Q2" class="audio-status"></span>
-                        </div>
-
-                        <!-- Enviar -->
-                        <div class="submit-section">
-                            <p id="statusM3Q2" class="status-text"></p>
-                            <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar Problema 2</button>
-                        </div>
-                    </div>
-
-                    <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
-                </div>
-            </div>
+        <div class="cocina-controls">
+            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">✅ Verificar emparejamientos</button>
+            <p id="traysFeedbackM1Q2" class="feedback-text"></p>
         </div>
-    </section>
-
-    <!-- MOMENTO 4: El mago lo hizo de nuevo -->
-    <section id="moment4Screen" class="screen magic-theme">
-        <div class="container">
-            <div class="header">
-                <!-- Momento 4: El mago lo hizo de nuevo -->
-                <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
-                
-                <!-- Sistema de vidas -->
-                <div class="magic-lives-container">
-                    <span class="magic-label">✨ Vidas mágicas:</span>
-                    <div id="magicLives" class="magic-lives">
-                        <span class="magic-heart">❤️</span>
-                        <span class="magic-heart">❤️</span>
-                        <span class="magic-heart">❤️</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="items-container">
-                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
-                
-                <div id="itemsWrapper">
-                    <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
-                </div>
-
-                <p id="moment4Status" class="status-text"></p>
-                <p id="pointsStatus" class="points-status hidden"></p>
-            </div>
-
-            <!-- Canvas para efectos mágicos -->
-            <canvas id="magicCanvas" class="magic-canvas"></canvas>
-            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-
-            <div id="finalQuestionSection" class="hidden">
-                <div class="final-box">
-                    <h3>¡Felicitaciones! 🎉</h3>
-                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
-                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
-                    <p class="thank-you-sub">¡Gracias por participar!</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- Scripts -->
-    <script src="trays-system.js?v=2026031420"></script>
-    <script type="module" src="main.js?v=2026031420"></script>
-    <script src="app.js?v=2026031420"></script>
+    <!-- <script src="trays-system.js?v=2026031813"></script> Duplicado eliminado -->
+    <script type="module" src="main.js?v=2026031813"></script>
+    <script src="app.js?v=2026031813"></script>
+    <!-- Refuerzo extremo: ocultar cocina persistentemente al cargar y en cambios de visibilidad -->
+    <script>
+        (function() {
+            function hideCocina() {
+                var cocina = document.getElementById('cocinaScreen');
+                if (cocina && !cocina.classList.contains('hidden')) {
+                    cocina.classList.add('hidden');
+                }
+            }
+            // Refuerzo: ocultar varias veces tras cargar
+            document.addEventListener('DOMContentLoaded', function() {
+                let count = 0;
+                const maxTries = 20; // 2 segundos
+                const interval = setInterval(function() {
+                    hideCocina();
+                    count++;
+                    if (count >= maxTries) clearInterval(interval);
+                }, 100);
+            });
+            // Refuerzo: ocultar si el usuario vuelve a la pestaña
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) hideCocina();
+            });
+
+            // Fondo de portada SOLO cuando la portada está activa
+            function updateBookCoverBg() {
+                var cover = document.querySelector('.book-cover-page.active');
+                var bg = document.getElementById('bookCoverBg');
+                if (cover && bg) {
+                    bg.style.display = 'block';
+                } else if(bg) {
+                    bg.style.display = 'none';
+                }
+            }
+            document.addEventListener('DOMContentLoaded', updateBookCoverBg);
+            document.addEventListener('click', function(e){
+                setTimeout(updateBookCoverBg, 100);
+            });
+            // Si usas navegación por teclado o eventos personalizados, puedes llamar updateBookCoverBg() tras cada cambio de página
+        })();
+    </script>
+
 </body>
 </html>

@@ -4,41 +4,2063 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividad 0B - El Misterio de las Sumas Repetidas</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫓</text></svg>">
-    <link rel="stylesheet" href="styles.css?v=2026031414">
-    <link rel="stylesheet" href="trays-styles.css?v=2026022007">
-    <link rel="stylesheet" href="bags-styles-0b.css?v=2026022103">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="trays-styles.css?v=2026031515">
+    <link rel="stylesheet" href="bags-styles-0b.css?v=2026031515">
     <!-- ResponsiveVoice para voces más expresivas -->
     <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
+    <style>
+    .activity-0b,
+    .activity-0b * {
+        font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif !important;
+    }
+
+    .activity-0b {
+        font-size: 20px;
+        line-height: 1.5;
+        color: #222;
+    }
+
+    .activity-0b p,
+    .activity-0b li,
+    .activity-0b .story-text,
+    .activity-0b .question,
+    .activity-0b .instruction-hint,
+    .activity-0b .confirmation-question,
+    .activity-0b .radio-label,
+    .activity-0b .feedback-text,
+    .activity-0b .status-text,
+    .activity-0b .activity-subtitle,
+    .activity-0b .student-code-display,
+    .activity-0b .problem-box p {
+        font-size: 13px;
+        text-align: justify;
+    }
+
+    .activity-0b .main-title {
+        display: block;
+        text-align: center;
+    }
+
+    .activity-0b .story-image,
+    .activity-0b .situation-image {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .activity-0b #welcomeScreen {
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .activity-0b #welcomeScreen .user-rect {
+        width: 100%;
+        max-width: 720px;
+        margin: 12px auto;
+        background: rgb(200, 230, 255);
+        border-radius: 14px;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .activity-0b #welcomeScreen .main-title,
+    .activity-0b #welcomeScreen .activity-subtitle {
+        margin: 0;
+        text-align: center;
+    }
+
+    .activity-0b #welcomeScreen .main-title {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+    }
+
+    .activity-0b #welcomeScreen .activity-subtitle {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+        font-weight: 700;
+        color: #0b2a3a;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        font-style: italic;
+    }
+
+    .activity-0b #welcomeScreen .chalk-text {
+        display: block;
+        margin-bottom: 14px;
+    }
+
+    .activity-0b #welcomeScreen .chalk-input,
+    .activity-0b #welcomeScreen .btn {
+        width: 75%;
+        max-width: 640px;
+        margin: 12px auto;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    .activity-0b #welcomeScreen .welcome-box {
+        background: transparent;
+        border-radius: 0;
+        padding: 0;
+        max-width: none;
+        margin: 0;
+    }
+
+    .activity-0b #welcomeScreen #welcomeError {
+        margin-top: 10px;
+    }
+
+    .activity-0b #confirmationScreen .main-title,
+    .activity-0b #confirmationScreen .confirmation-question {
+        font-size: 30px !important;
+        line-height: 1.2 !important;
+        text-align: center;
+    }
+
+    .activity-0b #moment1Screen .container {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 8px 10px;
+        border-radius: 14px;
+        box-shadow: none;
+        width: 95vw;
+        max-width: none;
+        margin: 12px auto;
+    }
+
+    .activity-0b #moment2Screen .container {
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        width: min(96vw, 1800px);
+        height: 96dvh;
+        padding: 8px 10px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 8px;
+        margin: 12px auto;
+    }
+
+    .activity-0b #moment1Screen #flipbook,
+    .activity-0b #moment1Screen #problemQ1Section.q1-book-spread {
+        width: 95% !important;
+        max-width: 95% !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .activity-0b #moment1Screen #flipbook .story-page .story-text {
+        font-size: clamp(1.15rem, 1.65vw, 1.55rem) !important;
+        line-height: 1.5 !important;
+        letter-spacing: -0.1px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page h3 {
+        font-size: clamp(1.15rem, 2vw, 1.4rem) !important;
+        margin-top: 0;
+        margin-bottom: 8px;
+        color: #d97825;
+        text-align: center;
+        width: 100%;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section.q1-book-spread {
+        position: relative;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section.page {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section.q1-book-spread {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 100%;
+        height: 100%;
+        margin: 0;
+        border: 0;
+        border-radius: 10px;
+        box-shadow: none;
+        overflow: hidden;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-left-page,
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-right-page {
+        min-height: 100%;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-left-page {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #moment1Screen #flipbook #problemQ1Section .q1-right-page {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page p,
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page .question {
+        font-size: clamp(0.92rem, 1.5vw, 1.08rem) !important;
+        line-height: 1.35 !important;
+        letter-spacing: -0.2px;
+        width: 92%;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: justify;
+        color: #222;
+        font-weight: 400;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-left-page .question {
+        margin-top: 12px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .sale-label-image {
+        display: block;
+        width: clamp(140px, 24vw, 240px);
+        max-width: 100%;
+        /* La imagen PNG tiene 38% de transparencia en la parte inferior;
+           aspect-ratio + object-fit recorta esa zona invisible */
+        aspect-ratio: 1536 / 640;
+        object-fit: cover;
+        object-position: top center;
+        margin: 0;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .sale-block {
+        width: 92%;
+        max-width: 460px;
+        margin: 8px auto 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .sale-block-ventas {
+        width: 100%;
+        max-width: none;
+        align-items: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .ventas-image {
+        width: 78%;
+        max-width: 78%;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .sale-description {
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        text-align: left !important;
+        line-height: 1.3 !important;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page h4 {
+        font-size: clamp(1.05rem, 1.65vw, 1.45rem);
+        line-height: 1.25;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .board-tools {
+        justify-content: center !important;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .board-container {
+        width: 98%;
+        max-width: 98%;
+        margin: 6px auto 4px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page #boardCanvasM1Q1 {
+        width: 100% !important;
+        height: clamp(300px, 50vh, 620px) !important;
+        max-height: none !important;
+        background-color: #ffffff;
+        background-image:
+            linear-gradient(to right, rgba(52, 73, 94, 0.08) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(52, 73, 94, 0.08) 1px, transparent 1px);
+        background-size: 30px 30px;
+        background-position: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: nowrap;
+        margin-top: 8px;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row .audio-controls,
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row .submit-section {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b #problemQ1Section .problem-page-number {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        z-index: 10;
+    }
+
+    .activity-0b #problemQ1Section .problem-page-number.book-spread-number {
+        left: 0;
+        right: 0;
+        width: 100%;
+        transform: none;
+        text-align: unset;
+        pointer-events: none;
+    }
+
+    .activity-0b #problemQ1Section .problem-page-number.book-spread-number .page-number-left,
+    .activity-0b #problemQ1Section .problem-page-number.book-spread-number .page-number-right {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .activity-0b #problemQ1Section .problem-page-number.book-spread-number .page-number-left {
+        left: 2.2%;
+    }
+
+    .activity-0b #problemQ1Section .problem-page-number.book-spread-number .page-number-right {
+        right: 2.2%;
+    }
+
+    .activity-0b #problemQ1Section .q1-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 12;
+        width: 62px;
+        height: 62px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ1Section #prevBtnQ1 {
+        left: 14px;
+    }
+
+    .activity-0b #problemQ1Section #nextBtnQ1 {
+        right: 14px;
+    }
+
+    .activity-0b #problemQ2Section {
+        position: relative;
+        overflow: visible;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread {
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        grid-column: 1 / -1;
+        overflow: hidden;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread.active {
+        display: grid;
+    }
+
+    .activity-0b .m2-preview-card {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto 14px;
+        border-radius: 14px;
+        border: 2px dashed rgba(48, 77, 112, 0.28);
+        background: linear-gradient(150deg, #f7fbff, #eef6ff);
+        padding: 14px;
+    }
+
+    .activity-0b .m2-preview-card h4 {
+        margin: 0 0 10px;
+        text-align: center;
+        color: #1d4f7a;
+        font-size: 1rem;
+    }
+
+    .activity-0b .m2-preview-note {
+        margin: 8px 0 0;
+        font-size: 0.92rem;
+        line-height: 1.35;
+        color: #355a76;
+        text-align: center;
+    }
+
+    .activity-0b .m2-photo-grid {
+        display: block;
+    }
+
+    .activity-0b .m2-photo-fixed-text {
+        margin: 0 0 8px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #1f4f7a;
+        text-align: center;
+    }
+
+    .activity-0b .m2-photo-fixed-image {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.14);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .activity-0b .m2-photo-card {
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 8px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .activity-0b .m2-photo-card.pair {
+        border-left: 5px solid #3b82f6;
+    }
+
+    .activity-0b .m2-photo-card.single {
+        border-left: 5px solid #f59e0b;
+    }
+
+    .activity-0b .m2-photo-title {
+        margin: 0 0 4px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #1d3550;
+    }
+
+    .activity-0b .m2-photo-body {
+        margin: 0;
+        font-size: 0.78rem;
+        line-height: 1.3;
+        color: #27384a;
+        text-align: left;
+    }
+
+    .activity-0b .m2-pending-card {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        border-radius: 14px;
+        border: 2px dashed rgba(57, 90, 128, 0.35);
+        background: linear-gradient(150deg, #f8fbff, #edf4ff);
+        padding: 16px 14px;
+    }
+
+    .activity-0b .m2-pending-card h4 {
+        margin: 0 0 8px;
+        text-align: center;
+        color: #1d4f7a;
+        font-size: 1rem;
+    }
+
+    .activity-0b .m2-pending-card p {
+        margin: 0;
+        text-align: center;
+        font-size: 0.92rem;
+        line-height: 1.4;
+        color: #355a76;
+    }
+
+    .activity-0b #goToCocinaBtn[disabled] {
+        opacity: 0.75;
+        cursor: not-allowed;
+        background: linear-gradient(135deg, #6f8fa7, #4d6a82);
+    }
+
+    .activity-0b .m2-secret-title {
+        margin: 0 0 10px;
+        text-align: center;
+        color: #b95414;
+        font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+    }
+
+    .activity-0b .m2-secret-text {
+        margin: 0 0 12px;
+        font-size: 0.9rem;
+        line-height: 1.35;
+        color: #1f3142;
+        text-align: left;
+    }
+
+    .activity-0b .m2-mul-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid rgba(27, 64, 95, 0.18);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .activity-0b .m2-mul-table th,
+    .activity-0b .m2-mul-table td {
+        border-bottom: 1px solid rgba(27, 64, 95, 0.14);
+        padding: 6px;
+        font-size: 0.75rem;
+        line-height: 1.25;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .activity-0b .m2-mul-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .activity-0b .m2-mul-table th {
+        background: #eef6ff;
+        color: #234a6b;
+        font-weight: 700;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-block-title th {
+        background: #e8f2fc;
+        font-size: 0.8rem;
+        padding: 7px 6px;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-label-row th {
+        font-size: 0.64rem;
+        line-height: 1.2;
+        padding: 5px 4px;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-entry-row td {
+        padding: 5px 4px;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-separator {
+        width: 8px;
+        min-width: 8px;
+        padding: 0;
+        background: #ffffff;
+    }
+
+    .activity-0b .m2-mul-table .m2-mul-symbol {
+        font-size: 0.64rem;
+        font-weight: 700;
+        color: #355a76;
+        white-space: nowrap;
+    }
+
+    .activity-0b .m2-mul-table input {
+        width: 100%;
+        min-width: 42px;
+        max-width: 64px;
+        border: 1px solid rgba(27, 64, 95, 0.3);
+        border-radius: 6px;
+        padding: 4px 6px;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    .activity-0b .m2-mul-actions {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .activity-0b #m2MulTableFeedback {
+        margin: 0;
+        min-height: 1.25rem;
+        flex: 1;
+    }
+
+    .activity-0b .m2-spread-21 {
+        text-align: center;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .activity-0b .m2-spread-21 .problem-box {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-left {
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="2"] .m2-problem1-left {
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-left .m2-secret-title,
+    .activity-0b #problemQ2Section .m2-problem1-left .m2-secret-text,
+    .activity-0b #problemQ2Section .m2-problem1-left .question {
+        width: 100%;
+        max-width: none;
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="2"] .m2-problem1-left .question {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.35;
+        color: #1f3142;
+        font-weight: 400;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-left .envelope-equation {
+        margin: 10px auto 14px;
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ2Section .m2-problem1-right {
+        justify-content: center;
+        align-items: stretch;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="2"] .m2-problem1-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ2Section .m2-p21-radio-group {
+        display: grid;
+        gap: 10px;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 540px;
+    }
+
+    .activity-0b #problemQ2Section .m2-p21-radio-group .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 2px solid #dbe4f7;
+        border-radius: 12px;
+        background: #f7f8fb;
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        color: #2f3a4d;
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .m2-p21-radio-group input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        accent-color: #8a95b0;
+        flex: 0 0 auto;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated {
+        margin-top: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #ffffff;
+        padding: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated .prompt-box {
+        margin: 0;
+        width: 100%;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated .prompt-box p {
+        margin: 0;
+        text-align: left;
+        font-size: 0.95rem;
+        line-height: 1.35;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated .audio-controls,
+    .activity-0b #problemQ2Section .m2-q1-associated .submit-section {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #recordBtnM2Q1,
+    .activity-0b #problemQ2Section .m2-q1-associated #stopBtnM2Q1,
+    .activity-0b #problemQ2Section .m2-q1-associated #submitM2Q1 {
+        font-size: 0.78rem;
+        padding: 6px 10px;
+        min-height: 34px;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #submitM2Q1 {
+        min-width: 88px;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #statusM2Q1 {
+        display: none;
+    }
+
+    .activity-0b #problemQ2Section .m2-q1-associated #audioStatusM2Q1 {
+        display: none;
+    }
+
+    .activity-0b #problemQ2Section .m2-spread[data-spread="1"] .q1-right-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 8px 6px 0;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section .status-text {
+        margin: 0;
+    }
+
+    .activity-0b #moment1Screen #flipbook #m1ToM2BridgePage {
+        background: var(--page-bg-light);
+    }
+
+    .activity-0b #flipbookSection {
+        transform-origin: center center;
+    }
+
+    .activity-0b #flipbookSection.m1-turn-out {
+        pointer-events: none;
+    }
+
+    .activity-0b #flipbookSection.m1-turn-out #flipbook {
+        animation: m1ToM2PageTurn 620ms cubic-bezier(0.2, 0.62, 0.2, 1) forwards;
+        transform-origin: left center;
+    }
+
+    .activity-0b #flipbookSection.m1-turn-out #flipbook::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(90deg, rgba(20, 34, 48, 0) 52%, rgba(20, 34, 48, 0.18) 76%, rgba(20, 34, 48, 0.28) 100%);
+        animation: m1ToM2Shade 620ms ease forwards;
+        z-index: 40;
+    }
+
+    .activity-0b #moment2Screen.turn-in #problemQ2Section {
+        animation: m2FromPageTurn 500ms cubic-bezier(0.22, 0.75, 0.24, 1) both;
+        transform-origin: right center;
+    }
+
+    @keyframes m1ToM2PageTurn {
+        0% {
+            transform: perspective(2200px) rotateY(0deg) translateX(0);
+            opacity: 1;
+        }
+        58% {
+            transform: perspective(2200px) rotateY(-16deg) translateX(-1%);
+            opacity: 0.96;
+        }
+        100% {
+            transform: perspective(2200px) rotateY(-30deg) translateX(-3%);
+            opacity: 0.18;
+        }
+    }
+
+    @keyframes m1ToM2Shade {
+        0% { opacity: 0; }
+        60% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+
+    @keyframes m2FromPageTurn {
+        0% {
+            transform: perspective(2200px) rotateY(20deg) translateX(2%);
+            opacity: 0.16;
+        }
+        100% {
+            transform: perspective(2200px) rotateY(0deg) translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .activity-0b #problemQ2Section.q1-book-spread {
+        display: block;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        width: 95%;
+        max-width: none;
+        height: 95%;
+        aspect-ratio: auto;
+        min-height: 0;
+        margin: 0 auto;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        background: #fdfdfd;
+        position: relative;
+    }
+
+    .activity-0b #problemQ2Section.q1-book-spread::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        background: rgba(0, 0, 0, 0.08);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page,
+    .activity-0b #problemQ2Section .q1-right-page {
+        margin: 0;
+        max-width: none;
+        min-height: 100%;
+        height: 100%;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 28px;
+        background: var(--page-bg-light);
+        background-image:
+            linear-gradient(90deg,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 85%,
+                rgba(0,0,0,0.02) 92%,
+                rgba(0,0,0,0.05) 96%,
+                rgba(0,0,0,0.08) 100%),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(0, 0, 0, 0.02) 24px,
+                rgba(0, 0, 0, 0.02) 25px
+            );
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #problemQ2Section .q1-right-page {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page h3 {
+        font-size: clamp(1.2rem, 2vw, 1.5rem) !important;
+        color: #d97825;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .activity-0b #problemQ2Section .q1-left-page > p {
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem) !important;
+        line-height: 1.45 !important;
+        width: 92%;
+        max-width: 480px;
+        margin: 0 auto 10px;
+        text-align: justify;
+        color: #222;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-card {
+        width: 92%;
+        max-width: 480px;
+        margin: 14px auto 0;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(63, 94, 251, 0.2);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-title {
+        margin: 0 0 8px;
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem);
+        font-weight: 700;
+        color: #2f3f87;
+        text-align: left;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-list {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+    }
+
+    .activity-0b #problemQ2Section .q2-guide-list li {
+        margin: 0;
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem);
+        line-height: 1.45;
+        text-align: left;
+        color: #233047;
+    }
+
+    .activity-0b #problemQ2Section .instruction-hint {
+        font-size: clamp(0.96rem, 1.45vw, 1.08rem) !important;
+        line-height: 1.45;
+        width: 92%;
+        max-width: 480px;
+        margin: 10px auto 0;
+        background: #fff8e8;
+        border-left: 4px solid #ffd46a;
+        color: #6f5b1f;
+    }
+
+    .activity-0b #problemQ2Section .page-number.book-spread-number {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 12px;
+        width: 100%;
+        transform: none;
+        text-align: unset;
+        font-size: 1.05rem;
+        font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.45);
+        font-style: normal;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .activity-0b #problemQ2Section .page-number.book-spread-number .page-number-left,
+    .activity-0b #problemQ2Section .page-number.book-spread-number .page-number-right {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .activity-0b #problemQ2Section .page-number.book-spread-number .page-number-left {
+        left: 2.2%;
+    }
+
+    .activity-0b #problemQ2Section .page-number.book-spread-number .page-number-right {
+        right: 2.2%;
+    }
+
+    .activity-0b #problemQ2Section .q2-nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 20;
+        width: 62px;
+        height: 62px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-0b #problemQ2Section #prevBtnQ2 {
+        left: -16px;
+    }
+
+    .activity-0b #problemQ2Section #nextBtnQ2 {
+        right: -16px;
+    }
+
+    .activity-0b #problemQ2Section .btn-cocina {
+        display: block;
+        width: 92%;
+        max-width: 480px;
+        margin: 18px auto 0;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: white;
+        border: none;
+        border-radius: 16px;
+        padding: 16px 24px;
+        font-size: clamp(1rem, 1.8vw, 1.25rem);
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(249, 115, 22, 0.38);
+        transition: all 0.3s;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+    }
+
+    .activity-0b #problemQ2Section .btn-cocina:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 26px rgba(249, 115, 22, 0.52);
+    }
+
+    .activity-0b #problemQ2Section .page-number {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        z-index: 6;
+    }
+
+    .activity-0b .cocina-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        background: linear-gradient(180deg, #fff9f1 0%, #f7e8d1 58%, #efd4af 100%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .activity-0b .cocina-overlay.hidden {
+        display: none !important;
+    }
+
+    .activity-0b .cocina-header {
+        text-align: center;
+        padding: 18px 20px 12px;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.22);
+        flex-shrink: 0;
+    }
+
+    .activity-0b .cocina-header h2 {
+        margin: 0 0 4px;
+        font-size: clamp(1.3rem, 3vw, 2rem);
+    }
+
+    .activity-0b .cocina-header p {
+        margin: 0;
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        opacity: 0.95;
+    }
+
+    .activity-0b .cocina-body {
+        flex: 0 0 auto;
+        padding: 18px 12px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        overflow: visible;
+    }
+
+    /* Pseudo-elementos de barras laterales deshabilitados */
+    .activity-0b .cocina-body::before,
+    .activity-0b .cocina-body::after {
+        display: none !important;
+    }
+
+    .activity-0b .cocina-body .trays-container {
+        width: min(100%, 1320px);
+        max-width: 1320px;
+        min-height: 560px;
+        overflow: visible;
+    }
+
+    .activity-0b .cocina-controls {
+        padding: 6px 20px 12px;
+        text-align: center;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        flex-shrink: 0;
+    }
+
+    .activity-0b .cocina-controls .game-controls {
+        margin-top: 4px;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 {
+        margin-top: 18px;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .problem-box {
+        background: #ffffff;
+        border: 2px solid #d9dff8;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(30, 58, 138, 0.08);
+        padding: 16px 16px 12px;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .problem-box h3 {
+        margin: 0 0 8px;
+        color: #1f2a44;
+        font-size: clamp(1.05rem, 1.8vw, 1.35rem) !important;
+        font-weight: 800;
+        text-align: left;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .problem-box .question {
+        margin: 0 0 8px;
+        color: #1f2a44;
+        font-size: clamp(0.95rem, 1.35vw, 1.12rem) !important;
+        line-height: 1.4 !important;
+        text-align: left !important;
+        font-weight: 500;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions .audio-controls,
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions .submit-section {
+        margin: 0;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .m2-inline-actions .status-text {
+        display: none;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .evidence-section {
+        margin-top: 10px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .evidence-section h4 {
+        margin: 0 0 8px;
+        text-align: left;
+        color: #1e3a5f;
+        font-size: clamp(1rem, 1.7vw, 1.3rem);
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .audio-controls,
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .submit-section {
+        margin-top: 6px;
+        justify-content: flex-start;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .btn-audio,
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .btn-primary {
+        font-size: clamp(0.75rem, 1.1vw, 0.88rem) !important;
+        padding: 7px 14px !important;
+    }
+
+    .activity-0b #moment2Screen #finalQuestionSectionM2 .status-text {
+        min-height: 0;
+        margin: 0;
+    }
+
+    .activity-0b .evidence-section .audio-controls,
+    .activity-0b .evidence-section .submit-section {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 8px 6px 0;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .activity-0b .evidence-section .audio-controls {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b .evidence-section .submit-section {
+        flex-wrap: nowrap;
+    }
+
+    .activity-0b .evidence-section .submit-section .status-text {
+        margin: 0 8px 0 0;
+    }
+
+    .activity-0b .evidence-section .submit-section .btn.btn-primary::before {
+        content: '';
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        margin-right: 0.45em;
+        vertical-align: -0.1em;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M2.01 21 23 12 2.01 3 2 10l15 2-15 2z'/%3E%3C/svg%3E");
+    }
+
+    .activity-0b #moment3Screen #problem2Section.m3-book-spread {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        width: 95%;
+        max-width: none;
+        min-height: 600px;
+        margin: 16px auto 0;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        background: #fdfdfd;
+        position: relative;
+    }
+
+    .activity-0b #moment3Screen #problem2Section.m3-book-spread::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        background: rgba(0, 0, 0, 0.08);
+        transform: translateX(-50%);
+        pointer-events: none;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-book-left,
+    .activity-0b #moment3Screen #problem2Section .m3-book-right {
+        min-height: 600px;
+        padding: 28px;
+        background: #f7f7f9;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 16px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-book-left {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-book-right {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .activity-0b #moment3Screen #problem2Section h3 {
+        margin: 0;
+        color: #e57b19;
+        font-size: clamp(2rem, 3.2vw, 3rem) !important;
+        line-height: 1.1;
+        font-weight: 800;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-equation-card {
+        width: 100%;
+        border-radius: 16px;
+        background: #ececf0;
+        padding: 16px 14px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-equation-card .envelope-equation {
+        margin: 0;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-main-question {
+        margin: 0;
+        color: #c8452f;
+        font-size: clamp(1.85rem, 2.9vw, 2.5rem);
+        font-weight: 700;
+        line-height: 1.22;
+        text-align: left;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-radio-group {
+        display: grid;
+        gap: 12px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-radio-group .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border: 2px solid #dbe4f7;
+        border-radius: 14px;
+        background: #f7f8fb;
+        padding: 12px 14px;
+        font-size: clamp(1rem, 1.6vw, 1.2rem);
+        color: #2f3a4d;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-radio-group input[type="radio"] {
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        accent-color: #8a95b0;
+        flex: 0 0 auto;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .m3-choice-placeholder {
+        border-radius: 14px;
+        background: #f2ebd8;
+        border: 1px solid #e7cf93;
+        color: #5b4b24;
+        text-align: center;
+        font-size: clamp(1rem, 1.65vw, 1.22rem);
+        font-weight: 700;
+        padding: 16px 20px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section #promptSection2 {
+        margin-top: 4px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section #promptSection2 .prompt-box {
+        margin-bottom: 10px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section #promptSection2 .evidence-section {
+        margin: 0;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+    .activity-0b #moment3Screen #problem2Section .page-number {
+        position: absolute;
+        left: auto;
+        right: 2.2%;
+        bottom: 12px;
+        transform: none;
+        z-index: 6;
+        font-size: 1.05rem;
+        font-family: 'Century Gothic', 'Avenir Next', 'Trebuchet MS', Arial, sans-serif;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.45);
+        font-style: normal;
+    }
+
+    .activity-0b #moment4Screen {
+        padding: 8px 10px;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        width: 95%;
+        min-height: 620px;
+        margin: 10px auto 0;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
+        background: #f5f5f7;
+        position: relative;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.1);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .activity-0b #moment4Screen .m4-left-page,
+    .activity-0b #moment4Screen .m4-right-page {
+        min-height: 620px;
+        padding: 24px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .activity-0b #moment4Screen .m4-left-page {
+        border-radius: 10px 0 0 10px;
+        background: #f7f7fa;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 18px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .activity-0b #moment4Screen .m4-left-page h3 {
+        margin: 0;
+        color: #e57b19;
+        text-align: center;
+        font-size: clamp(1.8rem, 3vw, 2.6rem) !important;
+    }
+
+    .activity-0b #moment4Screen .m4-story-card {
+        width: 88%;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #dbe2f3;
+        border-radius: 16px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+        padding: 16px 18px;
+    }
+
+    .activity-0b #moment4Screen .m4-story-card p {
+        margin: 0 0 8px;
+        font-size: clamp(1rem, 1.45vw, 1.28rem) !important;
+        line-height: 1.38;
+        text-align: left;
+        color: #273247;
+    }
+
+    .activity-0b #moment4Screen .m4-story-card p:last-child {
+        margin-bottom: 0;
+    }
+
+    .activity-0b #moment4Screen .m4-left-page .magic-lives-container {
+        width: 78%;
+        margin: 0 auto;
+        justify-content: center;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page {
+        background: linear-gradient(180deg, #182445 0%, #153564 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 14px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .student-code-display {
+        margin: 0;
+        text-align: center;
+        font-size: clamp(1.25rem, 1.9vw, 1.55rem) !important;
+        font-weight: 800;
+        color: #ffe6a7;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .magic-instruction {
+        margin: 0;
+        font-size: clamp(1.05rem, 1.8vw, 1.35rem) !important;
+        line-height: 1.32;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .items-container {
+        margin: 0;
+        max-width: none;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page #itemsWrapper {
+        gap: 0;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .item-box {
+        border: 2px solid #f2a22e;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 8px 18px rgba(10, 25, 48, 0.35);
+        padding: 20px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .item-equation {
+        font-size: clamp(2.25rem, 4vw, 3.4rem);
+        color: #6b3ea3;
+        gap: 12px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .item-input {
+        width: clamp(72px, 8vw, 96px);
+        font-size: clamp(2rem, 3.1vw, 2.8rem);
+        border-radius: 12px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .check-answer-btn {
+        font-size: clamp(1.45rem, 2.4vw, 2rem);
+        padding: 10px 24px !important;
+        border-radius: 12px;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .item-feedback {
+        font-size: clamp(1rem, 1.7vw, 1.28rem);
+        min-height: 40px !important;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page #moment4Status,
+    .activity-0b #moment4Screen .m4-right-page #pointsStatus {
+        text-align: center;
+        color: #ffffff;
+        margin-top: 10px;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        z-index: 3;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number {
+        left: 0;
+        right: 0;
+        width: 100%;
+        transform: none;
+        text-align: unset;
+        pointer-events: none;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-left,
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-right {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-left {
+        left: 2.2%;
+    }
+
+    .activity-0b #moment4Screen .m4-book-spread > .page-number.book-spread-number .page-number-right {
+        right: 2.2%;
+    }
+
+    .activity-0b #moment4ReflectionSection .m4-left-page,
+    .activity-0b #moment4ReflectionSection .m4-right-page {
+        background: var(--page-bg-light);
+        background-image:
+            linear-gradient(90deg,
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 85%,
+                rgba(0,0,0,0.02) 92%,
+                rgba(0,0,0,0.05) 96%,
+                rgba(0,0,0,0.08) 100%),
+            repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(0, 0, 0, 0.02) 24px,
+                rgba(0, 0, 0, 0.02) 25px
+            );
+    }
+
+    .activity-0b #moment4ReflectionSection .m4-left-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-0b #moment4ReflectionSection .final-story-card {
+        width: 94%;
+        max-width: 520px;
+        padding: 24px 22px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #fff9ec 0%, #f0f9ff 100%);
+        border: 1px solid rgba(251, 146, 60, 0.35);
+        box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+    }
+
+    .activity-0b #moment4ReflectionSection .final-story-card h3 {
+        margin: 0 0 12px;
+        font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+        color: #9a3412;
+        text-align: center;
+    }
+
+    .activity-0b #moment4ReflectionSection .final-story-card p {
+        font-size: clamp(0.95rem, 1.55vw, 1.1rem) !important;
+        line-height: 1.5 !important;
+        color: #1f2937;
+        margin: 0 0 10px;
+        text-align: justify;
+    }
+
+    .activity-0b #moment4ReflectionSection .final-story-card p:last-child {
+        margin-bottom: 0;
+    }
+
+    .activity-0b #moment4ReflectionSection .m4-right-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-card {
+        width: 94%;
+        max-width: 480px;
+        padding: 24px 22px;
+        border-radius: 18px;
+        background: linear-gradient(145deg, #0f172a 0%, #1e3a8a 100%);
+        box-shadow: 0 14px 26px rgba(15, 23, 42, 0.35);
+        border: 1px solid rgba(96, 165, 250, 0.35);
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-card h4 {
+        margin: 0 0 16px;
+        font-size: clamp(1.1rem, 1.9vw, 1.4rem);
+        color: #f8fafc;
+        text-align: center;
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-options {
+        display: grid;
+        gap: 10px;
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        color: #e2e8f0;
+        font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-option input {
+        accent-color: #f59e0b;
+        transform: scale(1.12);
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-hint,
+    .activity-0b #moment4ReflectionSection .reflection-status {
+        margin-top: 14px;
+        color: #cbd5e1;
+        font-size: 0.92rem;
+        text-align: center;
+    }
+
+    .activity-0b #moment4ReflectionSection .reflection-status {
+        min-height: 1.25em;
+        margin-top: 8px;
+    }
+
+    .activity-0b #moment4ReflectionSection #finishM4Btn {
+        display: block;
+        margin: 14px auto 0;
+    }
+
+    .activity-0b #moment4Screen .m4-right-page .m4-answer-row {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    @media (max-width: 980px) {
+        .activity-0b #moment1Screen .container {
+            width: 95vw;
+            padding: 6px 8px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section.q1-book-spread,
+        .activity-0b #problemQ2Section.q1-book-spread,
+        .activity-0b #moment3Screen #problem2Section.m3-book-spread,
+        .activity-0b #moment4Screen .m4-book-spread {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .activity-0b #problemQ2Section.q1-book-spread::before,
+        .activity-0b #moment3Screen #problem2Section.m3-book-spread::before,
+        .activity-0b #moment4Screen .m4-book-spread::before {
+            display: none;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page,
+        .activity-0b #problemQ2Section .q1-left-page,
+        .activity-0b #problemQ2Section .q1-right-page,
+        .activity-0b #moment3Screen #problem2Section .m3-book-left,
+        .activity-0b #moment3Screen #problem2Section .m3-book-right,
+        .activity-0b #moment4Screen .m4-left-page,
+        .activity-0b #moment4Screen .m4-right-page {
+            min-height: auto;
+            padding: 20px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page #boardCanvasM1Q1,
+        .activity-0b #moment3Screen #promptSection2 .drawing-board,
+        .activity-0b #moment3Screen #promptSection1 .drawing-board {
+            height: clamp(240px, 42vh, 420px) !important;
+        }
+
+        .activity-0b #problemQ1Section .q1-nav-btn {
+            width: 54px;
+            height: 54px;
+        }
+
+        .activity-0b #problemQ2Section .q2-nav-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+        }
+
+        .activity-0b #problemQ2Section #prevBtnQ2 {
+            left: -14px;
+        }
+
+        .activity-0b #problemQ2Section #nextBtnQ2 {
+            right: -14px;
+        }
+        .activity-0b #moment4Screen .m4-left-page .magic-lives-container,
+        .activity-0b #moment4Screen .m4-left-page .m4-story-card,
+        .activity-0b #moment4ReflectionSection .reflection-card,
+        .activity-0b #moment4ReflectionSection .final-story-card {
+            width: 100%;
+            max-width: none;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-equation {
+            font-size: clamp(2rem, 5.5vw, 2.9rem);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-input {
+            width: clamp(76px, 10vw, 94px);
+            font-size: clamp(1.7rem, 4.8vw, 2.4rem);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .check-answer-btn {
+            font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .activity-0b #welcomeScreen .user-rect {
+            max-width: 100%;
+            border-radius: 14px;
+            padding: 14px 12px;
+            margin: 10px auto;
+        }
+
+        .activity-0b #welcomeScreen .main-title {
+            font-size: 30px !important;
+        }
+
+        .activity-0b #welcomeScreen .activity-subtitle {
+            font-size: 30px !important;
+        }
+
+        .activity-0b #welcomeScreen .chalk-input,
+        .activity-0b #welcomeScreen .btn {
+            width: 75%;
+        }
+
+        .activity-0b #confirmationScreen .main-title,
+        .activity-0b #confirmationScreen .confirmation-question {
+            font-size: 24px !important;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page {
+            padding: 18px;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page #boardCanvasM1Q1 {
+            height: clamp(260px, 42vh, 420px) !important;
+            background-size: 24px 24px;
+        }
+
+        .activity-0b #problemQ2Section.q1-book-spread {
+            grid-template-columns: 1fr;
+            min-height: auto;
+            aspect-ratio: auto;
+        }
+
+        .activity-0b #problemQ2Section.q1-book-spread::before {
+            display: none;
+        }
+
+        .activity-0b #problemQ2Section .q1-left-page,
+        .activity-0b #problemQ2Section .q1-right-page {
+            min-height: auto;
+            padding: 18px;
+        }
+
+        .activity-0b .cocina-body {
+            padding: 12px;
+        }
+
+        .activity-0b .cocina-body .trays-container {
+            min-height: 420px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .activity-0b #moment2Screen #finalQuestionSectionM2 .problem-box {
+            padding: 12px;
+        }
+
+        .activity-0b #moment2Screen #finalQuestionSectionM2 .evidence-section h4 {
+            font-size: clamp(0.95rem, 4.2vw, 1.15rem);
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page .q1-action-row {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .activity-0b #problemQ1Section #prevBtnQ1 {
+            left: 8px;
+        }
+
+        .activity-0b #problemQ1Section #nextBtnQ1 {
+            right: 8px;
+        }
+
+        .activity-0b #moment1Screen #flipbook .story-page .story-text {
+            font-size: clamp(1.05rem, 2.7vw, 1.25rem) !important;
+            line-height: 1.45 !important;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page .audio-controls,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page .submit-section {
+            flex-wrap: wrap;
+        }
+
+        .activity-0b .evidence-section .audio-controls,
+        .activity-0b .evidence-section .submit-section {
+            flex-wrap: wrap;
+        }
+
+        .activity-0b #moment3Screen #problem2Section.m3-book-spread {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .activity-0b #moment3Screen #problem2Section.m3-book-spread::before {
+            display: none;
+        }
+
+        .activity-0b #moment3Screen #problem2Section .m3-book-left,
+        .activity-0b #moment3Screen #problem2Section .m3-book-right {
+            min-height: auto;
+            padding: 18px;
+        }
+
+        .activity-0b #moment3Screen #problem2Section .m3-main-question {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+        }
+
+        .activity-0b #moment4Screen .m4-book-spread {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .activity-0b #moment4Screen .m4-book-spread::before {
+            display: none;
+        }
+
+        .activity-0b #moment4Screen .m4-left-page,
+        .activity-0b #moment4Screen .m4-right-page {
+            min-height: auto;
+            padding: 16px;
+        }
+
+        .activity-0b #moment4Screen .m4-left-page .magic-lives-container,
+        .activity-0b #moment4Screen .m4-left-page .m4-story-card {
+            width: 100%;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-equation {
+            font-size: clamp(1.85rem, 7.2vw, 2.45rem);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-input {
+            font-size: clamp(1.5rem, 6.5vw, 2.2rem);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .check-answer-btn {
+            font-size: clamp(1.1rem, 4.8vw, 1.45rem);
+            margin-left: 8px !important;
+        }
+
+        .activity-0b #moment4ReflectionSection .reflection-card,
+        .activity-0b #moment4ReflectionSection .final-story-card {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .activity-0b {
+            font-size: 18px;
+        }
+
+        .activity-0b #moment1Screen .container,
+        .activity-0b #moment2Screen .container,
+        .activity-0b #moment3Screen .container,
+        .activity-0b #moment4Screen .container {
+            width: 98vw;
+            padding: 4px;
+            margin: 8px auto;
+        }
+
+        .activity-0b #moment1Screen #flipbook .story-page .story-text {
+            font-size: clamp(0.98rem, 4.4vw, 1.14rem) !important;
+            line-height: 1.38 !important;
+        }
+
+        .activity-0b #problemQ1Section .q1-nav-btn {
+            width: 46px;
+            height: 46px;
+            top: auto;
+            bottom: 14px;
+            transform: none;
+        }
+
+        .activity-0b #problemQ1Section #prevBtnQ1 {
+            left: 10px;
+        }
+
+        .activity-0b #problemQ1Section #nextBtnQ1 {
+            right: 10px;
+        }
+
+        .activity-0b #problemQ1Section .problem-page-number,
+        .activity-0b #problemQ2Section .page-number,
+        .activity-0b #moment3Screen #problem2Section .page-number,
+        .activity-0b #moment4Screen .m4-book-spread > .page-number {
+            bottom: 8px;
+            font-size: 1.5rem;
+        }
+
+        .activity-0b #moment1Screen #problemQ1Section .q1-left-page,
+        .activity-0b #moment1Screen #problemQ1Section .q1-right-page,
+        .activity-0b #problemQ2Section .q1-left-page,
+        .activity-0b #problemQ2Section .q1-right-page,
+        .activity-0b #moment3Screen #problem2Section .m3-book-left,
+        .activity-0b #moment3Screen #problem2Section .m3-book-right,
+        .activity-0b #moment4Screen .m4-left-page,
+        .activity-0b #moment4Screen .m4-right-page,
+        .activity-0b #moment4ReflectionSection .m4-left-page,
+        .activity-0b #moment4ReflectionSection .m4-right-page {
+            padding: 14px;
+        }
+
+        .activity-0b #problemQ2Section .btn-cocina,
+        .activity-0b #moment4ReflectionSection #finishM4Btn {
+            width: 100%;
+            max-width: none;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .m4-answer-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .check-answer-btn {
+            margin-left: 0 !important;
+            width: min(100%, 220px);
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-equation {
+            font-size: clamp(1.55rem, 7vw, 2.05rem);
+            gap: 8px;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-input {
+            width: 82px;
+            font-size: 1.8rem;
+        }
+
+        .activity-0b #moment4Screen .m4-right-page .item-box {
+            padding: 16px 12px;
+        }
+
+        .activity-0b #moment4ReflectionSection .reflection-option {
+            align-items: flex-start;
+            font-size: 0.98rem;
+        }
+
+        .activity-0b #moment4ReflectionSection .reflection-hint,
+        .activity-0b #moment4ReflectionSection .reflection-status,
+        .activity-0b #moment4Screen .m4-right-page #moment4Status,
+        .activity-0b #moment4Screen .m4-right-page #pointsStatus {
+            font-size: 0.9rem;
+            line-height: 1.35;
+        }
+    }
+    </style>
 </head>
 <body class="activity-0b">
     <!-- PANTALLA DE BIENVENIDA -->
-    <section id="welcomeScreen" class="screen active">
-        <h1 class="main-title">Actividad 0B</h1>
-        <p class="activity-subtitle">El Misterio de las Sumas Repetidas</p>
-        <div class="container">
-            <div class="welcome-box">
-                <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
-                <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
-                <button id="enterBtn" class="btn btn-primary">Ingresar</button>
-                <p id="welcomeError" class="error-text hidden"></p>
-            </div>
-        </div>
-    </section>
+<section id="welcomeScreen" class="screen active">
+  <div class="user-rect">
+    <h1 class="main-title">Actividad 0B</h1>
+  </div>
+
+  <div class="user-rect">
+    <p class="activity-subtitle">El Misterio de las Sumas Repetidas</p>
+  </div>
+
+  <div class="user-rect welcome-box">
+    <label for="studentCodeInput" class="chalk-text">Escribe tu código estudiantil:</label>
+    <input type="text" id="studentCodeInput" class="chalk-input" placeholder="Ej: 12345" maxlength="20" inputmode="numeric">
+    <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+    <p id="welcomeError" class="error-text hidden"></p>
+  </div>
+</section>
 
     <!-- PANTALLA DE CONFIRMACIÓN -->
-    <section id="confirmationScreen" class="screen">
-        <h1 class="main-title">Confirmación</h1>
-        <div class="container">
-            <div class="welcome-box">
-                <p id="confirmationQuestion" class="confirmation-question"></p>
-                <div class="confirmation-buttons">
-                    <button id="confirmYesBtn" class="btn btn-success">Sí</button>
-                    <button id="confirmNoBtn" class="btn btn-secondary">No</button>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section id="confirmationScreen" class="screen">
+       <h1 class="main-title">Confirmación</h1>
+       <div class="welcome-box confirmation-box">
+         <p id="confirmationQuestion" class="confirmation-question"></p>
+         <div class="confirmation-buttons">
+           <button id="confirmYesBtn" class="btn btn-success">
+             <img src="assets/images/BTconfirmar.png" alt="Confirmar">
+           </button>
+           <button id="confirmNoBtn" class="btn btn-secondary">
+             <img src="assets/images/BTrechazado.png" alt="Rechazar">
+           </button>
+         </div>
+       </div>
+      </section>
 
     <!-- MOMENTO 1: Cuento + Problema Q1 -->
     <section id="moment1Screen" class="screen">
@@ -62,9 +2084,34 @@
                         </svg>
                     </button>
                     <div id="flipbook">
-                        
+
+                        <!-- PORTADA CERRADA DEL LIBRO -->
+                        <div class="page book-cover-page active">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de Doña Alicia">
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-1">El</span>
+                                    <span class="cover-word-chip tone-2">secreto</span>
+                                    <span class="cover-word-chip tone-3">de</span>
+                                    <span class="cover-word-chip tone-4">las</span>
+                                </span>
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-5">bandejas</span>
+                                </span>
+                                <span class="cover-word-line">
+                                    <span class="cover-word-chip tone-2">de</span>
+                                    <span class="cover-word-chip tone-1">Doña</span>
+                                    <span class="cover-word-chip tone-4">Alicia</span>
+                                </span>
+                            </h2>
+                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+                            <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
+                                <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+                            </button>
+                        </div>
+
                         <!-- Story Page 1 -->
-                        <div class="page story-page active">
+                        <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM1"></span></p>
                             <div class="page-number">1</div>
                             <img src="assets/images/pagina1_cuento_act0B.png" alt="Doña Alicia en su panadería" class="story-image">
                             <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
@@ -72,6 +2119,7 @@
 
                         <!-- Story Page 2 -->
                         <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM2"></span></p>
                             <div class="page-number">2</div>
                             <img src="assets/images/pagina2_cuento_act0B.png" alt="Doña Alicia amasando" class="story-image">
                             <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Amasa con fuerza y ritmo. “Un poquito de harina por aquí y mucho amor por allá”, canta mientras prepara sus famosos pandebonos.</p>
@@ -79,6 +2127,7 @@
 
                         <!-- Story Page 3 -->
                         <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM3"></span></p>
                             <div class="page-number">3</div>
                             <img src="assets/images/pagina3_cuento_act0B.png" alt="Daniel ayudando" class="story-image">
                             <p class="story-text">Daniel, su pequeño vecino, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
@@ -86,6 +2135,7 @@
 
                         <!-- Story Page 4 -->
                         <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM4"></span></p>
                             <div class="page-number">4</div>
                             <img src="assets/images/pagina4_cuento_act0B.png" alt="Pandebonos en el horno" class="story-image">
                             <p class="story-text">¡Ding! El horno se abre y un vaporcito delicioso llena la calle. Los pandebonos brillan doraditos, listos para ser compartidos.</p>
@@ -93,13 +2143,15 @@
 
                         <!-- Story Page 5 -->
                         <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM5"></span></p>
                             <div class="page-number">5</div>
                             <img src="assets/images/pagina5_cuento_act0B.png" alt="Pedidos de bolsitas" class="story-image">
-                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 pandebonos”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Alejo. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
+                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 pandebonos”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Adrián. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
                         </div>
 
                         <!-- Story Page 6 -->
                         <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM6"></span></p>
                             <div class="page-number">6</div>
                             <img src="assets/images/pagina6_cuento_act0B.png" alt="Bolsitas más grandes" class="story-image">
                             <p class="story-text">Más tarde, llegan otros niños. —“Doña Alicia, ahora queremos bolsitas más grandes.” Ella piensa un momento y dice: —“Esta vez haremos 3 bolsitas. En cada una pondremos 7 pandebonos.” Daniel vuelve a organizar los panes: 7 en la primera bolsita, 7 en la segunda, 7 en la tercera. Cuando termina, mira las bolsitas. Mira los panes. Y vuelve a mirar las bolsitas.</p>
@@ -107,9 +2159,60 @@
 
                         <!-- Story Page 7 -->
                         <div class="page story-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM7"></span></p>
                             <div class="page-number">7</div>
                             <img src="assets/images/pagina7_cuento_act0B.png" alt="Cierre del cuento" class="story-image">
                             <p class="story-text">Cuando termina, sonríe orgulloso. —“¡Me encanta ayudar!”, dice mientras mira todas las bolsitas listas para entregar. Doña Alicia le da una palmadita en el hombro. —“Compartir con cuidado también es una forma de querer.” Y juntos siguen preparando más pedidos para el barrio.</p>
+                        </div>
+
+                        <!-- Story Page 8 (Páginas 15 y 16): Situación 1 -->
+                        <div id="problemQ1Section" class="page story-page q1-book-spread problem-q1-page">
+                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeQ1"></span></p>
+                            <div class="page-number">8</div>
+                            <div class="problem-box q1-left-page">
+                                <h3>Situación 1</h3>
+                                <div class="sale-block sale-block-ventas">
+                                    <img src="assets/images/Ventas.png" alt="Ventas" class="sale-label-image ventas-image">
+                                </div>
+                                <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
+                                <p class="question">Explica cómo lo sabes.</p>
+                            </div>
+
+                            <!-- TABLERO Y AUDIO -->
+                            <div class="evidence-section q1-right-page">
+                                <h4>Puedes utilizar el tablero:</h4>
+
+                                <!-- Tablero -->
+                                <div class="board-container">
+                                    <div class="board-tools">
+                                        <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                        <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                        <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                        <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                        <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                    </div>
+                                    <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
+                                </div>
+
+                                <div class="q1-action-row">
+                                    <!-- Audio -->
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM1Q1" class="audio-status"></span>
+                                    </div>
+
+                                    <!-- Enviar -->
+                                    <div class="submit-section">
+                                        <p id="statusM1Q1" class="status-text"></p>
+                                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="m1ToM2BridgePage" class="page story-page m1-bridge-page" aria-hidden="true">
+                            <div class="page-number">9</div>
                         </div>
 
                     </div>
@@ -117,47 +2220,6 @@
                     <!-- Navigation Controls dentro del libro -->
                     <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
                     <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
-                </div>
-            </div>
-
-            <!-- SITUACIÓN 1 -->
-            <div id="problemQ1Section" class="hidden q1-book-spread">
-                <div class="problem-box q1-left-page">
-                    <h3>Situación 1</h3>
-                    <p><strong>Primera venta:</strong> 7 bolsitas con 3 panes de bono cada una.</p>
-                    <p><strong>Segunda venta:</strong> 3 bolsitas con 7 panes de bono cada una.</p>
-                    <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
-                    <p class="question">Explica cómo lo sabes. Argumenta tu respuesta.</p>
-                </div>
-
-                <!-- TABLERO Y AUDIO -->
-                <div class="evidence-section q1-right-page">
-                    <h4>Puedes usar el tablero si lo necesitas (audio obligatorio):</h4>
-                    
-                    <!-- Tablero -->
-                    <div class="board-container">
-                        <div class="board-tools">
-                            <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                            <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                            <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                            <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                            <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
-                        </div>
-                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="800" height="400"></canvas>
-                    </div>
-
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM1Q1" class="audio-status"></span>
-                    </div>
-
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM1Q1" class="status-text"></p>
-                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -171,52 +2233,276 @@
                 <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
             </div>
 
-            <!-- INTRODUCCIÓN -->
-            <div class="problem-box">
-                <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora los deben organizar por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
-                <p><strong>Tu misión es unir los pedidos que tienen la misma cantidad de panes de bono:</strong></p>
-                <p class="instruction-hint">💡 Arrastra los pedidos para juntarlos. Recuerda: solo puedes unir los que tienen la misma cantidad.</p>
-            </div>
-
-            <!-- ÁREA DE BANDEJAS -->
-            <div id="traysGameSection">
-                <div id="traysArea" class="trays-container">
-                    <!-- Las 8 bandejas se generarán aquí dinámicamente -->
-                </div>
-                
-                <div class="game-controls">
-                    <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
-                    <p id="traysFeedback" class="feedback-text"></p>
-                </div>
-            </div>
-
-            <!-- PREGUNTA FINAL -->
-            <div id="finalQuestionSection" class="hidden">
-                <div class="problem-box">
-                    <h3>¡Excelente trabajo!</h3>
-                    <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
-                    <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
-                </div>
-
-                <!-- SOLO AUDIO -->
-                <div class="evidence-section">
-                    <h4>Graba tu explicación:</h4>
-                    
-                    <!-- Audio -->
-                    <div class="audio-controls">
-                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
-                        <span id="audioStatusM2" class="audio-status"></span>
+            <div id="problemQ2Section" class="q1-book-spread">
+                <button id="prevBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página anterior">←</button>
+                <button id="nextBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página siguiente">→</button>
+                <p class="student-code-display student-code-corner">Código: <span id="studentCodeQ2"></span></p>
+                <div class="m2-spread active" data-spread="0">
+                    <div class="page-number book-spread-number">
+                        <span class="page-number-left">17</span>
+                        <span class="page-number-right">18</span>
+                    </div>
+                    <div class="problem-box q1-left-page">
+                        <h3>Situación 2</h3>
+                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora debes organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
+                        <div class="q2-guide-card">
+                            <p class="q2-guide-title">Guía rápida</p>
+                            <ul class="q2-guide-list">
+                                <li>1. Haz clic en una bolsa para seleccionarla.</li>
+                                <li>2. Haz clic en otra bolsa para formar el par.</li>
+                                <li>3. Repite hasta armar todas las parejas posibles.</li>
+                            </ul>
+                        </div>
+                        <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
+                        <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
                     </div>
 
-                    <!-- Enviar -->
-                    <div class="submit-section">
-                        <p id="statusM2" class="status-text"></p>
-                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                    <div class="evidence-section q1-right-page" id="q2RightPage">
+                        <div id="m2PendingCard" class="m2-pending-card">
+                            <h4>Tu espacio de resultados</h4>
+                            <p>Cuando termines la organización en cocina, aquí verás cómo quedaron tus parejas.</p>
+                        </div>
+
+                        <div class="m2-preview-card hidden">
+                            <div id="m2PreviewPage18" class="m2-photo-grid"></div>
+                        </div>
+
+                        <div id="finalQuestionSectionM2" class="hidden">
+                            <div class="problem-box">
+                                <h3>Para pensar 🤔</h3>
+                                <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
+                                <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+
+                                <div class="m2-inline-actions">
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
+                                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <span id="audioStatusM2" class="audio-status"></span>
+                                    </div>
+
+                                    <div class="submit-section">
+                                        <p id="statusM2" class="status-text"></p>
+                                        <button id="submitM2" class="btn btn-primary" disabled>Enviar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <button id="continueToM3Btn" class="btn btn-success hidden">Continuar al Momento 3</button>
+                <div class="m2-spread" data-spread="1">
+                    <div class="page-number book-spread-number">
+                        <span class="page-number-left">19</span>
+                        <span class="page-number-right">20</span>
+                    </div>
+                    <div class="problem-box q1-left-page">
+                        <h3>Tu organización en una foto</h3>
+                        <p>Observa de nuevo cómo quedaron las parejas y los pedidos sin pareja.</p>
+                        <div class="m2-preview-card">
+                            
+                            <div id="m2PreviewPage19" class="m2-photo-grid"></div>
+                        </div>
+                    </div>
+
+                    <div class="evidence-section q1-right-page">
+                        <h3 class="m2-secret-title">Las bolsas secretas</h3>
+                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo. Esta vez utilizarás bolsas con números secretos. Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
+                        <table class="m2-mul-table" aria-label="Tabla de multiplicaciones de pedidos">
+                            <tbody>
+                                <tr class="m2-mul-block-title">
+                                    <th colspan="5">Pedido 3</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th colspan="5">Pedido 7</th>
+                                </tr>
+                                <tr class="m2-mul-label-row">
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th>#panes</th>
+                                    <th>Igual</th>
+                                    <th>#panes</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th>#panes</th>
+                                    <th>Igual</th>
+                                    <th>#panes</th>
+                                </tr>
+                                <tr class="m2-mul-entry-row">
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 3"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 3"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="#panes pedido 3"></td>
+                                    <td class="m2-mul-separator" aria-hidden="true"></td>
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 7"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 7"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="#panes pedido 7"></td>
+                                </tr>
+
+                                <tr class="m2-mul-block-title">
+                                    <th colspan="5">Pedido 2</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th colspan="5">Pedido 6</th>
+                                </tr>
+                                <tr class="m2-mul-label-row">
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th>#panes</th>
+                                    <th>Igual</th>
+                                    <th>#panes</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th>#panes</th>
+                                    <th>Igual</th>
+                                    <th>#panes</th>
+                                </tr>
+                                <tr class="m2-mul-entry-row">
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 2"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 2"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="#panes pedido 2"></td>
+                                    <td class="m2-mul-separator" aria-hidden="true"></td>
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 6"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 6"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="#panes pedido 6"></td>
+                                </tr>
+
+                                <tr class="m2-mul-block-title">
+                                    <th colspan="5">Pedido 4</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th colspan="5">Pedido 8</th>
+                                </tr>
+                                <tr class="m2-mul-label-row">
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th>#panes</th>
+                                    <th>Igual</th>
+                                    <th>#panes</th>
+                                    <th class="m2-mul-separator" aria-hidden="true"></th>
+                                    <th># bolsas</th>
+                                    <th>Por</th>
+                                    <th>#panes</th>
+                                    <th>Igual</th>
+                                    <th>#panes</th>
+                                </tr>
+                                <tr class="m2-mul-entry-row">
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 4"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 4"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="#panes pedido 4"></td>
+                                    <td class="m2-mul-separator" aria-hidden="true"></td>
+                                    <td><input type="text" aria-label="Numero de bolsas pedido 8"></td>
+                                    <td class="m2-mul-symbol">×</td>
+                                    <td><input type="text" aria-label="#panes pedido 8"></td>
+                                    <td class="m2-mul-symbol">=</td>
+                                    <td><input type="text" aria-label="#panes pedido 8"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="m2-mul-actions">
+                            <button id="verifyMulTableBtn" class="btn btn-primary" type="button">Verificar tabla</button>
+                            <p id="m2MulTableFeedback" class="feedback-text" aria-live="polite"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m2-spread" data-spread="2">
+                    <div class="page-number book-spread-number">
+                        <span class="page-number-left">21</span>
+                        <span class="page-number-right">22</span>
+                    </div>
+                    <div class="problem-box q1-left-page m2-problem1-left">
+                        <h3 class="m2-secret-title">Las bolsas secretas</h3>
+                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo.</p>
+                        <p class="m2-secret-text">Esta vez utilizarás bolsas con números secretos.</p>
+                        <p class="m2-secret-text">Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
+
+                        <div class="problem-box" style="width:100%;max-width:none;padding:0;border:0;background:transparent;box-shadow:none;">
+                            <h3>Problema 1</h3>
+                            <div class="envelope-equation">
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
+                                    <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
+                                    <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                <span class="operator">×</span>
+                                <span class="number">4</span>
+                                <span class="operator">=</span>
+                                <span class="number">4</span>
+                                <span class="operator">×</span>
+                                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
+                                    <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
+                                    <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
+                                    <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro de la bolsa verde?</p>
+                        </div>
+                    </div>
+
+                    <div class="evidence-section q1-right-page m2-problem1-right">
+                        <div class="radio-group m2-p21-radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1M2" value="yes">
+                                Sí, creo que es verdadera
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1M2" value="no">
+                                No, creo que no es verdadera
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="truthQ1M2" value="unsure">
+                                No estoy segura
+                            </label>
+                        </div>
+
+                        <div id="m2PromptSectionQ1" class="m2-q1-associated hidden">
+                            <div class="prompt-box">
+                                <p id="m2PromptTextQ1"></p>
+                            </div>
+                            <div class="audio-controls">
+                                <button id="recordBtnM2Q1" class="btn btn-audio">🎤 Grabar Audio</button>
+                                <button id="stopBtnM2Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <span id="audioStatusM2Q1" class="audio-status"></span>
+                            </div>
+                            <div class="submit-section">
+                                <p id="statusM2Q1" class="status-text"></p>
+                                <button id="submitM2Q1" class="btn btn-primary" disabled>Enviar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cocinaScreen" class="cocina-overlay hidden" aria-hidden="true">
+                <div class="cocina-header">
+                    <h2>👩‍🍳 Cocina de Doña Alicia</h2>
+                    <p>Empareja los pedidos que tienen la misma cantidad de panes de bono.</p>
+                </div>
+
+                <div class="cocina-body">
+                    <div id="traysGameSection">
+                        <div id="traysArea" class="trays-container">
+                            <!-- Las 8 bandejas se generan dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cocina-controls">
+                    <div class="game-controls">
+                        <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
+                        <p id="traysFeedback" class="feedback-text"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -230,6 +2516,7 @@
             </div>
 
             <div class="problem-box">
+                <p class="student-code-display student-code-corner">Código: <span id="studentCodeM3"></span></p>
                 <p><strong>En cada bolsa hay un número secreto.</strong></p>
                 <ul style="font-size: 1.1em; line-height: 1.8; margin: 15px 0; padding-left: 40px;">
                     <li>Las bolsas del mismo color guardan el mismo número.</li>
@@ -269,13 +2556,14 @@
                                 Sí, creo que es verdadera
                             </label>
                             <label class="radio-label">
+                                <input type="radio" name="truthQ1" value="no">
+                                No, creo que no es verdadera
+                            </label>
+                            <label class="radio-label">
                                 <input type="radio" name="truthQ1" value="unsure">
                                 No estoy segura
                             </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ1" value="no">
-                                Creo que no es verdadera
-                            </label>
+
                         </div>
                     </div>
                 </div>
@@ -311,17 +2599,18 @@
                         <!-- Enviar -->
                         <div class="submit-section">
                             <p id="statusM3Q1" class="status-text"></p>
-                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar Problema 1</button>
+                            <button id="submitM3Q1" class="btn btn-primary" disabled>Enviar</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- PROBLEMA 2 (oculto hasta que se envíe el primero) -->
-            <div id="problem2Section" class="hidden">
-                <div class="problem-box">
+            <div id="problem2Section" class="hidden m3-book-spread">
+                <div class="m3-book-left">
                     <h3>Problema 2</h3>
-                    <div class="envelope-equation">
+                    <div class="m3-equation-card">
+                        <div class="envelope-equation">
                         <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
                             <rect x="8" y="12" width="44" height="34" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="8"/>
                             <rect x="8" y="12" width="44" height="9" fill="#42A5F5" opacity="0.85" rx="8"/>
@@ -349,64 +2638,69 @@
                             <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
                             <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                    </div>
-                    
-                    <div class="question-section">
-                        <p class="question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ2" value="yes">
-                                Sí, verdadera
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ2" value="unsure">
-                                No estoy segura
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="truthQ2" value="no">
-                                No
-                            </label>
                         </div>
                     </div>
+                    <p class="m3-main-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
                 </div>
 
-                <div id="promptSection2" class="hidden">
-                    <div class="prompt-box">
-                        <p id="promptText2"></p>
+                <div class="m3-book-right">
+                    <div class="radio-group m3-radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="truthQ2" value="yes">
+                            Sí, verdadera
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="truthQ2" value="unsure">
+                            No estoy segura
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="truthQ2" value="no">
+                            No
+                        </label>
                     </div>
 
-                    <!-- TABLERO Y AUDIO -->
-                    <div class="evidence-section">
-                        <h4>Usa el tablero y el audio para explicar:</h4>
-                        
-                        <!-- Tablero -->
-                        <div class="board-container">
-                            <div class="board-tools">
-                                <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                                <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                                <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                                <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                    <div id="m3Q2ChoicePlaceholder" class="m3-choice-placeholder">Elige una opción para activar este espacio de explicación.</div>
+
+                    <div id="promptSection2" class="hidden">
+                        <div class="prompt-box">
+                            <p id="promptText2"></p>
+                        </div>
+
+                        <!-- TABLERO Y AUDIO -->
+                        <div class="evidence-section">
+                            <h4>Usa el tablero y el audio para explicar:</h4>
+                            
+                            <!-- Tablero -->
+                            <div class="board-container">
+                                <div class="board-tools">
+                                    <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                    <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                </div>
+                                <canvas id="boardCanvasM3Q2" class="drawing-board" width="800" height="500"></canvas>
                             </div>
-                            <canvas id="boardCanvasM3Q2" class="drawing-board" width="800" height="500"></canvas>
+
+                            <!-- Audio -->
+                            <div class="audio-controls">
+                                <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
+                                <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <span id="audioStatusM3Q2" class="audio-status"></span>
+                            </div>
+
+                            <!-- Enviar -->
+                            <div class="submit-section">
+                                <p id="statusM3Q2" class="status-text"></p>
+                                <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar</button>
+                            </div>
                         </div>
 
-                        <!-- Audio -->
-                        <div class="audio-controls">
-                            <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
-                            <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
-                            <span id="audioStatusM3Q2" class="audio-status"></span>
-                        </div>
-
-                        <!-- Enviar -->
-                        <div class="submit-section">
-                            <p id="statusM3Q2" class="status-text"></p>
-                            <button id="submitM3Q2" class="btn btn-primary" disabled>Enviar Problema 2</button>
-                        </div>
+                        <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
                     </div>
-
-                    <button id="continueToM4Btn" class="btn btn-success hidden">Continuar al Momento 4</button>
                 </div>
+
+                <div class="page-number">10</div>
             </div>
         </div>
     </section>
@@ -414,50 +2708,96 @@
     <!-- MOMENTO 4: El mago lo hizo de nuevo -->
     <section id="moment4Screen" class="screen magic-theme">
         <div class="container">
-            <div class="header">
-                    <!-- Momento 4: El mago lo hizo de nuevo -->
-                <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
-                
-                <!-- Sistema de vidas -->
-                <div class="magic-lives-container">
-                    <span class="magic-label">✨ Vidas mágicas:</span>
-                    <div id="magicLives" class="magic-lives">
-                        <span class="magic-heart">❤️</span>
-                        <span class="magic-heart">❤️</span>
-                        <span class="magic-heart">❤️</span>
+            <div id="moment4MainSpread" class="m4-book-spread">
+                <div class="m4-left-page">
+                    <h3>El reto final</h3>
+
+                    <div class="m4-story-card">
+                        <p>Después de pensar con bandejas y con sobres, Doña Alicia sonrió y le dijo a Daniel: "Ahora sí viene el reto final".</p>
+                        <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
+                        <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
                     </div>
+
+                    <div class="magic-lives-container">
+                        <span class="magic-label">✨ Vidas mágicas:</span>
+                        <div id="magicLives" class="magic-lives">
+                            <span class="magic-heart">❤️</span>
+                            <span class="magic-heart">❤️</span>
+                            <span class="magic-heart">❤️</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m4-right-page">
+                    <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+
+                    <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
+
+                    <div class="items-container">
+                        <div id="itemsWrapper">
+                            <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
+                        </div>
+
+                        <p id="moment4Status" class="status-text"></p>
+                        <p id="pointsStatus" class="points-status hidden"></p>
+
+                        <div id="finalQuestionSection" class="hidden">
+                            <div class="final-box">
+                                <h3>¡Felicitaciones! 🎉</h3>
+                                <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
+                                <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
+                                <p class="thank-you-sub">¡Gracias por participar!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="page-number book-spread-number">
+                    <span class="page-number-left">23</span>
+                    <span class="page-number-right">24</span>
                 </div>
             </div>
 
-            <div class="items-container">
-                <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
-                
-                <div id="itemsWrapper">
-                    <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
+            <div id="moment4ReflectionSection" class="m4-book-spread hidden">
+                <div class="m4-left-page">
+                    <div class="final-story-card">
+                        <h3>¡Llegaste al final del cuento! 🌟</h3>
+                        <p>Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
+                        <p>Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
+                        <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
+                    </div>
                 </div>
 
-                <p id="moment4Status" class="status-text"></p>
-                <p id="pointsStatus" class="points-status hidden"></p>
+                <div class="m4-right-page">
+                    <div class="reflection-card">
+                        <h4>Esta actividad fue:</h4>
+                        <div class="reflection-options">
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="dificil"> difícil</label>
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
+                        </div>
+                        <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
+                        <p id="m4ReflectionStatus" class="reflection-status"></p>
+                        <button id="finishM4Btn" class="btn btn-primary" disabled>Finalizar actividad</button>
+                    </div>
+                </div>
+                <div class="page-number book-spread-number">
+                    <span class="page-number-left">25</span>
+                    <span class="page-number-right">26</span>
+                </div>
             </div>
 
             <!-- Canvas para efectos mágicos -->
             <canvas id="magicCanvas" class="magic-canvas"></canvas>
             <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-
-            <div id="finalQuestionSection" class="hidden">
-                <div class="final-box">
-                    <h3>¡Felicitaciones! 🎉</h3>
-                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
-                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
-                    <p class="thank-you-sub">¡Gracias por participar!</p>
-                </div>
-            </div>
         </div>
     </section>
 
     <!-- Scripts -->
-    <script src="bags-system-0b.js?v=2026022103"></script>
-    <script type="module" src="main-0b.js?v=2026031415"></script>
-    <script src="app.js?v=2026031401"></script>
+    <script src="bags-system-0b.js?v=2026031709"></script>
+    <script type="module" src="main-0b.js?v=2026031716"></script>
+    <script src="app.js?v=2026031702"></script>
 </body>
 </html>

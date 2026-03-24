@@ -11,14 +11,14 @@ class TraysSystem {
         
         // Datos base de los 8 pedidos (Actividad 0B)
         this.BASE_TRAYS = [
-            { id: 'tray-1', pedido: 1, bags: 5, itemsPerBag: 4, total: 20, emoji: '🫓' },
-            { id: 'tray-2', pedido: 2, bags: 3, itemsPerBag: 5, total: 15, emoji: '🫓' },
-            { id: 'tray-3', pedido: 3, bags: 4, itemsPerBag: 2, total: 8, emoji: '🫓' },
-            { id: 'tray-4', pedido: 4, bags: 5, itemsPerBag: 6, total: 30, emoji: '🫓' },
-            { id: 'tray-5', pedido: 5, bags: 6, itemsPerBag: 4, total: 24, emoji: '🫓' },
-            { id: 'tray-6', pedido: 6, bags: 5, itemsPerBag: 3, total: 15, emoji: '🫓' },
-            { id: 'tray-7', pedido: 7, bags: 2, itemsPerBag: 4, total: 8, emoji: '🫓' },
-            { id: 'tray-8', pedido: 8, bags: 6, itemsPerBag: 5, total: 30, emoji: '🫓' }
+            { id: 'tray-1', pedido: 1, bags: 5, itemsPerBag: 4, total: 20 },
+            { id: 'tray-2', pedido: 2, bags: 3, itemsPerBag: 5, total: 15 },
+            { id: 'tray-3', pedido: 3, bags: 4, itemsPerBag: 2, total: 8 },
+            { id: 'tray-4', pedido: 4, bags: 5, itemsPerBag: 6, total: 30 },
+            { id: 'tray-5', pedido: 5, bags: 6, itemsPerBag: 4, total: 24 },
+            { id: 'tray-6', pedido: 6, bags: 5, itemsPerBag: 3, total: 15 },
+            { id: 'tray-7', pedido: 7, bags: 2, itemsPerBag: 4, total: 8 },
+            { id: 'tray-8', pedido: 8, bags: 6, itemsPerBag: 5, total: 30 }
         ];
         
         // Estado de emparejamiento (Map bidireccional)
@@ -94,7 +94,11 @@ class TraysSystem {
             layout.forEach((position) => {
                 const pane = document.createElement('span');
                 pane.className = 'mini-pane';
-                pane.textContent = data.emoji;
+                const paneImage = document.createElement('img');
+                paneImage.src = 'assets/images/pandebono.png';
+                paneImage.alt = 'Pan de bono';
+                paneImage.className = 'mini-pane-image';
+                pane.appendChild(paneImage);
                 pane.style.left = `${position.left}%`;
                 pane.style.top = `${position.top}%`;
                 miniWindow.appendChild(pane);
@@ -295,15 +299,12 @@ class TraysSystem {
         wrapper.style.justifyContent = 'center';
         wrapper.style.gridColumn = 'span 2'; // Ocupa 2 columnas
         wrapper.style.border = `4px solid ${color}`;
-        wrapper.style.boxShadow = `0 0 0 4px ${color}22`;
         
         // Marcar bandejas como emparejadas
         tray1.classList.add('paired');
         tray2.classList.add('paired');
         tray1.style.borderColor = color;
         tray2.style.borderColor = color;
-        tray1.style.boxShadow = `0 0 0 3px ${color}33`;
-        tray2.style.boxShadow = `0 0 0 3px ${color}33`;
         
         // Mover bandejas al wrapper
         const parent = tray1.parentElement;
@@ -344,10 +345,8 @@ class TraysSystem {
         // Limpiar estilos
         tray1.classList.remove('paired');
         tray1.style.borderColor = '';
-        tray1.style.boxShadow = '';
         tray2.classList.remove('paired');
         tray2.style.borderColor = '';
-        tray2.style.boxShadow = '';
         
         // Reorganizar layout
         this.reorganizeLayout();
