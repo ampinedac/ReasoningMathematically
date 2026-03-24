@@ -5,7 +5,6 @@
 */
 body {
   font-family: 'Rancho', cursive, Arial, sans-serif;
-  color: var(--text-main);
   background: url('C:\Users\Usuario\OneDrive - uan.edu.co\1. Maestría Ed Math\Tesis Maestría\ReasoningMathematically\assets\images\Fondo.png') no-repeat center center fixed;
   background-size: cover;
 }
@@ -646,7 +645,7 @@ body{
 #flipbook .cover-book-title{
   margin: 0 0 18px 0;
   font-family: 'Lobster Two', cursive;
-  font-size: 10vw;
+  font-size: clamp(3rem, 8vw, 6rem);
   letter-spacing: 1.2px;
   text-shadow: 2px 2px 8px #ff66ed98, 0 2px 2px #c1bdf7d1;
 }
