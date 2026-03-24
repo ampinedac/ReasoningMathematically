@@ -10,7 +10,7 @@
   min-height: 400px;
   margin: auto;
   box-sizing: border-box;
-  position: relative;
+  position: relative; 
 }
 
 .cover-content-flex {
@@ -20,23 +20,21 @@
   justify-content: center;
   height: 100%;
   width: 100%;
-  gap: 20px;
-}
+  gap: 20px; }
 
 #flipbook .cover-book-title {
   color: #5b3a00 !important;
   font-family: 'Lobster Two', cursive;
-  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-size: clamp(8.8rem, 20vw, 12.8rem);
   margin: 0;
   text-align: center;
   font-weight: normal;
   line-height: 1.1;
-}
 
 #flipbook .cover-subtitle {
   font-family: 'Lobster Two', cursive;
   color: #7c4700;
-  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  font-size: clamp(7.2rem, 16vw, 10.8rem);
   margin: 0;
   text-align: center;
   font-weight: normal;
@@ -870,11 +868,12 @@ body{
   margin-bottom: 0.5vw;
   align-self: flex-end;
 }
+
   min-height: 95%;
   height: auto;
   overflow: visible;
   margin: 0;
-}
+
 
 #moment1Screen #flipbook .page.q1-book-spread .q1-left-page > *,
 #moment1Screen #flipbook .page.q1-book-spread .q1-right-page > *,
