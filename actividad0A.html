@@ -153,7 +153,7 @@
                             <div class="page-number book-spread-number"><span class="page-number-left">7</span><span class="page-number-right">8</span></div>
                         </div>
 
-                        <!-- Story Spread 9 (Imagen izquierda, texto derecha) -->
+                        <!-- Story Spread 9-10 (Imagen izquierda, texto derecha) -->
                         <div class="page q1-book-spread">
                             <div class="q1-left-page">
                                 <img src="assets/images/pagina9_cuento_act0_1.png" alt="Niños felices compartiendo pandebonos" class="story-image">
@@ -166,46 +166,46 @@
 
                         <!-- SITUACIÓN 1 (CONTINUIDAD EN EL MISMO CUENTO) -->
                         <div id="problemQ1Section" class="page q1-book-spread activity-spread">
-                        <div class="problem-box q1-left-page">
-                            <h3>Situación 1</h3>
-                            <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
-                            <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
-                            <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
-                        </div>
-
-                        <!-- TABLERO Y AUDIO -->
-                        <div class="q1-right-page">
-                            <div class="evidence-section">
-                                <h4>Puedes utilizar el tablero</h4>
-                                <!-- Tablero -->
-                                <div class="board-container">
-                                    <div class="board-tools">
-                                        <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                        <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
-                                        <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
-                                        <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
-                                        <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
-                                    </div>
-                                    <div class="board-wrapper">
-                                        <div class="board-grid"></div>
-                                        <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
-                                    </div>
-                                </div>
-                                <!-- Audio -->
-                                <div class="audio-controls">
-                                    <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                    <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
-                                    <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
-                                    <span id="audioStatusM1Q1" class="audio-status"></span>
-                                </div>
-                                <!-- Enviar -->
-                                <div class="submit-section">
-                                    <p id="statusM1Q1" class="status-text"></p>
+                            <div class="q1-left-page">
+                                <div class="problem-box">
+                                    <h3>Situación 1</h3>
+                                    <p>Doña Alicia hizo pandebonos y quiere organizarlos en bandejas cuadradas para venderlos.</p>
+                                    <img src="assets/images/4por7.png" alt="Representación de 4 por 7 y 7 por 4" class="situation-image">
+                                    <p class="question">Compara las dos propuestas de organización. ¿Hay alguna que permita organizar más pandebonos que la otra? <strong>Explica.</strong></p>
                                 </div>
                             </div>
+                            <div class="q1-right-page">
+                                <div class="evidence-section">
+                                    <h4>Puedes utilizar el tablero</h4>
+                                    <!-- Tablero -->
+                                    <div class="board-container">
+                                        <div class="board-tools">
+                                            <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
+                                            <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                            <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
+                                            <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
+                                            <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
+                                        </div>
+                                        <div class="board-wrapper">
+                                            <div class="board-grid"></div>
+                                            <canvas id="boardCanvasM1Q1" class="drawing-board" width="1200" height="1100"></canvas>
+                                        </div>
+                                    </div>
+                                    <!-- Audio -->
+                                    <div class="audio-controls">
+                                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
+                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
+                                        <span id="audioStatusM1Q1" class="audio-status"></span>
+                                    </div>
+                                    <!-- Enviar -->
+                                    <div class="submit-section">
+                                        <p id="statusM1Q1" class="status-text"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">11</span><span class="page-number-right">12</span></div>
                         </div>
-                        <div class="page-number book-spread-number"><span class="page-number-left">19</span><span class="page-number-right">20</span></div>
-                    </div>
 
                     <!-- HOJA 11: BANDEJAS -->
 
@@ -246,7 +246,7 @@
                                     <p id="statusM1Q2" class="status-text"></p>
                                 </div>
                             </div>
-                            <div class="page-number book-spread-number"><span class="page-number-left">15</span><span class="page-number-right">16</span></div>
+                            <div class="page-number book-spread-number"><span class="page-number-left">13</span><span class="page-number-right">14</span></div>
                         </div>
 
                         <div id="problemQ3Section" class="page q1-book-spread activity-spread">
