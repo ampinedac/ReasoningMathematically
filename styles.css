@@ -72,17 +72,22 @@ body {
   font-family: 'Lobster Two'; /* Fuente decorativa */
  }
 
- #ContenedorBienvenida.main-title {
+ /*Titulo: Actividad 1*/
+ #ContenedorBienvenida .main-title {
   font-size: clamp(4rem, 10vw, 6rem); /* Tamaño adaptable para el título principal */
-  color: #3c00ff; /* Azul intenso para buena visibilidad */
+  color: #0077ff; /* Azul*/
+ }
+
+ /*Subtítulo: ¿El orden de los factores altera el producto?*/
+ #ContenedorBienvenida .subtitle {
+  font-size: clamp(2.5rem, 4vw, 3.5rem); /* Tamaño adaptable para el subtítulo */
+  color: #009dff; /* Azul */
+  margin-bottom: 24px; /* Espacio debajo del subtítulo */
  }
 
  /* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
-
-
-
  #ContenedorBienvenida .welcome-box {
-  width: min(92vw, 640px); /* Máximo 640px, pero responsivo */
+  width: min(92vw, 620px); /* Máximo 640px, pero responsivo */
   padding: clamp(20px, 3vw, 40px); /* Espaciado adaptable */
   background: rgba(62, 216, 255, 0.589); /* Fondo semitransparente azul */
   border: 1px solid rgba(255,255,255,.7); /* Borde blanco suave */
@@ -93,18 +98,16 @@ body {
   flex-direction: column;
   align-items: center;
   }
+
  /*Escribe tu código estudiantil: etiqueta del input */
   #ContenedorBienvenida .welcome-box label {
-  font-weight: bold; /* Texto en negrita para destacar */
   display: block; /* Ocupa toda la línea */
-  margin-bottom: 10px; /* Espacio debajo de la etiqueta */
   text-align: center; /* Centra el texto */
   font-size: clamp(2rem, 3vw, 2.6rem); /* Tamaño adaptable */
- }
+  color: #003f67; /* Azul */
+  }
 
-
-
-
+ /* Input de código estudiantil */
  #ContenedorBienvenida .chalk-input {
   width: min(100%, 360px); /* Máximo 360px, pero responsivo */
   margin: 0 auto 16px auto; /* Centrado y espacio inferior */
@@ -121,6 +124,7 @@ body {
   transition: border-color .2s ease, box-shadow .2s ease; /* Transiciones suaves */
  }
 
+ /*Para que cuando se vaya a escribir la caja de texto resalte*/
  #ContenedorBienvenida .chalk-input:focus {
   border-color: #93c5fd; /* Borde azul claro al enfocar */
   box-shadow: 0 0 0 4px rgba(59,130,246,.15); /* Sombra azul suave al enfocar */
@@ -131,28 +135,17 @@ body {
   border-radius: 16px; /* Bordes redondeados */
   cursor: pointer; /* Cursor de mano al pasar */
   transition: transform .15s ease, filter .15s ease, box-shadow .2s ease; /* Transiciones suaves */
-  box-shadow: 0 2px 8px rgba(0,0,0,.08); /* Sombra para profundidad */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  box-shadow: 0 3px 9px rgb(224, 253, 253); /* Sombra para profundidad */
+  font-family: 'Lobster Two'; /* Fuente decorativa */
   padding: 12px 24px; /* Espaciado interno cómodo */
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); /* Degradado azul */
   color: #fff; /* Texto blanco */
   font-size: clamp(1.2rem, 2.2vw, 1.6rem); /* Tamaño adaptable */
-  font-weight: 700; /* Texto en negrita */
  }
 
  #ContenedorBienvenida .btn:hover {
-  filter: brightness(.96); /* Oscurece ligeramente al pasar el mouse */
-  transform: translateY(-1px); /* Efecto de elevación al pasar el mouse */
- }
-
-
- #ContenedorBienvenida .btn:active {
-  transform: translateY(0); /* Vuelve a la posición original al hacer clic */
- }
-
- #ContenedorBienvenida .btn:disabled {
-  opacity: .65; /* Botón semitransparente cuando está deshabilitado */
-  cursor: not-allowed; /* Cursor de prohibido */
+  filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
+  transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
  }
 
  #ContenedorBienvenida #welcomeError {
@@ -164,25 +157,24 @@ body {
   font-family: 'Rancho', cursive; /* Fuente decorativa */
  }
 
-}
-
-/* =====================================================
-   CONTENEDOR CONFIRMACIÓN
-   Pantalla para confirmar identidad del estudiante.
+/* ===================================================================================
+   CONTENEDOR CONFIRMACIÓN: Pantalla para confirmar identidad del estudiante.
    Centra y resalta la pregunta de confirmación.
-====================================================== */
+====================================================================================== */
+
 #ContenedorConfirmacion {
   display: flex; /* Flexbox para centrar vertical y horizontalmente */
   align-items: center; /* Centra horizontalmente */
   justify-content: center; /* Centra verticalmente */
   flex-direction: column; /* Apila elementos en columna */
   min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  font-family: 'Lobster Two'; /* Fuente decorativa */
+  font-size: clamp(3rem, 9vw, 5rem); /* Tamaño adaptable*/
+ }
 
   /* Título principal de la pantalla de confirmación */
   #ContenedorConfirmacion .main-title {
     font-family: 'Lobster Two', cursive; /* Fuente decorativa especial */
-    font-size: clamp(2.2rem, 3.5vw, 2.8rem); /* Tamaño adaptable */
     color: #222; /* Gris oscuro para buena visibilidad */
     text-align: center; /* Centra el título */
     margin-bottom: 18px; /* Espacio debajo del título */
@@ -202,6 +194,18 @@ body {
   align-items: center;
  }
 
+  /* Pregunta de confirmación: ¿Eres X persona? Texto destacado y centrado */
+  #ContenedorConfirmacion .confirmation-question {
+    width: 100%; /* Ocupa todo el ancho de la caja */
+    margin: 0 0 24px 0; /* Espacio debajo de la pregunta */
+    font-family: 'Lobster Two', cursive; /* Fuente decorativa especial */
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem); /* Tamaño adaptable */
+    line-height: 1.25; /* Espaciado entre líneas */
+    font-weight: 700; /* Texto en negrita */
+    color: #222; /* Gris oscuro */
+    text-align: center; /* Centra la pregunta */
+  }
+
  /* Contenedor de los botones de confirmación: organiza los botones de sí/no */
  #ContenedorConfirmacion .confirmation-buttons {
   display: flex; /* Flexbox para alinear los botones */
@@ -220,21 +224,10 @@ body {
   align-items: center; /* Centra verticalmente el contenido */
   justify-content: center; /* Centra horizontalmente el contenido */
   border-radius: 18px; /* Bordes redondeados para aspecto amigable */
-  background: #fff; /* Fondo blanco para destacar el ícono */
-  box-shadow: 0 2px 12px rgba(0,0,0,.08); /* Sombra suave para profundidad */
+  background: #ffffff00; /* Fondo transparente para destacar el ícono */
+  filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
+  transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
  }
-
- /* Pregunta de confirmación: texto destacado y centrado */
-  #ContenedorConfirmacion .confirmation-question {
-    width: 100%; /* Ocupa todo el ancho de la caja */
-    margin: 0 0 24px 0; /* Espacio debajo de la pregunta */
-    font-family: 'Lobster Two', cursive; /* Fuente decorativa especial */
-    font-size: clamp(1.5rem, 3.4vw, 2.6rem); /* Tamaño adaptable */
-    line-height: 1.25; /* Espaciado entre líneas */
-    font-weight: 700; /* Texto en negrita */
-    color: #222; /* Gris oscuro */
-    text-align: center; /* Centra la pregunta */
-  }
 
   /* Imagen dentro del botón de confirmación */
   #ContenedorConfirmacion .confirmation-buttons .btn img {
@@ -243,7 +236,7 @@ body {
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     margin: 0 auto; /* Centra la imagen horizontalmente dentro del botón */
   }
-}
+
 
 /* =====================================================
    CONTENEDOR PORTADA
