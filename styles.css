@@ -1,21 +1,41 @@
 /* --- PORTADA GENERAL SOLO EN BIENVENIDA --- */
+
+/* === FONDO DE IMAGEN EN TODO EL BODY === */
+body {
+  background: url('assets/images/fondo.png') no-repeat center center fixed !important;
+  background-size: cover !important;
+}
+
+/* === CONTENEDORES PRINCIPALES INVISIBLES === */
+#ContenedorBienvenida,
+#ContenedorPortada,
+#ContenedorConfirmacion,
+#ContenedorLibro,
 .book-cover-page {
-  position: relative;
-  height: 95vh;
-  max-height: 95vh;
-  width: 50vw;
-  max-width: 640px;
-  margin: 40px auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
-  border: 3px solid rgba(180, 138, 0, .25);
-  box-shadow: 0 14px 30px rgba(0,0,0,.14);
-  padding: 40px 26px;
-  gap: 18px;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* === INPUTS Y SELECTS ESTILO BASE === */
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  border: 2px solid #d1d5db;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #111827;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
 }
 
 .author-credit,
@@ -30,28 +50,6 @@
   opacity: .85; /* Opacidad del texto */
 }
 
-
-/* ========================================
-  ESTILOS COMPARTIDOS ENTRE ACTIVIDADES 0A Y 0B
-  ========================================
-  Ejemplo de selectores: #welcomeScreen, .welcome-box, .btn, .main-title
-*/
-
-/* Contenedor principal de bienvenida: columna y centrado */
-#welcomeScreen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  font-family: 'Rancho', cursive;
-  font-size: clamp(2.2rem, 3.5vw, 2.8rem);
-}
-
-/* --- FIN LIMPIEZA PORTADA --- */
-}
-
-.btn{
   /* Afecta a todos los botones de la interfaz, como "Ingresar", "Confirmar", "Rechazar", "Graba tu explicación", etc. */
   /* Botón estilizado, con sombra y transición */
 .welcome-box {
@@ -65,7 +63,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
+} 
 /* =============================
    CONTENEDOR BIENVENIDA
    ============================= */
@@ -85,7 +83,7 @@
   background: rgba(62, 216, 255, 0.589);
   border: 1px solid rgba(255,255,255,.7);
   border-radius: 16px;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
   backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
@@ -896,20 +894,9 @@
 }
 
 .radio-label{
-  color: #344054;
-}
+	color: #344054;
 
 input[type="text"],
-input[type="number"],
-textarea,
-select{
-  border: 2px solid #d1d5db;
-  border-radius: 12px;
-  padding: 10px 12px;
-  background: #fff;
-  color: #111827;
-}
-
 input[type="text"]:focus,
 input[type="number"]:focus,
 textarea:focus,
@@ -918,7 +905,6 @@ select:focus{
   border-color: #93c5fd;
   box-shadow: 0 0 0 4px rgba(59,130,246,.15);
 }
-
 
 
 
