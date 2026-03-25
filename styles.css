@@ -69,17 +69,8 @@ body {
    Pantalla inicial para ingreso de código estudiantil.
    Centra el contenido y aplica tipografía amigable.
 ====================================================== */
-#ContenedorBienvenida {
-  display: flex; /* Flexbox para centrar vertical y horizontalmente */
-  flex-direction: column; /* Apila elementos en columna */
-  align-items: center; /* Centra horizontalmente */
-  justify-content: center; /* Centra verticalmente */
-  min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-  font-size: clamp(3.2rem, 4.5vw, 3.8rem); /* Tamaño adaptable para títulos */
-
-
- /* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
+ 
+/* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
  #ContenedorBienvenida .welcome-box {
   width: min(92vw, 640px); /* Máximo 640px, pero responsivo */
   padding: clamp(20px, 3vw, 40px); /* Espaciado adaptable */
@@ -92,6 +83,15 @@ body {
   flex-direction: column;
   align-items: center;
   }
+
+#ContenedorBienvenida {
+  display: flex; /* Flexbox para centrar vertical y horizontalmente */
+  flex-direction: column; /* Apila elementos en columna */
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
+  font-size: clamp(3.2rem, 4.5vw, 3.8rem); /* Tamaño adaptable para títulos */
 
  #ContenedorBienvenida .welcome-box label {
   font-weight: bold; /* Texto en negrita para destacar */
