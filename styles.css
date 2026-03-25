@@ -91,7 +91,7 @@ body {
   display: flex; /* Flexbox para organizar el contenido */
   flex-direction: column;
   align-items: center;
- }
+  }
 
  #ContenedorBienvenida .welcome-box label {
   font-weight: bold; /* Texto en negrita para destacar */
