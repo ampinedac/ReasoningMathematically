@@ -335,18 +335,17 @@ select:focus {
     text-align: center;
     width: 100%;
   }
-  #ContenedorPortada .cover-subtitle {
-    font-size: 1.3vw;
-    color: #263238;
-    text-align: center;
-    width: 100%;
-  }
   #ContenedorPortada .cover-leer-btn {
-    background: none;
-    border: none;
-    box-shadow: none;
-    padding: 0;
+    width: 40%;
     margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
     display: flex;
     align-items: center;
     justify-content: center;
@@ -354,16 +353,16 @@ select:focus {
     max-width: 40%;
     height: auto;
   }
+#ContenedorPortada .cover-leer-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 #ContenedorPortada > * {
   max-width: 100%;
   box-sizing: border-box;
 }
-#ContenedorPortada img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
+
 
   /* =============================
      CONTENEDOR LIBRO (FLIPBOOK)
