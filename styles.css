@@ -70,7 +70,21 @@ body {
    Centra el contenido y aplica tipografía amigable.
 ====================================================== */
  
-/* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
+ #ContenedorBienvenida {
+  display: flex; /* Flexbox para centrar vertical y horizontalmente */
+  flex-direction: column; /* Apila elementos en columna */
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
+  font-size: clamp(3.2rem, 4.5vw, 3.8rem); /* Tamaño adaptable para títulos */
+  color: #222; /* Gris oscuro para buena visibilidad */}
+
+
+ /* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
+
+
+
  #ContenedorBienvenida .welcome-box {
   width: min(92vw, 640px); /* Máximo 640px, pero responsivo */
   padding: clamp(20px, 3vw, 40px); /* Espaciado adaptable */
@@ -83,23 +97,17 @@ body {
   flex-direction: column;
   align-items: center;
   }
-
-#ContenedorBienvenida {
-  display: flex; /* Flexbox para centrar vertical y horizontalmente */
-  flex-direction: column; /* Apila elementos en columna */
-  align-items: center; /* Centra horizontalmente */
-  justify-content: center; /* Centra verticalmente */
-  min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-  font-size: clamp(3.2rem, 4.5vw, 3.8rem); /* Tamaño adaptable para títulos */
-
- #ContenedorBienvenida .welcome-box label {
+ /*Escribe tu código estudiantil: etiqueta del input */
+  #ContenedorBienvenida .welcome-box label {
   font-weight: bold; /* Texto en negrita para destacar */
   display: block; /* Ocupa toda la línea */
   margin-bottom: 10px; /* Espacio debajo de la etiqueta */
   text-align: center; /* Centra el texto */
   font-size: clamp(2rem, 3vw, 2.6rem); /* Tamaño adaptable */
  }
+
+
+
 
  #ContenedorBienvenida .chalk-input {
   width: min(100%, 360px); /* Máximo 360px, pero responsivo */
