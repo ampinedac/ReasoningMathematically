@@ -546,27 +546,6 @@ select:focus {
     0 14px 30px rgba(0,0,0,.14);
 }
 
-#flipbook .book-cover-page img{
-  width: 50%;
-  margin: 0 auto 1.2rem auto;
-}
-#flipbook .book-cover-page {
-  position: relative;
-  height: 95vh;
-  max-height: 95vh;
-  width: 50vw;
-  max-width: 640px;
-  margin: auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
 
 /* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
 /* Ocultar botones cuando la portada está activa */
@@ -576,16 +555,6 @@ select:focus {
   display: none !important;
 }
 
-#flipbook .cover-leer-btn {
-  background: none !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 auto !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .story-page-content{
   position: relative;
