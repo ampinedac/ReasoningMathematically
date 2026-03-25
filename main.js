@@ -399,7 +399,7 @@ function initConfirmationScreen() {
         console.log('✅ Usuario confirmó identidad');
         if (!studentCode || !studentInfo) {
             console.error('❌ Error: No hay código o información del estudiante');
-            showScreen('welcomeScreen');
+            showScreen('ContenedorBienvenida');
             return;
         }
         // SOLO AHORA guardar el código en localStorage
@@ -409,7 +409,7 @@ function initConfirmationScreen() {
         }
         console.log('💾 Código guardado en localStorage:', studentCode);
         // Navegar a Portada
-        showScreen('portadaScreen');
+        showScreen('ContenedorPortada');
     });
     confirmNoBtn.addEventListener('click', () => {
         console.log('❌ Usuario rechazó identidad');
@@ -418,7 +418,7 @@ function initConfirmationScreen() {
         localStorage.removeItem('studentCode');
         localStorage.removeItem('guestName');
         console.log('🧹 Datos limpiados');
-        showScreen('welcomeScreen');
+        showScreen('ContenedorBienvenida');
         const studentCodeInput = document.getElementById('studentCodeInput');
         if (studentCodeInput) {
             studentCodeInput.value = '';
