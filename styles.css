@@ -355,7 +355,7 @@ select:focus {
     height: auto;
   }
 #ContenedorPortada .cover-leer-image {
-    width: auto;
+    object-fit: contain;
     display: block;
 }
 #ContenedorPortada > * {
