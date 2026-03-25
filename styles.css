@@ -169,7 +169,7 @@ body {
   flex-direction: column; /* Apila elementos en columna */
   min-height: 100vh; /* Ocupa toda la altura de la ventana */
   font-family: 'Lobster Two'; /* Fuente decorativa */
-  font-size: clamp(3rem, 9vw, 5rem); /* Tamaño adaptable*/
+  font-size: clamp(2rem, 8vw, 4rem); /* Tamaño adaptable*/
  }
 
   /* Título principal de la pantalla de confirmación */
@@ -206,7 +206,14 @@ body {
     text-align: center; /* Centra la pregunta */
   }
 
-
+ /* Contenedor de los botones de confirmación: organiza los botones de sí/no */
+ #ContenedorConfirmacion .confirmation-buttons {
+  display: flex; /* Flexbox para alinear los botones */
+  gap: 20px; /* Espacio entre botones */
+  justify-content: center; /* Centra horizontalmente los botones */
+  align-items: center; /* Centra verticalmente los botones */
+  flex-wrap: wrap; /* Permite que los botones bajen si no caben */
+ }
 
  /* Botón de confirmación (sí/no): grande, redondeado y con sombra */
  #ContenedorConfirmacion .confirmation-buttons .btn {
