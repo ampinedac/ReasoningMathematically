@@ -351,7 +351,7 @@ select:focus {
     align-items: center;
     justify-content: center;
     width: 60%;
-    max-width: 100%;
+    max-width: 40%;
     height: auto;
   }
 #ContenedorPortada > * {
