@@ -213,7 +213,7 @@ body {
   justify-content: center; /* Centra horizontalmente los botones */
   align-items: center; /* Centra verticalmente los botones */
   flex-wrap: wrap; /* Permite que los botones bajen si no caben */
- }
+ } 
 
  /* Botón de confirmación (sí/no): grande, redondeado y con sombra */
  #ContenedorConfirmacion .confirmation-buttons .btn {
@@ -224,10 +224,14 @@ body {
   align-items: center; /* Centra verticalmente el contenido */
   justify-content: center; /* Centra horizontalmente el contenido */
   border-radius: 18px; /* Bordes redondeados para aspecto amigable */
-  background: #ebeef2e0; /* Fondo*/
-  filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
-  transform: translateY(-6px); /* Efecto de elevación al pasar el mouse */
+  background: #ffffff; /* Fondo*/
  }
+
+    /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
+     #ContenedorConfirmacion .confirmation-buttons .btn:hover {
+     filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
+     transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+     }
 
   /* Imagen dentro del botón de confirmación */
   #ContenedorConfirmacion .confirmation-buttons .btn img {
