@@ -355,8 +355,12 @@ select:focus {
     height: auto;
   }
 #ContenedorPortada .cover-leer-image {
-    object-fit: contain;
-    display: block;
+  object-fit: contain; /*La imagen se escala para caber completamente dentro del contenedor, manteniendo su proporción (puede dejar espacios vacíos).*/
+  width: auto;
+  height: auto;
+  height: auto;
+  display: block;
+  max-width: 100%;
 }
 #ContenedorPortada > * {
   max-width: 100%;
