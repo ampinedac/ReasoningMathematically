@@ -171,7 +171,7 @@ function initPortadaScreen() {
     const btnContinuarPortada = document.getElementById('btnContinuarPortada');
     if (btnContinuarPortada) {
         btnContinuarPortada.addEventListener('click', () => {
-            showScreen('moment1Screen');
+            showScreen('ContenedorLibro');
             initMoment1();
         });
     }
@@ -432,55 +432,27 @@ function initConfirmationScreen() {
 // NAVEGACIÓN ENTRE PANTALLAS
 // ========================================
 
-function showScreen(screenId) {
-    console.log(`🔄 Navegando a pantalla: ${screenId}`);
-    const targetScreen = document.getElementById(screenId);
-    if (!targetScreen) {
-        console.error(`❌ Error: No se encontró la pantalla con ID: ${screenId}`);
-        return;
-    }
-    // Ocultar todos los contenedores principales
+function showScreen(containerId) {
+    console.log(`🔄 Navegando a contenedor: ${containerId}`);
     const contenedores = [
-        document.getElementById('ContenedorBienvenida'),
-        document.getElementById('ContenedorConfirmacion'),
-        document.getElementById('ContenedorPortada'),
-        document.getElementById('ContenedorLibro')
+        'ContenedorBienvenida',
+        'ContenedorConfirmacion',
+        'ContenedorPortada',
+        'ContenedorLibro'
     ];
-    contenedores.forEach(c => { if (c) c.style.display = 'none'; });
-
-    // Remover 'active' de todas las pantallas
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
+    contenedores.forEach(id => {
+        const c = document.getElementById(id);
+        if (c) c.style.display = 'none';
     });
-
-    // Mostrar el contenedor correspondiente y activar la pantalla
-    if (screenId === 'welcomeScreen') {
-        const c = document.getElementById('ContenedorBienvenida');
-        if (c) c.style.display = '';
-    } else if (screenId === 'confirmationScreen') {
-        const c = document.getElementById('ContenedorConfirmacion');
-        if (c) c.style.display = '';
-    } else if (screenId === 'portadaScreen') {
-        const c = document.getElementById('ContenedorPortada');
-        if (c) c.style.display = '';
-    } else if (screenId === 'moment1Screen') {
-        const c = document.getElementById('ContenedorLibro');
-        if (c) c.style.display = '';
+    const target = document.getElementById(containerId);
+    if (target) {
+        target.style.display = '';
+        // Si contiene una sección con clase .screen, actívala
+        const screen = target.querySelector('.screen');
+        if (screen) screen.classList.add('active');
+    } else {
+        console.error(`❌ Error: No se encontró el contenedor con ID: ${containerId}`);
     }
-
-    // Agregar 'active' a la pantalla objetivo
-    targetScreen.classList.add('active');
-    if (screenId === 'moment1Screen') {
-        const flipbook = document.getElementById('flipbook');
-        if (flipbook) {
-            const portada = flipbook.querySelector('.book-cover-page');
-            if (portada) {
-                portada.classList.add('active');
-            }
-        }
-    }
-    console.log(`✅ Pantalla ${screenId} activada`);
-
     // Actualizar código estudiantil en encabezados
     if (studentCode) {
         document.querySelectorAll('.student-code-display span').forEach(span => {
