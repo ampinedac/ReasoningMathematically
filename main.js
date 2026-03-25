@@ -162,6 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initHomeScreen();
     initWelcomeScreen();
     initConfirmationScreen();
+    initPortadaScreen();
+// ========================================
+// PANTALLA DE PORTADA
+// ========================================
+function initPortadaScreen() {
+    const btnContinuarPortada = document.getElementById('btnContinuarPortada');
+    if (btnContinuarPortada) {
+        btnContinuarPortada.addEventListener('click', () => {
+            showScreen('moment1Screen');
+            initMoment1();
+        });
+    }
+}
 });
 
 // Manejador global de errores
@@ -377,56 +390,40 @@ function showConfirmationScreen() {
 function initConfirmationScreen() {
     const confirmYesBtn = document.getElementById('confirmYesBtn');
     const confirmNoBtn = document.getElementById('confirmNoBtn');
-    
     if (!confirmYesBtn || !confirmNoBtn) {
         console.error('❌ Error: No se encontraron los botones de confirmación');
         return;
     }
-    
     confirmYesBtn.addEventListener('click', () => {
         console.log('✅ Usuario confirmó identidad');
-        
         if (!studentCode || !studentInfo) {
             console.error('❌ Error: No hay código o información del estudiante');
             showScreen('welcomeScreen');
             return;
         }
-        
         // SOLO AHORA guardar el código en localStorage
         localStorage.setItem('studentCode', studentCode);
         if (studentCode === '0000' && studentInfo?.nombre) {
             localStorage.setItem('guestName', studentInfo.nombre);
         }
         console.log('💾 Código guardado en localStorage:', studentCode);
-        
-        // Navegar a Momento 1
-        showScreen('moment1Screen');
-        initMoment1();
+        // Navegar a Portada
+        showScreen('portadaScreen');
     });
-    
     confirmNoBtn.addEventListener('click', () => {
         console.log('❌ Usuario rechazó identidad');
-        
-        // Limpiar variables temporales
         studentCode = null;
         studentInfo = null;
-        
-        // Limpiar localStorage también por seguridad
         localStorage.removeItem('studentCode');
         localStorage.removeItem('guestName');
         console.log('🧹 Datos limpiados');
-        
-        // Volver a la pantalla de bienvenida
         showScreen('welcomeScreen');
-        
-        // Limpiar el input
         const studentCodeInput = document.getElementById('studentCodeInput');
         if (studentCodeInput) {
             studentCodeInput.value = '';
             studentCodeInput.focus();
         }
     });
-    
     console.log('✅ Pantalla de confirmación inicializada');
 }
 
@@ -436,17 +433,39 @@ function initConfirmationScreen() {
 
 function showScreen(screenId) {
     console.log(`🔄 Navegando a pantalla: ${screenId}`);
-    
     const targetScreen = document.getElementById(screenId);
     if (!targetScreen) {
         console.error(`❌ Error: No se encontró la pantalla con ID: ${screenId}`);
         return;
     }
-    
+    // Ocultar todos los contenedores principales
+    const contenedores = [
+        document.getElementById('ContenedorBienvenida'),
+        document.getElementById('ContenedorConfirmacion'),
+        document.getElementById('ContenedorPortada'),
+        document.getElementById('ContenedorLibro')
+    ];
+    contenedores.forEach(c => { if (c) c.style.display = 'none'; });
+
     // Remover 'active' de todas las pantallas
     document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
     });
+
+    // Mostrar el contenedor correspondiente y activar la pantalla
+    if (screenId === 'welcomeScreen') {
+        const c = document.getElementById('ContenedorBienvenida');
+        if (c) c.style.display = '';
+    } else if (screenId === 'confirmationScreen') {
+        const c = document.getElementById('ContenedorConfirmacion');
+        if (c) c.style.display = '';
+    } else if (screenId === 'portadaScreen') {
+        const c = document.getElementById('ContenedorPortada');
+        if (c) c.style.display = '';
+    } else if (screenId === 'moment1Screen') {
+        const c = document.getElementById('ContenedorLibro');
+        if (c) c.style.display = '';
+    }
 
     // Agregar 'active' a la pantalla objetivo
     targetScreen.classList.add('active');
