@@ -326,18 +326,10 @@ select:focus {
     cursor: pointer;
     padding: 0;
     box-shadow: 0 14px 30px rgba(255, 255, 255, 0.715);
-  }
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60%;
-    max-width: 40%;
-    height: auto;
-  }
+
 #ContenedorPortada .cover-leer-image {
   object-fit: contain; /*La imagen se escala para caber completamente dentro del contenedor, manteniendo su proporción (puede dejar espacios vacíos).*/
-  width: auto;
-  height: auto;
+  width: 80%;
   height: auto;
   display: block;
   max-width: 100%;
