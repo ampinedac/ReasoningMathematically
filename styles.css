@@ -224,9 +224,9 @@ body {
   align-items: center; /* Centra verticalmente el contenido */
   justify-content: center; /* Centra horizontalmente el contenido */
   border-radius: 18px; /* Bordes redondeados para aspecto amigable */
-  background: #ffffff00; /* Fondo transparente para destacar el ícono */
+  background: #ebeef2e0; /* Fondo*/
   filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
-  transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+  transform: translateY(-6px); /* Efecto de elevación al pasar el mouse */
  }
 
   /* Imagen dentro del botón de confirmación */
