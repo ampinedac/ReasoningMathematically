@@ -251,7 +251,6 @@ body {
   position: relative; /* Permite posicionar elementos hijos de forma absoluta si es necesario */
   height: 95%; /* Ocupa el 95% de la altura disponible */
   width: 50%; /* Ocupa la mitad del ancho de la pantalla */
-  margin: 0 auto; /* Centra horizontalmente el contenedor */
   box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total */
   display: flex; /* Flexbox para organizar el contenido */
   flex-direction: column; /* Apila elementos en columna */
@@ -262,8 +261,6 @@ body {
   box-shadow: 0 14px 30px rgba(0,0,0,.14); /* Sombra para profundidad */
   padding: 2vw 2vw; /* Espaciado interno adaptable */
   gap: 2vh; /* Espacio vertical entre elementos */
-  max-width: 100vw; /* No excede el ancho de la ventana */
-  max-height: 100vh; /* No excede la altura de la ventana */
   overflow: hidden; /* Oculta el contenido que se desborde */
 
   
@@ -301,28 +298,14 @@ body {
 
 }
 
-  /* =============================
-     CONTENEDOR LIBRO (FLIPBOOK)
-     ============================= */
-     /* =====================================================
-   CONTENEDOR LIBRO (FLIPBOOK)
-   Área principal donde se muestra el libro interactivo.
-   Ocupa todo el espacio disponible.
-====================================================== */
-#ContenedorLibro {
-  position: relative; /* Permite posicionar elementos hijos de forma absoluta si es necesario */
-  width: 100%; /* Ocupa todo el ancho disponible */
-  min-height: 100%; /* Asegura que el contenedor tenga al menos la altura completa */
-
-  
-
-  /* =====================================================
+  /* ========================================================================
      CONTENEDOR LIBRO (FLIPBOOK)
      Área principal del libro interactivo, con variables CSS para tipografía.
-  ====================================================== */
+  ========================================================================= */
+  /*estilo general del contenedor del libro*/ 
   #ContenedorLibro {
-    width: min(96vw, 1800px); /* Máximo 1800px, pero responsivo */
-    min-height: 96dvh; /* Ocupa casi toda la altura de la ventana */
+    width: 98%; /* Ocupa casi todo el ancho de la ventana */
+    height: 98%; /* Ocupa casi toda la altura de la ventana */
     padding: 24px 10px 8px 10px; /* Espaciado interno */
     gap: 12px; /* Espacio vertical entre elementos */
     display: flex; /* Flexbox para organizar el contenido */
@@ -330,16 +313,27 @@ body {
     align-items: center; /* Centra horizontalmente el contenido */
     justify-content: flex-start; /* Alinea el contenido arriba */
     --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem); /* Variable para tamaño de texto */
-    --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem); /* Variable para títulos */
     --a0-body-line-height: 1.45; /* Variable para interlineado */
-  }
-  /* Contenedor del flipbook: centra el libro y define el área de páginas */
+    --a0-body-font-family: 'Rancho'; /* Variable para fuente de texto */
+
+    --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem); /* Variable para títulos */
+    --a0-title-line-height: 1.45; /* Variable para interlineado de títulos */
+    --a0-title-font-family: 'Lobster Two', cursive; /* Variable para fuente de títulos */
+    --a0-title-color: #0379ff; /* Variable para color de títulos */
+    
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.253); /* Variable para sombra media */
+    --surface: #fff; /* Variable para color de fondo de páginas */
+     position: relative; /* Permite posicionar elementos hijos de forma absoluta */
+   }
+
+
+  /* Estilo particular del contenedor del flipbook: centra el libro y define el área de páginas */
   #ContenedorLibro .flipbook-wrapper {
     display: flex; /* Flexbox para centrar el flipbook */
     align-items: center; /* Centra verticalmente */
     justify-content: center; /* Centra horizontalmente */
     width: 100%; /* Ocupa todo el ancho disponible */
-    min-height: 400px; /* Altura mínima para el área del libro */
+    height: 100%; /* Ocupa toda la altura disponible */
     margin: 0; /* Sin margen externo */
     padding: 0; /* Sin relleno interno */
     position: relative; /* Permite posicionar páginas de forma absoluta */
@@ -400,7 +394,6 @@ body {
   }
   pointer-events: none; /* No interactuable */
   z-index: 6; /* Prioridad baja */
-}
 
 
 /* Página bajo la derecha: muestra solo la mitad derecha para animación */
