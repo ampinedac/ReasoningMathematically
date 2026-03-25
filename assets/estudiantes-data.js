@@ -1,5 +1,5 @@
 // Base de datos de estudiantes
-export const estudiantesData = {
+window.estudiantesData = {
     // Curso 201
     "51003": { nombre: "AMELIA", apellidos: "BENAVIDES GUZMÁN", curso: "201" },
     "52013": { nombre: "FRANCISCA", apellidos: "BETANCUR SÁNCHEZ", curso: "201" },

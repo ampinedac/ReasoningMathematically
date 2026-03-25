@@ -15,7 +15,8 @@ function showFlipbookPage(page) {
 // (Movido más abajo) Hacer que syncBookNextButton esté disponible globalmente para handlers fuera del módulo
 // main.js - Lógica principal de la aplicación
 import { db, storage, collection, addDoc, doc, runTransaction, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
-import { estudiantesData } from './assets/estudiantes-data.js';
+// import { estudiantesData } from './assets/estudiantes-data.js';
+// Usar variable global para compatibilidad con GitHub Pages
 
 console.log('✅ Firebase cargado correctamente');
 
@@ -296,7 +297,7 @@ function initWelcomeScreen() {
         }
         
         // Verificar que el código existe en la base de datos
-        const estudiante = estudiantesData[code];
+        const estudiante = window.estudiantesData ? window.estudiantesData[code] : undefined;
         if (!estudiante) {
             console.log('⚠️ Código no encontrado en la base de datos');
             welcomeError.textContent = 'Código no encontrado. Verifica que esté bien escrito.';
