@@ -384,7 +384,7 @@ function showConfirmationScreen() {
     
     confirmationQuestion.textContent = pregunta;
     console.log('❓ Pregunta de confirmación:', pregunta);
-    showScreen('confirmationScreen');
+    showScreen('ContenedorConfirmacion');
     console.log('✅ Pantalla de confirmación mostrada');
 }
 
