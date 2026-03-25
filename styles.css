@@ -94,6 +94,7 @@ body {
    CONTENEDOR LIBRO (FLIPBOOK)
    ============================= */
 #ContenedorLibro {
+  position: relative;
   width: 100%;
   min-height: 100%;
   }
