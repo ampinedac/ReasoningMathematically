@@ -2,7 +2,7 @@
 
 /* === FONDO DE IMAGEN EN TODO EL BODY === */
 body {
-  background: url('assets/images/fondo.png') no-repeat center center fixed !important;
+  background: url('assets/images/Fondo.png') no-repeat center center fixed !important;
   background-size: cover !important;
 }
 
