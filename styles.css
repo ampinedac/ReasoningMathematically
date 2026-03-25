@@ -262,7 +262,7 @@ body {
   padding: 2vw 2vw; /* Espaciado interno adaptable */
   gap: 2vh; /* Espacio vertical entre elementos */
   overflow: hidden; /* Oculta el contenido que se desborde */
-
+  }
   
   /* Título principal de la portada del libro */
   #ContenedorPortada .cover-book-title {
@@ -296,7 +296,7 @@ body {
     margin: 0; /* Sin margen */
   }
 
-}
+
 
   /* ========================================================================
      CONTENEDOR LIBRO (FLIPBOOK)
