@@ -133,10 +133,10 @@ select:focus {
 #ContenedorPortada {
   position: relative;
   height: 95vh;
-  max-height: 95vh;
   width: 50vw;
-  max-width: 640px;
-  margin: 40px auto;
+  min-height: 0;
+  min-width: 0;
+  margin: 0 auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -145,8 +145,11 @@ select:focus {
   background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
   border: 3px solid rgba(180, 138, 0, .25);
   box-shadow: 0 14px 30px rgba(0,0,0,.14);
-  padding: 40px 26px;
-  gap: 18px;
+  padding: 2vw 2vw;
+  gap: 2vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
 }
 
 /* =============================
@@ -327,14 +330,16 @@ select:focus {
   }
   #ContenedorPortada .cover-book-title {
     font-family: 'Lobster Two', cursive;
-    font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+    font-size: 2.5vw;
     color: #0084ff;
     text-align: center;
+    width: 100%;
   }
   #ContenedorPortada .cover-subtitle {
-    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    font-size: 1.3vw;
     color: #263238;
     text-align: center;
+    width: 100%;
   }
   #ContenedorPortada .cover-leer-btn {
     background: none;
@@ -345,7 +350,20 @@ select:focus {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 60%;
+    max-width: 100%;
+    height: auto;
   }
+#ContenedorPortada > * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#ContenedorPortada img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
 
   /* =============================
      CONTENEDOR LIBRO (FLIPBOOK)
