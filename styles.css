@@ -313,9 +313,7 @@ select:focus {
   #ContenedorPortada {
     position: relative;
     height: 95vh;
-    max-height: 95vh;
     width: 50vw;
-    max-width: 640px;
     margin: 40px auto;
     box-sizing: border-box;
     display: flex;
@@ -330,8 +328,8 @@ select:focus {
   }
   #ContenedorPortada .cover-book-title {
     font-family: 'Lobster Two', cursive;
-    font-size: 2.5vw;
-    color: #0084ff;
+    font-size: 4vw;
+    color: #8000ff;
     text-align: center;
     width: 100%;
   }
@@ -345,6 +343,7 @@ select:focus {
     border: none;
     cursor: pointer;
     padding: 0;
+    box-shadow: 0 14px 30px rgba(255, 255, 255, 0.715);
   }
     display: flex;
     align-items: center;
