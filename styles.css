@@ -1,4 +1,3 @@
-/* --- PORTADA GENERAL SOLO EN BIENVENIDA --- */
 
 /* === FONDO DE IMAGEN EN TODO EL BODY === */
 body {
@@ -6,30 +5,7 @@ body {
   background-size: cover !important;
 }
 
-/* === CONTENEDORES PRINCIPALES INVISIBLES === */
-
-
-/* === INPUTS Y SELECTS ESTILO BASE === */
-input[type="text"],
-input[type="number"],
-textarea,
-select {
-  border: 2px solid #d1d5db;
-  border-radius: 12px;
-  padding: 10px 12px;
-  background: #fff;
-  color: #111827;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
-}
-
+/* Donde sale mi nombre como autora*/
 .author-credit,
 #authorCredit{
   position: fixed; /* Fija el elemento en la pantalla */
@@ -42,20 +18,6 @@ select:focus {
   opacity: .85; /* Opacidad del texto */
 }
 
-  /* Afecta a todos los botones de la interfaz, como "Ingresar", "Confirmar", "Rechazar", "Graba tu explicación", etc. */
-  /* Botón estilizado, con sombra y transición */
-.welcome-box {
-  width: min(92vw, 640px);
-  padding: clamp(20px, 3vw, 40px);
-  background: rgba(62, 216, 255, 0.589);
-  border: 1px solid rgba(255,255,255,.7);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(8px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-} 
 /* =============================
    CONTENEDOR BIENVENIDA
    ============================= */
@@ -66,7 +28,7 @@ select:focus {
   justify-content: center;
   min-height: 100vh;
   font-family: 'Rancho', cursive;
-  font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+  font-size: clamp(3.2rem, 4.5vw, 3.8rem);
 }
 
 #ContenedorBienvenida .welcome-box {
@@ -132,8 +94,9 @@ select:focus {
    CONTENEDOR LIBRO (FLIPBOOK)
    ============================= */
 #ContenedorLibro {
-  width: min(96vw, 1800px);
-  min-height: 96dvh;
+  width: 100%;
+  min-height: 100%;
+  }
 
   /* =============================
      CONTENEDOR BIENVENIDA
@@ -146,6 +109,7 @@ select:focus {
     min-height: 100vh;
     font-family: 'Rancho', cursive;
     font-size: clamp(2.2rem, 3.5vw, 2.8rem);
+    }
 
   #ContenedorBienvenida .welcome-box {
     width: min(92vw, 640px);
@@ -158,7 +122,7 @@ select:focus {
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+    }
   #ContenedorBienvenida .welcome-box label {
     font-weight: bold;
     display: block;
@@ -304,7 +268,7 @@ select:focus {
   max-width: 100vw;
   max-height: 100vh;
   overflow: hidden;
-}
+  }
   
   #ContenedorPortada .cover-book-title {
     font-family: 'Lobster Two', cursive;
@@ -401,7 +365,7 @@ select:focus {
   clip-path: inset(0 0 0 50%); /* Muestra solo la mitad derecha */
   pointer-events: none; /* No interactuable */
   z-index: 6; /* Prioridad baja */
-}
+  }
 
 /* ========================================
   FLIPBOOK - HOJA DE GIRO (COMPARTIDO)
