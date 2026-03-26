@@ -280,10 +280,28 @@ body {
     color: #8000ff;
     text-align: center;
     width: 100%;
-    word-break: break-word;      /* Permite cortar palabras largas si es necesario */
-    overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
-    white-space: normal;         /* Permite saltos de línea normales */
-  }
+      word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+      overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+      white-space: normal;         /* Permite saltos de línea normales */
+      line-height: 1.1;           /* Espaciado entre líneas compacto para evitar desbordes */
+      margin: 0;                  /* Sin margen extra */
+    }
+  
+    #ContenedorPortada .cover-subtitle {
+      font-family: 'Rancho', cursive; /* Fuente decorativa para el subtítulo */
+      font-size: clamp(1rem, 2.5vw, 1.5rem); /* Tamaño responsivo para subtítulo */
+      width: 100%; /* Ocupa todo el ancho del contenedor */
+      word-break: break-word; /* Permite cortar palabras largas */
+      overflow-wrap: break-word; /* Ajusta el texto al ancho */
+      white-space: normal; /* Permite saltos de línea */
+      text-align: center; /* Centra el texto */
+      line-height: 1.2; /* Espaciado entre líneas */
+      margin: 0; /* Sin margen extra */
+      color: #8000ffc4; /* Color del subtítulo */
+      word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+      overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+      white-space: normal;         /* Permite saltos de línea normales */
+      }
 
     /* Descripción-SUBTITULO de la portada del libro */
   #ContenedorPortada .cover-subtitle {
@@ -313,7 +331,22 @@ body {
     overflow: hidden; /* Evita que la imagen se salga */
     border: none;
     background: transparent;
-  }
+    }
+  
+    #ContenedorPortada .cover-leer-btn {
+      width: min(320px, 60%); /* Máximo 320px, pero responsivo al 60% del contenedor */
+      aspect-ratio: 4/1.2; /* Proporción rectangular (ajusta si quieres más alto/bajo) */
+      display: flex; /* Flexbox para centrar el contenido */
+      align-items: center; /* Centra verticalmente la imagen */
+      justify-content: center; /* Centra horizontalmente la imagen */
+      margin: 24px auto 0 auto; /* Centrado y separado del contenido superior */
+      padding: 0; /* Sin relleno interno */
+      border: none; /* Sin borde */
+      background: transparent; /* Fondo transparente */
+      box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
+      overflow: visible; /* Permite que la imagen se muestre completa */
+    }
+  
 
       /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
      #ContenedorPortada .cover-leer-btn:hover {
@@ -329,7 +362,15 @@ body {
     max-height: 100%; /* No excede la altura del contenedor */
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     display: block; /* Ocupa toda la línea */
-   }
+    }
+  
+    #ContenedorPortada .cover-leer-image-btn {
+      width: 100%; /* Imagen ocupa todo el ancho del botón */
+      height: 100%; /* Imagen ocupa todo el alto del botón */
+      object-fit: contain; /* La imagen nunca se deforma, siempre se ve completa */
+      display: block; /* Elimina espacios extra debajo de la imagen */
+    }
+   
 
 
 /* ========================================================================
