@@ -315,24 +315,6 @@ body {
    white-space: normal;         /* Permite saltos de línea normales */
   }
   
-  #ContenedorPortada .cover-leer-btn {
-    width: min(320px, 50%); /* Máximo 320px, pero responsivo */
-    max-width: 50%;
-    height: min(80px, 20%); /* Máximo 80px, pero responsivo */
-    max-height: 20%;
-    
-    aspect-ratio: 4/1.2; /* Proporción rectangular, para ajustar */
-    display: flex; /* Flexbox para centrar el contenido del botón */
-    justify-content: center; /* Centra horizontalmente el contenido */
-    align-items: center; /* Centra verticalmente el contenido */
-    padding: 0;
-    margin: 0;
-    object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
-    overflow: hidden; /* Evita que la imagen se salga */
-    border: none;
-    background: transparent;
-    }
-  
     #ContenedorPortada .cover-leer-btn {
       width: min(320px, 60%); /* Máximo 320px, pero responsivo al 60% del contenedor */
       aspect-ratio: 4/1.2; /* Proporción rectangular (ajusta si quieres más alto/bajo) */
@@ -345,6 +327,7 @@ body {
       background: transparent; /* Fondo transparente */
       box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
       overflow: visible; /* Permite que la imagen se muestre completa */
+      cursor: pointer;                  /* Cursor de mano al pasar */
     }
   
       /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
@@ -357,8 +340,6 @@ body {
     #ContenedorPortada .cover-leer-image-btn {
     height: 100%;
     width: 100%; /* Ocupa todo el ancho del contenedor del botón */
-    max-width: 100%; /* No excede el ancho del contenedor */
-    max-height: 100%; /* No excede la altura del contenedor */
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     display: block; /* Ocupa toda la línea */
     }
