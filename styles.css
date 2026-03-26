@@ -315,41 +315,42 @@ body {
    white-space: normal;         /* Permite saltos de línea normales */
   }
   
-    #ContenedorPortada .cover-leer-btn {
-      width: min(320px, 60%); /* Máximo 320px, pero responsivo al 60% del contenedor */
-      aspect-ratio: 4/1.2; /* Proporción rectangular (ajusta si quieres más alto/bajo) */
-      display: flex; /* Flexbox para centrar el contenido */
-      align-items: center; /* Centra verticalmente la imagen */
-      justify-content: center; /* Centra horizontalmente la imagen */
-      margin: 24px auto 0 auto; /* Centrado y separado del contenido superior */
-      padding: 0; /* Sin relleno interno */
-      border: none; /* Sin borde */
-      background: transparent; /* Fondo transparente */
-      box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
-      overflow: visible; /* Permite que la imagen se muestre completa */
-      cursor: pointer;                  /* Cursor de mano al pasar */
-    }
+ /* Botón 'Léeme' en la portada: tamaño responsivo, centrado y sin bordes */
+ #ContenedorPortada .cover-leer-btn {
+  width: min(320px, 60%);           /* El botón nunca será mayor a 320px y ocupa hasta el 60% del contenedor */
+  aspect-ratio: 4/1.2;              /* Mantiene una proporción rectangular para el botón */
+  display: flex;                    /* Usa flexbox para centrar el contenido */
+  align-items: center;              /* Centra verticalmente la imagen dentro del botón */
+  justify-content: center;          /* Centra horizontalmente la imagen dentro del botón */
+  margin: 24px auto 0 auto;         /* Centra el botón y lo separa del contenido superior */
+  padding: 0;                       /* Sin relleno interno */
+  border: none;                     /* Sin borde */
+  background: transparent;          /* Fondo transparente */
+  box-sizing: border-box;           /* Incluye padding y borde en el tamaño total */
+  overflow: visible;                /* Permite que la imagen se muestre completa */
+  cursor: pointer;                  /* Cursor de mano al pasar */
+ }
   
-      /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
-     #ContenedorPortada .cover-leer-btn:hover {
-     transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
-     filter: brightness(1.15);    /* Ilumina el botón */
-     box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra más notoria */
-     }
+ /* Efecto visual al pasar el mouse sobre el botón 'Léeme' */
+ #ContenedorPortada .cover-leer-btn:hover {
+  transform: translateY(-3px);      /* Eleva el botón ligeramente */
+  filter: brightness(1.15);         /* Ilumina el botón */
+  box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra dorada */
+ }
 
-    #ContenedorPortada .cover-leer-image-btn {
-    height: 100%;
-    width: 100%; /* Ocupa todo el ancho del contenedor del botón */
-    object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
-    display: block; /* Ocupa toda la línea */
-    }
-  
-   /* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
-   /* Ocultar botones cuando la portada está activa */
+ /* Imagen interna del botón 'Léeme': ocupa todo el botón sin deformarse */
+ #ContenedorPortada .cover-leer-image {
+  width: 100%;                      /* La imagen ocupa todo el ancho del botón */
+  height: 100%;                     /* La imagen ocupa todo el alto del botón */
+  object-fit: contain;              /* La imagen nunca se deforma, siempre se ve completa */
+  display: block;                   /* Elimina espacios extra debajo de la imagen */
+  pointer-events: none;             /* La imagen no bloquea el click del botón */
+ }
+    /* Ocultar botones → ← cuando la portada está activa */
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none !important;
-}
+ }
 
 
 /* ========================================================================
