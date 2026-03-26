@@ -293,7 +293,8 @@ body {
   #ContenedorPortada .cover-leer-btn {
     width: min(320px, 80%);
     max-width: 100%;
-    height: auto;
+    height: min(80px, 12vh);
+    max-height: 20%;
     object-fit: contain;
     margin: 0 auto;
     display: block;
