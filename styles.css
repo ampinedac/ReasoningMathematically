@@ -347,7 +347,6 @@ body {
       overflow: visible; /* Permite que la imagen se muestre completa */
     }
   
-
       /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
      #ContenedorPortada .cover-leer-btn:hover {
      transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
@@ -370,7 +369,12 @@ body {
       object-fit: contain; /* La imagen nunca se deforma, siempre se ve completa */
       display: block; /* Elimina espacios extra debajo de la imagen */
     }
-   
+   /* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
+   /* Ocultar botones cuando la portada está activa */
+   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
+   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
+   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none !important;
+}
 
 
 /* ========================================================================
@@ -482,12 +486,6 @@ body {
   z-index: 6; /* Prioridad baja */
 }
 
-/* ========================================
-  FLIPBOOK - HOJA DE GIRO (COMPARTIDO)
-  ========================================
-  Ejemplo de selectores: .page-turn-leaf, .page-turn-face
-*/
-
 /* =====================================================
    FLIPBOOK - HOJA DE GIRO (COMPARTIDO)
    Define la hoja animada al pasar página.
@@ -502,26 +500,6 @@ body {
     inset -24px 0 46px rgba(0,0,0,.18), /* Sombra interna para profundidad */
     8px 10px 24px rgba(0,0,0,.16); /* Sombra externa */
 }
-
-/* Portada del libro: centrada y con altura máxima */
-#flipbook .book-cover-page {
-  position: relative; /* Permite posicionar elementos hijos */
-  height: 95vh; /* Ocupa el 95% de la altura de la ventana */
-  max-height: 95vh; /* No excede la altura máxima */
-  width: 50vw; /* Ocupa la mitad del ancho de la ventana */
-  max-width: 640px; /* Máximo 640px */
-  margin: auto; /* Centra horizontal y verticalmente */
-  box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total */
-  display: flex; /* Flexbox para organizar el contenido */
-  flex-direction: column; /* Apila elementos en columna */
-  justify-content: center; /* Centra verticalmente el contenido */
-  align-items: center; /* Centra horizontalmente el contenido */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
 
 /* Hoja animada al pasar página hacia adelante (cara trasera) */
 #flipbook .page-turn-leaf.forward .page-turn-face.back{
@@ -573,37 +551,6 @@ body {
 #flipbook .q1-book-spread
 
 
-/* =====================================================
-   ESTILOS ESPECÍFICOS ACTIVIDAD 0A (PORTADA, STORY PAGE)
-   Portada del libro interactivo: centrada, con fondo degradado y sombra.
-====================================================== */
-#flipbook .book-cover-page{
-  display: flex; /* Flexbox para organizar el contenido */
-  flex-direction: column; /* Apila elementos en columna */
-  justify-content: center; /* Centra verticalmente el contenido */
-  align-items: center; /* Centra horizontalmente el contenido */
-  padding: 40px 26px !important; /* Espaciado interno amplio */
-  gap: 18px; /* Espacio entre elementos */
-  height: 95%; /* Ocupa casi toda la altura del área */
-  width: 50%; /* Ocupa la mitad del ancho del área */
-  background:
-    linear-gradient(135deg, #c0f6ea 0%, #96f7ef 45%, #97e3ff 100%); /* Fondo degradado azul/verde */
-  border: 3px solid rgba(180, 138, 0, .25); /* Borde dorado semitransparente */
-  box-shadow:
-    inset 0 0 0 2px rgba(255,255,255,.45), /* Sombra interna blanca */
-    0 14px 30px rgba(0,0,0,.14); /* Sombra externa para profundidad */
-}
-
-
-/* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
-/* Ocultar botones cuando la portada está activa */
-#moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
-#moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
-#moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn {
-  display: none !important;
-}
-
-
 
 /* =====================================================
    CONTENIDO DE PÁGINA DE HISTORIA (story-page-content)
@@ -635,26 +582,6 @@ body {
   align-items: center; /* Centra horizontalmente */
   text-align: center; /* Centra el texto */
 }
-
-
-/* Botón para leer la historia: flotante, redondeado y destacado */
-.read-story-btn{
-  position: absolute; /* Posiciona sobre la página */
-  top: 8px; /* Separado del borde superior */
-  right: 8px; /* Separado del borde derecho */
-  padding: 10px 14px; /* Espaciado interno cómodo */
-  border-radius: 999px; /* Totalmente redondeado (píldora) */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Fondo degradado azul-violeta */
-  color: #fff; /* Texto blanco */
-  font-size: 1rem; /* Tamaño estándar */
-  border: 2px solid rgba(255,255,255,.3); /* Borde blanco semitransparente */
-}
-
-/* ========================================
-  ESTILOS ESPECÍFICOS ACTIVIDAD 0A (SPREAD Q1)
-  ========================================
-  Ejemplo de selectores: .q1-book-spread, .q1-left-page, .q1-right-page
-*/
 
 /* =====================================================
    SPREAD Q1 (Doble página de la actividad 0A)
@@ -695,7 +622,7 @@ body {
 
 /* Imagen dentro de la página izquierda: ocupa todo el ancho y mantiene proporción */
 #moment1Screen #flipbook .page.q1-book-spread .q1-left-page img {
-  width: 100%; /* Ocupa todo el ancho disponible */
+  width: 96%; /* Ocupa todo el ancho disponible */
   height: auto; /* Altura automática */
   object-fit: contain; /* Mantiene la proporción de la imagen */
   margin: 0; /* Sin margen */
@@ -852,11 +779,7 @@ body {
   text-align: center; /* Centra el texto */
 }
 
-/* ========================================
-  TIPOGRAFÍA INTERNA DEL FLIPBOOK (COMPARTIDO)
-  ========================================
-  Ejemplo de selectores: .story-text, .question, .activity-subtitle
-*/
+
 
 /* =====================================================
    TIPOGRAFÍA INTERNA DEL FLIPBOOK (COMPARTIDO)
@@ -872,45 +795,11 @@ body {
   line-height: var(--a0-body-line-height); /* Usa la variable para interlineado */
 }
 
-/* ========================================
-  BOTONES DE NAVEGACIÓN / SONIDO / TOOLS (COMPARTIDO)
-  ========================================
-  Ejemplo de selectores: .sound-toggle, .nav-btn, #prevBtn, #nextBtn
-*/
 
 /* =====================================================
    BOTONES DE NAVEGACIÓN / SONIDO / TOOLS (COMPARTIDO)
    Botones flotantes, redondeados y con sombra para navegación y sonido.
 ====================================================== */
-.sound-toggle,
-.nav-btn{
-  position: absolute; /* Flotantes sobre el contenido */
-  display: inline-flex; /* Flexbox en línea */
-  align-items: center; /* Centra verticalmente */
-  justify-content: center; /* Centra horizontalmente */
-  border: none; /* Sin borde */
-  border-radius: 999px; /* Totalmente redondeados */
-  background: rgba(255,255,255,.94); /* Fondo blanco semitransparente */
-  color: #1f2937; /* Gris oscuro para íconos */
-  box-shadow: var(--shadow-sm); /* Sombra suave */
-  cursor: pointer; /* Cursor de mano */
-  transition: transform .15s ease, box-shadow .2s ease, filter .15s ease; /* Transiciones suaves */
-}
-
-.sound-toggle:hover,
-.nav-btn:hover{
-  filter: brightness(.97); /* Oscurece ligeramente al pasar el mouse */
-  transform: translateY(-1px); /* Efecto de elevación */
-  box-shadow: var(--shadow-md); /* Sombra más intensa */
-}
-
-#moment1Screen .sound-toggle{
-  top: 8px;
-  right: 3%;
-  width: 52px;
-  height: 52px;
-  z-index: 125;
-}
 
 #moment1Screen .flipbook-wrapper .nav-btn{
   top: 50%;
