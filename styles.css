@@ -256,7 +256,7 @@ body {
   position: relative;
   width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
   max-width: 100vw;
-  height: auto;
+  height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
   max-height: 98vh;
   margin: auto;
   box-sizing: border-box;
@@ -270,6 +270,7 @@ body {
   padding: 2vw;
   gap: 2vh;
   overflow: hidden;
+  border-radius: 3px;
   }
   
   /* Título principal de la portada del libro */
@@ -295,9 +296,7 @@ body {
     max-width: 100%;
     height: min(80px, 12vh);
     max-height: 20%;
-    object-fit: contain;
-    margin: 0 auto;
-    display: block;
+    object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     overflow: hidden; /* Evita que la imagen se salga */
     padding: 0;
     border: none;
@@ -311,12 +310,15 @@ body {
      box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra más notoria */
      }
 
-  #ContenedorPortada .cover-leer-image-btn {
+    #ContenedorPortada .cover-leer-image-btn {
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     margin: 0; /* Sin margen */
     width: min(320px, 80%);
     max-width: 100%;
-  }
+    height: min(80px, 12vh);
+    max-height: 20%;
+    display: block; /* Ocupa toda la línea */
+   }
 
 
 /* ========================================================================
