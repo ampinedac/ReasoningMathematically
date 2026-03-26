@@ -300,8 +300,6 @@ body {
   }
 
   #ContenedorPortada .cover-leer-image-btn {
-    width: 100%; /* Ocupa todo el ancho del contenedor */
-    height: auto; /* Altura automática para mantener proporción */
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     margin: 0; /* Sin margen */
   }
@@ -313,14 +311,16 @@ body {
  ========================================================================= */
   /*estilo general del contenedor del libro*/ 
   #ContenedorLibro {
-    width: 98%; /* Ocupa casi todo el ancho de la ventana */
-    height: 98%; /* Ocupa casi toda la altura de la ventana */
+    width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
+    height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
     padding: 24px 10px 8px 10px; /* Espaciado interno */
     gap: 12px; /* Espacio vertical entre elementos */
     display: flex; /* Flexbox para organizar el contenido */
     flex-direction: column; /* Apila elementos en columna */
     align-items: center; /* Centra horizontalmente el contenido */
     justify-content: flex-start; /* Alinea el contenido arriba */
+    position: relative; /* Permite posicionar elementos hijos de forma absoluta */
+
     --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem); /* Variable para tamaño de texto */
     --a0-body-line-height: 1.45; /* Variable para interlineado */
     --a0-body-font-family: 'Rancho'; /* Variable para fuente de texto */
@@ -332,11 +332,9 @@ body {
     
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.253); /* Variable para sombra media */
     --surface: #fff; /* Variable para color de fondo de páginas */
-     position: relative; /* Permite posicionar elementos hijos de forma absoluta */
    }
 
-
-  /* Estilo particular del contenedor del flipbook: centra el libro y define el área de páginas */
+ /* Estilo particular del contenedor del flipbook: centra el libro y define el área de páginas */
   #ContenedorLibro .flipbook-wrapper {
     display: flex; /* Flexbox para centrar el flipbook */
     align-items: center; /* Centra verticalmente */
