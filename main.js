@@ -29,6 +29,7 @@ let studentInfo = null; // Información del estudiante (nombre, apellidos, curso
 let currentPage = 1;
 let totalPages = 0;
 let flipbook;
+let flipbookPages = [];
 let cocinaScreen;
 
 // Datos de Momento 2 (Juego de Bandejas)
@@ -479,14 +480,14 @@ function initMoment1() {
     }
     flipbook = document.getElementById('flipbook');
     if (flipbook) {
-        // 1. Ocultar todas las páginas del flipbook
-        const pages = flipbook.querySelectorAll('.page');
-        pages.forEach(p => p.classList.remove('active'));
+        // 1. Actualizar flipbookPages global con todas las páginas actuales
+        flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
+        // 2. Ocultar todas las páginas del flipbook
+        flipbookPages.forEach(p => p.classList.remove('active'));
 
-        // 2. Activar SOLO el primer spread (primer .page)
-        const firstPage = flipbook.querySelector('.page');
-        if (firstPage) {
-            firstPage.classList.add('active');
+        // 3. Activar SOLO el primer spread (primer .page)
+        if (flipbookPages.length > 0) {
+            flipbookPages[0].classList.add('active');
             console.log('[initMoment1] Primer spread del cuento ACTIVADO');
         } else {
             console.warn('[initMoment1] No se encontró ninguna página .page en el flipbook');
