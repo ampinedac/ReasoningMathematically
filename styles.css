@@ -34,9 +34,13 @@
    Aplica una imagen de fondo a toda la página, centrada y ajustada.
 ==================================================================================== */
 body {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: url('assets/images/Fondo.png') no-repeat center center fixed !important; /* Imagen de fondo fija y centrada */
   background-size: cover !important; /* Ajusta la imagen para cubrir toda la pantalla */
-  align-content: center; /* Centra el contenido verticalmente */
 }
 
 
@@ -249,45 +253,50 @@ body {
    Centra y resalta la portada con fondo degradado y sombra.
 ====================================================== */
 #ContenedorPortada {
-  position: relative; /* Permite posicionar elementos hijos de forma absoluta si es necesario */
-  height: 95%; /* Ocupa el 95% de la altura disponible */
-  width: 50%; /* Ocupa la mitad del ancho de la pantalla */
-  box-sizing: border-box; /* Incluye el padding y el borde en el tamaño total */
-  display: flex; /* Flexbox para organizar el contenido */
-  flex-direction: column; /* Apila elementos en columna */
-  justify-content: center; /* Centra verticalmente el contenido */
-  align-items: center; /* Centra horizontalmente el contenido */
-  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%); /* Fondo degradado colorido */
-  border: 3px solid rgba(180, 138, 0, .25); /* Borde dorado semitransparente */
-  box-shadow: 0 14px 30px rgba(0,0,0,.14); /* Sombra para profundidad */
-  padding: 2vw 2vw; /* Espaciado interno adaptable */
-  gap: 2vh; /* Espacio vertical entre elementos */
-  overflow: hidden; /* Oculta el contenido que se desborde */
+  position: relative;
+  width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
+  max-width: 100vw;
+  height: auto;
+  max-height: 98vh;
+  margin: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+  border: 3px solid rgba(180, 138, 0, .25);
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  padding: 2vw;
+  gap: 2vh;
+  overflow: hidden;
   }
   
   /* Título principal de la portada del libro */
   #ContenedorPortada .cover-book-title {
-    font-family: 'Lobster Two'; /* Fuente decorativa especial */
-    font-size: 4vw; /* Tamaño grande y adaptable */
-    color: #8000ff; /* Morado vibrante para destacar */
-    text-align: center; /* Centra el texto */
-    width: 100%; /* Ocupa todo el ancho del contenedor */
+    font-family: 'Lobster Two';
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #8000ff;
+    text-align: center;
+    width: 100%;
   }
 
     /* Descripción-SUBTITULO de la portada del libro */
   #ContenedorPortada .cover-subtitle {
-    font-family: 'Rancho', cursive; /* Fuente decorativa especial */
-    font-size: 4vw; /* Tamaño grande y adaptable */
-    color: #8000ff; /* Morado vibrante para destacar */
-    text-align: center; /* Centra el texto */
-    width: 100%; /* Ocupa todo el ancho del contenedor */
+    font-family: 'Rancho', cursive;
+    font-size: clamp(1.2rem, 3vw, 2.2rem);
+    color: #8000ffc4;
+    text-align: center;
+    width: 100%;
   }
   
   #ContenedorPortada .cover-leer-btn {
-    width: 50%; /* Ocupa la mitad del ancho de la portada */
-    height: auto; /* Altura automática para mantener proporción */
-    object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
-    margin: 0; /* Sin margen */
+    width: min(320px, 80%);
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
   }
 
   #ContenedorPortada .cover-leer-image-btn {
@@ -371,7 +380,9 @@ body {
     pointer-events: auto; /* Permite interacción */
     z-index: 10; /* Se coloca por encima de las demás */
   }
-  /* Numeración de páginas del libro (izquierda y derecha) */
+  /* Esta regla hace que la numeración de páginas del libro se muestre
+  siempre en la parte inferior, bien separada a los lados, y que no interfiera 
+  con la interacción del usuario. */
   #ContenedorLibro .page-number.book-spread-number {
     position: absolute; /* Posiciona sobre la página */
     width: 100%; /* Ocupa todo el ancho */
@@ -382,6 +393,8 @@ body {
     pointer-events: none; /* No interactuable */
     z-index: 20; /* Encima de otros elementos */
   }
+  /* Hace que los números de página se vean bonitos, 
+  legibles, bien posicionados y con un estilo decorativo en las esquinas inferiores del libro. */
   #ContenedorLibro .page-number-left, #ContenedorLibro .page-number-right {
     color: #0084ff; /* Azul llamativo */
     font-size: clamp(0.7rem, 1.1vw, 1.1rem); /* Tamaño adaptable */
@@ -392,8 +405,7 @@ body {
     margin-bottom: 0.5vw; /* Espacio inferior */
     align-self: flex-end; /* Alinea abajo */
   }
-  pointer-events: none; /* No interactuable */
-  z-index: 6; /* Prioridad baja */
+
 
 
 /* Página bajo la derecha: muestra solo la mitad derecha para animación */
