@@ -306,6 +306,8 @@ body {
   #ContenedorPortada .cover-leer-image-btn {
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     margin: 0; /* Sin margen */
+    width: min(320px, 80%);
+    max-width: 100%;
   }
 
 
