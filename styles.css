@@ -344,12 +344,6 @@ body {
     display: block; /* Ocupa toda la línea */
     }
   
-    #ContenedorPortada .cover-leer-image-btn {
-      width: 100%; /* Imagen ocupa todo el ancho del botón */
-      height: 100%; /* Imagen ocupa todo el alto del botón */
-      object-fit: contain; /* La imagen nunca se deforma, siempre se ve completa */
-      display: block; /* Elimina espacios extra debajo de la imagen */
-    }
    /* Ocultar botones de avanzar/retroceder en la portada (ajustado para máxima compatibilidad) */
    /* Ocultar botones cuando la portada está activa */
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
