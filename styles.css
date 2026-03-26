@@ -297,6 +297,10 @@ body {
     object-fit: contain;
     margin: 0 auto;
     display: block;
+    overflow: hidden; /* Evita que la imagen se salga */
+    padding: 0;
+    border: none;
+    background: transparent;
   }
 
   #ContenedorPortada .cover-leer-image-btn {
@@ -339,8 +343,8 @@ body {
     display: flex; /* Flexbox para centrar el flipbook */
     align-items: center; /* Centra verticalmente */
     justify-content: center; /* Centra horizontalmente */
-    width: 100%; /* Ocupa todo el ancho disponible */
-    height: 100%; /* Ocupa toda la altura disponible */
+    width: clamp(300px, 100%, 600px); /* Ocupa todo el ancho disponible */
+    height: clamp(400px, 98vh, 800px); /* Ocupa toda la altura disponible */
     margin: 0; /* Sin margen externo */
     padding: 0; /* Sin relleno interno */
     position: relative; /* Permite posicionar páginas de forma absoluta */
