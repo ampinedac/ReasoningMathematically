@@ -36,6 +36,7 @@
 body {
   background: url('assets/images/Fondo.png') no-repeat center center fixed !important; /* Imagen de fondo fija y centrada */
   background-size: cover !important; /* Ajusta la imagen para cubrir toda la pantalla */
+  align-content: center; /* Centra el contenido verticalmente */
 }
 
 
@@ -297,11 +298,10 @@ body {
   }
 
 
-
-  /* ========================================================================
+/* ========================================================================
      CONTENEDOR LIBRO (FLIPBOOK)
      Área principal del libro interactivo, con variables CSS para tipografía.
-  ========================================================================= */
+ ========================================================================= */
   /*estilo general del contenedor del libro*/ 
   #ContenedorLibro {
     width: 98%; /* Ocupa casi todo el ancho de la ventana */
