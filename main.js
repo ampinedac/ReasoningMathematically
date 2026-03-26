@@ -482,15 +482,15 @@ function initMoment1() {
         // Limpiar visibilidad de todas las páginas
         const pages = flipbook.querySelectorAll('.page');
         pages.forEach(p => {
-            p.classList.remove('active');
+            p.classList.remove('active'); // Oculta todas las páginas del libro
         });
-        // Mostrar solo la portada
-        const portada = flipbook.querySelector('.book-cover-page');
-        if (portada) {
-            portada.classList.add('active');
-            console.log('[initMoment1] Portada activada');
+        // Mostrar el primer spread del libro (primer .page)
+        const firstPage = flipbook.querySelector('.page');
+        if (firstPage) {
+            firstPage.classList.add('active'); // Activa el primer spread del cuento
+            console.log('[initMoment1] Primer spread activado');
         } else {
-            console.warn('[initMoment1] No se encontró la portada (book-cover-page)');
+            console.warn('[initMoment1] No se encontró ninguna página en el flipbook');
         }
     } else {
         console.warn('[initMoment1] No se encontró el flipbook');
