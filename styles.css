@@ -270,7 +270,7 @@ body {
   padding: 2vw;
   gap: 2vh;
   overflow: hidden;
-  border-radius: 3px;
+  border-radius: 14px;
   }
   
   /* Título principal de la portada del libro */
@@ -280,6 +280,9 @@ body {
     color: #8000ff;
     text-align: center;
     width: 100%;
+    word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+    overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+    white-space: normal;         /* Permite saltos de línea normales */
   }
 
     /* Descripción-SUBTITULO de la portada del libro */
@@ -289,16 +292,24 @@ body {
     color: #8000ffc4;
     text-align: center;
     width: 100%;
+    word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+    overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+    white-space: normal;         /* Permite saltos de línea normales */
   }
   
   #ContenedorPortada .cover-leer-btn {
     width: min(320px, 80%);
     max-width: 100%;
-    height: min(80px, 12vh);
+    height: auto;
+    aspect-ratio: 4/1.2; /* Proporción rectangular, para ajustar */
+    display: flex; /* Flexbox para centrar el contenido del botón */
+    justify-content: center; /* Centra horizontalmente el contenido */
+    align-items: center; /* Centra verticalmente el contenido */
+    padding: 0;
+    margin: 0;
     max-height: 20%;
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     overflow: hidden; /* Evita que la imagen se salga */
-    padding: 0;
     border: none;
     background: transparent;
   }
@@ -311,12 +322,11 @@ body {
      }
 
     #ContenedorPortada .cover-leer-image-btn {
+    height: 100%;
+    width: 100%; /* Ocupa todo el ancho del contenedor del botón */
+    max-width: 100%; /* No excede el ancho del contenedor */
+    max-height: 100%; /* No excede la altura del contenedor */
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
-    margin: 0; /* Sin margen */
-    width: min(320px, 80%);
-    max-width: 100%;
-    height: min(80px, 12vh);
-    max-height: 20%;
     display: block; /* Ocupa toda la línea */
    }
 
