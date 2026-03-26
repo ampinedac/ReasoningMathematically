@@ -30,6 +30,8 @@ let currentPage = 1;
 let totalPages = 0;
 let flipbook;
 let flipbookPages = [];
+// Índices de páginas especiales del flipbook (se actualizan en initMoment1)
+let q1PageIndex, q2PageIndex, q3PageIndex, q3bPageIndex, q4PageIndex, q5PageIndex;
 let cocinaScreen;
 
 // Datos de Momento 2 (Juego de Bandejas)
@@ -482,10 +484,19 @@ function initMoment1() {
     if (flipbook) {
         // 1. Actualizar flipbookPages global con todas las páginas actuales
         flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
-        // 2. Ocultar todas las páginas del flipbook
+
+        // 2. Actualizar índices globales de páginas especiales
+        q1PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+        q2PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
+        q3PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
+        q3bPageIndex  = flipbookPages.findIndex(page => page.id === 'problemQ3Section2');
+        q4PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
+        q5PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
+
+        // 3. Ocultar todas las páginas del flipbook
         flipbookPages.forEach(p => p.classList.remove('active'));
 
-        // 3. Activar SOLO el primer spread (primer .page)
+        // 4. Activar SOLO el primer spread (primer .page)
         if (flipbookPages.length > 0) {
             flipbookPages[0].classList.add('active');
             console.log('[initMoment1] Primer spread del cuento ACTIVADO');
