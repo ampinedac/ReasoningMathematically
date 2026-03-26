@@ -315,7 +315,7 @@ body {
  ========================================================================= */
   /*estilo general del contenedor del libro*/ 
   #ContenedorLibro {
-    width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
+    width: min(95vw, 1000px); /* Máximo 1000px, pero responsivo */
     height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
     padding: 24px 10px 8px 10px; /* Espaciado interno */
     gap: 12px; /* Espacio vertical entre elementos */
