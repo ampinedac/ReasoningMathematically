@@ -441,7 +441,8 @@ function showScreen(containerId) {
         'ContenedorBienvenida',
         'ContenedorConfirmacion',
         'ContenedorPortada',
-        'ContenedorLibro'
+        'ContenedorLibro',
+        'cocinaScreen' // Unificamos la cocina como pantalla controlada
     ];
     contenedores.forEach(id => {
         const c = document.getElementById(id);
@@ -473,7 +474,7 @@ function initMoment1() {
     // Forzar cocinaScreen oculta al iniciar momento 1
     cocinaScreen = document.getElementById('cocinaScreen');
     if (cocinaScreen) {
-        cocinaScreen.classList.add('hidden');
+        cocinaScreen.style.display = 'none'; // Oculta la cocina usando display
     }
     const moment1Screen = document.getElementById('moment1Screen');
     if (moment1Screen) {
@@ -749,7 +750,7 @@ function initMoment1() {
     const showCocinaScreen = () => {
         if (!cocinaScreen) return;
         if (m1Q2Verified) return;
-        cocinaScreen.classList.remove('hidden');
+        cocinaScreen.style.display = '';
         document.body.style.overflow = 'hidden';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         initSheet11Trays();
@@ -757,7 +758,7 @@ function initMoment1() {
 
     const hideCocinaScreen = () => {
         if (!cocinaScreen) return;
-        cocinaScreen.classList.add('hidden');
+        cocinaScreen.style.display = 'none';
         document.body.style.overflow = '';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         // Mostrar la imagen de bandejas al regresar de la cocina
