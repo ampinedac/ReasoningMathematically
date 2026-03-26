@@ -303,6 +303,13 @@ body {
     background: transparent;
   }
 
+      /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
+     #ContenedorPortada .cover-leer-btn:hover {
+     transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+     filter: brightness(1.15);    /* Ilumina el botón */
+     box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra más notoria */
+     }
+
   #ContenedorPortada .cover-leer-image-btn {
     object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
     margin: 0; /* Sin margen */
