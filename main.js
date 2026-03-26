@@ -479,18 +479,17 @@ function initMoment1() {
     }
     flipbook = document.getElementById('flipbook');
     if (flipbook) {
-        // Limpiar visibilidad de todas las páginas
+        // 1. Ocultar todas las páginas del flipbook
         const pages = flipbook.querySelectorAll('.page');
-        pages.forEach(p => {
-            p.classList.remove('active'); // Oculta todas las páginas del libro
-        });
-        // Mostrar el primer spread del libro (primer .page)
+        pages.forEach(p => p.classList.remove('active'));
+
+        // 2. Activar SOLO el primer spread (primer .page)
         const firstPage = flipbook.querySelector('.page');
         if (firstPage) {
-            firstPage.classList.add('active'); // Activa el primer spread del cuento
-            console.log('[initMoment1] Primer spread activado');
+            firstPage.classList.add('active');
+            console.log('[initMoment1] Primer spread del cuento ACTIVADO');
         } else {
-            console.warn('[initMoment1] No se encontró ninguna página en el flipbook');
+            console.warn('[initMoment1] No se encontró ninguna página .page en el flipbook');
         }
     } else {
         console.warn('[initMoment1] No se encontró el flipbook');
@@ -531,29 +530,8 @@ function initMoment1() {
     // Refuerzo de visibilidad y diagnóstico
     // --- Eliminado todo el refuerzo de visibilidad y diagnóstico anterior ---
 
-    const flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
-    const q1PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
-    const q2PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
-    const q3PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
-    const q3bPageIndex = flipbookPages.findIndex(page => page.id === 'problemQ3Section2');
-    const q4PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
-    const q5PageIndex = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
-
-    // --- ACTIVAR PORTADA SI NINGUNA PÁGINA ESTÁ ACTIVA ---
-    if (flipbookPages.length > 0) {
-        const anyActive = flipbookPages.some(p => p.classList.contains('active'));
-        if (!anyActive) {
-            // Quitar display:none de todas
-            flipbookPages.forEach(p => p.style.display = '');
-            // Activar la portada (primera página)
-            flipbookPages[0].classList.add('active');
-            console.log('ℹ️ Portada activada automáticamente');
-        } else {
-            console.log('ℹ️ Ya hay una página activa en el flipbook');
-        }
-    } else {
-        console.warn('⚠️ No se encontraron páginas en el flipbook');
-    }
+    // --- Eliminada lógica redundante de activación automática de portada ---
+    // Ahora solo se activa el primer spread al inicio, sin sobrescribir ni duplicar lógica.
 
     const getCurrentFlipbookPage = (event) => Number.isInteger(event?.detail?.page)
         ? event.detail.page
