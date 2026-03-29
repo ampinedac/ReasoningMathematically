@@ -421,9 +421,10 @@ body {
   }
   /* Página activa del flipbook: visible y en primer plano */
   #ContenedorLibro .page.active {
-    opacity: 1; /* Totalmente visible */
-    pointer-events: auto; /* Permite interacción */
-    z-index: 10; /* Se coloca por encima de las demás */
+    opacity: 1 !important; /* Totalmente visible */
+    display: flex !important; /* Asegura que la página esté visible */
+    pointer-events: auto;
+    z-index: 10;
   }
   /* Esta regla hace que la numeración de páginas del libro se muestre
   siempre en la parte inferior, bien separada a los lados, y que no interfiera 
