@@ -174,7 +174,7 @@ function initPortadaScreen() {
     const btnContinuarPortada = document.getElementById('btnContinuarPortada');
     if (btnContinuarPortada) {
         btnContinuarPortada.addEventListener('click', () => {
-            showScreen('ContenedorLibro');
+            // Aquí se eliminó la lógica de visibilidad de ContenedorLibro
             initMoment1();
         });
     }
@@ -441,7 +441,6 @@ function showScreen(containerId) {
         'ContenedorBienvenida',
         'ContenedorConfirmacion',
         'ContenedorPortada',
-        'ContenedorLibro',
         'cocinaScreen' // Unificamos la cocina como pantalla controlada
     ];
     contenedores.forEach(id => {
