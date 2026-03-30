@@ -15,63 +15,11 @@
   box-shadow: 0 0 32px 0 rgba(0,0,0,0.12);
 }
 
-/* Ajuste para que el overlay no interfiera con el layout base */
-#ContenedorLibro {
-  position: relative;
-}
-/* --- Migración: ahora los controles de sonido y navegación están bajo #ContenedorLibro directamente --- */
-#ContenedorLibro .sound-toggle {
-  top: 8px;
-  right: 3%;
-  width: 52px;
-  height: 52px;
-  z-index: 125;
-  position: absolute;
-}
-
-#ContenedorLibro .nav-btn {
-  top: 50%;
-  transform: translateY(-50%);
-  width: 56px;
-  height: 56px;
-  z-index: 120;
-  position: absolute;
-}
-#ContenedorLibro #prevBtn {
-  left: 12px;
-}
-#ContenedorLibro #nextBtn {
-  right: 12px;
-}
-
-/* ===================================================================================
-   ÍCONOS DE HERRAMIENTAS
-   Colorea y ajusta el tamaño de los íconos de herramientas.
-==================================================================================== */
-.tool-icon-red{
-  color: #e53935; /* Rojo intenso para advertencia o eliminar */
-}
-
-/* ==============================================================================
-   FONDO GENERAL DEL BODY
-   Aplica una imagen de fondo a toda la página, centrada y ajustada.
-==================================================================================== */
-body {
-  min-height: 100vh;
-  min-width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: url('assets/images/Fondo.png') no-repeat center center fixed !important; /* Imagen de fondo fija y centrada */
-  background-size: cover !important; /* Ajusta la imagen para cubrir toda la pantalla */
-}
-
-
-/* ===================================================================================
+/* ============================================================================================================
    CRÉDITO DE AUTORÍA
    Muestra el nombre de la autora en la esquina superior derecha.
    Fijo y visible en toda la aplicación.
-========================================================================================= */
+================================================================================================================== */
 .author-credit,
 #authorCredit {
   position: fixed; /* Fija el elemento en la pantalla */
@@ -84,12 +32,11 @@ body {
   opacity: .85; /* Opacidad para que no distraiga demasiado */
 }
 
-
-/* ========================================================================================
+/* ============================================================================================================
    CONTENEDOR BIENVENIDA
    Pantalla inicial para ingreso de código estudiantil.
    Centra el contenido y aplica tipografía amigable.
-========================================================================================= */
+=============================================================================================================== */
  /*Contenedor invisible que centra el contenido  de todo lo de la pantalla de bienvenida*/
  #ContenedorBienvenida {
   display: flex; /* Flexbox para centrar vertical y horizontalmente */
@@ -378,10 +325,51 @@ body {
 }
 
 
-/* ========================================================================
+/* =====================================================================================================================
      CONTENEDOR LIBRO (FLIPBOOK)
- ========================================================================= */
-  /*estilo general del contenedor del libro*/ 
+ ======================================================================================================================= */
+ /* Botones de navegción */
+   #ContenedorLibro .nav-btn {
+   top: 50%;
+   transform: translateY(-50%);
+   width: 56px;
+   height: 56px;
+   z-index: 120;
+   position: absolute;
+   background: #0379ff; /* Fondo azul vibrante */
+   color: #fff; /* Flecha blanca */
+   border: none;
+   border-radius: 50%;
+   font-size: 2.2rem;
+   font-family: 'Lobster Two', 'Comic Sans MS', cursive, sans-serif;
+   box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   cursor: pointer;
+   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+   outline: none;
+   user-select: none;
+   }
+
+/* Efecto hover/focus para accesibilidad */
+#ContenedorLibro .nav-btn:hover, #ContenedorLibro .nav-btn:focus {
+  background: #0056b3;
+  color: #fff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+   
+
+   #ContenedorLibro #prevBtn {
+   left: 12px;
+   }
+
+   #ContenedorLibro #nextBtn {
+   right: 12px;
+   }
+  
+  /* Estilo general del contenedor del libro */ 
   #ContenedorLibro {
     width: min(95vw, 1000px); /* Máximo 1000px, pero responsivo */
     height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
@@ -485,10 +473,10 @@ body {
   z-index: 6; /* Prioridad baja */
 }
 
-/* =====================================================
+/* =============================================================================================================
    FLIPBOOK - HOJA DE GIRO (COMPARTIDO)
    Define la hoja animada al pasar página.
-====================================================== */
+================================================================================================================ */
 #flipbook .page-turn-leaf{
   position: absolute; /* Posiciona sobre el contenedor */
   top: 0; /* Arriba */
@@ -582,10 +570,10 @@ body {
   text-align: center; /* Centra el texto */
 }
 
-/* =====================================================
+/* =============================================================================================================================
    SPREAD Q1 (Doble página de la actividad 0A)
    Organiza la doble página en dos columnas: izquierda (imagen) y derecha (texto).
-====================================================== */
+============================================================================================================================== */
 
 /* --- Migración: spreads y páginas internas bajo #ContenedorLibro --- */
 #ContenedorLibro #flipbook .page.q1-book-spread {
@@ -634,9 +622,9 @@ body {
   background: #fff;
 }
 #ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page .story-text {
-  font-size: clamp(2.1rem, 4vw, 2.8rem);
+  font-size: clamp(2rem, 3.5vw, 2.6rem);
   line-height: 1.25;
-  color: #0084ff;
+  color: #0059ff;
   font-family: 'Rancho', cursive;
   margin: 0;
   word-break: break-word;
@@ -644,10 +632,10 @@ body {
 }
 
 
-/* =====================================================
+/* =============================================================================================================================
    NUMERACIÓN DE PÁGINAS (spread)
    Muestra el número de página en las esquinas inferiores.
-====================================================== */
+  =========================================================================================================================== */
 .page-number.book-spread-number {
   position: absolute; /* Posiciona sobre la página */
   width: 100%; /* Ocupa todo el ancho */
@@ -766,23 +754,4 @@ body {
 ){
   font-size: var(--a0-body-font-size);
   line-height: var(--a0-body-line-height);
-}
-
-
-/* =====================================================
-   BOTONES DE NAVEGACIÓN / SONIDO / TOOLS (COMPARTIDO)
-   Botones flotantes, redondeados y con sombra para navegación y sonido.
-====================================================== */
-
-
-/* Eliminados selectores redundantes de navegación bajo .flipbook-wrapper y #moment1Screen */
-
-.tool-icon-red{
-  color: #e53935;
-}
-
-.tool-icon-image{
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
 }

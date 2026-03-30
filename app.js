@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
         progressText: document.getElementById('progressText'),
         prevBtn: document.getElementById('prevBtn'),
         nextBtn: document.getElementById('nextBtn'),
-        soundToggle: document.getElementById('soundToggle')
     };
 
     function applyRealBookPageNumbers() {
@@ -181,10 +180,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateSoundButton() {
-        if (!elements.soundToggle) return;
         
-        const muteLine = elements.soundToggle.querySelector('.mute-line');
-        const soundWaves = elements.soundToggle.querySelector('.sound-waves');
         
         // Siempre mostrar bocina abierta (ondas de sonido visibles)
         muteLine.style.display = 'none';
@@ -192,9 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Cambiar solo el aria-label para accesibilidad
         if (CONFIG.narrationEnabled) {
-            elements.soundToggle.setAttribute('aria-label', 'Detener narración');
         } else {
-            elements.soundToggle.setAttribute('aria-label', 'Narrar página');
         }
     }
 
@@ -543,9 +537,6 @@ document.addEventListener('DOMContentLoaded', function() {
         elements.nextBtn.addEventListener('click', nextPage);
         
         // Sound toggle
-        if (elements.soundToggle) {
-            elements.soundToggle.addEventListener('click', toggleNarration);
-        }
         
         // Cargar voces disponibles
         if ('speechSynthesis' in window) {
