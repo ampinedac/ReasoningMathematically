@@ -6,7 +6,6 @@ function hideAllFlipbookPages() {
     pages.forEach(page => {
         page.classList.remove('active');
     });
-}
 
 function showFlipbookPage(page) {
     if (!page) return;
