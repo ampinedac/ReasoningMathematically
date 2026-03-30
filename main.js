@@ -473,7 +473,8 @@ function initMoment1() {
     // Ocultar cocinaScreen al iniciar momento 1 (sin cambios)
     cocinaScreen = document.getElementById('cocinaScreen');
     if (cocinaScreen) {
-        cocinaScreen.style.display = 'none';
+        cocinaScreen.classList.add('hidden'); // Oculta la cocina usando la clase estándar
+        cocinaScreen.style.display = ''; // Limpia display para que el CSS controle la visibilidad
     }
     // Ya no existe moment1Screen ni flipbook-wrapper: todo está bajo #ContenedorLibro
     // Inicializar flipbook y páginas
