@@ -1,3 +1,14 @@
+/* --- DEBUG: Forzar visibilidad de todo el árbol del flipbook --- */
+#ContenedorLibro,
+#ContenedorLibro section,
+#ContenedorLibro .container,
+#ContenedorLibro #flipbookSection,
+#ContenedorLibro .flipbook-wrapper,
+#ContenedorLibro #flipbook {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
 #moment1Screen .sound-toggle{
   top: 8px; /* Separado del borde superior */
   right: 3%; /* Separado del borde derecho */
