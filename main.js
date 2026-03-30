@@ -74,28 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicialización completada
     console.log('✅ Sistema inicializado');
     
-    // Verificar si ya hay código guardado
-    const savedCode = localStorage.getItem('studentCode');
-    if (savedCode) {
-        studentCode = savedCode;
-        console.log('ℹ️ Código guardado encontrado:', studentCode);
-
-        if (savedCode === '0000') {
-            const savedGuestName = localStorage.getItem('guestName');
-            if (savedGuestName) {
-                studentInfo = {
-                    nombre: savedGuestName,
-                    apellidos: '',
-                    curso: 'INVITADO'
-                };
-            }
-        }
-    }
-    
+    // Inicializar pantallas y eventos
     initHomeScreen();
     initWelcomeScreen();
     initConfirmationScreen();
     initPortadaScreen();
+
+    // Ocultar todas las pantallas excepto la de bienvenida
+    const contenedores = [
+        'ContenedorBienvenida',
+        'ContenedorConfirmacion',
+        'ContenedorPortada',
+        'cocinaScreen'
+    ];
+    contenedores.forEach(id => {
+        const c = document.getElementById(id);
+        if (c) c.style.display = 'none';
+    });
+    // Mostrar solo la pantalla de bienvenida
+    const bienvenida = document.getElementById('ContenedorBienvenida');
+    if (bienvenida) bienvenida.style.display = '';
 // ========================================
 // PANTALLA DE PORTADA
 // ========================================
