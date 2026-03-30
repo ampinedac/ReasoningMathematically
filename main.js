@@ -175,80 +175,37 @@ function initPortadaScreen() {
     if (btnContinuarPortada) {
         btnContinuarPortada.addEventListener('click', () => {
             showScreen('ContenedorLibro');
-            initMoment1();
+            // --- Inicialización directa del libro y cocina ---
+            // Ocultar cocina
+            const cocinaScreen = document.getElementById('cocinaScreen');
+            if (cocinaScreen) {
+                cocinaScreen.classList.add('hidden');
+            }
+            // Inicializar flipbook y páginas
+            const flipbook = document.getElementById('flipbook');
+            if (flipbook) {
+                window.flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
+                // Actualizar índices globales de páginas especiales
+                window.q1PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
+                window.q2PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
+                window.q3PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
+                window.q3bPageIndex  = flipbookPages.findIndex(page => page.id === 'problemQ3Section2');
+                window.q4PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
+                window.q5PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
+                // Ocultar todas las páginas del flipbook
+                flipbookPages.forEach(p => p.classList.remove('active'));
+                // Activar SOLO el primer spread (primer .page)
+                if (flipbookPages.length > 0) {
+                    flipbookPages[0].classList.add('active');
+                }
+            }
+            // Actualizar encabezado de código estudiantil
+            const studentCodeM1 = document.getElementById('studentCodeM1');
+            if (studentCodeM1 && typeof getStudentHeaderText === 'function') {
+                studentCodeM1.textContent = getStudentHeaderText();
+            }
         });
     }
-}
-});
-
-// Manejador global de errores
-window.addEventListener('error', (event) => {
-    console.error('❌ Error global:', event.error);
-});
-
-window.addEventListener('unhandledrejection', (event) => {
-    console.error('❌ Promesa rechazada:', event.reason);
-});
-
-// ========================================
-// PANTALLA PRINCIPAL
-// ========================================
-
-function initHomeScreen() {
-    console.log('🔧 Inicializando pantalla principal...');
-    
-    const activity0Btn = document.getElementById('activity0Btn');
-    
-    if (activity0Btn) {
-        activity0Btn.addEventListener('click', () => {
-            console.log('📌 Abriendo Actividad 0A en nueva pestaña');
-            window.open('actividad0A.html', '_blank');
-        });
-    }
-}
-
-// ========================================
-// PANTALLA DE BIENVENIDA
-// ========================================
-
-function initWelcomeScreen() {
-    console.log('🔧 Inicializando pantalla de bienvenida...');
-    
-    const enterBtn = document.getElementById('enterBtn');
-    const studentCodeInput = document.getElementById('studentCodeInput');
-    const welcomeError = document.getElementById('welcomeError');
-    
-    // Bloquear cualquier tecla que no sea un número
-    studentCodeInput.addEventListener('keydown', (e) => {
-        // Permitir: backspace, delete, tab, escape, enter
-        if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
-            // Permitir: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
-            (e.keyCode === 65 && e.ctrlKey === true) ||
-            (e.keyCode === 67 && e.ctrlKey === true) ||
-            (e.keyCode === 86 && e.ctrlKey === true) ||
-            (e.keyCode === 88 && e.ctrlKey === true) ||
-            // Permitir: home, end, left, right
-            (e.keyCode >= 35 && e.keyCode <= 39)) {
-            return;
-        }
-        // Bloquear si no es un número (0-9 del teclado principal o numérico)
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-    });
-    
-    // Eliminar cualquier carácter no numérico al pegar
-    studentCodeInput.addEventListener('paste', (e) => {
-        e.preventDefault();
-        const pasteData = e.clipboardData.getData('text');
-        const numericOnly = pasteData.replace(/\D/g, '');
-        studentCodeInput.value = numericOnly;
-    });
-    
-    // Verificar que los elementos existen
-    if (!enterBtn || !studentCodeInput || !welcomeError) {
-        console.error('❌ Error: No se encontraron los elementos de bienvenida');
-        console.log('enterBtn:', enterBtn);
         console.log('studentCodeInput:', studentCodeInput);
         console.log('welcomeError:', welcomeError);
         return;

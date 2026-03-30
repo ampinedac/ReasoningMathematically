@@ -476,10 +476,28 @@
     <script type="module" src="main.js?v=2026031813"></script>
     <script src="app.js?v=2026031813"></script>
     <script>
-        // ...existing code...
-        function updateBookCoverBg() {
-            var cover = document.querySelector('.book-cover-page.active');
-            var bg = document.getElementById('bookCoverBg');
+        (function() {
+            function hideCocina() {
+                var cocina = document.getElementById('cocinaScreen');
+                if (cocina && !cocina.classList.contains('hidden')) {
+                    cocina.classList.add('hidden');
+                }
+            }
+            document.addEventListener('DOMContentLoaded', function() {
+                let count = 0;
+                const maxTries = 20;
+                const interval = setInterval(function() {
+                    hideCocina();
+                    count++;
+                    if (count >= maxTries) clearInterval(interval);
+                }, 100);
+            });
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) hideCocina();
+            });
+            function updateBookCoverBg() {
+                var cover = document.querySelector('.book-cover-page.active');
+                var bg = document.getElementById('bookCoverBg');
                 if (cover && bg) {
                     bg.style.display = 'block';
                 } else if(bg) {
@@ -490,7 +508,7 @@
             document.addEventListener('click', function(e){
                 setTimeout(updateBookCoverBg, 100);
             });
-        // ...existing code...
+        })();
     </script>
 </div>
 
