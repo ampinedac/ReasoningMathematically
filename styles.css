@@ -394,37 +394,35 @@ body {
   }
   /* Página individual del flipbook: animada y apilada */
   #ContenedorLibro .page {
-    position: absolute; /* Apila las páginas una sobre otra */
-    top: 0; /* Arriba del contenedor */
-    left: 50%; /* Centra horizontalmente */
-    width: 100%; /* Ocupa todo el ancho del área */
-    height: 100%; /* Ocupa toda la altura del área */
-    padding: 24px 28px; /* Espaciado interno para el contenido */
-    transform: translateX(-50%) rotateY(0deg); /* Centra y prepara para animación 3D */
-    transform-origin: center center; /* Origen de la animación 3D */
-    transform-style: preserve-3d; /* Mantiene el efecto 3D */
-    transition:
-      transform .4s cubic-bezier(0.645, 0.045, 0.355, 1),
-      opacity .4s ease; /* Transiciones suaves para animación */
-    backface-visibility: hidden; /* Oculta el reverso al girar */
-    opacity: 0; /* Oculta la página por defecto */
-    pointer-events: none; /* No permite interacción si no está activa */
-    z-index: 1; /* Apila las páginas correctamente */
-    overflow: hidden; /* Oculta el contenido que se desborde */
-    background: var(--surface); /* Fondo definido por variable */
-    border-radius: 14px; /* Bordes redondeados */
-    box-shadow: 0 4px 16px rgba(0,0,0,.08); /* Sombra suave */
-    display: flex; /* Flexbox para organizar el contenido */
-    flex-direction: column; /* Apila elementos en columna */
-    align-items: stretch; /* Estira los elementos hijos */
-    justify-content: flex-start; /* Alinea el contenido arriba */
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    padding: 24px 28px;
+    transform: translateX(-50%) rotateY(0deg);
+    transform-origin: center center;
+    transform-style: preserve-3d;
+    transition: transform .4s cubic-bezier(0.645, 0.045, 0.355, 1), opacity .4s ease;
+    backface-visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
   }
   /* Página activa del flipbook: visible y en primer plano */
   #ContenedorLibro .page.active {
-    opacity: 1 !important; /* Totalmente visible */
-    display: flex !important; /* Asegura que la página esté visible */
+    opacity: 1;
     pointer-events: auto;
     z-index: 10;
+    /* El layout (display: flex) ya está en la regla base */
   }
   /* Esta regla hace que la numeración de páginas del libro se muestre
   siempre en la parte inferior, bien separada a los lados, y que no interfiera 
@@ -564,20 +562,19 @@ body {
    Organiza la doble página en dos columnas: izquierda (imagen) y derecha (texto).
 ====================================================== */
 #moment1Screen #flipbook .page.q1-book-spread {
-  width: 98%; /* Ocupa casi todo el ancho disponible */
-  height: auto; /* Altura automática según el contenido */
-  margin: 0; /* Sin margen externo */
-  border-radius: 0; /* Sin bordes redondeados */
-  display: grid; /* Usa grid para organizar las columnas */
-  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
-  grid-template-rows: 1fr; /* Una sola fila */
-  gap: 0; /* Sin espacio entre columnas */
-  align-items: stretch; /* Estira el contenido verticalmente */
-  justify-items: stretch; /* Estira el contenido horizontalmente */
-  overflow: visible; /* Permite desbordamiento visible */
-  background: #fff; /* Fondo blanco */
-  box-sizing: border-box; /* Incluye padding y borde en el tamaño total */
-  position: relative; /* Permite posicionar elementos hijos */
+  width: 98%;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: visible;
+  background: #fff;
+  box-sizing: border-box;
+  position: relative;
 }
 
 
