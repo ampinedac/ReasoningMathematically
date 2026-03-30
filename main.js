@@ -31,6 +31,8 @@ function hideAllFlipbookPages() {
 }
 
 // Datos de Momento 3
+// Variable global para el código del estudiante
+let studentCode = null;
 let m3_a = 0;
 let m3_b = 0;
 let m3_choice = null;
