@@ -102,6 +102,98 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================================
 // PANTALLA PRINCIPAL
 // ========================================
+// ========================================
+// PANTALLA DE BIENVENIDA
+// ========================================
+function initWelcomeScreen() {
+    console.log('🔧 Inicializando pantalla de bienvenida...');
+    const enterBtn = document.getElementById('enterBtn');
+    const studentCodeInput = document.getElementById('studentCodeInput');
+    const welcomeError = document.getElementById('welcomeError');
+    // Bloquear cualquier tecla que no sea un número
+    studentCodeInput.addEventListener('keydown', (e) => {
+        if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+            (e.keyCode === 65 && e.ctrlKey === true) ||
+            (e.keyCode === 67 && e.ctrlKey === true) ||
+            (e.keyCode === 86 && e.ctrlKey === true) ||
+            (e.keyCode === 88 && e.ctrlKey === true) ||
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            return;
+        }
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+    studentCodeInput.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = e.clipboardData.getData('text');
+        const numericOnly = pasteData.replace(/\D/g, '');
+        studentCodeInput.value = numericOnly;
+    });
+    if (!enterBtn || !studentCodeInput || !welcomeError) {
+        console.error('❌ Error: No se encontraron los elementos de bienvenida');
+        console.log('enterBtn:', enterBtn);
+        console.log('studentCodeInput:', studentCodeInput);
+        console.log('welcomeError:', welcomeError);
+        return;
+    }
+    console.log('✅ Elementos encontrados, enlazando eventos...');
+    enterBtn.addEventListener('click', () => {
+        console.log('🖱️ Click en botón Ingresar');
+        const code = studentCodeInput.value.trim();
+        console.log('Código ingresado:', code);
+        if (!code) {
+            console.log('⚠️ Código vacío, mostrando error');
+            welcomeError.textContent = 'Por favor ingresa tu código estudiantil';
+            welcomeError.classList.remove('hidden');
+            return;
+        }
+        if (!/^\d+$/.test(code)) {
+            console.log('⚠️ Código inválido, solo se permiten números');
+            welcomeError.textContent = 'Solo se permiten números';
+            welcomeError.classList.remove('hidden');
+            return;
+        }
+        if (code === '0000') {
+            const providedName = window.prompt('¡Bienvenido(a)! ¿Cuál es tu nombre?');
+            const invitedName = providedName ? providedName.trim() : '';
+            if (!invitedName) {
+                welcomeError.textContent = 'Para continuar con el código 0000, escribe tu nombre.';
+                welcomeError.classList.remove('hidden');
+                return;
+            }
+            welcomeError.classList.add('hidden');
+            studentCode = code;
+            studentInfo = {
+                nombre: invitedName,
+                apellidos: '',
+                curso: 'INVITADO'
+            };
+            showConfirmationScreen();
+            return;
+        }
+        const estudiante = estudiantesData[code];
+        if (!estudiante) {
+            console.log('⚠️ Código no encontrado en la base de datos');
+            welcomeError.textContent = 'Código no encontrado. Verifica que esté bien escrito.';
+            welcomeError.classList.remove('hidden');
+            return;
+        }
+        welcomeError.classList.add('hidden');
+        studentCode = code;
+        studentInfo = estudiante;
+        console.log('✅ Estudiante encontrado:', estudiante);
+        console.log('⏯️ Navegando a pantalla de confirmación...');
+        showConfirmationScreen();
+    });
+    studentCodeInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            console.log('⌨️ Tecla Enter presionada');
+            enterBtn.click();
+        }
+    });
+    console.log('✅ Eventos enlazados correctamente');
+}
 function initHomeScreen() {
     console.log('🔧 Inicializando pantalla principal...');
     const activity0Btn = document.getElementById('activity0Btn');
