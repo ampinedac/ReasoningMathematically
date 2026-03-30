@@ -1,12 +1,11 @@
 // --- Ocultar todas las páginas del flipbook ---
 function hideAllFlipbookPages() {
-    flipbook = document.getElementById('flipbook');
-    if (!flipbook) return;
-    const pages = flipbook.querySelectorAll('.page');
-    pages.forEach(page => {
-        page.classList.remove('active');
-    });
-    }
+	flipbook = document.getElementById('flipbook');
+	if (!flipbook) return;
+	const pages = flipbook.querySelectorAll('.page');
+	pages.forEach(page => {
+		page.classList.remove('active');
+	});
 
     if (submitBtn) {
         submitBtn.disabled = true;
@@ -134,10 +133,8 @@ function initPortadaScreen() {
             }
         });
     }
-        console.log('studentCodeInput:', studentCodeInput);
-        console.log('welcomeError:', welcomeError);
-        return;
-    }
+    // ...existing code...
+}
     
     console.log('✅ Elementos encontrados, enlazando eventos...');
     
@@ -206,16 +203,16 @@ function initPortadaScreen() {
         // Navegar a pantalla de confirmación - REQUERIDO, no se puede saltar
         showConfirmationScreen();
     });
-    
+}
+);
     studentCodeInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             console.log('⌨️ Tecla Enter presionada');
             enterBtn.click();
         }
     });
-    
     console.log('✅ Eventos enlazados correctamente');
-}
+// NO cerrar aquí, el cierre correcto está más adelante
 
 // ========================================
 // PANTALLA DE CONFIRMACIÓN
@@ -1132,6 +1129,7 @@ function initProblemQ1() {
         }
     });
 }
+
 
 // ========================================
 // MOMENTO 3: VERACIDAD + EVIDENCIA
