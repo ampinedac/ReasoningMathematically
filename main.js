@@ -99,6 +99,19 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================================
 // PANTALLA DE PORTADA
 // ========================================
+// ========================================
+// PANTALLA PRINCIPAL
+// ========================================
+function initHomeScreen() {
+    console.log('🔧 Inicializando pantalla principal...');
+    const activity0Btn = document.getElementById('activity0Btn');
+    if (activity0Btn) {
+        activity0Btn.addEventListener('click', () => {
+            console.log('📌 Abriendo Actividad 0A en nueva pestaña');
+            window.open('actividad0A.html', '_blank');
+        });
+    }
+}
 function initPortadaScreen() {
     const btnContinuarPortada = document.getElementById('btnContinuarPortada');
     if (btnContinuarPortada) {
