@@ -473,8 +473,7 @@ function initMoment1() {
     // Ocultar cocinaScreen al iniciar momento 1 (sin cambios)
     cocinaScreen = document.getElementById('cocinaScreen');
     if (cocinaScreen) {
-        cocinaScreen.classList.add('hidden'); // Oculta la cocina usando la clase estándar
-        cocinaScreen.style.display = ''; // Limpia display para que el CSS controle la visibilidad
+        cocinaScreen.style.display = 'none';
     }
     // Ya no existe moment1Screen ni flipbook-wrapper: todo está bajo #ContenedorLibro
     // Inicializar flipbook y páginas
@@ -744,7 +743,7 @@ function initMoment1() {
     const showCocinaScreen = () => {
         if (!cocinaScreen) return;
         if (m1Q2Verified) return;
-        cocinaScreen.classList.remove('hidden');
+        cocinaScreen.style.display = '';
         document.body.style.overflow = 'hidden';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         initSheet11Trays();
@@ -752,7 +751,7 @@ function initMoment1() {
 
     const hideCocinaScreen = () => {
         if (!cocinaScreen) return;
-        cocinaScreen.classList.add('hidden');
+        cocinaScreen.style.display = 'none';
         document.body.style.overflow = '';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         // Mostrar la imagen de bandejas al regresar de la cocina
