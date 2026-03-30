@@ -1,24 +1,26 @@
-#moment1Screen .sound-toggle{
-  top: 8px; /* Separado del borde superior */
-  right: 3%; /* Separado del borde derecho */
-  width: 52px; /* Tamaño fijo */
-  height: 52px; /* Tamaño fijo */
-  z-index: 125; /* Prioridad alta para estar encima */
+/* --- Migración: ahora los controles de sonido y navegación están bajo #ContenedorLibro directamente --- */
+#ContenedorLibro .sound-toggle {
+  top: 8px;
+  right: 3%;
+  width: 52px;
+  height: 52px;
+  z-index: 125;
+  position: absolute;
 }
 
-#moment1Screen .flipbook-wrapper .nav-btn{
-  top: 50%; /* Centrado verticalmente */
-  transform: translateY(-50%); /* Ajuste fino para centrar */
-  width: 56px; /* Tamaño fijo */
-  height: 56px; /* Tamaño fijo */
-  z-index: 120; /* Prioridad alta */
+#ContenedorLibro .nav-btn {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  z-index: 120;
+  position: absolute;
 }
-
-#moment1Screen .flipbook-wrapper #prevBtn{
-  left: 12px; /* Separado del borde izquierdo */
+#ContenedorLibro #prevBtn {
+  left: 12px;
 }
-#moment1Screen .flipbook-wrapper #nextBtn{
-  right: 12px; /* Separado del borde derecho */
+#ContenedorLibro #nextBtn {
+  right: 12px;
 }
 
 /* ===================================================================================
@@ -347,10 +349,12 @@ body {
   pointer-events: none;             /* La imagen no bloquea el click del botón */
  }
     /* Ocultar botones → ← cuando la portada está activa */
-   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
-   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
-   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none !important;
- }
+/* --- Migración: ocultar navegación cuando la portada está activa, ahora bajo #ContenedorLibro --- */
+#ContenedorLibro #flipbook .book-cover-page.active ~ .nav-btn,
+#ContenedorLibro #flipbook .book-cover-page.active ~ #prevBtn,
+#ContenedorLibro #flipbook .book-cover-page.active ~ #nextBtn {
+  display: none !important;
+}
 
 
 /* ========================================================================
@@ -561,7 +565,9 @@ body {
    SPREAD Q1 (Doble página de la actividad 0A)
    Organiza la doble página en dos columnas: izquierda (imagen) y derecha (texto).
 ====================================================== */
-#moment1Screen #flipbook .page.q1-book-spread {
+
+/* --- Migración: spreads y páginas internas bajo #ContenedorLibro --- */
+#ContenedorLibro #flipbook .page.q1-book-spread {
   width: 98%;
   height: auto;
   margin: 0;
@@ -576,53 +582,42 @@ body {
   box-sizing: border-box;
   position: relative;
 }
-
-
-/* Página izquierda del spread Q1: muestra la imagen centrada */
-#moment1Screen #flipbook .page.q1-book-spread .q1-left-page {
-  flex: 1 1 0; /* Crece y ocupa el espacio disponible */
-  display: flex; /* Flexbox para centrar el contenido */
-  flex-direction: column; /* Apila elementos en columna */
-  align-items: center; /* Centra horizontalmente */
-  justify-content: center; /* Centra verticalmente */
-  text-align: center; /* Centra el texto */
-  padding: 0; /* Sin relleno interno */
-  margin: 0; /* Sin margen externo */
-  position: relative; /* Permite posicionar elementos hijos */
-  background: #fff; /* Fondo blanco */
+#ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  background: #fff;
 }
-
-
-/* Imagen dentro de la página izquierda: ocupa todo el ancho y mantiene proporción */
-#moment1Screen #flipbook .page.q1-book-spread .q1-left-page img {
-  width: 96%; /* Ocupa todo el ancho disponible */
-  height: auto; /* Altura automática */
-  object-fit: contain; /* Mantiene la proporción de la imagen */
-  margin: 0; /* Sin margen */
-  display: block; /* Ocupa toda la línea */
+#ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img {
+  width: 96%;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+  display: block;
 }
-
-
-/* Página derecha del spread Q1: muestra el texto de la historia */
-#moment1Screen #flipbook .page.q1-book-spread .q1-right-page {
-  flex: 1 1 0; /* Crece y ocupa el espacio disponible */
-  display: flex; /* Flexbox para organizar el contenido */
-  flex-direction: column; /* Apila elementos en columna */
-  align-items: flex-start; /* Alinea el contenido a la izquierda */
-  justify-content: center; /* Centra verticalmente */
-  text-align: left; /* Alinea el texto a la izquierda */
-  padding: 3vw 4vw 3vw 2vw; /* Espaciado interno amplio */
-  margin: 0; /* Sin margen externo */
-  background: #fff; /* Fondo blanco */
+#ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  padding: 3vw 4vw 3vw 2vw;
+  margin: 0;
+  background: #fff;
 }
-
-/* Texto principal de la historia en la página derecha */
-#moment1Screen #flipbook .page.q1-book-spread .q1-right-page .story-text {
-  font-size: clamp(2.1rem, 4vw, 2.8rem); /* Tamaño adaptable */
-  line-height: 1.25; /* Espaciado entre líneas */
-  color: #0084ff; /* Azul llamativo */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
-  margin: 0; /* Sin margen */
+#ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page .story-text {
+  font-size: clamp(2.1rem, 4vw, 2.8rem);
+  line-height: 1.25;
+  color: #0084ff;
+  font-family: 'Rancho', cursive;
+  margin: 0;
   word-break: break-word;
   width: 100%;
 }
@@ -663,93 +658,76 @@ body {
 
 
 /* Centra horizontalmente todos los elementos hijos directos de las páginas Q1 */
-#moment1Screen #flipbook .page.q1-book-spread .q1-left-page > *,
-#moment1Screen #flipbook .page.q1-book-spread .q1-right-page > *,
-#flipbook .q1-book-spread > *{
-  margin-left: auto; /* Centra a la izquierda */
-  margin-right: auto; /* Centra a la derecha */
+
+#ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page > *,
+#ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page > *,
+#ContenedorLibro #flipbook .q1-book-spread > * {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
 /* Cajas de problema, evidencia y guías: sin fondo ni borde, ocupan todo el ancho */
-#moment1Screen #flipbook .page.q1-book-spread .problem-box,
-#moment1Screen #flipbook .page.q1-book-spread .evidence-section,
-#flipbook .problem-box,
-#flipbook .q2-guide-card,
-#flipbook .prompt-box{
-  width: 100%; /* Ocupan todo el ancho disponible */
-  margin: 0 auto; /* Centrado horizontal */
-  padding: 0; /* Sin relleno interno */
-  background: transparent; /* Fondo transparente */
-  border: 0; /* Sin borde */
-  border-radius: 14px; /* Bordes redondeados suaves */
-  box-shadow: none; /* Sin sombra */
+
+#ContenedorLibro #flipbook .page.q1-book-spread .problem-box,
+#ContenedorLibro #flipbook .page.q1-book-spread .evidence-section,
+#ContenedorLibro #flipbook .problem-box,
+#ContenedorLibro #flipbook .q2-guide-card,
+#ContenedorLibro #flipbook .prompt-box {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 14px;
+  box-shadow: none;
 }
 
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page{
+
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page {
   overflow: visible;
   text-align: center;
 }
-
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page .drawing-board{
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .drawing-board {
   height: clamp(130px, 21vh, 220px);
 }
-
-#moment1Screen #flipbook .page#problemQ1Section .q1-left-page p{
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-left-page p {
   font-size: clamp(.92rem, 1.5vw, 1.08rem);
   line-height: 1.35;
   letter-spacing: -.2px;
   margin-bottom: 6px;
 }
-
-
-/* Pregunta destacada en la página izquierda: tamaño grande y espaciado */
-#moment1Screen #flipbook .page#problemQ1Section .q1-left-page .question{
-  font-size: clamp(1.05rem, 2vw, 1.55rem); /* Tamaño adaptable */
-  line-height: 1.3; /* Espaciado entre líneas */
-  letter-spacing: -.3px; /* Ajuste de espacio entre letras */
-  margin-top: 8px; /* Espacio superior */
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-left-page .question {
+  font-size: clamp(1.05rem, 2vw, 1.55rem);
+  line-height: 1.3;
+  letter-spacing: -.3px;
+  margin-top: 8px;
 }
-
-
-/* Subtítulo o encabezado en la página derecha */
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page h4{
-  font-size: clamp(1.25rem, 2vw, 2rem); /* Tamaño adaptable */
-  margin-bottom: 8px; /* Espacio inferior */
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page h4 {
+  font-size: clamp(1.25rem, 2vw, 2rem);
+  margin-bottom: 8px;
 }
-
-
-/* Contenedor del tablero de dibujo: centrado y ancho limitado */
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page .board-container{
-  margin: 4px auto; /* Centrado y espacio vertical */
-  max-width: 94%; /* No excede el 94% del ancho */
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .board-container {
+  margin: 4px auto;
+  max-width: 94%;
 }
-
-
-/* Herramientas del tablero: centradas y con espacio inferior */
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page .board-tools{
-  margin-bottom: 8px; /* Espacio inferior */
-  justify-content: center; /* Centra las herramientas */
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .board-tools {
+  margin-bottom: 8px;
+  justify-content: center;
 }
-
-
-/* Controles de audio: alineados en fila y centrados */
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page .audio-controls{
-  display: inline-flex; /* Flexbox en línea */
-  flex-direction: row; /* Elementos en fila */
-  align-items: center; /* Centra verticalmente */
-  margin: 6px 6px 0; /* Espacio alrededor */
-  gap: 8px; /* Espacio entre controles */
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .audio-controls {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 6px 6px 0;
+  gap: 8px;
 }
-
-
-/* Sección de envío de respuestas: centrada y alineada */
-#moment1Screen #flipbook .page#problemQ1Section .q1-right-page .submit-section{
-  display: inline-flex; /* Flexbox en línea */
-  align-items: center; /* Centra verticalmente */
-  justify-content: center; /* Centra horizontalmente */
-  margin: 6px 6px 0; /* Espacio alrededor */
-  text-align: center; /* Centra el texto */
+#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .submit-section {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 6px 0;
+  text-align: center;
 }
 
 
@@ -758,14 +736,15 @@ body {
    TIPOGRAFÍA INTERNA DEL FLIPBOOK (COMPARTIDO)
    Aplica tamaño y espaciado de fuente consistente a todos los textos relevantes.
 ====================================================== */
-#moment1Screen #flipbook .page :is(
+
+#ContenedorLibro #flipbook .page :is(
   p, li, label, input, textarea, select, button,
   .story-text, .question, .instruction-hint, .confirmation-question,
   .radio-label, .feedback-text, .status-text, .activity-subtitle,
   .student-code-display, .audio-status, .page-number, .problem-box p
 ){
-  font-size: var(--a0-body-font-size); /* Usa la variable definida para tamaño de texto */
-  line-height: var(--a0-body-line-height); /* Usa la variable para interlineado */
+  font-size: var(--a0-body-font-size);
+  line-height: var(--a0-body-line-height);
 }
 
 
@@ -774,21 +753,8 @@ body {
    Botones flotantes, redondeados y con sombra para navegación y sonido.
 ====================================================== */
 
-#moment1Screen .flipbook-wrapper .nav-btn{
-  top: 50%;
-  transform: translateY(-50%);
-  width: 56px;
-  height: 56px;
-  z-index: 120;
-}
 
-#moment1Screen .flipbook-wrapper #prevBtn{
-  left: 12px;
-}
-
-#moment1Screen .flipbook-wrapper #nextBtn{
-  right: 12px;
-}
+/* Eliminados selectores redundantes de navegación bajo .flipbook-wrapper y #moment1Screen */
 
 .tool-icon-red{
   color: #e53935;

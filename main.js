@@ -470,33 +470,27 @@ function showScreen(containerId) {
 
 function initMoment1() {
     console.log('[initMoment1] Entrando a la pantalla del cuento...');
-    // Forzar cocinaScreen oculta al iniciar momento 1
+    // Ocultar cocinaScreen al iniciar momento 1 (sin cambios)
     cocinaScreen = document.getElementById('cocinaScreen');
     if (cocinaScreen) {
-        cocinaScreen.style.display = 'none'; // Oculta la cocina usando display
+        cocinaScreen.style.display = 'none';
     }
-    const moment1Screen = document.getElementById('moment1Screen');
-    if (moment1Screen) {
-        moment1Screen.classList.add('active');
-        console.log('[initMoment1] moment1Screen activa');
-    }
+    // Ya no existe moment1Screen ni flipbook-wrapper: todo está bajo #ContenedorLibro
+    // Inicializar flipbook y páginas
     flipbook = document.getElementById('flipbook');
     if (flipbook) {
-        // 1. Actualizar flipbookPages global con todas las páginas actuales
+        // Actualizar flipbookPages global con todas las páginas actuales
         flipbookPages = Array.from(flipbook.querySelectorAll('.page'));
-
-        // 2. Actualizar índices globales de páginas especiales
+        // Actualizar índices globales de páginas especiales
         q1PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ1Section');
         q2PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ2Section');
         q3PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ3Section');
         q3bPageIndex  = flipbookPages.findIndex(page => page.id === 'problemQ3Section2');
         q4PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ4Section');
         q5PageIndex   = flipbookPages.findIndex(page => page.id === 'problemQ5Section');
-
-        // 3. Ocultar todas las páginas del flipbook
+        // Ocultar todas las páginas del flipbook
         flipbookPages.forEach(p => p.classList.remove('active'));
-
-        // 4. Activar SOLO el primer spread (primer .page)
+        // Activar SOLO el primer spread (primer .page)
         if (flipbookPages.length > 0) {
             flipbookPages[0].classList.add('active');
             console.log('[initMoment1] Primer spread del cuento ACTIVADO');
@@ -506,13 +500,13 @@ function initMoment1() {
     } else {
         console.warn('[initMoment1] No se encontró el flipbook');
     }
+    // Actualizar encabezado de código estudiantil
     const studentCodeM1 = document.getElementById('studentCodeM1');
     if (studentCodeM1) {
         studentCodeM1.textContent = getStudentHeaderText();
     } else {
         console.error('❌ No se encontró el elemento studentCodeM1');
     }
-
     console.log('✅ Momento 1 inicializado');
     console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
 
@@ -771,10 +765,11 @@ function initMoment1() {
         if (m4_closeTriggered) return;
         m4_closeTriggered = true;
 
-        const wrapper = document.querySelector('.flipbook-wrapper');
-        if (wrapper) {
-            wrapper.classList.add('book-closing');
-        }
+        // flipbook-wrapper ya no existe, animación de cierre se puede adaptar si es necesario
+        // const wrapper = document.querySelector('.flipbook-wrapper');
+        // if (wrapper) {
+        //     wrapper.classList.add('book-closing');
+        // }
 
         if (prevBtn) {
             prevBtn.style.display = 'none';
