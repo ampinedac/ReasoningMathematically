@@ -10,12 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
         soundEnabled: true,
         soundFrequency: 800,
         soundDuration: 100,
-        narrationEnabled: false // Control para la narración de texto
+        // narrationEnabled: false // Eliminado control de narración de texto
     };
 
     // ===== STATE =====
     let currentPage = 0;
-    let currentSpeech = null; // Almacenar el objeto de narración actual
+    // let currentSpeech = null; // Eliminado narración por voz
     let completionEventDispatched = false;
     let isTurning = false;
     const TURN_DURATION_MS = 920;
@@ -110,74 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
     window.playPageTurnSound = playPageTurnSound;
 
     // ===== TOGGLE SONIDO =====
-    function toggleNarration() {
-        CONFIG.narrationEnabled = !CONFIG.narrationEnabled;
-        updateSoundButton();
-        
-        if (CONFIG.narrationEnabled) {
-            // Narrar la página actual
-            narrateCurrentPage();
-        } else {
-            // Detener narración
-            stopNarration();
-        }
-        
-        // Guardar preferencia
-        localStorage.setItem('flipbookNarrationEnabled', CONFIG.narrationEnabled);
-    }
-
-    function narrateCurrentPage() {
-        // Detener cualquier narración anterior
-        stopNarration();
-        
-        const currentPageElement = pages[currentPage];
-        const storyText = currentPageElement.querySelector('.story-text');
-        
-        if (!storyText) return;
-        
-        const text = storyText.textContent;
-        
-        // Usar Web Speech API
-        if ('speechSynthesis' in window) {
-            currentSpeech = new SpeechSynthesisUtterance(text);
-            currentSpeech.lang = 'es-ES'; // Español
-            currentSpeech.rate = 0.9; // Velocidad un poco más lenta
-            currentSpeech.pitch = 1.1; // Tono ligeramente más alto (voz femenina)
-            
-            // Buscar voz femenina con acento neutral (es-ES o es-MX preferentemente)
-            const voices = window.speechSynthesis.getVoices();
-            
-            // Priorizar voces de España (es-ES) o México (es-MX) que suelen ser más neutrales
-            const spanishFemaleVoice = voices.find(voice => 
-                (voice.lang === 'es-ES' || voice.lang === 'es-MX') && 
-                (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('woman'))
-            ) || voices.find(voice => 
-                voice.lang === 'es-ES' && voice.name.toLowerCase().includes('lucia')
-            ) || voices.find(voice => 
-                voice.lang === 'es-MX' && voice.name.toLowerCase().includes('paulina')
-            ) || voices.find(voice => 
-                voice.lang.startsWith('es') && !voice.name.toLowerCase().includes('male')
-            ) || voices.find(voice => voice.lang.startsWith('es'));
-            
-            if (spanishFemaleVoice) {
-                currentSpeech.voice = spanishFemaleVoice;
-                console.log('🎙️ Usando voz:', spanishFemaleVoice.name);
-            }
-            
-            currentSpeech.onend = () => {
-                console.log('🔊 Narración completada');
-            };
-            
-            window.speechSynthesis.speak(currentSpeech);
-        }
-    }
-
-    function stopNarration() {
-        if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
-        }
-        currentSpeech = null;
-    }
 
     function updateSoundButton() {
         
@@ -391,9 +323,9 @@ document.addEventListener('DOMContentLoaded', function() {
         isTurning = true;
         
         // Detener narración al cambiar de página
-        stopNarration();
-        CONFIG.narrationEnabled = false;
-        updateSoundButton();
+        // stopNarration();
+        // CONFIG.narrationEnabled = false;
+        // updateSoundButton();
 
         clearTemporaryTurnLayers();
 
@@ -539,12 +471,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Sound toggle
         
         // Cargar voces disponibles
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = () => {
-                const voices = window.speechSynthesis.getVoices();
-                console.log('🎙️ Voces disponibles:', voices.length);
-            };
-        }
+        // if ('speechSynthesis' in window) {
+        //     window.speechSynthesis.onvoiceschanged = () => {
+        //         const voices = window.speechSynthesis.getVoices();
+        //         console.log('🎙️ Voces disponibles:', voices.length);
+        //     };
+        // }
     }
 
     // ===== CUSTOM PROGRESS BAR STYLE =====
@@ -560,11 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== INITIALIZATION =====
     function init() {
-        // Cargar preferencia de narración
-        const savedNarrationPref = localStorage.getItem('flipbookNarrationEnabled');
-        if (savedNarrationPref !== null) {
-            CONFIG.narrationEnabled = savedNarrationPref === 'true';
-        }
+        // Eliminada carga de preferencia de narración
         
         addProgressBarStyle();
         initEventListeners();
