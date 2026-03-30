@@ -222,11 +222,11 @@ body {
   }
 
 
-/* =====================================================
+/* ====================================================================================================================
    CONTENEDOR PORTADA
    Área visual principal de la portada del libro interactivo.
    Centra y resalta la portada con fondo degradado y sombra.
-====================================================== */
+======================================================================================================================= */
 #ContenedorPortada {
   position: relative;
   width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
@@ -306,8 +306,8 @@ body {
   cursor: pointer;                  /* Cursor de mano al pasar */
  }
   
- /* Efecto visual al pasar el mouse sobre el botón 'Léeme' */
- #ContenedorPortada .cover-leer-btn:hover {
+ /* Efecto visual al pasar el mouse sobre la imagen 'Léeme' */
+ #ContenedorPortada .cover-leer-image:hover {
   transform: translateY(-3px);      /* Eleva el botón ligeramente */
   filter: brightness(1.15);         /* Ilumina el botón */
   box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra dorada */
@@ -358,21 +358,20 @@ body {
    }
 
 /* Efecto hover/focus para accesibilidad */
-#ContenedorLibro .nav-btn:hover, #ContenedorLibro .nav-btn:focus {
+ #ContenedorLibro .nav-btn:hover, #ContenedorLibro .nav-btn:focus {
   background: #0056b3;
   color: #fff;
   transform: translateY(-50%) scale(1.08);
   box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-}
+ }
    
+ #ContenedorLibro #prevBtn {
+  left: 12px;
+  }
 
-   #ContenedorLibro #prevBtn {
-   left: 12px;
-   }
-
-   #ContenedorLibro #nextBtn {
-   right: 12px;
-   }
+  #ContenedorLibro #nextBtn {
+  right: 12px;
+  }
   
   /* Estilo general del contenedor del libro */ 
   #ContenedorLibro {
@@ -435,6 +434,7 @@ body {
     align-items: stretch;
     justify-content: flex-start;
   }
+
   /* Página activa del flipbook: visible y en primer plano */
   #ContenedorLibro .page.active {
     opacity: 1;
@@ -478,92 +478,11 @@ body {
   z-index: 6; /* Prioridad baja */
 }
 
-/* =============================================================================================================
-   FLIPBOOK - HOJA DE GIRO (COMPARTIDO)
-   Define la hoja animada al pasar página.
-================================================================================================================ */
-#flipbook .page-turn-leaf{
-  position: absolute; /* Posiciona sobre el contenedor */
-  top: 0; /* Arriba */
-  left: 0; /* Desde el borde izquierdo */
-  width: 100%; /* Ocupa todo el ancho */
-  height: 100%; /* Ocupa toda la altura */
-  box-shadow:
-    inset -24px 0 46px rgba(0,0,0,.18), /* Sombra interna para profundidad */
-    8px 10px 24px rgba(0,0,0,.16); /* Sombra externa */
-}
-
-/* Hoja animada al pasar página hacia adelante (cara trasera) */
-#flipbook .page-turn-leaf.forward .page-turn-face.back{
-  border-radius: 10px 0 0 10px; /* Bordes redondeados solo a la izquierda */
-  box-shadow:
-    inset 22px 0 42px rgba(0,0,0,.12), /* Sombra interna para profundidad */
-    -8px 10px 22px rgba(0,0,0,.12); /* Sombra externa */
-  transform: rotateY(180deg); /* Gira la hoja en 3D */
-}
-
-/* Hoja animada al pasar página hacia atrás (cara frontal) */
-#flipbook .page-turn-leaf.backward .page-turn-face.front{
-  border-radius: 10px 0 0 10px; /* Bordes redondeados solo a la izquierda */
-  box-shadow:
-    inset 24px 0 46px rgba(0,0,0,.18), /* Sombra interna */
-    -8px 10px 24px rgba(0,0,0,.16); /* Sombra externa */
-}
-
-/* Hoja animada al pasar página hacia atrás (cara trasera) */
-#flipbook .page-turn-leaf.backward .page-turn-face.back{
-  border-radius: 0 10px 10px 0; /* Bordes redondeados solo a la derecha */
-  box-shadow:
-    inset -22px 0 42px rgba(0,0,0,.12), /* Sombra interna */
-    8px 10px 22px rgba(0,0,0,.12); /* Sombra externa */
-  transform: rotateY(180deg); /* Gira la hoja en 3D */
-}
-
-
-/* Animación de giro de hoja hacia adelante */
-@keyframes leafTurnForward{
-  0%   { transform: rotateY(0deg); }
-  100% { transform: rotateY(-180deg); }
-}
-
-/* Animación de giro de hoja hacia atrás */
-@keyframes leafTurnBackward{
-  0%   { transform: rotateY(0deg); }
-  100% { transform: rotateY(180deg); }
-}
-
-/* ========================================
-  ESTILOS ESPECÍFICOS ACTIVIDAD 0A (PORTADA, STORY PAGE)
-  ========================================
-  Ejemplo de selectores: .book-cover-page, .cover-book-title, .cover-subtitle
-*/
-#flipbook .flipbook-page,
-#flipbook .story-page,
-#flipbook .book-cover-page,
-#flipbook .q1-book-spread
-
-
 
 /* =====================================================
    CONTENIDO DE PÁGINA DE HISTORIA (story-page-content)
    Área principal de cada página de la historia, con fondo y bordes decorativos.
 ====================================================== */
-.story-page-content{
-  position: relative; /* Permite posicionar elementos hijos de forma absoluta */
-  width: 98%; /* Ocupa casi todo el ancho disponible */
-  margin: 0 auto; /* Centra horizontalmente */
-  padding: 40px 70px 20px 50px; /* Espaciado interno amplio */
-  background: linear-gradient(135deg, #fff9f0 0%, #fffef8 50%, #ffffff 100%); /* Fondo degradado cálido */
-  border: 4px solid #d4a574; /* Borde dorado claro */
-  border-left: 8px solid #8b4513; /* Borde izquierdo más grueso y oscuro */
-  border-radius: 0 15px 15px 0; /* Bordes redondeados a la derecha */
-  box-shadow:
-    -5px 0 15px rgba(139,69,19,.2), /* Sombra lateral marrón */
-    0 10px 40px rgba(230,126,34,.15), /* Sombra inferior naranja */
-    inset 0 0 60px rgba(255,249,240,.7), /* Sombra interna clara */
-    inset 5px 0 10px rgba(139,69,19,.05); /* Sombra interna lateral */
-  overflow-y: auto; /* Permite desplazamiento vertical si hay mucho contenido */
-}
 
 
 /* Título de la página de historia: centrado y en columna */
@@ -636,39 +555,6 @@ body {
   width: 100%;
 }
 
-
-/* =============================================================================================================================
-   NUMERACIÓN DE PÁGINAS (spread)
-   Muestra el número de página en las esquinas inferiores.
-  =========================================================================================================================== */
-.page-number.book-spread-number {
-  position: absolute; /* Posiciona sobre la página */
-  width: 100%; /* Ocupa todo el ancho */
-  left: 0; /* Desde el borde izquierdo */
-  bottom: 0; /* Pegado al borde inferior */
-  display: flex; /* Flexbox para separar izquierda y derecha */
-  justify-content: space-between; /* Espacia los números a los extremos */
-  pointer-events: none; /* No interactuable */
-  z-index: 20; /* Encima de otros elementos */
-}
-.page-number-left {
-  color: #0084ff; /* Azul llamativo */
-  font-size: clamp(0.7rem, 1.1vw, 1.1rem); /* Tamaño adaptable */
-  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-  font-weight: bold; /* Texto en negrita */
-  margin-left: 1vw; /* Espacio a la izquierda */
-  margin-bottom: 0.5vw; /* Espacio inferior */
-  align-self: flex-end; /* Alinea abajo */
-}
-.page-number-right {
-  color: #0084ff; /* Azul llamativo */
-  font-size: clamp(0.7rem, 1.1vw, 1.1rem); /* Tamaño adaptable */
-  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-  font-weight: bold; /* Texto en negrita */
-  margin-right: 1vw; /* Espacio a la derecha */
-  margin-bottom: 0.5vw; /* Espacio inferior */
-  align-self: flex-end; /* Alinea abajo */
-}
 
 
 /* Centra horizontalmente todos los elementos hijos directos de las páginas Q1 */
@@ -745,18 +631,3 @@ body {
 }
 
 
-
-/* =====================================================
-   TIPOGRAFÍA INTERNA DEL FLIPBOOK (COMPARTIDO)
-   Aplica tamaño y espaciado de fuente consistente a todos los textos relevantes.
-====================================================== */
-
-#ContenedorLibro #flipbook .page :is(
-  p, li, label, input, textarea, select, button,
-  .story-text, .question, .instruction-hint, .confirmation-question,
-  .radio-label, .feedback-text, .status-text, .activity-subtitle,
-  .student-code-display, .audio-status, .page-number, .problem-box p
-){
-  font-size: var(--a0-body-font-size);
-  line-height: var(--a0-body-line-height);
-}

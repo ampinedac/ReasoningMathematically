@@ -111,18 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== TOGGLE SONIDO =====
 
-    function updateSoundButton() {
-        
-        
-        // Siempre mostrar bocina abierta (ondas de sonido visibles)
-        muteLine.style.display = 'none';
-        soundWaves.style.display = 'block';
-        
-        // Cambiar solo el aria-label para accesibilidad
-        if (CONFIG.narrationEnabled) {
-        } else {
-        }
-    }
 
     // ===== PROGRESS INDICATOR =====
     function updateProgress(page) {
@@ -325,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Detener narración al cambiar de página
         // stopNarration();
         // CONFIG.narrationEnabled = false;
-        // updateSoundButton();
+
 
         clearTemporaryTurnLayers();
 
@@ -498,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initEventListeners();
         initKeyboardNavigation();
         initTouchSupport();
-        updateSoundButton();
+
         applyRealBookPageNumbers();
         
 
