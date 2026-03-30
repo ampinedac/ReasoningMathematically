@@ -744,7 +744,7 @@ function initMoment1() {
     const showCocinaScreen = () => {
         if (!cocinaScreen) return;
         if (m1Q2Verified) return;
-        cocinaScreen.style.display = '';
+        cocinaScreen.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         initSheet11Trays();
@@ -752,7 +752,7 @@ function initMoment1() {
 
     const hideCocinaScreen = () => {
         if (!cocinaScreen) return;
-        cocinaScreen.style.display = 'none';
+        cocinaScreen.classList.add('hidden');
         document.body.style.overflow = '';
         if (typeof window.playPageTurnSound === 'function') window.playPageTurnSound();
         // Mostrar la imagen de bandejas al regresar de la cocina
