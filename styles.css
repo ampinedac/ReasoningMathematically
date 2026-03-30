@@ -260,7 +260,7 @@ body {
   max-height: 92vh;
   margin: auto;
   box-sizing: border-box;
-  display: flex;
+  /* display: flex;  <-- Solo JS controla el display */
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -271,7 +271,7 @@ body {
   gap: 2vh;
   overflow: hidden;
   border-radius: 14px;
-  }
+}
   
   /* Título principal de la portada del libro */
   #ContenedorPortada .cover-book-title {
@@ -287,21 +287,7 @@ body {
       margin: 0;                  /* Sin margen extra */
     }
   
-    #ContenedorPortada .cover-subtitle {
-      font-family: 'Rancho', cursive; /* Fuente decorativa para el subtítulo */
-      font-size: clamp(1rem, 2.5vw, 1.5rem); /* Tamaño responsivo para subtítulo */
-      width: 100%; /* Ocupa todo el ancho del contenedor */
-      word-break: break-word; /* Permite cortar palabras largas */
-      overflow-wrap: break-word; /* Ajusta el texto al ancho */
-      white-space: normal; /* Permite saltos de línea */
-      text-align: center; /* Centra el texto */
-      line-height: 1.2; /* Espaciado entre líneas */
-      margin: 0; /* Sin margen extra */
-      color: #8000ffc4; /* Color del subtítulo */
-      word-break: break-word;      /* Permite cortar palabras largas si es necesario */
-      overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
-      white-space: normal;         /* Permite saltos de línea normales */
-      }
+
 
     /* Descripción-SUBTITULO de la portada del libro */
   #ContenedorPortada .cover-subtitle {
@@ -349,7 +335,7 @@ body {
     /* Ocultar botones → ← cuando la portada está activa */
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
-   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none !important;
+   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none;
  }
 
 
@@ -362,7 +348,7 @@ body {
     height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
     padding: 24px 10px 8px 10px; /* Espaciado interno */
     gap: 12px; /* Espacio vertical entre elementos */
-    display: flex; /* Flexbox para organizar el contenido */
+    /* display: flex; <-- Solo JS controla el display */
     flex-direction: column; /* Apila elementos en columna */
     align-items: center; /* Centra horizontalmente el contenido */
     justify-content: flex-start; /* Alinea el contenido arriba */
@@ -379,7 +365,7 @@ body {
     
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.253); /* Variable para sombra media */
     --surface: #fff; /* Variable para color de fondo de páginas */
-   }
+  }
 
  /* Estilo particular del contenedor del flipbook: centra el libro y define el área de páginas */
   #ContenedorLibro .flipbook-wrapper {
