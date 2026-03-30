@@ -11,7 +11,92 @@
   transform: translateY(-50%); /* Ajuste fino para centrar */
   width: 56px; /* Tamaño fijo */
   height: 56px; /* Tamaño fijo */
+  z-index: 120; /* Prioridad alta */
+}
 
+#moment1Screen .flipbook-wrapper #prevBtn{
+  left: 12px; /* Separado del borde izquierdo */
+}
+#moment1Screen .flipbook-wrapper #nextBtn{
+  right: 12px; /* Separado del borde derecho */
+}
+
+/* ===================================================================================
+   ÍCONOS DE HERRAMIENTAS
+   Colorea y ajusta el tamaño de los íconos de herramientas.
+==================================================================================== */
+.tool-icon-red{
+  color: #e53935; /* Rojo intenso para advertencia o eliminar */
+}
+
+/* ==============================================================================
+   FONDO GENERAL DEL BODY
+   Aplica una imagen de fondo a toda la página, centrada y ajustada.
+==================================================================================== */
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('assets/images/Fondo.png') no-repeat center center fixed !important; /* Imagen de fondo fija y centrada */
+  background-size: cover !important; /* Ajusta la imagen para cubrir toda la pantalla */
+}
+
+
+/* ===================================================================================
+   CRÉDITO DE AUTORÍA
+   Muestra el nombre de la autora en la esquina superior derecha.
+   Fijo y visible en toda la aplicación.
+========================================================================================= */
+.author-credit,
+#authorCredit {
+  position: fixed; /* Fija el elemento en la pantalla */
+  right: 14px; /* Lo posiciona a 14px del borde derecho */
+  top: 12px; /* Lo posiciona a 12px del borde superior */
+  z-index: 60; /* Prioridad de apilamiento para que quede encima de otros elementos */
+  font-family: 'Rancho', cursive; /* Fuente decorativa y amigable */
+  font-size: clamp(1rem, 1.9vw, 1.7rem); /* Tamaño adaptable según el ancho de la pantalla */
+  color: #5b5b5b; /* Color gris oscuro para buena visibilidad */
+  opacity: .85; /* Opacidad para que no distraiga demasiado */
+}
+
+
+/* ========================================================================================
+   CONTENEDOR BIENVENIDA
+   Pantalla inicial para ingreso de código estudiantil.
+   Centra el contenido y aplica tipografía amigable.
+========================================================================================= */
+ /*Contenedor invisible que centra el contenido  de todo lo de la pantalla de bienvenida*/
+ #ContenedorBienvenida {
+  display: flex; /* Flexbox para centrar vertical y horizontalmente */
+  flex-direction: column; /* Apila elementos en columna */
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  font-family: 'Lobster Two'; /* Fuente decorativa */
+ }
+
+ /*Titulo: Actividad 1*/
+ #ContenedorBienvenida .main-title {
+  font-size: clamp(4rem, 10vw, 6rem); /* Tamaño adaptable para el título principal */
+  color: #0077ff; /* Azul*/
+ }
+
+ /*Subtítulo: ¿El orden de los factores altera el producto?*/
+ #ContenedorBienvenida .subtitle {
+  font-size: clamp(2.5rem, 4vw, 3.5rem); /* Tamaño adaptable para el subtítulo */
+  color: #009dff; /* Azul */
+  margin-bottom: 24px; /* Espacio debajo del subtítulo */
+ }
+
+ /* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
+ #ContenedorBienvenida .welcome-box {
+  width: min(92vw, 620px); /* Máximo 640px, pero responsivo */
+  padding: clamp(20px, 3vw, 40px); /* Espaciado adaptable */
+  background: rgba(62, 216, 255, 0.589); /* Fondo semitransparente azul */
+  border: 1px solid rgba(255,255,255,.7); /* Borde blanco suave */
+  border-radius: 16px; /* Bordes redondeados */
   box-shadow: 0 14px 30px rgba(0,0,0,.14); /* Sombra para profundidad */
   backdrop-filter: blur(8px); /* Difumina el fondo detrás */
   display: flex; /* Flexbox para organizar el contenido */
@@ -175,7 +260,7 @@
   max-height: 92vh;
   margin: auto;
   box-sizing: border-box;
-  /* display: flex;  <-- Solo JS controla el display */
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -186,7 +271,7 @@
   gap: 2vh;
   overflow: hidden;
   border-radius: 14px;
-}
+  }
   
   /* Título principal de la portada del libro */
   #ContenedorPortada .cover-book-title {
@@ -202,7 +287,21 @@
       margin: 0;                  /* Sin margen extra */
     }
   
-
+    #ContenedorPortada .cover-subtitle {
+      font-family: 'Rancho', cursive; /* Fuente decorativa para el subtítulo */
+      font-size: clamp(1rem, 2.5vw, 1.5rem); /* Tamaño responsivo para subtítulo */
+      width: 100%; /* Ocupa todo el ancho del contenedor */
+      word-break: break-word; /* Permite cortar palabras largas */
+      overflow-wrap: break-word; /* Ajusta el texto al ancho */
+      white-space: normal; /* Permite saltos de línea */
+      text-align: center; /* Centra el texto */
+      line-height: 1.2; /* Espaciado entre líneas */
+      margin: 0; /* Sin margen extra */
+      color: #8000ffc4; /* Color del subtítulo */
+      word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+      overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+      white-space: normal;         /* Permite saltos de línea normales */
+      }
 
     /* Descripción-SUBTITULO de la portada del libro */
   #ContenedorPortada .cover-subtitle {
@@ -250,7 +349,7 @@
     /* Ocultar botones → ← cuando la portada está activa */
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) .nav-btn,
    #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #prevBtn,
-   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none;
+   #moment1Screen .flipbook-wrapper:has(#flipbook .book-cover-page.active) #nextBtn { display: none !important;
  }
 
 
@@ -263,7 +362,7 @@
     height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
     padding: 24px 10px 8px 10px; /* Espaciado interno */
     gap: 12px; /* Espacio vertical entre elementos */
-    /* display: flex; <-- Solo JS controla el display */
+    display: flex; /* Flexbox para organizar el contenido */
     flex-direction: column; /* Apila elementos en columna */
     align-items: center; /* Centra horizontalmente el contenido */
     justify-content: flex-start; /* Alinea el contenido arriba */
@@ -280,7 +379,7 @@
     
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.253); /* Variable para sombra media */
     --surface: #fff; /* Variable para color de fondo de páginas */
-  }
+   }
 
  /* Estilo particular del contenedor del flipbook: centra el libro y define el área de páginas */
   #ContenedorLibro .flipbook-wrapper {
