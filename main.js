@@ -174,7 +174,7 @@ function initPortadaScreen() {
     const btnContinuarPortada = document.getElementById('btnContinuarPortada');
     if (btnContinuarPortada) {
         btnContinuarPortada.addEventListener('click', () => {
-            // Aquí se eliminó la lógica de visibilidad de ContenedorLibro
+            showScreen('ContenedorLibro');
             initMoment1();
         });
     }
