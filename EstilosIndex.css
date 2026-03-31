@@ -108,11 +108,11 @@ section.screen > * {
   <div class="home-container">
 */
 .home-container {
-    margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
+  margin: 0 auto;           /* Centra el contenedor horizontalmente */
+  padding: 40px 20px;       /* Espaciado interno: 40px arriba/abajo, 20px a los lados */
+  text-align: center;       /* Centra el texto dentro del contenedor */
+  position: relative;       /* Permite posicionar elementos hijos de forma absoluta respecto a este contenedor */
+  z-index: 1;               /* Asegura que el contenedor esté por encima de otros elementos con menor z-index */
 }
 /*
   Crédito de autor (esquina superior derecha)
