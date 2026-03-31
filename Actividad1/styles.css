@@ -1,6 +1,6 @@
 /* Fondo general para todo el body */
 body {
-  background: url('./assets/images/Fondo.png') no-repeat center center fixed;
+  background: url('../Actividad1/assets/images/Fondo.png') no-repeat center center fixed;
   background-size: cover;
 }
 /* Overlay de la cocina: cubre todo el área del libro y se muestra solo cuando no tiene .hidden */
