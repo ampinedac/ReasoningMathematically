@@ -452,9 +452,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ===== EVENT LISTENERS =====
     function initEventListeners() {
-        // Navigation buttons
-        elements.prevBtn.addEventListener('click', previousPage);
-        elements.nextBtn.addEventListener('click', nextPage);
+        // Navigation buttons: ahora la lógica se centraliza en main.js
+        // Los listeners se agregan desde main.js para permitir validación pedagógica
         
         // Sound toggle
         

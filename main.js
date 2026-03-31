@@ -1037,56 +1037,35 @@ function initMoment1() {
         nextBtn.removeEventListener('click', m1NextGuardHandler, true);
     }
 
+    // Centralizar listeners de navegación
     if (nextBtn) {
-        m1NextGuardHandler = async (event) => {
+        nextBtn.addEventListener('click', async (event) => {
             const currentFlipbookPage = getCurrentFlipbookPage();
-
-            if (currentFlipbookPage === q1PageIndex && !m1Q1Submitted) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return;
-            }
-
-            if (currentFlipbookPage === q2PageIndex && !m1Q2Submitted) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return;
-            }
-
-            if (currentFlipbookPage === q3PageIndex && !m3Q1Submitted) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return;
-            }
-
-            if (currentFlipbookPage === q3bPageIndex && !m3Q2Submitted) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return;
-            }
-
-            if (currentFlipbookPage === q4PageIndex && !m4_completed) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return;
-            }
-
+            // Validación pedagógica para avanzar
+            if (currentFlipbookPage === q1PageIndex && !m1Q1Submitted) return;
+            if (currentFlipbookPage === q2PageIndex && !m1Q2Submitted) return;
+            if (currentFlipbookPage === q3PageIndex && !m3Q1Submitted) return;
+            if (currentFlipbookPage === q3bPageIndex && !m3Q2Submitted) return;
+            if (currentFlipbookPage === q4PageIndex && !m4_completed) return;
             if (currentFlipbookPage === q5PageIndex) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-
-                if (!m4_reflectionSelected) {
-                    return;
-                }
-
+                if (!m4_reflectionSelected) return;
                 const saved = await saveMoment4Reflection();
-                if (saved) {
-                    closeBookAndReturnToActivities();
-                }
+                if (saved) closeBookAndReturnToActivities();
+                return;
             }
-        };
-
-        nextBtn.addEventListener('click', m1NextGuardHandler, true);
+            // Si pasa validación, avanzar
+            if (window.flipbookControls && typeof window.flipbookControls.nextPage === 'function') {
+                window.flipbookControls.nextPage();
+            }
+        });
+    }
+    if (prevBtn) {
+        prevBtn.addEventListener('click', (event) => {
+            // Permitir retroceder siempre, o agregar validaciones si se desea
+            if (window.flipbookControls && typeof window.flipbookControls.previousPage === 'function') {
+                window.flipbookControls.previousPage();
+            }
+        });
     }
 
     if (goToCocinaBtn) {

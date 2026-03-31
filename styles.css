@@ -279,16 +279,7 @@ body {
       }
 
     /* Descripción-SUBTITULO de la portada del libro */
-  #ContenedorPortada .cover-subtitle {
-    font-family: 'Rancho', cursive;
-    font-size: clamp(1.2rem, 3vw, 2.2rem);
-    color: #8000ffc4;
-    text-align: center;
-    width: 100%;
-    word-break: break-word;      /* Permite cortar palabras largas si es necesario */
-   overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
-   white-space: normal;         /* Permite saltos de línea normales */
-  }
+
   
  /* Botón 'Léeme' en la portada: tamaño responsivo, centrado y sin bordes */
  #ContenedorPortada .cover-leer-btn {
@@ -307,7 +298,7 @@ body {
  }
   
  /* Efecto visual al pasar el mouse sobre la imagen 'Léeme' */
- #ContenedorPortada .cover-leer-image:hover {
+ #ContenedorPortada .cover-leer-btn:hover {
   transform: translateY(-3px);      /* Eleva el botón ligeramente */
   filter: brightness(1.15);         /* Ilumina el botón */
   box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra dorada */
