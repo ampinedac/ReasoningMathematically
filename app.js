@@ -116,27 +116,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateProgress(page) {
         currentPage = page;
         const progress = ((page + 1) / CONFIG.totalPages) * 100;
-        
         // Update progress bar only if it exists
         if (elements.progressBar) {
             elements.progressBar.style.setProperty('--progress', `${progress}%`);
             elements.progressBar.querySelector('::before')?.style.setProperty('width', `${progress}%`);
-            // Update CSS variable for progress bar
             document.documentElement.style.setProperty('--flipbook-progress', `${progress}%`);
         }
-        
         // Update progress text only if it exists
         if (elements.progressText) {
             elements.progressText.textContent = `Página ${page + 1} de ${CONFIG.totalPages}`;
         }
-        
         // Al llegar por primera vez a la última página, mostrar Situación 1 automáticamente
         if (page === CONFIG.totalPages - 1 && !completionEventDispatched) {
             completionEventDispatched = true;
             document.dispatchEvent(new CustomEvent('flipbook:completed'));
             console.log('✅ Última página alcanzada - evento de situación emitido');
         }
-
         document.dispatchEvent(new CustomEvent('flipbook:pagechange', {
             detail: {
                 page,
@@ -144,22 +139,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 isLastPage: page === CONFIG.totalPages - 1
             }
         }));
-        
-        // Update navigation buttons
-        updateNavButtons(page);
+        // No modificar el estado de los botones aquí; main.js lo controla
     }
 
-    function updateNavButtons(page) {
-        if (page === 0) {
-            document.body.classList.add('flipbook-on-cover');
-        } else {
-            document.body.classList.remove('flipbook-on-cover');
-        }
-        elements.prevBtn.disabled = page === 0;
-        const allowNextOnLastPageForActivity0B = document.body.classList.contains('activity-0b')
-            && page === CONFIG.totalPages - 1;
-        elements.nextBtn.disabled = !allowNextOnLastPageForActivity0B && page === CONFIG.totalPages - 1;
-    }
+    // function updateNavButtons(page) {
+    //     if (page === 0) {
+    //         document.body.classList.add('flipbook-on-cover');
+    //     } else {
+    //         document.body.classList.remove('flipbook-on-cover');
+    //     }
+    //     elements.prevBtn.disabled = page === 0;
+    //     const allowNextOnLastPageForActivity0B = document.body.classList.contains('activity-0b')
+    //         && page === CONFIG.totalPages - 1;
+    //     elements.nextBtn.disabled = !allowNextOnLastPageForActivity0B && page === CONFIG.totalPages - 1;
+    // }
 
     function clearTemporaryTurnLayers() {
         document.querySelectorAll('#flipbook .page-turn-leaf').forEach(layer => layer.remove());

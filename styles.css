@@ -367,7 +367,8 @@ body {
   /* Estilo general del contenedor del libro */ 
   #ContenedorLibro {
     width: min(95vw, 1000px); /* Máximo 1000px, pero responsivo */
-    height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
+    height: 100vh; /* Siempre ocupa el alto total de la pantalla */
+    max-height: 100vh;
     padding: 24px 10px 8px 10px; /* Espaciado interno */
     gap: 12px; /* Espacio vertical entre elementos */
     display: flex; /* Flexbox para organizar el contenido */
@@ -375,6 +376,7 @@ body {
     align-items: center; /* Centra horizontalmente el contenido */
     justify-content: flex-start; /* Alinea el contenido arriba */
     position: relative; /* Permite posicionar elementos hijos de forma absoluta */
+    overflow: hidden;
 
     --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem); /* Variable para tamaño de texto */
     --a0-body-line-height: 1.45; /* Variable para interlineado */
