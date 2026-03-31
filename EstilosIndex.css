@@ -3,16 +3,16 @@
    (Usadas en títulos y textos decorativos)
    ===================================================== */
 @font-face {
-    font-family: 'Lobster Two';
-    src: url('assets/Font/Lobster_Two/LobsterTwo-BoldItalic.ttf') format('truetype');
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'Lobster Two';
+  src: url('Font/Lobster_Two/LobsterTwo-BoldItalic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
 }
 @font-face {
-    font-family: 'Rancho';
-    src: url('assets/Font/Rancho/Rancho-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Rancho';
+  src: url('Font/Rancho/Rancho-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
 /* =====================================================
