@@ -428,16 +428,8 @@ body {
     justify-content: flex-start;
   }
 
-  /* Página activa del flipbook: visible y en primer plano */
-  #ContenedorLibro .page.active {
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 10;
-    /* El layout (display: flex) ya está en la regla base */
-  }
-  /* Esta regla hace que la numeración de páginas del libro se muestre
-  siempre en la parte inferior, bien separada a los lados, y que no interfiera 
-  con la interacción del usuario. */
+  /* Esta regla hace que la numeración de páginas del libro se muestre siempre en la parte inferior, 
+  bien separada a los lados, y que no interfiera con la interacción del usuario. */
   #ContenedorLibro .page-number.book-spread-number {
     position: absolute; /* Posiciona sobre la página */
     width: 100%; /* Ocupa todo el ancho */
@@ -448,6 +440,7 @@ body {
     pointer-events: none; /* No interactuable */
     z-index: 20; /* Encima de otros elementos */
   }
+  
   /* Hace que los números de página se vean bonitos, 
   legibles, bien posicionados y con un estilo decorativo en las esquinas inferiores del libro. */
   #ContenedorLibro .page-number-left, #ContenedorLibro .page-number-right {
@@ -495,7 +488,7 @@ body {
 /* Contenedor general de los spreads #ContenedorLibro --- */
  #ContenedorLibro #flipbook .page.q1-book-spread { /* Contenedor de la doble página (spread) de la actividad Q1 */
   width: 100%;                /* Ocupa todo el ancho del contenedor padre */
-  height: 95%;                /* Ocupa el 95% de la altura del contenedor padre */
+  height: 100%;               /* Ocupa todo el alto del contenedor padre */
   margin: 0;                  /* Sin margen externo */
   display: flex;              /* Usa Flexbox para organizar el contenido interno */
   flex-direction: row;        /* Los hijos se organizan en fila (horizontalmente) */
@@ -510,6 +503,8 @@ body {
 
 /* Página izquierda del spread Q1: imagen centrada, sin padding ni margen, con fondo decorativo */
  #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page { /* Página izquierda del spread Q1: imagen centrada, sin padding ni margen, con fondo decorativo */
+    height: 100%;               /* Ocupa todo el alto del contenedor padre */
+    min-height: 0;              /* Permite que flexbox recorte si es necesario */
   flex: 1 1 0;             /* Ocupa la mitad del espacio disponible en el spread */
   display: flex;           /* Usa Flexbox para organizar el contenido interno */
   flex-direction: column;  /* Los hijos se apilan en columna (verticalmente) */
@@ -521,16 +516,18 @@ body {
  }
  
  /* Imagen dentro de la página izquierda del spread Q1: ocupa casi todo el espacio, sin deformarse, y centrada */
- #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img {
-  width: 96%;
-  height: auto;
-  object-fit: contain;
-  margin: 0;
-  display: block;
+ #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img { /* Imagen dentro de la página izquierda del spread Q1 */
+  width: 96%;             /* La imagen ocupa el 96% del ancho del contenedor */
+  max-height: 96%;        /* La imagen nunca supera el alto del contenedor */
+  height: auto;           /* La altura se ajusta automáticamente para mantener la proporción */
+  object-fit: contain;    /* La imagen se escala para verse completa sin deformarse */
+  display: block;         /* Elimina espacios extra debajo de la imagen y la hace un bloque */
  }
 
 /* Página derecha del spread Q1: texto centrado a la izquierda, sin padding ni margen, con fondo blanco */
  #ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page {
+    height: 100%;           /* Ocupa todo el alto del contenedor padre */
+    min-height: 0;          /* Permite que flexbox recorte si es necesario */
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
