@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const elements = {
         progressBar: document.getElementById('progressBar'),
         progressText: document.getElementById('progressText'),
-        prevBtn: document.getElementById('prevBtn'),
-        nextBtn: document.getElementById('nextBtn'),
     };
 
     function applyRealBookPageNumbers() {

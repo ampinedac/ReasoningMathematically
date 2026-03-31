@@ -1041,7 +1041,14 @@ function initMoment1() {
     if (nextBtn) {
         nextBtn.addEventListener('click', async (event) => {
             const currentFlipbookPage = getCurrentFlipbookPage();
-            // Validación pedagógica para avanzar
+            // Permitir avanzar siempre desde el primer spread real (índice 1, páginas 1-2)
+            if (currentFlipbookPage === 1) {
+                if (window.flipbookControls && typeof window.flipbookControls.nextPage === 'function') {
+                    window.flipbookControls.nextPage();
+                }
+                return;
+            }
+            // Validación pedagógica para el resto
             if (currentFlipbookPage === q1PageIndex && !m1Q1Submitted) return;
             if (currentFlipbookPage === q2PageIndex && !m1Q2Submitted) return;
             if (currentFlipbookPage === q3PageIndex && !m3Q1Submitted) return;
