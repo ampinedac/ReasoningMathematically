@@ -14,7 +14,7 @@
 <body>
 <!-- CONTENEDOR BIENVENIDA -->
 <div id="ContenedorBienvenida">
-    <div id="bookCoverBg" class="book-cover-bg" style="display:none;"></div>
+    <div id="bookCoverBg" class="book-cover-bg"></div>
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
     <section id="welcomeScreen" class="screen active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
         <h1 class="main-title">Actividad 1</h1>
@@ -23,13 +23,13 @@
             <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
             <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
             <button id="enterBtn" class="btn btn-primary">Ingresar</button>
-            <div id="welcomeError" class="hidden" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
+            <div id="welcomeError" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
         </div>
     </section>
 </div>
 
 <!-- CONTENEDOR CONFIRMACIÓN -->
-<div id="ContenedorConfirmacion" style="display:none;">
+<div id="ContenedorConfirmacion">
     <section id="confirmationScreen" class="screen">
         <h1 class="main-title">Confirmación</h1>
         <div class="welcome-box confirmation-box">
@@ -43,7 +43,7 @@
 </div>
 
 <!-- CONTENEDOR PORTADA (oculto al inicio) -->
-<div id="ContenedorPortada" style="display:none;">
+<div id="ContenedorPortada">
     <div id="bookCover" class="book-cover-page">
         <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
             <span style="color:#6f00ff;">El secreto de las bandejas de Doña Alicia </span> 
@@ -54,7 +54,7 @@
         </button>
     </div>
 </div>
-<div id="ContenedorLibro" style="display:none;">
+<div id="ContenedorLibro">
     <!-- MIGRACIÓN: Se elimina section#moment1Screen.screen, div#flipbookSection y div.flipbook-wrapper. Todo el contenido relevante se mueve aquí directamente. -->
     <div id="flipbook">
                         <!-- Story Spread 1-2 (Imagen izquierda, texto derecha) -->
@@ -148,7 +148,7 @@
                                     <!-- Audio -->
                                     <div class="audio-controls">
                                         <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="stopBtnM1Q1" class="btn btn-audio">⏹️ Detener</button>
                                         <button id="submitM1Q1" class="btn btn-primary" disabled>Enviar ✈️</button>
                                         <span id="audioStatusM1Q1" class="audio-status"></span>
                                     </div>
@@ -183,18 +183,18 @@
                             </div>
                             <div class="q1-right-page" id="q2RightPage">
                                 <!-- Imagen de bandejas SOLO visible al regresar de la cocina -->
-                                <div id="bandejasFotoRegreso" class="hidden" style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
+                                <div id="bandejasFotoRegreso" style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
                                     <img src="../Actividad1/assets/images/BandejasFoto.png" alt="Bandejas de pandebonos" style="max-width:95%;height:auto;border-radius:14px;box-shadow:0 4px 18px #0002;">
                                 </div>
                                 <!-- Foto de los pares (se genera al completar la cocina) -->
                                 <!-- Pregunta final + audio (se activa al completar la cocina) -->
-                                <div id="m1Q2FinalQuestion" class="q2-final-question hidden">
+                                <div id="m1Q2FinalQuestion" class="q2-final-question">
                                     <p><strong>Para pensar 🤔</strong></p>
                                     <p>En cada grupo hay dos bandejas que se ven diferentes, pero tienen la misma cantidad de pandebonos.</p>
                                     <p>¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
                                     <div class="audio-controls">
                                         <button id="recordBtnM1Q2" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                        <button id="stopBtnM1Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="stopBtnM1Q2" class="btn btn-audio">⏹️ Detener</button>
                                         <button id="submitM1Q2" class="btn btn-primary" disabled>Enviar ✈️</button>
                                         <span id="audioStatusM1Q2" class="audio-status"></span>
                                     </div>
@@ -250,7 +250,7 @@
 
                                 </div>
                             </div>
-                            <div id="promptSection1" class="hidden">
+                            <div id="promptSection1">
                                 <div class="prompt-box">
                                     <p id="promptText1"></p>
                                 </div>
@@ -258,7 +258,7 @@
                                     <h4>Graba tu explicación</h4>
                                     <div class="audio-controls">
                                         <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar audio</button>
-                                        <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="stopBtnM3Q1" class="btn btn-audio">⏹️ Detener</button>
                                         <span id="audioStatusM3Q1" class="audio-status"></span>
                                     </div>
                                     <div class="submit-section">
@@ -326,7 +326,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div id="promptSection2" class="hidden">
+                            <div id="promptSection2">
                                 <div class="prompt-box">
                                     <p id="promptText2"></p>
                                 </div>
@@ -334,7 +334,7 @@
                                     <h4>Graba tu explicación</h4>
                                     <div class="audio-controls">
                                         <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar audio</button>
-                                        <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="stopBtnM3Q2" class="btn btn-audio">⏹️ Detener</button>
                                         <span id="audioStatusM3Q2" class="audio-status"></span>
                                     </div>
                                     <div class="submit-section">
@@ -374,11 +374,11 @@
                                 <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
                                 <div id="itemsWrapper"></div>
                                 <p id="moment4Status" class="status-text"></p>
-                                <p id="pointsStatus" class="points-status hidden"></p>
+                                <p id="pointsStatus" class="points-status"></p>
                             </div>
                             <canvas id="magicCanvas" class="magic-canvas"></canvas>
                             <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-                            <div id="finalQuestionSection" class="hidden">
+                            <div id="finalQuestionSection">
                                 <div class="final-box">
                                     <h3>¡Felicitaciones! 🎉</h3>
                                     <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
@@ -427,7 +427,7 @@
     </section>
 
     <!-- COCINA: Pantalla completa para el juego de bandejas -->
-    <div id="cocinaScreen" class="cocina-overlay hidden">
+    <div id="cocinaScreen" class="cocina-overlay">
         <div class="cocina-header">
             <h2>👩‍🍳 La cocina de Doña Alicia</h2>
             <p>Une las bandejas que tienen la misma cantidad de pandebonos</p>
