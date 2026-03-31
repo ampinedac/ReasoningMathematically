@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Inicialización completada
     console.log('✅ Sistema inicializado');
-    
+
     // Inicializar pantallas y eventos
     initHomeScreen();
     initWelcomeScreen();
@@ -95,6 +95,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mostrar solo la pantalla de bienvenida
     const bienvenida = document.getElementById('ContenedorBienvenida');
     if (bienvenida) bienvenida.style.display = '';
+
+    // --- LÓGICA DE NAVEGACIÓN DEL FLIPBOOK ---
+    // Solo un spread visible a la vez, navegación secuencial
+    const flipbook = document.getElementById('flipbook');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (flipbook && prevBtn && nextBtn) {
+        let spreads = Array.from(flipbook.querySelectorAll('.page'));
+        let currentSpread = spreads.findIndex(p => p.classList.contains('active'));
+        if (currentSpread === -1) currentSpread = 0;
+        function showSpread(idx) {
+            spreads.forEach((p, i) => p.classList.toggle('active', i === idx));
+            currentSpread = idx;
+            prevBtn.disabled = idx === 0;
+            nextBtn.disabled = idx === spreads.length - 1;
+            prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
+            nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
+            prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
+            nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
+        }
+        prevBtn.addEventListener('click', () => {
+            if (currentSpread > 0) {
+                showSpread(currentSpread - 1);
+            }
+        });
+        nextBtn.addEventListener('click', () => {
+            if (currentSpread < spreads.length - 1) {
+                showSpread(currentSpread + 1);
+            }
+        });
+        // Inicializar estado de botones
+        showSpread(currentSpread);
+    }
 // ========================================
 // PANTALLA DE PORTADA
 // ========================================
