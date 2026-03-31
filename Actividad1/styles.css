@@ -1,26 +1,3 @@
-/* ====== REGLA TEMPORAL PARA MOSTRAR TODO ====== */
-#ContenedorBienvenida,
-#ContenedorConfirmacion,
-#ContenedorPortada,
-#ContenedorLibro,
-#ContenedorLibro .page.q1-book-spread,
-#ContenedorLibro .activity-spread {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  position: static !important;
-}
-
-#ContenedorLibro {
-  height: auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-  flex-direction: column !important;
-  align-items: stretch !important;
-  justify-content: flex-start !important;
-}
-
-
 /* =====================================================================================================
    VARIABLES CSS GLOBALES
 ===================================================================================================== */
@@ -75,7 +52,7 @@ body {
 }
 
 /* =====================================================================================================
-   CONTENEDORES PRINCIPALES (SOLO ALINEACIÓN, SIEMPRE INVISIBLES)
+   CONTENEDORES PRINCIPALES  AJUSTES GENERALES (SOLO ALINEACIÓN, SIEMPRE INVISIBLES)
 ===================================================================================================== */
 #ContenedorBienvenida,
 #ContenedorConfirmacion,
@@ -84,7 +61,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* Centra verticalmente */
   width: 100vw;
   height: 100vh;
   min-height: 100vh;
@@ -96,6 +73,302 @@ body {
   margin: 0 !important;
   overflow: visible;
 }
+
+/* ===================================================================================
+   CONTENEDOR BIENVENIDA: ESTILO ESPECÍFICO
+   (Ajustes visuales y de layout para la pantalla de bienvenida)
+=================================================================================== */
+ #ContenedorBienvenida {
+  min-height: 100vh;
+  font-family: 'Lobster Two', cursive;
+ }
+
+ #ContenedorBienvenida .main-title {
+  font-size: clamp(4rem, 10vw, 6rem);
+  color: #0077ff;
+ }
+
+ #ContenedorBienvenida .subtitle {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  color: #009dff;
+  margin-bottom: 24px;
+ }
+
+ #ContenedorBienvenida .welcome-box {
+  width: min(92vw, 620px);
+  padding: clamp(20px, 3vw, 40px);
+  background: rgba(62, 216, 255, 0.589);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ }
+
+#ContenedorBienvenida .welcome-box label {
+  display: block;
+  text-align: center;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: #003f67;
+ }
+
+ #ContenedorBienvenida .chalk-input {
+  width: min(100%, 360px);
+  margin: 0 auto 16px auto;
+  display: block;
+  padding: 12px 18px;
+  border: 2px solid #127afa;
+  border-radius: 16px;
+  background: #fff;
+  color: #111827;
+  text-align: center;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-family: 'Lobster Two', cursive;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+ }
+
+ #ContenedorBienvenida .chalk-input:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
+ }
+
+ #ContenedorBienvenida .btn {
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+  box-shadow: 0 3px 9px rgb(224, 253, 253);
+  font-family: 'Lobster Two', cursive;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+ }
+
+ #ContenedorBienvenida .btn:hover {
+  filter: brightness(.85);
+  transform: translateY(-3px);
+ }
+
+ #ContenedorBienvenida #welcomeError {
+  margin-top: 10px;
+  color: #b91c1c;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  text-align: center;
+  font-family: 'Rancho', cursive;
+ }
+
+ 
+/* ====== REGLA TEMPORAL PARA MOSTRAR TODO ====== */
+#ContenedorBienvenida,
+#ContenedorConfirmacion,
+#ContenedorPortada,
+#ContenedorLibro,
+#ContenedorLibro .page.q1-book-spread,
+#ContenedorLibro .activity-spread {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+#ContenedorLibro {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+
+ /* ===================================================================================
+   CONTENEDOR CONFIRMACIÓN: Pantalla para confirmar identidad del estudiante.
+   Centra y resalta la pregunta de confirmación.
+====================================================================================== */
+
+#ContenedorConfirmacion {
+  display: flex; /* Flexbox para centrar vertical y horizontalmente */
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  flex-direction: column; /* Apila elementos en columna */
+  min-height: 100vh; /* Ocupa toda la altura de la ventana */
+  font-family: 'Lobster Two'; /* Fuente decorativa */
+  font-size: clamp(2rem, 8vw, 4rem); /* Tamaño adaptable*/
+ }
+
+  /* Título principal de la pantalla de confirmación */
+  #ContenedorConfirmacion .main-title {
+    font-family: 'Lobster Two', cursive; /* Fuente decorativa especial */
+    color: #222; /* Gris oscuro para buena visibilidad */
+    text-align: center; /* Centra el título */
+    margin-bottom: 18px; /* Espacio debajo del título */
+  }
+
+ /* Caja principal de confirmación: agrupa la pregunta y botones, resaltando visualmente */
+ #ContenedorConfirmacion .confirmation-box {
+  width: min(92vw, 640px); /* Máximo 640px, pero responsivo */
+  padding: clamp(20px, 3vw, 40px); /* Espaciado adaptable */
+  background: rgba(62, 216, 255, 0.589); /* Fondo semitransparente azul */
+  border: 1px solid rgba(255,255,255,.7); /* Borde blanco suave */
+  border-radius: 16px; /* Bordes redondeados */
+  box-shadow: var(--shadow-md); /* Sombra definida por variable para profundidad */
+  backdrop-filter: blur(8px); /* Difumina el fondo detrás */
+  display: flex; /* Flexbox para organizar el contenido */
+  flex-direction: column;
+  align-items: center;
+ }
+
+  /* Pregunta de confirmación: ¿Eres X persona? Texto destacado y centrado */
+  #ContenedorConfirmacion .confirmation-question {
+    width: 100%; /* Ocupa todo el ancho de la caja */
+    margin: 0 0 24px 0; /* Espacio debajo de la pregunta */
+    font-family: 'Lobster Two', cursive; /* Fuente decorativa especial */
+    font-size: clamp(1.5rem, 3.4vw, 2.6rem); /* Tamaño adaptable */
+    line-height: 1.25; /* Espaciado entre líneas */
+    font-weight: 700; /* Texto en negrita */
+    color: #222; /* Gris oscuro */
+    text-align: center; /* Centra la pregunta */
+  }
+
+ /* Contenedor de los botones de confirmación: organiza los botones de sí/no */
+ #ContenedorConfirmacion .confirmation-buttons {
+  display: flex; /* Flexbox para alinear los botones */
+  gap: 20px; /* Espacio entre botones */
+  justify-content: center; /* Centra horizontalmente los botones */
+  align-items: center; /* Centra verticalmente los botones */
+  flex-wrap: wrap; /* Permite que los botones bajen si no caben */
+ } 
+
+ /* Botón de confirmación (sí/no): grande, redondeado y con sombra */
+ #ContenedorConfirmacion .confirmation-buttons .btn {
+  width: 100px; /* Ancho fijo para todos los botones */
+  height: 100px; /* Alto fijo para todos los botones */
+  padding: 0; /* Sin relleno interno extra */
+  display: flex; /* Flexbox para centrar el contenido del botón */
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  border-radius: 18px; /* Bordes redondeados para aspecto amigable */
+  background: #ffffff; /* Fondo*/
+ }
+
+    /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
+     #ContenedorConfirmacion .confirmation-buttons .btn:hover {
+     filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
+     transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+     }
+
+  /* Imagen dentro del botón de confirmación */
+  #ContenedorConfirmacion .confirmation-buttons .btn img {
+    max-width: 50%; /* Limita el ancho máximo de la imagen al 50% del botón */
+    max-height: 50%; /* Limita la altura máxima de la imagen al 50% del botón */
+    object-fit: contain; /* Escala la imagen para que siempre se vea completa y sin deformarse */
+    margin: 0 auto; /* Centra la imagen horizontalmente dentro del botón */
+  }
+
+
+/* ====================================================================================================================
+   CONTENEDOR PORTADA
+   Área visual principal de la portada del libro interactivo.
+   Centra y resalta la portada con fondo degradado y sombra.
+======================================================================================================================= */
+#ContenedorPortada {
+  position: relative;
+  width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
+  max-width: 100vw;
+  height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
+  max-height: 92vh;
+  margin: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+  border: 3px solid rgba(180, 138, 0, .25);
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  padding: 2vw;
+  gap: 2vh;
+  overflow: hidden;
+  border-radius: 14px;
+  }
+  
+  /* Título principal de la portada del libro */
+  #ContenedorPortada .cover-book-title {
+    font-family: 'Lobster Two';
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: #8000ff;
+    text-align: center;
+    width: 100%;
+      word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+      overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+      white-space: normal;         /* Permite saltos de línea normales */
+      line-height: 1.1;           /* Espaciado entre líneas compacto para evitar desbordes */
+      margin: 0;                  /* Sin margen extra */
+    }
+  
+    #ContenedorPortada .cover-subtitle {
+      font-family: 'Rancho', cursive; /* Fuente decorativa para el subtítulo */
+      font-size: clamp(1rem, 2.5vw, 1.5rem); /* Tamaño responsivo para subtítulo */
+      width: 100%; /* Ocupa todo el ancho del contenedor */
+      word-break: break-word; /* Permite cortar palabras largas */
+      overflow-wrap: break-word; /* Ajusta el texto al ancho */
+      white-space: normal; /* Permite saltos de línea */
+      text-align: center; /* Centra el texto */
+      line-height: 1.2; /* Espaciado entre líneas */
+      margin: 0; /* Sin margen extra */
+      color: #8000ffc4; /* Color del subtítulo */
+      word-break: break-word;      /* Permite cortar palabras largas si es necesario */
+      overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
+      white-space: normal;         /* Permite saltos de línea normales */
+      }
+
+    /* Descripción-SUBTITULO de la portada del libro */
+
+  
+ /* Botón 'Léeme' en la portada: tamaño responsivo, centrado y sin bordes */
+ #ContenedorPortada .cover-leer-btn {
+  width: min(320px, 60%);           /* El botón nunca será mayor a 320px y ocupa hasta el 60% del contenedor */
+  aspect-ratio: 4/1.2;              /* Mantiene una proporción rectangular para el botón */
+  display: flex;                    /* Usa flexbox para centrar el contenido */
+  align-items: center;              /* Centra verticalmente la imagen dentro del botón */
+  justify-content: center;          /* Centra horizontalmente la imagen dentro del botón */
+  margin: 24px auto 0 auto;         /* Centra el botón y lo separa del contenido superior */
+  padding: 0;                       /* Sin relleno interno */
+  border: none;                     /* Sin borde */
+  background: transparent;          /* Fondo transparente */
+  box-sizing: border-box;           /* Incluye padding y borde en el tamaño total */
+  overflow: visible;                /* Permite que la imagen se muestre completa */
+  cursor: pointer;                  /* Cursor de mano al pasar */
+ }
+  
+ /* Efecto visual al pasar el mouse sobre la imagen 'Léeme' */
+ #ContenedorPortada .cover-leer-btn:hover {
+  transform: translateY(-3px);      /* Eleva el botón ligeramente */
+  filter: brightness(1.15);         /* Ilumina el botón */
+  box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra dorada */
+ }
+
+ /* Imagen interna del botón 'Léeme': ocupa todo el botón sin deformarse */
+ #ContenedorPortada .cover-leer-image {
+  width: 100%;                      /* La imagen ocupa todo el ancho del botón */
+  height: 100%;                     /* La imagen ocupa todo el alto del botón */
+  object-fit: contain;              /* La imagen nunca se deforma, siempre se ve completa */
+  display: block;                   /* Elimina espacios extra debajo de la imagen */
+  pointer-events: none;             /* La imagen no bloquea el click del botón */
+ }
+    /* Ocultar botones → ← cuando la portada está activa */
+/* --- Migración: ocultar navegación cuando la portada está activa, ahora bajo #ContenedorLibro --- */
+#ContenedorLibro #flipbook .book-cover-page.active ~ .nav-btn,
+#ContenedorLibro #flipbook .book-cover-page.active ~ #prevBtn,
+#ContenedorLibro #flipbook .book-cover-page.active ~ #nextBtn {
+  display: none !important;
+}
+
+
 
 /* =====================================================================================================
    LIBRO Y SPREADS
@@ -152,6 +425,23 @@ body {
 }
 
 /* =====================================================================================================
+   IMÁGENES EN LA PÁGINA IZQUIERDA (AJUSTE Y ESTILO)
+===================================================================================================== */
+.left-page img,
+.q1-left-page img,
+.story-image {
+  display: block;
+  max-width: 98%;
+  max-height: 98%;
+  margin: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 12px 0 rgba(120,120,180,0.06);
+  object-fit: contain;
+  background: #fff8;
+  border: 1.5px solid #ececf3;
+  padding: 0.5vw;
+}
+/* =====================================================================================================
    PLIEGUE CENTRAL (SEPARADOR ENTRE PÁGINAS)
 ===================================================================================================== */
 .spread-fold {
@@ -160,7 +450,7 @@ body {
   max-width: 32px;
   height: 98%;
   align-self: center;
-  background: linear-gradient(90deg, rgba(220,220,240,0.12) 0%, rgba(180,180,220,0.18) 50%, rgba(220,220,240,0.12) 100%);
+  background: linear-gradient(90deg, rgba(193, 193, 197, 0.849) 0%, rgba(140, 140, 141, 0.904) 50%, rgba(220,220,240,0.12) 100%);
   border-radius: var(--radius-md);
   box-shadow: 0 0 12px 0 rgba(120,120,180,0.08);
   margin: 0 0.5vw;
