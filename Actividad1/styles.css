@@ -1,3 +1,32 @@
+/* ====== REGLA TEMPORAL PARA MOSTRAR TODO ====== */
+#ContenedorBienvenida,
+#ContenedorConfirmacion,
+#ContenedorPortada,
+#ContenedorLibro,
+#ContenedorLibro .page.q1-book-spread,
+#ContenedorLibro .activity-spread {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+}
+
+#ContenedorLibro {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+
+#ContenedorLibro .page.q1-book-spread {
+  margin-bottom: 32px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+/* Oculta navegación si es necesario */
+#prevBtn, #nextBtn, .nav-btn { display: none !important; }
 /* Fondo general para todo el body */
 body {
   background: url('../Actividad1/assets/images/Fondo.png') no-repeat center center fixed;
