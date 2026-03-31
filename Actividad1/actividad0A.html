@@ -9,21 +9,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="trays-styles.css?v=2026031813">
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
 </head>
 <body>
+    
 <!-- CONTENEDOR BIENVENIDA -->
 <div id="ContenedorBienvenida">
-    <div id="bookCoverBg" class="book-cover-bg"></div>
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
-    <section id="welcomeScreen" class="screen active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
+    <section id="welcomeScreen" class="screen active">
         <h1 class="main-title">Actividad 1</h1>
         <p class="subtitle">¿El orden de los factores altera el producto?</p>
         <div class="welcome-box">
-            <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
-            <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
+            <label for="studentCodeInput">Escribe tu código estudiantil:</label>
+            <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" />
             <button id="enterBtn" class="btn btn-primary">Ingresar</button>
-            <div id="welcomeError" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
+            <div id="welcomeError"></div>
         </div>
     </section>
 </div>
@@ -35,8 +34,8 @@
         <div class="welcome-box confirmation-box">
             <p id="confirmationQuestion" class="confirmation-question"></p>
             <div class="confirmation-buttons">
-                <button id="confirmYesBtn" class="btn btn-success"><img src="../Actividad1/assets/images/BTconfirmar.png" alt="Confirmar" style="height:48px;"></button>
-                <button id="confirmNoBtn" class="btn btn-secondary"><img src="../Actividad1/assets/images/BTrechazado.png" alt="Rechazar" style="height:48px;"></button>
+                <button id="confirmYesBtn" class="btn btn-success"><img src="../Actividad1/assets/images/BTconfirmar.png" alt="Confirmar"></button>
+                <button id="confirmNoBtn" class="btn btn-secondary"><img src="../Actividad1/assets/images/BTrechazado.png" alt="Rechazar"></button>
             </div>
         </div>
     </section>
@@ -46,7 +45,7 @@
 <div id="ContenedorPortada">
     <div id="bookCover" class="book-cover-page">
         <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
-            <span style="color:#6f00ff;">El secreto de las bandejas de Doña Alicia </span> 
+            <span>El secreto de las bandejas de Doña Alicia </span> 
         </h2>
         <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
         <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" id="btnContinuarPortada">
@@ -163,7 +162,7 @@
 
                     <!-- HOJA 11: BANDEJAS -->
 
-                        <div id="problemQ2Section" class="page q1-book-spread activity-spread" style="position:relative;">
+                        <div id="problemQ2Section" class="page q1-book-spread activity-spread">
                             <div class="q1-left-page">
                                 <span id="studentCodeM1" class="student-code-display"></span>
                                 <div class="problem-box">
@@ -183,8 +182,8 @@
                             </div>
                             <div class="q1-right-page" id="q2RightPage">
                                 <!-- Imagen de bandejas SOLO visible al regresar de la cocina -->
-                                <div id="bandejasFotoRegreso" style="width:100%;display:flex;justify-content:center;align-items:center;margin:18px 0;">
-                                    <img src="../Actividad1/assets/images/BandejasFoto.png" alt="Bandejas de pandebonos" style="max-width:95%;height:auto;border-radius:14px;box-shadow:0 4px 18px #0002;">
+                                <div id="bandejasFotoRegreso">
+                                    <img src="../Actividad1/assets/images/BandejasFoto.png" alt="Bandejas de pandebonos">
                                 </div>
                                 <!-- Foto de los pares (se genera al completar la cocina) -->
                                 <!-- Pregunta final + audio (se activa al completar la cocina) -->
