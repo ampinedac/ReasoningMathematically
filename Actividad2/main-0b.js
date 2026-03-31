@@ -193,7 +193,7 @@ function initHomeScreen() {
     if (activity0Btn) {
         activity0Btn.addEventListener('click', () => {
             console.log('📌 Abriendo Actividad 0A en nueva pestaña');
-            window.open('actividad0A.html', '_blank');
+            window.open('Actividad1/actividad0A/actividad0A.html', '_blank');
         });
     }
 }

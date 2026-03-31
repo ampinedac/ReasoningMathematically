@@ -105,28 +105,83 @@ document.addEventListener('DOMContentLoaded', () => {
         let spreads = Array.from(flipbook.querySelectorAll('.page'));
         let currentSpread = spreads.findIndex(p => p.classList.contains('active'));
         if (currentSpread === -1) currentSpread = 0;
-        function showSpread(idx) {
-            spreads.forEach((p, i) => p.classList.toggle('active', i === idx));
-            currentSpread = idx;
-            prevBtn.disabled = idx === 0;
-            nextBtn.disabled = idx === spreads.length - 1;
+
+        // Elimina todas las clases de animación de todas las páginas
+        function resetPageClasses() {
+            spreads.forEach(p => {
+                p.classList.remove('active', 'turning-next', 'turning-prev', 'turned');
+            });
+        }
+
+        // Muestra el spread idx con animación de libro real
+        function animateToSpread(targetIdx) {
+            if (targetIdx === currentSpread) return;
+            const direction = targetIdx > currentSpread ? 'next' : 'prev';
+            const from = currentSpread;
+            const to = targetIdx;
+            // Página actual
+            const currentPage = spreads[from];
+            // Página destino
+            const nextPage = spreads[to];
+            if (!currentPage || !nextPage) return;
+
+            // Elimina clases previas
+            spreads.forEach((p, i) => {
+                p.classList.remove('active', 'turning-next', 'turning-prev');
+                if (i < to) {
+                    p.classList.add('turned');
+                } else {
+                    p.classList.remove('turned');
+                }
+            });
+
+            // Activa animación
+            if (direction === 'next') {
+                currentPage.classList.add('turning-next');
+                nextPage.classList.add('active');
+                setTimeout(() => {
+                    currentPage.classList.remove('turning-next', 'active');
+                    currentPage.classList.add('turned');
+                }, 700);
+            } else {
+                // Volver atrás
+                nextPage.classList.add('turning-prev');
+                nextPage.classList.remove('turned');
+                setTimeout(() => {
+                    nextPage.classList.remove('turning-prev');
+                    nextPage.classList.add('active');
+                    currentPage.classList.remove('active');
+                }, 700);
+            }
+            currentSpread = to;
+            updateNavBtns();
+        }
+
+        function updateNavBtns() {
+            prevBtn.disabled = currentSpread === 0;
+            nextBtn.disabled = currentSpread === spreads.length - 1;
             prevBtn.style.opacity = prevBtn.disabled ? '0.5' : '1';
             nextBtn.style.opacity = nextBtn.disabled ? '0.5' : '1';
             prevBtn.style.cursor = prevBtn.disabled ? 'not-allowed' : 'pointer';
             nextBtn.style.cursor = nextBtn.disabled ? 'not-allowed' : 'pointer';
         }
+
         prevBtn.addEventListener('click', () => {
             if (currentSpread > 0) {
-                showSpread(currentSpread - 1);
+                animateToSpread(currentSpread - 1);
             }
         });
         nextBtn.addEventListener('click', () => {
             if (currentSpread < spreads.length - 1) {
-                showSpread(currentSpread + 1);
+                animateToSpread(currentSpread + 1);
             }
         });
-        // Inicializar estado de botones
-        showSpread(currentSpread);
+
+        // Inicializar: solo la primera página activa
+        resetPageClasses();
+        spreads[0].classList.add('active');
+        currentSpread = 0;
+        updateNavBtns();
     }
 // ========================================
 // PANTALLA DE PORTADA
@@ -232,7 +287,7 @@ function initHomeScreen() {
     if (activity0Btn) {
         activity0Btn.addEventListener('click', () => {
             console.log('📌 Abriendo Actividad 0A en nueva pestaña');
-            window.open('actividad0A.html', '_blank');
+            window.open('Actividad1/actividad0A/actividad0A.html', '_blank');
         });
     }
 }

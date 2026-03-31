@@ -402,31 +402,94 @@ body {
     padding: 0; /* Sin relleno interno */
     position: relative; /* Permite posicionar páginas de forma absoluta */
   }
-  /* Página individual del flipbook: animada y apilada */
-  #ContenedorLibro .page {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    padding: 24px 28px;
-    transform: translate(-50%, -50%) rotateY(0deg); /* Centrado absoluto */
-    transform-origin: center center;
-    transform-style: preserve-3d;
-    transition: transform .4s cubic-bezier(0.645, 0.045, 0.355, 1), opacity .4s ease;
-    backface-visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-    background: var(--surface);
-    border-radius: 14px;
-    box-shadow: 0 4px 16px rgba(0,0,0,.08);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-  }
+
+/*
+============================================================
+ ANIMACIÓN REALISTA DE PASO DE PÁGINA DE LIBRO (FLIPBOOK)
+------------------------------------------------------------
+ Este bloque define la animación 3D para simular el paso de página
+ como en un libro real. Utiliza transformaciones y transiciones
+ para lograr el efecto de "volteo" de hoja.
+------------------------------------------------------------
+ 1. .page: base de cada página, apilada y oculta por defecto.
+ 2. .page.active: página visible, lista para animar.
+ 3. .page.turning-next/.turning-prev: animación de paso de página.
+ 4. .page.turned: página ya pasada (queda "detrás").
+------------------------------------------------------------
+ Puedes controlar la animación agregando/quitarndo las clases
+ .turning-next, .turning-prev y .turned desde JS.
+============================================================
+*/
+#ContenedorLibro .page {
+  position: absolute; /* Apila todas las páginas una sobre otra */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 24px 28px;
+  background: var(--surface);
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  z-index: 1;
+  opacity: 0; /* Oculta por defecto */
+  pointer-events: none;
+  transform: perspective(1200px) rotateY(0deg) scale(1); /* Estado base */
+  transform-origin: left center; /* El "giro" inicia desde el lomo */
+  transition:
+    opacity 0.3s,
+    z-index 0s 0.3s,
+    transform 0.7s cubic-bezier(0.77,0,0.18,1);
+}
+
+/* Página visible (spread actual) */
+#ContenedorLibro .page.active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 10;
+  transform: perspective(1200px) rotateY(0deg) scale(1);
+  transition:
+    opacity 0.3s,
+    z-index 0s,
+    transform 0.7s cubic-bezier(0.77,0,0.18,1);
+}
+
+/* Animación: pasar página hacia adelante (siguiente) */
+#ContenedorLibro .page.turning-next {
+  z-index: 20;
+  opacity: 1;
+  pointer-events: none;
+  transform: perspective(1200px) rotateY(-100deg) scale(0.98);
+  transition:
+    transform 0.7s cubic-bezier(0.77,0,0.18,1),
+    opacity 0.3s;
+}
+
+/* Animación: pasar página hacia atrás (anterior) */
+#ContenedorLibro .page.turning-prev {
+  z-index: 20;
+  opacity: 1;
+  pointer-events: none;
+  transform: perspective(1200px) rotateY(100deg) scale(0.98);
+  transition:
+    transform 0.7s cubic-bezier(0.77,0,0.18,1),
+    opacity 0.3s;
+}
+
+/* Página ya pasada (queda "detrás" del libro) */
+#ContenedorLibro .page.turned {
+  z-index: 1;
+  opacity: 0.7;
+  pointer-events: none;
+  transform: perspective(1200px) rotateY(-180deg) scale(0.97);
+  transition:
+    transform 0.7s cubic-bezier(0.77,0,0.18,1),
+    opacity 0.3s;
+}
 
   /* Esta regla hace que la numeración de páginas del libro se muestre siempre en la parte inferior, 
   bien separada a los lados, y que no interfiera con la interacción del usuario. */

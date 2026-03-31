@@ -17,7 +17,7 @@
     "piloto",
     "firebase"
   ],
-  "author": "",
+  "author": "Ángela María Pineda Chacón",
   "license": "ISC",
   "dependencies": {
     "firebase": "^12.9.0"
