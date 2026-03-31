@@ -56,7 +56,6 @@ body {
 ===================================================================================================== */
 #ContenedorBienvenida,
 #ContenedorConfirmacion,
-#ContenedorPortada,
 #ContenedorLibro {
   display: flex;
   flex-direction: column;
