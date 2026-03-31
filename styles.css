@@ -495,7 +495,7 @@ body {
 /* --- Migración: spreads y páginas internas bajo #ContenedorLibro --- */
 #ContenedorLibro #flipbook .page.q1-book-spread {
   width: 98%;
-  height: auto;
+  height: 98%;
   margin: 0;
   border-radius: 0;
   display: flex;
@@ -504,7 +504,7 @@ body {
   align-items: stretch;
   justify-content: stretch;
   overflow: visible;
-  background: #fff;
+  background: #5ba1fda9;
   box-sizing: border-box;
   position: relative;
 }
@@ -518,11 +518,11 @@ body {
   padding: 0;
   margin: 0;
   position: relative;
-  background: #fff;
+  background: #435e81;
 }
 #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img {
   width: 96%;
-  height: auto;
+  height: 98%;
   object-fit: contain;
   margin: 0;
   display: block;
