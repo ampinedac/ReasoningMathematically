@@ -54,9 +54,7 @@ body {
 /* =====================================================================================================
    CONTENEDORES PRINCIPALES  AJUSTES GENERALES (SOLO ALINEACIÓN, SIEMPRE INVISIBLES)
 ===================================================================================================== */
-#ContenedorBienvenida,
-#ContenedorConfirmacion,
-#ContenedorLibro {
+#ContenedorBienvenida, #ContenedorConfirmacion,{
   display: flex;
   flex-direction: column;
   align-items: center;
