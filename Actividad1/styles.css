@@ -51,35 +51,9 @@ body {
   opacity: .85;
 }
 
-/* =====================================================================================================
-   CONTENEDORES PRINCIPALES  AJUSTES GENERALES (SOLO ALINEACIÓN, SIEMPRE INVISIBLES)
-===================================================================================================== */
-#ContenedorBienvenida, #ContenedorConfirmacion,{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* Centra verticalmente */
-  width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  min-width: 100vw;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: visible;
-}
-
-/* ===================================================================================
-   CONTENEDOR BIENVENIDA: ESTILO ESPECÍFICO
-   (Ajustes visuales y de layout para la pantalla de bienvenida)
-=================================================================================== */
- #ContenedorBienvenida {
-  min-height: 100vh;
-  font-family: 'Lobster Two', cursive;
- }
-
+/* ==========================================================================================================
+  CONTENEDOR BIENVENIDA: Estilos de los textos, cajas y botones.
+  =========================================================================================================== */
  #ContenedorBienvenida .main-title {
   font-size: clamp(4rem, 10vw, 6rem);
   color: #0077ff;
