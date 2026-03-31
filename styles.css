@@ -492,10 +492,10 @@ body {
    Organiza la doble página en dos columnas: izquierda (imagen) y derecha (texto).
 ============================================================================================================================== */
 
-/* --- Migración: spreads y páginas internas bajo #ContenedorLibro --- */
-#ContenedorLibro #flipbook .page.q1-book-spread {
-  width: 98%;
-  height: 98%;
+/* Contenedor general de los spreads #ContenedorLibro --- */
+ #ContenedorLibro #flipbook .page.q1-book-spread {
+  width: 100%;
+  height: 95%;
   margin: 0;
   border-radius: 0;
   display: flex;
@@ -504,11 +504,13 @@ body {
   align-items: stretch;
   justify-content: stretch;
   overflow: visible;
-  background: #5ba1fda9;
+  background: #ff00dda9;
   box-sizing: border-box;
   position: relative;
-}
-#ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page {
+ }
+
+/* Página izquierda del spread Q1: imagen centrada, sin padding ni margen, con fondo decorativo */
+ #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
@@ -518,27 +520,31 @@ body {
   padding: 0;
   margin: 0;
   position: relative;
-  background: #435e81;
-}
-#ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img {
+  background: #ddd7855b;
+ }
+ /* Imagen dentro de la página izquierda del spread Q1: ocupa casi todo el espacio, sin deformarse, y centrada */
+ #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img {
   width: 96%;
-  height: 98%;
+  height: auto;
   object-fit: contain;
   margin: 0;
   display: block;
-}
-#ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page {
+ }
+
+/* Página derecha del spread Q1: texto centrado a la izquierda, sin padding ni margen, con fondo blanco */
+ #ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   text-align: left;
-  padding: 3vw 4vw 3vw 2vw;
+  padding: 0;
   margin: 0;
   background: #fff;
-}
-#ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page .story-text {
+ }
+ /* Texto dentro de la página derecha del spread Q1: tamaño adaptable, con interlineado cómodo, color azul, fuente decorativa, sin margen, y que se ajuste al ancho del contenedor */
+ #ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page .story-text {
   font-size: clamp(2rem, 3.5vw, 2.6rem);
   line-height: 1.25;
   color: #0059ff;
@@ -546,81 +552,8 @@ body {
   margin: 0;
   word-break: break-word;
   width: 100%;
-}
-
-
-
-/* Centra horizontalmente todos los elementos hijos directos de las páginas Q1 */
-
-#ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page > *,
-#ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page > *,
-#ContenedorLibro #flipbook .q1-book-spread > * {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-/* Cajas de problema, evidencia y guías: sin fondo ni borde, ocupan todo el ancho */
-
-#ContenedorLibro #flipbook .page.q1-book-spread .problem-box,
-#ContenedorLibro #flipbook .page.q1-book-spread .evidence-section,
-#ContenedorLibro #flipbook .problem-box,
-#ContenedorLibro #flipbook .q2-guide-card,
-#ContenedorLibro #flipbook .prompt-box {
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 14px;
-  box-shadow: none;
-}
-
-
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page {
-  overflow: visible;
-  text-align: center;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .drawing-board {
-  height: clamp(130px, 21vh, 220px);
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-left-page p {
-  font-size: clamp(.92rem, 1.5vw, 1.08rem);
-  line-height: 1.35;
-  letter-spacing: -.2px;
-  margin-bottom: 6px;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-left-page .question {
-  font-size: clamp(1.05rem, 2vw, 1.55rem);
-  line-height: 1.3;
-  letter-spacing: -.3px;
-  margin-top: 8px;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page h4 {
-  font-size: clamp(1.25rem, 2vw, 2rem);
-  margin-bottom: 8px;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .board-container {
-  margin: 4px auto;
-  max-width: 94%;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .board-tools {
-  margin-bottom: 8px;
-  justify-content: center;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .audio-controls {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  margin: 6px 6px 0;
-  gap: 8px;
-}
-#ContenedorLibro #flipbook .page#problemQ1Section .q1-right-page .submit-section {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 6px 6px 0;
-  text-align: center;
-}
+  overflow-wrap: break-word;
+  white-space: normal;
+  }
 
 
