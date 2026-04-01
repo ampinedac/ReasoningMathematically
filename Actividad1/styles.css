@@ -678,6 +678,7 @@ body #ContenedorLibro .activity-spread {
           margin: auto;
           object-fit: contain;
           padding: 0.5vw;
+          display: block;
         }
         
         /* =====================================================================================================
