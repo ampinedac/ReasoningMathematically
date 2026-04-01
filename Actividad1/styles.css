@@ -789,11 +789,11 @@ body #ContenedorLibro .activity-spread {
         Páginas 19 y  20 Reto final
         ===================================================================================================== */     
         .q1-right-page.magic-theme { /* Estilo del tema mágico en la situación 4 */
-          width: 100%;
+          width: 48.5%;
           height: 100%;
-          max-width: none;
-          max-height: none;
-          margin: 0;
+          max-width: 48.5%;
+          max-height: 100%;
+          margin: 0.3em 0;
           padding: 0.8rem 0.5rem;
           display: flex;
           flex-direction: column;
