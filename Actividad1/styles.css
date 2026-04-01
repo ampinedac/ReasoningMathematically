@@ -826,7 +826,7 @@ body #ContenedorLibro .activity-spread {
           color: #123d77;
         }
 
-        #statusM4Reflection.status-text {
+        #statusM4Reflection.status-text, #statusM1Q1Reflection.status-text, #statusM1Q2Reflection.status-text, #statusM3Q1.status-text, #statusM3Q2.status-text { /* Estilo del texto de estado en las reflexiones finales */
           text-align: center;
           font-family: 'Lobster Two', cursive;
           font-size: clamp(1rem, 1.3vw, 1.2rem);
@@ -1285,18 +1285,7 @@ body #ContenedorLibro .activity-spread {
   box-sizing: border-box;
   }
 
-/* Caja unica para todos los estados: grabando, listo, subiendo, guardado, error */
-.status-text {
-  flex-shrink: 0; /* Evita que se reduzca */
-  margin: 0;
-  padding: 0;
-  font-family: 'Lobster Two', cursive;
-  font-size: clamp(1rem, 1vw, 1rem);
-  color: #030303;
-  margin: 0.4em 0 0;
-  text-align: center;
-  min-height: 1.8em;
-}
+
 
 
 /* Entrada del reto final sin flechas del input numérico */
