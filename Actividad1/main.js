@@ -150,6 +150,33 @@ function initWelcome() {
         if (!code) { showError(err, 'Por favor escribe tu código.'); return; }
         if (!/^\d+$/.test(code)) { showError(err, 'Solo se permiten números.'); return; }
 
+        if (code === '0000') {
+            const providedName = window.prompt('Escribe tu nombre para ingresar como invitado');
+            const guestName = (providedName || '').trim();
+
+            if (!guestName) {
+                showError(err, 'Para ingresar con 0000 debes escribir tu nombre.');
+                return;
+            }
+
+            err.textContent = '';
+            studentCode = code;
+            studentInfo = {
+                nombre: guestName,
+                apellidos: '',
+                curso: 'INVITADO'
+            };
+
+            const q = document.getElementById('confirmationQuestion');
+            if (q) {
+                q.textContent = `\u00BFEres ${toTitle(guestName)}?`;
+            }
+
+            hide('ContenedorBienvenida');
+            show('ContenedorConfirmacion');
+            return;
+        }
+
         const estudiante = (window.estudiantesData || {})[code];
         if (!estudiante) { showError(err, 'Código no encontrado. Verifica que esté bien escrito.'); return; }
 
@@ -181,7 +208,12 @@ function showError(el, msg) {
 
 function toTitle(str) {
     if (!str) return '';
-    return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    return str
+        .toLocaleLowerCase('es-CO')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(word => word.charAt(0).toLocaleUpperCase('es-CO') + word.slice(1))
+        .join(' ');
 }
 
 // ─────────────────────────────────────────────
