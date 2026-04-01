@@ -407,6 +407,7 @@ function canAdvance() {
     if (currentSpread === 6) return m1q2Submitted;
     if (currentSpread === 7) return m3q1Submitted;
     if (currentSpread === 8) return m3q2Submitted;
+    if (currentSpread === 9) return m4Submitted;
     return true;
 }
 
@@ -686,8 +687,25 @@ async function handleSubmit(tag) {
         const basePath = `Actividad1/${studentCode}/${tag}`;
         const timestamp = Date.now();
 
+        // Para M3Q1 / M3Q2: leer la respuesta del radio y añadirla al nombre del archivo
+        let audioFileName = `audio_${timestamp}`;
+        let m3q1Answer = null;
+        let m3q2Answer = null;
+        if (tag === 'M3Q1') {
+            const checked = document.querySelector('input[name="truthQ1"]:checked');
+            const labelMap = { yes: 'si', no: 'no', unsure: 'nose' };
+            m3q1Answer = checked ? (labelMap[checked.value] ?? checked.value) : 'sinrespuesta';
+            audioFileName = `audio_${timestamp}_${m3q1Answer}`;
+        }
+        if (tag === 'M3Q2') {
+            const checked = document.querySelector('input[name="truthQ2"]:checked');
+            const labelMap = { yes: 'si', no: 'no', unsure: 'nose' };
+            m3q2Answer = checked ? (labelMap[checked.value] ?? checked.value) : 'sinrespuesta';
+            audioFileName = `audio_${timestamp}_${m3q2Answer}`;
+        }
+
         // Subir audio
-        const audioRef = ref(storage, `${basePath}/audio_${timestamp}.webm`);
+        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
         await uploadBytes(audioRef, audioBlob);
         const audioURL = await getDownloadURL(audioRef);
 
@@ -711,6 +729,8 @@ async function handleSubmit(tag) {
             tag,
             audioURL,
             imageURL: imageURL || null,
+            ...(m3q1Answer !== null && { m3q1Answer }),
+            ...(m3q2Answer !== null && { m3q2Answer }),
             timestamp: serverTimestamp()
         });
 
@@ -1145,6 +1165,8 @@ function checkAnswer(correctValue) {
 async function finalizeM4() {
     if (m4Finalized) return;
     m4Finalized = true;
+    m4Submitted = true;
+    updateNavButtons();
 
     const points = m4Lives; // Puntos = vidas que quedan
     const finalSection = document.getElementById('finalQuestionSection');

@@ -767,7 +767,7 @@ body #ContenedorLibro .activity-spread {
 
       #promptSection1 .prompt-box,
       #promptSection2 .prompt-box { /* Fondo destacado para resaltar la pregunta */
-        width: 94%;
+        width: 80%;
         padding: 0.6em 0.8em;
         border-radius: 14px;
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(238, 243, 255, 0.95) 100%);
@@ -790,9 +790,9 @@ body #ContenedorLibro .activity-spread {
         ===================================================================================================== */     
         .q1-right-page.magic-theme { /* Estilo del tema mágico en la situación 4 */
           width: 95%;
-          height: 100%;
+          height: 95%;
           max-width: 400px;
-          max-height: 30%;
+          max-height: 70%;
           margin: auto;
           object-fit: contain;
           padding: 0.5vw;
@@ -1303,6 +1303,7 @@ body #ContenedorLibro .activity-spread {
 #itemsWrapper .magic-input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
+  font-family: 'Rancho', cursive;
 }
 
 #itemsWrapper .magic-input[type="number"]::-webkit-outer-spin-button,
