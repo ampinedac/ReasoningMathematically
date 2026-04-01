@@ -211,6 +211,15 @@ function initWelcomeScreen() {
     const enterBtn = document.getElementById('enterBtn');
     const studentCodeInput = document.getElementById('studentCodeInput');
     const welcomeError = document.getElementById('welcomeError');
+
+    // Verificar que los elementos existen antes de enlazar eventos
+    if (!enterBtn || !studentCodeInput || !welcomeError) {
+        console.error('❌ Error: No se encontraron los elementos de bienvenida');
+        console.log('enterBtn:', enterBtn);
+        console.log('studentCodeInput:', studentCodeInput);
+        console.log('welcomeError:', welcomeError);
+        return;
+    }
     
     // Bloquear cualquier tecla que no sea un número
     studentCodeInput.addEventListener('keydown', (e) => {
@@ -238,15 +247,6 @@ function initWelcomeScreen() {
         const numericOnly = pasteData.replace(/\D/g, '');
         studentCodeInput.value = numericOnly;
     });
-    
-    // Verificar que los elementos existen
-    if (!enterBtn || !studentCodeInput || !welcomeError) {
-        console.error('❌ Error: No se encontraron los elementos de bienvenida');
-        console.log('enterBtn:', enterBtn);
-        console.log('studentCodeInput:', studentCodeInput);
-        console.log('welcomeError:', welcomeError);
-        return;
-    }
     
     console.log('✅ Elementos encontrados, enlazando eventos...');
     
