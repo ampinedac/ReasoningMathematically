@@ -1,4 +1,4 @@
-/* =====================================================================================================
+﻿/* =====================================================================================================
    VARIABLES CSS GLOBALES
 ===================================================================================================== */
 :root {
@@ -852,3 +852,12 @@ body #ContenedorLibro .activity-spread {
   box-sizing: border-box;
   }
 
+/* Caja unica para todos los estados: grabando, listo, subiendo, guardado, error */
+.status-text {
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  color: #030303;
+  margin: 0.4em 0 0;
+  text-align: center;
+  min-height: 1.8em;
+}

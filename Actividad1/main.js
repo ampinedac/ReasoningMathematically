@@ -1,25 +1,25 @@
-// main.js – Actividad1 · Lógica principal
-// Punto de entrada: módulo ES, se carga con type="module"
+﻿// main.js â€“ Actividad1 Â· LÃ³gica principal
+// Punto de entrada: mÃ³dulo ES, se carga con type="module"
 
 let firebaseServices = null;
 
 async function initFirebaseServices() {
     try {
         firebaseServices = await import('./firebase.js');
-        console.log('✅ Firebase listo');
+        console.log('âœ… Firebase listo');
     } catch (error) {
         firebaseServices = null;
-        console.warn('⚠️ Firebase no disponible, el flujo UI seguirá funcionando:', error);
+        console.warn('âš ï¸ Firebase no disponible, el flujo UI seguirÃ¡ funcionando:', error);
     }
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // ESTADO GLOBAL
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let studentCode = null;
 let studentInfo = null;
 
-// Índice del spread visible (0-based, donde 0 = spread 1-2)
+// Ãndice del spread visible (0-based, donde 0 = spread 1-2)
 let currentSpread = 0;
 
 // Submits completados (para habilitar "siguiente" en cada spread)
@@ -40,11 +40,11 @@ let m4Finalized = false;
 let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
 
 // Grabaciones de audio en vuelo
-const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
+const audioState = {};  // key: tag â†’  { mediaRecorder, chunks, blob }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // ARRANQUE
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
     normalizeNavigationLabels();
@@ -64,9 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initEncuesta();
 });
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // 1. VISIBILIDAD INICIAL
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initVisibility() {
     show('ContenedorBienvenida');
     hide('ContenedorConfirmacion');
@@ -75,17 +75,17 @@ function initVisibility() {
     hide('ContenedorCocina');
     hide('prevBtn');
     hide('nextBtn');
-    // La sección derecha del spread 13-14 inicia oculta
+    // La secciÃ³n derecha del spread 13-14 inicia oculta
     const q2Right = document.getElementById('q2RightPage');
     if (q2Right) {
-        // Ocultamos solo el contenido dinámico, no la imagen de portada
+        // Ocultamos solo el contenido dinÃ¡mico, no la imagen de portada
         const finalQ = document.getElementById('m1Q2FinalQuestion');
         if (finalQ) hide('m1Q2FinalQuestion');
     }
-    // Ocultar sección de audio M3 (se activa con los radios)
+    // Ocultar secciÃ³n de audio M3 (se activa con los radios)
     hide('promptSection1');
     hide('promptSection2');
-    // Ocultar sección final M4
+    // Ocultar secciÃ³n final M4
     hide('finalQuestionSection');
     hide('magicCanvas');
     hide('confettiCanvas');
@@ -136,9 +136,9 @@ function setVisible(id, visible) {
     if (visible) show(id); else hide(id);
 }
 
-// ─────────────────────────────────────────────
-// 2. BIENVENIDA – solo números en el input
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 2. BIENVENIDA â€“ solo nÃºmeros en el input
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initWelcome() {
     const input = document.getElementById('studentCodeInput');
     const btn   = document.getElementById('enterBtn');
@@ -146,7 +146,7 @@ function initWelcome() {
 
     if (!input || !btn) return;
 
-    // Bloquear caracteres no numéricos
+    // Bloquear caracteres no numÃ©ricos
     input.addEventListener('keydown', e => {
         const allowed = [
             'Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','Home','End'
@@ -164,8 +164,8 @@ function initWelcome() {
 
     btn.addEventListener('click', () => {
         const code = input.value.trim();
-        if (!code) { showError(err, 'Por favor escribe tu código.'); return; }
-        if (!/^\d+$/.test(code)) { showError(err, 'Solo se permiten números.'); return; }
+        if (!code) { showError(err, 'Por favor escribe tu cÃ³digo.'); return; }
+        if (!/^\d+$/.test(code)) { showError(err, 'Solo se permiten nÃºmeros.'); return; }
 
         if (code === '0000') {
             const providedName = window.prompt('Escribe tu nombre para ingresar como invitado');
@@ -195,21 +195,21 @@ function initWelcome() {
         }
 
         const estudiante = (window.estudiantesData || {})[code];
-        if (!estudiante) { showError(err, 'Código no encontrado. Verifica que esté bien escrito.'); return; }
+        if (!estudiante) { showError(err, 'CÃ³digo no encontrado. Verifica que estÃ© bien escrito.'); return; }
 
         err.textContent = '';
         studentCode = code;
         studentInfo = estudiante;
 
-        // Rellenar pregunta de confirmación
+        // Rellenar pregunta de confirmaciÃ³n
         const q = document.getElementById('confirmationQuestion');
         if (q) {
             const nombre = toTitle(estudiante.nombre);
             const apellidos = toTitle(estudiante.apellidos || '');
             if (estudiante.curso === 'DOCENTE') {
-                q.textContent = `¿Eres ${nombre} ${apellidos}?`;
+                q.textContent = `Â¿Eres ${nombre} ${apellidos}?`;
             } else {
-                q.textContent = `¿Eres ${nombre} ${apellidos} del curso ${estudiante.curso}?`;
+                q.textContent = `Â¿Eres ${nombre} ${apellidos} del curso ${estudiante.curso}?`;
             }
         }
 
@@ -233,17 +233,17 @@ function toTitle(str) {
         .join(' ');
 }
 
-// ─────────────────────────────────────────────
-// 3. CONFIRMACIÓN
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 3. CONFIRMACIÃ“N
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initConfirmation() {
     const yesBtn = document.getElementById('confirmYesBtn');
     const noBtn  = document.getElementById('confirmNoBtn');
 
     yesBtn?.addEventListener('click', () => {
-        // Mostrar código en el spread del libro
+        // Mostrar cÃ³digo en el spread del libro
         document.querySelectorAll('#studentCodeM1').forEach(el => {
-            el.textContent = studentCode ? `Código: ${studentCode}` : '';
+            el.textContent = studentCode ? `CÃ³digo: ${studentCode}` : '';
         });
         hide('ContenedorConfirmacion');
         show('ContenedorPortada');
@@ -259,9 +259,9 @@ function initConfirmation() {
     });
 }
 
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // 4. PORTADA
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initPortada() {
     const btn = document.getElementById('btnContinuarPortada');
     btn?.addEventListener('click', () => {
@@ -273,9 +273,9 @@ function initPortada() {
     });
 }
 
-// ─────────────────────────────────────────────
-// 5. SPREADS – navegación
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 5. SPREADS â€“ navegaciÃ³n
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function getSpreads() {
     return Array.from(document.querySelectorAll('#ContenedorLibro .page.q1-book-spread'));
 }
@@ -310,15 +310,15 @@ function updateNavButtons() {
     }
 }
 
-// Regla de qué spreads requieren submit para avanzar (índices 0-based):
-// spread 5 = páginas 11-12 → requiere m1q1Submitted
-// spread 6 = páginas 13-14 → requiere m1q2Submitted
-// spread 7 = páginas 15-16 → requiere m3q1Submitted
-// spread 8 = páginas 17-18 → requiere m3q2Submitted
+// Regla de quÃ© spreads requieren submit para avanzar (Ã­ndices 0-based):
+// spread 5 = pÃ¡ginas 11-12 â†’ requiere m1q1Submitted
+// spread 6 = pÃ¡ginas 13-14 â†’ requiere m1q2Submitted
+// spread 7 = pÃ¡ginas 15-16 â†’ requiere m3q1Submitted
+// spread 8 = pÃ¡ginas 17-18 â†’ requiere m3q2Submitted
 function canAdvance() {
     const spreads = getSpreads();
     if (currentSpread >= spreads.length - 1) {
-        // Último spread: requiere al menos 1 opción de reflexión marcada
+        // Ãšltimo spread: requiere al menos 1 opciÃ³n de reflexiÃ³n marcada
         const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
         return checked.length >= 1;
     }
@@ -339,17 +339,17 @@ function initNavigation() {
     });
 }
 
-// ─────────────────────────────────────────────
-// 6. SPREAD 11-12 – CANVAS (tablero de dibujo)
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 6. SPREAD 11-12 â€“ CANVAS (tablero de dibujo)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initBoard() {
     const canvas = document.getElementById('boardCanvasM1Q1');
     if (!canvas) return;
 
-    // Ajustar tamaño al contenedor
+    // Ajustar tamano al contenedor
     const wrapper = canvas.parentElement;
-    const resize  = () => {
-        canvas.width  = wrapper.offsetWidth  || 400;
+    const resize = () => {
+        canvas.width = wrapper.offsetWidth || 400;
         canvas.height = wrapper.offsetHeight || 300;
     };
     resize();
@@ -358,31 +358,18 @@ function initBoard() {
     const ctx = canvas.getContext('2d');
     let drawing = false;
     let tool = 'black'; // herramienta activa
-
-    // Miniatura (thumbnail) → un canvas más pequeño aparte
-    const thumb = document.createElement('canvas');
-    thumb.id = 'boardThumbM1Q1';
-    thumb.className = 'board-thumbnail';
-    thumb.width  = 120;
-    thumb.height = 80;
-    canvas.parentElement.insertAdjacentElement('afterend', thumb);
-
-    const syncThumb = () => {
-        const tctx = thumb.getContext('2d');
-        tctx.clearRect(0, 0, thumb.width, thumb.height);
-        tctx.drawImage(canvas, 0, 0, thumb.width, thumb.height);
-    };
+    setBoardCursor(canvas, tool);
 
     const getPos = e => {
         const rect = canvas.getBoundingClientRect();
-        const src  = e.touches ? e.touches[0] : e;
+        const src = e.touches ? e.touches[0] : e;
         return { x: src.clientX - rect.left, y: src.clientY - rect.top };
     };
 
     const startDraw = e => {
         e.preventDefault();
         drawing = true;
-        const {x, y} = getPos(e);
+        const { x, y } = getPos(e);
         ctx.beginPath();
         ctx.moveTo(x, y);
         applyToolStyle(ctx, tool);
@@ -391,39 +378,55 @@ function initBoard() {
     const draw = e => {
         if (!drawing) return;
         e.preventDefault();
-        const {x, y} = getPos(e);
+        const { x, y } = getPos(e);
         if (tool === 'eraser') {
-            ctx.clearRect(x - 12, y - 12, 24, 24);
+            ctx.clearRect(x - 6, y - 6, 12, 12);
         } else {
             ctx.lineTo(x, y);
             ctx.stroke();
         }
-        syncThumb();
     };
 
-    const endDraw = e => { drawing = false; syncThumb(); };
+    const endDraw = () => { drawing = false; };
 
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup',   endDraw);
+    canvas.addEventListener('mouseup', endDraw);
     canvas.addEventListener('mouseleave', endDraw);
     canvas.addEventListener('touchstart', startDraw, { passive: false });
-    canvas.addEventListener('touchmove',  draw,       { passive: false });
-    canvas.addEventListener('touchend',   endDraw);
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', endDraw);
 
     // Botones de herramienta
     document.querySelectorAll('.board-tools .tool-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             tool = btn.dataset.tool;
+            setBoardCursor(canvas, tool);
             if (tool === 'clear') {
-                if (confirm('¿Estás segur@ de que quieres limpiar todo el tablero?')) {
+                if (confirm('Estas segur@ de que quieres limpiar todo el tablero?')) {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    syncThumb();
                 }
-                tool = 'black'; // volver al lápiz negro después de limpiar
+                tool = 'black';
+                setBoardCursor(canvas, tool);
             }
         });
     });
+}
+
+function setBoardCursor(canvas, tool) {
+    const cursors = {
+        black: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M4 24l5-1 12-12-4-4L5 19z' fill='%23222'/><path d='M17 7l4 4 2-2-4-4z' fill='%23666'/></svg>",
+        red: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M4 24l5-1 12-12-4-4L5 19z' fill='%23d33'/><path d='M17 7l4 4 2-2-4-4z' fill='%23822'/></svg>",
+        yellow: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><rect x='8' y='2' width='8' height='18' rx='2' fill='%23f6e05e'/><rect x='8' y='18' width='8' height='8' fill='%23c99a00'/></svg>",
+        eraser: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><rect x='6' y='9' width='16' height='10' rx='2' fill='%23f5f5f5' stroke='%23999' stroke-width='1.5'/></svg>"
+    };
+
+    if (tool === 'clear' || !cursors[tool]) {
+        canvas.style.cursor = 'crosshair';
+        return;
+    }
+
+    canvas.style.cursor = `url("data:image/svg+xml;utf8,${cursors[tool]}") 4 24, crosshair`;
 }
 
 function applyToolStyle(ctx, tool) {
@@ -447,7 +450,7 @@ function applyToolStyle(ctx, tool) {
     }
 }
 
-// Canvas → Blob (para subir a Firebase Storage)
+// Canvas â†’ Blob (para subir a Firebase Storage)
 function canvasToBlob(canvasId) {
     return new Promise(resolve => {
         const canvas = document.getElementById(canvasId);
@@ -456,20 +459,26 @@ function canvasToBlob(canvasId) {
     });
 }
 
-// ─────────────────────────────────────────────
-// 7. GRABACIÓN DE AUDIO (genérica por tag)
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 7. GRABACIÃ“N DE AUDIO (genÃ©rica por tag)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // tag: 'M1Q1' | 'M1Q2' | 'M3Q1' | 'M3Q2'
 function initAudioRecorder(tag) {
     const recordBtn = document.getElementById(`recordBtn${tag}`);
     const stopBtn   = document.getElementById(`stopBtn${tag}`);
-    const statusEl  = document.getElementById(`audioStatus${tag}`);
+    const statusEl  = document.getElementById(`status${tag}`);
+    const submitBtn = document.getElementById(`submit${tag}`);
     if (!recordBtn || !stopBtn) return;
 
     audioState[tag] = { mediaRecorder: null, chunks: [], blob: null };
 
-    // Estado inicial: stopBtn oculto
+    // Estado inicial: stop oculto, submit deshabilitado hasta tener audio listo
     stopBtn.style.display = 'none';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+    }
 
     recordBtn.addEventListener('click', async () => {
         try {
@@ -483,28 +492,38 @@ function initAudioRecorder(tag) {
             mr.onstop = () => {
                 audioState[tag].blob = new Blob(audioState[tag].chunks, { type: 'audio/webm' });
                 stream.getTracks().forEach(t => t.stop());
-                if (statusEl) statusEl.textContent = '✅ Audio listo para enviar';
-                // Habilitar botón de envío
-                const submitBtn = document.getElementById(`submit${tag}`);
-                if (submitBtn) {
+                if (statusEl) statusEl.textContent = 'Audio listo para enviar';
+
+                if (submitBtn && audioState[tag].blob && audioState[tag].blob.size > 0) {
                     submitBtn.disabled = false;
                     submitBtn.style.opacity = '1';
                     submitBtn.style.cursor  = 'pointer';
                 }
+
                 // Volver a mostrar grabar, ocultar detener
                 recordBtn.style.display = '';
                 stopBtn.style.display   = 'none';
-                recordBtn.disabled = true; // ya grabó, no graba otra vez
+                recordBtn.disabled = true; // ya grabo, no graba otra vez
                 recordBtn.style.opacity = '0.4';
             };
 
             mr.start();
             recordBtn.style.display = 'none';
             stopBtn.style.display   = '';
-            if (statusEl) statusEl.textContent = '🔴 Grabando...';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
+            if (statusEl) statusEl.textContent = 'Grabando...';
         } catch (err) {
-            console.error('❌ Error al acceder al micrófono:', err);
-            if (statusEl) statusEl.textContent = 'No se pudo acceder al micrófono.';
+            console.error('Error al acceder al microfono:', err);
+            if (statusEl) statusEl.textContent = 'No se pudo acceder al microfono.';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
         }
     });
 
@@ -514,13 +533,12 @@ function initAudioRecorder(tag) {
     });
 
     // Submit de audio (+ imagen de canvas si aplica)
-    const submitBtn = document.getElementById(`submit${tag}`);
     submitBtn?.addEventListener('click', () => handleSubmit(tag));
 }
 
-// ─────────────────────────────────────────────
+// _____________________________________________________________________________________
 // 8. ENVÍO A FIREBASE
-// ─────────────────────────────────────────────
+// ──────────────────────────────────────────────────────────────────────────────────────
 async function handleSubmit(tag) {
     const submitBtn = document.getElementById(`submit${tag}`);
     const statusEl  = document.getElementById(`status${tag}`);
@@ -548,7 +566,7 @@ async function handleSubmit(tag) {
 
         let imageURL = null;
 
-        // Si es M1Q1 también subir imagen del canvas
+        // Si es M1Q1 tambiÃ©n subir imagen del canvas
         if (tag === 'M1Q1') {
             const canvasBlob = await canvasToBlob('boardCanvasM1Q1');
             if (canvasBlob) {
@@ -570,17 +588,17 @@ async function handleSubmit(tag) {
         });
 
         if (statusEl) {
-            statusEl.textContent = '✅ Guardado. Ya puedes pasar a la siguiente página.';
+            statusEl.textContent = 'âœ… Guardado. Ya puedes pasar a la siguiente pÃ¡gina.';
             statusEl.style.color = '#16a34a';
         }
 
-        // Marcar como enviado y desbloquear navegación
+        // Marcar como enviado y desbloquear navegaciÃ³n
         markSubmitted(tag);
 
     } catch (error) {
-        console.error(`❌ Error al enviar ${tag}:`, error);
+        console.error(`âŒ Error al enviar ${tag}:`, error);
         if (statusEl) {
-            statusEl.textContent = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            statusEl.textContent = 'Error al guardar. Revisa tu conexiÃ³n e intenta de nuevo.';
             statusEl.style.color = '#dc2626';
         }
         submitBtn.disabled = false;
@@ -596,9 +614,9 @@ function markSubmitted(tag) {
     updateNavButtons();
 }
 
-// ─────────────────────────────────────────────
-// 9. SPREAD 13-14 – COCINA DE BANDEJAS
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 9. SPREAD 13-14 â€“ COCINA DE BANDEJAS
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initCocinaSystem() {
     const gotoBtn    = document.getElementById('goToCocinaBtn');
     const verifyBtn  = document.getElementById('verifyTraysBtnM1Q2');
@@ -625,7 +643,7 @@ function initCocinaSystem() {
 
         if (allCorrect) {
             if (feedbackEl) {
-                feedbackEl.textContent = '✅ ¡Perfecto! Todas las bandejas están bien emparejadas.';
+                feedbackEl.textContent = 'âœ… Â¡Perfecto! Todas las bandejas estÃ¡n bien emparejadas.';
                 feedbackEl.style.color = '#16a34a';
             }
             setTimeout(() => {
@@ -654,7 +672,7 @@ function initCocinaSystem() {
     });
 }
 
-// ─── Sistema de bandejas (simplificado, autocontenido) ───
+// â”€â”€â”€ Sistema de bandejas (simplificado, autocontenido) â”€â”€â”€
 function createTraysSystem(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return null;
@@ -696,14 +714,14 @@ function createTraysSystem(containerId) {
 
             for (let i = 0; i < data.total; i++) {
                 const cell = document.createElement('span');
-                cell.textContent = '🫓';
+                cell.textContent = 'ðŸ«“';
                 cell.style.fontSize = data.total >= 24 ? '0.7em' : data.total >= 15 ? '0.85em' : '1em';
                 grid.appendChild(cell);
             }
 
             const label = document.createElement('div');
             label.className = 'tray-label';
-            label.textContent = `${data.rows} × ${data.cols} = ${data.total}`;
+            label.textContent = `${data.rows} Ã— ${data.cols} = ${data.total}`;
             label.style.cssText = 'text-align:center;font-size:0.8em;margin-top:4px;';
 
             card.appendChild(grid);
@@ -786,9 +804,9 @@ function createTraysSystem(containerId) {
     return { validatePairings, getPairings };
 }
 
-// ─────────────────────────────────────────────
-// 10. SPREADS 15-16 y 17-18 – RADIOS + PLACEHOLDER
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 10. SPREADS 15-16 y 17-18 â€“ RADIOS + PLACEHOLDER
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initRadioSpreads() {
     setupRadioSpread(
         'truthQ1',
@@ -801,9 +819,9 @@ function initRadioSpreads() {
 }
 
 const PROMPTS = {
-    yes:    '¿Por qué crees que es verdadera? Explica.',
-    no:     '¿Por qué crees que es falsa? ¿Tienes un ejemplo? Explica.',
-    unsure: '¿Qué te hace dudar? Explica.'
+    yes:    'Â¿Por quÃ© crees que es verdadera? Explica.',
+    no:     'Â¿Por quÃ© crees que es falsa? Â¿Tienes un ejemplo? Explica.',
+    unsure: 'Â¿QuÃ© te hace dudar? Explica.'
 };
 
 function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
@@ -817,9 +835,9 @@ function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
     });
 }
 
-// ─────────────────────────────────────────────
-// 11. SPREAD 19-20 – EJERCICIOS DE CONMUTATIVIDAD
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 11. SPREAD 19-20 â€“ EJERCICIOS DE CONMUTATIVIDAD
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function initM4() {
     m4Exercises = generateExercises(5);
     renderExercise(m4CurrentEx);
@@ -853,26 +871,26 @@ function renderExercise(index) {
     m4AttemptsOnCurrent = 0; // resetear intentos del nuevo ejercicio
 
     const { a, b } = m4Exercises[index];
-    // a × b = [input] × a
+    // a Ã— b = [input] Ã— a
     const container = document.createElement('div');
     container.className = 'magic-equation';
     container.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:1.5rem;flex-wrap:wrap;justify-content:center;';
 
     container.innerHTML = `
         <span class="magic-num">${a}</span>
-        <span class="magic-op">×</span>
+        <span class="magic-op">Ã—</span>
         <span class="magic-num">${b}</span>
         <span class="magic-op">=</span>
         <input id="m4Input" type="number" min="1" max="50"
             class="magic-input"
             style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
         >
-        <span class="magic-op">×</span>
+        <span class="magic-op">Ã—</span>
         <span class="magic-num">${a}</span>
     `;
 
     const checkBtn = document.createElement('button');
-    checkBtn.textContent = '✔ Verificar';
+    checkBtn.textContent = 'âœ” Verificar';
     checkBtn.className = 'btn btn-primary';
     checkBtn.style.cssText = 'margin-left:12px;font-size:1rem;';
     checkBtn.addEventListener('click', () => checkAnswer(b));
@@ -897,7 +915,7 @@ function renderLives() {
     for (let i = 0; i < 3; i++) {
         const heart = document.createElement('span');
         heart.className = 'magic-heart';
-        heart.textContent = i < m4Lives ? '❤️' : '🖤';
+        heart.textContent = i < m4Lives ? 'â¤ï¸' : 'ðŸ–¤';
         livesEl.appendChild(heart);
     }
 }
@@ -910,8 +928,8 @@ function checkAnswer(correctValue) {
     const statusEl = document.getElementById('moment4Status');
 
     if (value === correctValue) {
-        // Correcto → avanzar al siguiente ejercicio
-        if (statusEl) { statusEl.textContent = '✅ ¡Correcto!'; statusEl.style.color = '#16a34a'; }
+        // Correcto â†’ avanzar al siguiente ejercicio
+        if (statusEl) { statusEl.textContent = 'âœ… Â¡Correcto!'; statusEl.style.color = '#16a34a'; }
         m4CurrentEx++;
         setTimeout(() => {
             if (statusEl) statusEl.textContent = '';
@@ -926,10 +944,10 @@ function checkAnswer(correctValue) {
         if (m4Lives > 0) m4Lives--;
         renderLives();
 
-        // ¿Quedó sin vidas?
+        // Â¿QuedÃ³ sin vidas?
         if (m4Lives === 0) {
             if (statusEl) {
-                statusEl.textContent = '💔 ¡Se acabaron las vidas mágicas! Sigue adelante con valentía.';
+                statusEl.textContent = 'ðŸ’” Â¡Se acabaron las vidas mÃ¡gicas! Sigue adelante con valentÃ­a.';
                 statusEl.style.color = '#dc2626';
             }
             m4CurrentEx++;
@@ -941,9 +959,9 @@ function checkAnswer(correctValue) {
         }
 
         if (m4AttemptsOnCurrent >= 2) {
-            // Segundo error en este ejercicio → pasar al siguiente
+            // Segundo error en este ejercicio â†’ pasar al siguiente
             if (statusEl) {
-                statusEl.textContent = `❌ Dos errores en este ejercicio. ¡Sigamos!`;
+                statusEl.textContent = `âŒ Dos errores en este ejercicio. Â¡Sigamos!`;
                 statusEl.style.color = '#dc2626';
             }
             m4CurrentEx++;
@@ -954,9 +972,9 @@ function checkAnswer(correctValue) {
                 renderExercise(m4CurrentEx);
             }, 1000);
         } else {
-            // Primer error → advertencia
+            // Primer error â†’ advertencia
             if (statusEl) {
-                statusEl.textContent = `❌ Incorrecto. ¿Estás segura? Intenta de nuevo.`;
+                statusEl.textContent = `âŒ Incorrecto. Â¿EstÃ¡s segura? Intenta de nuevo.`;
                 statusEl.style.color = '#dc2626';
             }
             const input = document.getElementById('m4Input');
@@ -979,10 +997,10 @@ async function finalizeM4() {
 
     if (pointsStatus) {
         if (points > 0) {
-            pointsStatus.textContent = `🌟 ¡Ganaste ${points} punto${points > 1 ? 's' : ''} de ClassDojo!`;
+            pointsStatus.textContent = `ðŸŒŸ Â¡Ganaste ${points} punto${points > 1 ? 's' : ''} de ClassDojo!`;
             pointsStatus.style.color = '#f59e0b';
         } else {
-            pointsStatus.textContent = 'Sigue practicando, ¡lo harás mejor la próxima vez!';
+            pointsStatus.textContent = 'Sigue practicando, Â¡lo harÃ¡s mejor la prÃ³xima vez!';
             pointsStatus.style.color = '#6b7280';
         }
     }
@@ -1004,16 +1022,16 @@ async function finalizeM4() {
             timestamp: serverTimestamp()
         });
     } catch (err) {
-        console.error('❌ Error al guardar resultado M4:', err);
+        console.error('âŒ Error al guardar resultado M4:', err);
     }
 
-    // Habilitar botón siguiente
+    // Habilitar botÃ³n siguiente
     updateNavButtons();
 }
 
-// ─────────────────────────────────────────────
-// 12. SPREAD 21-22 – ENCUESTA (Google Forms)
-// ─────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// 12. SPREAD 21-22 â€“ ENCUESTA (Google Forms)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc30-KG8YdvHtJ_JFrn385BtNNLcaGsjvzxz2d5m5xKQYe0Gg/viewform';
 const GOOGLE_FORM_RESPONSE_URL = GOOGLE_FORM_URL.replace('/viewform', '/formResponse');
 const FORM_ENTRY_CODIGO = 'entry.975342770';
@@ -1021,33 +1039,33 @@ const FORM_ENTRY_CODIGO = 'entry.975342770';
 const FORM_ENTRY_RESPUESTA = 'entry.637654905';
 
 function initEncuesta() {
-    // Límite máximo de 2 checkboxes
+    // LÃ­mite mÃ¡ximo de 2 checkboxes
     const checkboxes = document.querySelectorAll('input[name="m4Reflection"]');
     checkboxes.forEach(cb => {
         cb.addEventListener('change', () => {
             const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
             if (checked.length > 2) cb.checked = false;
-            updateNavButtons(); // actualizar estado del botón siguiente
+            updateNavButtons(); // actualizar estado del botÃ³n siguiente
         });
     });
 
-    // Botón de envío final (siguiente en el último spread)
+    // BotÃ³n de envÃ­o final (siguiente en el Ãºltimo spread)
     // Se dispara cuando el usuario llega al spread 21-22 y hace click en "siguiente"
-    // pero también al detectar que ya respondió al menos 1 opción.
-    // Usamos el nextBtn del último spread como trigger de envío + redirect.
+    // pero tambiÃ©n al detectar que ya respondiÃ³ al menos 1 opciÃ³n.
+    // Usamos el nextBtn del Ãºltimo spread como trigger de envÃ­o + redirect.
     const nextBtn = document.getElementById('nextBtn');
     if (!nextBtn) return;
 
-    // Reemplazamos el listener del nextBtn para el último spread
-    // La lógica de reinicialización ocurre en updateNavButtons, aquí solo capturamos el caso especial.
+    // Reemplazamos el listener del nextBtn para el Ãºltimo spread
+    // La lÃ³gica de reinicializaciÃ³n ocurre en updateNavButtons, aquÃ­ solo capturamos el caso especial.
     document.addEventListener('click', e => {
         if (e.target.id !== 'nextBtn' && !e.target.closest('#nextBtn')) return;
         const spreads = getSpreads();
-        if (currentSpread !== spreads.length - 1) return; // Solo actuar en el último spread
+        if (currentSpread !== spreads.length - 1) return; // Solo actuar en el Ãºltimo spread
 
         const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
         if (checked.length === 0) {
-            alert('Por favor selecciona al menos una opción antes de continuar.');
+            alert('Por favor selecciona al menos una opciÃ³n antes de continuar.');
             return;
         }
 
@@ -1057,9 +1075,9 @@ function initEncuesta() {
 
 async function submitEncuesta(checkedBoxes) {
     const reflectionLabelMap = {
-        facil: 'Fácil',
+        facil: 'FÃ¡cil',
         interesante: 'Interesante',
-        dificil: 'Difícil',
+        dificil: 'DifÃ­cil',
         'pensar-mucho': 'Me hizo pensar mucho',
         confusa: 'Confusa'
     };
@@ -1080,7 +1098,7 @@ async function submitEncuesta(checkedBoxes) {
             <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
                         height:100%;width:100%;text-align:center;padding:40px;gap:20px;">
                 <h2 style="font-family:'Lobster Two',cursive;color:#8000ff;font-size:2.5rem;">
-                    ¡Muchas gracias! 🎉
+                    Â¡Muchas gracias! ðŸŽ‰
                 </h2>
                 <p style="font-size:1.4rem;color:#333;">
                     Tus respuestas han sido enviadas. En 3 segundos regresas al inicio.
@@ -1089,7 +1107,7 @@ async function submitEncuesta(checkedBoxes) {
         `;
     }
 
-    // Envío silencioso al formulario (sin pedir correo ni abrir pestaña)
+    // EnvÃ­o silencioso al formulario (sin pedir correo ni abrir pestaÃ±a)
     try {
         await fetch(GOOGLE_FORM_RESPONSE_URL, {
             method: 'POST',
@@ -1103,10 +1121,13 @@ async function submitEncuesta(checkedBoxes) {
         console.error('No se pudo enviar al Google Form:', error);
     }
 
-    // Redirigir al index después de 3 segundos
+    // Redirigir al index despuÃ©s de 3 segundos
     setTimeout(() => {
         window.location.href = '../index.html';
     }, 3000);
 }
 
 // Fin de main.js
+
+
+
