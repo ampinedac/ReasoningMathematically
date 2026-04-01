@@ -836,11 +836,19 @@ function initCocinaSystem() {
             }, 1000);
         } else {
             const wrongCount = results.filter(r => !r.isCorrect).length;
-            const unpairedCount = 8 - totalPaired * 2;
+            const missingPairs = Math.max(0, 3 - totalPaired);
             let msg = '';
-            if (wrongCount > 0) msg += 'No todas las bandejas tienen pareja. Revisa si uniste dos que no corresponden. ';
-            if (wrongCount === 0 && !validation.hasExpectedSingles) msg += 'Recuerda que hay dos bandejas que deben quedar sin pareja. ';
-            if (unpairedCount > 2) msg += `Aún faltan ${unpairedCount - 2} bandeja(s) que sí necesitan emparejarse.`;
+
+            if (wrongCount > 0) {
+                msg += `Tienes ${wrongCount} emparejamiento(s) incorrecto(s). Revisa las parejas que no corresponden. `;
+            }
+
+            if (missingPairs > 0) {
+                msg += `Aún faltan ${missingPairs} pareja(s) por formar.`;
+            } else if (wrongCount === 0 && !validation.hasExpectedSingles) {
+                msg += 'Recuerda que hay dos bandejas que deben quedar sin pareja.';
+            }
+
             if (feedbackEl) {
                 feedbackEl.textContent = msg || 'Revisa los emparejamientos.';
                 feedbackEl.style.color = '#dc2626';

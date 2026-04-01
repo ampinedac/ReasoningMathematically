@@ -798,8 +798,12 @@ body #ContenedorLibro .activity-spread {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: flex-start;
-          gap: 0.65rem;
+          justify-content: space-evenly;
+          gap: 0.35rem;
+        }
+
+        .q1-right-page.magic-theme > * {
+          width: 90%;
         }
 
         .magic-instruction {
@@ -845,9 +849,15 @@ body #ContenedorLibro .activity-spread {
         }
 
         #itemsWrapper {
-          width: 90%;
           display: flex;
           justify-content: center;
+        }
+
+        #moment4Status,
+        #pointsStatus,
+        #finalQuestionSection {
+          width: 90%;
+          margin: 0 auto;
         }
 
         .magic-equation {
@@ -1426,21 +1436,21 @@ body #ContenedorLibro .activity-spread {
 
 /* ── Clases aplicadas por JS durante la animación ── */
 .q1-right-page.anim-flip-out {
-  animation: flip-right-out 0.32s ease-in forwards;
+  animation: flip-right-out 0.5s ease-in forwards;
   pointer-events: none;
 }
 
 .q1-left-page.anim-flip-out {
-  animation: flip-left-out 0.32s ease-in forwards;
+  animation: flip-left-out 0.5s ease-in forwards;
   pointer-events: none;
 }
 
 .q1-left-page.anim-flip-in {
-  animation: flip-left-in 0.32s ease-out forwards;
+  animation: flip-left-in 0.5s ease-out forwards;
   pointer-events: none;
 }
 
 .q1-right-page.anim-flip-in {
-  animation: flip-right-in 0.32s ease-out forwards;
+  animation: flip-right-in 0.5s ease-out forwards;
   pointer-events: none;
 }
