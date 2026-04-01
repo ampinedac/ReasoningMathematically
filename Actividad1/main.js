@@ -283,7 +283,7 @@ function getSpreads() {
 function goToSpread(index) {
     const spreads = getSpreads();
     spreads.forEach((s, i) => {
-        s.style.display = (i === index) ? '' : 'none';
+        s.style.display = (i === index) ? 'flex' : 'none';
     });
     currentSpread = index;
     updateNavButtons();
