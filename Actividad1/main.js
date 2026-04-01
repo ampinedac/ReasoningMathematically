@@ -1087,7 +1087,7 @@ function renderExercise(index) {
     const checkBtn = document.createElement('button');
     checkBtn.textContent = '✔ Verificar';
     checkBtn.className = 'btn btn-primary';
-    checkBtn.style.cssText = 'margin-left:12px;font-size:1rem;';
+    checkBtn.style.cssText = "margin-left:12px;font-size:1rem;font-family:'Rancho',cursive;";
     checkBtn.addEventListener('click', () => checkAnswer(b));
 
     container.appendChild(checkBtn);
