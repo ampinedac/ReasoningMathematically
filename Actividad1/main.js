@@ -91,7 +91,25 @@ function initVisibility() {
 
 function show(id) {
     const el = document.getElementById(id);
-    if (el) el.style.display = '';
+    if (!el) return;
+
+    const displayById = {
+        ContenedorBienvenida: 'flex',
+        ContenedorConfirmacion: 'flex',
+        ContenedorPortada: 'flex',
+        ContenedorLibro: 'flex',
+        ContenedorCocina: 'block',
+        prevBtn: 'flex',
+        nextBtn: 'flex',
+        m1Q2FinalQuestion: 'block',
+        promptSection1: 'block',
+        promptSection2: 'block',
+        finalQuestionSection: 'block',
+        magicCanvas: 'block',
+        confettiCanvas: 'block'
+    };
+
+    el.style.display = displayById[id] || 'block';
 }
 function hide(id) {
     const el = document.getElementById(id);

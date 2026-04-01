@@ -43,18 +43,18 @@ body {
 }
 
 /* Estado inicial obligatorio del flujo: solo bienvenida visible */
-#ContenedorBienvenida { display: flex; }
-#ContenedorConfirmacion,
-#ContenedorPortada,
-#ContenedorLibro,
-#ContenedorCocina,
-#prevBtn,
-#nextBtn {
+body #ContenedorBienvenida { display: flex; }
+body #ContenedorConfirmacion,
+body #ContenedorPortada,
+body #ContenedorLibro,
+body #ContenedorCocina,
+body #prevBtn,
+body #nextBtn {
   display: none;
 }
 
-#ContenedorLibro .page.q1-book-spread,
-#ContenedorLibro .activity-spread {
+body #ContenedorLibro .page.q1-book-spread,
+body #ContenedorLibro .activity-spread {
   display: none;
 }
 
