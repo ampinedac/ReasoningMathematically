@@ -1,5 +1,5 @@
 ﻿// main.js - LÃ³gica principal de la aplicaciÃ³n
-import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
+import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase2.js';
 import './assets/estudiantes-data.js';
 
 console.log('âœ… Firebase cargado correctamente');
