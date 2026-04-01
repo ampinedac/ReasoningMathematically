@@ -878,9 +878,52 @@ function createTraysSystem(containerId) {
         return pairColors.get(key);
     }
 
+    function shuffleArray(items) {
+        const arr = [...items];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function getGridColumns() {
+        const tpl = getComputedStyle(container).gridTemplateColumns || '';
+        const repeatMatch = tpl.match(/repeat\((\d+),/);
+        if (repeatMatch) return Math.max(parseInt(repeatMatch[1], 10), 1);
+        const count = tpl.split(' ').filter(Boolean).length;
+        return Math.max(count, 1);
+    }
+
+    function hasSameTotalAdjacency(order, cols) {
+        for (let i = 0; i < order.length; i++) {
+            const right = (i % cols !== cols - 1) ? i + 1 : -1;
+            const down = i + cols < order.length ? i + cols : -1;
+
+            if (right !== -1 && order[i].total === order[right].total) return true;
+            if (down !== -1 && order[i].total === order[down].total) return true;
+        }
+        return false;
+    }
+
+    function getSeparatedOrder() {
+        const cols = getGridColumns();
+        let fallback = shuffleArray(BASE_TRAYS);
+
+        for (let attempt = 0; attempt < 240; attempt++) {
+            const candidate = shuffleArray(BASE_TRAYS);
+            if (!hasSameTotalAdjacency(candidate, cols)) {
+                return candidate;
+            }
+            fallback = candidate;
+        }
+
+        return fallback;
+    }
+
     function render() {
         container.innerHTML = '';
-        const shuffled = [...BASE_TRAYS].sort(() => Math.random() - 0.5);
+        const shuffled = getSeparatedOrder();
         shuffled.forEach(data => {
             const card = document.createElement('div');
             card.className = 'tray-card';

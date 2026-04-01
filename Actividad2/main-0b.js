@@ -1,15 +1,15 @@
-// main.js - Lógica principal de la aplicación
+﻿// main.js - LÃ³gica principal de la aplicaciÃ³n
 import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase.js';
-import { estudiantesData } from './assets/estudiantes-data.js';
+import './assets/estudiantes-data.js';
 
-console.log('✅ Firebase cargado correctamente');
+console.log('âœ… Firebase cargado correctamente');
 
 // ========================================
 // VARIABLES GLOBALES
 // ========================================
 
 let studentCode = null;
-let studentInfo = null; // Información del estudiante (nombre, apellidos, curso)
+let studentInfo = null; // InformaciÃ³n del estudiante (nombre, apellidos, curso)
 let currentPage = 1;
 let totalPages = 0;
 
@@ -74,8 +74,8 @@ function renderMoment2Snapshot(targetId) {
     }
 
     container.innerHTML = `
-        <p class="m2-photo-fixed-text">📸 Así quedaron tus parejas:</p>
-        <img src="assets/images/BolsasFoto.png" alt="Así quedaron tus parejas" class="m2-photo-fixed-image">
+        <p class="m2-photo-fixed-text">ðŸ“¸ AsÃ­ quedaron tus parejas:</p>
+        <img src="assets/images/BolsasFoto.png" alt="AsÃ­ quedaron tus parejas" class="m2-photo-fixed-image">
     `;
 }
 
@@ -144,22 +144,24 @@ let m4_responses = [];
 let m4_errorsTotal = 0;
 let m4_errorsConsecutive = 0;
 let m4_errorsConsecutiveMax = 0;
-let m4_magicLives = 3; // Sistema de vidas mágicas
+let m4_magicLives = 3; // Sistema de vidas mÃ¡gicas
 let m4_isFinalizing = false;
 let m4_returnHomeTimeout = null;
 let m4_reflectionSelected = false;
 let m4_reflectionSaved = false;
 let m4_reflectionSaving = false;
 
+const FINAL_SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeNKfEc_IzO3Vn4fWwlrTKcCuhW6lCXMRe6TTAmnpwnZdya_A/viewform?usp=header';
+
 // ========================================
-// INICIALIZACIÓN
+// INICIALIZACIÃ“N
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Aplicación iniciada');
-    console.log('📅 Fecha:', new Date().toLocaleString());
-    // Siempre forzar flujo: bienvenida -> confirmación -> actividad
-    // No cargar datos previos automáticamente, solo después de confirmar
+    console.log('ðŸš€ AplicaciÃ³n iniciada');
+    console.log('ðŸ“… Fecha:', new Date().toLocaleString());
+    // Siempre forzar flujo: bienvenida -> confirmaciÃ³n -> actividad
+    // No cargar datos previos automÃ¡ticamente, solo despuÃ©s de confirmar
     studentCode = null;
     studentInfo = null;
     initSpreadStudentCodeDisplays();
@@ -175,11 +177,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Manejador global de errores
 window.addEventListener('error', (event) => {
-    console.error('❌ Error global:', event.error);
+    console.error('âŒ Error global:', event.error);
 });
 
 window.addEventListener('unhandledrejection', (event) => {
-    console.error('❌ Promesa rechazada:', event.reason);
+    console.error('âŒ Promesa rechazada:', event.reason);
 });
 
 // ========================================
@@ -187,13 +189,13 @@ window.addEventListener('unhandledrejection', (event) => {
 // ========================================
 
 function initHomeScreen() {
-    console.log('🔧 Inicializando pantalla principal...');
+    console.log('ðŸ”§ Inicializando pantalla principal...');
     
     const activity0Btn = document.getElementById('activity0Btn');
     
     if (activity0Btn) {
         activity0Btn.addEventListener('click', () => {
-            console.log('📌 Abriendo Actividad 0A en nueva pestaña');
+            console.log('ðŸ“Œ Abriendo Actividad 0A en nueva pestaÃ±a');
             window.open('Actividad1/actividad0A/actividad0A.html', '_blank');
         });
     }
@@ -204,13 +206,13 @@ function initHomeScreen() {
 // ========================================
 
 function initWelcomeScreen() {
-    console.log('🔧 Inicializando pantalla de bienvenida...');
+    console.log('ðŸ”§ Inicializando pantalla de bienvenida...');
     
     const enterBtn = document.getElementById('enterBtn');
     const studentCodeInput = document.getElementById('studentCodeInput');
     const welcomeError = document.getElementById('welcomeError');
     
-    // Bloquear cualquier tecla que no sea un número
+    // Bloquear cualquier tecla que no sea un nÃºmero
     studentCodeInput.addEventListener('keydown', (e) => {
         // Permitir: backspace, delete, tab, escape, enter
         if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
@@ -223,13 +225,13 @@ function initWelcomeScreen() {
             (e.keyCode >= 35 && e.keyCode <= 39)) {
             return;
         }
-        // Bloquear si no es un número (0-9 del teclado principal o numérico)
+        // Bloquear si no es un nÃºmero (0-9 del teclado principal o numÃ©rico)
         if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
             e.preventDefault();
         }
     });
     
-    // Eliminar cualquier carácter no numérico al pegar
+    // Eliminar cualquier carÃ¡cter no numÃ©rico al pegar
     studentCodeInput.addEventListener('paste', (e) => {
         e.preventDefault();
         const pasteData = e.clipboardData.getData('text');
@@ -239,42 +241,42 @@ function initWelcomeScreen() {
     
     // Verificar que los elementos existen
     if (!enterBtn || !studentCodeInput || !welcomeError) {
-        console.error('❌ Error: No se encontraron los elementos de bienvenida');
+        console.error('âŒ Error: No se encontraron los elementos de bienvenida');
         console.log('enterBtn:', enterBtn);
         console.log('studentCodeInput:', studentCodeInput);
         console.log('welcomeError:', welcomeError);
         return;
     }
     
-    console.log('✅ Elementos encontrados, enlazando eventos...');
+    console.log('âœ… Elementos encontrados, enlazando eventos...');
     
     enterBtn.addEventListener('click', () => {
-        console.log('🖱️ Click en botón Ingresar');
+        console.log('ðŸ–±ï¸ Click en botÃ³n Ingresar');
         const code = studentCodeInput.value.trim();
-        console.log('Código ingresado:', code);
+        console.log('CÃ³digo ingresado:', code);
         
         if (!code) {
-            console.log('⚠️ Código vacío, mostrando error');
-            welcomeError.textContent = 'Por favor ingresa tu código estudiantil';
+            console.log('âš ï¸ CÃ³digo vacÃ­o, mostrando error');
+            welcomeError.textContent = 'Por favor ingresa tu cÃ³digo estudiantil';
             welcomeError.classList.remove('hidden');
             return;
         }
         
-        // Validar que solo contenga números
+        // Validar que solo contenga nÃºmeros
         if (!/^\d+$/.test(code)) {
-            console.log('⚠️ Código inválido, solo se permiten números');
-            welcomeError.textContent = 'Solo se permiten números';
+            console.log('âš ï¸ CÃ³digo invÃ¡lido, solo se permiten nÃºmeros');
+            welcomeError.textContent = 'Solo se permiten nÃºmeros';
             welcomeError.classList.remove('hidden');
             return;
         }
 
         // Flujo especial para participantes invitados
         if (code === '0000') {
-            const providedName = window.prompt('¡Bienvenido(a)! ¿Cuál es tu nombre?');
+            const providedName = window.prompt('Â¡Bienvenido(a)! Â¿CuÃ¡l es tu nombre?');
             const invitedName = providedName ? providedName.trim() : '';
 
             if (!invitedName) {
-                welcomeError.textContent = 'Para continuar con el código 0000, escribe tu nombre.';
+                welcomeError.textContent = 'Para continuar con el cÃ³digo 0000, escribe tu nombre.';
                 welcomeError.classList.remove('hidden');
                 return;
             }
@@ -291,44 +293,44 @@ function initWelcomeScreen() {
             return;
         }
         
-        // Verificar que el código existe en la base de datos
-        const estudiante = estudiantesData[code];
+        // Verificar que el cÃ³digo existe en la base de datos
+        const estudiante = (window.estudiantesData || {})[code];
         if (!estudiante) {
-            console.log('⚠️ Código no encontrado en la base de datos');
-            welcomeError.textContent = 'Código no encontrado. Verifica que esté bien escrito.';
+            console.log('âš ï¸ CÃ³digo no encontrado en la base de datos');
+            welcomeError.textContent = 'CÃ³digo no encontrado. Verifica que estÃ© bien escrito.';
             welcomeError.classList.remove('hidden');
             return;
         }
         
-        // Ocultar error si había uno previo
+        // Ocultar error si habÃ­a uno previo
         welcomeError.classList.add('hidden');
         
-        // Guardar temporalmente el código y la información del estudiante
+        // Guardar temporalmente el cÃ³digo y la informaciÃ³n del estudiante
         // NO guardar en localStorage hasta que se confirme
         studentCode = code;
         studentInfo = estudiante;
-        console.log('✅ Estudiante encontrado:', estudiante);
-        console.log('⏯️ Navegando a pantalla de confirmación...');
+        console.log('âœ… Estudiante encontrado:', estudiante);
+        console.log('â¯ï¸ Navegando a pantalla de confirmaciÃ³n...');
         
-        // Navegar a pantalla de confirmación - REQUERIDO, no se puede saltar
+        // Navegar a pantalla de confirmaciÃ³n - REQUERIDO, no se puede saltar
         showConfirmationScreen();
     });
     
     studentCodeInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            console.log('⌨️ Tecla Enter presionada');
+            console.log('âŒ¨ï¸ Tecla Enter presionada');
             enterBtn.click();
         }
     });
     
-    console.log('✅ Eventos enlazados correctamente');
+    console.log('âœ… Eventos enlazados correctamente');
 }
 
 // ========================================
-// PANTALLA DE CONFIRMACIÓN
+// PANTALLA DE CONFIRMACIÃ“N
 // ========================================
 
-// Función para convertir texto a formato título (Primera Letra Mayúscula)
+// FunciÃ³n para convertir texto a formato tÃ­tulo (Primera Letra MayÃºscula)
 function toTitleCase(text) {
     return text
         .toLowerCase()
@@ -341,7 +343,7 @@ function getStudentHeaderText() {
     if (!studentCode) return '';
 
     if (studentCode === '0000' && studentInfo?.nombre) {
-        return `${studentCode} · ${toTitleCase(studentInfo.nombre)}`;
+        return `${studentCode} Â· ${toTitleCase(studentInfo.nombre)}`;
     }
 
     return studentCode;
@@ -366,44 +368,44 @@ function initSpreadStudentCodeDisplays() {
 function updateSpreadStudentCodeDisplays() {
     const text = getStudentHeaderText();
     document.querySelectorAll('#ContenedorLibro .spread-student-code').forEach(el => {
-        el.textContent = text ? `Código: ${text}` : '';
+        el.textContent = text ? `CÃ³digo: ${text}` : '';
     });
 }
 
 function showConfirmationScreen() {
-    console.log('🔍 Mostrando pantalla de confirmación...');
-    console.log('📋 Información del estudiante:', studentInfo);
+    console.log('ðŸ” Mostrando pantalla de confirmaciÃ³n...');
+    console.log('ðŸ“‹ InformaciÃ³n del estudiante:', studentInfo);
     
     const confirmationQuestion = document.getElementById('confirmationQuestion');
     
     if (!confirmationQuestion) {
-        console.error('❌ Error: No se encontró el elemento confirmationQuestion');
+        console.error('âŒ Error: No se encontrÃ³ el elemento confirmationQuestion');
         return;
     }
     
     if (!studentInfo) {
-        console.error('❌ Error: No hay información del estudiante');
+        console.error('âŒ Error: No hay informaciÃ³n del estudiante');
         return;
     }
     
-    // Convertir nombre y apellidos a formato título
+    // Convertir nombre y apellidos a formato tÃ­tulo
     const nombreFormateado = toTitleCase(studentInfo.nombre || '');
     const apellidosFormateados = toTitleCase(studentInfo.apellidos || '');
     
     // Construir la pregunta basada en si es docente o estudiante
     let pregunta = '';
     if (studentCode === '0000' || studentInfo.curso === 'INVITADO') {
-        pregunta = `¡Hola, ${nombreFormateado}! ¿Deseas iniciar la actividad?`;
+        pregunta = `Â¡Hola, ${nombreFormateado}! Â¿Deseas iniciar la actividad?`;
     } else if (studentInfo.curso === 'DOCENTE') {
-        pregunta = `¿Eres ${nombreFormateado} ${apellidosFormateados}?`;
+        pregunta = `Â¿Eres ${nombreFormateado} ${apellidosFormateados}?`;
     } else {
-        pregunta = `¿Eres ${nombreFormateado} ${apellidosFormateados} del curso ${studentInfo.curso}?`;
+        pregunta = `Â¿Eres ${nombreFormateado} ${apellidosFormateados} del curso ${studentInfo.curso}?`;
     }
     
     confirmationQuestion.textContent = pregunta;
-    console.log('❓ Pregunta de confirmación:', pregunta);
+    console.log('â“ Pregunta de confirmaciÃ³n:', pregunta);
     showScreen('confirmationScreen');
-    console.log('✅ Pantalla de confirmación mostrada');
+    console.log('âœ… Pantalla de confirmaciÃ³n mostrada');
 }
 
 function initConfirmationScreen() {
@@ -411,25 +413,25 @@ function initConfirmationScreen() {
     const confirmNoBtn = document.getElementById('confirmNoBtn');
     
     if (!confirmYesBtn || !confirmNoBtn) {
-        console.error('❌ Error: No se encontraron los botones de confirmación');
+        console.error('âŒ Error: No se encontraron los botones de confirmaciÃ³n');
         return;
     }
     
     confirmYesBtn.addEventListener('click', () => {
-        console.log('✅ Usuario confirmó identidad');
+        console.log('âœ… Usuario confirmÃ³ identidad');
         
         if (!studentCode || !studentInfo) {
-            console.error('❌ Error: No hay código o información del estudiante');
+            console.error('âŒ Error: No hay cÃ³digo o informaciÃ³n del estudiante');
             showScreen('welcomeScreen');
             return;
         }
         
-        // SOLO AHORA guardar el código en localStorage
+        // SOLO AHORA guardar el cÃ³digo en localStorage
         localStorage.setItem('studentCode', studentCode);
         if (studentCode === '0000' && studentInfo?.nombre) {
             localStorage.setItem('guestName', studentInfo.nombre);
         }
-        console.log('💾 Código guardado en localStorage:', studentCode);
+        console.log('ðŸ’¾ CÃ³digo guardado en localStorage:', studentCode);
         
         // Navegar a Momento 1
         showScreen('moment1Screen');
@@ -437,16 +439,16 @@ function initConfirmationScreen() {
     });
     
     confirmNoBtn.addEventListener('click', () => {
-        console.log('❌ Usuario rechazó identidad');
+        console.log('âŒ Usuario rechazÃ³ identidad');
         
         // Limpiar variables temporales
         studentCode = null;
         studentInfo = null;
         
-        // Limpiar localStorage también por seguridad
+        // Limpiar localStorage tambiÃ©n por seguridad
         localStorage.removeItem('studentCode');
         localStorage.removeItem('guestName');
-        console.log('🧹 Datos limpiados');
+        console.log('ðŸ§¹ Datos limpiados');
         
         // Volver a la pantalla de bienvenida
         showScreen('welcomeScreen');
@@ -459,19 +461,19 @@ function initConfirmationScreen() {
         }
     });
     
-    console.log('✅ Pantalla de confirmación inicializada');
+    console.log('âœ… Pantalla de confirmaciÃ³n inicializada');
 }
 
 // ========================================
-// NAVEGACIÓN ENTRE PANTALLAS
+// NAVEGACIÃ“N ENTRE PANTALLAS
 // ========================================
 
 function showScreen(screenId) {
-    console.log(`🔄 Navegando a pantalla: ${screenId}`);
+    console.log(`ðŸ”„ Navegando a pantalla: ${screenId}`);
     
     const targetScreen = document.getElementById(screenId);
     if (!targetScreen) {
-        console.error(`❌ Error: No se encontró la pantalla con ID: ${screenId}`);
+        console.error(`âŒ Error: No se encontrÃ³ la pantalla con ID: ${screenId}`);
         return;
     }
     
@@ -482,9 +484,9 @@ function showScreen(screenId) {
     
     // Agregar 'active' a la pantalla objetivo
     targetScreen.classList.add('active');
-    console.log(`✅ Pantalla ${screenId} activada`);
+    console.log(`âœ… Pantalla ${screenId} activada`);
     
-    // Actualizar código estudiantil en encabezados
+    // Actualizar cÃ³digo estudiantil en encabezados
     if (studentCode) {
         document.querySelectorAll('.student-code-display span').forEach(span => {
             span.textContent = getStudentHeaderText();
@@ -501,8 +503,8 @@ function showScreen(screenId) {
 function initMoment1() {
     document.getElementById('studentCodeM1').textContent = getStudentHeaderText();
     
-    console.log('✅ Momento 1 inicializado');
-    console.log('📖 El cuento ya está en el HTML, no necesita cargarse');
+    console.log('âœ… Momento 1 inicializado');
+    console.log('ðŸ“– El cuento ya estÃ¡ en el HTML, no necesita cargarse');
 
     const flipbook = document.getElementById('flipbook');
     const prevBtn = document.getElementById('prevBtn');
@@ -574,7 +576,7 @@ function initMoment1() {
                 prevBtn.style.opacity = '0.5';
                 prevBtn.style.cursor = 'not-allowed';
             } else {
-                // Al salir de la página puente, reactivar siempre "anterior"
+                // Al salir de la pÃ¡gina puente, reactivar siempre "anterior"
                 // para permitir volver desde 15-16 al cuento.
                 prevBtn.disabled = false;
                 prevBtn.style.opacity = '1';
@@ -604,7 +606,7 @@ function initMoment1() {
     document.addEventListener('flipbook:pagechange', m1FlipbookPageHandler);
     if (!m1FlipbookListenerAttached) {
         m1FlipbookListenerAttached = true;
-        console.log('✅ Listener de cambio de página del cuento configurado');
+        console.log('âœ… Listener de cambio de pÃ¡gina del cuento configurado');
     }
 
     if (prevBtn) {
@@ -619,7 +621,7 @@ function initMoment1() {
 // ========================================
 
 function initProblemQ1() {
-    console.log('🔧 Inicializando Problema Q1...');
+    console.log('ðŸ”§ Inicializando Problema Q1...');
     
     const canvasId = 'boardCanvasM1Q1';
     const recordBtnId = 'recordBtnM1Q1';
@@ -633,21 +635,21 @@ function initProblemQ1() {
     const recordBtn = document.getElementById(recordBtnId);
     const stopBtn = document.getElementById(stopBtnId);
     
-    console.log('Canvas:', canvas ? '✅ Encontrado' : '❌ No encontrado');
-    console.log('Botón grabar:', recordBtn ? '✅ Encontrado' : '❌ No encontrado');
-    console.log('Botón detener:', stopBtn ? '✅ Encontrado' : '❌ No encontrado');
+    console.log('Canvas:', canvas ? 'âœ… Encontrado' : 'âŒ No encontrado');
+    console.log('BotÃ³n grabar:', recordBtn ? 'âœ… Encontrado' : 'âŒ No encontrado');
+    console.log('BotÃ³n detener:', stopBtn ? 'âœ… Encontrado' : 'âŒ No encontrado');
     
     if (!canvas || !recordBtn || !stopBtn) {
-        console.error('⚠️ Faltan elementos necesarios para el problema Q1');
+        console.error('âš ï¸ Faltan elementos necesarios para el problema Q1');
         return;
     }
     
     const boardState = initBoard(canvasId);
     const audioState = initAudio(recordBtnId, stopBtnId, statusId);
     
-    console.log('✅ Board y Audio inicializados');
+    console.log('âœ… Board y Audio inicializados');
     
-    // Habilitar botón enviar cuando haya evidencia
+    // Habilitar botÃ³n enviar cuando haya evidencia
     const submitBtn = document.getElementById(submitBtnId);
     
     const checkEvidence = () => {
@@ -655,12 +657,12 @@ function initProblemQ1() {
         // Solo requiere audio (tablero opcional)
         submitBtn.disabled = m1Q1Submitted || !hasAudio;
 
-        // Si ya grabó o ya envió, no puede volver a grabar.
+        // Si ya grabÃ³ o ya enviÃ³, no puede volver a grabar.
         recordBtn.disabled = m1Q1Submitted || hasAudio;
         recordBtn.style.opacity = recordBtn.disabled ? '0.5' : '1';
         recordBtn.style.cursor = recordBtn.disabled ? 'not-allowed' : 'pointer';
         
-        // Mostrar mensaje de qué falta
+        // Mostrar mensaje de quÃ© falta
         const statusText = document.getElementById(statusTextId);
         if (m1Q1Submitted) {
             statusText.textContent = '';
@@ -669,7 +671,7 @@ function initProblemQ1() {
             statusText.textContent = '';
             statusText.className = 'status-text';
         } else {
-            statusText.textContent = '✅ Listo para enviar';
+            statusText.textContent = 'âœ… Listo para enviar';
             statusText.className = 'status-text success';
         }
     };
@@ -679,7 +681,7 @@ function initProblemQ1() {
     
     // Enviar evidencia
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente
+        // Bloquear botÃ³n inmediatamente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
@@ -694,7 +696,7 @@ function initProblemQ1() {
             await submitEvidence({
                 moment: 'm1',
                 tag: 'q1',
-                data: { question: 'Q1: ¿Quién tiene razón?' },
+                data: { question: 'Q1: Â¿QuiÃ©n tiene razÃ³n?' },
                 boardBlob: boardBlob,
                 audioBlob: audioState.audioBlob
             });
@@ -705,15 +707,15 @@ function initProblemQ1() {
                 localStorage.setItem(m1StorageKey, 'true');
             }
             
-            statusText.textContent = 'Guardado exitosamente ✅ Ya puedes pasar a la siguiente página.';
+            statusText.textContent = 'Guardado exitosamente âœ… Ya puedes pasar a la siguiente pÃ¡gina.';
             statusText.className = 'status-text success';
             
-            // Mantener botón deshabilitado permanentemente
+            // Mantener botÃ³n deshabilitado permanentemente
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.5';
             submitBtn.style.cursor = 'not-allowed';
             
-            // Bloquear edición
+            // Bloquear ediciÃ³n
             boardState.disabled = true;
             const canvas = document.getElementById(canvasId);
             canvas.style.pointerEvents = 'none';
@@ -742,17 +744,17 @@ function initProblemQ1() {
             console.error('Detalles del error:', error.message);
             
             let errorMsg = 'Error al guardar. ';
-            if (error.message.includes('Firebase no está configurado')) {
+            if (error.message.includes('Firebase no estÃ¡ configurado')) {
                 errorMsg += 'Firebase no disponible. ';
             } else if (error.message.includes('network')) {
-                errorMsg += 'Revisa tu conexión a internet. ';
+                errorMsg += 'Revisa tu conexiÃ³n a internet. ';
             }
             errorMsg += 'Intenta de nuevo.';
             
             statusText.textContent = errorMsg;
             statusText.className = 'status-text error';
             
-            // Rehabilitar botón solo si hay error
+            // Rehabilitar botÃ³n solo si hay error
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
             submitBtn.style.cursor = 'pointer';
@@ -765,7 +767,7 @@ function initProblemQ1() {
 // ========================================
 
 function initMoment2() {
-    console.log('🎯 Inicializando Momento 2 - Sistema de Bolsas');
+    console.log('ðŸŽ¯ Inicializando Momento 2 - Sistema de Bolsas');
     
     document.getElementById('studentCodeM2').textContent = getStudentHeaderText();
     
@@ -778,9 +780,9 @@ function initMoment2() {
     // Crear nueva instancia del sistema de bandejas
     try {
         traysSystem = new TraysSystem('traysArea');
-        console.log('✅ Sistema de bolsas inicializado');
+        console.log('âœ… Sistema de bolsas inicializado');
     } catch (error) {
-        console.error('❌ Error al inicializar sistema de bolsas:', error);
+        console.error('âŒ Error al inicializar sistema de bolsas:', error);
     }
 
     m2CurrentSpread = 0;
@@ -812,21 +814,21 @@ function initMoment2() {
         goToCocinaBtn.parentNode.replaceChild(newGoToCocinaBtn, goToCocinaBtn);
         if (m2OrderCompleted) {
             newGoToCocinaBtn.disabled = true;
-            newGoToCocinaBtn.textContent = '✅ Organización completada';
-            newGoToCocinaBtn.title = 'Ya verificaste la organización correctamente.';
+            newGoToCocinaBtn.textContent = 'âœ… OrganizaciÃ³n completada';
+            newGoToCocinaBtn.title = 'Ya verificaste la organizaciÃ³n correctamente.';
         } else {
             newGoToCocinaBtn.disabled = false;
-            newGoToCocinaBtn.textContent = '👩‍🍳 Ir a la cocina a organizar';
+            newGoToCocinaBtn.textContent = 'ðŸ‘©â€ðŸ³ Ir a la cocina a organizar';
             newGoToCocinaBtn.title = '';
             newGoToCocinaBtn.addEventListener('click', () => {
                 if (!traysSystem) {
                     try {
                         traysSystem = new TraysSystem('traysArea');
                     } catch (error) {
-                        console.error('❌ No se pudo abrir cocina: sistema de bolsas no disponible', error);
+                        console.error('âŒ No se pudo abrir cocina: sistema de bolsas no disponible', error);
                         const feedback = document.getElementById('traysFeedback');
                         if (feedback) {
-                            feedback.textContent = 'No fue posible cargar la cocina. Recarga la página e inténtalo de nuevo.';
+                            feedback.textContent = 'No fue posible cargar la cocina. Recarga la pÃ¡gina e intÃ©ntalo de nuevo.';
                             feedback.className = 'feedback-text error';
                         }
                         return;
@@ -868,11 +870,11 @@ function initMoment2() {
         if (nextBtnQ2Ref) {
             if (m2CurrentSpread < 1 && !m2OrderCompleted) {
                 nextBtnQ2Ref.disabled = true;
-                nextBtnQ2Ref.title = 'Completa la organización en cocina para avanzar.';
+                nextBtnQ2Ref.title = 'Completa la organizaciÃ³n en cocina para avanzar.';
                 nextBtnQ2Ref.style.opacity = '0.5';
             } else if (m2CurrentSpread === lastSpreadIndex && !m2ExplanationSubmitted) {
                 nextBtnQ2Ref.disabled = true;
-                nextBtnQ2Ref.title = 'Primero envía tu explicación de la página 18.';
+                nextBtnQ2Ref.title = 'Primero envÃ­a tu explicaciÃ³n de la pÃ¡gina 18.';
                 nextBtnQ2Ref.style.opacity = '0.5';
             } else {
                 nextBtnQ2Ref.disabled = false;
@@ -935,7 +937,7 @@ function initMoment2() {
     const progressText = document.getElementById('progressText');
     const progressBar = document.getElementById('progressBar');
     if (progressText) {
-        progressText.textContent = 'Páginas 17 a 22 del libro';
+        progressText.textContent = 'PÃ¡ginas 17 a 22 del libro';
     }
     if (progressBar) {
         progressBar.style.setProperty('--progress', '100%');
@@ -960,9 +962,9 @@ function initMoment2() {
     const m2PromptTextQ1 = document.getElementById('m2PromptTextQ1');
     const m2TruthQ1Radios = Array.from(document.querySelectorAll('input[name="truthQ1M2"]'));
     const m2PromptMapQ1 = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
-        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
+        yes: 'Explica detalladamente cÃ³mo lo sabes.',
+        no: 'Â¿Con quÃ© nÃºmero crees que no funcionarÃ­a?',
+        unsure: 'ExplÃ­came cÃ³mo estÃ¡s pensando para decidir si esta igualdad serÃ¡ verdadera para cualquier nÃºmero.'
     };
 
     if (m2PromptSectionQ1) {
@@ -1044,7 +1046,7 @@ function initMoment2() {
                     moment: 'm2',
                     tag: 'q1-associated-audio',
                     data: {
-                        question: 'Problema 1 asociado en página 22',
+                        question: 'Problema 1 asociado en pÃ¡gina 22',
                         choice: document.querySelector('input[name="truthQ1M2"]:checked')?.value || null
                     },
                     boardBlob: null,
@@ -1055,7 +1057,7 @@ function initMoment2() {
                     clearInterval(m2Q1AudioCheckInterval);
                     m2Q1AudioCheckInterval = null;
                 }
-                statusText.textContent = 'Guardado exitosamente ✅';
+                statusText.textContent = 'Guardado exitosamente âœ…';
                 statusText.className = 'status-text success';
                 newRecordBtn.disabled = true;
                 newStopBtn.disabled = true;
@@ -1156,7 +1158,7 @@ function initMoment2() {
             }
 
             if (wrongValues === 0) {
-                feedback.textContent = '¡Excelente! Los datos de la tabla coinciden con los pedidos.';
+                feedback.textContent = 'Â¡Excelente! Los datos de la tabla coinciden con los pedidos.';
                 feedback.className = 'feedback-text success';
             } else {
                 feedback.textContent = `Hay ${wrongValues} dato(s) que no coinciden con los pedidos. Revisa y vuelve a intentar.`;
@@ -1177,7 +1179,7 @@ function initMoment2() {
 
     hideCocinaScreenM2();
     
-    // Configurar botón de verificación
+    // Configurar botÃ³n de verificaciÃ³n
     if (verifyBtn) {
         // Remover event listeners previos
         const newVerifyBtn = verifyBtn.cloneNode(true);
@@ -1187,17 +1189,17 @@ function initMoment2() {
         newVerifyBtn.addEventListener('click', verifyTraysPairings);
     }
     
-    // Botón continuar a M3
+    // BotÃ³n continuar a M3
 }
 
 // ========================================
 // JUEGO DE BANDEJAS - DRAG AND DROP
 // ========================================
-// NOTA: Esta sección ha sido reemplazada por el nuevo sistema TraysSystem
-// El código antiguo se mantiene comentado por referencia
+// NOTA: Esta secciÃ³n ha sido reemplazada por el nuevo sistema TraysSystem
+// El cÃ³digo antiguo se mantiene comentado por referencia
 
 /*
-// ===== CÓDIGO ANTIGUO (DESHABILITADO) =====
+// ===== CÃ“DIGO ANTIGUO (DESHABILITADO) =====
 function createTraysGame_OLD() {
     const traysData = [
         { id: 1, rows: 3, cols: 4, total: 12, pairId: 'A' },
@@ -1253,18 +1255,18 @@ function createTraysGame_OLD() {
         trayCard.dataset.pairId = data.pairId;
         trayCard.dataset.total = data.total;
         
-        // Usar posición del grid (sin sobreposiciones)
+        // Usar posiciÃ³n del grid (sin sobreposiciones)
         const pos = positions[index];
         trayCard.style.left = pos.x + 'px';
         trayCard.style.top = pos.y + 'px';
         
-        // Grid de pandebonos (SIN etiqueta para que las niñas cuenten)
+        // Grid de pandebonos (SIN etiqueta para que las niÃ±as cuenten)
         const grid = document.createElement('div');
         grid.className = 'tray-grid';
         grid.style.gridTemplateColumns = `repeat(${data.cols}, 1fr)`;
         grid.style.gridTemplateRows = `repeat(${data.rows}, 1fr)`;
         
-        // Ajustar tamaño de emojis según filas/columnas para que todo quepa
+        // Ajustar tamaÃ±o de emojis segÃºn filas/columnas para que todo quepa
         const maxDimension = Math.max(data.rows, data.cols);
         let emojiSize = '1.2em';
         if (maxDimension >= 6) {
@@ -1278,7 +1280,7 @@ function createTraysGame_OLD() {
         // Emojis de pandebonos
         for (let i = 0; i < data.total; i++) {
             const pandebono = document.createElement('span');
-            pandebono.textContent = '🫓';
+            pandebono.textContent = 'ðŸ«“';
             pandebono.style.fontSize = emojiSize;
             grid.appendChild(pandebono);
         }
@@ -1286,7 +1288,7 @@ function createTraysGame_OLD() {
         trayCard.appendChild(grid);
         traysArea.appendChild(trayCard);
         
-        // Eventos de mouse para arrastrar (más control que drag & drop nativo)
+        // Eventos de mouse para arrastrar (mÃ¡s control que drag & drop nativo)
         setupDragging(trayCard);
         
         trays.push({
@@ -1297,11 +1299,11 @@ function createTraysGame_OLD() {
         });
     });
     
-    // Botón verificar
+    // BotÃ³n verificar
     document.getElementById('verifyTraysBtn').addEventListener('click', verifyPairings);
 }
 
-// Sistema de arrastre con mouse (más confiable que drag & drop nativo)
+// Sistema de arrastre con mouse (mÃ¡s confiable que drag & drop nativo)
 let currentDraggedTray = null;
 let isDraggingMouse = false;
 let startX = 0;
@@ -1358,11 +1360,11 @@ function setupDragging(trayCard) {
                 
                 // Eliminar del array
                 pairs.splice(pairIndex, 1);
-                console.log('🔓 Desemparejada de bandeja', otherId);
+                console.log('ðŸ”“ Desemparejada de bandeja', otherId);
             }
         }
         
-        // Guardar posición inicial
+        // Guardar posiciÃ³n inicial
         startX = e.clientX;
         startY = e.clientY;
         initialLeft = parseInt(this.style.left) || 0;
@@ -1373,7 +1375,7 @@ function setupDragging(trayCard) {
         this.style.zIndex = '1000';
         this.style.cursor = 'grabbing';
         
-        console.log('🎯 Inicio arrastre:', this.dataset.id);
+        console.log('ðŸŽ¯ Inicio arrastre:', this.dataset.id);
         
         e.preventDefault();
     });
@@ -1382,7 +1384,7 @@ function setupDragging(trayCard) {
 document.addEventListener('mousemove', function(e) {
     if (!isDraggingMouse || !currentDraggedTray) return;
     
-    // Calcular nueva posición
+    // Calcular nueva posiciÃ³n
     const deltaX = e.clientX - startX;
     const deltaY = e.clientY - startY;
     
@@ -1393,14 +1395,14 @@ document.addEventListener('mousemove', function(e) {
 document.addEventListener('mouseup', function(e) {
     if (!isDraggingMouse || !currentDraggedTray) return;
     
-    console.log('🎯 Fin arrastre');
+    console.log('ðŸŽ¯ Fin arrastre');
     
     // Restaurar estilo
     currentDraggedTray.classList.remove('dragging');
     currentDraggedTray.style.zIndex = 'auto';
     currentDraggedTray.style.cursor = 'grab';
     
-    // Verificar si se soltó sobre otra bandeja
+    // Verificar si se soltÃ³ sobre otra bandeja
     checkForPairingMouse(e, currentDraggedTray);
     
     isDraggingMouse = false;
@@ -1414,36 +1416,36 @@ function checkForPairingMouse(e, draggedTray) {
     // Buscar otra bandeja (que no sea la que estamos arrastrando)
     for (let elem of elementsBelow) {
         if (elem.classList && elem.classList.contains('tray-card') && elem !== draggedTray) {
-            console.log('🔍 Bandeja encontrada debajo:', elem.dataset.id);
+            console.log('ðŸ” Bandeja encontrada debajo:', elem.dataset.id);
             
-            // Detectar en qué lado de la bandeja se soltó
+            // Detectar en quÃ© lado de la bandeja se soltÃ³
             const rect = elem.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const isLeftSide = e.clientX < centerX;
             
-            console.log(`📍 Soltada en el lado: ${isLeftSide ? 'IZQUIERDO' : 'DERECHO'}`);
+            console.log(`ðŸ“ Soltada en el lado: ${isLeftSide ? 'IZQUIERDO' : 'DERECHO'}`);
             
             tryPairing(draggedTray, elem, isLeftSide);
             return;
         }
     }
     
-    console.log('❌ No hay bandeja debajo');
+    console.log('âŒ No hay bandeja debajo');
 }
 
 function tryPairing(draggedTray, targetTray, isLeftSide) {
     const id1 = parseInt(draggedTray.dataset.id);
     const id2 = parseInt(targetTray.dataset.id);
     
-    console.log(`🔍 Uniendo: Bandeja ${id1} con Bandeja ${id2} (lado ${isLeftSide ? 'izquierdo' : 'derecho'})`);
+    console.log(`ðŸ” Uniendo: Bandeja ${id1} con Bandeja ${id2} (lado ${isLeftSide ? 'izquierdo' : 'derecho'})`);
     
     // Permitir emparejar cualquier bandeja con cualquier otra (excepto consigo misma)
     if (id1 !== id2) {
-        console.log('✅ Uniendo bandejas...');
+        console.log('âœ… Uniendo bandejas...');
         
-        // Si la bandeja objetivo ya está emparejada, desemparejarla primero
+        // Si la bandeja objetivo ya estÃ¡ emparejada, desemparejarla primero
         if (targetTray.classList.contains('paired')) {
-            console.log('🔓 Bandeja objetivo ya emparejada, desemparejando...');
+            console.log('ðŸ”“ Bandeja objetivo ya emparejada, desemparejando...');
             const targetId = parseInt(targetTray.dataset.id);
             const pairIndex = pairs.findIndex(p => p.includes(targetId));
             
@@ -1489,19 +1491,19 @@ function tryPairing(draggedTray, targetTray, isLeftSide) {
         wrapper.classList.add('tray-pair-wrapper');
         wrapper.dataset.pair = `${id1}-${id2}`;
         
-        // Obtener posición de la bandeja objetivo
+        // Obtener posiciÃ³n de la bandeja objetivo
         const rectTarget = targetTray.getBoundingClientRect();
         const traysContainer = document.getElementById('traysContainer');
         const containerRect = traysContainer.getBoundingClientRect();
         
-        // Ajustar posición del wrapper según el lado
+        // Ajustar posiciÃ³n del wrapper segÃºn el lado
         let wrapperLeft, wrapperTop;
         if (isLeftSide) {
-            // La arrastrada va a la izquierda, wrapper comienza más a la izquierda
+            // La arrastrada va a la izquierda, wrapper comienza mÃ¡s a la izquierda
             wrapperLeft = (rectTarget.left - containerRect.left) - 210; // ancho bandeja + gap
             wrapperTop = rectTarget.top - containerRect.top;
         } else {
-            // La arrastrada va a la derecha, wrapper comienza en la posición de la target
+            // La arrastrada va a la derecha, wrapper comienza en la posiciÃ³n de la target
             wrapperLeft = rectTarget.left - containerRect.left;
             wrapperTop = rectTarget.top - containerRect.top;
         }
@@ -1543,9 +1545,9 @@ function tryPairing(draggedTray, targetTray, isLeftSide) {
         // Registrar emparejamiento
         addPairing(id1, id2);
         
-        console.log('✨ Bandejas agrupadas en wrapper - la validación ocurrirá al verificar');
+        console.log('âœ¨ Bandejas agrupadas en wrapper - la validaciÃ³n ocurrirÃ¡ al verificar');
     } else {
-        console.log('❌ No puedes emparejar una bandeja consigo misma');
+        console.log('âŒ No puedes emparejar una bandeja consigo misma');
     }
 }
 
@@ -1579,7 +1581,7 @@ function setupWrapperDragging(wrapper) {
             this.style.cursor = 'grabbing';
             this.style.zIndex = '1000';
             
-            console.log('📦 Arrastrando par completo');
+            console.log('ðŸ“¦ Arrastrando par completo');
             
             e.stopPropagation();
             e.preventDefault();
@@ -1604,18 +1606,18 @@ document.addEventListener('mouseup', function(e) {
     currentDraggedWrapper.style.cursor = 'grab';
     currentDraggedWrapper.style.zIndex = 'auto';
     
-    console.log('📦 Par movido');
+    console.log('ðŸ“¦ Par movido');
     
     isDraggingWrapper = false;
     currentDraggedWrapper = null;
 });
 */
-// ===== FIN DEL CÓDIGO ANTIGUO =====
+// ===== FIN DEL CÃ“DIGO ANTIGUO =====
 
-// Nueva función de verificación usando el sistema TraysSystem
+// Nueva funciÃ³n de verificaciÃ³n usando el sistema TraysSystem
 function verifyTraysPairings() {
     if (!traysSystem) {
-        console.error('❌ Sistema de bandejas no inicializado');
+        console.error('âŒ Sistema de bandejas no inicializado');
         return;
     }
     
@@ -1623,7 +1625,7 @@ function verifyTraysPairings() {
     const feedback = document.getElementById('traysFeedback');
     
     if (results.length === 0) {
-        feedback.textContent = '⚠️ No hay emparejamientos. Arrastra las bolsas para unirlas.';
+        feedback.textContent = 'âš ï¸ No hay emparejamientos. Arrastra las bolsas para unirlas.';
         feedback.className = 'feedback-text info';
         return;
     }
@@ -1632,14 +1634,14 @@ function verifyTraysPairings() {
     const correctCount = results.filter(r => r.isCorrect).length;
     const totalPairs = results.length;
     
-    console.log('📊 Validación:', { correctCount, totalPairs, results });
+    console.log('ðŸ“Š ValidaciÃ³n:', { correctCount, totalPairs, results });
     
     // Emparejamientos esperados: 3 pares correctos (15-15, 8-8, 30-30)
     // Pedidos solos: Pedido 5 (24) y Pedido 1 (20)
     const expectedCorrectPairs = 3;
     
     if (correctCount === totalPairs && totalPairs === expectedCorrectPairs) {
-        feedback.textContent = `🎉 ¡Perfecto! Todos los ${totalPairs} emparejamientos son correctos.`;
+        feedback.textContent = `ðŸŽ‰ Â¡Perfecto! Todos los ${totalPairs} emparejamientos son correctos.`;
         feedback.className = 'feedback-text success';
 
         m2OrderCompleted = true;
@@ -1659,17 +1661,17 @@ function verifyTraysPairings() {
             previewCard19.classList.remove('hidden');
         }
         
-        // Deshabilitar el botón
+        // Deshabilitar el botÃ³n
         document.getElementById('verifyTraysBtn').disabled = true;
 
         const goToCocinaBtn = document.getElementById('goToCocinaBtn');
         if (goToCocinaBtn) {
             goToCocinaBtn.disabled = true;
-            goToCocinaBtn.textContent = '✅ Organización completada';
-            goToCocinaBtn.title = 'Ya verificaste la organización correctamente.';
+            goToCocinaBtn.textContent = 'âœ… OrganizaciÃ³n completada';
+            goToCocinaBtn.title = 'Ya verificaste la organizaciÃ³n correctamente.';
         }
         
-        // Cerrar cocina y volver al cuento (hoja 11), análogo a 0A
+        // Cerrar cocina y volver al cuento (hoja 11), anÃ¡logo a 0A
         setTimeout(() => {
             const closeCocinaBtn = document.getElementById('closeCocinaBtnM2');
             if (closeCocinaBtn) {
@@ -1703,11 +1705,11 @@ function verifyTraysPairings() {
         let errorMsg = '';
         
         if (totalPairs < expectedCorrectPairs) {
-            errorMsg = `🔍 Te faltan emparejamientos. Solo tienes ${totalPairs} de ${expectedCorrectPairs} pares.`;
+            errorMsg = `ðŸ” Te faltan emparejamientos. Solo tienes ${totalPairs} de ${expectedCorrectPairs} pares.`;
         } else if (totalPairs > expectedCorrectPairs) {
-            errorMsg = '💡 Pista: algunas bolsas no tienen pareja.';
+            errorMsg = 'ðŸ’¡ Pista: algunas bolsas no tienen pareja.';
         } else {
-            errorMsg = `✨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Vuelve a contar y verifica que las parejas estén unidas solo si tienen la misma cantidad de panes de bono.`;
+            errorMsg = `âœ¨ ${correctCount} de ${totalPairs} emparejamientos son correctos. Vuelve a contar y verifica que las parejas estÃ©n unidas solo si tienen la misma cantidad de panes de bono.`;
         }
         
         feedback.textContent = errorMsg;
@@ -1722,7 +1724,7 @@ function verifyTraysPairings() {
     }
 }
 
-// Función antigua (mantenida por referencia)
+// FunciÃ³n antigua (mantenida por referencia)
 /*
 function verifyPairings_OLD() {
     const feedback = document.getElementById('traysFeedback');
@@ -1737,7 +1739,7 @@ function verifyPairings_OLD() {
     // Bandejas que deben quedar solas
     const singleTrays = [7, 8];
     
-    // Verificar que todos los pares correctos estén presentes
+    // Verificar que todos los pares correctos estÃ©n presentes
     let allCorrect = true;
     let missingPairs = [];
     
@@ -1751,7 +1753,7 @@ function verifyPairings_OLD() {
             allCorrect = false;
             const tray1 = trays.find(t => t.data.id === correctPair[0]);
             const tray2 = trays.find(t => t.data.id === correctPair[1]);
-            missingPairs.push(`${tray1.data.rows}×${tray1.data.cols} con ${tray2.data.rows}×${tray2.data.cols}`);
+            missingPairs.push(`${tray1.data.rows}Ã—${tray1.data.cols} con ${tray2.data.rows}Ã—${tray2.data.cols}`);
         }
     }
     
@@ -1765,7 +1767,7 @@ function verifyPairings_OLD() {
     }
     
     if (allCorrect && pairs.length === 3) {
-        feedback.textContent = '🎉 ¡Perfecto! Todos los emparejamientos son correctos.';
+        feedback.textContent = 'ðŸŽ‰ Â¡Perfecto! Todos los emparejamientos son correctos.';
         feedback.className = 'feedback-text success';
         
         // Deshabilitar el juego
@@ -1783,14 +1785,14 @@ function verifyPairings_OLD() {
         }, 1000);
         
     } else {
-        let errorMsg = '🔍 Revisa de nuevo. ';
+        let errorMsg = 'ðŸ” Revisa de nuevo. ';
         
         if (pairs.length < 3) {
             errorMsg += 'Recuerda que debes emparejar las bandejas con la misma cantidad de pandebonos. ';
         }
         
         if (wrongPairs.length > 0) {
-            errorMsg += 'Hay bandejas que no tienen pareja porque tienen cantidades únicas. ';
+            errorMsg += 'Hay bandejas que no tienen pareja porque tienen cantidades Ãºnicas. ';
         }
         
         if (missingPairs.length > 0) {
@@ -1820,10 +1822,10 @@ function initMoment2Audio() {
         
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = 'ðŸŽ¤ Graba tu explicaciÃ³n';
             statusText.className = 'status-text';
         } else {
-            statusText.textContent = '✅ Listo para enviar';
+            statusText.textContent = 'âœ… Listo para enviar';
             statusText.className = 'status-text success';
         }
     };
@@ -1831,12 +1833,12 @@ function initMoment2Audio() {
     let checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
+        // Bloquear botÃ³n inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
         
-        // Detener el intervalo de verificación
+        // Detener el intervalo de verificaciÃ³n
         clearInterval(checkInterval);
         
         const statusText = document.getElementById(statusTextId);
@@ -1848,14 +1850,14 @@ function initMoment2Audio() {
                 moment: 'm2',
                 tag: 'trays_explanation',
                 data: { 
-                    question: '¿Por qué tienen la misma cantidad?',
+                    question: 'Â¿Por quÃ© tienen la misma cantidad?',
                     pairs: pairs
                 },
                 boardBlob: null,
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅ Ya puedes avanzar en el libro.';
+            statusText.textContent = 'Guardado exitosamente âœ… Ya puedes avanzar en el libro.';
             statusText.className = 'status-text success';
 
             m2ExplanationSubmitted = true;
@@ -1866,7 +1868,7 @@ function initMoment2Audio() {
                 nextBtnQ2.style.opacity = '1';
             }
             
-            // Deshabilitar botón de grabar también
+            // Deshabilitar botÃ³n de grabar tambiÃ©n
             document.getElementById(recordBtnId).disabled = true;
             
         } catch (error) {
@@ -1908,7 +1910,7 @@ function initMoment3() {
         });
     });
     
-    // Botón continuar a M4
+    // BotÃ³n continuar a M4
     document.getElementById('continueToM4Btn').addEventListener('click', () => {
         showScreen('moment4Screen');
         initMoment4();
@@ -1920,9 +1922,9 @@ function showPrompt1(choice) {
     const promptText = document.getElementById('promptText1');
     
     const prompts = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
-        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
+        yes: 'Explica detalladamente cÃ³mo lo sabes.',
+        no: 'Â¿Con quÃ© nÃºmero crees que no funcionarÃ­a?',
+        unsure: 'ExplÃ­came cÃ³mo estÃ¡s pensando para decidir si esta igualdad serÃ¡ verdadera para cualquier nÃºmero.'
     };
     
     promptText.textContent = prompts[choice] || '';
@@ -1938,9 +1940,9 @@ function showPrompt2(choice) {
     const choicePlaceholder = document.getElementById('m3Q2ChoicePlaceholder');
     
     const prompts = {
-        yes: 'Explica detalladamente cómo lo sabes.',
-        no: '¿Con qué número crees que no funcionaría?',
-        unsure: 'Explícame cómo estás pensando para decidir si esta igualdad será verdadera para cualquier número.'
+        yes: 'Explica detalladamente cÃ³mo lo sabes.',
+        no: 'Â¿Con quÃ© nÃºmero crees que no funcionarÃ­a?',
+        unsure: 'ExplÃ­came cÃ³mo estÃ¡s pensando para decidir si esta igualdad serÃ¡ verdadera para cualquier nÃºmero.'
     };
     
     promptText.textContent = prompts[choice] || '';
@@ -1972,10 +1974,10 @@ function initProblemM3Q1() {
         
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = 'ðŸŽ¤ Graba tu explicaciÃ³n';
             statusText.className = 'status-text';
         } else {
-            statusText.textContent = '✅ Listo para enviar';
+            statusText.textContent = 'âœ… Listo para enviar';
             statusText.className = 'status-text success';
         }
     };
@@ -1983,12 +1985,12 @@ function initProblemM3Q1() {
     const checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
+        // Bloquear botÃ³n inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
         
-        // Detener el intervalo de verificación
+        // Detener el intervalo de verificaciÃ³n
         clearInterval(checkInterval);
         
         const statusText = document.getElementById(statusTextId);
@@ -2006,10 +2008,10 @@ function initProblemM3Q1() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅';
+            statusText.textContent = 'Guardado exitosamente âœ…';
             statusText.className = 'status-text success';
             
-            // Bloquear edición
+            // Bloquear ediciÃ³n
             boardState.disabled = true;
             const canvas = document.getElementById(canvasId);
             canvas.style.pointerEvents = 'none';
@@ -2057,10 +2059,10 @@ function initProblemM3Q2() {
         
         const statusText = document.getElementById(statusTextId);
         if (!hasAudio) {
-            statusText.textContent = '🎤 Graba tu explicación';
+            statusText.textContent = 'ðŸŽ¤ Graba tu explicaciÃ³n';
             statusText.className = 'status-text';
         } else {
-            statusText.textContent = '✅ Listo para enviar';
+            statusText.textContent = 'âœ… Listo para enviar';
             statusText.className = 'status-text success';
         }
     };
@@ -2068,12 +2070,12 @@ function initProblemM3Q2() {
     const checkInterval = setInterval(checkEvidence, 500);
     
     submitBtn.addEventListener('click', async () => {
-        // Bloquear botón inmediatamente y permanentemente
+        // Bloquear botÃ³n inmediatamente y permanentemente
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
         
-        // Detener el intervalo de verificación
+        // Detener el intervalo de verificaciÃ³n
         clearInterval(checkInterval);
         
         const statusText = document.getElementById(statusTextId);
@@ -2093,10 +2095,10 @@ function initProblemM3Q2() {
                 audioBlob: audioState.audioBlob
             });
             
-            statusText.textContent = 'Guardado exitosamente ✅ Continuando...';
+            statusText.textContent = 'Guardado exitosamente âœ… Continuando...';
             statusText.className = 'status-text success';
             
-            // Bloquear edición
+            // Bloquear ediciÃ³n
             boardState.disabled = true;
             const canvas = document.getElementById(canvasId);
             canvas.style.pointerEvents = 'none';
@@ -2105,7 +2107,7 @@ function initProblemM3Q2() {
             evidenceSection.querySelectorAll('.tool-btn').forEach(b => b.disabled = true);
             document.getElementById(recordBtnId).disabled = true;
             
-            // Continuar automáticamente al Momento 4 después de un breve delay
+            // Continuar automÃ¡ticamente al Momento 4 despuÃ©s de un breve delay
             setTimeout(() => {
                 showScreen('moment4Screen');
                 initMoment4();
@@ -2126,7 +2128,7 @@ function initProblemM3Q2() {
 }
 
 // ========================================
-// MOMENTO 4: 6 ÍTEMS
+// MOMENTO 4: 6 ÃTEMS
 // ========================================
 
 function initMoment4() {
@@ -2165,7 +2167,7 @@ function initMoment4() {
     const finishBtn = document.getElementById('finishM4Btn');
 
     if (reflectionHint) {
-        reflectionHint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+        reflectionHint.textContent = 'Selecciona al menos una opciÃ³n para continuar (mÃ¡ximo dos).';
     }
     if (reflectionStatus) {
         reflectionStatus.textContent = '';
@@ -2185,7 +2187,7 @@ function initMoment4() {
                     clearTimeout(m4_returnHomeTimeout);
                 }
                 m4_returnHomeTimeout = setTimeout(() => {
-                    window.location.href = 'index.html';
+                    window.location.href = FINAL_SURVEY_URL;
                 }, 2200);
             }
         };
@@ -2202,7 +2204,7 @@ function initMoment4() {
     // Generar las 6 preguntas
     generateMoment4Questions();
     
-    // Mostrar primer ítem
+    // Mostrar primer Ã­tem
     showItem(1);
 }
 
@@ -2236,11 +2238,11 @@ function updateMoment4ReflectionSelection(event) {
 
     if (hint) {
         if (validCheckedOptions.length === 0) {
-            hint.textContent = 'Selecciona al menos una opción para continuar (máximo dos).';
+            hint.textContent = 'Selecciona al menos una opciÃ³n para continuar (mÃ¡ximo dos).';
         } else if (validCheckedOptions.length >= 2) {
-            hint.textContent = 'Ya seleccionaste el máximo de dos opciones.';
+            hint.textContent = 'Ya seleccionaste el mÃ¡ximo de dos opciones.';
         } else {
-            hint.textContent = 'Puedes seleccionar una opción más (máximo dos).';
+            hint.textContent = 'Puedes seleccionar una opciÃ³n mÃ¡s (mÃ¡ximo dos).';
         }
     }
 
@@ -2263,8 +2265,8 @@ async function saveMoment4Reflection() {
     if (values.length === 0 || values.length > 2) {
         if (hint) {
             hint.textContent = values.length > 2
-                ? 'Puedes seleccionar máximo dos opciones.'
-                : 'Selecciona al menos una opción para continuar.';
+                ? 'Puedes seleccionar mÃ¡ximo dos opciones.'
+                : 'Selecciona al menos una opciÃ³n para continuar.';
         }
         return false;
     }
@@ -2297,7 +2299,7 @@ async function saveMoment4Reflection() {
         }
         return true;
     } catch (error) {
-        console.error('❌ Error al guardar reflexión final:', error);
+        console.error('âŒ Error al guardar reflexiÃ³n final:', error);
         if (statusText) {
             statusText.textContent = 'No se pudo guardar. Revisa internet e intenta de nuevo.';
         }
@@ -2325,10 +2327,10 @@ function showMoment4ReflectionPage() {
 }
 
 function generateMoment4Questions() {
-    // Generar 6 preguntas con números aleatorios entre 1 y 50
+    // Generar 6 preguntas con nÃºmeros aleatorios entre 1 y 50
     const questions = [];
     
-    // SVG de la bolsa mágica (faltante)
+    // SVG de la bolsa mÃ¡gica (faltante)
     const envelope = `<span class="missing-envelope" aria-label="bolsa misteriosa" role="img">
         <svg class="envelope magic" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
             <rect x="8" y="12" width="44" height="34" fill="#ffd166" stroke="#ff9f1c" stroke-width="2" rx="8"/>
@@ -2340,12 +2342,12 @@ function generateMoment4Questions() {
     </span>`;
     
     const patterns = [
-        (a, b) => ({ eq: `${a} × ${envelope} = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${envelope} × ${a} = ${b} × ${a}`, ans: b, fullEq: `${b} × ${a} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${a} × ${b} = ${b} × ${envelope}`, ans: a, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${envelope} × ${a} = ${b} × ${a}`, ans: b, fullEq: `${b} × ${a} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${a} × ${envelope} = ${b} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` }),
-        (a, b) => ({ eq: `${a} × ${b} = ${envelope} × ${a}`, ans: b, fullEq: `${a} × ${b} = ${b} × ${a}` })
+        (a, b) => ({ eq: `${a} Ã— ${envelope} = ${b} Ã— ${a}`, ans: b, fullEq: `${a} Ã— ${b} = ${b} Ã— ${a}` }),
+        (a, b) => ({ eq: `${envelope} Ã— ${a} = ${b} Ã— ${a}`, ans: b, fullEq: `${b} Ã— ${a} = ${b} Ã— ${a}` }),
+        (a, b) => ({ eq: `${a} Ã— ${b} = ${b} Ã— ${envelope}`, ans: a, fullEq: `${a} Ã— ${b} = ${b} Ã— ${a}` }),
+        (a, b) => ({ eq: `${envelope} Ã— ${a} = ${b} Ã— ${a}`, ans: b, fullEq: `${b} Ã— ${a} = ${b} Ã— ${a}` }),
+        (a, b) => ({ eq: `${a} Ã— ${envelope} = ${b} Ã— ${a}`, ans: b, fullEq: `${a} Ã— ${b} = ${b} Ã— ${a}` }),
+        (a, b) => ({ eq: `${a} Ã— ${b} = ${envelope} Ã— ${a}`, ans: b, fullEq: `${a} Ã— ${b} = ${b} Ã— ${a}` })
     ];
     
     patterns.forEach(pattern => {
@@ -2393,13 +2395,13 @@ function showItem(itemNum) {
         if (parseInt(box.dataset.item) === itemNum) {
             box.classList.remove('hidden');
             
-            // Agregar evento al botón comprobar
+            // Agregar evento al botÃ³n comprobar
             const checkBtn = box.querySelector('.check-answer-btn');
             const input = box.querySelector('.item-input');
             
             checkBtn.addEventListener('click', () => validateItem(input, box));
             
-            // Prevenir validación automática al escribir
+            // Prevenir validaciÃ³n automÃ¡tica al escribir
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     checkBtn.click();
@@ -2412,7 +2414,7 @@ function showItem(itemNum) {
 }
 
 // ========================================
-// SISTEMA DE VIDAS MÁGICAS
+// SISTEMA DE VIDAS MÃGICAS
 // ========================================
 
 function loseLife() {
@@ -2433,7 +2435,7 @@ function loseLife() {
 }
 
 // ========================================
-// ANIMACIÓN DE HECHIZO
+// ANIMACIÃ“N DE HECHIZO
 // ========================================
 
 function createSpellEffect(itemBox) {
@@ -2448,12 +2450,12 @@ function createSpellEffect(itemBox) {
     const particleCount = 50;
     const colors = ['#9b59b6', '#8e44ad', '#ffd700', '#fff', '#bb86fc'];
     
-    // Obtener posición del itemBox
+    // Obtener posiciÃ³n del itemBox
     const rect = itemBox.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     
-    // Crear partículas
+    // Crear partÃ­culas
     for (let i = 0; i < particleCount; i++) {
         particles.push({
             x: centerX,
@@ -2467,7 +2469,7 @@ function createSpellEffect(itemBox) {
         });
     }
     
-    // Animar partículas
+    // Animar partÃ­culas
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
@@ -2477,12 +2479,12 @@ function createSpellEffect(itemBox) {
             if (p.alpha > 0) {
                 anyAlive = true;
                 
-                // Actualizar posición
+                // Actualizar posiciÃ³n
                 p.x += p.vx;
                 p.y += p.vy;
                 p.alpha -= p.decay;
                 
-                // Dibujar partícula
+                // Dibujar partÃ­cula
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fillStyle = p.color;
@@ -2513,7 +2515,7 @@ function createSpellEffect(itemBox) {
     // Agregar emoji de hechizo temporal
     const emoji = document.createElement('div');
     emoji.className = 'spell-effect';
-    emoji.textContent = '✨';
+    emoji.textContent = 'âœ¨';
     itemBox.style.position = 'relative';
     itemBox.appendChild(emoji);
     
@@ -2534,7 +2536,7 @@ function validateItem(input, itemBox) {
     let attempts = parseInt(input.dataset.attempts);
     
     if (input.value === '' || isNaN(userAnswer)) {
-        feedback.textContent = '⚠️ Por favor ingresa un número';
+        feedback.textContent = 'âš ï¸ Por favor ingresa un nÃºmero';
         feedback.className = 'item-feedback incorrect';
         return;
     }
@@ -2545,18 +2547,18 @@ function validateItem(input, itemBox) {
         const parts = normalized.split('=').map(s => s.trim());
 
         const fillMissingValue = (part) => {
-            if (!part.includes('×')) {
+            if (!part.includes('Ã—')) {
                 return part;
             }
 
-            const factors = part.split('×').map(s => s.trim());
+            const factors = part.split('Ã—').map(s => s.trim());
             if (factors.length !== 2) {
                 return part;
             }
 
             const leftFactor = /\d/.test(factors[0]) ? factors[0] : String(userAnswer);
             const rightFactor = /\d/.test(factors[1]) ? factors[1] : String(userAnswer);
-            return `${leftFactor} × ${rightFactor}`;
+            return `${leftFactor} Ã— ${rightFactor}`;
         };
 
         if (parts.length === 2) {
@@ -2568,10 +2570,10 @@ function validateItem(input, itemBox) {
     };
 
     if (userAnswer === answer) {
-        // ✅ CORRECTO - Activar animación de hechizo
+        // âœ… CORRECTO - Activar animaciÃ³n de hechizo
         createSpellEffect(itemBox);
         
-        feedback.innerHTML = '<span style="color: #27ae60; font-weight: bold;">✅ ¡Correcto! Muy bien.</span>';
+        feedback.innerHTML = '<span style="color: #27ae60; font-weight: bold;">âœ… Â¡Correcto! Muy bien.</span>';
         feedback.className = 'item-feedback correct';
         input.disabled = true;
         checkBtn.disabled = true;
@@ -2583,7 +2585,7 @@ function validateItem(input, itemBox) {
             attempts: attempts + 1
         });
         
-        // Avanzar al siguiente ítem
+        // Avanzar al siguiente Ã­tem
         setTimeout(() => {
             itemBox.classList.add('hidden');
             m4_currentItem++;
@@ -2595,21 +2597,21 @@ function validateItem(input, itemBox) {
         }, 1500);
         
     } else {
-        // ❌ INCORRECTO
+        // âŒ INCORRECTO
         attempts++;
         input.dataset.attempts = attempts;
         m4_errorsTotal++;
         
         if (attempts === 1) {
             // Primer intento fallido
-            feedback.innerHTML = '<span style="color: #e67e22;">❌ Verifica tu respuesta. Recuerda lo que hemos hecho para adivinar el número que va en la bolsa.</span>';
+            feedback.innerHTML = '<span style="color: #e67e22;">âŒ Verifica tu respuesta. Recuerda lo que hemos hecho para adivinar el nÃºmero que va en la bolsa.</span>';
             feedback.className = 'item-feedback incorrect';
             input.focus();
             
         } else if (attempts === 2) {
-            // Segundo intento fallido - solo sugerir hacer las multiplicaciones sin decir si está bien o mal
+            // Segundo intento fallido - solo sugerir hacer las multiplicaciones sin decir si estÃ¡ bien o mal
             const parts = getComparisonParts();
-            feedback.innerHTML = `<span style="color: #555; font-size: 1.1em;">💭 Intenta hacer ambas multiplicaciones:<br><strong>${parts[0]}</strong> y <strong>${parts[1]}</strong></span>`;
+            feedback.innerHTML = `<span style="color: #555; font-size: 1.1em;">ðŸ’­ Intenta hacer ambas multiplicaciones:<br><strong>${parts[0]}</strong> y <strong>${parts[1]}</strong></span>`;
             feedback.className = 'item-feedback';
             input.focus();
             
@@ -2619,10 +2621,10 @@ function validateItem(input, itemBox) {
             
             const parts = getComparisonParts();
             
-            feedback.innerHTML = `<span style="color: #c0392b;">❌ Intentaste hacer ambas multiplicaciones:<br>
+            feedback.innerHTML = `<span style="color: #c0392b;">âŒ Intentaste hacer ambas multiplicaciones:<br>
                 <strong>${parts[0]}</strong> y <strong>${parts[1]}</strong><br>
-                Pero con el número <strong>${userAnswer}</strong> no te da lo mismo en ambas multiplicaciones.<br>
-                💔 ¡Perdiste una vida mágica!</span>`;
+                Pero con el nÃºmero <strong>${userAnswer}</strong> no te da lo mismo en ambas multiplicaciones.<br>
+                ðŸ’” Â¡Perdiste una vida mÃ¡gica!</span>`;
             feedback.className = 'item-feedback incorrect';
             input.disabled = true;
             checkBtn.disabled = true;
@@ -2634,7 +2636,7 @@ function validateItem(input, itemBox) {
                 attempts: 3
             });
             
-            // Si todavía hay vidas, continuar con la siguiente pregunta
+            // Si todavÃ­a hay vidas, continuar con la siguiente pregunta
             if (m4_magicLives > 0) {
                 setTimeout(() => {
                     itemBox.classList.add('hidden');
@@ -2646,7 +2648,7 @@ function validateItem(input, itemBox) {
                     }
                 }, 4000);
             }
-            // Si no hay vidas, loseLife() ya llamó a finalizeMoment4()
+            // Si no hay vidas, loseLife() ya llamÃ³ a finalizeMoment4()
         }
     }
 }
@@ -2671,38 +2673,38 @@ async function finalizeMoment4() {
                 errorsConsecutiveMax: m4_errorsConsecutiveMax,
                 needsSupport: needsSupport,
                 livesRemaining: m4_magicLives,
-                comment: needsSupport ? 'No está clara la propiedad conmutativa' : null
+                comment: needsSupport ? 'No estÃ¡ clara la propiedad conmutativa' : null
             },
             boardBlob: null,
             audioBlob: null
         });
         
-        statusText.textContent = 'Completado ✅';
+        statusText.textContent = 'Completado âœ…';
         statusText.className = 'status-text success';
         
         // Mostrar pantalla final
         const finalSection = document.getElementById('finalQuestionSection');
         finalSection.classList.remove('hidden');
         
-        // Celebración si termina con al menos 1 vida
+        // CelebraciÃ³n si termina con al menos 1 vida
         if (m4_magicLives > 0) {
             createFullScreenMagicEffect();
         }
 
-        // Si terminó con las 3 vidas, mostrar mensaje especial
+        // Si terminÃ³ con las 3 vidas, mostrar mensaje especial
         if (m4_magicLives === 3) {
             
             const finalBox = finalSection.querySelector('.final-box');
             finalBox.innerHTML = `
-                <h3 style="color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);">🎉 ¡Increíble! 🎉</h3>
+                <h3 style="color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);">ðŸŽ‰ Â¡IncreÃ­ble! ðŸŽ‰</h3>
                 <p class="final-question" style="font-size: 1.4em; color: #fff; margin: 20px 0;">
-                    ¡Completaste todos los desafíos sin perder ninguna vida mágica! ✨
+                    Â¡Completaste todos los desafÃ­os sin perder ninguna vida mÃ¡gica! âœ¨
                 </p>
                 <p style="font-size: 1.6em; color: #ffd700; font-weight: bold; margin: 25px 0; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);">
-                    🌟 Puedes reclamar <strong style="font-size: 1.3em;">3 PUNTOS POSITIVOS</strong> 🌟
+                    ðŸŒŸ Puedes reclamar <strong style="font-size: 1.3em;">3 PUNTOS POSITIVOS</strong> ðŸŒŸ
                 </p>
-                <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
-                <p class="thank-you-sub">¡Gracias por participar!</p>
+                <p class="thank-you">Â¿El orden de los factores altera el producto o no?</p>
+                <p class="thank-you-sub">Â¡Gracias por participar!</p>
             `;
         } else {
             // Calcular puntos basados en vidas restantes
@@ -2713,7 +2715,7 @@ async function finalizeMoment4() {
             }
         }
 
-        statusText.textContent = 'Completado ✅';
+        statusText.textContent = 'Completado âœ…';
         setTimeout(() => {
             showMoment4ReflectionPage();
         }, 2200);
@@ -2728,7 +2730,7 @@ async function finalizeMoment4() {
     }
 }
 
-// Crear efecto mágico de pantalla completa
+// Crear efecto mÃ¡gico de pantalla completa
 function createFullScreenMagicEffect() {
     const canvas = document.getElementById('magicCanvas');
     if (!canvas) return;
@@ -2741,7 +2743,7 @@ function createFullScreenMagicEffect() {
     const particleCount = 150;
     const colors = ['#ffd700', '#fff', '#9b59b6', '#8e44ad', '#bb86fc', '#feca57'];
     
-    // Crear partículas desde el centro de la pantalla
+    // Crear partÃ­culas desde el centro de la pantalla
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     
@@ -2761,7 +2763,7 @@ function createFullScreenMagicEffect() {
         });
     }
     
-    // Animar partículas
+    // Animar partÃ­culas
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
@@ -2771,13 +2773,13 @@ function createFullScreenMagicEffect() {
             if (p.alpha > 0) {
                 anyAlive = true;
                 
-                // Actualizar posición
+                // Actualizar posiciÃ³n
                 p.x += p.vx;
                 p.y += p.vy;
                 p.vy += 0.1; // Gravedad
                 p.alpha -= p.decay;
                 
-                // Dibujar partícula como estrella
+                // Dibujar partÃ­cula como estrella
                 ctx.save();
                 ctx.translate(p.x, p.y);
                 ctx.beginPath();
@@ -2831,11 +2833,11 @@ function createFullScreenMagicEffect() {
 // ========================================
 
 function initBoard(canvasId) {
-    console.log('🎨 Inicializando board:', canvasId);
+    console.log('ðŸŽ¨ Inicializando board:', canvasId);
     
     const canvas = document.getElementById(canvasId);
     if (!canvas) {
-        console.error('❌ Canvas no encontrado:', canvasId);
+        console.error('âŒ Canvas no encontrado:', canvasId);
         return { hasDrawing: false, disabled: false };
     }
     
@@ -2846,25 +2848,25 @@ function initBoard(canvasId) {
     let hasDrawing = false;
     let disabled = false;
     
-    // Establecer cursor inicial (lápiz negro)
+    // Establecer cursor inicial (lÃ¡piz negro)
     canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><path fill=\'black\' d=\'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z\'/></svg>") 2 22, auto';
     
     // Configurar herramientas
     const evidenceSection = canvas.closest('.evidence-section');
     if (!evidenceSection) {
-        console.error('❌ No se encontró .evidence-section para el canvas:', canvasId);
+        console.error('âŒ No se encontrÃ³ .evidence-section para el canvas:', canvasId);
         return { hasDrawing: false, disabled: false };
     }
     
     const toolButtons = evidenceSection.querySelectorAll('.tool-btn');
-    console.log('🔧 Botones de herramientas encontrados:', toolButtons.length);
+    console.log('ðŸ”§ Botones de herramientas encontrados:', toolButtons.length);
     
     toolButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const tool = btn.dataset.tool;
             
             if (tool === 'clear') {
-                const shouldClear = window.confirm('¿Estás segura de querer limpiar todo el tablero?');
+                const shouldClear = window.confirm('Â¿EstÃ¡s segura de querer limpiar todo el tablero?');
                 if (!shouldClear) {
                     return;
                 }
@@ -2875,7 +2877,7 @@ function initBoard(canvasId) {
             
             currentTool = tool;
             
-            // Cambiar cursor según herramienta
+            // Cambiar cursor segÃºn herramienta
             switch (tool) {
                 case 'black':
                     canvas.style.cursor = 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'><path fill=\'black\' d=\'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z\'/></svg>") 2 22, auto';
@@ -2995,28 +2997,28 @@ function initBoard(canvasId) {
 // ========================================
 
 function initAudio(recordBtnId, stopBtnId, statusId) {
-    console.log('🎤 Inicializando audio:', recordBtnId);
+    console.log('ðŸŽ¤ Inicializando audio:', recordBtnId);
     
     const recordBtn = document.getElementById(recordBtnId);
     const stopBtn = document.getElementById(stopBtnId);
     const status = document.getElementById(statusId);
     
     if (!recordBtn || !stopBtn || !status) {
-        console.error('❌ Elementos de audio no encontrados');
+        console.error('âŒ Elementos de audio no encontrados');
         console.error('recordBtn:', recordBtn);
         console.error('stopBtn:', stopBtn);
         console.error('status:', status);
         return { audioBlob: null };
     }
     
-    console.log('✅ Elementos de audio encontrados');
+    console.log('âœ… Elementos de audio encontrados');
     
     let mediaRecorder = null;
     let audioChunks = [];
     let audioBlob = null;
     
     recordBtn.addEventListener('click', async () => {
-        console.log('🔴 Intentando grabar audio...');
+        console.log('ðŸ”´ Intentando grabar audio...');
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             
@@ -3035,7 +3037,7 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
             
             mediaRecorder.addEventListener('stop', () => {
                 audioBlob = new Blob(audioChunks, { type: options.mimeType });
-                status.textContent = '🎤 Audio grabado';
+                status.textContent = 'ðŸŽ¤ Audio grabado';
                 status.classList.remove('error-text');
                 status.classList.add('success-text');
                 
@@ -3047,12 +3049,12 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
             
             recordBtn.classList.add('hidden');
             stopBtn.classList.remove('hidden');
-            status.textContent = '🔴 Grabando...';
+            status.textContent = 'ðŸ”´ Grabando...';
             status.classList.remove('error-text');
             
         } catch (error) {
-            console.error('Error al acceder al micrófono:', error);
-            status.textContent = '❌ Error: El micrófono es OBLIGATORIO. Debes permitir el acceso para continuar.';
+            console.error('Error al acceder al micrÃ³fono:', error);
+            status.textContent = 'âŒ Error: El micrÃ³fono es OBLIGATORIO. Debes permitir el acceso para continuar.';
             status.classList.add('error-text');
         }
     });
@@ -3076,13 +3078,13 @@ function initAudio(recordBtnId, stopBtnId, statusId) {
 // ========================================
 
 async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
-    // Verificar si Firebase está disponible
+    // Verificar si Firebase estÃ¡ disponible
     if (!db || !storage) {
-        throw new Error('Firebase no está configurado. Los datos no se pueden guardar en la nube, pero puedes continuar con la actividad.');
+        throw new Error('Firebase no estÃ¡ configurado. Los datos no se pueden guardar en la nube, pero puedes continuar con la actividad.');
     }
     
-    console.log('📤 Iniciando envío:', { moment, tag, hasBoard: !!boardBlob, hasAudio: !!audioBlob });
-    console.log('🎤 Audio blob:', audioBlob);
+    console.log('ðŸ“¤ Iniciando envÃ­o:', { moment, tag, hasBoard: !!boardBlob, hasAudio: !!audioBlob });
+    console.log('ðŸŽ¤ Audio blob:', audioBlob);
 
     const participantName = [studentInfo?.nombre, studentInfo?.apellidos]
         .filter(Boolean)
@@ -3109,28 +3111,28 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
     try {
         // Subir imagen del tablero (si existe)
         if (boardBlob) {
-            console.log('📸 Subiendo imagen...');
+            console.log('ðŸ“¸ Subiendo imagen...');
             const boardPath = `uploads/${storageIdentifier}/act0b/${moment}/${storageIdentifier}_act0b_${moment}_${tag}_${timestamp}.png`;
             const boardRef = ref(storage, boardPath);
             await uploadBytes(boardRef, boardBlob);
             boardUrl = await getDownloadURL(boardRef);
-            console.log('✅ Tablero subido:', boardUrl);
+            console.log('âœ… Tablero subido:', boardUrl);
         }
         
         // Subir audio (si existe)
         if (audioBlob) {
-            console.log('🎤 Subiendo audio...', audioBlob.size, 'bytes');
+            console.log('ðŸŽ¤ Subiendo audio...', audioBlob.size, 'bytes');
             const audioPath = `uploads/${storageIdentifier}/act0b/${moment}/${storageIdentifier}_act0b_${moment}_${tag}_${timestamp}.webm`;
             const audioRef = ref(storage, audioPath);
             await uploadBytes(audioRef, audioBlob);
             audioUrl = await getDownloadURL(audioRef);
-            console.log('✅ Audio subido:', audioUrl);
+            console.log('âœ… Audio subido:', audioUrl);
         } else {
-            console.warn('⚠️ No hay audio blob para subir');
+            console.warn('âš ï¸ No hay audio blob para subir');
         }
     } catch (storageError) {
-        console.error('❌ Error al subir archivos:', storageError);
-        throw storageError; // Propagar el error original, no uno genérico
+        console.error('âŒ Error al subir archivos:', storageError);
+        throw storageError; // Propagar el error original, no uno genÃ©rico
     }
     
     // Crear documento en Firestore
@@ -3152,14 +3154,14 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         }
     };
     
-    console.log('💾 Creando documento en Firestore...', docData);
+    console.log('ðŸ’¾ Creando documento en Firestore...', docData);
     
     try {
         const docRef = await addDoc(collection(db, 'submissions'), docData);
-        console.log('✅ Documento guardado con ID:', docRef.id);
+        console.log('âœ… Documento guardado con ID:', docRef.id);
         return docRef.id;
     } catch (firestoreError) {
-        console.error('❌ Error al guardar en Firestore:', firestoreError);
+        console.error('âŒ Error al guardar en Firestore:', firestoreError);
         throw firestoreError;
     }
 }
@@ -3180,3 +3182,4 @@ async function canvasToBlob(canvasId) {
         }, 'image/png');
     });
 }
+

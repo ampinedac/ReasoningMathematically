@@ -1,27 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actividad 2 - ¿El orden de los factores altera el producto?</title>
+    <title>Actividad 2 - Â¿El orden de los factores altera el producto?</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="trays-styles.css?v=2026031813">
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=jQZ2zSth"></script>
-</head>
-<body>
-<div class="author-credit">Por: Ángela María Pineda Chacón</div>
+    </head>
+<body class="activity-0b">
+<div class="author-credit">Por: Ãngela MarÃ­a Pineda ChacÃ³n</div>
 
 <!-- CONTENEDOR BIENVENIDA -->
 <div id="ContenedorBienvenida">
-    <div id="bookCoverBg" class="book-cover-bg" style="display:none;"></div>
     <section id="welcomeScreen" class="screen active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
         <h1 class="main-title">Actividad 2</h1>
-        <p class="subtitle">¿El orden de los factores altera el producto?</p>
+        <p class="subtitle">Â¿El orden de los factores altera el producto?</p>
         <div class="welcome-box">
-            <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
+            <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu cÃ³digo estudiantil:</label>
             <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
             <button id="enterBtn" class="btn btn-primary">Ingresar</button>
             <div id="welcomeError" class="hidden" style="color: #b91c1c; margin-top: 10px; font-weight: bold;"></div>
@@ -29,15 +27,15 @@
     </section>
 </div>
 
-<!-- CONTENEDOR CONFIRMACIÓN -->
+<!-- CONTENEDOR CONFIRMACIÃ“N -->
 <div id="ContenedorConfirmacion" style="display:none;">
     <section id="confirmationScreen" class="screen">
-        <h1 class="main-title">Confirmación</h1>
+        <h1 class="main-title">ConfirmaciÃ³n</h1>
         <div class="welcome-box confirmation-box">
             <p id="confirmationQuestion" class="confirmation-question"></p>
             <div class="confirmation-buttons">
-                <button id="confirmYesBtn" class="btn btn-success"><img src="../Actividad1/assets/images/BTconfirmar.png" alt="Confirmar" style="height:48px;"></button>
-                <button id="confirmNoBtn" class="btn btn-secondary"><img src="../Actividad1/assets/images/BTrechazado.png" alt="Rechazar" style="height:48px;"></button>
+                <button id="confirmYesBtn" class="btn btn-success"><img src="assets/images/BTconfirmar.png" alt="Confirmar"></button>
+                <button id="confirmNoBtn" class="btn btn-secondary"><img src="assets/images/BTrechazado.png" alt="Rechazar"></button>
             </div>
         </div>
     </section>
@@ -46,25 +44,25 @@
 <!-- CONTENEDOR PORTADA (oculto al inicio) -->
 <div id="ContenedorPortada" style="display:none;">
     <div id="bookCover" class="book-cover-page">
-        <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
-            <span style="color:#6f00ff;">El secreto de las bandejas de Doña Alicia </span> 
+        <h2 class="cover-book-title" aria-label="El secreto de las bandejas de DoÃ±a Alicia">
+            <span style="color:#6f00ff;">El secreto de las bandejas de DoÃ±a Alicia </span> 
         </h2>
-        <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
-        <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" id="btnContinuarPortada">
-            <img src="../Actividad1/assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+        <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirÃ¡s un secreto que se puede contar de dos formas.</p>
+        <button class="cover-leer-btn cover-leer-image-btn" aria-label="LÃ©eme" id="btnContinuarPortada">
+            <img src="assets/images/Leeme.png" alt="LÃ©eme" class="cover-leer-image">
         </button>
     </div>
 </div>
 
 <div id="ContenedorLibro" style="display:none;">
-    <!-- MIGRACIÓN: Se elimina section#moment1Screen.screen, div#flipbookSection y div.flipbook-wrapper. Todo el contenido relevante se mueve aquí directamente. -->
+    <!-- MIGRACIÃ“N: Se elimina section#moment1Screen.screen, div#flipbookSection y div.flipbook-wrapper. Todo el contenido relevante se mueve aquÃ­ directamente. -->
     <div id="flipbook">
     <!-- MOMENTO 1: Cuento + Problema Q1 -->
     <section id="moment1Screen" class="screen">
         <div class="container">
             <div class="header">
-                <!-- Momento 1: El secreto de las bolsitas de doña Alicia -->
-                <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
+                <!-- Momento 1: El secreto de las bolsitas de doÃ±a Alicia -->
+                <p class="student-code-display">CÃ³digo: <span id="studentCodeM1"></span></p>
             </div>
 
             <!-- FLIPBOOK 3D DEL CUENTO -->
@@ -72,12 +70,12 @@
 
                 <!-- Flipbook Container -->
                 <div class="flipbook-wrapper">
-                    <!-- Botón de sonido en esquina superior derecha -->
+                    <!-- BotÃ³n de sonido en esquina superior derecha -->
                     <div id="flipbook">
 
                         <!-- PORTADA CERRADA DEL LIBRO -->
                         <div class="page book-cover-page active">
-                            <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de Doña Alicia">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de DoÃ±a Alicia">
                                 <span class="cover-word-line">
                                     <span class="cover-word-chip tone-1">El</span>
                                     <span class="cover-word-chip tone-2">secreto</span>
@@ -89,82 +87,82 @@
                                 </span>
                                 <span class="cover-word-line">
                                     <span class="cover-word-chip tone-2">de</span>
-                                    <span class="cover-word-chip tone-1">Doña</span>
+                                    <span class="cover-word-chip tone-1">DoÃ±a</span>
                                     <span class="cover-word-chip tone-4">Alicia</span>
                                 </span>
                             </h2>
-                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
-                            <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
-                                <img src="../Actividad2/assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
+                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirÃ¡s un secreto que se puede contar de dos formas.</p>
+                            <button class="cover-leer-btn cover-leer-image-btn" aria-label="LÃ©eme" onclick="document.getElementById('nextBtn').click()">
+                                <img src="../Actividad2/assets/images/Leeme.png" alt="LÃ©eme" class="cover-leer-image">
                             </button>
                         </div>
 
                         <!-- Story Page 1 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM1"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM1"></span></p>
                             <div class="page-number">1</div>
-                            <img src="../Actividad2/assets/images/pagina1_cuento_act0B.png" alt="Doña Alicia en su panadería" class="story-image">
-                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                            <img src="../Actividad2/assets/images/pagina1_cuento_act0B.png" alt="DoÃ±a Alicia en su panaderÃ­a" class="story-image">
+                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive DoÃ±a Alicia. Ella tiene la sonrisa mÃ¡s grande y el delantal mÃ¡s blanco de todo el mundo. Su panaderÃ­a es el lugar mÃ¡s feliz de la cuadra.</p>
                         </div>
 
                         <!-- Story Page 2 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM2"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM2"></span></p>
                             <div class="page-number">2</div>
-                            <img src="../Actividad2/assets/images/pagina2_cuento_act0B.png" alt="Doña Alicia amasando" class="story-image">
-                            <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Amasa con fuerza y ritmo. “Un poquito de harina por aquí y mucho amor por allá”, canta mientras prepara sus famosos pandebonos.</p>
+                            <img src="../Actividad2/assets/images/pagina2_cuento_act0B.png" alt="DoÃ±a Alicia amasando" class="story-image">
+                            <p class="story-text">Cada maÃ±ana, muy temprano, DoÃ±a Alicia comienza su magia. Amasa con fuerza y ritmo. â€œUn poquito de harina por aquÃ­ y mucho amor por allÃ¡â€, canta mientras prepara sus famosos pandebonos.</p>
                         </div>
 
                         <!-- Story Page 3 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM3"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM3"></span></p>
                             <div class="page-number">3</div>
                             <img src="../Actividad2/assets/images/pagina3_cuento_act0B.png" alt="Daniel ayudando" class="story-image">
-                            <p class="story-text">Daniel, su pequeño vecino, siempre llega para ayudar. A él le encanta ver cómo las bolitas de masa son todas iguales, redonditas y suaves como pequeñas nubes de queso.</p>
+                            <p class="story-text">Daniel, su pequeÃ±o vecino, siempre llega para ayudar. A Ã©l le encanta ver cÃ³mo las bolitas de masa son todas iguales, redonditas y suaves como pequeÃ±as nubes de queso.</p>
                         </div>
 
                         <!-- Story Page 4 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM4"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM4"></span></p>
                             <div class="page-number">4</div>
                             <img src="../Actividad2/assets/images/pagina4_cuento_act0B.png" alt="Pandebonos en el horno" class="story-image">
-                            <p class="story-text">¡Ding! El horno se abre y un vaporcito delicioso llena la calle. Los pandebonos brillan doraditos, listos para ser compartidos.</p>
+                            <p class="story-text">Â¡Ding! El horno se abre y un vaporcito delicioso llena la calle. Los pandebonos brillan doraditos, listos para ser compartidos.</p>
                         </div>
 
                         <!-- Story Page 5 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM5"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM5"></span></p>
                             <div class="page-number">5</div>
                             <img src="../Actividad2/assets/images/pagina5_cuento_act0B.png" alt="Pedidos de bolsitas" class="story-image">
-                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 pandebonos”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Adrián. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
+                            <p class="story-text">Ese dÃ­a llegan muchos niÃ±os. â€”â€œDoÃ±a Alicia, quiero una bolsita con 3 pandebonosâ€, dice Sarita. â€”â€œYo tambiÃ©nâ€, dice Luchi. â€”â€œÂ¡Y yo!â€, grita AdriÃ¡n. DoÃ±a Alicia mira a Daniel. â€”â€œVamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.â€ Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la terceraâ€¦ Sigue hasta completar las 7 bolsitas.</p>
                         </div>
 
                         <!-- Story Page 6 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM6"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM6"></span></p>
                             <div class="page-number">6</div>
-                            <img src="../Actividad2/assets/images/pagina6_cuento_act0B.png" alt="Bolsitas más grandes" class="story-image">
-                            <p class="story-text">Más tarde, llegan otros niños. —“Doña Alicia, ahora queremos bolsitas más grandes.” Ella piensa un momento y dice: —“Esta vez haremos 3 bolsitas. En cada una pondremos 7 pandebonos.” Daniel vuelve a organizar los panes: 7 en la primera bolsita, 7 en la segunda, 7 en la tercera. Cuando termina, mira las bolsitas. Mira los panes. Y vuelve a mirar las bolsitas.</p>
+                            <img src="../Actividad2/assets/images/pagina6_cuento_act0B.png" alt="Bolsitas mÃ¡s grandes" class="story-image">
+                            <p class="story-text">MÃ¡s tarde, llegan otros niÃ±os. â€”â€œDoÃ±a Alicia, ahora queremos bolsitas mÃ¡s grandes.â€ Ella piensa un momento y dice: â€”â€œEsta vez haremos 3 bolsitas. En cada una pondremos 7 pandebonos.â€ Daniel vuelve a organizar los panes: 7 en la primera bolsita, 7 en la segunda, 7 en la tercera. Cuando termina, mira las bolsitas. Mira los panes. Y vuelve a mirar las bolsitas.</p>
                         </div>
 
                         <!-- Story Page 7 -->
                         <div class="page story-page">
-                            <p class="student-code-display student-code-corner">Código: <span id="studentCodeM7"></span></p>
+                            <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM7"></span></p>
                             <div class="page-number">7</div>
                             <img src="../Actividad2/assets/images/pagina7_cuento_act0B.png" alt="Cierre del cuento" class="story-image">
-                            <p class="story-text">Cuando termina, sonríe orgulloso. —“¡Me encanta ayudar!”, dice mientras mira todas las bolsitas listas para entregar. Doña Alicia le da una palmadita en el hombro. —“Compartir con cuidado también es una forma de querer.” Y juntos siguen preparando más pedidos para el barrio.</p>
+                            <p class="story-text">Cuando termina, sonrÃ­e orgulloso. â€”â€œÂ¡Me encanta ayudar!â€, dice mientras mira todas las bolsitas listas para entregar. DoÃ±a Alicia le da una palmadita en el hombro. â€”â€œCompartir con cuidado tambiÃ©n es una forma de querer.â€ Y juntos siguen preparando mÃ¡s pedidos para el barrio.</p>
                         </div>
 
-                        <!-- Story Page 8 (Páginas 15 y 16): Situación 1 -->
+                        <!-- Story Page 8 (PÃ¡ginas 15 y 16): SituaciÃ³n 1 -->
                         <div id="problemQ1Section" class="page story-page q1-book-spread problem-q1-page">
                             <div class="page-number">8</div>
                             <div class="problem-box q1-left-page">
-                                <h3>Situación 1</h3>
+                                <h3>SituaciÃ³n 1</h3>
                                 <div class="sale-block sale-block-ventas">
                                     <img src="../Actividad2/assets/images/Ventas.png" alt="Ventas" class="sale-label-image ventas-image">
                                 </div>
-                                <p class="question">¿Vendieron más en la primera venta, en la segunda o vendieron lo mismo?</p>
-                                <p class="question">Explica cómo lo sabes.</p>
+                                <p class="question">Â¿Vendieron mÃ¡s en la primera venta, en la segunda o vendieron lo mismo?</p>
+                                <p class="question">Explica cÃ³mo lo sabes.</p>
                             </div>
 
                             <!-- TABLERO Y AUDIO -->
@@ -174,8 +172,8 @@
                                 <!-- Tablero -->
                                 <div class="board-container">
                                     <div class="board-tools">
-                                        <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                        <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                        <button class="tool-btn active" data-tool="black" title="LÃ¡piz negro" aria-label="LÃ¡piz negro"><span class="tool-icon-black">âœŽ</span></button>
+                                        <button class="tool-btn" data-tool="red" title="LÃ¡piz rojo" aria-label="LÃ¡piz rojo"><span class="tool-icon-red">âœŽ</span></button>
                                         <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="../Actividad2/assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
                                         <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="../Actividad2/assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
                                         <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="../Actividad2/assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
@@ -186,8 +184,8 @@
                                 <div class="q1-action-row">
                                     <!-- Audio -->
                                     <div class="audio-controls">
-                                        <button id="recordBtnM1Q1" class="btn btn-audio">🎤 Graba tu explicación</button>
-                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="recordBtnM1Q1" class="btn btn-audio">ðŸŽ¤ Graba tu explicaciÃ³n</button>
+                                        <button id="stopBtnM1Q1" class="btn btn-audio hidden">â¹ï¸ Detener</button>
                                         <span id="audioStatusM1Q1" class="audio-status"></span>
                                     </div>
 
@@ -207,8 +205,8 @@
                     </div>
                     
                     <!-- Navigation Controls dentro del libro -->
-                    <button id="prevBtn" class="nav-btn" aria-label="Página anterior">←</button>
-                    <button id="nextBtn" class="nav-btn" aria-label="Página siguiente">→</button>
+                    <button id="prevBtn" class="nav-btn" aria-label="PÃ¡gina anterior">â†</button>
+                    <button id="nextBtn" class="nav-btn" aria-label="PÃ¡gina siguiente">â†’</button>
                 </div>
             </div>
         </div>
@@ -219,36 +217,36 @@
         <div class="container">
             <div class="header">
                 <!-- Momento 2: Organizando pedidos -->
-                <p class="student-code-display">Código: <span id="studentCodeM2"></span></p>
+                <p class="student-code-display">CÃ³digo: <span id="studentCodeM2"></span></p>
             </div>
 
             <div id="problemQ2Section" class="q1-book-spread">
-                <button id="prevBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página anterior">←</button>
-                <button id="nextBtnQ2" class="nav-btn q2-nav-btn" aria-label="Página siguiente">→</button>
+                <button id="prevBtnQ2" class="nav-btn q2-nav-btn" aria-label="PÃ¡gina anterior">â†</button>
+                <button id="nextBtnQ2" class="nav-btn q2-nav-btn" aria-label="PÃ¡gina siguiente">â†’</button>
                 <div class="m2-spread active" data-spread="0">
                     <div class="page-number book-spread-number">
                         <span class="page-number-left">17</span>
                         <span class="page-number-right">18</span>
                     </div>
                     <div class="problem-box q1-left-page">
-                        <h3>Situación 2</h3>
-                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora debes organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
+                        <h3>SituaciÃ³n 2</h3>
+                        <p>DoÃ±a Alicia y Daniel prepararon varios pedidos. Ahora debes organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer mÃ¡s sencillo el despacho.</p>
                         <div class="q2-guide-card">
-                            <p class="q2-guide-title">Guía rápida</p>
+                            <p class="q2-guide-title">GuÃ­a rÃ¡pida</p>
                             <ul class="q2-guide-list">
                                 <li>1. Haz clic en una bolsa para seleccionarla.</li>
                                 <li>2. Haz clic en otra bolsa para formar el par.</li>
                                 <li>3. Repite hasta armar todas las parejas posibles.</li>
                             </ul>
                         </div>
-                        <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
-                        <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
+                        <p class="instruction-hint">ðŸ’¡ Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
+                        <button id="goToCocinaBtn" class="btn btn-cocina">ðŸ‘©â€ðŸ³ Ir a la cocina a organizar</button>
                     </div>
 
                     <div class="evidence-section q1-right-page" id="q2RightPage">
                         <div id="m2PendingCard" class="m2-pending-card">
                             <h4>Tu espacio de resultados</h4>
-                            <p>Cuando termines la organización en cocina, aquí verás cómo quedaron tus parejas.</p>
+                            <p>Cuando termines la organizaciÃ³n en cocina, aquÃ­ verÃ¡s cÃ³mo quedaron tus parejas.</p>
                         </div>
 
                         <div class="m2-preview-card hidden">
@@ -257,14 +255,14 @@
 
                         <div id="finalQuestionSectionM2" class="hidden">
                             <div class="problem-box">
-                                <h3>Para pensar 🤔</h3>
+                                <h3>Para pensar ðŸ¤”</h3>
                                 <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
-                                <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                                <p class="question">Â¿Por quÃ© crees que pasa eso? ExplÃ­calo con tus propias palabras.</p>
 
                                 <div class="m2-inline-actions">
                                     <div class="audio-controls">
-                                        <button id="recordBtnM2" class="btn btn-audio">🎤 Grabar Audio</button>
-                                        <button id="stopBtnM2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                        <button id="recordBtnM2" class="btn btn-audio">ðŸŽ¤ Grabar Audio</button>
+                                        <button id="stopBtnM2" class="btn btn-audio hidden">â¹ï¸ Detener</button>
                                         <span id="audioStatusM2" class="audio-status"></span>
                                     </div>
 
@@ -284,8 +282,8 @@
                         <span class="page-number-right">20</span>
                     </div>
                     <div class="problem-box q1-left-page">
-                        <h3>Tu organización en una foto</h3>
-                        <p>Observa de nuevo cómo quedaron las parejas y los pedidos sin pareja.</p>
+                        <h3>Tu organizaciÃ³n en una foto</h3>
+                        <p>Observa de nuevo cÃ³mo quedaron las parejas y los pedidos sin pareja.</p>
                         <div class="m2-preview-card">
                             
                             <div id="m2PreviewPage19" class="m2-photo-grid"></div>
@@ -294,7 +292,7 @@
 
                     <div class="evidence-section q1-right-page">
                         <h3 class="m2-secret-title">Las bolsas secretas</h3>
-                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo. Esta vez utilizarás bolsas con números secretos. Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
+                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, DoÃ±a Alicia te propuso un reto nuevo. Esta vez utilizarÃ¡s bolsas con nÃºmeros secretos. Regla del juego: las bolsas del mismo color guardan el mismo nÃºmero.</p>
                         <table class="m2-mul-table" aria-label="Tabla de multiplicaciones de pedidos">
                             <tbody>
                                 <tr class="m2-mul-block-title">
@@ -317,13 +315,13 @@
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 3"></td>
-                                    <td class="m2-mul-symbol">×</td>
+                                    <td class="m2-mul-symbol">Ã—</td>
                                     <td><input type="text" aria-label="#panes pedido 3"></td>
                                     <td class="m2-mul-symbol">=</td>
                                     <td><input type="text" aria-label="#panes pedido 3"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 7"></td>
-                                    <td class="m2-mul-symbol">×</td>
+                                    <td class="m2-mul-symbol">Ã—</td>
                                     <td><input type="text" aria-label="#panes pedido 7"></td>
                                     <td class="m2-mul-symbol">=</td>
                                     <td><input type="text" aria-label="#panes pedido 7"></td>
@@ -349,13 +347,13 @@
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 2"></td>
-                                    <td class="m2-mul-symbol">×</td>
+                                    <td class="m2-mul-symbol">Ã—</td>
                                     <td><input type="text" aria-label="#panes pedido 2"></td>
                                     <td class="m2-mul-symbol">=</td>
                                     <td><input type="text" aria-label="#panes pedido 2"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 6"></td>
-                                    <td class="m2-mul-symbol">×</td>
+                                    <td class="m2-mul-symbol">Ã—</td>
                                     <td><input type="text" aria-label="#panes pedido 6"></td>
                                     <td class="m2-mul-symbol">=</td>
                                     <td><input type="text" aria-label="#panes pedido 6"></td>
@@ -381,13 +379,13 @@
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 4"></td>
-                                    <td class="m2-mul-symbol">×</td>
+                                    <td class="m2-mul-symbol">Ã—</td>
                                     <td><input type="text" aria-label="#panes pedido 4"></td>
                                     <td class="m2-mul-symbol">=</td>
                                     <td><input type="text" aria-label="#panes pedido 4"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 8"></td>
-                                    <td class="m2-mul-symbol">×</td>
+                                    <td class="m2-mul-symbol">Ã—</td>
                                     <td><input type="text" aria-label="#panes pedido 8"></td>
                                     <td class="m2-mul-symbol">=</td>
                                     <td><input type="text" aria-label="#panes pedido 8"></td>
@@ -408,9 +406,9 @@
                     </div>
                     <div class="problem-box q1-left-page m2-problem1-left">
                         <h3 class="m2-secret-title">Las bolsas secretas</h3>
-                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, Doña Alicia te propuso un reto nuevo.</p>
-                        <p class="m2-secret-text">Esta vez utilizarás bolsas con números secretos.</p>
-                        <p class="m2-secret-text">Regla del juego: las bolsas del mismo color guardan el mismo número.</p>
+                        <p class="m2-secret-text">Como organizaste muy bien los pedidos, DoÃ±a Alicia te propuso un reto nuevo.</p>
+                        <p class="m2-secret-text">Esta vez utilizarÃ¡s bolsas con nÃºmeros secretos.</p>
+                        <p class="m2-secret-text">Regla del juego: las bolsas del mismo color guardan el mismo nÃºmero.</p>
 
                         <div class="problem-box" style="width:100%;max-width:none;padding:0;border:0;background:transparent;box-shadow:none;">
                             <h3>Problema 1</h3>
@@ -421,11 +419,11 @@
                                     <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                                     <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
-                                <span class="operator">×</span>
+                                <span class="operator">Ã—</span>
                                 <span class="number">4</span>
                                 <span class="operator">=</span>
                                 <span class="number">4</span>
-                                <span class="operator">×</span>
+                                <span class="operator">Ã—</span>
                                 <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
                                     <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
                                     <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
@@ -433,7 +431,7 @@
                                     <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
                             </div>
-                            <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro de la bolsa verde?</p>
+                            <p class="question">Â¿Crees que esta igualdad serÃ¡ verdadera sin importar quÃ© nÃºmero haya dentro de la bolsa verde?</p>
                         </div>
                     </div>
 
@@ -441,7 +439,7 @@
                         <div class="radio-group m2-p21-radio-group">
                             <label class="radio-label">
                                 <input type="radio" name="truthQ1M2" value="yes">
-                                Sí, creo que es verdadera
+                                SÃ­, creo que es verdadera
                             </label>
                             <label class="radio-label">
                                 <input type="radio" name="truthQ1M2" value="no">
@@ -458,8 +456,8 @@
                                 <p id="m2PromptTextQ1"></p>
                             </div>
                             <div class="audio-controls">
-                                <button id="recordBtnM2Q1" class="btn btn-audio">🎤 Grabar Audio</button>
-                                <button id="stopBtnM2Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <button id="recordBtnM2Q1" class="btn btn-audio">ðŸŽ¤ Grabar Audio</button>
+                                <button id="stopBtnM2Q1" class="btn btn-audio hidden">â¹ï¸ Detener</button>
                                 <span id="audioStatusM2Q1" class="audio-status"></span>
                             </div>
                             <div class="submit-section">
@@ -473,14 +471,14 @@
 
             <div id="cocinaScreen" class="cocina-overlay hidden" aria-hidden="true">
                 <div class="cocina-header">
-                    <h2>👩‍🍳 Cocina de Doña Alicia</h2>
+                    <h2>ðŸ‘©â€ðŸ³ Cocina de DoÃ±a Alicia</h2>
                     <p>Empareja los pedidos que tienen la misma cantidad de panes de bono.</p>
                 </div>
 
                 <div class="cocina-body">
                     <div id="traysGameSection">
                         <div id="traysArea" class="trays-container">
-                            <!-- Las 8 bandejas se generan dinámicamente -->
+                            <!-- Las 8 bandejas se generan dinÃ¡micamente -->
                         </div>
                     </div>
                 </div>
@@ -500,15 +498,15 @@
         <div class="container">
             <div class="header">
                 <!-- Momento 3: Las bolsas misteriosas -->
-                <p class="student-code-display">Código: <span id="studentCodeM3"></span></p>
+                <p class="student-code-display">CÃ³digo: <span id="studentCodeM3"></span></p>
             </div>
 
             <div class="problem-box">
-                <p class="student-code-display student-code-corner">Código: <span id="studentCodeM3"></span></p>
-                <p><strong>En cada bolsa hay un número secreto.</strong></p>
+                <p class="student-code-display student-code-corner">CÃ³digo: <span id="studentCodeM3"></span></p>
+                <p><strong>En cada bolsa hay un nÃºmero secreto.</strong></p>
                 <ul style="font-size: 1.1em; line-height: 1.8; margin: 15px 0; padding-left: 40px;">
-                    <li>Las bolsas del mismo color guardan el mismo número.</li>
-                    <li>Las bolsas de diferente color guardan números diferentes.</li>
+                    <li>Las bolsas del mismo color guardan el mismo nÃºmero.</li>
+                    <li>Las bolsas de diferente color guardan nÃºmeros diferentes.</li>
                 </ul>
             </div>
 
@@ -523,11 +521,11 @@
                             <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                             <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                        <span class="operator">×</span>
+                        <span class="operator">Ã—</span>
                         <span class="number">4</span>
                         <span class="operator">=</span>
                         <span class="number">4</span>
-                        <span class="operator">×</span>
+                        <span class="operator">Ã—</span>
                         <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
                             <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
                             <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
@@ -537,11 +535,11 @@
                     </div>
                     
                     <div class="question-section">
-                        <p class="question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro de la bolsa verde?</p>
+                        <p class="question">Â¿Crees que esta igualdad serÃ¡ verdadera sin importar quÃ© nÃºmero haya dentro de la bolsa verde?</p>
                         <div class="radio-group">
                             <label class="radio-label">
                                 <input type="radio" name="truthQ1" value="yes">
-                                Sí, creo que es verdadera
+                                SÃ­, creo que es verdadera
                             </label>
                             <label class="radio-label">
                                 <input type="radio" name="truthQ1" value="no">
@@ -568,8 +566,8 @@
                         <!-- Tablero -->
                         <div class="board-container">
                             <div class="board-tools">
-                                <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                <button class="tool-btn active" data-tool="black" title="LÃ¡piz negro" aria-label="LÃ¡piz negro"><span class="tool-icon-black">âœŽ</span></button>
+                                <button class="tool-btn" data-tool="red" title="LÃ¡piz rojo" aria-label="LÃ¡piz rojo"><span class="tool-icon-red">âœŽ</span></button>
                                 <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="../Actividad2/assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
                                 <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="../Actividad2/assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
                                 <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="../Actividad2/assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
@@ -579,8 +577,8 @@
 
                         <!-- Audio -->
                         <div class="audio-controls">
-                            <button id="recordBtnM3Q1" class="btn btn-audio">🎤 Grabar Audio</button>
-                            <button id="stopBtnM3Q1" class="btn btn-audio hidden">⏹️ Detener</button>
+                            <button id="recordBtnM3Q1" class="btn btn-audio">ðŸŽ¤ Grabar Audio</button>
+                            <button id="stopBtnM3Q1" class="btn btn-audio hidden">â¹ï¸ Detener</button>
                             <span id="audioStatusM3Q1" class="audio-status"></span>
                         </div>
 
@@ -593,7 +591,7 @@
                 </div>
             </div>
 
-            <!-- PROBLEMA 2 (oculto hasta que se envíe el primero) -->
+            <!-- PROBLEMA 2 (oculto hasta que se envÃ­e el primero) -->
             <div id="problem2Section" class="hidden m3-book-spread">
                 <div class="m3-book-left">
                     <h3>Problema 2</h3>
@@ -605,7 +603,7 @@
                             <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
                             <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                        <span class="operator">×</span>
+                        <span class="operator">Ã—</span>
                         <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
                             <rect x="8" y="12" width="44" height="34" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="8"/>
                             <rect x="8" y="12" width="44" height="9" fill="#66BB6A" opacity="0.85" rx="8"/>
@@ -619,7 +617,7 @@
                             <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                             <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round"/>
                         </svg>
-                        <span class="operator">×</span>
+                        <span class="operator">Ã—</span>
                         <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
                             <rect x="8" y="12" width="44" height="34" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="8"/>
                             <rect x="8" y="12" width="44" height="9" fill="#42A5F5" opacity="0.85" rx="8"/>
@@ -628,14 +626,14 @@
                         </svg>
                         </div>
                     </div>
-                    <p class="m3-main-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+                    <p class="m3-main-question">Â¿Piensas que esta igualdad funcionarÃ¡ con cualquier par de nÃºmeros?</p>
                 </div>
 
                 <div class="m3-book-right">
                     <div class="radio-group m3-radio-group">
                         <label class="radio-label">
                             <input type="radio" name="truthQ2" value="yes">
-                            Sí, verdadera
+                            SÃ­, verdadera
                         </label>
                         <label class="radio-label">
                             <input type="radio" name="truthQ2" value="unsure">
@@ -647,7 +645,7 @@
                         </label>
                     </div>
 
-                    <div id="m3Q2ChoicePlaceholder" class="m3-choice-placeholder">Elige una opción para activar este espacio de explicación.</div>
+                    <div id="m3Q2ChoicePlaceholder" class="m3-choice-placeholder">Elige una opciÃ³n para activar este espacio de explicaciÃ³n.</div>
 
                     <div id="promptSection2" class="hidden">
                         <div class="prompt-box">
@@ -661,8 +659,8 @@
                             <!-- Tablero -->
                             <div class="board-container">
                                 <div class="board-tools">
-                                    <button class="tool-btn active" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro"><span class="tool-icon-black">✎</span></button>
-                                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo"><span class="tool-icon-red">✎</span></button>
+                                    <button class="tool-btn active" data-tool="black" title="LÃ¡piz negro" aria-label="LÃ¡piz negro"><span class="tool-icon-black">âœŽ</span></button>
+                                    <button class="tool-btn" data-tool="red" title="LÃ¡piz rojo" aria-label="LÃ¡piz rojo"><span class="tool-icon-red">âœŽ</span></button>
                                     <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador"><img src="../Actividad2/assets/images/resaltador.png" alt="Resaltador" class="tool-icon-image"></button>
                                     <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador"><img src="../Actividad2/assets/images/borrador.png" alt="Borrador" class="tool-icon-image"></button>
                                     <button class="tool-btn clear-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero"><img src="../Actividad2/assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="tool-icon-image"></button>
@@ -672,8 +670,8 @@
 
                             <!-- Audio -->
                             <div class="audio-controls">
-                                <button id="recordBtnM3Q2" class="btn btn-audio">🎤 Grabar Audio</button>
-                                <button id="stopBtnM3Q2" class="btn btn-audio hidden">⏹️ Detener</button>
+                                <button id="recordBtnM3Q2" class="btn btn-audio">ðŸŽ¤ Grabar Audio</button>
+                                <button id="stopBtnM3Q2" class="btn btn-audio hidden">â¹ï¸ Detener</button>
                                 <span id="audioStatusM3Q2" class="audio-status"></span>
                             </div>
 
@@ -701,29 +699,29 @@
                     <h3>El reto final</h3>
 
                     <div class="m4-story-card">
-                        <p>Después de pensar con bandejas y con sobres, Doña Alicia sonrió y le dijo a Daniel: "Ahora sí viene el reto final".</p>
-                        <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
-                        <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
+                        <p>DespuÃ©s de pensar con bandejas y con sobres, DoÃ±a Alicia sonriÃ³ y le dijo a Daniel: "Ahora sÃ­ viene el reto final".</p>
+                        <p>En cada igualdad falta un nÃºmero escondido. Tu misiÃ³n es descubrir cuÃ¡l debe ir allÃ­ para que la igualdad sea verdadera.</p>
+                        <p>Si lo haces con cuidado, verÃ¡s que la idea del orden sigue apareciendo una y otra vez.</p>
                     </div>
 
                     <div class="magic-lives-container">
-                        <span class="magic-label">✨ Vidas mágicas:</span>
+                        <span class="magic-label">âœ¨ Vidas mÃ¡gicas:</span>
                         <div id="magicLives" class="magic-lives">
-                            <span class="magic-heart">❤️</span>
-                            <span class="magic-heart">❤️</span>
-                            <span class="magic-heart">❤️</span>
+                            <span class="magic-heart">â¤ï¸</span>
+                            <span class="magic-heart">â¤ï¸</span>
+                            <span class="magic-heart">â¤ï¸</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="m4-right-page">
-                    <p class="student-code-display">Código: <span id="studentCodeM4"></span></p>
+                    <p class="student-code-display">CÃ³digo: <span id="studentCodeM4"></span></p>
 
-                    <p class="instruction magic-instruction">🔮 ¿Qué número revelará el hechizo para que la igualdad sea verdadera?</p>
+                    <p class="instruction magic-instruction">ðŸ”® Â¿QuÃ© nÃºmero revelarÃ¡ el hechizo para que la igualdad sea verdadera?</p>
 
                     <div class="items-container">
                         <div id="itemsWrapper">
-                            <!-- Las 6 preguntas se generarán dinámicamente con JavaScript -->
+                            <!-- Las 6 preguntas se generarÃ¡n dinÃ¡micamente con JavaScript -->
                         </div>
 
                         <p id="moment4Status" class="status-text"></p>
@@ -731,10 +729,10 @@
 
                         <div id="finalQuestionSection" class="hidden">
                             <div class="final-box">
-                                <h3>¡Felicitaciones! 🎉</h3>
+                                <h3>Â¡Felicitaciones! ðŸŽ‰</h3>
                                 <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
-                                <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
-                                <p class="thank-you-sub">¡Gracias por participar!</p>
+                                <p class="thank-you">Â¿El orden de los factores altera el producto o no?</p>
+                                <p class="thank-you-sub">Â¡Gracias por participar!</p>
                             </div>
                         </div>
                     </div>
@@ -749,10 +747,10 @@
             <div id="moment4ReflectionSection" class="m4-book-spread hidden">
                 <div class="m4-left-page">
                     <div class="final-story-card">
-                        <h3>¡Llegaste al final del cuento! 🌟</h3>
-                        <p>Daniel y Doña Alicia están muy felices porque llegaste hasta el final y resolviste cada reto con dedicación.</p>
+                        <h3>Â¡Llegaste al final del cuento! ðŸŒŸ</h3>
+                        <p>Daniel y DoÃ±a Alicia estÃ¡n muy felices porque llegaste hasta el final y resolviste cada reto con dedicaciÃ³n.</p>
                         <p>Gracias por pensar, probar y explicar tus ideas durante toda la actividad.</p>
-                        <p>Antes de cerrar el libro, cuéntanos cómo te sentiste con esta actividad.</p>
+                        <p>Antes de cerrar el libro, cuÃ©ntanos cÃ³mo te sentiste con esta actividad.</p>
                     </div>
                 </div>
 
@@ -760,13 +758,13 @@
                     <div class="reflection-card">
                         <h4>Esta actividad fue:</h4>
                         <div class="reflection-options">
-                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fácil</label>
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="facil"> fÃ¡cil</label>
                             <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="interesante"> interesante</label>
-                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="dificil"> difícil</label>
+                            <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="dificil"> difÃ­cil</label>
                             <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="pensar-mucho"> me hizo pensar mucho</label>
                             <label class="reflection-option"><input type="checkbox" name="m4Reflection" value="confusa"> confusa</label>
                         </div>
-                        <p class="reflection-hint">Selecciona al menos una opción para continuar (máximo dos).</p>
+                        <p class="reflection-hint">Selecciona al menos una opciÃ³n para continuar (mÃ¡ximo dos).</p>
                         <p id="m4ReflectionStatus" class="reflection-status"></p>
                         <button id="finishM4Btn" class="btn btn-primary" disabled>Finalizar actividad</button>
                     </div>
@@ -777,7 +775,7 @@
                 </div>
             </div>
 
-            <!-- Canvas para efectos mágicos -->
+            <!-- Canvas para efectos mÃ¡gicos -->
             <canvas id="magicCanvas" class="magic-canvas"></canvas>
             <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
         </div>
@@ -785,7 +783,7 @@
 
     <!-- Scripts -->
     <script src="bags-system-0b.js?v=2026031709"></script>
-    <script type="module" src="main-0b.js?v=2026031716"></script>
-    <script src="app.js?v=2026031702"></script>
+    <script type="module" src="main.js?v=2026040101"></script>
 </body>
 </html>
+
