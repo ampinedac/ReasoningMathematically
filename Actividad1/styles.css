@@ -37,8 +37,7 @@ body {
   background: url('../Actividad1/assets/images/Fondo.png') no-repeat center center fixed;
   background-size: cover;
   font-family: var(--font-general);
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0;
   justify-content: center;
 }
 
@@ -400,13 +399,25 @@ body #ContenedorLibro .activity-spread {
 #ContenedorLibro { /* Permite scroll interno si hay muchos spreads */
   overflow-y: auto;
   align-items: center; /* Centra horizontalmente el libro dentro del contenedor */
-  justify-content: flex-start; /* Alinea los spreads al inicio (arriba) */
+  justify-content: center; /* Centra verticalmente el libro */
   gap: var(--gap-lg);
+  min-height: 100vh;
+  width: 100%;
   height: auto !important;
   max-height: none !important;
   overflow: visible !important;
   flex-direction: column !important;
+  box-sizing: border-box;
   }
+
+/* Respaldo: en pantallas bajas prioriza visibilidad completa sobre centrado vertical */
+@media (max-height: 760px) {
+  #ContenedorLibro {
+    justify-content: flex-start;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+}
 
  #ContenedorLibro .page.q1-book-spread,
  #ContenedorLibro .activity-spread {
@@ -734,6 +745,37 @@ body #ContenedorLibro .activity-spread {
        .radio-label { /* Estilo de las etiquetas de opcion multiple en la situación 3 */
         display: block;
         }
+
+      #promptSection1,
+      #promptSection2 { /* Contenedor de respuesta guiada en páginas 16 y 18 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.55em;
+        width: 100%;
+        margin-top: 0.35em;
+      }
+
+      #promptSection1 .prompt-box,
+      #promptSection2 .prompt-box { /* Fondo destacado para resaltar la pregunta */
+        width: 94%;
+        padding: 0.6em 0.8em;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(238, 243, 255, 0.95) 100%);
+        border: 2px solid rgba(29, 78, 216, 0.26);
+        box-shadow: 0 8px 18px rgba(30, 64, 175, 0.18);
+      }
+
+      #promptSection1 .prompt-box p,
+      #promptSection2 .prompt-box p {
+        margin: 0;
+        text-align: center;
+        font-family: 'Rancho', cursive;
+        font-size: clamp(1.35rem, 1.9vw, 1.85rem);
+        color: #163261;
+        line-height: 1.25;
+      }
         
         /* =====================================================================================================
         Páginas 19 y  20 Reto final
@@ -747,12 +789,41 @@ body #ContenedorLibro .activity-spread {
           object-fit: contain;
           padding: 0.5vw;
         }
+
+        input[type="radio"] { /* Estilo de los botones de opción múltiple en la situación 4 */
+          size: 5px;
+          }
         
         /* =====================================================================================================
         Páginas 21 y  22 Reto final
         ===================================================================================================== */
         .reflection-option { /* Estilo de las etiquetas de opcion multiple en la situación 4 */
         display: block;
+        }
+
+        .reflection-audio-box {
+          width: 100%;
+          margin-top: 0.35em;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.3em;
+        }
+
+        .reflection-audio-title {
+          margin: 0;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.35rem, 1.9vw, 1.8rem);
+          color: #123d77;
+        }
+
+        #statusM4Reflection.status-text {
+          text-align: center;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1rem, 1.3vw, 1.2rem);
+          min-height: 1.4em;
+          margin: 0;
         }
 
 /* =====================================================================================================
@@ -1220,4 +1291,16 @@ body #ContenedorLibro .activity-spread {
   margin: 0.4em 0 0;
   text-align: center;
   min-height: 1.8em;
+}
+
+/* Entrada del reto final sin flechas del input numérico */
+#itemsWrapper .magic-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+#itemsWrapper .magic-input[type="number"]::-webkit-outer-spin-button,
+#itemsWrapper .magic-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

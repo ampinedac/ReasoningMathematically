@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudioRecorder('M1Q2');
     initAudioRecorder('M3Q1');
     initAudioRecorder('M3Q2');
+    initAudioRecorder('M4Reflection');
     initRadioSpreads();
     initCocinaSystem();
     initM4();
@@ -332,6 +333,13 @@ function updateNavButtons() {
         next.disabled = !canGoNext;
         next.style.opacity = canGoNext ? '1' : '0.3';
         next.style.cursor  = canGoNext ? 'pointer' : 'not-allowed';
+
+        // En el último spread, el envío se hace con el botón de audio, no con flecha
+        if (currentSpread === total - 1) {
+            next.style.display = 'none';
+        } else {
+            next.style.display = 'flex';
+        }
     }
 }
 
@@ -515,7 +523,7 @@ function canvasToBlob(canvasId) {
 // ─────────────────────────────────────────────
 // 7. GRABACIÓN DE AUDIO (genérica por tag)
 // ─────────────────────────────────────────────
-// tag: 'M1Q1' | 'M1Q2' | 'M3Q1' | 'M3Q2'
+// tag: 'M1Q1' | 'M1Q2' | 'M3Q1' | 'M3Q2' | 'M4Reflection'
 function initAudioRecorder(tag) {
     const recordBtn = document.getElementById(`recordBtn${tag}`);
     const stopBtn   = document.getElementById(`stopBtn${tag}`);
@@ -641,8 +649,32 @@ async function handleSubmit(tag) {
         });
 
         if (statusEl) {
-            statusEl.textContent = '✅ Guardado. Ya puedes pasar a la siguiente página.';
+            statusEl.textContent = tag === 'M4Reflection'
+                ? '✅ Audio enviado. Finalizando actividad...'
+                : '✅ Guardado. Ya puedes pasar a la siguiente página.';
             statusEl.style.color = '#16a34a';
+        }
+
+        // En el último spread, el envío del audio final dispara el formulario de cierre.
+        if (tag === 'M4Reflection') {
+            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
+            if (checked.length === 0) {
+                if (statusEl) {
+                    statusEl.textContent = 'Selecciona al menos una opción antes de enviar.';
+                    statusEl.style.color = '#dc2626';
+                }
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+                return;
+            }
+
+            if (statusEl) {
+                statusEl.textContent = 'Enviando respuestas finales...';
+                statusEl.style.color = '#555';
+            }
+            submitEncuesta(checked);
+            return;
         }
 
         // Marcar como enviado y desbloquear navegación
@@ -1013,7 +1045,7 @@ function checkAnswer(correctValue) {
             renderExercise(m4CurrentEx);
         }, 800);
     } else {
-        // Incorrecto
+        // Respuesta no válida
         m4Errors++;
         m4AttemptsOnCurrent++;
 
@@ -1021,24 +1053,10 @@ function checkAnswer(correctValue) {
         if (m4Lives > 0) m4Lives--;
         renderLives();
 
-        // ¿Quedó sin vidas?
-        if (m4Lives === 0) {
-            if (statusEl) {
-                statusEl.textContent = '💔 ¡Se acabaron las vidas mágicas! Sigue adelante con valentía.';
-                statusEl.style.color = '#dc2626';
-            }
-            m4CurrentEx++;
-            setTimeout(() => {
-                if (statusEl) statusEl.textContent = '';
-                renderExercise(m4CurrentEx);
-            }, 1200);
-            return;
-        }
-
         if (m4AttemptsOnCurrent >= 2) {
             // Segundo error en este ejercicio → pasar al siguiente
             if (statusEl) {
-                statusEl.textContent = `❌ Dos errores en este ejercicio. ¡Sigamos!`;
+                statusEl.textContent = `Vamos a cambiar de pregunta`;
                 statusEl.style.color = '#dc2626';
             }
             m4CurrentEx++;
@@ -1051,11 +1069,9 @@ function checkAnswer(correctValue) {
         } else {
             // Primer error → advertencia
             if (statusEl) {
-                statusEl.textContent = `❌ Incorrecto. ¿Estás segura? Intenta de nuevo.`;
+                statusEl.textContent = ` ¿Estás segur@? Intenta de nuevo.`;
                 statusEl.style.color = '#dc2626';
             }
-            const input = document.getElementById('m4Input');
-            if (input) input.value = '';
         }
     }
 }
@@ -1066,21 +1082,30 @@ async function finalizeM4() {
 
     const points = m4Lives; // Puntos = vidas que quedan
     const finalSection = document.getElementById('finalQuestionSection');
+    const finalTitleEl = finalSection?.querySelector('h3');
+    const finalQuestionEl = finalSection?.querySelector('.final-question');
+    const thankYouEl = finalSection?.querySelector('.thank-you');
+    const thankYouSubEl = finalSection?.querySelector('.thank-you-sub');
     const totalPointsEl = document.getElementById('totalPoints');
     const pointsStatus  = document.getElementById('pointsStatus');
 
     if (totalPointsEl) totalPointsEl.textContent = points;
     if (finalSection)  finalSection.style.display = '';
 
-    if (pointsStatus) {
-        if (points > 0) {
-            pointsStatus.textContent = `🌟 ¡Ganaste ${points} punto${points > 1 ? 's' : ''} de ClassDojo!`;
-            pointsStatus.style.color = '#f59e0b';
-        } else {
-            pointsStatus.textContent = 'Sigue practicando, ¡lo harás mejor la próxima vez!';
-            pointsStatus.style.color = '#6b7280';
+    if (points > 0) {
+        if (finalTitleEl) finalTitleEl.textContent = '¡Felicitaciones! 🎉';
+        if (finalQuestionEl) {
+            finalQuestionEl.innerHTML = `Ganaste <strong id="totalPoints">${points}</strong> puntos positivos`;
         }
+        if (thankYouEl) thankYouEl.textContent = '¡Gracias por participar!';
+    } else {
+        if (finalTitleEl) finalTitleEl.textContent = '¡Felicitaciones!';
+        if (finalQuestionEl) finalQuestionEl.textContent = 'Llegaste al final de la Actividad 1.';
+        if (thankYouEl) thankYouEl.textContent = '¡Gracias por participar!';
     }
+
+    if (thankYouSubEl) thankYouSubEl.style.display = 'none';
+    if (pointsStatus) pointsStatus.textContent = '';
 
     // Enviar resultado a Firebase
     try {
@@ -1126,28 +1151,8 @@ function initEncuesta() {
         });
     });
 
-    // Botón de envío final (siguiente en el último spread)
-    // Se dispara cuando el usuario llega al spread 21-22 y hace click en "siguiente"
-    // pero también al detectar que ya respondió al menos 1 opción.
-    // Usamos el nextBtn del último spread como trigger de envío + redirect.
-    const nextBtn = document.getElementById('nextBtn');
-    if (!nextBtn) return;
-
-    // Reemplazamos el listener del nextBtn para el último spread
-    // La lógica de reinicialización ocurre en updateNavButtons, aquí solo capturamos el caso especial.
-    document.addEventListener('click', e => {
-        if (e.target.id !== 'nextBtn' && !e.target.closest('#nextBtn')) return;
-        const spreads = getSpreads();
-        if (currentSpread !== spreads.length - 1) return; // Solo actuar en el último spread
-
-        const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
-        if (checked.length === 0) {
-            alert('Por favor selecciona al menos una opción antes de continuar.');
-            return;
-        }
-
-        submitEncuesta(checked);
-    });
+    // El envío del formulario final se ejecuta desde initNavigation
+    // cuando el usuario está en el último spread y pulsa "siguiente".
 }
 
 async function submitEncuesta(checkedBoxes) {
