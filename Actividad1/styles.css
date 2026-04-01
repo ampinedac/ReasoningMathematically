@@ -342,7 +342,7 @@ body #ContenedorLibro .activity-spread {
   
 /* Imagen 'Léeme' como botón directamente */
 #ContenedorPortada .cover-leer-image {
-  width: 20%; /* Tamaño del botón, ajustable según diseño */
+  width: 30%; /* Tamaño del botón, ajustable según diseño */
   display: block;
   align-items: center;
   justify-content: center;
@@ -504,7 +504,7 @@ body #ContenedorLibro .activity-spread {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   font-size: clamp(2rem, 3vw, 2.2rem);
   margin-bottom: 0.3em;
   margin-top: 0.3em;

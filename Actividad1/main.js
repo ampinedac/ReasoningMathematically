@@ -428,13 +428,16 @@ function initBoard() {
 
     const wrapper = canvas.parentElement;
     const ctx = canvas.getContext('2d');
+    let boardWidth = 1;
+    let boardHeight = 1;
 
     const resize = () => {
         const rect = wrapper.getBoundingClientRect();
         const width = Math.max(Math.floor(rect.width), 1);
         const height = Math.max(Math.floor(rect.height), 1);
+        const dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-        if (canvas.width === width && canvas.height === height) return;
+        if (canvas.width === Math.floor(width * dpr) && canvas.height === Math.floor(height * dpr)) return;
 
         const snapshot = document.createElement('canvas');
         snapshot.width = canvas.width;
@@ -444,11 +447,19 @@ function initBoard() {
             snapshot.getContext('2d').drawImage(canvas, 0, 0);
         }
 
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        boardWidth = width;
+        boardHeight = height;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
 
         if (snapshot.width > 0 && snapshot.height > 0) {
-            ctx.drawImage(snapshot, 0, 0, width, height);
+            ctx.drawImage(snapshot, 0, 0, snapshot.width, snapshot.height, 0, 0, width, height);
         }
     };
 
@@ -478,24 +489,26 @@ function initBoard() {
         e.preventDefault();
         drawing = true;
         const { x, y } = getPos(e);
+        applyToolStyle(ctx, tool);
         ctx.beginPath();
         ctx.moveTo(x, y);
-        applyToolStyle(ctx, tool);
+        ctx.lineTo(x, y);
+        ctx.stroke();
     };
 
     const draw = e => {
         if (!drawing) return;
         e.preventDefault();
         const { x, y } = getPos(e);
-        if (tool === 'eraser') {
-            ctx.clearRect(x - 6, y - 6, 12, 12);
-        } else {
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
+        ctx.lineTo(x, y);
+        ctx.stroke();
     };
 
-    const endDraw = () => { drawing = false; };
+    const endDraw = () => {
+        if (!drawing) return;
+        drawing = false;
+        ctx.closePath();
+    };
 
     canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', draw);
@@ -512,7 +525,7 @@ function initBoard() {
             setBoardCursor(canvas, tool);
             if (tool === 'clear') {
                 if (confirm('Estas segur@ de que quieres limpiar todo el tablero?')) {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.clearRect(0, 0, boardWidth, boardHeight);
                 }
                 tool = 'black';
                 setBoardCursor(canvas, tool);
@@ -540,21 +553,27 @@ function setBoardCursor(canvas, tool) {
 function applyToolStyle(ctx, tool) {
     ctx.lineJoin = 'round';
     ctx.lineCap  = 'round';
+    ctx.imageSmoothingEnabled = true;
     if (tool === 'black') {
         ctx.globalAlpha     = 1;
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle     = '#000000';
-        ctx.lineWidth       = 3;
+        ctx.lineWidth       = 4;
     } else if (tool === 'red') {
         ctx.globalAlpha     = 1;
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle     = '#e53e3e';
-        ctx.lineWidth       = 3;
+        ctx.lineWidth       = 4;
     } else if (tool === 'yellow') {
         ctx.globalAlpha     = 0.5;
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle     = '#f6e05e';
         ctx.lineWidth       = 14;
+    } else if (tool === 'eraser') {
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+        ctx.lineWidth = 18;
     }
 }
 
