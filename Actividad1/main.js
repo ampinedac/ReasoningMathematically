@@ -47,6 +47,7 @@ const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
 // ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
+    normalizeNavigationLabels();
     initVisibility();
     initWelcome();
     initConfirmation();
@@ -67,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 1. VISIBILIDAD INICIAL
 // ─────────────────────────────────────────────
 function initVisibility() {
+    show('ContenedorBienvenida');
     hide('ContenedorConfirmacion');
     hide('ContenedorPortada');
     hide('ContenedorLibro');
@@ -87,6 +89,21 @@ function initVisibility() {
     hide('finalQuestionSection');
     hide('magicCanvas');
     hide('confettiCanvas');
+}
+
+function normalizeNavigationLabels() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (prevBtn) {
+        prevBtn.textContent = '\u2190';
+        prevBtn.setAttribute('aria-label', 'Pagina anterior');
+    }
+
+    if (nextBtn) {
+        nextBtn.textContent = '\u2192';
+        nextBtn.setAttribute('aria-label', 'Pagina siguiente');
+    }
 }
 
 function show(id) {
