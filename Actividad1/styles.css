@@ -26,8 +26,8 @@
   --gap-md: 1vw;
   --gap-sm: 0.5vw;
   /* Tamaños libro */
-  --spread-width: 95%;
-  --spread-height: 95%;
+  --spread-width: 90%;
+  --spread-height: 90%;
 }
 
 /* =====================================================================================================
@@ -39,6 +39,7 @@ body {
   font-family: var(--font-general);
   margin-left: auto;
   margin-right: auto;
+  justify-content: center;
 }
 
 .author-credit,
@@ -158,12 +159,10 @@ body {
  }
 
  
-/* ====== REGLA TEMPORAL PARA MOSTRAR TODO ====== */
-#ContenedorPortada,
-#ContenedorLibro,
+/* Contenedores controlados por JS — visibilidad manejada en main.js */
 #ContenedorLibro .page.q1-book-spread,
 #ContenedorLibro .activity-spread {
-  visibility: visible !important;
+  position: relative;
 }
 
 
@@ -345,15 +344,44 @@ body {
   display: none !important;
 }
 
+/* =====================================================================================================
+   Botones de navegación del libro (anterior/siguiente) → AJUSTES GENERALES
+===================================================================================================== */
+.nav-btn, #prevBtn, #nextBtn {
+    position: absolute;
+    top: 50%; /* Centra verticalmente el botón respecto al contenedor del libro */
+    transform: translateY(-50%);
+    background: var(--pastel-azul-num);
+    border: white solid 2px;
+    border-radius: 10%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    color: white; /* Color del texto (flechas) */
+    font-size: 2rem; /* Tamaño de las flechas */
+   }
+  
+   #prevBtn {
+   left: 1rem;
+   z-index: 100;    
+   }
 
+   #nextBtn {
+   right: 1rem;
+   z-index: 100;
+   }
 
 /* =====================================================================================================
    LIBRO Y SPREADS
 ===================================================================================================== */
 #ContenedorLibro { /* Permite scroll interno si hay muchos spreads */
   overflow-y: auto;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: center; /* Centra horizontalmente el libro dentro del contenedor */
+  justify-content: flex-start; /* Alinea los spreads al inicio (arriba) */
   gap: var(--gap-lg);
   height: auto !important;
   max-height: none !important;
@@ -365,7 +393,7 @@ body {
  #ContenedorLibro .activity-spread {
   width: var(--spread-width); /* Ancho del spread definido por variable CSS */
   height: var(--spread-height);
-  max-width: 1200px;
+  max-width: 90%;
   max-height: 92vh;
   margin: 0.5em auto;
   display: flex; /* Flexbox para organizar las páginas internas del spread */
@@ -647,23 +675,48 @@ body {
         align-items: center;
         margin-top: 4%; 
         margin-bottom: 4%;
+        background-color: white;
+        border-radius: 16px;
+        border-style: solid;
+        border-width: 2px;
+        border-color: #190bdb;
+        width: 90%;
         }
         .operator { /* Estilo del por e igual en la situación 3 */
        font-family: 'Arial', sans-serif; /* O la fuente que prefieras */
        font-size: 2.2em;
-       color: #000000; 
+       color: #b10505; 
        }
        .rect, .number { /* Estilo de los sobres y números en la situación 3 */
        font-family: 'Rancho', cursive; /* O la fuente que prefieras */
        font-size: 1.5em;
-       color: #000000; 
+       color: #029c31; 
+       font-weight: bold;
        }
 
        .radio-label { /* Estilo de las etiquetas de opcion multiple en la situación 3 */
         display: block;
         }
-
         
+        /* =====================================================================================================
+        Páginas 19 y  20 Reto final
+        ===================================================================================================== */     
+        .q1-right-page.magic-theme { /* Estilo del tema mágico en la situación 4 */
+          width: 95%;
+          height: 100%;
+          max-width: 400px;
+          max-height: 30%;
+          margin: auto;
+          object-fit: contain;
+          padding: 0.5vw;
+        }
+        
+        /* =====================================================================================================
+        Páginas 21 y  22 Reto final
+        ===================================================================================================== */
+        .reflection-option { /* Estilo de las etiquetas de opcion multiple en la situación 4 */
+        display: block;
+        }
 
 /* =====================================================================================================
   PLIEGUE CENTRAL (SEPARADOR ENTRE PÁGINAS)
@@ -681,38 +734,91 @@ body {
   z-index: 20; /* Asegura que el pliegue esté por encima de las páginas para crear el efecto de separación */
   margin-left: 0.2vw;
   margin-right: 0.2vw;
-  min-height: 400px;
+  min-height: 500px;
 }
 
 
 /* =====================================================================================================
    NUMERACIÓN DE PÁGINAS
 ===================================================================================================== */
- .q1-left-page .page-number, .q1-right-page .page-number, .left-page .page-number, .right-page .page-number {
+#ContenedorLibro .page.q1-book-spread > .page-number,
+#ContenedorLibro .activity-spread > .page-number {
   position: absolute;
   bottom: 1.2vw;
   font-family: var(--font-titulo);
   font-size: clamp(1.2rem, 2vw, 2rem);
   color: var(--pastel-azul-num);
-  opacity: 1;
   letter-spacing: 0.04em;
   user-select: none;
- }
- 
- .q1-left-page .page-number, .left-page .page-number {
-  left: 2vw;}
+  z-index: 30;
+}
 
- .q1-right-page .page-number, .right-page .page-number {
-  right: 2vw;}
+#ContenedorLibro .page.q1-book-spread > .page-number-left,
+#ContenedorLibro .activity-spread > .page-number-left {
+  left: 2vw;
+}
+
+#ContenedorLibro .page.q1-book-spread > .page-number-right,
+#ContenedorLibro .activity-spread > .page-number-right {
+  right: 2vw;
+}
 
 /* =====================================================================================================
   Botones página 12 tablero y Primera pregunta
 ===================================================================================================== */
 
 
+/* =====================================================================================================
+  CONTENEDOR COCINA
+===================================================================================================== */
+  #ContenedorCocina {
+  position: relative;
+  width: 90%;
+  max-width: 90%;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+  border: 3px solid rgba(180, 138, 0, .25);
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  padding: 2vw;
+  border-radius: 14px;
+  }
 
-/* Overlay de la cocina (sin cambios) */
-.cocina-overlay {
+  .cocina-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  }
+
+
+ .cocina-header h2 {
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: #8000ff;
+  justify-content: center;
+  align-items: center;
+  }
+ .cocina-header p {
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(2rem, 3vw, 3rem);
+  color: #8000ff;
+  justify-content: center;
+  align-items: center;
+  }
+
+  
+  #ContenedorCocina #cocinaScreen {
+  width: 100%;
+  height: 100vh;}
+
+  /* Overlay de la cocina (sin cambios) */
+ .cocina-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -726,5 +832,7 @@ body {
   justify-content: flex-start;
   overflow-y: auto;
   box-shadow: 0 0 32px 0 rgba(0,0,0,0.12);
-}
+  padding: 2vw;
+  box-sizing: border-box;
+  }
 
