@@ -789,13 +789,91 @@ body #ContenedorLibro .activity-spread {
         Páginas 19 y  20 Reto final
         ===================================================================================================== */     
         .q1-right-page.magic-theme { /* Estilo del tema mágico en la situación 4 */
-          width: 95%;
-          height: 95%;
-          max-width: 400px;
-          max-height: 70%;
-          margin: auto;
-          object-fit: contain;
-          padding: 0.5vw;
+          width: 100%;
+          height: 100%;
+          max-width: none;
+          max-height: none;
+          margin: 0;
+          padding: 0.8rem 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.65rem;
+        }
+
+        .magic-instruction {
+          width: 90%;
+          margin: 0;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(2rem, 2.7vw, 2.6rem);
+          line-height: 1.15;
+        }
+
+        .magic-lives-box {
+          width: 90%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.45rem 0.6rem;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.42);
+          border: 1px solid rgba(255, 255, 255, 0.55);
+          box-shadow: 0 6px 16px rgba(29, 78, 216, 0.12);
+        }
+
+        .magic-label {
+          margin: 0;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(2rem, 2.6vw, 2.4rem);
+          color: #0d2f63;
+        }
+
+        .magic-lives {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+          width: 100%;
+        }
+
+        .magic-heart {
+          font-size: clamp(1.9rem, 2.5vw, 2.2rem);
+        }
+
+        #itemsWrapper {
+          width: 90%;
+          display: flex;
+          justify-content: center;
+        }
+
+        .magic-equation {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.55rem;
+        }
+
+        .magic-equation-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(2rem, 2.5vw, 2.5rem);
+          color: #0a0a0a;
+        }
+
+        .magic-equation .btn {
+          margin: 0;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.3rem, 1.8vw, 1.6rem);
         }
 
         input[type="radio"] { /* Estilo de los botones de opción múltiple en la situación 4 */
@@ -826,12 +904,14 @@ body #ContenedorLibro .activity-spread {
           color: #123d77;
         }
 
-        #statusM4Reflection.status-text, #statusM1Q1Reflection.status-text, #statusM1Q2Reflection.status-text, #statusM3Q1.status-text, #statusM3Q2.status-text { /* Estilo del texto de estado en las reflexiones finales */
+        .q1-left-page p.status-text,
+        .q1-right-page p.status-text { /* Estilo unificado para todos los textos de estado del audio*/
           text-align: center;
           font-family: 'Lobster Two', cursive;
           font-size: clamp(1rem, 1.3vw, 1.2rem);
           min-height: 1.4em;
           margin: 0;
+          line-height: 1.2;
         }
 
 /* =====================================================================================================

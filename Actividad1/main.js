@@ -36,6 +36,7 @@ let cocinaCompleted = false;
 
 // Ejercicios M4
 let m4Lives = 3;
+let m4Submitted = false; // habilita siguiente solo cuando termina el reto final
 let m4Errors = 0;       // total de errores acumulados
 let m4CurrentEx = 0;    // ejercicio actual (0-based)
 let m4Exercises = [];   // array con los 5 ejercicios generados
@@ -1034,6 +1035,7 @@ function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
 // 11. SPREAD 19-20 – EJERCICIOS DE CONMUTATIVIDAD
 // ─────────────────────────────────────────────
 function initM4() {
+    m4Submitted = false;
     m4Exercises = generateExercises(5);
     renderExercise(m4CurrentEx);
 }
@@ -1069,9 +1071,10 @@ function renderExercise(index) {
     // a × b = [input] × a
     const container = document.createElement('div');
     container.className = 'magic-equation';
-    container.style.cssText = 'display:flex;align-items:center;gap:10px;font-size:1.5rem;flex-wrap:wrap;justify-content:center;';
+    const equationRow = document.createElement('div');
+    equationRow.className = 'magic-equation-row';
 
-    container.innerHTML = `
+    equationRow.innerHTML = `
         <span class="magic-num">${a}</span>
         <span class="magic-op">×</span>
         <span class="magic-num">${b}</span>
@@ -1087,9 +1090,10 @@ function renderExercise(index) {
     const checkBtn = document.createElement('button');
     checkBtn.textContent = '✔ Verificar';
     checkBtn.className = 'btn btn-primary';
-    checkBtn.style.cssText = "margin-left:12px;font-size:1rem;font-family:'Rancho',cursive;";
+    checkBtn.style.cssText = "font-family:'Rancho',cursive;";
     checkBtn.addEventListener('click', () => checkAnswer(b));
 
+    container.appendChild(equationRow);
     container.appendChild(checkBtn);
     wrapper.appendChild(container);
 
