@@ -1,8 +1,31 @@
 // main.js - Lógica principal de la aplicación
-import { db, storage, collection, addDoc, serverTimestamp, ref, uploadBytes, getDownloadURL } from './firebase2.js';
 import './assets/estudiantes-data.js';
 
-console.log('✅ Firebase cargado correctamente');
+let db = null;
+let storage = null;
+let collection = null;
+let addDoc = null;
+let serverTimestamp = null;
+let ref = null;
+let uploadBytes = null;
+let getDownloadURL = null;
+
+async function initializeFirebase() {
+    try {
+        const firebaseModule = await import('./firebase2.js');
+        db = firebaseModule.db;
+        storage = firebaseModule.storage;
+        collection = firebaseModule.collection;
+        addDoc = firebaseModule.addDoc;
+        serverTimestamp = firebaseModule.serverTimestamp;
+        ref = firebaseModule.ref;
+        uploadBytes = firebaseModule.uploadBytes;
+        getDownloadURL = firebaseModule.getDownloadURL;
+        console.log('✅ Firebase cargado correctamente');
+    } catch (error) {
+        console.warn('⚠️ Firebase no se pudo cargar al inicio. La actividad continuará sin guardado en línea.', error);
+    }
+}
 
 // ========================================
 // VARIABLES GLOBALES
@@ -160,6 +183,7 @@ const FINAL_SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeNKfEc_IzO3V
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Aplicación iniciada');
     console.log('📅 Fecha:', new Date().toLocaleString());
+    initializeFirebase();
     // Siempre forzar flujo: bienvenida -> confirmación -> actividad
     // No cargar datos previos automáticamente, solo después de confirmar
     studentCode = null;
@@ -170,9 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initWelcomeScreen();
     initConfirmationScreen();
     // Mostrar solo la pantalla de bienvenida al inicio
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    if (welcomeScreen) welcomeScreen.classList.add('active');
+    showScreen('welcomeScreen');
 });
 
 // Manejador global de errores
@@ -475,6 +497,31 @@ function showScreen(screenId) {
     if (!targetScreen) {
         console.error(`❌ Error: No se encontró la pantalla con ID: ${screenId}`);
         return;
+    }
+
+    // Mostrar solo el contenedor raíz que corresponde a la pantalla objetivo.
+    const containerIds = ['ContenedorBienvenida', 'ContenedorConfirmacion', 'ContenedorPortada', 'ContenedorLibro'];
+    containerIds.forEach((containerId) => {
+        const container = document.getElementById(containerId);
+        if (container) {
+            container.style.display = 'none';
+        }
+    });
+
+    let activeContainerId = null;
+    if (screenId === 'welcomeScreen') {
+        activeContainerId = 'ContenedorBienvenida';
+    } else if (screenId === 'confirmationScreen') {
+        activeContainerId = 'ContenedorConfirmacion';
+    } else if (['moment1Screen', 'moment2Screen', 'moment3Screen', 'moment4Screen'].includes(screenId)) {
+        activeContainerId = 'ContenedorLibro';
+    }
+
+    if (activeContainerId) {
+        const activeContainer = document.getElementById(activeContainerId);
+        if (activeContainer) {
+            activeContainer.style.display = '';
+        }
     }
     
     // Remover 'active' de todas las pantallas
