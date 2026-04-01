@@ -3103,6 +3103,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         : studentCode;
 
     const storageIdentifier = storageSafeName(effectiveIdentifier) || 'invitado';
+    const storageBasePath = `Actividad2/${storageIdentifier}/${tag}`;
     
     const timestamp = Date.now();
     let boardUrl = null;
@@ -3112,7 +3113,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         // Subir imagen del tablero (si existe)
         if (boardBlob) {
             console.log('ðŸ“¸ Subiendo imagen...');
-            const boardPath = `uploads/${storageIdentifier}/act0b/${moment}/${storageIdentifier}_act0b_${moment}_${tag}_${timestamp}.png`;
+            const boardPath = `${storageBasePath}/canvas_${timestamp}.png`;
             const boardRef = ref(storage, boardPath);
             await uploadBytes(boardRef, boardBlob);
             boardUrl = await getDownloadURL(boardRef);
@@ -3122,7 +3123,7 @@ async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
         // Subir audio (si existe)
         if (audioBlob) {
             console.log('ðŸŽ¤ Subiendo audio...', audioBlob.size, 'bytes');
-            const audioPath = `uploads/${storageIdentifier}/act0b/${moment}/${storageIdentifier}_act0b_${moment}_${tag}_${timestamp}.webm`;
+            const audioPath = `${storageBasePath}/audio_${timestamp}.webm`;
             const audioRef = ref(storage, audioPath);
             await uploadBytes(audioRef, audioBlob);
             audioUrl = await getDownloadURL(audioRef);

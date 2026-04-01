@@ -40,6 +40,7 @@ let m4Submitted = false; // habilita siguiente solo cuando termina el reto final
 let m4Errors = 0;       // total de errores acumulados
 let m4CurrentEx = 0;    // ejercicio actual (0-based)
 let m4Exercises = [];   // array con los 5 ejercicios generados
+let m4Patterns = [];    // patrón de posición de la caja por ejercicio
 let m4Finalized = false;
 let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
 
@@ -1088,6 +1089,7 @@ function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
 function initM4() {
     m4Submitted = false;
     m4Exercises = generateExercises(5);
+    m4Patterns = generateM4Patterns(5);
     renderExercise(m4CurrentEx);
 }
 
@@ -1106,6 +1108,35 @@ function generateExercises(n) {
     return exercises;
 }
 
+function shuffleArray(items) {
+    const arr = [...items];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function generateM4Patterns(n) {
+    // Posiciones posibles de la caja en: a × b = b × a
+    // 0: [ ] × b = b × a
+    // 1: a × [ ] = b × a
+    // 2: a × b = [ ] × a
+    // 3: a × b = b × [ ]
+    const base = shuffleArray([0, 1, 2, 3]);
+    const patterns = [];
+
+    while (patterns.length < n) {
+        if (patterns.length < 4) {
+            patterns.push(base[patterns.length]);
+        } else {
+            patterns.push(base[Math.floor(Math.random() * base.length)]);
+        }
+    }
+
+    return patterns;
+}
+
 function renderExercise(index) {
     const wrapper = document.getElementById('itemsWrapper');
     if (!wrapper) return;
@@ -1119,30 +1150,80 @@ function renderExercise(index) {
     m4AttemptsOnCurrent = 0; // resetear intentos del nuevo ejercicio
 
     const { a, b } = m4Exercises[index];
-    // a × b = [input] × a
+    const pattern = m4Patterns[index] ?? 1;
+
+    let equationHTML = '';
+    let correctValue = b;
+
+    if (pattern === 0) {
+        equationHTML = `
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+            <span class="magic-op">×</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">=</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${a}</span>
+        `;
+        correctValue = a;
+    } else if (pattern === 1) {
+        equationHTML = `
+            <span class="magic-num">${a}</span>
+            <span class="magic-op">×</span>
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+            <span class="magic-op">=</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${a}</span>
+        `;
+        correctValue = b;
+    } else if (pattern === 2) {
+        equationHTML = `
+            <span class="magic-num">${a}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">=</span>
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+            <span class="magic-op">×</span>
+            <span class="magic-num">${a}</span>
+        `;
+        correctValue = b;
+    } else {
+        equationHTML = `
+            <span class="magic-num">${a}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">=</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">×</span>
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+        `;
+        correctValue = a;
+    }
+
     const container = document.createElement('div');
     container.className = 'magic-equation';
     const equationRow = document.createElement('div');
     equationRow.className = 'magic-equation-row';
-
-    equationRow.innerHTML = `
-        <span class="magic-num">${a}</span>
-        <span class="magic-op">×</span>
-        <span class="magic-num">${b}</span>
-        <span class="magic-op">=</span>
-        <input id="m4Input" type="number" min="1" max="50"
-            class="magic-input"
-            style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
-        >
-        <span class="magic-op">×</span>
-        <span class="magic-num">${a}</span>
-    `;
+    equationRow.innerHTML = equationHTML;
 
     const checkBtn = document.createElement('button');
     checkBtn.textContent = '✔ Verificar';
     checkBtn.className = 'btn btn-primary';
     checkBtn.style.cssText = "font-family:'Rancho',cursive;";
-    checkBtn.addEventListener('click', () => checkAnswer(b));
+    checkBtn.addEventListener('click', () => checkAnswer(correctValue));
 
     container.appendChild(equationRow);
     container.appendChild(checkBtn);
@@ -1151,7 +1232,7 @@ function renderExercise(index) {
     const input = document.getElementById('m4Input');
     if (input) {
         input.focus();
-        input.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(b); });
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(correctValue); });
     }
 
     // Actualizar estado de vidas
