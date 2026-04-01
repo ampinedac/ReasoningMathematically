@@ -1,11 +1,17 @@
 // main.js – Actividad1 · Lógica principal
 // Punto de entrada: módulo ES, se carga con type="module"
 
-import {
-    db, storage,
-    collection, addDoc, serverTimestamp,
-    ref, uploadBytes, getDownloadURL
-} from './firebase.js';
+let firebaseServices = null;
+
+async function initFirebaseServices() {
+    try {
+        firebaseServices = await import('./firebase.js');
+        console.log('✅ Firebase listo');
+    } catch (error) {
+        firebaseServices = null;
+        console.warn('⚠️ Firebase no disponible, el flujo UI seguirá funcionando:', error);
+    }
+}
 
 // ─────────────────────────────────────────────
 // ESTADO GLOBAL
@@ -40,6 +46,7 @@ const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
 // ARRANQUE
 // ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    initFirebaseServices();
     initVisibility();
     initWelcome();
     initConfirmation();
@@ -459,6 +466,11 @@ async function handleSubmit(tag) {
     if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
 
     try {
+        if (!firebaseServices?.storage || !firebaseServices?.db) {
+            throw new Error('Firebase no disponible');
+        }
+
+        const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
         const basePath = `Actividad1/${studentCode}/${tag}`;
         const timestamp = Date.now();
 
@@ -910,6 +922,11 @@ async function finalizeM4() {
 
     // Enviar resultado a Firebase
     try {
+        if (!firebaseServices?.db) {
+            throw new Error('Firebase no disponible');
+        }
+
+        const { db, collection, addDoc, serverTimestamp } = firebaseServices;
         await addDoc(collection(db, 'Actividad1'), {
             studentCode,
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',

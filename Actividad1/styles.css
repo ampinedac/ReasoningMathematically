@@ -42,6 +42,22 @@ body {
   justify-content: center;
 }
 
+/* Estado inicial obligatorio del flujo: solo bienvenida visible */
+#ContenedorBienvenida { display: flex; }
+#ContenedorConfirmacion,
+#ContenedorPortada,
+#ContenedorLibro,
+#ContenedorCocina,
+#prevBtn,
+#nextBtn {
+  display: none;
+}
+
+#ContenedorLibro .page.q1-book-spread,
+#ContenedorLibro .activity-spread {
+  display: none;
+}
+
 .author-credit,
 #authorCredit {
   position: fixed;
