@@ -22,6 +22,9 @@ let studentInfo = null;
 // Índice del spread visible (0-based, donde 0 = spread 1-2)
 let currentSpread = 0;
 
+// Bloqueo durante animación de paso de página
+let isFlipping = false;
+
 // Submits completados (para habilitar "siguiente" en cada spread)
 let m1q1Submitted = false;
 let m1q2Submitted = false;
@@ -308,11 +311,55 @@ function getSpreads() {
 
 function goToSpread(index) {
     const spreads = getSpreads();
-    spreads.forEach((s, i) => {
-        s.style.display = (i === index) ? 'flex' : 'none';
-    });
-    currentSpread = index;
-    updateNavButtons();
+
+    // Llamada de inicialización (mismo índice) o retorno desde cocina: mostrar sin animación
+    if (index === currentSpread) {
+        spreads.forEach((s, i) => {
+            s.style.display = (i === index) ? 'flex' : 'none';
+        });
+        updateNavButtons();
+        return;
+    }
+
+    if (isFlipping || index < 0 || index >= spreads.length) return;
+
+    const direction = index > currentSpread ? 'forward' : 'backward';
+    const oldSpread = spreads[currentSpread];
+
+    // La página que se pliega hacia el lomo (sale)
+    const foldOutPage = direction === 'forward'
+        ? oldSpread.querySelector('.q1-right-page')
+        : oldSpread.querySelector('.q1-left-page');
+
+    isFlipping = true;
+
+    // Fase 1: la página sale rotando hasta 90° (queda de canto, invisible)
+    foldOutPage.classList.add('anim-flip-out');
+
+    setTimeout(() => {
+        foldOutPage.classList.remove('anim-flip-out');
+
+        // Intercambio de spreads justo cuando la página está de canto (invisible)
+        spreads.forEach((s, i) => {
+            s.style.display = (i === index) ? 'flex' : 'none';
+        });
+        currentSpread = index;
+        updateNavButtons();
+
+        // Fase 2: la nueva página entra rotando desde 90° hasta 0°
+        const newSpread = spreads[index];
+        const foldInPage = direction === 'forward'
+            ? newSpread.querySelector('.q1-left-page')
+            : newSpread.querySelector('.q1-right-page');
+
+        foldInPage.classList.add('anim-flip-in');
+
+        setTimeout(() => {
+            foldInPage.classList.remove('anim-flip-in');
+            isFlipping = false;
+        }, 320);
+
+    }, 320);
 }
 
 function updateNavButtons() {
