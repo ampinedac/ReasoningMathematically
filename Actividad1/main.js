@@ -47,6 +47,19 @@ let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
 // Grabaciones de audio en vuelo
 const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
 
+function updateM4ReflectionSubmitState() {
+    const submitBtn = document.getElementById('submitM4Reflection');
+    if (!submitBtn) return;
+
+    const hasAudio = !!(audioState['M4Reflection']?.blob && audioState['M4Reflection'].blob.size > 0);
+    const checkedCount = document.querySelectorAll('input[name="m4Reflection"]:checked').length;
+    const canSubmit = hasAudio && checkedCount >= 1;
+
+    submitBtn.disabled = !canSubmit;
+    submitBtn.style.opacity = canSubmit ? '1' : '0.5';
+    submitBtn.style.cursor = canSubmit ? 'pointer' : 'not-allowed';
+}
+
 // ─────────────────────────────────────────────
 // ARRANQUE
 // ─────────────────────────────────────────────
@@ -609,6 +622,7 @@ function initAudioRecorder(tag) {
         submitBtn.style.opacity = '0.5';
         submitBtn.style.cursor = 'not-allowed';
     }
+    if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
 
     recordBtn.addEventListener('click', async () => {
         try {
@@ -624,7 +638,9 @@ function initAudioRecorder(tag) {
                 stream.getTracks().forEach(t => t.stop());
                 if (statusEl) statusEl.textContent = 'Audio listo para enviar';
 
-                if (submitBtn && audioState[tag].blob && audioState[tag].blob.size > 0) {
+                if (tag === 'M4Reflection') {
+                    updateM4ReflectionSubmitState();
+                } else if (submitBtn && audioState[tag].blob && audioState[tag].blob.size > 0) {
                     submitBtn.disabled = false;
                     submitBtn.style.opacity = '1';
                     submitBtn.style.cursor  = 'pointer';
@@ -645,6 +661,7 @@ function initAudioRecorder(tag) {
                 submitBtn.style.opacity = '0.5';
                 submitBtn.style.cursor = 'not-allowed';
             }
+            if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
             if (statusEl) statusEl.textContent = 'Grabando...';
         } catch (err) {
             console.error('Error al acceder al microfono:', err);
@@ -654,6 +671,7 @@ function initAudioRecorder(tag) {
                 submitBtn.style.opacity = '0.5';
                 submitBtn.style.cursor = 'not-allowed';
             }
+            if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
         }
     });
 
@@ -751,9 +769,7 @@ async function handleSubmit(tag) {
                     statusEl.textContent = 'Selecciona al menos una opción antes de enviar.';
                     statusEl.style.color = '#dc2626';
                 }
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = '1';
-                submitBtn.style.cursor = 'pointer';
+                updateM4ReflectionSubmitState();
                 return;
             }
 
@@ -1372,6 +1388,7 @@ function initEncuesta() {
             const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
             if (checked.length > 2) cb.checked = false;
             updateNavButtons(); // actualizar estado del botón siguiente
+            updateM4ReflectionSubmitState(); // submit final requiere check + audio
         });
     });
 

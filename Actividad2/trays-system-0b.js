@@ -11,14 +11,14 @@ class TraysSystem {
         
         // Datos base de las 8 bolsas (Actividad 0B)
         this.BASE_TRAYS = [
-            { id: 'tray-1', rows: 3, cols: 5, total: 15, emoji: '🫓' },
-            { id: 'tray-2', rows: 5, cols: 3, total: 15, emoji: '🫓' },
-            { id: 'tray-3', rows: 2, cols: 4, total: 8, emoji: '🫓' },
-            { id: 'tray-4', rows: 4, cols: 2, total: 8, emoji: '🫓' },
-            { id: 'tray-5', rows: 6, cols: 5, total: 30, emoji: '🫓' },
-            { id: 'tray-6', rows: 5, cols: 6, total: 30, emoji: '🫓' },
-            { id: 'tray-7', rows: 6, cols: 4, total: 24, emoji: '🫓' },
-            { id: 'tray-8', rows: 5, cols: 4, total: 20, emoji: '🫓' }
+            { id: 'tray-1', rows: 3, cols: 5, total: 15, emoji: '??' },
+            { id: 'tray-2', rows: 5, cols: 3, total: 15, emoji: '??' },
+            { id: 'tray-3', rows: 2, cols: 4, total: 8, emoji: '??' },
+            { id: 'tray-4', rows: 4, cols: 2, total: 8, emoji: '??' },
+            { id: 'tray-5', rows: 6, cols: 5, total: 30, emoji: '??' },
+            { id: 'tray-6', rows: 5, cols: 6, total: 30, emoji: '??' },
+            { id: 'tray-7', rows: 6, cols: 4, total: 24, emoji: '??' },
+            { id: 'tray-8', rows: 5, cols: 4, total: 20, emoji: '??' }
         ];
         
         // Estado de emparejamiento (Map bidireccional)
@@ -39,7 +39,7 @@ class TraysSystem {
     }
     
     init() {
-        console.log('🎯 Inicializando sistema de bolsas...');
+        console.log('Inicializando sistema de bolsas...');
         this.render();
         this.setupEventListeners();
     }
@@ -59,7 +59,7 @@ class TraysSystem {
             this.container.appendChild(trayElement);
         });
         
-        console.log('✅ 8 bolsas renderizadas correctamente');
+        console.log('8 bolsas renderizadas correctamente');
     }
     
     // Crear elemento de bolsa
@@ -91,7 +91,7 @@ class TraysSystem {
 
         // Posicionar panes dentro de la bolsa con patrón natural (no matricial)
         for (let i = 0; i < data.total; i++) {
-            const angle = i * 2.399963229728653; // ángulo áureo
+            const angle = i * 2.399963229728653; // Ángulo áureo
             const radius = Math.sqrt((i + 0.6) / data.total) * 42;
             const offsetX = Math.cos(angle) * radius;
             const offsetY = Math.sin(angle) * radius;
@@ -197,14 +197,14 @@ class TraysSystem {
             // Primera selección
             this.selectedTray = tray;
             tray.classList.add('selected');
-            console.log('📍 Seleccionada:', tray.id);
+            console.log('Seleccionada:', tray.id);
         } else {
             // Segunda selección - intentar emparejar
             if (this.selectedTray === tray) {
                 // Click en la misma - deseleccionar
                 this.selectedTray.classList.remove('selected');
                 this.selectedTray = null;
-                console.log('❌ Deseleccionada');
+                console.log('Deseleccionada');
             } else {
                 // Emparejar o desemparejar
                 this.togglePairing(this.selectedTray.id, tray.id);
@@ -225,7 +225,7 @@ class TraysSystem {
         if (this.pairings.get(id1) === id2) {
             // Desemparejar
             this.unpair(id1, id2);
-            console.log('🔓 Desemparejadas:', id1, id2);
+            console.log('Desemparejadas:', id1, id2);
         } else {
             // Si alguna ya tiene pareja, desemparejar primero
             if (this.pairings.has(id1)) {
@@ -237,7 +237,7 @@ class TraysSystem {
             
             // Emparejar (bidireccional)
             this.pair(id1, id2);
-            console.log('🔗 Emparejadas:', id1, id2);
+            console.log('Emparejadas:', id1, id2);
         }
     }
     
@@ -343,7 +343,7 @@ class TraysSystem {
         // Guardar color para este par
         this.pairColors.set(pairKey, color);
         
-        console.log(`🎨 Asignado color ${color} al par ${pairKey}`);
+        console.log(`Asignado color ${color} al par ${pairKey}`);
         return color;
     }
     
@@ -352,7 +352,7 @@ class TraysSystem {
         // Los wrappers ocupan 2 columnas (span 2)
         // Las bandejas solas ocupan 1 columna
         // El CSS grid se encarga automáticamente del flujo
-        console.log('📐 Layout reorganizado automáticamente por CSS Grid');
+        console.log('Layout reorganizado automáticamente por CSS Grid');
     }
     
     // Obtener todos los emparejamientos actuales
@@ -436,7 +436,7 @@ class TraysSystem {
         this.pairings.clear();
         this.pairColors.clear();
         this.pairCounter = 0;
-        console.log('🗑️ Sistema de bandejas destruido');
+        console.log('??? Sistema de bandejas destruido');
     }
 }
 

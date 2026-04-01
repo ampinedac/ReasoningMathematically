@@ -212,7 +212,7 @@ body {
     /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
      #ContenedorConfirmacion .confirmation-buttons .btn:hover {
      filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
-     transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+    transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
      }
 
   /* Imagen dentro del botón de confirmación */
@@ -226,7 +226,7 @@ body {
 
 /* ====================================================================================================================
    CONTENEDOR PORTADA
-   Área visual principal de la portada del libro interactivo.
+   área visual principal de la portada del libro interactivo.
    Centra y resalta la portada con fondo degradado y sombra.
 ======================================================================================================================= */
 #ContenedorPortada {
@@ -314,7 +314,7 @@ body {
   display: block;                   /* Elimina espacios extra debajo de la imagen */
   pointer-events: none;             /* La imagen no bloquea el click del botón */
  }
-    /* Ocultar botones → ← cuando la portada está activa */
+    /* Ocultar botones ? ? cuando la portada está activa */
 /* --- Migración: ocultar navegación cuando la portada está activa, ahora bajo #ContenedorLibro --- */
 #ContenedorLibro #flipbook .book-cover-page.active ~ .nav-btn,
 #ContenedorLibro #flipbook .book-cover-page.active ~ #prevBtn,
@@ -326,7 +326,7 @@ body {
 /* =====================================================================================================================
      CONTENEDOR LIBRO (FLIPBOOK)
  ======================================================================================================================= */
- /* Botones de navegción */
+ /* Botones de navegación */
    #ContenedorLibro .nav-btn {
    top: 50%;
    transform: translateY(-50%);
@@ -546,8 +546,8 @@ body {
 
 
 /* =====================================================
-   CONTENIDO DE PÁGINA DE HISTORIA (story-page-content)
-   Área principal de cada página de la historia, con fondo y bordes decorativos.
+  CONTENIDO DE PÁGINA DE HISTORIA (story-page-content)
+   área principal de cada página de la historia, con fondo y bordes decorativos.
 ====================================================== */
 
 
