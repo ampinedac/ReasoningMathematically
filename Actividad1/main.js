@@ -692,13 +692,14 @@ function initCocinaSystem() {
 
     verifyBtn?.addEventListener('click', () => {
         if (!traysSystem) return;
-        const results = traysSystem.validatePairings();
-        const allCorrect = results.length === 4 && results.every(r => r.isCorrect);
+        const validation = traysSystem.validatePairings();
+        const results = validation.pairResults;
+        const allCorrect = results.length === 3 && results.every(r => r.isCorrect) && validation.hasExpectedSingles;
         const totalPaired = results.length;
 
         if (allCorrect) {
             if (feedbackEl) {
-                feedbackEl.textContent = '✅ ¡Perfecto! Todas las bandejas están bien emparejadas.';
+                feedbackEl.textContent = '✅ ¡Perfecto! Emparejaste las bandejas correctas y dejaste sin pareja las que no la tienen.';
                 feedbackEl.style.color = '#16a34a';
             }
             setTimeout(() => {
@@ -718,8 +719,9 @@ function initCocinaSystem() {
             const wrongCount = results.filter(r => !r.isCorrect).length;
             const unpairedCount = 8 - totalPaired * 2;
             let msg = '';
-            if (wrongCount > 0) msg += `${wrongCount} par(es) incorrecto(s). `;
-            if (unpairedCount > 0) msg += `Faltan ${unpairedCount} bandeja(s) por emparejar.`;
+            if (wrongCount > 0) msg += 'No todas las bandejas tienen pareja. Revisa si uniste dos que no corresponden. ';
+            if (wrongCount === 0 && !validation.hasExpectedSingles) msg += 'Recuerda que hay dos bandejas que deben quedar sin pareja. ';
+            if (unpairedCount > 2) msg += `Aún faltan ${unpairedCount - 2} bandeja(s) que sí necesitan emparejarse.`;
             if (feedbackEl) {
                 feedbackEl.textContent = msg || 'Revisa los emparejamientos.';
                 feedbackEl.style.color = '#dc2626';
@@ -734,15 +736,17 @@ function createTraysSystem(containerId) {
     if (!container) return null;
 
     const BASE_TRAYS = [
-        { id: 'trayA1', rows: 3, cols: 5, total: 15 },
-        { id: 'trayA2', rows: 5, cols: 3, total: 15 },
-        { id: 'trayA3', rows: 2, cols: 4, total: 8  },
-        { id: 'trayA4', rows: 4, cols: 2, total: 8  },
-        { id: 'trayA5', rows: 6, cols: 5, total: 30 },
-        { id: 'trayA6', rows: 5, cols: 6, total: 30 },
-        { id: 'trayA7', rows: 6, cols: 4, total: 24 },
-        { id: 'trayA8', rows: 4, cols: 6, total: 24 }
+        { id: 'trayA1', rows: 3, cols: 4, total: 12 },
+        { id: 'trayA2', rows: 4, cols: 3, total: 12 },
+        { id: 'trayA3', rows: 2, cols: 6, total: 12 },
+        { id: 'trayA4', rows: 6, cols: 2, total: 12 },
+        { id: 'trayA5', rows: 5, cols: 3, total: 15 },
+        { id: 'trayA6', rows: 3, cols: 5, total: 15 },
+        { id: 'trayA7', rows: 4, cols: 5, total: 20 },
+        { id: 'trayA8', rows: 2, cols: 7, total: 14 }
     ];
+
+    const EXPECTED_UNPAIRED_TOTALS = new Set([14, 20]);
 
     const PAIR_COLORS = ['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316'];
     let pairings = new Map();
@@ -855,11 +859,22 @@ function createTraysSystem(containerId) {
     }
 
     function validatePairings() {
-        return getPairings().map(([id1, id2]) => {
+        const pairResults = getPairings().map(([id1, id2]) => {
             const t1 = BASE_TRAYS.find(t => t.id === id1);
             const t2 = BASE_TRAYS.find(t => t.id === id2);
             return { pair: [id1, id2], total1: t1?.total, total2: t2?.total, isCorrect: t1?.total === t2?.total };
         });
+
+        const pairedIds = new Set(pairResults.flatMap(result => result.pair));
+        const unpairedTrays = BASE_TRAYS.filter(tray => !pairedIds.has(tray.id));
+
+        return {
+            pairResults,
+            unpairedTrays,
+            hasExpectedSingles:
+                unpairedTrays.length === 2 &&
+                unpairedTrays.every(tray => EXPECTED_UNPAIRED_TOTALS.has(tray.total))
+        };
     }
 
     render();
