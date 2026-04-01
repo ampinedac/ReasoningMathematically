@@ -48,6 +48,7 @@ const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
 document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
     normalizeNavigationLabels();
+    initStudentCodeDisplays();
     initVisibility();
     initWelcome();
     initConfirmation();
@@ -78,7 +79,8 @@ function initVisibility() {
     // La sección derecha del spread 13-14 inicia oculta
     const q2Right = document.getElementById('q2RightPage');
     if (q2Right) {
-        // Ocultamos solo el contenido dinámico, no la imagen de portada
+        const traysImage = document.getElementById('bandejasFotoM1Q2');
+        if (traysImage) traysImage.style.display = 'none';
         const finalQ = document.getElementById('m1Q2FinalQuestion');
         if (finalQ) hide('m1Q2FinalQuestion');
     }
@@ -233,6 +235,31 @@ function toTitle(str) {
         .join(' ');
 }
 
+function initStudentCodeDisplays() {
+    getSpreads().forEach(spread => {
+        const legacyDisplay = spread.querySelector('.q1-left-page > .student-code-display');
+        if (legacyDisplay) legacyDisplay.remove();
+
+        const hasDisplay = Array.from(spread.children).some(child =>
+            child.classList && child.classList.contains('spread-student-code')
+        );
+
+        if (!hasDisplay) {
+            const display = document.createElement('span');
+            display.className = 'spread-student-code';
+            spread.prepend(display);
+        }
+    });
+
+    updateStudentCodeDisplays();
+}
+
+function updateStudentCodeDisplays() {
+    document.querySelectorAll('.spread-student-code').forEach(el => {
+        el.textContent = studentCode ? `Código: ${studentCode}` : '';
+    });
+}
+
 // ─────────────────────────────────────────────
 // 3. CONFIRMACIÓN
 // ─────────────────────────────────────────────
@@ -241,10 +268,7 @@ function initConfirmation() {
     const noBtn  = document.getElementById('confirmNoBtn');
 
     yesBtn?.addEventListener('click', () => {
-        // Mostrar código en el spread del libro
-        document.querySelectorAll('#studentCodeM1').forEach(el => {
-            el.textContent = studentCode ? `Código: ${studentCode}` : '';
-        });
+        updateStudentCodeDisplays();
         hide('ContenedorConfirmacion');
         show('ContenedorPortada');
     });
@@ -252,6 +276,7 @@ function initConfirmation() {
     noBtn?.addEventListener('click', () => {
         studentCode = null;
         studentInfo = null;
+        updateStudentCodeDisplays();
         document.getElementById('studentCodeInput').value = '';
         document.getElementById('welcomeError').textContent = '';
         hide('ContenedorConfirmacion');
@@ -346,16 +371,44 @@ function initBoard() {
     const canvas = document.getElementById('boardCanvasM1Q1');
     if (!canvas) return;
 
-    // Ajustar tamano al contenedor
     const wrapper = canvas.parentElement;
-    const resize = () => {
-        canvas.width = wrapper.offsetWidth || 400;
-        canvas.height = wrapper.offsetHeight || 300;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-
     const ctx = canvas.getContext('2d');
+
+    const resize = () => {
+        const rect = wrapper.getBoundingClientRect();
+        const width = Math.max(Math.floor(rect.width), 1);
+        const height = Math.max(Math.floor(rect.height), 1);
+
+        if (canvas.width === width && canvas.height === height) return;
+
+        const snapshot = document.createElement('canvas');
+        snapshot.width = canvas.width;
+        snapshot.height = canvas.height;
+
+        if (snapshot.width > 0 && snapshot.height > 0) {
+            snapshot.getContext('2d').drawImage(canvas, 0, 0);
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        if (snapshot.width > 0 && snapshot.height > 0) {
+            ctx.drawImage(snapshot, 0, 0, width, height);
+        }
+    };
+
+    // Ajustar tamano al contenedor cuando el spread se vuelve visible o cambia
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+
+    requestAnimationFrame(resize);
+    setTimeout(resize, 0);
+    window.addEventListener('resize', resize);
+    if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(() => resize());
+        observer.observe(wrapper);
+    }
+
     let drawing = false;
     let tool = 'black'; // herramienta activa
     setBoardCursor(canvas, tool);
@@ -621,6 +674,7 @@ function initCocinaSystem() {
     const gotoBtn    = document.getElementById('goToCocinaBtn');
     const verifyBtn  = document.getElementById('verifyTraysBtnM1Q2');
     const feedbackEl = document.getElementById('traysFeedbackM1Q2');
+    const traysImage = document.getElementById('bandejasFotoM1Q2');
 
     let traysSystem = null;
 
@@ -629,6 +683,7 @@ function initCocinaSystem() {
         if (!traysSystem) {
             traysSystem = createTraysSystem('traysAreaM1Q2');
         }
+        if (traysImage) traysImage.style.display = 'none';
         hide('ContenedorLibro');
         hide('prevBtn');
         hide('nextBtn');
@@ -651,6 +706,7 @@ function initCocinaSystem() {
                 show('ContenedorLibro');
                 show('prevBtn');
                 show('nextBtn');
+                if (traysImage) traysImage.style.display = 'block';
                 show('m1Q2FinalQuestion');
                 cocinaCompleted = true;
                 goToSpread(6); // Spread 13-14
@@ -709,23 +765,29 @@ function createTraysSystem(containerId) {
             card.dataset.total = data.total;
 
             const grid = document.createElement('div');
-            grid.className = 'tray-grid-inner';
-            grid.style.cssText = `display:grid;grid-template-columns:repeat(${data.cols},1fr);gap:2px;padding:4px;`;
+            grid.className = 'tray-grid tray-grid-inner';
+            grid.style.gridTemplateColumns = `repeat(${data.cols}, minmax(0, 1fr))`;
+            grid.style.gap = data.total >= 24 ? '5px' : data.total >= 15 ? '6px' : '7px';
+
+            const bunSize = data.total >= 24 ? 18 : data.total >= 15 ? 22 : 26;
 
             for (let i = 0; i < data.total; i++) {
                 const cell = document.createElement('span');
-                cell.textContent = '🫓';
-                cell.style.fontSize = data.total >= 24 ? '0.7em' : data.total >= 15 ? '0.85em' : '1em';
+                cell.className = 'tray-item';
+                cell.style.width = `${bunSize}px`;
+                cell.style.height = `${bunSize}px`;
+
+                const bun = document.createElement('img');
+                bun.className = 'tray-item-image';
+                bun.src = 'assets/images/pandebono.png';
+                bun.alt = '';
+                bun.draggable = false;
+
+                cell.appendChild(bun);
                 grid.appendChild(cell);
             }
 
-            const label = document.createElement('div');
-            label.className = 'tray-label';
-            label.textContent = `${data.rows} × ${data.cols} = ${data.total}`;
-            label.style.cssText = 'text-align:center;font-size:0.8em;margin-top:4px;';
-
             card.appendChild(grid);
-            card.appendChild(label);
             container.appendChild(card);
         });
 

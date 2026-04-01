@@ -30,11 +30,13 @@ body {
   position: fixed; /* Fija el elemento en la pantalla */
   right: 14px; /* Lo posiciona a 14px del borde derecho */
   top: 12px; /* Lo posiciona a 12px del borde superior */
-  z-index: 60; /* Prioridad de apilamiento para que quede encima de otros elementos */
+  z-index: 1000; /* Prioridad de apilamiento para que quede encima de otros elementos */
   font-family: 'Rancho', cursive; /* Fuente decorativa y amigable */
   font-size: clamp(1rem, 1.9vw, 1.7rem); /* Tamaño adaptable según el ancho de la pantalla */
   color: #5b5b5b; /* Color gris oscuro para buena visibilidad */
   opacity: .85; /* Opacidad para que no distraiga demasiado */
+  pointer-events: none; /* Permite que los clics pasen a través del elemento, evitando interferencias con la interacción */
+  background-color: #e9daf7c4; /* Fondo semitransparente para mejorar la legibilidad del texto */
 }
 
 /* ============================================================================================================
@@ -515,6 +517,21 @@ body {
     margin-right: 1vw; /* Espacio a la derecha */
     margin-bottom: 0.5vw; /* Espacio inferior */
     align-self: flex-end; /* Alinea abajo */
+  }
+
+  #ContenedorLibro .q1-book-spread > .spread-student-code {
+    position: absolute;
+    top: 0.9vw;
+    left: 1.2vw;
+    font-family: 'Lobster Two', cursive;
+    font-size: clamp(0.58rem, 0.85vw, 0.82rem);
+    font-weight: bold;
+    color: #0084ff;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    user-select: none;
+    pointer-events: none;
+    z-index: 30;
   }
 
 

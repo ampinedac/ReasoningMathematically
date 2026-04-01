@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // No cargar datos previos automáticamente, solo después de confirmar
     studentCode = null;
     studentInfo = null;
+    initSpreadStudentCodeDisplays();
     // Inicializar pantallas
     initHomeScreen();
     initWelcomeScreen();
@@ -346,6 +347,29 @@ function getStudentHeaderText() {
     return studentCode;
 }
 
+function initSpreadStudentCodeDisplays() {
+    document.querySelectorAll('#ContenedorLibro .q1-book-spread').forEach(spread => {
+        const hasDisplay = Array.from(spread.children).some(child =>
+            child.classList && child.classList.contains('spread-student-code')
+        );
+
+        if (!hasDisplay) {
+            const display = document.createElement('span');
+            display.className = 'spread-student-code';
+            spread.prepend(display);
+        }
+    });
+
+    updateSpreadStudentCodeDisplays();
+}
+
+function updateSpreadStudentCodeDisplays() {
+    const text = getStudentHeaderText();
+    document.querySelectorAll('#ContenedorLibro .spread-student-code').forEach(el => {
+        el.textContent = text ? `Código: ${text}` : '';
+    });
+}
+
 function showConfirmationScreen() {
     console.log('🔍 Mostrando pantalla de confirmación...');
     console.log('📋 Información del estudiante:', studentInfo);
@@ -466,6 +490,8 @@ function showScreen(screenId) {
             span.textContent = getStudentHeaderText();
         });
     }
+
+    updateSpreadStudentCodeDisplays();
 }
 
 // ========================================

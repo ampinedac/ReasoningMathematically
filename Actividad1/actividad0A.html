@@ -11,10 +11,10 @@
     <link rel="stylesheet" href="trays-styles.css?v=2026031813">
 </head>
 <body>
-    
+    <div class="author-credit">Por: Ángela María Pineda Chacón</div>
+
 <!-- CONTENEDOR BIENVENIDA -->
 <div id="ContenedorBienvenida">
-    <div class="author-credit">Por: Ángela María Pineda Chacón</div>
     <section id="welcomeScreen">
         <h1 class="main-title">Actividad 1</h1>
         <p class="subtitle">¿El orden de los factores altera el producto?</p>
@@ -192,7 +192,7 @@
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page" id="q2RightPage">
-            <img class="BandejasFoto" src="../Actividad1/assets/images/BandejasFoto.png" alt="Bandejas de pandebonos">
+            <img id="bandejasFotoM1Q2" class="BandejasFoto" src="../Actividad1/assets/images/BandejasFoto.png" alt="Bandejas de pandebonos">
             <!-- Pregunta final + audio (se activa al completar la cocina) -->
             <div id="m1Q2FinalQuestion">
                 <h3><strong>Para pensar 🤔</strong></h3>
@@ -423,19 +423,19 @@
             <div class="bakery-kitchen-bg">
                 <div class="bakery-wall"></div>
                 <div class="bakery-shelf">
-                    <div class="bakery-shelf-item pan">PAN</div>
-                    <div class="bakery-shelf-item pan">PAN</div>
-                    <div class="bakery-shelf-item pan">PAN</div>
-                    <div class="bakery-shelf-item pan">PAN</div>
+                    <div class="bakery-shelf-item jar" aria-hidden="true"></div>
+                    <div class="bakery-shelf-item bowl" aria-hidden="true"></div>
+                    <div class="bakery-shelf-item basket" aria-hidden="true"></div>
+                    <div class="bakery-shelf-item jar" aria-hidden="true"></div>
                 </div>
                 <div class="bakery-oven">
                     <div class="oven-door"></div>
                     <div class="oven-window"></div>
                 </div>
                 <div class="bakery-utensils">
-                    <span class="utensil">??</span>
-                    <span class="utensil">??</span>
-                    <span class="utensil">??</span>
+                    <span class="utensil whisk" aria-hidden="true"></span>
+                    <span class="utensil spoon" aria-hidden="true"></span>
+                    <span class="utensil rolling-pin" aria-hidden="true"></span>
                 </div>
                 <!-- Mesa central con bandejas -->
                 <div class="bakery-table-center">
@@ -445,7 +445,7 @@
             </div>
         </div>
         <div class="cocina-controls">
-            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">? Verificar emparejamientos</button>
+            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">Verificar emparejamientos</button>
             <p id="traysFeedbackM1Q2" class="feedback-text"></p>
         </div>
     </div>

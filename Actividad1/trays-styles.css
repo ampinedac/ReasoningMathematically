@@ -5,19 +5,23 @@
 /* Contenedor principal de bandejas */
 .trays-container {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     grid-auto-flow: row dense;
-    gap: 20px !important;
-    padding: 30px;
+    gap: 16px !important;
+    padding: 18px;
     background:
         radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 28%),
         radial-gradient(circle at 82% 76%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 34%),
         repeating-linear-gradient(90deg, rgba(101, 67, 33, 0.18) 0 6px, rgba(0, 0, 0, 0) 6px 34px),
         linear-gradient(140deg, #b07b45 0%, #9a6736 36%, #7b4f29 100%);
-    border-radius: 12px;
-    min-height: 500px;
+    border-radius: 22px;
+    min-height: 0;
     box-shadow: 0 14px 34px rgba(72, 44, 19, 0.34);
     align-items: start;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    justify-items: center;
 }
 
 /* Wrapper para parejas - ocupa 2 columnas */
@@ -48,8 +52,8 @@
 .tray-card {
     background: white;
     border: 3px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 15px;
+    border-radius: 20px;
+    padding: 10px;
     cursor: grab;
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -67,6 +71,7 @@
     -webkit-user-select: none;
     -webkit-user-drag: none;
     touch-action: manipulation;
+    max-width: 250px;
     /* NO agregar left, top, transform que saquen del flujo */
 }
 
@@ -124,10 +129,11 @@
 /* Grid de items dentro de la bandeja */
 .tray-grid {
     display: grid;
-    gap: 4px;
-    width: 100%;
-    max-width: 240px;
-    max-height: 240px;
+    gap: 6px;
+    width: fit-content;
+    max-width: 100%;
+    max-height: none;
+    margin: 0 auto;
     place-items: center;
 }
 
@@ -135,7 +141,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25em;
+    flex: 0 0 auto;
     line-height: 1;
     transition: transform 0.2s;
 }
@@ -147,6 +153,7 @@
     display: block;
     user-select: none;
     pointer-events: none;
+    filter: drop-shadow(0 1px 1px rgba(136, 84, 29, 0.18));
 }
 
 .tray-item:hover {
@@ -219,6 +226,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    font-family: 'Rancho', cursive;
 }
 
 .feedback-text.success {
@@ -280,6 +289,7 @@
     .tray-card {
         min-height: 126px;
         padding: 8px;
+        max-width: none;
     }
     
     .tray-grid {
@@ -293,9 +303,7 @@
         align-items: center;
     }
     
-    .tray-item {
-        font-size: 0.82em;
-    }
+    .tray-item { transform: none; }
 
     .tray-card:hover,
     .tray-card.selected,
@@ -323,6 +331,7 @@
     .tray-card {
         min-height: 112px;
         padding: 8px;
+        max-width: none;
     }
     
     .tray-grid {
@@ -333,9 +342,7 @@
         overflow: visible;
     }
 
-    .tray-item {
-        font-size: 0.75em;
-    }
+    .tray-item { transform: none; }
 }
 
 /* Animación de entrada */
