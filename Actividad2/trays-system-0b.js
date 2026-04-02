@@ -89,7 +89,7 @@ class TraysSystem {
                 ? (isSmallScreen ? '0.72em' : '0.95em')
                 : (isSmallScreen ? '0.85em' : '1.05em');
 
-        // Posicionar panes dentro de la bolsa con patrón natural (no matricial)
+        // Posicionar arepas dentro de la bolsa con patrón natural (no matricial)
         for (let i = 0; i < data.total; i++) {
             const angle = i * 2.399963229728653; // Ángulo áureo
             const radius = Math.sqrt((i + 0.6) / data.total) * 42;
@@ -111,7 +111,7 @@ class TraysSystem {
 
             const itemImage = document.createElement('img');
             itemImage.src = this.pandebonoImageSrc;
-            itemImage.alt = 'Pandebono';
+            itemImage.alt = 'Arepa';
             itemImage.className = 'bag-item-image';
             itemImage.draggable = false;
 

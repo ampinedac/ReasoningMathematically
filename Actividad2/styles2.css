@@ -1,158 +1,191 @@
-/* ─── Estado inicial y utilidades ─────────────────────────────────────────── */
-.hidden { display: none !important; }
+﻿/* =====================================================================================================
+   VARIABLES CSS GLOBALES
+===================================================================================================== */
+:root {
+  /* Paleta pastel muy clara */
+  --pastel-lila: #e5ccff;
+  --pastel-azul: #b2d5ff;
+  --pastel-azul-texto: #002fff;
+  --pastel-azul-num: #007bff;
+  --blanco: #fff;
+  --gris-suave: #c7c7c7;
+  /* Tipografías */
+  --font-titulo: 'Lobster Two', cursive;
+  --font-general: 'Rancho', cursive;
+  /* Bordes y radios */
+  --radius-xl: 32px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  /* Sombras */
+  --shadow-suave: 0 2px 16px 0 rgba(91, 91, 163, 0.692);
+  --shadow-casi-nada: 0 1px 4px 0 rgba(120, 120, 180, 0.589);
+  /* Espaciados */
+  --gap-xl: 3.5vw;
+  --gap-lg: 2vw;
+  --gap-md: 1vw;
+  --gap-sm: 0.5vw;
+  /* Tamaños libro */
+  --spread-width: 90%;
+  --spread-height: 90%;
+}
 
-/* Solo la bienvenida visible al cargar; JS gestiona el resto */
-body #ContenedorBienvenida    { display: flex; }
-body #ContenedorConfirmacion,
-body #ContenedorPortada,
-body #ContenedorLibro         { display: none; }
-
-/* Momentos dentro del libro: ocultos hasta que JS los active */
-#ContenedorLibro section.screen { display: none; }
-
-/* ─────────────────────────────────────────────────────────────────────────── */
-/* Fondo general para todo el body */
+/* =====================================================================================================
+   FONDO GENERAL Y CRÉDITO DE AUTORÍA
+===================================================================================================== */
 body {
   background: url('./assets/images/Fondo.png') no-repeat center center fixed;
   background-size: cover;
+  font-family: var(--font-general);
+  margin: 0;
+  justify-content: center;
 }
-/* Overlay de la cocina: cubre todo el área del libro y se muestra solo cuando no tiene .hidden */
-.cocina-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff; /* Fondo blanco opaco */
-  z-index: 200;
+
+/* Estado inicial obligatorio del flujo: solo bienvenida visible */
+body #ContenedorBienvenida { display: flex; }
+body #ContenedorConfirmacion,
+body #ContenedorPortada,
+body #ContenedorLibro,
+body #ContenedorCocina,
+body #prevBtn,
+body #nextBtn {
+  display: none;
+}
+
+body #ContenedorLibro .page.q1-book-spread,
+body #ContenedorLibro .activity-spread {
+  display: none;
+}
+
+.author-credit,
+#authorCredit {
+  position: fixed;
+  right: 14px;
+  top: 12px;
+  z-index: 1000;
+  font-family: var(--font-general);
+  font-size: clamp(1rem, 1.9vw, 1.7rem);
+  color: #5b5b5b;
+  opacity: .85;
+  pointer-events: none;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+/* =====================================================================================================
+  CONTENEDORES Bienvenida y Confirmación → AJUSTES GENERALES
+ ===================================================================================================== */
+#ContenedorBienvenida, #ContenedorConfirmacion{
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  overflow-y: auto;
-  box-shadow: 0 0 32px 0 rgba(0,0,0,0.12);
-}
-
-/* ============================================================================================================
-   CRÉDITO DE AUTORÍA
-   Muestra el nombre de la autora en la esquina superior derecha.
-   Fijo y visible en toda la aplicación.
-================================================================================================================== */
-.author-credit,
-#authorCredit {
-  position: fixed; /* Fija el elemento en la pantalla */
-  right: 14px; /* Lo posiciona a 14px del borde derecho */
-  top: 12px; /* Lo posiciona a 12px del borde superior */
-  z-index: 1000; /* Prioridad de apilamiento para que quede encima de otros elementos */
-  font-family: 'Rancho', cursive; /* Fuente decorativa y amigable */
-  font-size: clamp(1rem, 1.9vw, 1.7rem); /* Tamaño adaptable según el ancho de la pantalla */
-  color: #5b5b5b; /* Color gris oscuro para buena visibilidad */
-  opacity: .85; /* Opacidad para que no distraiga demasiado */
-  pointer-events: none; /* Permite que los clics pasen a través del elemento, evitando interferencias con la interacción */
-  background-color: #e9daf7c4; /* Fondo semitransparente para mejorar la legibilidad del texto */
-}
-
-/* ============================================================================================================
-   CONTENEDOR BIENVENIDA
-   Pantalla inicial para ingreso de código estudiantil.
-   Centra el contenido y aplica tipografía amigable.
-=============================================================================================================== */
- /*Contenedor invisible que centra el contenido  de todo lo de la pantalla de bienvenida*/
- #ContenedorBienvenida {
-  display: flex; /* Flexbox para centrar vertical y horizontalmente */
-  flex-direction: column; /* Apila elementos en columna */
-  align-items: center; /* Centra horizontalmente */
   justify-content: center; /* Centra verticalmente */
-  min-height: 100vh; /* Ocupa toda la altura de la ventana */
-  font-family: 'Lobster Two'; /* Fuente decorativa */
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-width: 100vw;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible;
+  font-family: 'Lobster Two', cursive;
  }
 
- /*Titulo: Actividad 1*/
+/* ==========================================================================================================
+  CONTENEDOR BIENVENIDA: Estilos de los textos, cajas y botones.
+  =========================================================================================================== */
  #ContenedorBienvenida .main-title {
-  font-size: clamp(4rem, 10vw, 6rem); /* Tamaño adaptable para el título principal */
-  color: #0077ff; /* Azul*/
+  font-size: clamp(4rem, 10vw, 6rem);
+  color: #0077ff;
+  text-align: center;
  }
 
- /*Subtítulo: ¿El orden de los factores altera el producto?*/
  #ContenedorBienvenida .subtitle {
-  font-size: clamp(2.5rem, 4vw, 3.5rem); /* Tamaño adaptable para el subtítulo */
-  color: #009dff; /* Azul */
-  margin-bottom: 24px; /* Espacio debajo del subtítulo */
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  color: #009dff;
+  margin-bottom: 24px;
  }
 
- /* Caja principal de bienvenida: agrupa el formulario y lo resalta visualmente */
  #ContenedorBienvenida .welcome-box {
-  width: min(92vw, 620px); /* Máximo 640px, pero responsivo */
-  padding: clamp(20px, 3vw, 40px); /* Espaciado adaptable */
-  background: rgba(62, 216, 255, 0.589); /* Fondo semitransparente azul */
-  border: 1px solid rgba(255,255,255,.7); /* Borde blanco suave */
-  border-radius: 16px; /* Bordes redondeados */
-  box-shadow: 0 14px 30px rgba(0,0,0,.14); /* Sombra para profundidad */
-  backdrop-filter: blur(8px); /* Difumina el fondo detrás */
-  display: flex; /* Flexbox para organizar el contenido */
+  width: min(92vw, 620px);
+  padding: clamp(20px, 3vw, 40px);
+  background: rgba(62, 216, 255, 0.589);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0,0,0,.14);
+  backdrop-filter: blur(8px);
+  display: flex;
   flex-direction: column;
   align-items: center;
-  }
-
- /*Escribe tu código estudiantil: etiqueta del input */
-  #ContenedorBienvenida .welcome-box label {
-  display: block; /* Ocupa toda la línea */
-  text-align: center; /* Centra el texto */
-  font-size: clamp(2rem, 3vw, 2.6rem); /* Tamaño adaptable */
-  color: #003f67; /* Azul */
-  }
-
- /* Input de código estudiantil */
- #ContenedorBienvenida .chalk-input {
-  width: min(100%, 360px); /* Máximo 360px, pero responsivo */
-  margin: 0 auto 16px auto; /* Centrado y espacio inferior */
-  display: block; /* Ocupa toda la línea */
-  padding: 12px 18px; /* Espaciado interno cómodo */
-  border: 2px solid #127afa; /* Borde azul llamativo */
-  border-radius: 16px; /* Bordes redondeados */
-  background: #fff; /* Fondo blanco para contraste */
-  color: #111827; /* Texto oscuro para legibilidad */
-  text-align: center; /* Centra el texto dentro del input */
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem); /* Tamaño adaptable */
-  font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-  outline: none; /* Sin borde de sistema al enfocar */
-  transition: border-color .2s ease, box-shadow .2s ease; /* Transiciones suaves */
  }
 
- /*Para que cuando se vaya a escribir la caja de texto resalte*/
+#ContenedorBienvenida .welcome-box label {
+  display: block;
+  text-align: center;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: #003f67;
+ }
+
+ #ContenedorBienvenida .chalk-input {
+  width: min(100%, 360px);
+  margin: 0 auto 16px auto;
+  display: block;
+  padding: 12px 18px;
+  border: 2px solid #127afa;
+  border-radius: 16px;
+  background: #fff;
+  color: #111827;
+  text-align: center;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-family: 'Lobster Two', cursive;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+ }
+
  #ContenedorBienvenida .chalk-input:focus {
-  border-color: #93c5fd; /* Borde azul claro al enfocar */
-  box-shadow: 0 0 0 4px rgba(59,130,246,.15); /* Sombra azul suave al enfocar */
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59,130,246,.15);
  }
 
  #ContenedorBienvenida .btn {
-  border: none; /* Sin borde por defecto */
-  border-radius: 16px; /* Bordes redondeados */
-  cursor: pointer; /* Cursor de mano al pasar */
-  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease; /* Transiciones suaves */
-  box-shadow: 0 3px 9px rgb(224, 253, 253); /* Sombra para profundidad */
-  font-family: 'Lobster Two'; /* Fuente decorativa */
-  padding: 12px 24px; /* Espaciado interno cómodo */
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); /* Degradado azul */
-  color: #fff; /* Texto blanco */
-  font-size: clamp(1.2rem, 2.2vw, 1.6rem); /* Tamaño adaptable */
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+  box-shadow: 0 3px 9px rgb(224, 253, 253);
+  font-family: 'Lobster Two', cursive;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
  }
 
  #ContenedorBienvenida .btn:hover {
-  filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
-  transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+  filter: brightness(.85);
+  transform: translateY(-3px);
  }
 
  #ContenedorBienvenida #welcomeError {
-  margin-top: 10px; /* Espacio arriba del mensaje de error */
-  color: #b91c1c; /* Rojo intenso para destacar el error */
-  font-weight: 700; /* Texto en negrita */
-  font-size: clamp(1rem, 1.8vw, 1.2rem); /* Tamaño adaptable */
-  text-align: center; /* Centra el mensaje */
-  font-family: 'Rancho', cursive; /* Fuente decorativa */
+  margin-top: 10px;
+  color: #b91c1c;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  text-align: center;
+  font-family: 'Rancho', cursive;
  }
 
-/* ===================================================================================
+ 
+/* Contenedores controlados por JS — visibilidad manejada en main.js */
+#ContenedorLibro .page.q1-book-spread,
+#ContenedorLibro .activity-spread {
+  position: relative;
+}
+
+
+
+ /* ===================================================================================
    CONTENEDOR CONFIRMACIÓN: Pantalla para confirmar identidad del estudiante.
    Centra y resalta la pregunta de confirmación.
 ====================================================================================== */
@@ -225,7 +258,7 @@ body {
     /*para que se eleve y se oscurezca el botón de confirmación al pasar el mouse ¡IMPORTANTE en hover porque ese es para que pase algo cuando el mouse pasa por encima*/
      #ContenedorConfirmacion .confirmation-buttons .btn:hover {
      filter: brightness(.85); /* Oscurece ligeramente al pasar el mouse */
-    transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
+     transform: translateY(-3px); /* Efecto de elevación al pasar el mouse */
      }
 
   /* Imagen dentro del botón de confirmación */
@@ -239,7 +272,7 @@ body {
 
 /* ====================================================================================================================
    CONTENEDOR PORTADA
-   área visual principal de la portada del libro interactivo.
+   Área visual principal de la portada del libro interactivo.
    Centra y resalta la portada con fondo degradado y sombra.
 ======================================================================================================================= */
 #ContenedorPortada {
@@ -258,9 +291,19 @@ body {
   border: 3px solid rgba(180, 138, 0, .25);
   box-shadow: 0 14px 30px rgba(0,0,0,.14);
   padding: 2vw;
-  gap: 2vh;
   overflow: hidden;
   border-radius: 14px;
+  }
+
+  #ContenedorPortada #bookCover {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(18px, 3vh, 32px) 0;
+    box-sizing: border-box;
   }
   
   /* Título principal de la portada del libro */
@@ -279,55 +322,49 @@ body {
   
     #ContenedorPortada .cover-subtitle {
       font-family: 'Rancho', cursive; /* Fuente decorativa para el subtítulo */
-      font-size: clamp(1rem, 2.5vw, 1.5rem); /* Tamaño responsivo para subtítulo */
+      font-size: clamp(2rem, 3.5vw, 2.5rem); /* Tamaño responsivo para subtítulo */
       width: 100%; /* Ocupa todo el ancho del contenedor */
       word-break: break-word; /* Permite cortar palabras largas */
       overflow-wrap: break-word; /* Ajusta el texto al ancho */
       white-space: normal; /* Permite saltos de línea */
       text-align: center; /* Centra el texto */
       line-height: 1.2; /* Espaciado entre líneas */
-      margin: 0; /* Sin margen extra */
       color: #8000ffc4; /* Color del subtítulo */
       word-break: break-word;      /* Permite cortar palabras largas si es necesario */
       overflow-wrap: break-word;   /* Asegura que el texto se ajuste al contenedor */
       white-space: normal;         /* Permite saltos de línea normales */
+      margin: auto 0;
+      display: block;
       }
 
     /* Descripción-SUBTITULO de la portada del libro */
 
   
- /* Botón 'Léeme' en la portada: tamaño responsivo, centrado y sin bordes */
- #ContenedorPortada .cover-leer-btn {
-  width: min(320px, 60%);           /* El botón nunca será mayor a 320px y ocupa hasta el 60% del contenedor */
-  aspect-ratio: 4/1.2;              /* Mantiene una proporción rectangular para el botón */
-  display: flex;                    /* Usa flexbox para centrar el contenido */
-  align-items: center;              /* Centra verticalmente la imagen dentro del botón */
-  justify-content: center;          /* Centra horizontalmente la imagen dentro del botón */
-  margin: 24px auto 0 auto;         /* Centra el botón y lo separa del contenido superior */
-  padding: 0;                       /* Sin relleno interno */
-  border: none;                     /* Sin borde */
-  background: transparent;          /* Fondo transparente */
-  box-sizing: border-box;           /* Incluye padding y borde en el tamaño total */
-  overflow: visible;                /* Permite que la imagen se muestre completa */
-  cursor: pointer;                  /* Cursor de mano al pasar */
- }
-  
- /* Efecto visual al pasar el mouse sobre la imagen 'Léeme' */
- #ContenedorPortada .cover-leer-btn:hover {
+/* Imagen 'Léeme' como botón directamente */
+#ContenedorPortada .cover-leer-image {
+  width: 30%; /* Tamaño del botón, ajustable según diseño */
+  display: block;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-sizing: border-box;
+  overflow: visible;
+  cursor: pointer;
+  object-fit: contain;
+  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+}
+  /* Efecto visual al pasar el mouse sobre la imagen 'Léeme' */
+ #ContenedorPortada .cover-leer-image:hover {
   transform: translateY(-3px);      /* Eleva el botón ligeramente */
   filter: brightness(1.15);         /* Ilumina el botón */
   box-shadow: 0 6px 18px rgba(255, 237, 72, 0.466); /* Sombra dorada */
  }
 
- /* Imagen interna del botón 'Léeme': ocupa todo el botón sin deformarse */
- #ContenedorPortada .cover-leer-image {
-  width: 100%;                      /* La imagen ocupa todo el ancho del botón */
-  height: 100%;                     /* La imagen ocupa todo el alto del botón */
-  object-fit: contain;              /* La imagen nunca se deforma, siempre se ve completa */
-  display: block;                   /* Elimina espacios extra debajo de la imagen */
-  pointer-events: none;             /* La imagen no bloquea el click del botón */
- }
-    /* Ocultar botones ? ? cuando la portada está activa */
+
+    /* Ocultar botones → ← cuando la portada está activa */
 /* --- Migración: ocultar navegación cuando la portada está activa, ahora bajo #ContenedorLibro --- */
 #ContenedorLibro #flipbook .book-cover-page.active ~ .nav-btn,
 #ContenedorLibro #flipbook .book-cover-page.active ~ #prevBtn,
@@ -335,314 +372,1366 @@ body {
   display: none !important;
 }
 
-
-/* =====================================================================================================================
-     CONTENEDOR LIBRO (FLIPBOOK)
- ======================================================================================================================= */
- /* Botones de navegación */
-   #ContenedorLibro .nav-btn {
-   top: 50%;
-   transform: translateY(-50%);
-   width: 56px;
-   height: 56px;
-   z-index: 120;
-   position: absolute;
-   background: #0379ff; /* Fondo azul vibrante */
-   color: #fff; /* Flecha blanca */
-   border: none;
-   border-radius: 50%;
-   font-size: 2.2rem;
-   font-family: 'Lobster Two', 'Comic Sans MS', cursive, sans-serif;
-   box-shadow: 0 2px 8px rgba(0,0,0,0.13);
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   cursor: pointer;
-   transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-   outline: none;
-   user-select: none;
+/* =====================================================================================================
+   Botones de navegación del libro (anterior/siguiente) → AJUSTES GENERALES
+===================================================================================================== */
+.nav-btn, #prevBtn, #nextBtn {
+    position: absolute;
+    top: 50%; /* Centra verticalmente el botón respecto al contenedor del libro */
+    transform: translateY(-50%);
+    background: var(--pastel-azul-num);
+    border: white solid 2px;
+    border-radius: 10%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    color: white; /* Color del texto (flechas) */
+    font-size: 2rem; /* Tamaño de las flechas */
    }
-
-/* Efecto hover/focus para accesibilidad */
- #ContenedorLibro .nav-btn:hover, #ContenedorLibro .nav-btn:focus {
-  background: #0056b3;
-  color: #fff;
-  transform: translateY(-50%) scale(1.08);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
- }
-   
- #ContenedorLibro #prevBtn {
-  left: 12px;
-  }
-
-  #ContenedorLibro #nextBtn {
-  right: 12px;
-  }
   
-  /* Estilo general del contenedor del libro */ 
-  #ContenedorLibro {
-    width: min(95vw, 1000px); /* Máximo 1000px, pero responsivo */
-    height: 100vh; /* Siempre ocupa el alto total de la pantalla */
-    max-height: 100vh;
-    padding: 24px 10px 8px 10px; /* Espaciado interno */
-    gap: 12px; /* Espacio vertical entre elementos */
-    display: flex; /* Flexbox para organizar el contenido */
-    flex-direction: column; /* Apila elementos en columna */
-    align-items: center; /* Centra horizontalmente el contenido */
-    justify-content: center; /* Centra verticalmente el contenido */
-    position: relative; /* Permite posicionar elementos hijos de forma absoluta */
-    overflow: hidden;
-
-    --a0-body-font-size: clamp(0.9rem, 1.15vw, 1.08rem); /* Variable para tamaño de texto */
-    --a0-body-line-height: 1.45; /* Variable para interlineado */
-    --a0-body-font-family: 'Rancho'; /* Variable para fuente de texto */
-
-    --a0-title-font-size: clamp(1rem, 1.9vw, 1.4rem); /* Variable para títulos */
-    --a0-title-line-height: 1.45; /* Variable para interlineado de títulos */
-    --a0-title-font-family: 'Lobster Two', cursive; /* Variable para fuente de títulos */
-    --a0-title-color: #0379ff; /* Variable para color de títulos */
-    
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.253); /* Variable para sombra media */
-    --surface: #fff; /* Variable para color de fondo de páginas */
+   #prevBtn {
+   left: 1rem;
+   z-index: 100;    
    }
 
- /* Estilo particular del contenedor del flipbook: centra el libro y define el área de páginas */
-  #ContenedorLibro .flipbook-wrapper {
-    display: flex; /* Flexbox para centrar el flipbook */
-    align-items: center; /* Centra verticalmente */
-    justify-content: center; /* Centra horizontalmente */
-    width: min(100%, 900px); /* Máximo 900px, responsivo */
-    height: 100%; /* Ocupa todo el alto del contenedor padre */
-    margin: 0; /* Sin margen externo */
-    padding: 0; /* Sin relleno interno */
-    position: relative; /* Permite posicionar páginas de forma absoluta */
+   #nextBtn {
+   right: 1rem;
+   z-index: 100;
+   }
+
+/* =====================================================================================================
+   LIBRO Y SPREADS
+===================================================================================================== */
+#ContenedorLibro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centra verticalmente el libro */
+  gap: var(--gap-lg);
+  width: 100%;
+  height: 100vh;
+  overflow: visible; /* Necesario para que los botones de nav no queden recortados */
+  box-sizing: border-box;
   }
 
-/*
-============================================================
- ANIMACIÓN REALISTA DE PASO DE PÁGINA DE LIBRO (FLIPBOOK)
-------------------------------------------------------------
- Este bloque define la animación 3D para simular el paso de página
- como en un libro real. Utiliza transformaciones y transiciones
- para lograr el efecto de "volteo" de hoja.
-------------------------------------------------------------
- 1. .page: base de cada página, apilada y oculta por defecto.
- 2. .page.active: página visible, lista para animar.
- 3. .page.turning-next/.turning-prev: animación de paso de página.
- 4. .page.turned: página ya pasada (queda "detrás").
-------------------------------------------------------------
- Puedes controlar la animación agregando/quitarndo las clases
- .turning-next, .turning-prev y .turned desde JS.
-============================================================
-*/
-#ContenedorLibro .page {
-  position: absolute; /* Apila todas las páginas una sobre otra */
+/* Respaldo: en pantallas bajas prioriza visibilidad completa sobre centrado vertical */
+@media (max-height: 760px) {
+  #ContenedorLibro {
+    justify-content: flex-start;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+}
+
+ #ContenedorLibro .page.q1-book-spread,
+ #ContenedorLibro .activity-spread {
+  width: var(--spread-width); /* Ancho del spread definido por variable CSS */
+  height: var(--spread-height);
+  max-width: 90%;
+  max-height: 92vh;
+  margin: 0.5em auto;
+  display: flex; /* Flexbox para organizar las páginas internas del spread */
+  flex-direction: row; /* Páginas internas una al lado de la otra */
+  align-items: stretch; /* Asegura que las páginas internas ocupen toda la altura del spread */
+  justify-content: center; /* Centra horizontalmente las páginas internas dentro del spread */
+  align-items: center; /* Centra verticalmente las páginas internas dentro del spread */
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-suave);
+  padding: var(--gap-lg);
+  gap: 0;
+  position: relative;
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+  overflow: visible !important;
+ }
+
+ /* =====================================================================================================
+  PÁGINAS INTERNAS DEL SPREAD
+  ===================================================================================================== */
+/* Ajuste para dejar espacio al pliegue central */
+.left-page, .q1-left-page{
+  width: 48.5%;
+  height: 100%;
+  display: flex; /* Flexbox para organizar el contenido de la página */
+  flex-direction: column; /* Apila el contenido en columna */
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra horizontalmente el contenido */
+  background: transparent;
+  font-family: var(--font-general);
+  color: var(--pastel-azul-texto);
+  padding: 1vw 1vw 1vw 1vw;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  font-size: clamp(2rem, 3vw, 2.2rem);
+  }
+    /*Para que los títulos de las páginas internas no tengan margen y estén alineados con el contenido*/
+   .left-page h3, .q1-left-page h3{
+    margin-top: 0em;
+    margin-bottom: 0em;
+    text-align: center;
+    }
+   /*Para que los párrafos de las páginas internas tengan margen a derecha e izquierda y estén alineados con el contenido*/ 
+    .left-page p, .q1-left-page p{
+    margin-top: 0em;
+    margin-bottom: 0em;
+    text-align: justify;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    }
+    /*Para las imágenes de situación en las páginas internas*/
+    .left-page .situation-image, .q1-left-page .situation-image {
+      max-width: 75%;
+      max-height: 100%;
+      margin: auto;
+      border-radius: var(--radius-lg);
+      object-fit: contain;
+      border: 1.5px solid #ececf3;
+      padding: 0.5vw;
+    }
+ 
+/* Ajuste para dejar espacio al pliegue central */
+.right-page, .q1-right-page  {
+  background: transparent;
+  height: 100%;
+  width: 48.5%;
+  padding: 1vw 1vw 1vw 1vw;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: clamp(2rem, 3vw, 2.2rem);
+  margin-bottom: 0.3em;
+  margin-top: 0.3em;
+  gap: 0.3em;
+  min-height: 0; /* Importante para que flex calcule correctamente */
+  }
+      /*Para que los títulos de las páginas internas no tengan margen y estén alineados con el contenido*/
+   .right-page h3, .q1-right-page h3, .left-page h3, .q1-left-page h3{
+    margin-top: 0em;
+    margin-bottom: 0em;
+    text-align: center;
+    font-size: clamp(2rem, 3vw, 2rem);
+    color: var(--pastel-azul-texto);
+    flex-shrink: 0; /* Evita que se reduzca */
+    }
+   /*Para que los párrafos de las páginas internas tengan margen a derecha e izquierda y estén alineados con el contenido*/ 
+    .right-page p, .q1-right-page p, .left-page p, .q1-left-page p{
+    margin-top: 0em;
+    margin-bottom: 0em;
+    text-align: justify;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    font-size: clamp(2rem, 2vw, 2rem);
+    color: black;
+    }
+
+    /* =====================================================================================================
+    IMÁGENES EN LA PÁGINA IZQUIERDA Páginas 1,3,5,7,9 (AJUSTE Y ESTILO)
+    ===================================================================================================== */
+    .left-page img, .q1-left-page img, .story-image {
+     display: block;
+     max-width: 95%;
+     max-height: 100%;
+     margin: auto;
+     border-radius: var(--radius-lg);
+     object-fit: contain;
+     border: 1.5px solid #ececf3;
+     padding: 0.5vw;
+     }
+
+    /* =====================================================================================================
+    PÁGINAS 12 Y 13 SITUACION 1 Y PREGUNTA 1
+    ===================================================================================================== */
+    /* Botones de herramientas del tablero: sin fondo, sin borde, cuadrados y en fila */
+       .board-tools { /* Contenedor de los botones del tablero */
+       display: flex;
+       flex-direction: row;
+       gap: 0.45em; /* Espacio entre botones */
+       justify-content: center;
+       align-items: center;
+       }
+
+       .board-tools .tool-btn { /* Estilo de cada botón de herramienta */
+       background: none;
+       border: none;
+       box-shadow: none;
+       padding: 0.2em;
+       margin: 0;
+       border-radius: 0.5em;
+       width: 70px;
+       height: 70px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       transition: background 0.2s;
+       }
+
+       .board-tools .tool-btn:hover { /* Resalta el botón enfocado con un borde azul */
+       transform: translateY(-3px);      /* Eleva el botón ligeramente */
+       filter: brightness(1.15);         /* Ilumina el botón */
+       box-shadow: 0 6px 18px rgba(255, 231, 10, 0.534); /* Sombra dorada */
+       }
+
+       .board-tools .tool-btn img {
+       max-width: 60%;
+       max-height: 60%;
+       margin: 0;
+       padding: 0;
+       display: block;
+       }
+    
+       /*Tablero de la página 12 =====================================================================*/
+       .board-container { /* Contenedor del tablero y herramientas, con fondo transparente para que se vea el fondo del libro */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.4em;
+        width: 100%;
+        flex: 1 1 auto; /* Permite que el contenedor del tablero crezca para llenar el espacio disponible */
+        min-height: 0; /* Importante para que flex calcule correctamente la altura en navegadores modernos */
+       }
+
+       .board-tools { /* Contenedor de botones - altura fija */
+        flex-shrink: 0; /* Evita que se reduzca */
+       }
+
+       .board-wrapper { /* Contenedor del tablero con fondo blanco, borde y sombra */
+        border: 6px solid #7c4a03;
+        border-radius: 18px;
+        box-shadow: 0 4px 24px 0 rgba(80, 50, 10, 0.61);
+        margin: 0 auto;
+        width: 100%;
+        flex: 1 1 auto; /* Ocupa el espacio restante */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background-color: white;
+
+        max-width: 100%;        
+        min-height: 200px;
+        min-width: 200px;
+       }
+
+       .drawing-board {
+        display: block;
+        width: 100%;
+        height: 100%;
+        flex: 1 1 auto;
+        border-radius: 12px;
+        touch-action: none;
+       }
+
+      .boardCanvasM1Q1 > div { /* Estilo de cada celda del tablero */
+        width: 100%;
+        height: 100%;
+       }
+    
+       /* Botones de Grabar, pausar, enviar==============================================================*/
+       .audio-controls { /* Contenedor de los botones de audio */
+       display: flex;
+       flex-direction: row;
+       gap: 0.45em; /* Espacio entre botones */
+       justify-content: center;
+       align-items: center;
+       margin-top: 0.4em; /* Espacio encima de los botones de audio */
+       flex-shrink: 0; /* Evita que se reduzca */
+       }
+
+       .audio-controls .btn { /* Contenedor de los botones de audio */
+       display: flex;
+       flex-direction: row;
+       gap: 0.45em; /* Espacio entre botones */
+       justify-content: center;
+       align-items: center;
+       margin-top: 0.4em; /* Espacio encima de los botones de audio */
+       background-color: white;
+       }
+       
+       .audio-controls .btn:hover { /* Resalta el botón enfocado con un borde azul */
+       transform: translateY(-3px);      /* Eleva el botón ligeramente */
+       filter: brightness(1.15);         /* Ilumina el botón */
+       box-shadow: 0 6px 18px rgba(255, 231, 10, 0.534); /* Sombra dorada */
+       }
+       .audio-controls button img { /* Estilo de cada botón de audio */
+       max-width: 40px;
+       max-height: 40px;
+       object-fit: contain;
+       margin: 0;
+       padding: 0;
+       display: block;
+       }
+
+       /* =====================================================================================================
+        Páginas 13 y  14 situación 2 y cocina
+        ===================================================================================================== */
+        .q2-guide-card { /* Tarjeta de guía para la situación 2 */
+          width: 95%;
+          height: auto;
+          background: rgb(255, 255, 255);
+          border-radius: 16px;
+          padding: 0; /* Espaciado interno definido por variable */
+          display: flex; /** Flexbox para organizar el contenido de la tarjeta */
+          flex-direction: column; /* Apila el contenido en columna */
+          align-items: center; /* Centra horizontalmente el contenido */
+          justify-content: center; /* Centra verticalmente el contenido */
+          font-family: var(--font-general);
+          color: var(--pastel-azul-texto);
+          font-size: clamp(1.5rem, 2.5vw, 2rem);
+          color: #003f67;
+          margin-top: 4%;
+          margin-bottom: 4%;
+        } 
+          
+        .q1-left-page .btn-cocina { /* Botón para ir a la cocina en la situación 2 */
+          width: 95%;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, #3b83f6ce 0%, #1d4fd8c7 100%);
+          color: #fff;
+          font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+          font-family: 'Lobster Two', cursive;
+          border: none;
+          border-radius: 16px;
+          cursor: pointer;
+          transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+        }
+
+        .q1-left-page .btn-cocina:hover { /* Efecto visual al pasar el mouse sobre el botón de cocina */
+          filter: brightness(.85);
+          transform: translateY(-3px);
+          box-shadow: 0 3px 9px rgb(224, 253, 253);
+        }
+
+        .q1-right-page .BandejasFoto { /* Imagen de la bandeja en la situación 2 */
+          width: 95%;
+          height: auto;
+          max-width: 400px;
+          max-height: 30%;
+          margin: auto;
+          object-fit: contain;
+          padding: 0.5vw;
+          display: block;
+        }
+        
+        /* =====================================================================================================
+        Páginas 15 y  16 Los sobres secretos 1
+        ===================================================================================================== */
+      .envelope-equation { /* Contenedor de los sobres secretos en la situación 3 */
+        display: flex; /* Flexbox para organizar los sobres secretos */
+        flex-direction: row;
+        gap: 1vw; /* Espacio entre los sobres */
+        justify-content: center;
+        align-items: center;
+        margin-top: 4%; 
+        margin-bottom: 4%;
+        background-color: white;
+        border-radius: 16px;
+        border-style: solid;
+        border-width: 2px;
+        border-color: #190bdb;
+        width: 90%;
+        }
+        .operator { /* Estilo del por e igual en la situación 3 */
+       font-family: 'Arial', sans-serif; /* O la fuente que prefieras */
+       font-size: 2.2em;
+       color: #b10505; 
+       }
+       .rect, .number { /* Estilo de los sobres y números en la situación 3 */
+       font-family: 'Rancho', cursive; /* O la fuente que prefieras */
+       font-size: 1.5em;
+       color: #029c31; 
+       font-weight: bold;
+       }
+
+       .radio-label { /* Estilo de las etiquetas de opcion multiple en la situación 3 */
+        display: block;
+        }
+
+      #promptSection1,
+      #promptSection2 { /* Contenedor de respuesta guiada en páginas 16 y 18 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.55em;
+        width: 100%;
+        margin-top: 0.35em;
+      }
+
+      #promptSection1 .prompt-box,
+      #promptSection2 .prompt-box { /* Fondo destacado para resaltar la pregunta */
+        width: 80%;
+        padding: 0.6em 0.8em;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(238, 243, 255, 0.95) 100%);
+        border: 2px solid rgba(29, 78, 216, 0.26);
+        box-shadow: 0 8px 18px rgba(30, 64, 175, 0.18);
+      }
+
+      #promptSection1 .prompt-box p,
+      #promptSection2 .prompt-box p {
+        margin: 0;
+        text-align: center;
+        font-family: 'Rancho', cursive;
+        font-size: clamp(1.35rem, 1.9vw, 1.85rem);
+        color: #163261;
+        line-height: 1.25;
+      }
+        
+        /* =====================================================================================================
+        Páginas 19 y  20 Reto final
+        ===================================================================================================== */     
+        .q1-right-page.magic-theme { /* Estilo del tema mágico en la situación 4 */
+          width: 48.5%;
+          height: 100%;
+          max-width: 48.5%;
+          max-height: 100%;
+          margin: 0.3em 0;
+          padding: 0.8rem 0.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-evenly;
+          gap: 0.35rem;
+        }
+
+        .q1-right-page.magic-theme > * {
+          width: 90%;
+        }
+
+        .magic-instruction {
+          width: 90%;
+          margin: 0;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(2rem, 2.7vw, 2.6rem);
+          line-height: 1.15;
+        }
+
+        .magic-lives-box {
+          width: 90%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.45rem 0.6rem;
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.42);
+          border: 1px solid rgba(255, 255, 255, 0.55);
+          box-shadow: 0 6px 16px rgba(29, 78, 216, 0.12);
+        }
+
+        .magic-label {
+          margin: 0;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(2rem, 2.6vw, 2.4rem);
+          color: #0d2f63;
+        }
+
+        .magic-lives {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+          width: 100%;
+        }
+
+        .magic-heart {
+          font-size: clamp(1.9rem, 2.5vw, 2.2rem);
+        }
+
+        #itemsWrapper {
+          display: flex;
+          justify-content: center;
+        }
+
+        #moment4Status,
+        #pointsStatus,
+        #finalQuestionSection {
+          width: 90%;
+          margin: 0 auto;
+        }
+
+        .magic-equation {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.55rem;
+        }
+
+        .magic-equation-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(2rem, 2.5vw, 2.5rem);
+          color: #0a0a0a;
+        }
+
+        .magic-equation .btn {
+          margin: 0;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+        }
+
+        input[type="radio"] { /* Estilo de los botones de opción múltiple en la situación 4 */
+          size: 5px;
+          }
+        
+        /* =====================================================================================================
+        Páginas 21 y  22 Reto final
+        ===================================================================================================== */
+        .reflection-option { /* Estilo de las etiquetas de opcion multiple en la situación 4 */
+        display: block;
+        }
+
+        .reflection-audio-box {
+          width: 100%;
+          margin-top: 0.35em;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.3em;
+        }
+
+        .reflection-audio-title {
+          margin: 0;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.35rem, 1.9vw, 1.8rem);
+          color: #123d77;
+        }
+
+        .q1-left-page p.status-text,
+        .q1-right-page p.status-text { /* Estilo unificado para todos los textos de estado del audio*/
+          text-align: center;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1rem, 1.3vw, 1.2rem);
+          min-height: 1.4em;
+          margin: 0;
+          line-height: 1.2;
+        }
+
+/* =====================================================================================================
+  PLIEGUE CENTRAL (SEPARADOR ENTRE PÁGINAS)
+===================================================================================================== */
+.spread-fold {
+  width: 0.8%;
+  height: 100%;
+  align-self: stretch; /* Asegura que el pliegue ocupe toda la altura del spread */
+  background: linear-gradient(90deg, #d1c4e9 0%, #bdbdbd 45%, #fff 50%, #bdbdbd 55%, #b2d5ff 100%);
+  border-radius: 18px;
+  display: flex; /* Flexbox para organizar el contenido del pliegue central */
+  align-items: center; /* Centra verticalmente el contenido del pliegue */
+  flex-direction: column;
+  justify-content: center;
+  z-index: 20; /* Asegura que el pliegue esté por encima de las páginas para crear el efecto de separación */
+  margin-left: 0.2vw;
+  margin-right: 0.2vw;
+  min-height: 500px;
+}
+
+
+/* =====================================================================================================
+   NUMERACIÓN DE PÁGINAS
+===================================================================================================== */
+#ContenedorLibro .page.q1-book-spread > .page-number,
+#ContenedorLibro .activity-spread > .page-number {
+  position: absolute;
+  bottom: 1.2vw;
+  font-family: var(--font-titulo);
+  font-size: clamp(1.2rem, 2vw, 2rem);
+  color: var(--pastel-azul-num);
+  letter-spacing: 0.04em;
+  user-select: none;
+  z-index: 30;
+}
+
+#ContenedorLibro .page.q1-book-spread > .page-number-left,
+#ContenedorLibro .activity-spread > .page-number-left {
+  left: 2vw;
+}
+
+#ContenedorLibro .page.q1-book-spread > .page-number-right,
+#ContenedorLibro .activity-spread > .page-number-right {
+  right: 2vw;
+}
+/* =====================================================================================================
+   CÓDIGO DEL ESTUDIANTE
+===================================================================================================== */
+
+#ContenedorLibro .page.q1-book-spread > .spread-student-code,
+#ContenedorLibro .activity-spread > .spread-student-code {
+  position: absolute;
+  top: 1.1vw;
+  left: 2vw;
+  font-family: var(--font-titulo);
+  font-size: clamp(1rem, 1vw, 1.2rem);
+  color: var(--pastel-azul-num);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* =====================================================================================================
+  CONTENEDOR COCINA
+===================================================================================================== */
+  #ContenedorCocina {
+  position: relative;
+  width: min(96vw, 1320px);
+  max-width: 1320px;
+  min-height: calc(100vh - 2rem);
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background:
+    radial-gradient(circle at top left, rgba(255, 245, 216, 0.75), transparent 28%),
+    radial-gradient(circle at top right, rgba(255, 224, 197, 0.55), transparent 24%),
+    linear-gradient(160deg, #f4d9ef 0%, #d8d2ff 34%, #c6ecff 100%);
+  border: 3px solid rgba(156, 97, 38, 0.22);
+  box-shadow: 0 18px 42px rgba(80, 52, 24, 0.18);
+  padding: 1.1rem;
+  border-radius: 28px;
+  box-sizing: border-box;
+  }
+
+  .cocina-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  text-align: center;
+  }
+
+
+ .cocina-header h2 {
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(2.1rem, 4vw, 3.4rem);
+  color: #93511b;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 0 2px 0 rgba(255,255,255,0.42);
+  }
+ .cocina-header p {
+  font-family: 'Rancho', cursive;
+  font-size: clamp(1.5rem, 2.1vw, 2rem);
+  color: #6c4420;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  }
+
+  .cocina-body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex: 1 1 auto;
+  }
+
+  
+  #ContenedorCocina #cocinaScreen {
+  width: 100%;
+  min-height: calc(100vh - 4rem);
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  }
+
+ .bakery-kitchen-bg {
+  position: relative;
+  width: min(100%, 1180px);
+  min-height: 700px;
+  margin: 0 auto;
+  padding: 7rem 1.5rem 2rem;
+  border-radius: 28px;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #fffaf1 0%, #f8ebd7 64%, #d7a26d 64%, #c3874b 100%);
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.5), 0 18px 36px rgba(111, 73, 31, 0.2);
+ }
+
+ .bakery-wall {
+  position: absolute;
+  inset: 0 0 28% 0;
+  background:
+    linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.12)),
+    linear-gradient(90deg, rgba(214, 184, 146, 0.35) 0 2px, transparent 2px 62px),
+    linear-gradient(180deg, rgba(214, 184, 146, 0.3) 0 2px, transparent 2px 62px),
+    linear-gradient(180deg, #fff9f1 0%, #f6ebdd 100%);
+ }
+
+ .bakery-floor {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 28%;
+  background:
+    repeating-linear-gradient(90deg, #c98f58 0 36px, #b37843 36px 40px, #c98f58 40px 76px),
+    linear-gradient(180deg, #b77c45 0%, #996232 100%);
+ }
+
+ .bakery-shelf {
+  position: absolute;
+  top: 1.8rem;
+  left: 2rem;
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-end;
+  padding: 0.8rem 1rem 1rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #b07c49 0%, #8c5a2d 100%);
+  box-shadow: 0 12px 20px rgba(92, 59, 27, 0.18);
+  z-index: 2;
+ }
+
+ .bakery-shelf::after {
+  content: '';
+  position: absolute;
+  left: 0.8rem;
+  right: 0.8rem;
+  bottom: 0.35rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(83, 48, 20, 0.34);
+ }
+
+ .bakery-shelf-item {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+ }
+
+ .bakery-shelf-item.jar {
+  background: linear-gradient(180deg, #fdf7e2 0%, #efd6a8 100%);
+  border: 3px solid #d49c59;
+ }
+
+ .bakery-shelf-item.jar::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: -8px;
+  height: 10px;
+  border-radius: 8px 8px 4px 4px;
+  background: #b96a39;
+ }
+
+ .bakery-shelf-item.bowl {
+  width: 62px;
+  height: 38px;
+  border-radius: 0 0 30px 30px;
+  background: linear-gradient(180deg, #f4c2a1 0%, #d97f55 100%);
+  align-self: flex-end;
+ }
+
+ .bakery-shelf-item.bowl::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: -14px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffe9c2 0%, #d69a57 100%);
+ }
+
+ .bakery-shelf-item.basket {
+  width: 70px;
+  height: 44px;
+  border-radius: 0 0 22px 22px;
+  background: linear-gradient(180deg, #d3a35a 0%, #b37a39 100%);
+ }
+
+ .bakery-shelf-item.basket::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: -16px;
+  height: 24px;
+  background: url('./assets/images/pandebono.png') center/contain no-repeat;
+ }
+
+ .bakery-oven {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  width: 180px;
+  height: 128px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #d8d8de 0%, #9ba0aa 100%);
+  box-shadow: 0 12px 24px rgba(75, 79, 88, 0.2);
+  z-index: 2;
+ }
+
+ .oven-door {
+  position: absolute;
+  inset: 18px 16px 16px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #4d5058 0%, #2e3138 100%);
+ }
+
+ .oven-window {
+  position: absolute;
+  left: 34px;
+  right: 34px;
+  top: 34px;
+  bottom: 34px;
+  border-radius: 14px;
+  background: radial-gradient(circle at center, rgba(255, 205, 120, 0.95) 0%, rgba(250, 135, 63, 0.92) 48%, rgba(96, 40, 12, 0.9) 100%);
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
+ }
+
+ .bakery-utensils {
+  position: absolute;
+  top: 6.9rem;
+  left: 2.4rem;
+  display: flex;
+  gap: 1rem;
+  z-index: 2;
+ }
+
+ .utensil {
+  position: relative;
+  display: block;
+  width: 14px;
+  height: 72px;
+ }
+
+ .utensil::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 18px;
+  width: 4px;
+  height: 52px;
+  border-radius: 999px;
+  background: #9a6a37;
+ }
+
+ .utensil.whisk::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 24px;
+  border: 3px solid #a8b0b7;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none;
+ }
+
+ .utensil.spoon::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 14px;
+  height: 22px;
+  border-radius: 50% 50% 45% 45%;
+  background: linear-gradient(180deg, #cdd5dc 0%, #8b949b 100%);
+ }
+
+ .utensil.rolling-pin::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 12px;
+  width: 32px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d9a56e 0%, #b87f49 100%);
+ }
+
+ .utensil.rolling-pin::after {
+  left: -1px;
+  top: 4px;
+  width: 4px;
+  height: 28px;
+ }
+
+ .bakery-table-center {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 1100px);
+  margin: 7rem auto 0;
+  padding: 1.35rem;
+  border-radius: 30px;
+  background: linear-gradient(180deg, #cb945d 0%, #a76935 100%);
+  box-shadow: 0 18px 28px rgba(101, 61, 27, 0.3);
+  box-sizing: border-box;
+ }
+
+ .bakery-table-center::before {
+  content: '';
+  position: absolute;
+  inset: -10px 18px auto;
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 236, 206, 0.58);
+ }
+
+ .cocina-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  text-align: center;
+ }
+
+ #verifyTraysBtnM1Q2 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 0.85rem 2.2rem;
+  border-radius: 18px;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #6f79e8 0%, #7350b0 100%);
+  box-shadow: 0 10px 24px rgba(84, 63, 162, 0.3);
+ }
+
+ #verifyTraysBtnM1Q2:hover {
+  filter: brightness(.94);
+  transform: translateY(-2px);
+ }
+
+ #traysFeedbackM1Q2 {
+  max-width: min(90%, 760px);
+  margin: 0 auto;
+  font-family: 'Rancho', cursive;
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+ }
+
+ @media (max-width: 900px) {
+  #ContenedorCocina {
+   width: min(98vw, 1320px);
+   padding: 0.8rem;
+  }
+
+  .bakery-kitchen-bg {
+   min-height: 620px;
+   padding-top: 8.5rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+  }
+
+  .bakery-shelf,
+  .bakery-utensils,
+  .bakery-oven {
+   position: static;
+   margin: 0 auto 0.9rem;
+  }
+
+  .bakery-table-center {
+   margin-top: 0.6rem;
+   width: 100%;
+  }
+ }
+
+  /* Overlay de la cocina (sin cambios) */
+ .cocina-overlay {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 24px 28px;
-  background: var(--surface);
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  background: #fff;
+  z-index: 200;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
   justify-content: flex-start;
-  overflow: hidden;
-  z-index: 1;
-  opacity: 0; /* Oculta por defecto */
-  pointer-events: none;
-  transform: perspective(1200px) rotateY(0deg) scale(1); /* Estado base */
-  transform-origin: left center; /* El "giro" inicia desde el lomo */
-  transition:
-    opacity 0.3s,
-    z-index 0s 0.3s,
-    transform 0.7s cubic-bezier(0.77,0,0.18,1);
-}
-
-/* Página visible (spread actual) */
-#ContenedorLibro .page.active {
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 10;
-  transform: perspective(1200px) rotateY(0deg) scale(1);
-  transition:
-    opacity 0.3s,
-    z-index 0s,
-    transform 0.7s cubic-bezier(0.77,0,0.18,1);
-}
-
-/* Animación: pasar página hacia adelante (siguiente) */
-#ContenedorLibro .page.turning-next {
-  z-index: 20;
-  opacity: 1;
-  pointer-events: none;
-  transform: perspective(1200px) rotateY(-100deg) scale(0.98);
-  transition:
-    transform 0.7s cubic-bezier(0.77,0,0.18,1),
-    opacity 0.3s;
-}
-
-/* Animación: pasar página hacia atrás (anterior) */
-#ContenedorLibro .page.turning-prev {
-  z-index: 20;
-  opacity: 1;
-  pointer-events: none;
-  transform: perspective(1200px) rotateY(100deg) scale(0.98);
-  transition:
-    transform 0.7s cubic-bezier(0.77,0,0.18,1),
-    opacity 0.3s;
-}
-
-/* Página ya pasada (queda "detrás" del libro) */
-#ContenedorLibro .page.turned {
-  z-index: 1;
-  opacity: 0.7;
-  pointer-events: none;
-  transform: perspective(1200px) rotateY(-180deg) scale(0.97);
-  transition:
-    transform 0.7s cubic-bezier(0.77,0,0.18,1),
-    opacity 0.3s;
-}
-
-  /* Esta regla hace que la numeración de páginas del libro se muestre siempre en la parte inferior, 
-  bien separada a los lados, y que no interfiera con la interacción del usuario. */
-  #ContenedorLibro .page-number.book-spread-number {
-    position: absolute; /* Posiciona sobre la página */
-    width: 100%; /* Ocupa todo el ancho */
-    left: 0; /* Desde el borde izquierdo */
-    bottom: 0; /* Pegado al borde inferior */
-    display: flex; /* Flexbox para separar izquierda y derecha */
-    justify-content: space-between; /* Espacia los números a los extremos */
-    pointer-events: none; /* No interactuable */
-    z-index: 20; /* Encima de otros elementos */
-  }
-  
-  /* Hace que los números de página se vean bonitos, 
-  legibles, bien posicionados y con un estilo decorativo en las esquinas inferiores del libro. */
-  #ContenedorLibro .page-number-left, #ContenedorLibro .page-number-right {
-    color: #0084ff; /* Azul llamativo */
-    font-size: clamp(0.7rem, 1.1vw, 1.1rem); /* Tamaño adaptable */
-    font-family: 'Lobster Two', cursive; /* Fuente decorativa */
-    font-weight: bold; /* Texto en negrita */
-    margin-left: 1vw; /* Espacio a la izquierda */
-    margin-right: 1vw; /* Espacio a la derecha */
-    margin-bottom: 0.5vw; /* Espacio inferior */
-    align-self: flex-end; /* Alinea abajo */
-  }
-
-  #ContenedorLibro .q1-book-spread > .spread-student-code {
-    position: absolute;
-    top: 0.9vw;
-    left: 1.2vw;
-    font-family: 'Lobster Two', cursive;
-    font-size: clamp(0.58rem, 0.85vw, 0.82rem);
-    font-weight: bold;
-    color: #0084ff;
-    letter-spacing: 0.03em;
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-    z-index: 30;
+  overflow-y: auto;
+  box-shadow: 0 0 32px 0 rgba(0,0,0,0.12);
+  padding: 2vw;
+  box-sizing: border-box;
   }
 
 
 
-/* Página bajo la derecha: muestra solo la mitad derecha para animación */
-#flipbook .page.page-under-right{
-  opacity: 1; /* Visible */
-  clip-path: inset(0 0 0 50%); /* Muestra solo la mitad derecha */
-  pointer-events: none; /* No interactuable */
-  z-index: 6; /* Prioridad baja */
+
+/* Entrada del reto final sin flechas del input numérico */
+#itemsWrapper .magic-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  font-family: 'Rancho', cursive;
 }
 
-
-/* =====================================================
-  CONTENIDO DE PÁGINA DE HISTORIA (story-page-content)
-   área principal de cada página de la historia, con fondo y bordes decorativos.
-====================================================== */
-
-
-/* Título de la página de historia: centrado y en columna */
-.story-title-page{
-  display: flex; /* Flexbox para organizar el contenido */
-  flex-direction: column; /* Apila elementos en columna */
-  justify-content: center; /* Centra verticalmente */
-  align-items: center; /* Centra horizontalmente */
-  text-align: center; /* Centra el texto */
+#itemsWrapper .magic-input[type="number"]::-webkit-outer-spin-button,
+#itemsWrapper .magic-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-/* =============================================================================================================================
-   SPREAD Q1 (Doble página de la actividad 0A)
-   Organiza la doble página en dos columnas: izquierda (imagen) y derecha (texto).
-============================================================================================================================== */
+/* =====================================================================================================
+   EFECTO LIBRO REAL AL PASAR LA PÁGINA
+===================================================================================================== */
 
-/* Contenedor general de los spreads #ContenedorLibro --- */
- #ContenedorLibro #flipbook .page.q1-book-spread { /* Contenedor de la doble página (spread) de la actividad Q1 */
-  width: 100%;                /* Ocupa todo el ancho del contenedor padre */
-  height: 100%;               /* Ocupa todo el alto del contenedor padre */
-  margin: 0;                  /* Sin margen externo */
-  display: flex;              /* Usa Flexbox para organizar el contenido interno */
-  flex-direction: row;        /* Los hijos se organizan en fila (horizontalmente) */
-  gap: 0;                     /* Sin espacio entre los elementos hijos */
-  align-items: stretch;       /* Los hijos se estiran para ocupar todo el alto */
-  justify-content: stretch;   /* Los hijos se estiran para ocupar todo el ancho */
-  overflow: visible;          /* El contenido que se desborde será visible */
-  background: #ff00dda9;      /* Fondo fucsia semitransparente */
-  box-sizing: border-box;     /* Incluye padding y borde en el tamaño total */
-  position: relative;         /* Permite posicionar elementos hijos de forma absoluta */
- }
+/* Contexto de perspectiva 3D para el spread (padre directo de las páginas) */
+#ContenedorLibro .page.q1-book-spread,
+#ContenedorLibro .activity-spread {
+  perspective: 2200px;
+  perspective-origin: center center;
+}
 
-/* Página izquierda del spread Q1: imagen centrada, sin padding ni margen, con fondo decorativo */
- #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page { /* Página izquierda del spread Q1: imagen centrada, sin padding ni margen, con fondo decorativo */
-    height: 100%;               /* Ocupa todo el alto del contenedor padre */
-    min-height: 0;              /* Permite que flexbox recorte si es necesario */
-  flex: 1 1 0;             /* Ocupa la mitad del espacio disponible en el spread */
-  display: flex;           /* Usa Flexbox para organizar el contenido interno */
-  flex-direction: column;  /* Los hijos se apilan en columna (verticalmente) */
-  align-items: center;     /* Centra horizontalmente el contenido */
-  justify-content: center; /* Centra verticalmente el contenido */
-  text-align: center;      /* Centra el texto dentro del contenedor */
-  position: relative;      /* Permite posicionar elementos hijos de forma absoluta */
-  background: #001aff;   /* Fondo decorativo semitransparente azul */
- }
- 
- /* Imagen dentro de la página izquierda del spread Q1: ocupa casi todo el espacio, sin deformarse, y centrada */
- #ContenedorLibro #flipbook .page.q1-book-spread .q1-left-page img { /* Imagen dentro de la página izquierda del spread Q1 */
-  width: 96%;             /* La imagen ocupa el 96% del ancho del contenedor */
-  max-height: 96%;        /* La imagen nunca supera el alto del contenedor */
-  height: auto;           /* La altura se ajusta automáticamente para mantener la proporción */
-  object-fit: contain;    /* La imagen se escala para verse completa sin deformarse */
-  display: block;         /* Elimina espacios extra debajo de la imagen y la hace un bloque */
- }
+/* La página derecha gira desde su borde izquierdo (el lomo) */
+.q1-right-page {
+  transform-origin: left center;
+}
 
-/* Página derecha del spread Q1: texto centrado a la izquierda, sin padding ni margen, con fondo blanco */
- #ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page {
-    height: 100%;           /* Ocupa todo el alto del contenedor padre */
-    min-height: 0;          /* Permite que flexbox recorte si es necesario */
-  flex: 1 1 0;
+/* La página izquierda gira desde su borde derecho (el lomo) */
+.q1-left-page {
+  transform-origin: right center;
+}
+
+/* ── Keyframes de SALIDA ── */
+@keyframes flip-right-out {
+  0%   { transform: rotateY(0deg);   box-shadow:  6px 0 18px rgba(0, 0, 0, 0.22); }
+  100% { transform: rotateY(-90deg); box-shadow:  0   0  0   rgba(0, 0, 0, 0); }
+}
+
+@keyframes flip-left-out {
+  0%   { transform: rotateY(0deg);   box-shadow: -6px 0 18px rgba(0, 0, 0, 0.22); }
+  100% { transform: rotateY(90deg);  box-shadow:  0   0  0   rgba(0, 0, 0, 0); }
+}
+
+/* ── Keyframes de ENTRADA ── */
+@keyframes flip-left-in {
+  0%   { transform: rotateY(90deg);  box-shadow:  0   0  0   rgba(0, 0, 0, 0); }
+  100% { transform: rotateY(0deg);   box-shadow: -6px 0 18px rgba(0, 0, 0, 0.15); }
+}
+
+@keyframes flip-right-in {
+  0%   { transform: rotateY(-90deg); box-shadow:  0   0  0   rgba(0, 0, 0, 0); }
+  100% { transform: rotateY(0deg);   box-shadow:  6px 0 18px rgba(0, 0, 0, 0.15); }
+}
+
+/* ── Clases aplicadas por JS durante la animación ── */
+.q1-right-page.anim-flip-out {
+  animation: flip-right-out 0.5s ease-in forwards;
+  pointer-events: none;
+}
+
+.q1-left-page.anim-flip-out {
+  animation: flip-left-out 0.5s ease-in forwards;
+  pointer-events: none;
+}
+
+.q1-left-page.anim-flip-in {
+  animation: flip-left-in 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+.q1-right-page.anim-flip-in {
+  animation: flip-right-in 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+/* =====================================================================================================
+   COMPATIBILIDAD ACTIVIDAD 0B
+===================================================================================================== */
+.hidden {
+  display: none !important;
+}
+
+#ContenedorLibro section.screen {
+  display: none;
+}
+
+#problemQ2Section {
+  position: relative;
+  width: var(--spread-width);
+  height: var(--spread-height);
+  max-width: 90%;
+  max-height: 92vh;
+  margin: 0.5em auto;
+}
+
+#problemQ2Section .m2-spread,
+.m3-book-spread,
+.m4-book-spread {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 92vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-suave);
+  padding: var(--gap-lg);
+  gap: 0;
+  position: relative;
+  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
+  overflow: visible !important;
+  box-sizing: border-box;
+}
+
+#problemQ2Section .m2-spread {
+  display: none;
+}
+
+.m3-book-left,
+.m4-left-page,
+.m3-book-right,
+.m4-right-page {
+  width: 48.5%;
+  height: 100%;
+  padding: 1vw;
+  box-sizing: border-box;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: center;
-  text-align: left;
-  padding: 0;
-  margin: 0;
-  background: #e5ff00;
- }
+  align-items: center;
+  min-height: 0;
+}
 
- /* Texto dentro de la página derecha del spread Q1: tamaño adaptable, con interlineado cómodo, color azul, fuente decorativa, sin margen, y que se ajuste al ancho del contenedor */
- #ContenedorLibro #flipbook .page.q1-book-spread .q1-right-page .story-text {
-  font-size: clamp(2rem, 3.5vw, 2.6rem);
-  line-height: 1.25;
-  color: #0059ff;
+.m3-book-left,
+.m4-left-page {
+  font-family: var(--font-general);
+  color: var(--pastel-azul-texto);
+}
+
+.m3-book-right,
+.m4-right-page {
+  gap: 0.5em;
+}
+
+.m2-pending-card,
+.m2-preview-card,
+.m3-equation-card,
+.m4-story-card,
+.final-story-card,
+.reflection-card,
+.final-box,
+.m3-choice-placeholder {
+  width: 92%;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.14);
+  padding: 1rem 1.1rem;
+  box-sizing: border-box;
+}
+
+.m2-pending-card h4,
+.m2-secret-title,
+.m3-main-question,
+.reflection-card h4,
+.final-box h3,
+.final-story-card h3 {
+  margin: 0 0 0.35em 0;
+  text-align: center;
+  color: #0d2f63;
+}
+
+.m2-secret-text,
+.m3-choice-placeholder,
+.m4-story-card p,
+.final-story-card p,
+.reflection-card p,
+.final-box p {
+  margin: 0.2em 0;
+  text-align: center;
+  color: #173463;
+}
+
+.m2-photo-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  justify-items: center;
+  align-items: start;
+}
+
+.m2-inline-actions,
+.m2-q1-associated,
+.magic-lives-container,
+.reflection-options {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.m2-p21-radio-group,
+.m3-radio-group,
+.radio-group {
+  width: 92%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0 auto;
+}
+
+.radio-label,
+.reflection-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  padding: 0.55rem 0.8rem;
+  box-sizing: border-box;
+}
+
+.m2-mul-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0.3rem;
   font-family: 'Rancho', cursive;
-  margin: 0;
-  word-break: break-word;
-  width: 95%;
-  overflow-wrap: break-word;
-  white-space: normal;
+  font-size: clamp(1.1rem, 1.45vw, 1.45rem);
+  color: #163261;
+}
+
+.m2-mul-table th,
+.m2-mul-table td {
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 12px;
+  padding: 0.35rem 0.4rem;
+  text-align: center;
+}
+
+.m2-mul-block-title th {
+  background: rgba(3, 121, 255, 0.14);
+  color: #0d2f63;
+  font-family: 'Lobster Two', cursive;
+}
+
+.m2-mul-symbol,
+.m2-mul-separator {
+  background: transparent !important;
+  box-shadow: none;
+}
+
+.m2-mul-table input {
+  width: 100%;
+  min-width: 2.4rem;
+  border: 2px solid #b2d5ff;
+  border-radius: 10px;
+  padding: 0.3rem;
+  font: inherit;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.m2-mul-actions,
+.submit-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.m4-right-page .items-container,
+.m4-right-page #itemsWrapper,
+.m4-right-page .item-box {
+  width: 100%;
+}
+
+.item-box {
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 18px;
+  box-shadow: 0 10px 20px rgba(13, 47, 99, 0.12);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.item-equation {
+  text-align: center;
+  font-family: 'Rancho', cursive;
+  font-size: clamp(1.7rem, 2.4vw, 2.3rem);
+  color: #0d2f63;
+}
+
+.m4-answer-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.item-input {
+  width: min(180px, 70%);
+  padding: 0.55rem 0.8rem;
+  border: 2px solid #93c5fd;
+  border-radius: 12px;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  text-align: center;
+}
+
+.magic-lives-container {
+  gap: 0.35rem;
+}
+
+.reflection-options {
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  #problemQ2Section {
+    width: min(96vw, 100%);
+    height: auto;
+    max-height: none;
   }
 
+  #problemQ2Section .m2-spread,
+  .m3-book-spread,
+  .m4-book-spread {
+    height: auto;
+    max-height: none;
+    min-height: calc(100vh - 5rem);
+    flex-direction: column;
+    padding: 1rem;
+  }
 
+  .m3-book-left,
+  .m4-left-page,
+  .m3-book-right,
+  .m4-right-page,
+  .q1-left-page,
+  .q1-right-page {
+    width: 100%;
+  }
+
+  .m2-photo-grid {
+    grid-template-columns: 1fr;
+  }
+}

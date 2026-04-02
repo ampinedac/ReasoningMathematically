@@ -96,7 +96,7 @@ class TraysSystem {
                 pane.className = 'mini-pane';
                 const paneImage = document.createElement('img');
                 paneImage.src = 'assets/images/pandebono.png';
-                paneImage.alt = 'Pan de bono';
+                paneImage.alt = 'Arepa';
                 paneImage.className = 'mini-pane-image';
                 pane.appendChild(paneImage);
                 pane.style.left = `${position.left}%`;

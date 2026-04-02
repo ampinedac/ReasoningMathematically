@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actividad 2 - ¿El orden de los factores altera el producto?</title>
+    <title>Actividad 2 - El misterio de las sumas repetidas</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
 <div id="ContenedorBienvenida">
     <section id="welcomeScreen" class="screen active" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;">
         <h1 class="main-title">Actividad 2</h1>
-        <p class="subtitle">¿El orden de los factores altera el producto?</p>
+        <p class="subtitle">El misterio de las sumas repetidas</p>
         <div class="welcome-box">
             <label for="studentCodeInput" style="font-weight: bold; display: block; margin-bottom: 10px; text-align: center;">Escribe tu código estudiantil:</label>
             <input id="studentCodeInput" class="chalk-input" type="text" placeholder="Ej: 12345" autocomplete="off" maxlength="12" style="text-align: center; margin-bottom: 16px;" />
@@ -45,10 +45,10 @@
 <!-- CONTENEDOR PORTADA (oculto al inicio) -->
 <div id="ContenedorPortada" style="display:none;">
     <div id="bookCover" class="book-cover-page">
-        <h2 class="cover-book-title" aria-label="El secreto de las bandejas de Doña Alicia">
-            <span style="color:#6f00ff;">El secreto de las bandejas de Doña Alicia </span> 
+        <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de Doña Aurora">
+            <span style="color:#6f00ff;">El secreto de las bolsitas de Doña Aurora </span> 
         </h2>
-        <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+        <p class="cover-subtitle">Entre arepas doraditas y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
         <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" id="btnContinuarPortada">
             <img src="assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
         </button>
@@ -60,7 +60,7 @@
     <section id="moment1Screen" class="screen">
         <div class="container">
             <div class="header">
-                <!-- Momento 1: El secreto de las bolsitas de doña Alicia -->
+                <!-- Momento 1: El secreto de las bolsitas de Doña Aurora -->
                 <p class="student-code-display">Código: <span id="studentCodeM1"></span></p>
             </div>
 
@@ -74,7 +74,7 @@
 
                         <!-- PORTADA CERRADA DEL LIBRO -->
                         <div class="page book-cover-page active">
-                            <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de Doña Alicia">
+                            <h2 class="cover-book-title" aria-label="El secreto de las bolsitas de Doña Aurora">
                                 <span class="cover-word-line">
                                     <span class="cover-word-chip tone-1">El</span>
                                     <span class="cover-word-chip tone-2">secreto</span>
@@ -82,15 +82,15 @@
                                     <span class="cover-word-chip tone-4">las</span>
                                 </span>
                                 <span class="cover-word-line">
-                                    <span class="cover-word-chip tone-5">bandejas</span>
+                                    <span class="cover-word-chip tone-5">bolsitas</span>
                                 </span>
                                 <span class="cover-word-line">
                                     <span class="cover-word-chip tone-2">de</span>
                                     <span class="cover-word-chip tone-1">Doña</span>
-                                    <span class="cover-word-chip tone-4">Alicia</span>
+                                    <span class="cover-word-chip tone-4">Aurora</span>
                                 </span>
                             </h2>
-                            <p class="cover-subtitle">Entre panes doraditos y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
+                            <p class="cover-subtitle">Entre arepas doraditas y cuentas curiosas, descubrirás un secreto que se puede contar de dos formas.</p>
                             <button class="cover-leer-btn cover-leer-image-btn" aria-label="Léeme" onclick="document.getElementById('nextBtn').click()">
                                 <img src="../Actividad2/assets/images/Leeme.png" alt="Léeme" class="cover-leer-image">
                             </button>
@@ -100,8 +100,8 @@
                         <div class="page story-page">
                             <p class="student-code-display student-code-corner">Código: <span id="studentCodeM1"></span></p>
                             <div class="page-number">1</div>
-                            <img src="../Actividad2/assets/images/pagina1_cuento_act0B.png" alt="Doña Alicia en su panadería" class="story-image">
-                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a queso y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su panadería es el lugar más feliz de la cuadra.</p>
+                            <img src="../Actividad2/assets/images/pagina1_cuento_act0B.png" alt="Doña Alicia en su arepera" class="story-image">
+                            <p class="story-text">En una esquina del barrio, donde el aire siempre huele a maiz tierno y mantequilla, vive Doña Alicia. Ella tiene la sonrisa más grande y el delantal más blanco de todo el mundo. Su arepera es el lugar más feliz de la cuadra.</p>
                         </div>
 
                         <!-- Story Page 2 -->
@@ -109,7 +109,7 @@
                             <p class="student-code-display student-code-corner">Código: <span id="studentCodeM2"></span></p>
                             <div class="page-number">2</div>
                             <img src="../Actividad2/assets/images/pagina2_cuento_act0B.png" alt="Doña Alicia amasando" class="story-image">
-                            <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Amasa con fuerza y ritmo. "Un poquito de harina por aquí y mucho amor por allá", canta mientras prepara sus famosos pandebonos.</p>
+                            <p class="story-text">Cada mañana, muy temprano, Doña Alicia comienza su magia. Mezcla la masa con fuerza y ritmo. "Un poquito de maiz por aquí y mucho amor por allá", canta mientras prepara sus famosas arepas.</p>
                         </div>
 
                         <!-- Story Page 3 -->
@@ -124,8 +124,8 @@
                         <div class="page story-page">
                             <p class="student-code-display student-code-corner">Código: <span id="studentCodeM4"></span></p>
                             <div class="page-number">4</div>
-                            <img src="../Actividad2/assets/images/pagina4_cuento_act0B.png" alt="Pandebonos en el horno" class="story-image">
-                            <p class="story-text">¡Ding! El horno se abre y un vaporcito delicioso llena la calle. Los pandebonos brillan doraditos, listos para ser compartidos.</p>
+                            <img src="../Actividad2/assets/images/pagina4_cuento_act0B.png" alt="Arepas recien hechas" class="story-image">
+                            <p class="story-text">¡Ding! El fogon suena y un vaporcito delicioso llena la calle. Las arepas brillan doraditas, listas para ser compartidas.</p>
                         </div>
 
                         <!-- Story Page 5 -->
@@ -133,7 +133,7 @@
                             <p class="student-code-display student-code-corner">Código: <span id="studentCodeM5"></span></p>
                             <div class="page-number">5</div>
                             <img src="../Actividad2/assets/images/pagina5_cuento_act0B.png" alt="Pedidos de bolsitas" class="story-image">
-                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 pandebonos”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Adrián. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 pandebonos.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
+                            <p class="story-text">Ese día llegan muchos niños. —“Doña Alicia, quiero una bolsita con 3 arepas”, dice Sarita. —“Yo también”, dice Luchi. —“¡Y yo!”, grita Adrián. Doña Alicia mira a Daniel. —“Vamos a preparar 7 bolsitas. En cada una pondremos 3 arepas.” Daniel empieza con cuidado: 3 en la primera bolsita, 3 en la segunda, 3 en la tercera… Sigue hasta completar las 7 bolsitas.</p>
                         </div>
 
                         <!-- Story Page 6 -->
@@ -141,7 +141,7 @@
                             <p class="student-code-display student-code-corner">Código: <span id="studentCodeM6"></span></p>
                             <div class="page-number">6</div>
                             <img src="../Actividad2/assets/images/pagina6_cuento_act0B.png" alt="Bolsitas más grandes" class="story-image">
-                            <p class="story-text">Más tarde, llegan otros niños. —“Doña Alicia, ahora queremos bolsitas más grandes.” Ella piensa un momento y dice: —“Esta vez haremos 3 bolsitas. En cada una pondremos 7 pandebonos.” Daniel vuelve a organizar los panes: 7 en la primera bolsita, 7 en la segunda, 7 en la tercera. Cuando termina, mira las bolsitas. Mira los panes. Y vuelve a mirar las bolsitas.</p>
+                            <p class="story-text">Más tarde, llegan otros niños. —“Doña Alicia, ahora queremos bolsitas más grandes.” Ella piensa un momento y dice: —“Esta vez haremos 3 bolsitas. En cada una pondremos 7 arepas.” Daniel vuelve a organizar las arepas: 7 en la primera bolsita, 7 en la segunda, 7 en la tercera. Cuando termina, mira las bolsitas. Mira las arepas. Y vuelve a mirar las bolsitas.</p>
                         </div>
 
                         <!-- Story Page 7 -->
@@ -229,7 +229,7 @@
                     </div>
                     <div class="problem-box q1-left-page">
                         <h3>Situación 2</h3>
-                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora debes organizarlos por aquellos que tienen la misma cantidad de panes de bono para hacer más sencillo el despacho.</p>
+                        <p>Doña Alicia y Daniel prepararon varios pedidos. Ahora debes organizarlos por aquellos que tienen la misma cantidad de arepas para hacer más sencillo el despacho.</p>
                         <div class="q2-guide-card">
                             <p class="q2-guide-title">Guía rápida</p>
                             <ul class="q2-guide-list">
@@ -238,7 +238,7 @@
                                 <li>3. Repite hasta armar todas las parejas posibles.</li>
                             </ul>
                         </div>
-                        <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de panes de bono.</p>
+                        <p class="instruction-hint">💡 Solo puedes unir pedidos que tengan la misma cantidad de arepas.</p>
                         <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina a organizar</button>
                     </div>
 
@@ -255,7 +255,7 @@
                         <div id="finalQuestionSectionM2" class="hidden">
                             <div class="problem-box">
                                 <h3>Para pensar 🤔</h3>
-                                <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de panes de bono.</p>
+                                <p class="question">En cada grupo hay dos pedidos que se ven diferentes, pero tienen la misma cantidad de arepas.</p>
                                 <p class="question">¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
 
                                 <div class="m2-inline-actions">
@@ -302,28 +302,28 @@
                                 <tr class="m2-mul-label-row">
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th>Igual</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th class="m2-mul-separator" aria-hidden="true"></th>
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th>Igual</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 3"></td>
                                     <td class="m2-mul-symbol">×</td>
-                                    <td><input type="text" aria-label="#panes pedido 3"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 3"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="#panes pedido 3"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 3"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 7"></td>
                                     <td class="m2-mul-symbol">×</td>
-                                    <td><input type="text" aria-label="#panes pedido 7"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 7"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="#panes pedido 7"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 7"></td>
                                 </tr>
 
                                 <tr class="m2-mul-block-title">
@@ -334,28 +334,28 @@
                                 <tr class="m2-mul-label-row">
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th>Igual</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th class="m2-mul-separator" aria-hidden="true"></th>
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th>Igual</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 2"></td>
                                     <td class="m2-mul-symbol">×</td>
-                                    <td><input type="text" aria-label="#panes pedido 2"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 2"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="#panes pedido 2"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 2"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 6"></td>
                                     <td class="m2-mul-symbol">×</td>
-                                    <td><input type="text" aria-label="#panes pedido 6"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 6"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="#panes pedido 6"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 6"></td>
                                 </tr>
 
                                 <tr class="m2-mul-block-title">
@@ -366,28 +366,28 @@
                                 <tr class="m2-mul-label-row">
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th>Igual</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th class="m2-mul-separator" aria-hidden="true"></th>
                                     <th># bolsas</th>
                                     <th>Por</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                     <th>Igual</th>
-                                    <th>#panes</th>
+                                    <th># arepas</th>
                                 </tr>
                                 <tr class="m2-mul-entry-row">
                                     <td><input type="text" aria-label="Numero de bolsas pedido 4"></td>
                                     <td class="m2-mul-symbol">×</td>
-                                    <td><input type="text" aria-label="#panes pedido 4"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 4"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="#panes pedido 4"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 4"></td>
                                     <td class="m2-mul-separator" aria-hidden="true"></td>
                                     <td><input type="text" aria-label="Numero de bolsas pedido 8"></td>
                                     <td class="m2-mul-symbol">×</td>
-                                    <td><input type="text" aria-label="#panes pedido 8"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 8"></td>
                                     <td class="m2-mul-symbol">=</td>
-                                    <td><input type="text" aria-label="#panes pedido 8"></td>
+                                    <td><input type="text" aria-label="# arepas pedido 8"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -471,7 +471,7 @@
             <div id="cocinaScreen" class="cocina-overlay hidden" aria-hidden="true">
                 <div class="cocina-header">
                     <h2>👩‍🍳 Cocina de Doña Alicia</h2>
-                    <p>Empareja los pedidos que tienen la misma cantidad de panes de bono.</p>
+                    <p>Empareja los pedidos que tienen la misma cantidad de arepas.</p>
                 </div>
 
                 <div class="cocina-body">
