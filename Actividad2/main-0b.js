@@ -406,10 +406,11 @@ function updateNavButtons() {
 }
 
 // Regla de qué spreads requieren submit para avanzar (índices 0-based):
-// spread 5 = páginas 11-12 → requiere m1q1Submitted
-// spread 6 = páginas 13-14 → requiere m1q2Submitted
-// spread 7 = páginas 15-16 → requiere m3q1Submitted
-// spread 8 = páginas 17-18 → requiere m3q2Submitted
+// spread 6 = primera actividad → requiere m1q1Submitted
+// spread 7 = segunda actividad → requiere m1q2Submitted
+// spread 8 = sobres 1 → requiere m3q1Submitted
+// spread 9 = sobres 2 → requiere m3q2Submitted
+// spread 10 = reto final → requiere m4Submitted
 function canAdvance() {
     const spreads = getSpreads();
     if (currentSpread >= spreads.length - 1) {
@@ -418,11 +419,11 @@ function canAdvance() {
         return checked.length >= 1;
     }
 
-    if (currentSpread === 5) return m1q1Submitted;
-    if (currentSpread === 6) return m1q2Submitted;
-    if (currentSpread === 7) return m3q1Submitted;
-    if (currentSpread === 8) return m3q2Submitted;
-    if (currentSpread === 9) return m4Submitted;
+    if (currentSpread === 6) return m1q1Submitted;
+    if (currentSpread === 7) return m1q2Submitted;
+    if (currentSpread === 8) return m3q1Submitted;
+    if (currentSpread === 9) return m3q2Submitted;
+    if (currentSpread === 10) return m4Submitted;
     return true;
 }
 
