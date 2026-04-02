@@ -1,3 +1,16 @@
+/* ─── Estado inicial y utilidades ─────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* Solo la bienvenida visible al cargar; JS gestiona el resto */
+body #ContenedorBienvenida    { display: flex; }
+body #ContenedorConfirmacion,
+body #ContenedorPortada,
+body #ContenedorLibro         { display: none; }
+
+/* Momentos dentro del libro: ocultos hasta que JS los active */
+#ContenedorLibro section.screen { display: none; }
+
+/* ─────────────────────────────────────────────────────────────────────────── */
 /* Fondo general para todo el body */
 body {
   background: url('./assets/images/Fondo.png') no-repeat center center fixed;
