@@ -1,1099 +1,1460 @@
 // main-0b.js – Actividad2 · Lógica principal
-// Arquitectura basada en Actividad1, adaptada para Actividad2
-import './assets/estudiantes-data.js';
+// Punto de entrada: módulo ES, se carga con type="module"
 
-// ─────────────────────────────────────────────────────────────────────────────
-// FIREBASE (importación dinámica con fallback gracioso)
-// ─────────────────────────────────────────────────────────────────────────────
-let db=null,storage=null,collection=null,addDoc=null,serverTimestamp=null,
-    ref=null,uploadBytes=null,getDownloadURL=null;
+let firebaseServices = null;
 
 async function initFirebaseServices() {
     try {
-        const m = await import('./firebase2.js');
-        db=m.db; storage=m.storage; collection=m.collection; addDoc=m.addDoc;
-        serverTimestamp=m.serverTimestamp; ref=m.ref;
-        uploadBytes=m.uploadBytes; getDownloadURL=m.getDownloadURL;
+        firebaseServices = await import('./firebase2.js');
         console.log('✅ Firebase listo');
-    } catch (e) {
-        console.warn('⚠️ Firebase no disponible, la actividad continúa sin guardado:', e);
+    } catch (error) {
+        firebaseServices = null;
+        console.warn('⚠️ Firebase no disponible, el flujo UI seguirá funcionando:', error);
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 // ESTADO GLOBAL
-// ─────────────────────────────────────────────────────────────────────────────
-let studentCode  = null;
-let studentInfo  = null;
+// ─────────────────────────────────────────────
+let studentCode = null;
+let studentInfo = null;
 
-// Flipbook (Momento 1)
-let currentFlipbookPage = 0;
-let isFlipping          = false;
+// Índice del spread visible (0-based, donde 0 = spread 1-2)
+let currentSpread = 0;
 
-// Submit flags
-let m1q1Submitted         = false;
-let m2OrderCompleted      = false;
-let m2ExplanationSubmitted= false;
-let m3q1Submitted         = false;
-let m3q2Submitted         = false;
+// Bloqueo durante animación de paso de página
+let isFlipping = false;
 
-// Momento 2
-let m2CurrentSpread          = 0;
-let traysSystem              = null;
-let m2Q1AssociatedSubmitted  = false;
-let m2Q1AudioCheckInterval   = null;
+// Submits completados (para habilitar "siguiente" en cada spread)
+let m1q1Submitted = false;
+let m1q2Submitted = false;
+let m3q1Submitted = false;
+let m3q2Submitted = false;
 
-// Momento 3
-let m3Choice = null;
+// Cocina completada
+let cocinaCompleted = false;
 
-// Momento 4
-let m4Lives             = 3;
-let m4Finalized         = false;
-let m4CurrentItem       = 1;
-let m4Responses         = [];
-let m4ErrorsTotal       = 0;
-let m4ReflectionSelected= false;
-let m4ReflectionSaved   = false;
-let m4ReflectionSaving  = false;
-let m4ReturnHomeTimeout = null;
+// Ejercicios M4
+let m4Lives = 3;
+let m4Submitted = false; // habilita siguiente solo cuando termina el reto final
+let m4Errors = 0;       // total de errores acumulados
+let m4CurrentEx = 0;    // ejercicio actual (0-based)
+let m4Exercises = [];   // array con los 5 ejercicios generados
+let m4Patterns = [];    // patrón de posición de la caja por ejercicio
+let m4Finalized = false;
+let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
 
-const FINAL_SURVEY_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeNKfEc_IzO3Vn4fWwlrTKcCuhW6lCXMRe6TTAmnpwnZdya_A/viewform?usp=header';
+// Grabaciones de audio en vuelo
+const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
 
-// ─────────────────────────────────────────────────────────────────────────────
+function updateM4ReflectionSubmitState() {
+    const submitBtn = document.getElementById('submitM4Reflection');
+    if (!submitBtn) return;
+
+    const hasAudio = !!(audioState['M4Reflection']?.blob && audioState['M4Reflection'].blob.size > 0);
+    const checkedCount = document.querySelectorAll('input[name="m4Reflection"]:checked').length;
+    const canSubmit = hasAudio && checkedCount >= 1;
+
+    submitBtn.disabled = !canSubmit;
+    submitBtn.style.opacity = canSubmit ? '1' : '0.5';
+    submitBtn.style.cursor = canSubmit ? 'pointer' : 'not-allowed';
+}
+
+// ─────────────────────────────────────────────
 // ARRANQUE
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Actividad2 iniciada');
     initFirebaseServices();
+    normalizeNavigationLabels();
+    initStudentCodeDisplays();
     initVisibility();
     initWelcome();
     initConfirmation();
     initPortada();
+    initNavigation();
+    initBoard();
+    initAudioRecorder('M1Q1');
+    initAudioRecorder('M1Q2');
+    initAudioRecorder('M3Q1');
+    initAudioRecorder('M3Q2');
+    initAudioRecorder('M4Reflection');
+    initRadioSpreads();
+    initCocinaSystem();
+    initM4();
+    initEncuesta();
 });
 
-window.addEventListener('error',            e => console.error('❌ Error global:',         e.error));
-window.addEventListener('unhandledrejection',e => console.error('❌ Promesa rechazada:',    e.reason));
-
-// ─────────────────────────────────────────────────────────────────────────────
-// VISIBILIDAD INICIAL
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// 1. VISIBILIDAD INICIAL
+// ─────────────────────────────────────────────
 function initVisibility() {
     show('ContenedorBienvenida');
     hide('ContenedorConfirmacion');
     hide('ContenedorPortada');
     hide('ContenedorLibro');
-    // Momentos dentro del libro: todos ocultos hasta que JS los active
-    ['moment1Screen','moment2Screen','moment3Screen','moment4Screen'].forEach(hide);
+    hide('ContenedorCocina');
+    hide('prevBtn');
+    hide('nextBtn');
+    // La sección derecha del spread 13-14 inicia oculta
+    const q2Right = document.getElementById('q2RightPage');
+    if (q2Right) {
+        const traysImage = document.getElementById('bandejasFotoM1Q2');
+        if (traysImage) traysImage.style.display = 'none';
+        const finalQ = document.getElementById('m1Q2FinalQuestion');
+        if (finalQ) hide('m1Q2FinalQuestion');
+    }
+    // Ocultar sección de audio M3 (se activa con los radios)
+    hide('promptSection1');
+    hide('promptSection2');
+    // Ocultar sección final M4
+    hide('finalQuestionSection');
+    hide('magicCanvas');
+    hide('confettiCanvas');
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// UTILIDADES show / hide
-// ─────────────────────────────────────────────────────────────────────────────
+function normalizeNavigationLabels() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (prevBtn) {
+        prevBtn.textContent = '\u2190';
+        prevBtn.setAttribute('aria-label', 'Pagina anterior');
+    }
+
+    if (nextBtn) {
+        nextBtn.textContent = '\u2192';
+        nextBtn.setAttribute('aria-label', 'Pagina siguiente');
+    }
+}
+
 function show(id) {
     const el = document.getElementById(id);
     if (!el) return;
-    const map = {
+
+    const displayById = {
         ContenedorBienvenida: 'flex',
-        ContenedorConfirmacion:'flex',
-        ContenedorPortada:     'flex',
-        ContenedorLibro:       'flex',
-        moment1Screen:         'flex',
-        moment2Screen:         'flex',
-        moment3Screen:         'flex',
-        moment4Screen:         'flex',
+        ContenedorConfirmacion: 'flex',
+        ContenedorPortada: 'flex',
+        ContenedorLibro: 'flex',
+        ContenedorCocina: 'block',
+        prevBtn: 'flex',
+        nextBtn: 'flex',
+        m1Q2FinalQuestion: 'block',
+        promptSection1: 'block',
+        promptSection2: 'block',
+        finalQuestionSection: 'block',
+        magicCanvas: 'block',
+        confettiCanvas: 'block'
     };
-    el.style.display = map[id] || 'block';
+
+    el.style.display = displayById[id] || 'block';
 }
 function hide(id) {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
 }
-
-// Cambia el contenedor raíz visible
-function toggleContainers(target) {
-    ['ContenedorBienvenida','ContenedorConfirmacion','ContenedorPortada','ContenedorLibro'].forEach(hide);
-    const map = {
-        bienvenida:   'ContenedorBienvenida',
-        confirmacion: 'ContenedorConfirmacion',
-        portada:      'ContenedorPortada',
-        libro:        'ContenedorLibro',
-    };
-    if (map[target]) show(map[target]);
+function setVisible(id, visible) {
+    if (visible) show(id); else hide(id);
 }
 
-// Muestra un momento y oculta los demás dentro del libro
-function showMoment(momentId) {
-    ['moment1Screen','moment2Screen','moment3Screen','moment4Screen'].forEach(hide);
-    show(momentId);
-    updateStudentCodeDisplays();
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CÓDIGO DEL ESTUDIANTE (displays)
-// ─────────────────────────────────────────────────────────────────────────────
-function toTitle(str) {
-    if (!str) return '';
-    return str.toLocaleLowerCase('es-CO').split(/\s+/).filter(Boolean)
-        .map(w => w.charAt(0).toLocaleUpperCase('es-CO') + w.slice(1)).join(' ');
-}
-function getStudentHeaderText() {
-    if (!studentCode) return '';
-    if (studentCode === '0000' && studentInfo?.nombre)
-        return `${studentCode} · ${toTitle(studentInfo.nombre)}`;
-    return studentCode;
-}
-function updateStudentCodeDisplays() {
-    const text = getStudentHeaderText();
-    document.querySelectorAll('.student-code-display span').forEach(el => { el.textContent = text; });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// BIENVENIDA
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// 2. BIENVENIDA – solo números en el input
+// ─────────────────────────────────────────────
 function initWelcome() {
     const input = document.getElementById('studentCodeInput');
     const btn   = document.getElementById('enterBtn');
     const err   = document.getElementById('welcomeError');
+
     if (!input || !btn) return;
 
-    // Solo dígitos
+    // Bloquear caracteres no numéricos
     input.addEventListener('keydown', e => {
-        const allowed = ['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','Home','End'];
-        if (allowed.includes(e.key) || e.ctrlKey || e.metaKey) return;
+        const allowed = [
+            'Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','Home','End'
+        ];
+        if (allowed.includes(e.key)) return;
+        if (e.ctrlKey || e.metaKey) return; // Ctrl+A / Ctrl+C / etc.
         if (!/^\d$/.test(e.key)) e.preventDefault();
     });
-    input.addEventListener('input', () => { input.value = input.value.replace(/\D/g, ''); });
+
+    input.addEventListener('input', () => {
+        input.value = input.value.replace(/\D/g, '');
+    });
+
     input.addEventListener('keypress', e => { if (e.key === 'Enter') btn.click(); });
 
     btn.addEventListener('click', () => {
         const code = input.value.trim();
-        if (!code)              { showErr(err, 'Por favor escribe tu código.'); return; }
-        if (!/^\d+$/.test(code)){ showErr(err, 'Solo se permiten números.');    return; }
+        if (!code) { showError(err, 'Por favor escribe tu código.'); return; }
+        if (!/^\d+$/.test(code)) { showError(err, 'Solo se permiten números.'); return; }
 
         if (code === '0000') {
-            const name = (window.prompt('Escribe tu nombre para ingresar como invitado') || '').trim();
-            if (!name) { showErr(err, 'Para ingresar con 0000 debes escribir tu nombre.'); return; }
-            studentCode = code;
-            studentInfo = { nombre: name, apellidos: '', curso: 'INVITADO' };
-            buildConfirmationQuestion();
-            toggleContainers('confirmacion');
-            return;
-        }
+            const providedName = window.prompt('Escribe tu nombre para ingresar como invitado');
+            const guestName = (providedName || '').trim();
 
-        const est = (window.estudiantesData || {})[code];
-        if (!est) { showErr(err, 'Código no encontrado. Verifica que esté bien escrito.'); return; }
-        clearErr(err);
-        studentCode = code;
-        studentInfo = est;
-        buildConfirmationQuestion();
-        toggleContainers('confirmacion');
-    });
-}
-
-function showErr(el, msg) { if (el) { el.textContent = msg; el.classList.remove('hidden'); } }
-function clearErr(el)      { if (el) { el.textContent = '';  el.classList.add('hidden');    } }
-
-function buildConfirmationQuestion() {
-    const q = document.getElementById('confirmationQuestion');
-    if (!q || !studentInfo) return;
-    const nombre    = toTitle(studentInfo.nombre    || '');
-    const apellidos = toTitle(studentInfo.apellidos || '');
-    if (studentCode === '0000' || studentInfo.curso === 'INVITADO')
-        q.textContent = `¡Hola, ${nombre}! ¿Deseas iniciar la actividad?`;
-    else if (studentInfo.curso === 'DOCENTE')
-        q.textContent = `¿Eres ${nombre} ${apellidos}?`;
-    else
-        q.textContent = `¿Eres ${nombre} ${apellidos} del curso ${studentInfo.curso}?`;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CONFIRMACIÓN
-// ─────────────────────────────────────────────────────────────────────────────
-function initConfirmation() {
-    document.getElementById('confirmYesBtn')?.addEventListener('click', () => {
-        updateStudentCodeDisplays();
-        toggleContainers('portada');
-    });
-    document.getElementById('confirmNoBtn')?.addEventListener('click', () => {
-        studentCode = null;
-        studentInfo = null;
-        const input = document.getElementById('studentCodeInput');
-        if (input) input.value = '';
-        clearErr(document.getElementById('welcomeError'));
-        updateStudentCodeDisplays();
-        toggleContainers('bienvenida');
-    });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// PORTADA
-// ─────────────────────────────────────────────────────────────────────────────
-function initPortada() {
-    document.getElementById('btnContinuarPortada')?.addEventListener('click', () => {
-        toggleContainers('libro');
-        showMoment('moment1Screen');
-        initMoment1();
-    });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// MOMENTO 1: FLIPBOOK + PROBLEMA Q1
-// ─────────────────────────────────────────────────────────────────────────────
-function initMoment1() {
-    const codeEl = document.getElementById('studentCodeM1');
-    if (codeEl) codeEl.textContent = getStudentHeaderText();
-
-    const flipbook = document.getElementById('flipbook');
-    if (!flipbook) return;
-
-    const pages        = Array.from(flipbook.querySelectorAll('.page'));
-    const q1PageIdx    = pages.findIndex(p => p.id === 'problemQ1Section');
-    const bridgeIdx    = pages.findIndex(p => p.id === 'm1ToM2BridgePage');
-    let prevBtn        = document.getElementById('prevBtn');
-    let nextBtn        = document.getElementById('nextBtn');
-    let m1Q1Done       = m1q1Submitted;
-
-    // Reemplazar botones para limpiar listeners viejos
-    if (prevBtn) { const c=prevBtn.cloneNode(true); prevBtn.parentNode.replaceChild(c,prevBtn); prevBtn=c; }
-    if (nextBtn) { const c=nextBtn.cloneNode(true); nextBtn.parentNode.replaceChild(c,nextBtn); nextBtn=c; }
-
-    function goToPage(index) {
-        if (isFlipping || index<0 || index>=pages.length) return;
-        isFlipping = true;
-
-        const oldPage = pages[currentFlipbookPage];
-        const dir = index > currentFlipbookPage ? 'forward' : 'backward';
-
-        oldPage.classList.add(dir==='forward' ? 'turning-next' : 'turning-prev');
-
-        setTimeout(() => {
-            oldPage.classList.remove('turning-next','turning-prev','active');
-            oldPage.classList.add('turned');
-            currentFlipbookPage = index;
-
-            const newPage = pages[index];
-            newPage.classList.remove('turned');
-            newPage.classList.add('active');
-            updateFlipbookNav();
-            isFlipping = false;
-
-            // Puente → pasar al Momento 2
-            if (index === bridgeIdx) {
-                setTimeout(() => {
-                    showMoment('moment2Screen');
-                    initMoment2();
-                }, 400);
+            if (!guestName) {
+                showError(err, 'Para ingresar con 0000 debes escribir tu nombre.');
                 return;
             }
 
-            // Página del Problema Q1
-            if (index === q1PageIdx) {
-                if (m1Q1Done) applyM1Q1Lock();
-                else if (!flipbook.dataset.q1Init) {
-                    flipbook.dataset.q1Init = '1';
-                    initProblemQ1(onM1Q1Submitted);
-                }
+            err.textContent = '';
+            studentCode = code;
+            studentInfo = {
+                nombre: guestName,
+                apellidos: '',
+                curso: 'INVITADO'
+            };
+
+            const q = document.getElementById('confirmationQuestion');
+            if (q) {
+                q.textContent = `\u00BFEres ${toTitle(guestName)}?`;
             }
-        }, 350);
-    }
 
-    function onM1Q1Submitted() {
-        m1Q1Done = true;
-        m1q1Submitted = true;
-        updateFlipbookNav();
-    }
-
-    function updateFlipbookNav() {
-        const isQ1     = currentFlipbookPage === q1PageIdx;
-        const isBridge = currentFlipbookPage === bridgeIdx;
-
-        if (prevBtn) {
-            prevBtn.disabled      = currentFlipbookPage <= 0 || isBridge;
-            prevBtn.style.opacity = prevBtn.disabled ? '0.3' : '1';
+            hide('ContenedorBienvenida');
+            show('ContenedorConfirmacion');
+            return;
         }
-        if (nextBtn) {
-            nextBtn.disabled      = isBridge || (isQ1 && !m1Q1Done);
-            nextBtn.style.opacity = nextBtn.disabled ? '0.3' : '1';
-            nextBtn.style.display = isBridge ? 'none' : 'flex';
+
+        const estudiante = (window.estudiantesData || {})[code];
+        if (!estudiante) { showError(err, 'Código no encontrado. Verifica que esté bien escrito.'); return; }
+
+        err.textContent = '';
+        studentCode = code;
+        studentInfo = estudiante;
+
+        // Rellenar pregunta de confirmación
+        const q = document.getElementById('confirmationQuestion');
+        if (q) {
+            const nombre = toTitle(estudiante.nombre);
+            const apellidos = toTitle(estudiante.apellidos || '');
+            if (estudiante.curso === 'DOCENTE') {
+                q.textContent = `¿Eres ${nombre} ${apellidos}?`;
+            } else {
+                q.textContent = `¿Eres ${nombre} ${apellidos} del curso ${estudiante.curso}?`;
+            }
         }
-    }
 
-    prevBtn?.addEventListener('click', () => { if (currentFlipbookPage > 0) goToPage(currentFlipbookPage-1); });
-    nextBtn?.addEventListener('click', () => { const n=document.getElementById('nextBtn'); if(!n?.disabled) goToPage(currentFlipbookPage+1); });
-
-    // Inicializar primera página
-    pages.forEach((p,i) => {
-        p.classList.remove('active','turned','turning-next','turning-prev');
-        if (i===0) p.classList.add('active');
-    });
-    delete flipbook.dataset.q1Init;
-    currentFlipbookPage = 0;
-    updateFlipbookNav();
-}
-
-function applyM1Q1Lock() {
-    ['submitM1Q1','recordBtnM1Q1'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) { el.disabled=true; el.style.opacity='0.5'; }
-    });
-    document.getElementById('stopBtnM1Q1')?.classList.add('hidden');
-    const cv = document.getElementById('boardCanvasM1Q1');
-    if (cv) cv.style.pointerEvents='none';
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// PROBLEMA Q1 (tablero + audio)
-// ─────────────────────────────────────────────────────────────────────────────
-function initProblemQ1(onSubmitCallback) {
-    const boardState  = initBoard('boardCanvasM1Q1');
-    const audioSt     = initAudio('recordBtnM1Q1','stopBtnM1Q1','audioStatusM1Q1');
-    const submitBtn   = document.getElementById('submitM1Q1');
-    const statusText  = document.getElementById('statusM1Q1');
-
-    const iv = setInterval(() => { if (submitBtn) submitBtn.disabled = !audioSt.audioBlob; }, 500);
-
-    submitBtn?.addEventListener('click', async () => {
-        submitBtn.disabled = true; submitBtn.style.opacity='0.5';
-        if (statusText) statusText.textContent = 'Subiendo evidencia...';
-        clearInterval(iv);
-        try {
-            const boardBlob = boardState.hasDrawing ? await canvasToBlob('boardCanvasM1Q1') : null;
-            await submitEvidence({ moment:'m1', tag:'q1', data:{ question:'Situación 1: ¿Vendieron más en la primera o la segunda venta?' }, boardBlob, audioBlob: audioSt.audioBlob });
-            if (statusText) { statusText.textContent='Guardado ✅ Ya puedes pasar a la siguiente página.'; statusText.className='status-text success'; }
-            applyM1Q1Lock();
-            onSubmitCallback?.();
-        } catch (e) {
-            console.error('Error M1Q1:', e);
-            if (statusText) { statusText.textContent='Error al guardar. Intenta de nuevo.'; statusText.className='status-text error'; }
-            submitBtn.disabled=false; submitBtn.style.opacity='1';
-        }
+        hide('ContenedorBienvenida');
+        show('ContenedorConfirmacion');
     });
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MOMENTO 2: ORGANIZANDO PEDIDOS
-// ─────────────────────────────────────────────────────────────────────────────
-function initMoment2() {
-    const codeEl = document.getElementById('studentCodeM2');
-    if (codeEl) codeEl.textContent = getStudentHeaderText();
-
-    // Destruir instancia previa
-    traysSystem?.destroy?.();
-    traysSystem = null;
-    try {
-        traysSystem = new TraysSystem('traysArea');
-    } catch (e) {
-        console.error('Error al crear TraysSystem:', e);
-    }
-
-    m2CurrentSpread = 0;
-    renderMoment2Snapshots();
-    setupMoment2UI();
-}
-
-function renderMoment2Snapshot(targetId) {
-    const el = document.getElementById(targetId);
+function showError(el, msg) {
     if (!el) return;
-    if (!m2OrderCompleted) { el.innerHTML=''; return; }
-    el.innerHTML='<p class="m2-photo-fixed-text">📸 Así quedaron tus parejas:</p>'
-        +'<img src="assets/images/BolsasFoto.png" alt="Así quedaron tus parejas" class="m2-photo-fixed-image">';
-}
-function renderMoment2Snapshots() {
-    renderMoment2Snapshot('m2PreviewPage18');
-    renderMoment2Snapshot('m2PreviewPage19');
+    el.textContent = msg;
 }
 
-function setupMoment2UI() {
-    const spreads = Array.from(document.querySelectorAll('#problemQ2Section .m2-spread'));
+function toTitle(str) {
+    if (!str) return '';
+    return str
+        .toLocaleLowerCase('es-CO')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(word => word.charAt(0).toLocaleUpperCase('es-CO') + word.slice(1))
+        .join(' ');
+}
 
-    const updateSpreadUI = () => {
-        spreads.forEach((s,i) => { s.style.display = i===m2CurrentSpread ? 'flex':'none'; });
-        const pq2 = document.getElementById('prevBtnQ2');
-        const nq2 = document.getElementById('nextBtnQ2');
-        if (pq2) pq2.disabled = false;
-        if (nq2) {
-            if (m2CurrentSpread===0 && !m2OrderCompleted) { nq2.disabled=true; nq2.style.opacity='0.5'; }
-            else if (m2CurrentSpread===spreads.length-1 && !m2ExplanationSubmitted) { nq2.disabled=true; nq2.style.opacity='0.5'; }
-            else { nq2.disabled=false; nq2.style.opacity='1'; }
+function initStudentCodeDisplays() {
+    getSpreads().forEach(spread => {
+        const legacyDisplay = spread.querySelector('.q1-left-page > .student-code-display');
+        if (legacyDisplay) legacyDisplay.remove();
+
+        const hasDisplay = Array.from(spread.children).some(child =>
+            child.classList && child.classList.contains('spread-student-code')
+        );
+
+        if (!hasDisplay) {
+            const display = document.createElement('span');
+            display.className = 'spread-student-code';
+            spread.prepend(display);
         }
-    };
-
-    const prevQ2 = cloneReplace('prevBtnQ2');
-    const nextQ2 = cloneReplace('nextBtnQ2');
-
-    prevQ2?.addEventListener('click', () => {
-        if (m2CurrentSpread>0) { m2CurrentSpread--; updateSpreadUI(); }
-        else { showMoment('moment1Screen'); initMoment1(); }
-    });
-    nextQ2?.addEventListener('click', () => {
-        if (m2CurrentSpread<spreads.length-1) { m2CurrentSpread++; updateSpreadUI(); }
-        else { showMoment('moment3Screen'); initMoment3(); }
     });
 
-    // Botón cocina
-    const gotoBtn = cloneReplace('goToCocinaBtn');
-    if (gotoBtn) {
-        if (m2OrderCompleted) {
-            gotoBtn.disabled=true; gotoBtn.textContent='✅ Organización completada';
-        } else {
-            gotoBtn.textContent='👩‍🍳 Ir a la cocina a organizar';
-            gotoBtn.addEventListener('click', () => {
-                if (!traysSystem) {
-                    try { traysSystem = new TraysSystem('traysArea'); } catch(e){ return; }
-                }
-                openCocinaScreen();
-            });
-        }
-    }
-
-    // Botón verificar
-    const verifyBtn = cloneReplace('verifyTraysBtn');
-    if (verifyBtn) {
-        verifyBtn.disabled = m2OrderCompleted;
-        verifyBtn.addEventListener('click', verifyTraysPairings);
-    }
-
-    // Estado de la UI según m2OrderCompleted
-    document.getElementById('m2PendingCard')?.classList.toggle('hidden', m2OrderCompleted);
-    document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card')?.classList.toggle('hidden',!m2OrderCompleted);
-    document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card')?.classList.toggle('hidden',!m2OrderCompleted);
-    document.getElementById('finalQuestionSectionM2')?.classList.toggle('hidden',!m2OrderCompleted);
-
-    if (m2OrderCompleted) initMoment2Audio();
-
-    setupM2RadioButtons();
-    updateSpreadUI();
-    hideCocinaScreen();
+    updateStudentCodeDisplays();
 }
 
-function openCocinaScreen() {
-    const cs = document.getElementById('cocinaScreen');
-    if (cs) { cs.classList.remove('hidden'); cs.setAttribute('aria-hidden','false'); }
-    document.body.style.overflow='hidden';
-}
-function hideCocinaScreen() {
-    const cs = document.getElementById('cocinaScreen');
-    if (cs) { cs.classList.add('hidden'); cs.setAttribute('aria-hidden','true'); }
-    document.body.style.overflow='';
+function updateStudentCodeDisplays() {
+    document.querySelectorAll('.spread-student-code').forEach(el => {
+        el.textContent = studentCode ? `Código: ${studentCode}` : '';
+    });
 }
 
-function verifyTraysPairings() {
-    if (!traysSystem) return;
-    const results  = traysSystem.validatePairings();
-    const feedback = document.getElementById('traysFeedback');
-    if (!feedback) return;
+// ─────────────────────────────────────────────
+// 3. CONFIRMACIÓN
+// ─────────────────────────────────────────────
+function initConfirmation() {
+    const yesBtn = document.getElementById('confirmYesBtn');
+    const noBtn  = document.getElementById('confirmNoBtn');
 
-    if (results.length===0) {
-        feedback.textContent='⚠️ No hay emparejamientos. Haz clic en las bolsas para unirlas.';
-        feedback.className='feedback-text info'; return;
+    yesBtn?.addEventListener('click', () => {
+        updateStudentCodeDisplays();
+        hide('ContenedorConfirmacion');
+        show('ContenedorPortada');
+    });
+
+    noBtn?.addEventListener('click', () => {
+        studentCode = null;
+        studentInfo = null;
+        updateStudentCodeDisplays();
+        document.getElementById('studentCodeInput').value = '';
+        document.getElementById('welcomeError').textContent = '';
+        hide('ContenedorConfirmacion');
+        show('ContenedorBienvenida');
+    });
+}
+
+// ─────────────────────────────────────────────
+// 4. PORTADA
+// ─────────────────────────────────────────────
+function initPortada() {
+    const btn = document.getElementById('btnContinuarPortada');
+    btn?.addEventListener('click', () => {
+        hide('ContenedorPortada');
+        show('ContenedorLibro');
+        show('prevBtn');
+        show('nextBtn');
+        goToSpread(0);
+    });
+}
+
+// ─────────────────────────────────────────────
+// 5. SPREADS – navegación
+// ─────────────────────────────────────────────
+function getSpreads() {
+    return Array.from(document.querySelectorAll('#ContenedorLibro .page.q1-book-spread'));
+}
+
+function goToSpread(index) {
+    const spreads = getSpreads();
+
+    // Llamada de inicialización (mismo índice) o retorno desde cocina: mostrar sin animación
+    if (index === currentSpread) {
+        spreads.forEach((s, i) => {
+            s.style.display = (i === index) ? 'flex' : 'none';
+        });
+        updateNavButtons();
+        return;
     }
 
-    const correctCount   = results.filter(r=>r.isCorrect).length;
-    const expectedPairs  = 3;
+    if (isFlipping || index < 0 || index >= spreads.length) return;
 
-    if (correctCount===results.length && results.length===expectedPairs) {
-        feedback.textContent=`🎉 ¡Perfecto! Todos los ${results.length} emparejamientos son correctos.`;
-        feedback.className='feedback-text success';
-        m2OrderCompleted=true;
-        renderMoment2Snapshots();
-        document.getElementById('m2PendingCard')?.classList.add('hidden');
-        document.getElementById('m2PreviewPage18')?.closest('.m2-preview-card')?.classList.remove('hidden');
-        document.getElementById('m2PreviewPage19')?.closest('.m2-preview-card')?.classList.remove('hidden');
-        document.getElementById('verifyTraysBtn').disabled=true;
-        const gotoBtn=document.getElementById('goToCocinaBtn');
-        if (gotoBtn){ gotoBtn.disabled=true; gotoBtn.textContent='✅ Organización completada'; }
+    const direction = index > currentSpread ? 'forward' : 'backward';
+    const oldSpread = spreads[currentSpread];
+
+    // La página que se pliega hacia el lomo (sale)
+    const foldOutPage = direction === 'forward'
+        ? oldSpread.querySelector('.q1-right-page')
+        : oldSpread.querySelector('.q1-left-page');
+
+    isFlipping = true;
+
+    // Fase 1: la página sale rotando hasta 90° (queda de canto, invisible)
+    foldOutPage.classList.add('anim-flip-out');
+
+    setTimeout(() => {
+        foldOutPage.classList.remove('anim-flip-out');
+
+        // Intercambio de spreads justo cuando la página está de canto (invisible)
+        spreads.forEach((s, i) => {
+            s.style.display = (i === index) ? 'flex' : 'none';
+        });
+        currentSpread = index;
+        updateNavButtons();
+
+        // Fase 2: la nueva página entra rotando desde 90° hasta 0°
+        const newSpread = spreads[index];
+        const foldInPage = direction === 'forward'
+            ? newSpread.querySelector('.q1-left-page')
+            : newSpread.querySelector('.q1-right-page');
+
+        foldInPage.classList.add('anim-flip-in');
 
         setTimeout(() => {
-            hideCocinaScreen();
-            const finalQ=document.getElementById('finalQuestionSectionM2');
-            if (finalQ) { finalQ.classList.remove('hidden'); finalQ.scrollIntoView({behavior:'smooth',block:'start'}); initMoment2Audio(); }
-            const nextQ2=document.getElementById('nextBtnQ2');
-            if (nextQ2) { nextQ2.disabled=false; nextQ2.style.opacity='1'; }
-        }, 1000);
-    } else {
-        let msg='';
-        if (results.length<expectedPairs) msg=`🔍 Te faltan emparejamientos. Solo tienes ${results.length} de ${expectedPairs} pares.`;
-        else if (results.length>expectedPairs) msg='💡 Pista: algunas bolsas no tienen pareja.';
-        else msg=`✨ ${correctCount} de ${results.length} emparejamientos son correctos. Vuelve a contar.`;
-        feedback.textContent=msg; feedback.className='feedback-text error';
+            foldInPage.classList.remove('anim-flip-in');
+            isFlipping = false;
+        }, 320);
+
+    }, 320);
+}
+
+function updateNavButtons() {
+    const spreads = getSpreads();
+    const total = spreads.length;
+    const prev = document.getElementById('prevBtn');
+    const next = document.getElementById('nextBtn');
+
+    if (prev) {
+        const canGoBack = currentSpread > 0;
+        prev.disabled = !canGoBack;
+        prev.style.opacity = canGoBack ? '1' : '0.3';
+        prev.style.cursor  = canGoBack ? 'pointer' : 'not-allowed';
+    }
+
+    if (next) {
+        const canGoNext = canAdvance();
+        next.disabled = !canGoNext;
+        next.style.opacity = canGoNext ? '1' : '0.3';
+        next.style.cursor  = canGoNext ? 'pointer' : 'not-allowed';
+
+        // En el último spread, el envío se hace con el botón de audio, no con flecha
+        if (currentSpread === total - 1) {
+            next.style.display = 'none';
+        } else {
+            next.style.display = 'flex';
+        }
     }
 }
 
-function initMoment2Audio() {
-    const audioSt   = initAudio('recordBtnM2','stopBtnM2','audioStatusM2');
-    const submitBtn = document.getElementById('submitM2');
-    const statusText= document.getElementById('statusM2');
-    if (!submitBtn) return;
-
-    const iv = setInterval(()=>{ submitBtn.disabled=!audioSt.audioBlob; }, 500);
-
-    submitBtn.addEventListener('click', async () => {
-        submitBtn.disabled=true; submitBtn.style.opacity='0.5';
-        clearInterval(iv);
-        if (statusText) statusText.textContent='Subiendo...';
-        try {
-            await submitEvidence({ moment:'m2', tag:'trays_explanation', data:{question:'¿Por qué tienen la misma cantidad?'}, boardBlob:null, audioBlob:audioSt.audioBlob });
-            if (statusText){ statusText.textContent='Guardado ✅ Ya puedes avanzar.'; statusText.className='status-text success'; }
-            m2ExplanationSubmitted=true;
-            const nq2=document.getElementById('nextBtnQ2');
-            if (nq2){ nq2.disabled=false; nq2.style.opacity='1'; }
-        } catch(e) {
-            if (statusText){ statusText.textContent='Error al guardar.'; statusText.className='status-text error'; }
-            submitBtn.disabled=false; submitBtn.style.opacity='1';
-        }
-    });
-}
-
-function setupM2RadioButtons() {
-    const promptSect = document.getElementById('m2PromptSectionQ1');
-    const promptText = document.getElementById('m2PromptTextQ1');
-    const promptMap  = {
-        yes:    'Explica detalladamente cómo lo sabes.',
-        no:     '¿Con qué número crees que no funcionaría?',
-        unsure: 'Explícame cómo estás pensando para decidir.'
-    };
-    if (promptSect) promptSect.classList.add('hidden');
-    document.querySelectorAll('input[name="truthQ1M2"]').forEach(r => {
-        r.checked=false;
-        r.onchange = e => {
-            if (promptText) promptText.textContent = promptMap[e.target.value]||'';
-            if (promptSect) promptSect.classList.remove('hidden');
-            if (!m2Q1AssociatedSubmitted) setupM2AssociatedAudio();
-        };
-    });
-    setupMulTableValidation();
-}
-
-function setupM2AssociatedAudio() {
-    if (m2Q1AssociatedSubmitted) return;
-    if (m2Q1AudioCheckInterval) { clearInterval(m2Q1AudioCheckInterval); m2Q1AudioCheckInterval=null; }
-    const audioSt   = initAudio('recordBtnM2Q1','stopBtnM2Q1','audioStatusM2Q1');
-    const submitBtn = cloneReplace('submitM2Q1');
-    const statusText= document.getElementById('statusM2Q1');
-    if (!submitBtn) return;
-
-    m2Q1AudioCheckInterval = setInterval(()=>{ submitBtn.disabled=!audioSt.audioBlob; }, 500);
-
-    document.getElementById('submitM2Q1').addEventListener('click', async () => {
-        const btn = document.getElementById('submitM2Q1');
-        if (!audioSt.audioBlob) return;
-        btn.disabled=true;
-        clearInterval(m2Q1AudioCheckInterval);
-        if (statusText) statusText.textContent='Subiendo...';
-        try {
-            await submitEvidence({ moment:'m2', tag:'q1-bolsas-secretas', data:{ choice:document.querySelector('input[name="truthQ1M2"]:checked')?.value }, boardBlob:null, audioBlob:audioSt.audioBlob });
-            if (statusText){ statusText.textContent='Guardado ✅'; statusText.className='status-text success'; }
-            m2Q1AssociatedSubmitted=true;
-            m2ExplanationSubmitted=true;
-            const nq2=document.getElementById('nextBtnQ2');
-            if (nq2){ nq2.disabled=false; nq2.style.opacity='1'; }
-        } catch(e) {
-            if (statusText){ statusText.textContent='Error.'; statusText.className='status-text error'; }
-            btn.disabled=false;
-        }
-    });
-}
-
-function setupMulTableValidation() {
-    const verifyBtn = cloneReplace('verifyMulTableBtn');
-    const feedback  = document.getElementById('m2MulTableFeedback');
-    const entryRows = Array.from(document.querySelectorAll('#problemQ2Section .m2-mul-table .m2-mul-entry-row'));
-    if (!verifyBtn||!feedback||entryRows.length<3) return;
-    feedback.textContent='';
-    verifyBtn.addEventListener('click', () => {
-        const traySource  = traysSystem?.BASE_TRAYS||[];
-        const trayByPedido= new Map(traySource.map(t=>[Number(t.pedido),t]));
-        const pedidoPairs = [[3,7],[2,6],[4,8]];
-        let emptyVals=false, wrongVals=0;
-        pedidoPairs.forEach((pair,row)=>{
-            const r=entryRows[row]; if(!r){wrongVals++;return;}
-            const inputs=Array.from(r.querySelectorAll('input')); if(inputs.length<6){wrongVals++;return;}
-            pair.forEach((pedido,side)=>{
-                const expected=trayByPedido.get(pedido); if(!expected){wrongVals++;return;}
-                const o=side*3;
-                const vals=[inputs[o],inputs[o+1],inputs[o+2]].map(i=>parseInt((i?.value||'').trim(),10));
-                if(vals.some(Number.isNaN)){emptyVals=true;return;}
-                if(vals[0]!==Number(expected.bags)||vals[1]!==Number(expected.itemsPerBag)||vals[2]!==Number(expected.total)) wrongVals++;
-            });
-        });
-        if(emptyVals){feedback.textContent='Completa todos los espacios.';feedback.className='feedback-text info';return;}
-        feedback.textContent=wrongVals===0?'¡Excelente! Los datos coinciden.': `Hay ${wrongVals} dato(s) que no coinciden. Revisa.`;
-        feedback.className=wrongVals===0?'feedback-text success':'feedback-text error';
-    });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// MOMENTO 3: LAS BOLSAS MISTERIOSAS
-// ─────────────────────────────────────────────────────────────────────────────
-function initMoment3() {
-    const codeEl=document.getElementById('studentCodeM3');
-    if (codeEl) codeEl.textContent=getStudentHeaderText();
-
-    let p1Init=false, p2Init=false;
-
-    const PROMPTS = {
-        yes:    'Explica detalladamente cómo lo sabes.',
-        no:     '¿Con qué número crees que no funcionaría? Explica.',
-        unsure: 'Explícame cómo estás pensando para decidir si esto siempre será verdadero.'
-    };
-
-    function setupRadio(name, sectionId, placeholderId, textId, onFirst) {
-        document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
-            r.addEventListener('change', ()=>{
-                const t=document.getElementById(textId); if(t) t.textContent=PROMPTS[r.value]||'';
-                document.getElementById(sectionId)?.classList.remove('hidden');
-                document.getElementById(placeholderId)?.classList.add('hidden');
-                if (onFirst) { onFirst(); onFirst=null; }
-            });
-        });
+// Regla de qué spreads requieren submit para avanzar (índices 0-based):
+// spread 5 = páginas 11-12 → requiere m1q1Submitted
+// spread 6 = páginas 13-14 → requiere m1q2Submitted
+// spread 7 = páginas 15-16 → requiere m3q1Submitted
+// spread 8 = páginas 17-18 → requiere m3q2Submitted
+function canAdvance() {
+    const spreads = getSpreads();
+    if (currentSpread >= spreads.length - 1) {
+        // Último spread: requiere al menos 1 opción de reflexión marcada
+        const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
+        return checked.length >= 1;
     }
 
-    setupRadio('truthQ1','promptSection1','m3Q1ChoicePlaceholder','promptText1', ()=>{
-        if (!p1Init) { p1Init=true; initProblemM3Q1(); }
-    });
-    setupRadio('truthQ2','promptSection2','m3Q2ChoicePlaceholder','promptText2', ()=>{
-        if (!p2Init) { p2Init=true; initProblemM3Q2(); }
-    });
+    if (currentSpread === 5) return m1q1Submitted;
+    if (currentSpread === 6) return m1q2Submitted;
+    if (currentSpread === 7) return m3q1Submitted;
+    if (currentSpread === 8) return m3q2Submitted;
+    if (currentSpread === 9) return m4Submitted;
+    return true;
+}
 
-    document.getElementById('continueToM4Btn')?.addEventListener('click', ()=>{
-        showMoment('moment4Screen'); initMoment4();
+function initNavigation() {
+    document.getElementById('prevBtn')?.addEventListener('click', () => {
+        if (currentSpread > 0) goToSpread(currentSpread - 1);
+    });
+    document.getElementById('nextBtn')?.addEventListener('click', () => {
+        if (canAdvance()) goToSpread(currentSpread + 1);
     });
 }
 
-function initProblemM3Q1() {
-    const boardState = initBoard('boardCanvasM3Q1');
-    const audioSt    = initAudio('recordBtnM3Q1','stopBtnM3Q1','audioStatusM3Q1');
-    const submitBtn  = document.getElementById('submitM3Q1');
-    const statusText = document.getElementById('statusM3Q1');
+// ─────────────────────────────────────────────
+// 6. SPREAD 11-12 – CANVAS (tablero de dibujo)
+// ─────────────────────────────────────────────
+function initBoard() {
+    const canvas = document.getElementById('boardCanvasM1Q1');
+    if (!canvas) return;
 
-    const iv = setInterval(()=>{ if(submitBtn) submitBtn.disabled=!audioSt.audioBlob; }, 500);
+    const wrapper = canvas.parentElement;
+    const ctx = canvas.getContext('2d');
+    let boardWidth = 1;
+    let boardHeight = 1;
 
-    submitBtn?.addEventListener('click', async ()=>{
-        submitBtn.disabled=true; submitBtn.style.opacity='0.5';
-        clearInterval(iv);
-        if (statusText) statusText.textContent='Subiendo...';
-        try {
-            const choice=document.querySelector('input[name="truthQ1"]:checked')?.value;
-            const boardBlob=boardState.hasDrawing?await canvasToBlob('boardCanvasM3Q1'):null;
-            await submitEvidence({ moment:'m3', tag:'problema1', data:{choice}, boardBlob, audioBlob:audioSt.audioBlob });
-            if (statusText){ statusText.textContent='Guardado ✅'; statusText.className='status-text success'; }
-            lockBoard('boardCanvasM3Q1','recordBtnM3Q1');
-            m3q1Submitted=true;
-            setTimeout(()=>{
-                document.getElementById('problem2Section')?.classList.remove('hidden');
-                document.getElementById('problem2Section')?.scrollIntoView({behavior:'smooth'});
-            }, 1000);
-        } catch(e) {
-            if (statusText){ statusText.textContent='Error. Intenta de nuevo.'; statusText.className='status-text error'; }
-            submitBtn.disabled=false; submitBtn.style.opacity='1';
+    const resize = () => {
+        const rect = wrapper.getBoundingClientRect();
+        const width = Math.max(Math.floor(rect.width), 1);
+        const height = Math.max(Math.floor(rect.height), 1);
+        const dpr = Math.max(window.devicePixelRatio || 1, 1);
+
+        if (canvas.width === Math.floor(width * dpr) && canvas.height === Math.floor(height * dpr)) return;
+
+        const snapshot = document.createElement('canvas');
+        snapshot.width = canvas.width;
+        snapshot.height = canvas.height;
+
+        if (snapshot.width > 0 && snapshot.height > 0) {
+            snapshot.getContext('2d').drawImage(canvas, 0, 0);
         }
-    });
-}
 
-function initProblemM3Q2() {
-    const boardState = initBoard('boardCanvasM3Q2');
-    const audioSt    = initAudio('recordBtnM3Q2','stopBtnM3Q2','audioStatusM3Q2');
-    const submitBtn  = document.getElementById('submitM3Q2');
-    const statusText = document.getElementById('statusM3Q2');
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        boardWidth = width;
+        boardHeight = height;
 
-    const iv = setInterval(()=>{ if(submitBtn) submitBtn.disabled=!audioSt.audioBlob; }, 500);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
 
-    submitBtn?.addEventListener('click', async ()=>{
-        submitBtn.disabled=true; submitBtn.style.opacity='0.5';
-        clearInterval(iv);
-        if (statusText) statusText.textContent='Subiendo...';
-        try {
-            const choice=document.querySelector('input[name="truthQ2"]:checked')?.value;
-            const boardBlob=boardState.hasDrawing?await canvasToBlob('boardCanvasM3Q2'):null;
-            await submitEvidence({ moment:'m3', tag:'problema2', data:{choice}, boardBlob, audioBlob:audioSt.audioBlob });
-            if (statusText){ statusText.textContent='Guardado ✅ Continuando...'; statusText.className='status-text success'; }
-            lockBoard('boardCanvasM3Q2','recordBtnM3Q2');
-            m3q2Submitted=true;
-            document.getElementById('continueToM4Btn')?.classList.remove('hidden');
-        } catch(e) {
-            if (statusText){ statusText.textContent='Error. Intenta de nuevo.'; statusText.className='status-text error'; }
-            submitBtn.disabled=false; submitBtn.style.opacity='1';
+        if (snapshot.width > 0 && snapshot.height > 0) {
+            ctx.drawImage(snapshot, 0, 0, snapshot.width, snapshot.height, 0, 0, width, height);
         }
-    });
-}
+    };
 
-function lockBoard(canvasId, recordBtnId) {
-    const canvas=document.getElementById(canvasId); if(canvas) canvas.style.pointerEvents='none';
-    canvas?.closest('.evidence-section')?.querySelectorAll('.tool-btn').forEach(b=>b.disabled=true);
-    const rb=document.getElementById(recordBtnId); if(rb){ rb.disabled=true; }
-}
+    // Ajustar tamano al contenedor cuando el spread se vuelve visible o cambia
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MOMENTO 4: EL RETO FINAL
-// ─────────────────────────────────────────────────────────────────────────────
-function initMoment4() {
-    const codeEl=document.getElementById('studentCodeM4');
-    if (codeEl) codeEl.textContent=getStudentHeaderText();
-    m4Lives=3; m4Finalized=false; m4CurrentItem=1; m4Responses=[]; m4ErrorsTotal=0;
-    m4ReflectionSelected=false; m4ReflectionSaved=false; m4ReflectionSaving=false;
-    if (m4ReturnHomeTimeout){ clearTimeout(m4ReturnHomeTimeout); m4ReturnHomeTimeout=null; }
+    requestAnimationFrame(resize);
+    setTimeout(resize, 0);
+    window.addEventListener('resize', resize);
+    if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(() => resize());
+        observer.observe(wrapper);
+    }
 
-    document.getElementById('moment4MainSpread')?.classList.remove('hidden');
-    document.getElementById('moment4ReflectionSection')?.classList.add('hidden');
-    document.getElementById('finalQuestionSection')?.classList.add('hidden');
-    document.querySelectorAll('.magic-heart').forEach(h=>h.classList.remove('lost'));
-    renderMagicLives();
+    let drawing = false;
+    let tool = 'black'; // herramienta activa
+    setBoardCursor(canvas, tool);
 
-    document.querySelectorAll('input[name="m4Reflection"]').forEach(cb=>{
-        cb.checked=false; cb.disabled=false; cb.onchange=updateM4Reflection;
-    });
+    const getPos = e => {
+        const rect = canvas.getBoundingClientRect();
+        const src = e.touches ? e.touches[0] : e;
+        return { x: src.clientX - rect.left, y: src.clientY - rect.top };
+    };
 
-    const hint    = document.querySelector('#moment4ReflectionSection .reflection-hint');
-    const status  = document.getElementById('m4ReflectionStatus');
-    const finishBtn = document.getElementById('finishM4Btn');
-    if (hint)   hint.textContent='Selecciona al menos una opción para continuar (máximo dos).';
-    if (status) status.textContent='';
-    if (finishBtn) {
-        finishBtn.disabled=true; finishBtn.style.opacity='0.5';
-        finishBtn.onclick = async ()=>{
-            const saved=await saveMoment4Reflection();
-            if (saved) {
-                if (status) status.textContent='Respuesta guardada. Cerrando libro...';
-                m4ReturnHomeTimeout=setTimeout(()=>{ window.location.href=FINAL_SURVEY_URL; }, 2200);
+    const startDraw = e => {
+        e.preventDefault();
+        drawing = true;
+        const { x, y } = getPos(e);
+        applyToolStyle(ctx, tool);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    };
+
+    const draw = e => {
+        if (!drawing) return;
+        e.preventDefault();
+        const { x, y } = getPos(e);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    };
+
+    const endDraw = () => {
+        if (!drawing) return;
+        drawing = false;
+        ctx.closePath();
+    };
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseleave', endDraw);
+    canvas.addEventListener('touchstart', startDraw, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    canvas.addEventListener('touchend', endDraw);
+
+    // Botones de herramienta
+    document.querySelectorAll('.board-tools .tool-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            tool = btn.dataset.tool;
+            setBoardCursor(canvas, tool);
+            if (tool === 'clear') {
+                if (confirm('Estas segur@ de que quieres limpiar todo el tablero?')) {
+                    ctx.clearRect(0, 0, boardWidth, boardHeight);
+                }
+                tool = 'black';
+                setBoardCursor(canvas, tool);
             }
-        };
-    }
-
-    generateMoment4Questions();
-    showItem(1);
+        });
+    });
 }
 
-function renderMagicLives() {
-    const el=document.getElementById('magicLives'); if(!el) return;
-    el.innerHTML='';
-    for (let i=0;i<3;i++){
-        const h=document.createElement('span'); h.className='magic-heart';
-        h.textContent = i<m4Lives?'❤️':'🖤'; el.appendChild(h);
+function setBoardCursor(canvas, tool) {
+    const cursors = {
+        black: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M4 24l5-1 12-12-4-4L5 19z' fill='%23222'/><path d='M17 7l4 4 2-2-4-4z' fill='%23666'/></svg>",
+        red: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M4 24l5-1 12-12-4-4L5 19z' fill='%23d33'/><path d='M17 7l4 4 2-2-4-4z' fill='%23822'/></svg>",
+        yellow: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><rect x='8' y='2' width='8' height='18' rx='2' fill='%23f6e05e'/><rect x='8' y='18' width='8' height='8' fill='%23c99a00'/></svg>",
+        eraser: "<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><rect x='6' y='9' width='16' height='10' rx='2' fill='%23f5f5f5' stroke='%23999' stroke-width='1.5'/></svg>"
+    };
+
+    if (tool === 'clear' || !cursors[tool]) {
+        canvas.style.cursor = 'crosshair';
+        return;
+    }
+
+    canvas.style.cursor = `url("data:image/svg+xml;utf8,${cursors[tool]}") 4 24, crosshair`;
+}
+
+function applyToolStyle(ctx, tool) {
+    ctx.lineJoin = 'round';
+    ctx.lineCap  = 'round';
+    ctx.imageSmoothingEnabled = true;
+    if (tool === 'black') {
+        ctx.globalAlpha     = 1;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle     = '#000000';
+        ctx.lineWidth       = 4;
+    } else if (tool === 'red') {
+        ctx.globalAlpha     = 1;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle     = '#e53e3e';
+        ctx.lineWidth       = 4;
+    } else if (tool === 'yellow') {
+        ctx.globalAlpha     = 0.5;
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.strokeStyle     = '#f6e05e';
+        ctx.lineWidth       = 14;
+    } else if (tool === 'eraser') {
+        ctx.globalAlpha = 1;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+        ctx.lineWidth = 18;
     }
 }
 
-function generateMoment4Questions() {
-    const envelope=`<span class="missing-envelope" aria-label="bolsa misteriosa" role="img">
-        <svg class="envelope magic" viewBox="0 0 60 50" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="12" width="44" height="34" fill="#ffd166" stroke="#ff9f1c" stroke-width="2" rx="8"/>
-            <rect x="8" y="12" width="44" height="9" fill="#ffe28a" opacity="0.9" rx="8"/>
-            <path d="M18 14 V8 C18 6 20 5 22 5 C24 5 26 6 26 8 V14" fill="none" stroke="#ff9f1c" stroke-width="2" stroke-linecap="round"/>
-            <path d="M34 14 V8 C34 6 36 5 38 5 C40 5 42 6 42 8 V14" fill="none" stroke="#ff9f1c" stroke-width="2" stroke-linecap="round"/>
-            <circle cx="30" cy="30" r="3" fill="#ff6f91"/>
-        </svg></span>`;
+// Canvas → Blob (para subir a Firebase Storage)
+function canvasToBlob(canvasId) {
+    return new Promise(resolve => {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) { resolve(null); return; }
+        canvas.toBlob(blob => resolve(blob), 'image/png');
+    });
+}
 
-    const patterns=[
-        (a,b)=>({ eq:`${a} × ${envelope} = ${b} × ${a}`, ans:b }),
-        (a,b)=>({ eq:`${envelope} × ${a} = ${b} × ${a}`, ans:b }),
-        (a,b)=>({ eq:`${a} × ${b} = ${b} × ${envelope}`, ans:a }),
-        (a,b)=>({ eq:`${envelope} × ${a} = ${b} × ${a}`, ans:b }),
-        (a,b)=>({ eq:`${a} × ${envelope} = ${b} × ${a}`, ans:b }),
-        (a,b)=>({ eq:`${a} × ${b} = ${envelope} × ${a}`, ans:b }),
+// ─────────────────────────────────────────────
+// 7. GRABACIÓN DE AUDIO (genérica por tag)
+// ─────────────────────────────────────────────
+// tag: 'M1Q1' | 'M1Q2' | 'M3Q1' | 'M3Q2' | 'M4Reflection'
+function initAudioRecorder(tag) {
+    const recordBtn = document.getElementById(`recordBtn${tag}`);
+    const stopBtn   = document.getElementById(`stopBtn${tag}`);
+    const statusEl  = document.getElementById(`status${tag}`);
+    const submitBtn = document.getElementById(`submit${tag}`);
+    if (!recordBtn || !stopBtn) return;
+
+    audioState[tag] = { mediaRecorder: null, chunks: [], blob: null };
+
+    // Estado inicial: stop oculto, submit deshabilitado hasta tener audio listo
+    stopBtn.style.display = 'none';
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+    }
+    if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
+
+    recordBtn.addEventListener('click', async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const mr = new MediaRecorder(stream);
+            audioState[tag].mediaRecorder = mr;
+            audioState[tag].chunks = [];
+            audioState[tag].blob   = null;
+
+            mr.ondataavailable = e => { if (e.data.size > 0) audioState[tag].chunks.push(e.data); };
+            mr.onstop = () => {
+                audioState[tag].blob = new Blob(audioState[tag].chunks, { type: 'audio/webm' });
+                stream.getTracks().forEach(t => t.stop());
+                if (statusEl) statusEl.textContent = 'Audio listo para enviar';
+
+                if (tag === 'M4Reflection') {
+                    updateM4ReflectionSubmitState();
+                } else if (submitBtn && audioState[tag].blob && audioState[tag].blob.size > 0) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor  = 'pointer';
+                }
+
+                // Volver a mostrar grabar, ocultar detener
+                recordBtn.style.display = '';
+                stopBtn.style.display   = 'none';
+                recordBtn.disabled = true; // ya grabo, no graba otra vez
+                recordBtn.style.opacity = '0.4';
+            };
+
+            mr.start();
+            recordBtn.style.display = 'none';
+            stopBtn.style.display   = '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
+            if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
+            if (statusEl) statusEl.textContent = 'Grabando...';
+        } catch (err) {
+            console.error('Error al acceder al microfono:', err);
+            if (statusEl) statusEl.textContent = 'No se pudo acceder al microfono.';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
+            if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
+        }
+    });
+
+    stopBtn.addEventListener('click', () => {
+        const mr = audioState[tag].mediaRecorder;
+        if (mr && mr.state === 'recording') mr.stop();
+    });
+
+    // Submit de audio (+ imagen de canvas si aplica)
+    submitBtn?.addEventListener('click', () => handleSubmit(tag));
+}
+
+// _____________________________________________________________________________________
+// 8. ENVIO A FIREBASE
+// --------------------------------------------------------------------------------------
+async function handleSubmit(tag) {
+    const submitBtn = document.getElementById(`submit${tag}`);
+    const statusEl  = document.getElementById(`status${tag}`);
+    const audioBlob = audioState[tag]?.blob;
+
+    if (!audioBlob) return;
+
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.4';
+    if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
+
+    try {
+        if (!firebaseServices?.storage || !firebaseServices?.db) {
+            throw new Error('Firebase no disponible');
+        }
+
+        const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
+        const basePath = `Actividad2/${studentCode}/${tag}`;
+        const timestamp = Date.now();
+
+        // Para M3Q1 / M3Q2: leer la respuesta del radio y añadirla al nombre del archivo
+        let audioFileName = `audio_${timestamp}`;
+        let m3q1Answer = null;
+        let m3q2Answer = null;
+        if (tag === 'M3Q1') {
+            const checked = document.querySelector('input[name="truthQ1"]:checked');
+            const labelMap = { yes: 'si', no: 'no', unsure: 'nose' };
+            m3q1Answer = checked ? (labelMap[checked.value] ?? checked.value) : 'sinrespuesta';
+            audioFileName = `audio_${timestamp}_${m3q1Answer}`;
+        }
+        if (tag === 'M3Q2') {
+            const checked = document.querySelector('input[name="truthQ2"]:checked');
+            const labelMap = { yes: 'si', no: 'no', unsure: 'nose' };
+            m3q2Answer = checked ? (labelMap[checked.value] ?? checked.value) : 'sinrespuesta';
+            audioFileName = `audio_${timestamp}_${m3q2Answer}`;
+        }
+
+        // Subir audio
+        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
+        await uploadBytes(audioRef, audioBlob);
+        const audioURL = await getDownloadURL(audioRef);
+
+        let imageURL = null;
+
+        // Si es M1Q1 también subir imagen del canvas
+        if (tag === 'M1Q1') {
+            const canvasBlob = await canvasToBlob('boardCanvasM1Q1');
+            if (canvasBlob) {
+                const imgRef = ref(storage, `${basePath}/canvas_${timestamp}.png`);
+                await uploadBytes(imgRef, canvasBlob);
+                imageURL = await getDownloadURL(imgRef);
+            }
+        }
+
+        // Guardar registro en Firestore
+        await addDoc(collection(db, 'Actividad2'), {
+            studentCode,
+            studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
+            curso: studentInfo?.curso || '',
+            tag,
+            audioURL,
+            imageURL: imageURL || null,
+            ...(m3q1Answer !== null && { m3q1Answer }),
+            ...(m3q2Answer !== null && { m3q2Answer }),
+            timestamp: serverTimestamp()
+        });
+
+        if (statusEl) {
+            statusEl.textContent = tag === 'M4Reflection'
+                ? '✅ Audio enviado. Finalizando actividad...'
+                : '✅ Guardado. Ya puedes pasar a la siguiente página.';
+            statusEl.style.color = '#16a34a';
+        }
+
+        // En el último spread, el envío del audio final dispara el formulario de cierre.
+        if (tag === 'M4Reflection') {
+            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
+            if (checked.length === 0) {
+                if (statusEl) {
+                    statusEl.textContent = 'Selecciona al menos una opción antes de enviar.';
+                    statusEl.style.color = '#dc2626';
+                }
+                updateM4ReflectionSubmitState();
+                return;
+            }
+
+            if (statusEl) {
+                statusEl.textContent = 'Enviando respuestas finales...';
+                statusEl.style.color = '#555';
+            }
+            submitEncuesta(checked);
+            return;
+        }
+
+        // Marcar como enviado y desbloquear navegación
+        markSubmitted(tag);
+
+    } catch (error) {
+        console.error(`❌ Error al enviar ${tag}:`, error);
+        if (statusEl) {
+            statusEl.textContent = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            statusEl.style.color = '#dc2626';
+        }
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+    }
+}
+
+function markSubmitted(tag) {
+    if (tag === 'M1Q1') m1q1Submitted = true;
+    if (tag === 'M1Q2') m1q2Submitted = true;
+    if (tag === 'M3Q1') m3q1Submitted = true;
+    if (tag === 'M3Q2') m3q2Submitted = true;
+    updateNavButtons();
+}
+
+// ─────────────────────────────────────────────
+// 9. SPREAD 13-14 – COCINA DE BOLSITAS
+// ─────────────────────────────────────────────
+function initCocinaSystem() {
+    const gotoBtn    = document.getElementById('goToCocinaBtn');
+    const verifyBtn  = document.getElementById('verifyTraysBtnM1Q2');
+    const feedbackEl = document.getElementById('traysFeedbackM1Q2');
+    const traysImage = document.getElementById('bandejasFotoM1Q2');
+
+    let traysSystem = null;
+
+    gotoBtn?.addEventListener('click', () => {
+        // Inicializar sistema de bolsitas si no existe
+        if (!traysSystem) {
+            if (typeof window.TraysSystem === 'function') {
+                traysSystem = new window.TraysSystem('traysAreaM1Q2');
+            } else {
+                traysSystem = createTraysSystem('traysAreaM1Q2');
+            }
+        }
+        if (traysImage) traysImage.style.display = 'none';
+        hide('ContenedorLibro');
+        hide('prevBtn');
+        hide('nextBtn');
+        show('ContenedorCocina');
+    });
+
+    verifyBtn?.addEventListener('click', () => {
+        if (!traysSystem) return;
+        const validation = traysSystem.validatePairings();
+        const results = validation.pairResults;
+        const allCorrect = results.length === 3 && results.every(r => r.isCorrect) && validation.hasExpectedSingles;
+        const totalPaired = results.length;
+
+        if (allCorrect) {
+            if (feedbackEl) {
+                feedbackEl.textContent = '✅ ¡Perfecto! Emparejaste las bolsitas correctas y dejaste sin pareja las que no la tienen.';
+                feedbackEl.style.color = '#16a34a';
+            }
+            setTimeout(() => {
+                hide('ContenedorCocina');
+                show('ContenedorLibro');
+                show('prevBtn');
+                show('nextBtn');
+                if (traysImage) traysImage.style.display = 'block';
+                show('m1Q2FinalQuestion');
+                cocinaCompleted = true;
+                goToSpread(6); // Spread 13-14
+                // Iniciar grabador M1Q2
+                const recordBtn = document.getElementById('recordBtnM1Q2');
+                if (recordBtn) recordBtn.disabled = false;
+            }, 1000);
+        } else {
+            const wrongCount = results.filter(r => !r.isCorrect).length;
+            const missingPairs = Math.max(0, 3 - totalPaired);
+            let msg = '';
+
+            if (wrongCount > 0) {
+                msg += `Tienes ${wrongCount} emparejamiento(s) incorrecto(s). Revisa las parejas que no corresponden. `;
+            }
+
+            if (missingPairs > 0) {
+                msg += `Aún faltan ${missingPairs} pareja(s) por formar.`;
+            } else if (wrongCount === 0 && !validation.hasExpectedSingles) {
+                msg += 'Recuerda que hay dos bolsitas que deben quedar sin pareja.';
+            }
+
+            if (feedbackEl) {
+                feedbackEl.textContent = msg || 'Revisa los emparejamientos.';
+                feedbackEl.style.color = '#dc2626';
+            }
+        }
+    });
+}
+
+// ─── Sistema de bolsitas (simplificado, autocontenido) ───
+function createTraysSystem(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return null;
+
+    const BASE_TRAYS = [
+        { id: 'trayA1', rows: 3, cols: 4, total: 12 },
+        { id: 'trayA2', rows: 4, cols: 3, total: 12 },
+        { id: 'trayA3', rows: 2, cols: 6, total: 12 },
+        { id: 'trayA4', rows: 6, cols: 2, total: 12 },
+        { id: 'trayA5', rows: 5, cols: 3, total: 15 },
+        { id: 'trayA6', rows: 3, cols: 5, total: 15 },
+        { id: 'trayA7', rows: 4, cols: 5, total: 20 },
+        { id: 'trayA8', rows: 2, cols: 7, total: 14 }
     ];
 
-    const wrapper=document.getElementById('itemsWrapper'); if(!wrapper) return;
-    wrapper.innerHTML='';
-    patterns.forEach((pat,index)=>{
-        const a=Math.floor(Math.random()*50)+1;
-        const b=Math.floor(Math.random()*50)+1;
-        const { eq, ans }=pat(a,b);
-        const box=document.createElement('div');
-        box.className='item-box hidden'; box.dataset.item=index+1;
-        box.innerHTML=`
-            <div class="item-equation">${eq}</div>
-            <div class="m4-answer-row">
-                <input type="number" class="item-input" data-answer="${ans}" data-attempts="0"
-                    placeholder="?" min="1" max="50">
-                <button class="btn btn-primary check-answer-btn" style="margin-left:15px;padding:10px 25px;">Comprobar</button>
-            </div>
-            <div class="item-feedback" style="margin-top:15px;font-size:1.2em;min-height:50px;"></div>`;
-        wrapper.appendChild(box);
-    });
-}
+    const EXPECTED_UNPAIRED_TOTALS = new Set([14, 20]);
 
-function showItem(itemNum) {
-    document.querySelectorAll('.item-box').forEach(box=>{
-        const match=parseInt(box.dataset.item)===itemNum;
-        box.classList.toggle('hidden',!match);
-        if (match) {
-            const input=box.querySelector('.item-input');
-            const checkBtn=box.querySelector('.check-answer-btn');
-            checkBtn.addEventListener('click',()=>validateItem(input,box));
-            input.addEventListener('keypress',e=>{ if(e.key==='Enter') checkBtn.click(); });
-            input.focus();
-        }
-    });
-}
+    const PAIR_COLORS = ['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316'];
+    let pairings = new Map();
+    let selected = null;
+    let pairCount = 0;
+    const pairColors = new Map();
 
-function loseLife() {
-    if (m4Lives>0) m4Lives--;
-    renderMagicLives();
-    if (m4Lives===0) setTimeout(finalizeMoment4, 2000);
-}
-
-function validateItem(input, itemBox) {
-    const answer     = parseInt(input.dataset.answer);
-    const userAnswer = parseInt(input.value);
-    const feedback   = itemBox.querySelector('.item-feedback');
-    const checkBtn   = itemBox.querySelector('.check-answer-btn');
-    let   attempts   = parseInt(input.dataset.attempts);
-
-    if (!input.value||isNaN(userAnswer)) { feedback.textContent='⚠️ Por favor ingresa un número.'; return; }
-
-    if (userAnswer===answer) {
-        createSpellEffect(itemBox);
-        feedback.innerHTML='<span style="color:#27ae60;font-weight:bold;">✅ ¡Correcto! Muy bien.</span>';
-        input.disabled=true; checkBtn.disabled=true; checkBtn.style.opacity='0.5';
-        m4Responses.push({ item:m4CurrentItem, correct:true, attempts:attempts+1 });
-        setTimeout(()=>{
-            itemBox.classList.add('hidden'); m4CurrentItem++;
-            m4CurrentItem<=6 ? showItem(m4CurrentItem) : finalizeMoment4();
-        }, 1500);
-    } else {
-        attempts++; input.dataset.attempts=attempts; m4ErrorsTotal++;
-        if (attempts===1) {
-            feedback.innerHTML='<span style="color:#e67e22;">❌ Verifica tu respuesta. Recuerda la propiedad conmutativa.</span>';
-            input.focus();
-        } else if (attempts===2) {
-            feedback.innerHTML='<span style="color:#555;">💭 Intenta hacer ambas multiplicaciones.</span>';
-            input.focus();
-        } else {
-            loseLife();
-            feedback.innerHTML='<span style="color:#c0392b;">❌ No es correcto. 💔 ¡Perdiste una vida mágica!</span>';
-            input.disabled=true; checkBtn.disabled=true; checkBtn.style.opacity='0.5';
-            m4Responses.push({ item:m4CurrentItem, correct:false, attempts:3 });
-            if (m4Lives>0) setTimeout(()=>{
-                itemBox.classList.add('hidden'); m4CurrentItem++;
-                m4CurrentItem<=6 ? showItem(m4CurrentItem) : finalizeMoment4();
-            }, 4000);
-        }
+    function getColor(key) {
+        if (!pairColors.has(key)) { pairColors.set(key, PAIR_COLORS[pairCount++ % PAIR_COLORS.length]); }
+        return pairColors.get(key);
     }
-}
 
-async function finalizeMoment4() {
-    if (m4Finalized) return;
-    m4Finalized=true;
-    const statusText=document.getElementById('moment4Status');
-    if (statusText){ statusText.textContent='Guardando resultados...'; statusText.className='status-text loading'; }
-    try {
-        await submitEvidence({ moment:'m4', tag:'m4', data:{ responses:m4Responses, errorsTotal:m4ErrorsTotal, livesRemaining:m4Lives }, boardBlob:null, audioBlob:null });
-        if (statusText){ statusText.textContent='Completado ✅'; statusText.className='status-text success'; }
-        document.getElementById('finalQuestionSection')?.classList.remove('hidden');
-        if (m4Lives>0) createFullScreenMagicEffect();
-        setTimeout(showMoment4ReflectionPage, 2200);
-    } catch(e) {
-        console.error(e);
-        if (statusText){ statusText.textContent='Error al guardar.'; statusText.className='status-text error'; }
+    function shuffleArray(items) {
+        const arr = [...items];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
     }
-}
 
-function showMoment4ReflectionPage() {
-    document.getElementById('moment4MainSpread')?.classList.add('hidden');
-    document.getElementById('moment4ReflectionSection')?.classList.remove('hidden');
-}
+    function getGridColumns() {
+        const tpl = getComputedStyle(container).gridTemplateColumns || '';
+        const repeatMatch = tpl.match(/repeat\((\d+),/);
+        if (repeatMatch) return Math.max(parseInt(repeatMatch[1], 10), 1);
+        const count = tpl.split(' ').filter(Boolean).length;
+        return Math.max(count, 1);
+    }
 
-function updateM4Reflection(event) {
-    const checked=document.querySelectorAll('input[name="m4Reflection"]:checked');
-    if (checked.length>2 && event?.target) event.target.checked=false;
-    const valid=document.querySelectorAll('input[name="m4Reflection"]:checked');
-    m4ReflectionSelected=valid.length>0 && valid.length<=2;
-    const finishBtn=document.getElementById('finishM4Btn');
-    if (finishBtn){ finishBtn.disabled=!m4ReflectionSelected||m4ReflectionSaving; finishBtn.style.opacity=finishBtn.disabled?'0.5':'1'; }
-}
+    function hasSameTotalAdjacency(order, cols) {
+        for (let i = 0; i < order.length; i++) {
+            const right = (i % cols !== cols - 1) ? i + 1 : -1;
+            const down = i + cols < order.length ? i + cols : -1;
 
-async function saveMoment4Reflection() {
-    if (m4ReflectionSaved) return true;
-    if (m4ReflectionSaving) return false;
-    const checked=Array.from(document.querySelectorAll('input[name="m4Reflection"]:checked'));
-    if (checked.length===0||checked.length>2) return false;
-    m4ReflectionSaving=true;
-    try {
-        await submitEvidence({ moment:'m4', tag:'reflection-final', data:{ options:checked.map(c=>c.value) }, boardBlob:null, audioBlob:null });
-        m4ReflectionSaved=true; return true;
-    } catch(e) { console.error(e); return false; }
-    finally { m4ReflectionSaving=false; updateM4Reflection(); }
-}
+            if (right !== -1 && order[i].total === order[right].total) return true;
+            if (down !== -1 && order[i].total === order[down].total) return true;
+        }
+        return false;
+    }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EFECTOS VISUALES (Momento 4)
-// ─────────────────────────────────────────────────────────────────────────────
-function createSpellEffect(itemBox) {
-    const canvas=document.getElementById('magicCanvas'); if(!canvas) return;
-    const ctx=canvas.getContext('2d');
-    canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-    const rect=itemBox.getBoundingClientRect();
-    const cx=rect.left+rect.width/2, cy=rect.top+rect.height/2;
-    const colors=['#9b59b6','#8e44ad','#ffd700','#fff','#bb86fc'];
-    const particles=Array.from({length:50},()=>({
-        x:cx,y:cy,vx:(Math.random()-.5)*10,vy:(Math.random()-.5)*10,
-        r:Math.random()*4+2,color:colors[Math.floor(Math.random()*colors.length)],
-        alpha:1,decay:Math.random()*.02+.015
-    }));
-    (function anim(){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        let alive=false;
-        particles.forEach(p=>{
-            if(p.alpha>0){alive=true;p.x+=p.vx;p.y+=p.vy;p.alpha-=p.decay;
-                ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-                ctx.fillStyle=p.color;ctx.globalAlpha=Math.max(0,p.alpha);ctx.fill();}
-        });
-        ctx.globalAlpha=1;
-        if(alive) requestAnimationFrame(anim); else ctx.clearRect(0,0,canvas.width,canvas.height);
-    })();
-}
+    function getSeparatedOrder() {
+        const cols = getGridColumns();
+        let fallback = shuffleArray(BASE_TRAYS);
 
-function createFullScreenMagicEffect() {
-    const canvas=document.getElementById('magicCanvas'); if(!canvas) return;
-    const ctx=canvas.getContext('2d');
-    canvas.width=window.innerWidth; canvas.height=window.innerHeight;
-    const cx=canvas.width/2, cy=canvas.height/2;
-    const colors=['#ffd700','#fff','#9b59b6','#8e44ad','#bb86fc'];
-    const particles=Array.from({length:150},(_,i)=>{
-        const angle=(Math.PI*2*i)/150, v=3+Math.random()*5;
-        return{x:cx,y:cy,vx:Math.cos(angle)*v,vy:Math.sin(angle)*v,
-               r:Math.random()*5+2,color:colors[i%colors.length],alpha:1,decay:Math.random()*.01+.005};
-    });
-    (function anim(){
-        ctx.clearRect(0,0,canvas.width,canvas.height); let alive=false;
-        particles.forEach(p=>{
-            if(p.alpha>0){alive=true;p.x+=p.vx;p.y+=p.vy;p.vy+=.1;p.alpha-=p.decay;
-                ctx.save();ctx.translate(p.x,p.y);ctx.beginPath();
-                for(let j=0;j<5;j++){const a=(Math.PI*2*j)/5-Math.PI/2;
-                    j===0?ctx.moveTo(Math.cos(a)*p.r,Math.sin(a)*p.r):ctx.lineTo(Math.cos(a)*p.r,Math.sin(a)*p.r);
-                    const ia=a+Math.PI/5;ctx.lineTo(Math.cos(ia)*p.r*.5,Math.sin(ia)*p.r*.5);}
-                ctx.closePath();ctx.fillStyle=p.color;ctx.globalAlpha=Math.max(0,p.alpha);ctx.fill();ctx.restore();}
-        });
-        ctx.globalAlpha=1;
-        if(alive) requestAnimationFrame(anim); else ctx.clearRect(0,0,canvas.width,canvas.height);
-    })();
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// TABLERO (canvas de dibujo)
-// ─────────────────────────────────────────────────────────────────────────────
-function initBoard(canvasId) {
-    const canvas=document.getElementById(canvasId);
-    if(!canvas) return { hasDrawing:false, disabled:false };
-    const ctx=canvas.getContext('2d');
-    let isDrawing=false, currentTool='black', hasDrawing=false, disabled=false;
-
-    const evidenceSection=canvas.closest('.evidence-section');
-    if(!evidenceSection) return { hasDrawing:false, disabled:false };
-
-    evidenceSection.querySelectorAll('.tool-btn').forEach(btn=>{
-        btn.addEventListener('click',()=>{
-            const tool=btn.dataset.tool;
-            if(tool==='clear'){
-                if(window.confirm('¿Estás segura de querer limpiar todo el tablero?')){
-                    ctx.clearRect(0,0,canvas.width,canvas.height); hasDrawing=false; } return;
+        for (let attempt = 0; attempt < 240; attempt++) {
+            const candidate = shuffleArray(BASE_TRAYS);
+            if (!hasSameTotalAdjacency(candidate, cols)) {
+                return candidate;
             }
-            currentTool=tool;
-            evidenceSection.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
-            btn.classList.add('active');
+            fallback = candidate;
+        }
+
+        return fallback;
+    }
+
+    function render() {
+        container.innerHTML = '';
+        const shuffled = getSeparatedOrder();
+        shuffled.forEach(data => {
+            const card = document.createElement('div');
+            card.className = 'tray-card';
+            card.id = data.id;
+            card.dataset.total = data.total;
+
+            const grid = document.createElement('div');
+            grid.className = 'tray-grid tray-grid-inner';
+            grid.style.gridTemplateColumns = `repeat(${data.cols}, minmax(0, 1fr))`;
+            grid.style.gap = data.total >= 24 ? '5px' : data.total >= 15 ? '6px' : '7px';
+
+            const bunSize = data.total >= 24 ? 18 : data.total >= 15 ? 22 : 26;
+
+            for (let i = 0; i < data.total; i++) {
+                const cell = document.createElement('span');
+                cell.className = 'tray-item';
+                cell.style.width = `${bunSize}px`;
+                cell.style.height = `${bunSize}px`;
+
+                const bun = document.createElement('img');
+                bun.className = 'tray-item-image';
+                bun.src = 'assets/images/pandebono.png';
+                bun.alt = '';
+                bun.draggable = false;
+
+                cell.appendChild(bun);
+                grid.appendChild(cell);
+            }
+
+            card.appendChild(grid);
+            container.appendChild(card);
+        });
+
+        container.addEventListener('click', handleClick);
+    }
+
+    function handleClick(e) {
+        const card = e.target.closest('.tray-card');
+        if (!card) return;
+
+        if (!selected) {
+            selected = card;
+            card.classList.add('selected');
+            card.style.outline = '3px solid #f59e0b';
+        } else if (selected === card) {
+            card.classList.remove('selected');
+            card.style.outline = '';
+            selected = null;
+        } else {
+            togglePair(selected.id, card.id);
+            selected.classList.remove('selected');
+            selected.style.outline = '';
+            selected = null;
+        }
+    }
+
+    function togglePair(id1, id2) {
+        if (pairings.get(id1) === id2) {
+            unpair(id1, id2);
+        } else {
+            if (pairings.has(id1)) unpair(id1, pairings.get(id1));
+            if (pairings.has(id2)) unpair(id2, pairings.get(id2));
+            pair(id1, id2);
+        }
+    }
+
+    function pair(id1, id2) {
+        pairings.set(id1, id2);
+        pairings.set(id2, id1);
+        const key   = [id1, id2].sort().join('-');
+        const color = getColor(key);
+        [id1, id2].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.style.borderColor = color; el.classList.add('paired'); }
+        });
+    }
+
+    function unpair(id1, id2) {
+        pairings.delete(id1);
+        pairings.delete(id2);
+        [id1, id2].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) { el.style.borderColor = ''; el.classList.remove('paired'); }
+        });
+    }
+
+    function getPairings() {
+        const seen = new Set();
+        const result = [];
+        for (const [a, b] of pairings) {
+            const key = [a, b].sort().join('-');
+            if (!seen.has(key)) { seen.add(key); result.push([a, b]); }
+        }
+        return result;
+    }
+
+    function validatePairings() {
+        const pairResults = getPairings().map(([id1, id2]) => {
+            const t1 = BASE_TRAYS.find(t => t.id === id1);
+            const t2 = BASE_TRAYS.find(t => t.id === id2);
+            return { pair: [id1, id2], total1: t1?.total, total2: t2?.total, isCorrect: t1?.total === t2?.total };
+        });
+
+        const pairedIds = new Set(pairResults.flatMap(result => result.pair));
+        const unpairedTrays = BASE_TRAYS.filter(tray => !pairedIds.has(tray.id));
+
+        return {
+            pairResults,
+            unpairedTrays,
+            hasExpectedSingles:
+                unpairedTrays.length === 2 &&
+                unpairedTrays.every(tray => EXPECTED_UNPAIRED_TOTALS.has(tray.total))
+        };
+    }
+
+    render();
+    return { validatePairings, getPairings };
+}
+
+// ─────────────────────────────────────────────
+// 10. SPREADS 15-16 y 17-18 – RADIOS + PLACEHOLDER
+// ─────────────────────────────────────────────
+function initRadioSpreads() {
+    setupRadioSpread(
+        'truthQ1',
+        'promptSection1', 'm3Q1Placeholder', 'promptText1'
+    );
+    setupRadioSpread(
+        'truthQ2',
+        'promptSection2', 'm3Q2Placeholder', 'promptText2'
+    );
+}
+
+const PROMPTS = {
+    yes:    '¿Por qué crees que es verdadera? Explica.',
+    no:     '¿Por qué crees que es falsa? ¿Tienes un ejemplo? Explica.',
+    unsure: '¿Qué te hace dudar? Explica.'
+};
+
+function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
+    document.querySelectorAll(`input[name="${radioName}"]`).forEach(radio => {
+        radio.addEventListener('change', () => {
+            const text = document.getElementById(textId);
+            if (text) text.textContent = PROMPTS[radio.value] || '';
+            show(sectionId);
+            hide(placeholderId);
+        });
+    });
+}
+
+// ─────────────────────────────────────────────
+// 11. SPREAD 19-20 – EJERCICIOS DE CONMUTATIVIDAD
+// ─────────────────────────────────────────────
+function initM4() {
+    m4Submitted = false;
+    m4Exercises = generateExercises(5);
+    m4Patterns = generateM4Patterns(5);
+    renderExercise(m4CurrentEx);
+}
+
+function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateExercises(n) {
+    const exercises = [];
+    for (let i = 0; i < n; i++) {
+        let a = randInt(5, 50);
+        let b;
+        do { b = randInt(5, 50); } while (b === a);
+        exercises.push({ a, b });
+    }
+    return exercises;
+}
+
+function shuffleArray(items) {
+    const arr = [...items];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function generateM4Patterns(n) {
+    // Posiciones posibles de la caja en: a × b = b × a
+    // 0: [ ] × b = b × a
+    // 1: a × [ ] = b × a
+    // 2: a × b = [ ] × a
+    // 3: a × b = b × [ ]
+    const base = shuffleArray([0, 1, 2, 3]);
+    const patterns = [];
+
+    while (patterns.length < n) {
+        if (patterns.length < 4) {
+            patterns.push(base[patterns.length]);
+        } else {
+            patterns.push(base[Math.floor(Math.random() * base.length)]);
+        }
+    }
+
+    return patterns;
+}
+
+function renderExercise(index) {
+    const wrapper = document.getElementById('itemsWrapper');
+    if (!wrapper) return;
+    wrapper.innerHTML = '';
+
+    if (index >= m4Exercises.length) {
+        finalizeM4();
+        return;
+    }
+
+    m4AttemptsOnCurrent = 0; // resetear intentos del nuevo ejercicio
+
+    const { a, b } = m4Exercises[index];
+    const pattern = m4Patterns[index] ?? 1;
+
+    let equationHTML = '';
+    let correctValue = b;
+
+    if (pattern === 0) {
+        equationHTML = `
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+            <span class="magic-op">×</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">=</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${a}</span>
+        `;
+        correctValue = a;
+    } else if (pattern === 1) {
+        equationHTML = `
+            <span class="magic-num">${a}</span>
+            <span class="magic-op">×</span>
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+            <span class="magic-op">=</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${a}</span>
+        `;
+        correctValue = b;
+    } else if (pattern === 2) {
+        equationHTML = `
+            <span class="magic-num">${a}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">=</span>
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+            <span class="magic-op">×</span>
+            <span class="magic-num">${a}</span>
+        `;
+        correctValue = b;
+    } else {
+        equationHTML = `
+            <span class="magic-num">${a}</span>
+            <span class="magic-op">×</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">=</span>
+            <span class="magic-num">${b}</span>
+            <span class="magic-op">×</span>
+            <input id="m4Input" type="number" min="1" max="50"
+                class="magic-input"
+                style="width:70px;font-size:1.4rem;text-align:center;border:2px solid #8b5cf6;border-radius:8px;padding:4px;"
+            >
+        `;
+        correctValue = a;
+    }
+
+    const container = document.createElement('div');
+    container.className = 'magic-equation';
+    const equationRow = document.createElement('div');
+    equationRow.className = 'magic-equation-row';
+    equationRow.innerHTML = equationHTML;
+
+    const checkBtn = document.createElement('button');
+    checkBtn.textContent = '✔ Verificar';
+    checkBtn.className = 'btn btn-primary';
+    checkBtn.style.cssText = "font-family:'Rancho',cursive;";
+    checkBtn.addEventListener('click', () => checkAnswer(correctValue));
+
+    container.appendChild(equationRow);
+    container.appendChild(checkBtn);
+    wrapper.appendChild(container);
+
+    const input = document.getElementById('m4Input');
+    if (input) {
+        input.focus();
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(correctValue); });
+    }
+
+    // Actualizar estado de vidas
+    renderLives();
+}
+
+function renderLives() {
+    const livesEl = document.getElementById('magicLives');
+    if (!livesEl) return;
+    livesEl.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'magic-heart';
+        heart.textContent = i < m4Lives ? '❤️' : '🖤';
+        livesEl.appendChild(heart);
+    }
+}
+
+function checkAnswer(correctValue) {
+    if (m4Finalized) return;
+    const input = document.getElementById('m4Input');
+    if (!input) return;
+    const value = parseInt(input.value, 10);
+    const statusEl = document.getElementById('moment4Status');
+
+    if (value === correctValue) {
+        // Correcto → avanzar al siguiente ejercicio
+        if (statusEl) { statusEl.textContent = '✅ ¡Correcto!'; statusEl.style.color = '#16a34a'; }
+        m4CurrentEx++;
+        setTimeout(() => {
+            if (statusEl) statusEl.textContent = '';
+            renderExercise(m4CurrentEx);
+        }, 800);
+    } else {
+        // Respuesta no válida
+        m4Errors++;
+        m4AttemptsOnCurrent++;
+
+        // Perder una vida
+        if (m4Lives > 0) m4Lives--;
+        renderLives();
+
+        if (m4AttemptsOnCurrent >= 2) {
+            // Segundo error en este ejercicio → pasar al siguiente
+            if (statusEl) {
+                statusEl.textContent = `Vamos a cambiar de pregunta`;
+                statusEl.style.color = '#dc2626';
+            }
+            m4CurrentEx++;
+            const input = document.getElementById('m4Input');
+            if (input) input.disabled = true;
+            setTimeout(() => {
+                if (statusEl) statusEl.textContent = '';
+                renderExercise(m4CurrentEx);
+            }, 1000);
+        } else {
+            // Primer error → advertencia
+            if (statusEl) {
+                statusEl.textContent = ` ¿Estás segur@? Intenta de nuevo.`;
+                statusEl.style.color = '#dc2626';
+            }
+        }
+    }
+}
+
+async function finalizeM4() {
+    if (m4Finalized) return;
+    m4Finalized = true;
+    m4Submitted = true;
+    updateNavButtons();
+
+    const points = m4Lives; // Puntos = vidas que quedan
+    const finalSection = document.getElementById('finalQuestionSection');
+    const finalTitleEl = finalSection?.querySelector('h3');
+    const finalQuestionEl = finalSection?.querySelector('.final-question');
+    const thankYouEl = finalSection?.querySelector('.thank-you');
+    const thankYouSubEl = finalSection?.querySelector('.thank-you-sub');
+    const totalPointsEl = document.getElementById('totalPoints');
+    const pointsStatus  = document.getElementById('pointsStatus');
+
+    if (totalPointsEl) totalPointsEl.textContent = points;
+    if (finalSection)  finalSection.style.display = '';
+
+    if (points > 0) {
+        if (finalTitleEl) finalTitleEl.textContent = '¡Felicitaciones! 🎉';
+        if (finalQuestionEl) {
+            finalQuestionEl.innerHTML = `Ganaste <strong id="totalPoints">${points}</strong> puntos positivos`;
+        }
+        if (thankYouEl) thankYouEl.textContent = '¡Gracias por participar!';
+    } else {
+        if (finalTitleEl) finalTitleEl.textContent = '¡Felicitaciones!';
+        if (finalQuestionEl) finalQuestionEl.textContent = 'Llegaste al final de la Actividad 1.';
+        if (thankYouEl) thankYouEl.textContent = '¡Gracias por participar!';
+    }
+
+    if (thankYouSubEl) thankYouSubEl.style.display = 'none';
+    if (pointsStatus) pointsStatus.textContent = '';
+
+    // Enviar resultado a Firebase
+    try {
+        if (!firebaseServices?.db) {
+            throw new Error('Firebase no disponible');
+        }
+
+        const { db, collection, addDoc, serverTimestamp } = firebaseServices;
+        await addDoc(collection(db, 'Actividad2'), {
+            studentCode,
+            studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
+            curso: studentInfo?.curso || '',
+            tag: 'M4_resultado',
+            points,
+            errorsTotal: m4Errors,
+            timestamp: serverTimestamp()
+        });
+    } catch (err) {
+        console.error('❌ Error al guardar resultado M4:', err);
+    }
+
+    // Habilitar botón siguiente
+    updateNavButtons();
+}
+
+// ─────────────────────────────────────────────
+// 12. SPREAD 21-22 – ENCUESTA (Google Forms)
+// ─────────────────────────────────────────────
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc30-KG8YdvHtJ_JFrn385BtNNLcaGsjvzxz2d5m5xKQYe0Gg/viewform';
+const GOOGLE_FORM_RESPONSE_URL = GOOGLE_FORM_URL.replace('/viewform', '/formResponse');
+const FORM_ENTRY_CODIGO = 'entry.975342770';
+// Campo detectado en tu Form actual: "Esta actividad fue"
+const FORM_ENTRY_RESPUESTA = 'entry.637654905';
+
+function initEncuesta() {
+    // Límite máximo de 2 checkboxes
+    const checkboxes = document.querySelectorAll('input[name="m4Reflection"]');
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
+            if (checked.length > 2) cb.checked = false;
+            updateNavButtons(); // actualizar estado del botón siguiente
+            updateM4ReflectionSubmitState(); // submit final requiere check + audio
         });
     });
 
-    const getCoords=e=>{
-        const rect=canvas.getBoundingClientRect();
-        const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
-        const src=e.touches?e.touches[0]:e;
-        return{x:(src.clientX-rect.left)*sx, y:(src.clientY-rect.top)*sy};
+    // El envío del formulario final se ejecuta desde initNavigation
+    // cuando el usuario está en el último spread y pulsa "siguiente".
+}
+
+async function submitEncuesta(checkedBoxes) {
+    const reflectionLabelMap = {
+        facil: 'Fácil',
+        interesante: 'Interesante',
+        dificil: 'Difícil',
+        'pensar-mucho': 'Me hizo pensar mucho',
+        confusa: 'Confusa'
     };
-    const startDraw=e=>{ if(disabled)return; e.preventDefault(); isDrawing=true; applyTool(ctx,currentTool); const{x,y}=getCoords(e); ctx.beginPath();ctx.moveTo(x,y); };
-    const draw=e=>{ if(!isDrawing||disabled)return; e.preventDefault(); const{x,y}=getCoords(e); ctx.lineTo(x,y); ctx.stroke(); hasDrawing=true; };
-    const endDraw=()=>{ if(isDrawing){isDrawing=false;ctx.closePath();} };
+    const valores = Array.from(checkedBoxes)
+        .map(cb => reflectionLabelMap[cb.value] || cb.value);
 
-    canvas.addEventListener('mousedown',startDraw);
-    canvas.addEventListener('mousemove',draw);
-    canvas.addEventListener('mouseup',  endDraw);
-    canvas.addEventListener('mouseleave',endDraw);
-    canvas.addEventListener('touchstart',startDraw,{passive:false});
-    canvas.addEventListener('touchmove', draw,      {passive:false});
-    canvas.addEventListener('touchend',  endDraw);
+    const payload = new URLSearchParams();
+    if (FORM_ENTRY_CODIGO) {
+        payload.append(FORM_ENTRY_CODIGO, studentCode || '');
+    }
+    valores.forEach(v => payload.append(FORM_ENTRY_RESPUESTA, v));
 
-    return {
-        get hasDrawing(){return hasDrawing;},
-        get disabled(){return disabled;},
-        set disabled(v){disabled=v;}
-    };
+    // Mostrar mensaje de agradecimiento
+    const spreads = getSpreads();
+    const lastSpread = spreads[spreads.length - 1];
+    if (lastSpread) {
+        lastSpread.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
+                        height:100%;width:100%;text-align:center;padding:40px;gap:20px;">
+                <h2 style="font-family:'Lobster Two',cursive;color:#8000ff;font-size:2.5rem;">
+                    ¡Muchas gracias! 🎉
+                </h2>
+                <p style="font-size:1.4rem;color:#333;">
+                    Tus respuestas han sido enviadas. En 3 segundos regresas al inicio.
+                </p>
+            </div>
+        `;
+    }
+
+    // Envío silencioso al formulario (sin pedir correo ni abrir pestaña)
+    try {
+        await fetch(GOOGLE_FORM_RESPONSE_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: payload.toString()
+        });
+    } catch (error) {
+        console.error('No se pudo enviar al Google Form:', error);
+    }
+
+    // Redirigir al index después de 3 segundos
+    setTimeout(() => {
+        window.location.href = '../index.html';
+    }, 3000);
 }
 
-function applyTool(ctx,tool) {
-    ctx.lineJoin='round'; ctx.lineCap='round';
-    if(tool==='black')       {ctx.strokeStyle='#000';    ctx.lineWidth=3;  ctx.globalAlpha=1;    ctx.globalCompositeOperation='source-over';}
-    else if(tool==='red')    {ctx.strokeStyle='#e74c3c'; ctx.lineWidth=3;  ctx.globalAlpha=1;    ctx.globalCompositeOperation='source-over';}
-    else if(tool==='yellow') {ctx.strokeStyle='#f1c40f'; ctx.lineWidth=15; ctx.globalAlpha=0.35; ctx.globalCompositeOperation='source-over';}
-    else if(tool==='eraser') {ctx.strokeStyle='#fff';    ctx.lineWidth=20; ctx.globalAlpha=1;    ctx.globalCompositeOperation='destination-out';}
-}
+// Fin de main.js
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AUDIO (MediaRecorder)
-// ─────────────────────────────────────────────────────────────────────────────
-function initAudio(recordBtnId, stopBtnId, statusId) {
-    const recordBtn=document.getElementById(recordBtnId);
-    const stopBtn  =document.getElementById(stopBtnId);
-    const status   =document.getElementById(statusId);
-    if(!recordBtn||!stopBtn) return { get audioBlob(){return null;} };
 
-    let mediaRecorder=null, chunks=[], audioBlob=null;
 
-    recordBtn.addEventListener('click', async ()=>{
-        try {
-            const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-            const opts={mimeType:'audio/webm;codecs=opus'};
-            if(!MediaRecorder.isTypeSupported(opts.mimeType)) opts.mimeType='audio/webm';
-            mediaRecorder=new MediaRecorder(stream,opts); chunks=[];
-            mediaRecorder.ondataavailable=e=>{ if(e.data.size>0) chunks.push(e.data); };
-            mediaRecorder.onstop=()=>{
-                audioBlob=new Blob(chunks,{type:opts.mimeType});
-                stream.getTracks().forEach(t=>t.stop());
-                if(status) status.textContent='🎤 Audio grabado.';
-                stopBtn.classList.add('hidden'); recordBtn.classList.remove('hidden');
-                recordBtn.disabled=true; recordBtn.style.opacity='0.4';
-            };
-            mediaRecorder.start();
-            recordBtn.classList.add('hidden'); stopBtn.classList.remove('hidden');
-            if(status) status.textContent='🔴 Grabando...';
-        } catch(e) {
-            if(status) status.textContent='❌ Error: permite el acceso al micrófono.';
-        }
-    });
-    stopBtn.addEventListener('click',()=>{ if(mediaRecorder&&mediaRecorder.state!=='inactive') mediaRecorder.stop(); });
-    return { get audioBlob(){return audioBlob;} };
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FIREBASE: SUBIR EVIDENCIA
-// ─────────────────────────────────────────────────────────────────────────────
-async function submitEvidence({ moment, tag, data, boardBlob, audioBlob }) {
-    if(!db||!storage) throw new Error('Firebase no está configurado.');
-    const participantName=[studentInfo?.nombre,studentInfo?.apellidos].filter(Boolean).join(' ').trim()||null;
-    const safe=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'');
-    const effectiveId=(studentCode==='0000'&&participantName)?participantName:studentCode;
-    const storeId=safe(effectiveId)||'invitado';
-    const basePath=`Actividad2/${storeId}/${tag}`;
-    const ts=Date.now();
-    let boardUrl=null, audioUrl=null;
-    if(boardBlob){ const r=ref(storage,`${basePath}/canvas_${ts}.png`); await uploadBytes(r,boardBlob); boardUrl=await getDownloadURL(r); }
-    if(audioBlob){ const r=ref(storage,`${basePath}/audio_${ts}.webm`); await uploadBytes(r,audioBlob); audioUrl=await getDownloadURL(r); }
-    const docRef=await addDoc(collection(db,'submissions'),{
-        studentCode:effectiveId, accessCode:studentCode, participantName,
-        activity:'act0b', moment, tag, createdAt:serverTimestamp(),
-        boardUrl, audioUrl, data, deviceInfo:navigator.userAgent
-    });
-    return docRef.id;
-}
-
-async function canvasToBlob(canvasId) {
-    return new Promise(res=>{ document.getElementById(canvasId)?.toBlob(b=>res(b),'image/png'); });
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
-function cloneReplace(id) {
-    const el=document.getElementById(id); if(!el) return null;
-    const clone=el.cloneNode(true);
-    el.parentNode.replaceChild(clone,el);
-    return clone;
-}

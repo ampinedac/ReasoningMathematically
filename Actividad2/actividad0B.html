@@ -9,8 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles2.css?v=2026040102">
     <link rel="stylesheet" href="trays-styles-0b.css?v=2026031813">
+    <link rel="stylesheet" href="bags-styles-0b.css?v=2026040102">
 </head>
-<body>
+<body class="activity-0b">
     <div class="author-credit">Por: Ángela María Pineda Chacón</div>
 
 <!-- CONTENEDOR BIENVENIDA -->
@@ -444,7 +445,7 @@
             <p>Une las bolsitas que tienen la misma cantidad de arepas</p>
         </div>
         <div class="cocina-body">
-            <!-- Ambiente de arepería alrededor de la mesa -->
+            <!-- Ambiente de panadería alrededor de la mesa -->
             <div class="bakery-kitchen-bg">
                 <div class="bakery-wall"></div>
                 <div class="bakery-shelf">
@@ -462,25 +463,23 @@
                     <span class="utensil spoon" aria-hidden="true"></span>
                     <span class="utensil rolling-pin" aria-hidden="true"></span>
                 </div>
-            </div>
 
-            <!-- Trays/Bags game container -->
-            <div id="traysGameSection">
-                <div id="traysArea" class="trays-container">
-                    <!-- Las 8 bolsitas se generan dinámicamente -->
+                <!-- Mesa central con bolsitas -->
+                <div class="bakery-table-center">
+                    <div id="traysAreaM1Q2" class="trays-container"></div>
                 </div>
+                <div class="bakery-floor"></div>
             </div>
-
-            <!-- Verification button -->
-            <div id="cocinaControls" class="game-controls">
-                <button id="verifyTraysBtn" class="btn btn-primary">Verificar emparejamientos</button>
-                <p id="traysFeedback" class="feedback-text"></p>
-            </div>
+        </div>
+        <div class="cocina-controls">
+            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">Verificar emparejamientos</button>
+            <p id="traysFeedbackM1Q2" class="feedback-text"></p>
         </div>
     </div>
 </div>
 
 <!-- Scripts -->
+<script src="assets/estudiantes-data.js"></script>
 <script src="bags-system-0b.js?v=2026031709"></script>
 <script type="module" src="main-0b.js?v=2026040102"></script>
 
