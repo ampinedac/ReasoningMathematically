@@ -272,7 +272,7 @@ function buildStorageBasePath(tag) {
     console.log(`[buildStorageBasePath] studentCode=${studentCode}, isGuest=${isGuest}, studentName=${studentInfo?.nombre}, guestFolder=${guestFolder}, safeGuestFolder=${safeGuestFolder}`);
 
     if (isGuest) {
-        const path = `Actividad0/${safeGuestFolder}/${tag}`;
+        const path = `Actividad1/${safeGuestFolder}/${tag}`;
         console.log(`[buildStorageBasePath] Retornando ruta de INVITADO: ${path}`);
         return path;
     }

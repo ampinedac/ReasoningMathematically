@@ -887,7 +887,7 @@ function createTraysSystem(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return null;
 
-    const AREPA_ICON_DATA_URI = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='35%25' cy='30%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%23ffe8b8'/%3E%3Cstop offset='100%25' stop-color='%23d39a58'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='28' fill='url(%23g)' stroke='%23b87437' stroke-width='2'/%3E%3Ccircle cx='22' cy='23' r='2.2' fill='%23c07a3b' opacity='0.75'/%3E%3Ccircle cx='41' cy='24' r='1.8' fill='%23c07a3b' opacity='0.72'/%3E%3Ccircle cx='36' cy='40' r='2.4' fill='%23b86d33' opacity='0.7'/%3E%3Ccircle cx='24' cy='42' r='1.9' fill='%23b86d33' opacity='0.68'/%3E%3C/svg%3E";
+    const AREPA_ICON_EMOJI = '🫓';
 
     const BASE_TRAYS = [
         { id: 'trayA1', rows: 3, cols: 4, total: 12 },
@@ -977,12 +977,15 @@ function createTraysSystem(containerId) {
                 cell.className = 'tray-item';
                 cell.style.width = `${bunSize}px`;
                 cell.style.height = `${bunSize}px`;
+                cell.style.display = 'flex';
+                cell.style.alignItems = 'center';
+                cell.style.justifyContent = 'center';
 
-                const bun = document.createElement('img');
-                bun.className = 'tray-item-image';
-                bun.src = AREPA_ICON_DATA_URI;
-                bun.alt = '';
-                bun.draggable = false;
+                const bun = document.createElement('span');
+                bun.className = 'tray-item-emoji';
+                bun.innerHTML = AREPA_ICON_EMOJI;
+                bun.style.fontSize = '20px';
+                bun.style.lineHeight = '1';
 
                 cell.appendChild(bun);
                 grid.appendChild(cell);
