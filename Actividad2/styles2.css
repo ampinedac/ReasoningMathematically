@@ -1170,7 +1170,9 @@ body #ContenedorLibro .activity-spread {
   right: 8px;
   top: -16px;
   height: 24px;
-  background: url('./assets/images/pandebono.png') center/contain no-repeat;
+  border-radius: 999px;
+  background: radial-gradient(circle at 35% 30%, #ffe8b8 0%, #d39a58 72%, #b87437 100%);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
  }
 
  .bakery-oven {
