@@ -254,6 +254,34 @@ function toTitle(str) {
         .join(' ');
 }
 
+function normalizeStorageSegment(value) {
+    return (value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9\s_-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .toLowerCase();
+}
+
+function buildStorageBasePath(tag) {
+    const isGuest = studentCode === '0000';
+    const guestFolder = normalizeStorageSegment(studentInfo?.nombre || 'invitado');
+    const safeGuestFolder = guestFolder || 'invitado';
+    
+    console.log(`[buildStorageBasePath] studentCode=${studentCode}, isGuest=${isGuest}, studentName=${studentInfo?.nombre}, guestFolder=${guestFolder}, safeGuestFolder=${safeGuestFolder}`);
+
+    if (isGuest) {
+        const path = `Actividad0/${safeGuestFolder}/${tag}`;
+        console.log(`[buildStorageBasePath] Retornando ruta de INVITADO: ${path}`);
+        return path;
+    }
+
+    const path = `Actividad1/${studentCode}/${tag}`;
+    console.log(`[buildStorageBasePath] Retornando ruta de ESTUDIANTE: ${path}`);
+    return path;
+}
+
 function initStudentCodeDisplays() {
     getSpreads().forEach(spread => {
         const legacyDisplay = spread.querySelector('.q1-left-page > .student-code-display');
@@ -704,7 +732,7 @@ async function handleSubmit(tag) {
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        const basePath = `Actividad1/${studentCode}/${tag}`;
+        const basePath = buildStorageBasePath(tag);
         const timestamp = Date.now();
 
         // Para M3Q1 / M3Q2: leer la respuesta del radio y añadirla al nombre del archivo
@@ -747,6 +775,7 @@ async function handleSubmit(tag) {
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
             curso: studentInfo?.curso || '',
             tag,
+            storageBasePath: basePath,
             audioURL,
             imageURL: imageURL || null,
             ...(m3q1Answer !== null && { m3q1Answer }),
