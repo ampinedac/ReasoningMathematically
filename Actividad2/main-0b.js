@@ -877,7 +877,7 @@ function initCocinaSystem() {
                 if (traysImage) traysImage.style.display = 'block';
                 show('m1Q2FinalQuestion');
                 cocinaCompleted = true;
-                goToSpread(6); // Spread 13-14
+                goToSpread(7); // Spread 15-16 (situación 2)
                 // Iniciar grabador M1Q2
                 const recordBtn = document.getElementById('recordBtnM1Q2');
                 if (recordBtn) recordBtn.disabled = false;
@@ -923,7 +923,7 @@ function createTraysSystem(containerId) {
         { id: 'trayA8', rows: 2, cols: 7, total: 14 }
     ];
 
-    const EXPECTED_UNPAIRED_TOTALS = new Set([20, 24]);
+    const EXPECTED_UNPAIRED_TOTALS = new Set([14, 20]);
 
     const PAIR_COLORS = ['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316'];
     let pairings = new Map();
@@ -1006,9 +1006,13 @@ function createTraysSystem(containerId) {
 
                 const bun = document.createElement('span');
                 bun.className = 'tray-item-emoji';
-                bun.innerHTML = AREPA_ICON_EMOJI;
-                bun.style.fontSize = '20px';
+                bun.textContent = AREPA_ICON_EMOJI;
+                bun.style.fontSize = `${Math.max(10, Math.floor(bunSize * 0.6))}px`;
                 bun.style.lineHeight = '1';
+                bun.style.display = 'inline-flex';
+                bun.style.alignItems = 'center';
+                bun.style.justifyContent = 'center';
+                bun.style.pointerEvents = 'none';
 
                 cell.appendChild(bun);
                 grid.appendChild(cell);

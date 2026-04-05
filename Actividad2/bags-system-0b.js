@@ -49,13 +49,10 @@ class TraysSystem {
     render() {
         // CRÍTICO: Limpiar contenedor primero
         this.container.innerHTML = '';
-        // El CSS ya define el grid, no sobrescribir aquí
-        
-        // Crear copia para barajar (no mutar el original)
-        const shuffledTrays = [...this.BASE_TRAYS].sort(() => Math.random() - 0.5);
-        
-        // Renderizar cada pedido
-        shuffledTrays.forEach((trayData, index) => {
+        // Renderizar en orden natural: Pedido 1, 2, 3...
+        const orderedTrays = [...this.BASE_TRAYS].sort((a, b) => a.pedido - b.pedido);
+
+        orderedTrays.forEach((trayData, index) => {
             const trayElement = this.createTrayElement(trayData, index);
             this.container.appendChild(trayElement);
         });
@@ -77,6 +74,7 @@ class TraysSystem {
 
         const bagsGrid = document.createElement('div');
         bagsGrid.className = 'pedido-bags-grid';
+        bagsGrid.style.gridTemplateColumns = `repeat(${this.getBagsColumns(data.bags)}, max-content)`;
 
         for (let bagIndex = 0; bagIndex < data.bags; bagIndex++) {
             const miniBag = document.createElement('div');
@@ -92,13 +90,17 @@ class TraysSystem {
             miniWindow.className = 'mini-bag-window';
 
             const layout = this.getBagLayout(data.itemsPerBag);
+            const emojiSize = data.itemsPerBag >= 6 ? 9 : data.itemsPerBag === 5 ? 10 : data.itemsPerBag === 4 ? 11 : 12;
 
             layout.forEach((position) => {
                 const pane = document.createElement('span');
                 pane.className = 'mini-pane';
-                pane.innerHTML = AREPA_ICON_EMOJI;
-                pane.style.fontSize = '16px';
+                pane.textContent = AREPA_ICON_EMOJI;
+                pane.style.fontSize = `${emojiSize}px`;
                 pane.style.lineHeight = '1';
+                pane.style.display = 'flex';
+                pane.style.alignItems = 'center';
+                pane.style.justifyContent = 'center';
                 pane.style.left = `${position.left}%`;
                 pane.style.top = `${position.top}%`;
                 miniWindow.appendChild(pane);
@@ -159,6 +161,12 @@ class TraysSystem {
         };
 
         return layouts[itemsPerBag] || layouts[6];
+    }
+
+    getBagsColumns(bagsCount) {
+        if (bagsCount <= 2) return 2;
+        if (bagsCount <= 4) return 2;
+        return 3;
     }
     
     // Configurar event listeners

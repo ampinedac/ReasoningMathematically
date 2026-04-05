@@ -1,14 +1,18 @@
 /* Estilos exclusivos Actividad 0B - Pedidos con bolsas */
 
 .activity-0b .tray-card {
+    height: 230px;
     min-height: 230px;
     padding: 10px 10px 12px;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: center;
     gap: 4px;
     overflow: hidden;
+    width: fit-content;
+    min-width: fit-content;
+    max-width: none;
 }
 
 .activity-0b .tray-card:hover {
@@ -33,12 +37,14 @@
 
 .activity-0b .pedido-bags-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
     margin-top: 8px;
-    align-items: start;
+    align-items: center;
     justify-items: center;
-    width: 100%;
+    justify-content: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .activity-0b .mini-bag {
@@ -112,6 +118,7 @@
     }
 
     .activity-0b .tray-card {
+        height: 190px;
         min-height: 190px;
         padding: 8px;
     }
@@ -146,6 +153,7 @@
     }
 
     .activity-0b .tray-card {
+        height: 168px;
         min-height: 168px;
         padding: 6px;
         border-radius: 12px !important;

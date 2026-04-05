@@ -5,7 +5,7 @@
 /* Contenedor principal de bandejas */
 .trays-container {
     display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(4, max-content) !important;
     grid-auto-flow: row dense;
     gap: 16px !important;
     padding: 18px;
@@ -22,6 +22,7 @@
     max-width: 100%;
     box-sizing: border-box;
     justify-items: center;
+    justify-content: center;
 }
 
 /* Wrapper para parejas - ocupa 2 columnas */
@@ -64,8 +65,8 @@
     aspect-ratio: 1 / 1;
     height: auto;
     min-height: 0;
-    width: 100%;
-    min-width: 0;
+    width: auto;
+    min-width: fit-content;
     position: relative;
     user-select: none;
     -webkit-user-select: none;
@@ -275,7 +276,7 @@
 /* Responsividad */
 @media (max-width: 768px) {
     .trays-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(2, max-content) !important;
         gap: 12px;
         padding: 14px;
         min-height: auto;
@@ -319,7 +320,7 @@
 
 @media (max-width: 480px) {
     .trays-container {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(2, max-content) !important;
         gap: 8px;
         padding: 12px;
     }
