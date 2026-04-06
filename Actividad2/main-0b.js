@@ -462,7 +462,12 @@ function initNavigation() {
 // 6. SPREAD 11-12 – CANVAS (tablero de dibujo)
 // ─────────────────────────────────────────────
 function initBoard() {
-    const canvas = document.getElementById('boardCanvasM1Q1');
+    initBoardCanvas('boardCanvasM1Q1');
+    initBoardCanvas('boardCanvasM3Q1');
+}
+
+function initBoardCanvas(canvasId) {
+    const canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
     const wrapper = canvas.parentElement;
@@ -558,7 +563,12 @@ function initBoard() {
     canvas.addEventListener('touchend', endDraw);
 
     // Botones de herramienta
-    document.querySelectorAll('.board-tools .tool-btn').forEach(btn => {
+    const boardContainer = canvas.closest('.board-container');
+    const toolButtons = boardContainer
+        ? boardContainer.querySelectorAll('.board-tools .tool-btn')
+        : [];
+
+    toolButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             tool = btn.dataset.tool;
             setBoardCursor(canvas, tool);
@@ -735,10 +745,8 @@ async function handleSubmit(tag) {
         let m3q1Answer = null;
         let m3q2Answer = null;
         if (tag === 'M3Q1') {
-            const checked = document.querySelector('input[name="truthQ1"]:checked');
-            const labelMap = { yes: 'si', no: 'no', unsure: 'nose' };
-            m3q1Answer = checked ? (labelMap[checked.value] ?? checked.value) : 'sinrespuesta';
-            audioFileName = `audio_${timestamp}_${m3q1Answer}`;
+            m3q1Answer = 'las_ventas_misteriosas1';
+            audioFileName = `audio_${timestamp}_las_ventas_misteriosas1`;
         }
         if (tag === 'M3Q2') {
             const checked = document.querySelector('input[name="truthQ2"]:checked');
@@ -755,21 +763,27 @@ async function handleSubmit(tag) {
         let imageURL = null;
 
         // Si es M1Q1 también subir imagen del canvas
-        if (tag === 'M1Q1') {
-            const canvasBlob = await canvasToBlob('boardCanvasM1Q1');
+        if (tag === 'M1Q1' || tag === 'M3Q1') {
+            const canvasId = tag === 'M3Q1' ? 'boardCanvasM3Q1' : 'boardCanvasM1Q1';
+            const canvasBlob = await canvasToBlob(canvasId);
             if (canvasBlob) {
-                const imgRef = ref(storage, `${basePath}/canvas_${timestamp}.png`);
+                const canvasName = tag === 'M3Q1'
+                    ? `canvas_${timestamp}_las_ventas_misteriosas1.png`
+                    : `canvas_${timestamp}.png`;
+                const imgRef = ref(storage, `${basePath}/${canvasName}`);
                 await uploadBytes(imgRef, canvasBlob);
                 imageURL = await getDownloadURL(imgRef);
             }
         }
+
+        const firestoreTag = tag === 'M3Q1' ? 'LasVentasMisteriosas1' : tag;
 
         // Guardar registro en Firestore
         await addDoc(collection(db, 'Actividad2'), {
             studentCode,
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
             curso: studentInfo?.curso || '',
-            tag,
+            tag: firestoreTag,
             storageBasePath: basePath,
             audioURL,
             imageURL: imageURL || null,

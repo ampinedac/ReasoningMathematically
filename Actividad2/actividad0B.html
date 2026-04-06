@@ -212,8 +212,8 @@
             <!-- Pregunta final + audio (se activa al completar la cocina) -->
             <div id="m1Q2FinalQuestion">
                 <h3><strong>Para pensar 🤔</strong></h3>
-                <p>En cada grupo hay diferentes maneras de organizar las arepas, pero al final tienen la misma cantidad de arepas.</p>
-                <p>¿Por qué crees que pasa eso? Explícalo con tus propias palabras.</p>
+                <p>Cada pedido se organiza de manera diferente, pero como ya viste hay pedidos que tienen la misma cantidad de arepas.</p>
+                <p>¿Por qué, aunque se ven diferentes tienen la misma cantidad de arepas? Explícalo.</p>
                 <div class="audio-controls">
                     <button id="recordBtnM1Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
                     <button id="stopBtnM1Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
@@ -228,60 +228,47 @@
     <!-- Story Spread 17-18 (Pregunta izquierda, actividad sobres y audio derecha) -->
     <div class="page q1-book-spread activity-spread">
         <div class="q1-left-page">
-            <h3>Los sobres misteriosos 1️⃣</h3>
+            <h3>Las ventas misteriosas 1️⃣</h3>
             <div class="book-story-card">
                 <p>Doña Aurora te tiene este nuevo reto.</p>
-                <p><strong>💡</strong> Ten en cuenta que los sobres del mismo color guardan el mismo número.</p>
+                <p><strong>💡</strong> Hay dos nuevas ventas, pero esta vez Andrés las reportó en el cuaderno de ventas así:</p>
             </div>
-            <div class="envelope-equation">
-                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                </svg>
-                <span class="operator">×</span>
-                <span id="q3FixedNum1" class="number">4</span>
-                <span class="operator">=</span>
-                <span id="q3FixedNum2" class="number">4</span>
-                <span class="operator">×</span>
-                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                </svg>
-            </div>
-            <p class="q3-inline-question">¿Crees que esta igualdad será verdadera sin importar qué número haya dentro del sobre verde?</p>
+            <img src="./assets/images/VentasSpread17-18.png" alt="Ventas del spread 17-18" class="ventas-image">
+            <p class="q3-inline-question">¡Qué curioso! ¿Hay alguna forma de saber que los dos lados de la igualdad dan el mismo resultado, sin necesidad de hacer las sumas? ¿Cuál?</p>
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page">
-            <div class="radio-group">
-                <label class="radio-label">
-                    <input type="radio" name="truthQ1" value="yes">
-                    Sí, creo que si es verdadera.
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="truthQ1" value="no">
-                    No, creo que no es verdadera.
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="truthQ1" value="unsure">
-                    No estoy segur@.
-                </label>
-            </div>
-            <div id="promptSection1">
-                <div class="prompt-box">
-                    <p id="promptText1"></p>
+            <h3>Puedes utilizar el tablero</h3>
+            <div class="board-container">
+                <div class="board-tools">
+                    <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
+                        <img src="./assets/images/lapiznegro.png" alt="LapizNegro" class="LapizNegro">
+                    </button>
+                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo">
+                        <img src="./assets/images/lapizrojo.png" alt="LapizRojo" class="LapizRojo">
+                    </button>
+                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador">
+                        <img src="./assets/images/resaltador.png" alt="Resaltador" class="Resaltador">
+                    </button>
+                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador">
+                        <img src="./assets/images/borrador.png" alt="Borrador" class="Borrador">
+                    </button>
+                    <button class="tool-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero">
+                        <img src="./assets/images/borrador-de-pizarra.png" alt="Limpiar tablero" class="LimpiarTablero">
+                    </button>
                 </div>
-                <div class="audio-controls">
-                    <button id="recordBtnM3Q1" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                    <button id="stopBtnM3Q1" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
-                    <button id="submitM3Q1" class="btn btn-audiosubmit" disabled> <img src="./assets/images/enviar.png" alt="Enviar"></button>
+                <div class="board-wrapper">
+                    <canvas id="boardCanvasM3Q1" class="drawing-board"></canvas>
                 </div>
-                <p id="statusM3Q1" class="status-text"></p>
-                
             </div>
-            <div id="m3Q1Placeholder" class="book-placeholder">
-                Elige una opción para activar este espacio de explicación.
+            <div class="audio-controls">
+                <button id="recordBtnM3Q1" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+                <button id="stopBtnM3Q1" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
+                <button id="submitM3Q1" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
+            </div>
+            <p id="statusM3Q1" class="status-text"></p>
+            <div class="book-placeholder">
+                Dibuja y luego explica con audio cómo pensaste esta situación.
             </div>
         </div>
         <span class="page-number page-number-left">17</span>
@@ -291,10 +278,10 @@
     <!-- Story Spread 19-20 (Reto final, reflexión y cierre) -->
     <div class="page q1-book-spread activity-spread">
         <div class="q1-left-page">
-            <h3>Los sobres misteriosos 2️⃣</h3>
+            <h3>Las ventas misteriosas 2️⃣</h3>
             <div class="book-story-card">
-                <p>Ahora aparece un nuevo reto con dos sobres de color diferente.</p>
-                <p>💡 Ten en cuenta que los sobres del mismo color guardan el mismo número.</p>
+                <p>Parece que Doña Aurora es experta en ventas misteriosas.</p>
+                <p>Ayúdale a identificar cuando ha vendido la misma cantidad sin necesidad de hacer las sumas</p>
             </div>
             <div class="envelope-equation">
                 <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
@@ -459,29 +446,7 @@
                     <div class="oven-window"></div>
                 </div>
                 <div class="bakery-utensils">
-                    <span class="utensil whisk" aria-hidden="true"></span>
-                    <span class="utensil spoon" aria-hidden="true"></span>
-                    <span class="utensil rolling-pin" aria-hidden="true"></span>
-                </div>
-
-                <!-- Mesa central con bolsitas -->
-                <div class="bakery-table-center">
-                    <div id="traysAreaM1Q2" class="trays-container"></div>
-                </div>
-                <div class="bakery-floor"></div>
-            </div>
-        </div>
-        <div class="cocina-controls">
-            <button id="verifyTraysBtnM1Q2" class="btn btn-primary">Verificar emparejamientos</button>
-            <p id="traysFeedbackM1Q2" class="feedback-text"></p>
-        </div>
-    </div>
-</div>
-
-<!-- Scripts -->
-<script src="assets/estudiantes-data.js"></script>
-<script src="bags-system-0b.js?v=2026040505"></script>
-<script type="module" src="main-0b.js?v=2026040504"></script>
+                    <img src="./assets/images/VentasIgualdad.png" alt="Ventas en igualdad" class="ventas-image">
 
 </body>
 </html>
