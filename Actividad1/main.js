@@ -909,23 +909,26 @@ function createTraysSystem(containerId) {
     if (!container) return null;
 
     const BASE_TRAYS = [
-        { id: 'trayA1', rows: 3, cols: 4, total: 12 },
-        { id: 'trayA2', rows: 4, cols: 3, total: 12 },
-        { id: 'trayA3', rows: 2, cols: 6, total: 12 },
-        { id: 'trayA4', rows: 6, cols: 2, total: 12 },
-        { id: 'trayA5', rows: 5, cols: 3, total: 15 },
-        { id: 'trayA6', rows: 3, cols: 5, total: 15 },
-        { id: 'trayA7', rows: 4, cols: 5, total: 20 },
-        { id: 'trayA8', rows: 2, cols: 7, total: 14 }
+        { id: 'trayA1', rows: 4, cols: 5, total: 20, rowGap: 12, colGap: 5 },
+        { id: 'trayA2', rows: 5, cols: 4, total: 20, rowGap: 5, colGap: 12 },
+        { id: 'trayA3', rows: 2, cols: 6, total: 12, rowGap: 12, colGap: 5 },
+        { id: 'trayA4', rows: 6, cols: 2, total: 12, rowGap: 5, colGap: 12 },
+        { id: 'trayA5', rows: 8, cols: 3, total: 24, rowGap: 10, colGap: 5 },
+        { id: 'trayA6', rows: 3, cols: 8, total: 24, rowGap: 5, colGap: 10 },
+        { id: 'trayA7', rows: 4, cols: 2, total: 8, rowGap: 9, colGap: 5 },
+        { id: 'trayA8', rows: 7, cols: 2, total: 14, rowGap: 8, colGap: 5 }
     ];
 
-    const EXPECTED_UNPAIRED_TOTALS = new Set([14, 20]);
+    const EXPECTED_UNPAIRED_TOTALS = new Set([8, 14]);
+    const traysById = new Map(BASE_TRAYS.map(tray => [tray.id, tray]));
 
-    const PAIR_COLORS = ['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316'];
+    const PAIR_COLORS = ['#facc15', '#2563eb', '#ef4444', '#16a34a', '#9333ea'];
     let pairings = new Map();
     let selected = null;
     let pairCount = 0;
     const pairColors = new Map();
+    let shuffledOrder = [];
+    const trayElements = new Map();
 
     function getColor(key) {
         if (!pairColors.has(key)) { pairColors.set(key, PAIR_COLORS[pairCount++ % PAIR_COLORS.length]); }
@@ -977,19 +980,23 @@ function createTraysSystem(containerId) {
 
     function render() {
         container.innerHTML = '';
-        const shuffled = getSeparatedOrder();
-        shuffled.forEach(data => {
+        shuffledOrder = getSeparatedOrder().map(tray => tray.id);
+
+        BASE_TRAYS.forEach(data => {
             const card = document.createElement('div');
             card.className = 'tray-card';
             card.id = data.id;
             card.dataset.total = data.total;
+            card.dataset.rows = data.rows;
+            card.dataset.cols = data.cols;
 
             const grid = document.createElement('div');
             grid.className = 'tray-grid tray-grid-inner';
             grid.style.gridTemplateColumns = `repeat(${data.cols}, minmax(0, 1fr))`;
-            grid.style.gap = data.total >= 24 ? '5px' : data.total >= 15 ? '6px' : '7px';
+            grid.style.rowGap = `${data.rowGap ?? 7}px`;
+            grid.style.columnGap = `${data.colGap ?? 7}px`;
 
-            const bunSize = data.total >= 24 ? 18 : data.total >= 15 ? 22 : 26;
+            const bunSize = data.total >= 24 ? 15 : data.total >= 20 ? 19 : data.total >= 14 ? 21 : 24;
 
             for (let i = 0; i < data.total; i++) {
                 const cell = document.createElement('span');
@@ -1008,10 +1015,52 @@ function createTraysSystem(containerId) {
             }
 
             card.appendChild(grid);
-            container.appendChild(card);
+            trayElements.set(data.id, card);
         });
 
+        updateLayout();
+
         container.addEventListener('click', handleClick);
+    }
+
+    function updateLayout() {
+        const used = new Set();
+        container.innerHTML = '';
+
+        shuffledOrder.forEach(id => {
+            if (used.has(id)) return;
+
+            const pairId = pairings.get(id);
+            const card = trayElements.get(id);
+            if (!card) return;
+
+            if (pairId && !used.has(pairId)) {
+                const pairCard = trayElements.get(pairId);
+                if (!pairCard) {
+                    container.appendChild(card);
+                    used.add(id);
+                    return;
+                }
+
+                const key = [id, pairId].sort().join('-');
+                const color = getColor(key);
+                const wrapper = document.createElement('div');
+                wrapper.className = 'tray-pair-wrapper';
+                wrapper.style.border = `3px dashed ${color}`;
+                wrapper.style.boxShadow = `0 0 0 3px ${color}33`;
+
+                wrapper.appendChild(card);
+                wrapper.appendChild(pairCard);
+                container.appendChild(wrapper);
+
+                used.add(id);
+                used.add(pairId);
+                return;
+            }
+
+            container.appendChild(card);
+            used.add(id);
+        });
     }
 
     function handleClick(e) {
@@ -1053,6 +1102,7 @@ function createTraysSystem(containerId) {
             const el = document.getElementById(id);
             if (el) { el.style.borderColor = color; el.classList.add('paired'); }
         });
+        updateLayout();
     }
 
     function unpair(id1, id2) {
@@ -1062,6 +1112,7 @@ function createTraysSystem(containerId) {
             const el = document.getElementById(id);
             if (el) { el.style.borderColor = ''; el.classList.remove('paired'); }
         });
+        updateLayout();
     }
 
     function getPairings() {
@@ -1076,8 +1127,8 @@ function createTraysSystem(containerId) {
 
     function validatePairings() {
         const pairResults = getPairings().map(([id1, id2]) => {
-            const t1 = BASE_TRAYS.find(t => t.id === id1);
-            const t2 = BASE_TRAYS.find(t => t.id === id2);
+            const t1 = traysById.get(id1);
+            const t2 = traysById.get(id2);
             return { pair: [id1, id2], total1: t1?.total, total2: t2?.total, isCorrect: t1?.total === t2?.total };
         });
 
