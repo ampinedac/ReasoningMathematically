@@ -842,12 +842,59 @@ function initCocinaSystem() {
     const traysImage = document.getElementById('bandejasFotoM1Q2');
 
     let traysSystem = null;
+    let cocinaNoticeTimer = null;
+
+    function showCocinaNotice(message, type = 'success', durationMs = 2400, onDone = null) {
+        const cocinaScreen = document.getElementById('cocinaScreen');
+        if (!cocinaScreen) {
+            if (typeof onDone === 'function') onDone();
+            return;
+        }
+
+        const oldNotice = document.getElementById('cocinaFloatingNotice');
+        if (oldNotice) oldNotice.remove();
+        if (cocinaNoticeTimer) {
+            clearTimeout(cocinaNoticeTimer);
+            cocinaNoticeTimer = null;
+        }
+
+        const notice = document.createElement('div');
+        notice.id = 'cocinaFloatingNotice';
+        notice.className = `cocina-floating-notice ${type}`;
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+
+        const icon = type === 'success' ? '✅' : '⚠️';
+        notice.innerHTML = `
+            <div class="cocina-floating-notice-card">
+                <span class="cocina-floating-notice-icon">${icon}</span>
+                <p class="cocina-floating-notice-text">${message}</p>
+            </div>
+        `;
+
+        cocinaScreen.appendChild(notice);
+
+        cocinaNoticeTimer = setTimeout(() => {
+            notice.classList.add('hide');
+            setTimeout(() => {
+                notice.remove();
+                if (typeof onDone === 'function') onDone();
+            }, 280);
+        }, durationMs);
+    }
 
     gotoBtn?.addEventListener('click', () => {
         // Inicializar sistema de bandejas si no existe
         if (!traysSystem) {
             traysSystem = createTraysSystem('traysAreaM1Q2');
         }
+        const oldNotice = document.getElementById('cocinaFloatingNotice');
+        if (oldNotice) oldNotice.remove();
+        if (cocinaNoticeTimer) {
+            clearTimeout(cocinaNoticeTimer);
+            cocinaNoticeTimer = null;
+        }
+        if (feedbackEl) feedbackEl.textContent = '';
         if (traysImage) traysImage.style.display = 'none';
         hide('ContenedorLibro');
         hide('prevBtn');
@@ -863,11 +910,11 @@ function initCocinaSystem() {
         const totalPaired = results.length;
 
         if (allCorrect) {
-            if (feedbackEl) {
-                feedbackEl.textContent = '✅ ¡Perfecto! Emparejaste las bandejas correctas y dejaste sin pareja las que no la tienen.';
-                feedbackEl.style.color = '#16a34a';
-            }
-            setTimeout(() => {
+            showCocinaNotice(
+                '¡Perfecto! Emparejaste las bandejas correctas y dejaste sin pareja las que no la tienen. Te llevaremos al libro.',
+                'success',
+                4000,
+                () => {
                 hide('ContenedorCocina');
                 show('ContenedorLibro');
                 show('prevBtn');
@@ -879,7 +926,8 @@ function initCocinaSystem() {
                 // Iniciar grabador M1Q2
                 const recordBtn = document.getElementById('recordBtnM1Q2');
                 if (recordBtn) recordBtn.disabled = false;
-            }, 1000);
+                }
+            );
         } else {
             const wrongCount = results.filter(r => !r.isCorrect).length;
             const missingPairs = Math.max(0, 3 - totalPaired);
@@ -895,10 +943,7 @@ function initCocinaSystem() {
                 msg += 'Recuerda que hay dos bandejas que deben quedar sin pareja.';
             }
 
-            if (feedbackEl) {
-                feedbackEl.textContent = msg || 'Revisa los emparejamientos.';
-                feedbackEl.style.color = '#dc2626';
-            }
+            showCocinaNotice(msg || 'Revisa los emparejamientos.', 'error', 3200);
         }
     });
 }
