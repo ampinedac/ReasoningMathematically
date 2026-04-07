@@ -26,19 +26,21 @@
 
 /* Wrapper para parejas - ocupa 2 columnas */
 .tray-pair-wrapper {
-    display: flex !important;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    justify-self: center;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: stretch;
+    justify-items: center;
+    justify-self: stretch;
     grid-column: span 2;
-    padding: 10px;
+    padding: 0;
     background: rgba(255, 250, 240, 0.2);
     border-radius: 16px;
     animation: pairAppear 0.5s ease-out;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
+    box-sizing: border-box;
 }
 
 .tray-pair-wrapper:hover {
@@ -124,8 +126,7 @@
 }
 
 .tray-pair-wrapper .tray-card {
-    flex: 0 0 auto;
-    width: min(45vw, 250px);
+    width: 100%;
     max-width: 250px;
 }
 
@@ -297,12 +298,13 @@
     
     .tray-pair-wrapper {
         grid-column: span 2;
-        flex-direction: column;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
     }
 
     .tray-pair-wrapper .tray-card {
-        width: min(84vw, 240px);
-        max-width: 240px;
+        width: 100%;
+        max-width: none;
     }
     
     .tray-card {
@@ -345,11 +347,13 @@
     
     .tray-pair-wrapper {
         grid-column: span 2;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
     }
 
     .tray-pair-wrapper .tray-card {
-        width: min(86vw, 200px);
-        max-width: 200px;
+        width: 100%;
+        max-width: none;
     }
     
     .tray-card {
