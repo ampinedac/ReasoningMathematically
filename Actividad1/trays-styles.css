@@ -30,12 +30,15 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
+    justify-self: center;
     grid-column: span 2;
     padding: 10px;
     background: rgba(255, 250, 240, 0.2);
     border-radius: 16px;
     animation: pairAppear 0.5s ease-out;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+    width: fit-content;
+    max-width: 100%;
 }
 
 .tray-pair-wrapper:hover {
@@ -121,8 +124,9 @@
 }
 
 .tray-pair-wrapper .tray-card {
-    flex: 1 1 0;
-    min-width: 0;
+    flex: 0 0 auto;
+    width: min(45vw, 250px);
+    max-width: 250px;
 }
 
 @keyframes pulseGlow {
@@ -295,6 +299,11 @@
         grid-column: span 2;
         flex-direction: column;
     }
+
+    .tray-pair-wrapper .tray-card {
+        width: min(84vw, 240px);
+        max-width: 240px;
+    }
     
     .tray-card {
         min-height: 126px;
@@ -336,6 +345,11 @@
     
     .tray-pair-wrapper {
         grid-column: span 2;
+    }
+
+    .tray-pair-wrapper .tray-card {
+        width: min(86vw, 200px);
+        max-width: 200px;
     }
     
     .tray-card {
