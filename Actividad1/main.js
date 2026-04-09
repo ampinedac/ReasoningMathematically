@@ -45,17 +45,13 @@ let m4Finalized = false;
 let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
 
 // Grabaciones de audio en vuelo
-const audioState = {};  // key: tag → { mediaRecorder, chunks, blob, confirmed }
+const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
 
 function updateM4ReflectionSubmitState() {
     const submitBtn = document.getElementById('submitM4Reflection');
     if (!submitBtn) return;
 
-    const hasAudio = !!(
-        audioState['M4Reflection']?.blob &&
-        audioState['M4Reflection'].blob.size > 0 &&
-        audioState['M4Reflection']?.confirmed
-    );
+    const hasAudio = !!(audioState['M4Reflection']?.blob && audioState['M4Reflection'].blob.size > 0);
     const checkedCount = document.querySelectorAll('input[name="m4Reflection"]:checked').length;
     const canSubmit = hasAudio && checkedCount >= 1;
 
@@ -645,58 +641,15 @@ function initAudioRecorder(tag) {
     const submitBtn = document.getElementById(`submit${tag}`);
     if (!recordBtn || !stopBtn) return;
 
-    const controlsContainer = recordBtn.closest('.audio-controls');
-    const reviewBox = document.createElement('div');
-    reviewBox.className = 'audio-review-controls';
-    reviewBox.style.display = 'none';
-
-    const audioPreview = document.createElement('audio');
-    audioPreview.controls = true;
-    audioPreview.className = 'audio-preview-player';
-
-    const confirmBtn = document.createElement('button');
-    confirmBtn.type = 'button';
-    confirmBtn.className = 'btn btn-audioconfirm';
-    confirmBtn.textContent = 'Este audio está bien';
-
-    const retryBtn = document.createElement('button');
-    retryBtn.type = 'button';
-    retryBtn.className = 'btn btn-audioretry';
-    retryBtn.textContent = 'Grabar otro audio';
-
-    reviewBox.append(audioPreview, confirmBtn, retryBtn);
-    if (controlsContainer?.parentNode) {
-        controlsContainer.parentNode.insertBefore(reviewBox, controlsContainer.nextSibling);
-    }
-
-    let previewUrl = null;
-
-    function clearPreviewUrl() {
-        if (!previewUrl) return;
-        URL.revokeObjectURL(previewUrl);
-        previewUrl = null;
-    }
-
-    function setSubmitEnabled(enabled) {
-        if (!submitBtn) return;
-        submitBtn.disabled = !enabled;
-        submitBtn.style.opacity = enabled ? '1' : '0.5';
-        submitBtn.style.cursor = enabled ? 'pointer' : 'not-allowed';
-    }
-
-    function showReviewControls() {
-        reviewBox.style.display = 'flex';
-    }
-
-    function hideReviewControls() {
-        reviewBox.style.display = 'none';
-    }
-
-    audioState[tag] = { mediaRecorder: null, chunks: [], blob: null, confirmed: false };
+    audioState[tag] = { mediaRecorder: null, chunks: [], blob: null };
 
     // Estado inicial: stop oculto, submit deshabilitado hasta tener audio listo
     stopBtn.style.display = 'none';
-    setSubmitEnabled(false);
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.5';
+        submitBtn.style.cursor = 'not-allowed';
+    }
     if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
 
     recordBtn.addEventListener('click', async () => {
@@ -706,25 +659,20 @@ function initAudioRecorder(tag) {
             audioState[tag].mediaRecorder = mr;
             audioState[tag].chunks = [];
             audioState[tag].blob   = null;
-            audioState[tag].confirmed = false;
-            hideReviewControls();
-            clearPreviewUrl();
-            audioPreview.removeAttribute('src');
-            audioPreview.load();
 
             mr.ondataavailable = e => { if (e.data.size > 0) audioState[tag].chunks.push(e.data); };
             mr.onstop = () => {
                 audioState[tag].blob = new Blob(audioState[tag].chunks, { type: 'audio/webm' });
-                audioState[tag].confirmed = false;
                 stream.getTracks().forEach(t => t.stop());
-                setSubmitEnabled(false);
-                previewUrl = URL.createObjectURL(audioState[tag].blob);
-                audioPreview.src = previewUrl;
-                audioPreview.load();
-                showReviewControls();
-                if (statusEl) statusEl.textContent = 'Audio grabado. Escúchalo y elige si quieres usarlo o grabar otro.';
+                if (statusEl) statusEl.textContent = 'Audio listo para enviar';
 
-                if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
+                if (tag === 'M4Reflection') {
+                    updateM4ReflectionSubmitState();
+                } else if (submitBtn && audioState[tag].blob && audioState[tag].blob.size > 0) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor  = 'pointer';
+                }
 
                 // Volver a mostrar grabar, ocultar detener
                 recordBtn.style.display = '';
@@ -736,13 +684,21 @@ function initAudioRecorder(tag) {
             mr.start();
             recordBtn.style.display = 'none';
             stopBtn.style.display   = '';
-            setSubmitEnabled(false);
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
             if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
             if (statusEl) statusEl.textContent = 'Grabando...';
         } catch (err) {
             console.error('Error al acceder al microfono:', err);
             if (statusEl) statusEl.textContent = 'No se pudo acceder al microfono.';
-            setSubmitEnabled(false);
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+            }
             if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
         }
     });
@@ -750,40 +706,6 @@ function initAudioRecorder(tag) {
     stopBtn.addEventListener('click', () => {
         const mr = audioState[tag].mediaRecorder;
         if (mr && mr.state === 'recording') mr.stop();
-    });
-
-    confirmBtn.addEventListener('click', () => {
-        const currentBlob = audioState[tag]?.blob;
-        if (!currentBlob || currentBlob.size === 0) return;
-
-        audioState[tag].confirmed = true;
-        hideReviewControls();
-        if (statusEl) statusEl.textContent = 'Audio confirmado. Ya puedes enviarlo.';
-
-        if (tag === 'M4Reflection') {
-            updateM4ReflectionSubmitState();
-        } else {
-            setSubmitEnabled(true);
-        }
-    });
-
-    retryBtn.addEventListener('click', () => {
-        audioState[tag].blob = null;
-        audioState[tag].chunks = [];
-        audioState[tag].confirmed = false;
-        clearPreviewUrl();
-        audioPreview.removeAttribute('src');
-        audioPreview.load();
-        hideReviewControls();
-        setSubmitEnabled(false);
-        if (tag === 'M4Reflection') updateM4ReflectionSubmitState();
-
-        recordBtn.style.display = '';
-        stopBtn.style.display = 'none';
-        recordBtn.disabled = false;
-        recordBtn.style.opacity = '1';
-
-        if (statusEl) statusEl.textContent = 'Listo. Vuelve a grabar cuando quieras.';
     });
 
     // Submit de audio (+ imagen de canvas si aplica)
@@ -797,15 +719,8 @@ async function handleSubmit(tag) {
     const submitBtn = document.getElementById(`submit${tag}`);
     const statusEl  = document.getElementById(`status${tag}`);
     const audioBlob = audioState[tag]?.blob;
-    const audioConfirmed = !!audioState[tag]?.confirmed;
 
-    if (!audioBlob || !audioConfirmed) {
-        if (statusEl) {
-            statusEl.textContent = 'Primero confirma el audio o graba uno nuevo.';
-            statusEl.style.color = '#dc2626';
-        }
-        return;
-    }
+    if (!audioBlob) return;
 
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.4';

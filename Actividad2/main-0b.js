@@ -682,8 +682,8 @@ function initAudioRecorder(tag) {
                 // Volver a mostrar grabar, ocultar detener
                 recordBtn.style.display = '';
                 stopBtn.style.display   = 'none';
-                recordBtn.disabled = true; // ya grabo, no graba otra vez
-                recordBtn.style.opacity = '0.4';
+                recordBtn.disabled = false;
+                recordBtn.style.opacity = '1';
             };
 
             mr.start();

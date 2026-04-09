@@ -669,45 +669,6 @@ body #ContenedorLibro .activity-spread {
        display: block;
        }
 
-      .audio-review-controls {
-       display: flex;
-       flex-direction: column;
-       align-items: center;
-       gap: 0.45em;
-       margin-top: 0.45em;
-      }
-
-      .audio-preview-player {
-       width: min(100%, 290px);
-       max-width: 290px;
-      }
-
-      .audio-review-controls .btn {
-       width: min(100%, 290px);
-       border: none;
-       border-radius: 12px;
-       padding: 8px 12px;
-       font-family: var(--font-general);
-       font-size: clamp(1.1rem, 1.7vw, 1.4rem);
-       cursor: pointer;
-       transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
-      }
-
-      .audio-review-controls .btn:hover {
-       transform: translateY(-2px);
-       filter: brightness(1.05);
-      }
-
-      .audio-review-controls .btn-audioconfirm {
-       background: #d9f99d;
-       color: #166534;
-      }
-
-      .audio-review-controls .btn-audioretry {
-       background: #fee2e2;
-       color: #991b1b;
-      }
-
        /* =====================================================================================================
         Páginas 13 y  14 situación 2 y cocina
         ===================================================================================================== */
