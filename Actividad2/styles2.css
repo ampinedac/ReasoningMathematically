@@ -531,6 +531,18 @@ body #ContenedorLibro .activity-spread {
     color: black;
     }
 
+    .q1-left-page .page9-intro-text {
+    display: block;
+    width: 100%;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    text-align: justify;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    font-size: clamp(2rem, 2vw, 2rem);
+    color: black;
+    }
+
     /* =====================================================================================================
     IMÁGENES EN LA PÁGINA IZQUIERDA Páginas 1,3,5,7,9 (AJUSTE Y ESTILO)
     ===================================================================================================== */
@@ -709,6 +721,26 @@ body #ContenedorLibro .activity-spread {
           box-shadow: 0 3px 9px rgb(224, 253, 253);
         }
 
+        .q1-right-page .btn-cocina-organizar {
+          width: 95%;
+          padding: 12px 24px;
+          margin-top: 0.75rem;
+          background: linear-gradient(135deg, #3b83f6ce 0%, #1d4fd8c7 100%);
+          color: #fff;
+          font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+          font-family: 'Lobster Two', cursive;
+          border: none;
+          border-radius: 16px;
+          cursor: pointer;
+          transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+        }
+
+        .q1-right-page .btn-cocina-organizar:hover {
+          filter: brightness(.85);
+          transform: translateY(-3px);
+          box-shadow: 0 3px 9px rgb(224, 253, 253);
+        }
+
         .q1-right-page .BandejasFoto { /* Imagen de la bandeja en la situación 2 */
           width: 95%;
           height: auto;
@@ -720,6 +752,155 @@ body #ContenedorLibro .activity-spread {
           display: block;
         }
         
+        /* =====================================================================================================
+        Páginas 17 y 18 – Actividad: une parejas con sumas misteriosas
+        ===================================================================================================== */
+
+        /* SVG de lazos: capa encima del spread, sin capturar clics */
+        .matching-lines-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: visible;
+        }
+
+        /* Instrucción de la actividad */
+        .matching-instruction {
+            font-family: 'Rancho', cursive;
+            font-size: clamp(1.3rem, 2vw, 1.7rem);
+            color: #3b0764;
+            text-align: center;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
+
+        /* Contenedor de tarjetas de parejas (izquierda) */
+        .matching-pairs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* Tarjeta de una pareja de pedidos */
+        .match-pair-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.3rem;
+            background: #f5f3ff;
+            border: 2.5px solid #a78bfa;
+            border-radius: 14px;
+            padding: 0.45rem 0.7rem;
+            cursor: pointer;
+            transition: border-color .15s, box-shadow .15s, transform .1s;
+            position: relative;
+            z-index: 6;
+        }
+        .match-pair-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-1px);
+        }
+        .match-pair-card.selected {
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px #ddd6fe;
+            background: #ede9fe;
+        }
+        .match-pair-card.connected {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        /* Mini sección de un pedido dentro de la tarjeta */
+        .match-pedido-mini {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            flex: 1;
+        }
+        .match-pedido-label {
+            font-family: 'Lobster Two', cursive;
+            font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+            color: #4c1d95;
+            white-space: nowrap;
+        }
+        .match-bags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            justify-content: center;
+        }
+        .match-bag-unit {
+            font-size: clamp(0.65rem, 1.1vw, 0.9rem);
+            background: #ede9fe;
+            border: 1px solid #c4b5fd;
+            border-radius: 6px;
+            padding: 1px 4px;
+            line-height: 1.4;
+        }
+        .match-pair-plus {
+            font-family: 'Lobster Two', cursive;
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: #7c3aed;
+            flex-shrink: 0;
+        }
+
+        /* Contenedor de recuadros de sumas (derecha) */
+        .matching-sums-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            width: 100%;
+            flex: 1;
+            justify-content: center;
+        }
+
+        /* Recuadro de suma misteriosa */
+        .match-sum-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff7ed;
+            border: 2.5px solid #fb923c;
+            border-radius: 14px;
+            padding: 0.5rem 0.8rem;
+            cursor: pointer;
+            transition: border-color .15s, box-shadow .15s, transform .1s;
+            text-align: center;
+            position: relative;
+            z-index: 6;
+        }
+        .match-sum-box:hover {
+            border-color: #ea580c;
+            transform: translateY(-1px);
+        }
+        .match-sum-box.connected {
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+        .match-sum-text {
+            font-family: 'Rancho', cursive;
+            font-size: clamp(1rem, 1.8vw, 1.4rem);
+            color: #7c2d12;
+            letter-spacing: 0.03em;
+        }
+
+        /* Pregunta final + audio en página 18 */
+        .matching-final-question {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+
         /* =====================================================================================================
         Páginas 15 y  16 Los sobres secretos 1
         ===================================================================================================== */

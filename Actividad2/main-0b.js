@@ -33,6 +33,8 @@ let m3q2Submitted = false;
 
 // Cocina completada
 let cocinaCompleted = false;
+let matchingCompleted = false;
+let matchingDrawLines = null; // callback para redibujar lazos al volver al spread
 
 // Ejercicios M4
 let m4Lives = 3;
@@ -73,12 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortada();
     initNavigation();
     initBoard();
+    initAudioRecorder('M1Q0');
     initAudioRecorder('M1Q1');
     initAudioRecorder('M1Q2');
     initAudioRecorder('M3Q1');
     initAudioRecorder('M3Q2');
     initAudioRecorder('M4Reflection');
     initRadioSpreads();
+    initMatchingActivity();
     initCocinaSystem();
     initM4();
     initEncuesta();
@@ -394,6 +398,7 @@ function goToSpread(index) {
         setTimeout(() => {
             foldInPage.classList.remove('anim-flip-in');
             isFlipping = false;
+            if (index === 8 && typeof matchingDrawLines === 'function') matchingDrawLines();
         }, 320);
 
     }, 320);
@@ -443,7 +448,7 @@ function canAdvance() {
 
     if (currentSpread === 6) return m1q1Submitted;
     if (currentSpread === 7) return m1q2Submitted;
-    if (currentSpread === 8) return m3q1Submitted;
+    if (currentSpread === 8) return matchingCompleted;
     if (currentSpread === 9) return m3q2Submitted;
     if (currentSpread === 10) return m4Submitted;
     return true;
@@ -846,13 +851,17 @@ function markSubmitted(tag) {
 // ─────────────────────────────────────────────
 function initCocinaSystem() {
     const gotoBtn    = document.getElementById('goToCocinaBtn');
+    const gotoBtnM0  = document.getElementById('goToCocinaBtnM0');
     const verifyBtn  = document.getElementById('verifyTraysBtnM1Q2');
     const feedbackEl = document.getElementById('traysFeedbackM1Q2');
     const traysImage = document.getElementById('bandejasFotoM1Q2');
 
     let traysSystem = null;
+    let returnSpread = 7;
 
-    gotoBtn?.addEventListener('click', () => {
+    const openCocina = (targetSpread) => {
+        returnSpread = targetSpread;
+
         // Inicializar sistema de bolsitas si no existe
         if (!traysSystem) {
             if (typeof window.TraysSystem === 'function') {
@@ -861,12 +870,16 @@ function initCocinaSystem() {
                 traysSystem = createTraysSystem('traysAreaM1Q2');
             }
         }
+
         if (traysImage) traysImage.style.display = 'none';
         hide('ContenedorLibro');
         hide('prevBtn');
         hide('nextBtn');
         show('ContenedorCocina');
-    });
+    };
+
+    gotoBtn?.addEventListener('click', () => openCocina(7));
+    gotoBtnM0?.addEventListener('click', () => openCocina(5));
 
     verifyBtn?.addEventListener('click', () => {
         if (!traysSystem) return;
@@ -889,12 +902,16 @@ function initCocinaSystem() {
                 show('prevBtn');
                 show('nextBtn');
                 if (traysImage) traysImage.style.display = 'block';
-                show('m1Q2FinalQuestion');
                 cocinaCompleted = true;
-                goToSpread(7); // Spread 15-16 (situación 2)
-                // Iniciar grabador M1Q2
-                const recordBtn = document.getElementById('recordBtnM1Q2');
-                if (recordBtn) recordBtn.disabled = false;
+
+                if (returnSpread === 7) {
+                    show('m1Q2FinalQuestion');
+                    // Iniciar grabador M1Q2
+                    const recordBtn = document.getElementById('recordBtnM1Q2');
+                    if (recordBtn) recordBtn.disabled = false;
+                }
+
+                goToSpread(returnSpread);
             }, 1000);
         } else {
             const wrongCount = results.filter(r => !r.isCorrect).length;
@@ -1123,7 +1140,174 @@ function createTraysSystem(containerId) {
 }
 
 // ─────────────────────────────────────────────
-// 10. SPREADS 15-16 y 17-18 – RADIOS + PLACEHOLDER
+// 10. SPREAD 17-18 – ACTIVIDAD: UNE PAREJAS CON SUMAS MISTERIOSAS
+// ─────────────────────────────────────────────
+function initMatchingActivity() {
+    const pairsEl    = document.getElementById('matchingPairs');
+    const sumsEl     = document.getElementById('matchingSums');
+    const svgEl      = document.getElementById('matchingLinesSVG');
+    const feedbackEl = document.getElementById('matchingFeedback');
+    if (!pairsEl || !sumsEl) return;
+
+    // Pares de pedidos: cada uno apunta a su suma correcta
+    const PAIRS = [
+        { id: 'mpair0', label1: 'Pedido 2', bags1: 3, items1: 5,
+                        label2: 'Pedido 6', bags2: 5, items2: 3, correctSum: 'msum0' },
+        { id: 'mpair1', label1: 'Pedido 3', bags1: 4, items1: 2,
+                        label2: 'Pedido 7', bags2: 2, items2: 4, correctSum: 'msum1' },
+        { id: 'mpair2', label1: 'Pedido 4', bags1: 5, items1: 6,
+                        label2: 'Pedido 8', bags2: 6, items2: 5, correctSum: 'msum2' }
+    ];
+
+    // Sumas misteriosas – se barajan al cargar
+    const SUMS = [
+        { id: 'msum0', text: '5+5+5 = 3+3+3+3+3' },
+        { id: 'msum1', text: '2+2+2+2+2 = 4+4' },
+        { id: 'msum2', text: '6+6+6+6+6 = 5+5+5+5+5+5' }
+    ];
+    const shuffled = [...SUMS].sort(() => Math.random() - 0.5);
+
+    // Estado
+    const connections = {}; // pairId → sumId
+    let selectedPair  = null;
+
+    // Color por pareja para los lazos
+    const LAZO_COLORS = { mpair0: '#e11d48', mpair1: '#7c3aed', mpair2: '#0ea5e9' };
+
+    // ── Renderizar tarjetas de parejas (izquierda) ──────────────────
+    function buildBags(bags, items) {
+        let out = '<div class="match-bags-row">';
+        for (let i = 0; i < bags; i++) {
+            out += `<span class="match-bag-unit">🫓×${items}</span>`;
+        }
+        return out + '</div>';
+    }
+
+    PAIRS.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'match-pair-card';
+        card.id = p.id;
+        card.innerHTML = `
+            <div class="match-pedido-mini">
+                <span class="match-pedido-label">${p.label1}</span>
+                ${buildBags(p.bags1, p.items1)}
+            </div>
+            <span class="match-pair-plus">y</span>
+            <div class="match-pedido-mini">
+                <span class="match-pedido-label">${p.label2}</span>
+                ${buildBags(p.bags2, p.items2)}
+            </div>`;
+        card.addEventListener('click', () => {
+            if (selectedPair === p.id) {
+                selectedPair = null;
+                card.classList.remove('selected');
+            } else {
+                selectedPair = p.id;
+                pairsEl.querySelectorAll('.match-pair-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            }
+        });
+        pairsEl.appendChild(card);
+    });
+
+    // ── Renderizar recuadros de sumas (derecha, orden aleatorio) ───
+    shuffled.forEach(s => {
+        const box = document.createElement('div');
+        box.className = 'match-sum-box';
+        box.id = s.id;
+        box.innerHTML = `<span class="match-sum-text">${s.text}</span>`;
+        box.addEventListener('click', () => {
+            if (!selectedPair) return;
+
+            // Liberar ocupante previo de esta suma
+            for (const [pid, sid] of Object.entries(connections)) {
+                if (sid === s.id) {
+                    delete connections[pid];
+                    document.getElementById(pid)?.classList.remove('connected');
+                    break;
+                }
+            }
+            // Liberar suma previa de este par
+            const prev = connections[selectedPair];
+            if (prev) document.getElementById(prev)?.classList.remove('connected');
+
+            // Crear nueva conexión
+            connections[selectedPair] = s.id;
+            document.getElementById(selectedPair)?.classList.add('connected');
+            box.classList.add('connected');
+
+            // Deseleccionar
+            selectedPair = null;
+            pairsEl.querySelectorAll('.match-pair-card').forEach(c => c.classList.remove('selected'));
+
+            drawLines();
+            checkAll();
+        });
+        sumsEl.appendChild(box);
+    });
+
+    // ── Dibujar lazos ────────────────────────────────────────────
+    function drawLines() {
+        if (!svgEl) return;
+        const spread = document.getElementById('matchingSpread');
+        if (!spread) return;
+
+        const w = spread.offsetWidth;
+        const h = spread.offsetHeight;
+        svgEl.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        svgEl.setAttribute('width', w);
+        svgEl.setAttribute('height', h);
+        svgEl.innerHTML = '';
+
+        const sr = spread.getBoundingClientRect();
+
+        for (const [pairId, sumId] of Object.entries(connections)) {
+            const pEl = document.getElementById(pairId);
+            const sEl = document.getElementById(sumId);
+            if (!pEl || !sEl) continue;
+
+            const pR = pEl.getBoundingClientRect();
+            const sR = sEl.getBoundingClientRect();
+
+            const x1 = pR.right  - sr.left;
+            const y1 = pR.top    - sr.top + pR.height / 2;
+            const x2 = sR.left   - sr.left;
+            const y2 = sR.top    - sr.top + sR.height / 2;
+            const cx = (x1 + x2) / 2;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `M${x1},${y1} C${cx},${y1} ${cx},${y2} ${x2},${y2}`);
+            path.setAttribute('stroke', LAZO_COLORS[pairId] || '#7c3aed');
+            path.setAttribute('stroke-width', '4');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-linecap', 'round');
+            path.setAttribute('stroke-dasharray', '10 5');
+            svgEl.appendChild(path);
+        }
+    }
+
+    // ── Verificar si todas son correctas ─────────────────────────
+    function checkAll() {
+        if (Object.keys(connections).length < 3) return;
+        const allOk = PAIRS.every(p => connections[p.id] === p.correctSum);
+        if (feedbackEl) {
+            feedbackEl.textContent = allOk
+                ? '✅ ¡Perfecto! Todas las parejas son correctas.'
+                : '🔁 Hay alguna pareja incorrecta, ¡inténtalo de nuevo!';
+            feedbackEl.style.color = allOk ? '#16a34a' : '#dc2626';
+        }
+        if (allOk) {
+            matchingCompleted = true;
+            updateNavButtons();
+        }
+    }
+
+    matchingDrawLines = drawLines;
+    window.addEventListener('resize', drawLines);
+}
+
+// ─────────────────────────────────────────────
+// 11. SPREADS 15-16 y 19-20 – RADIOS + PLACEHOLDER
 // ─────────────────────────────────────────────
 function initRadioSpreads() {
     setupRadioSpread(
