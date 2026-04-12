@@ -535,12 +535,29 @@ body #ContenedorLibro .activity-spread {
     display: block;
     width: 100%;
     margin-top: 0em;
-    margin-bottom: 0em;
+    margin-bottom: 0.55rem;
     text-align: justify;
     margin-right: 0.5em;
     margin-left: 0.5em;
     font-size: clamp(2rem, 2vw, 2rem);
     color: black;
+    }
+
+    .q1-left-page .page9-main-image {
+    margin-bottom: 0.55rem;
+    }
+
+    .q1-left-page .page9-after-image-text {
+    display: block;
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: justify;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+    font-size: clamp(1.75rem, 1.9vw, 1.95rem);
+    line-height: 1.25;
+    color: #1f2937;
     }
 
     /* =====================================================================================================
@@ -1243,7 +1260,7 @@ body #ContenedorLibro .activity-spread {
   width: min(100%, 1180px);
   min-height: 700px;
   margin: 0 auto;
-  padding: 7rem 1.5rem 2rem;
+  padding: 1.35rem 1.5rem 2rem;
   border-radius: 28px;
   overflow: hidden;
   box-sizing: border-box;
@@ -1459,7 +1476,7 @@ body #ContenedorLibro .activity-spread {
   position: relative;
   z-index: 3;
   width: min(100%, 1100px);
-  margin: 7rem auto 0;
+  margin: 1rem auto 0;
   padding: 1.35rem;
   border-radius: 30px;
   background: linear-gradient(180deg, #cb945d 0%, #a76935 100%);

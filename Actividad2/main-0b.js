@@ -26,6 +26,7 @@ let currentSpread = 0;
 let isFlipping = false;
 
 // Submits completados (para habilitar "siguiente" en cada spread)
+let m1q0Submitted = false;
 let m1q1Submitted = false;
 let m1q2Submitted = false;
 let m3q1Submitted = false;
@@ -433,9 +434,10 @@ function updateNavButtons() {
 }
 
 // Regla de qué spreads requieren submit para avanzar (índices 0-based):
+// spread 4 = página 9-10 → requiere m1q0Submitted
 // spread 6 = primera actividad → requiere m1q1Submitted
 // spread 7 = segunda actividad → requiere m1q2Submitted
-// spread 8 = sobres 1 → requiere m3q1Submitted
+// spread 8 = actividad de emparejamiento → requiere matchingCompleted
 // spread 9 = sobres 2 → requiere m3q2Submitted
 // spread 10 = reto final → requiere m4Submitted
 function canAdvance() {
@@ -446,6 +448,7 @@ function canAdvance() {
         return checked.length >= 1;
     }
 
+    if (currentSpread === 4) return m1q0Submitted;
     if (currentSpread === 6) return m1q1Submitted;
     if (currentSpread === 7) return m1q2Submitted;
     if (currentSpread === 8) return matchingCompleted;
@@ -839,6 +842,7 @@ async function handleSubmit(tag) {
 }
 
 function markSubmitted(tag) {
+    if (tag === 'M1Q0') m1q0Submitted = true;
     if (tag === 'M1Q1') m1q1Submitted = true;
     if (tag === 'M1Q2') m1q2Submitted = true;
     if (tag === 'M3Q1') m3q1Submitted = true;

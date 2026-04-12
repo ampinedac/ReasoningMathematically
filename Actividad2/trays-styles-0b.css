@@ -274,6 +274,12 @@
 }
 
 /* Responsividad */
+@media (max-width: 1200px) {
+    .trays-container {
+        grid-template-columns: repeat(3, max-content) !important;
+    }
+}
+
 @media (max-width: 768px) {
     .trays-container {
         grid-template-columns: repeat(2, max-content) !important;
