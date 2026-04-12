@@ -435,7 +435,7 @@ function updateNavButtons() {
 
 // Regla de qué spreads requieren submit para avanzar (índices 0-based):
 // spread 4 = página 9-10 → requiere m1q0Submitted
-// spread 6 = actividad de emparejamiento (13-14) → requiere matchingCompleted
+// spread 6 = actividad de emparejamiento (13-14) → requiere m3q1Submitted
 // spread 7 = segunda actividad → requiere m1q2Submitted
 // spread 8 = sobres 2 → requiere m3q2Submitted
 // spread 9 = reto final → requiere m4Submitted
@@ -448,7 +448,7 @@ function canAdvance() {
     }
 
     if (currentSpread === 4) return m1q0Submitted;
-    if (currentSpread === 6) return matchingCompleted;
+    if (currentSpread === 6) return m3q1Submitted;
     if (currentSpread === 7) return m1q2Submitted;
     if (currentSpread === 8) return m3q2Submitted;
     if (currentSpread === 9) return m4Submitted;
@@ -1148,26 +1148,24 @@ function initMatchingActivity() {
     const pairsEl    = document.getElementById('matchingPairs');
     const sumsEl     = document.getElementById('matchingSums');
     const svgEl      = document.getElementById('matchingLinesSVG');
+    const verifyBtn  = document.getElementById('matchingVerifyBtn');
     const feedbackEl = document.getElementById('matchingFeedback');
-    if (!pairsEl || !sumsEl) return;
+    if (!pairsEl || !sumsEl || !verifyBtn) return;
 
     // Pares de pedidos: cada uno apunta a su suma correcta
     const PAIRS = [
-        { id: 'mpair0', label1: 'Pedido 2', bags1: 3, items1: 5,
-                        label2: 'Pedido 6', bags2: 5, items2: 3, correctSum: 'msum0' },
-        { id: 'mpair1', label1: 'Pedido 3', bags1: 4, items1: 2,
-                        label2: 'Pedido 7', bags2: 2, items2: 4, correctSum: 'msum1' },
-        { id: 'mpair2', label1: 'Pedido 4', bags1: 5, items1: 6,
-                        label2: 'Pedido 8', bags2: 6, items2: 5, correctSum: 'msum2' }
+        { id: 'mpair0', imageSrc: './assets/images/pedidos%202%20y%206.png', alt: 'Pedidos 2 y 6', correctSum: 'msum0' },
+        { id: 'mpair1', imageSrc: './assets/images/pedidos%203%20y%207.png', alt: 'Pedidos 3 y 7', correctSum: 'msum1' },
+        { id: 'mpair2', imageSrc: './assets/images/pedidos%204%20y%208.png', alt: 'Pedidos 4 y 8', correctSum: 'msum2' }
     ];
 
     // Sumas misteriosas – se barajan al cargar
     const SUMS = [
-        { id: 'msum0', text: '5+5+5 = 3+3+3+3+3' },
-        { id: 'msum1', text: '2+2+2+2+2 = 4+4' },
-        { id: 'msum2', text: '6+6+6+6+6 = 5+5+5+5+5+5' }
+        { id: 'msum0', text: '5+5+5=3+3+3+3+3' },
+        { id: 'msum1', text: '2+2+2+2+2=4+4' },
+        { id: 'msum2', text: '6+6+6+6+6=5+5+5+5+5+5' }
     ];
-    const shuffled = [...SUMS].sort(() => Math.random() - 0.5);
+    const shuffledSums = [...SUMS].sort(() => Math.random() - 0.5);
 
     // Estado
     const connections = {}; // pairId → sumId
@@ -1176,46 +1174,26 @@ function initMatchingActivity() {
     // Color por pareja para los lazos
     const LAZO_COLORS = { mpair0: '#e11d48', mpair1: '#7c3aed', mpair2: '#0ea5e9' };
 
-    // ── Renderizar tarjetas de parejas (izquierda) ──────────────────
-    function buildBags(bags, items) {
-        let out = '<div class="match-bags-row">';
-        for (let i = 0; i < bags; i++) {
-            out += `<span class="match-bag-unit">🫓×${items}</span>`;
-        }
-        return out + '</div>';
-    }
-
     const shuffledPairs = [...PAIRS].sort(() => Math.random() - 0.5);
 
     shuffledPairs.forEach(p => {
-        const card = document.createElement('div');
+        const card = document.createElement('button');
+        card.type = 'button';
         card.className = 'match-pair-card';
         card.id = p.id;
-        card.innerHTML = `
-            <div class="match-pedido-mini">
-                <span class="match-pedido-label">${p.label1}</span>
-                ${buildBags(p.bags1, p.items1)}
-            </div>
-            <span class="match-pair-plus">y</span>
-            <div class="match-pedido-mini">
-                <span class="match-pedido-label">${p.label2}</span>
-                ${buildBags(p.bags2, p.items2)}
-            </div>`;
+        card.innerHTML = `<img src="${p.imageSrc}" alt="${p.alt}" class="match-pair-image">`;
         card.addEventListener('click', () => {
             if (selectedPair === p.id) {
                 selectedPair = null;
-                card.classList.remove('selected');
             } else {
                 selectedPair = p.id;
-                pairsEl.querySelectorAll('.match-pair-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
             }
         });
         pairsEl.appendChild(card);
     });
 
     // ── Renderizar recuadros de sumas (derecha, orden aleatorio) ───
-    shuffled.forEach(s => {
+    shuffledSums.forEach(s => {
         const box = document.createElement('div');
         box.className = 'match-sum-box';
         box.id = s.id;
@@ -1227,25 +1205,22 @@ function initMatchingActivity() {
             for (const [pid, sid] of Object.entries(connections)) {
                 if (sid === s.id) {
                     delete connections[pid];
-                    document.getElementById(pid)?.classList.remove('connected');
                     break;
                 }
             }
-            // Liberar suma previa de este par
-            const prev = connections[selectedPair];
-            if (prev) document.getElementById(prev)?.classList.remove('connected');
 
             // Crear nueva conexión
             connections[selectedPair] = s.id;
-            document.getElementById(selectedPair)?.classList.add('connected');
-            box.classList.add('connected');
 
             // Deseleccionar
             selectedPair = null;
-            pairsEl.querySelectorAll('.match-pair-card').forEach(c => c.classList.remove('selected'));
+            matchingCompleted = false;
+            updateNavButtons();
 
             drawLines();
-            checkAll();
+            if (feedbackEl) {
+                feedbackEl.textContent = '';
+            }
         });
         sumsEl.appendChild(box);
     });
@@ -1290,8 +1265,8 @@ function initMatchingActivity() {
         }
     }
 
-    // ── Verificar si todas son correctas ─────────────────────────
-    function checkAll() {
+    // ── Verificar si todas son correctas (solo al presionar botón) ─────────────────────────
+    function verifyAll() {
         if (Object.keys(connections).length < 3) return;
         const allOk = PAIRS.every(p => connections[p.id] === p.correctSum);
         if (feedbackEl) {
@@ -1305,6 +1280,17 @@ function initMatchingActivity() {
             updateNavButtons();
         }
     }
+
+    verifyBtn.addEventListener('click', () => {
+        if (Object.keys(connections).length < 3) {
+            if (feedbackEl) {
+                feedbackEl.textContent = 'Une las 3 parejas antes de verificar.';
+                feedbackEl.style.color = '#dc2626';
+            }
+            return;
+        }
+        verifyAll();
+    });
 
     matchingDrawLines = drawLines;
     window.addEventListener('resize', drawLines);
