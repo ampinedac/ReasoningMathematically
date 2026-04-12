@@ -399,7 +399,7 @@ function goToSpread(index) {
         setTimeout(() => {
             foldInPage.classList.remove('anim-flip-in');
             isFlipping = false;
-            if (index === 8 && typeof matchingDrawLines === 'function') matchingDrawLines();
+            if (index === 6 && typeof matchingDrawLines === 'function') matchingDrawLines();
         }, 320);
 
     }, 320);
@@ -435,11 +435,10 @@ function updateNavButtons() {
 
 // Regla de qué spreads requieren submit para avanzar (índices 0-based):
 // spread 4 = página 9-10 → requiere m1q0Submitted
-// spread 6 = primera actividad → requiere m1q1Submitted
+// spread 6 = actividad de emparejamiento (13-14) → requiere matchingCompleted
 // spread 7 = segunda actividad → requiere m1q2Submitted
-// spread 8 = actividad de emparejamiento → requiere matchingCompleted
-// spread 9 = sobres 2 → requiere m3q2Submitted
-// spread 10 = reto final → requiere m4Submitted
+// spread 8 = sobres 2 → requiere m3q2Submitted
+// spread 9 = reto final → requiere m4Submitted
 function canAdvance() {
     const spreads = getSpreads();
     if (currentSpread >= spreads.length - 1) {
@@ -449,11 +448,10 @@ function canAdvance() {
     }
 
     if (currentSpread === 4) return m1q0Submitted;
-    if (currentSpread === 6) return m1q1Submitted;
+    if (currentSpread === 6) return matchingCompleted;
     if (currentSpread === 7) return m1q2Submitted;
-    if (currentSpread === 8) return matchingCompleted;
-    if (currentSpread === 9) return m3q2Submitted;
-    if (currentSpread === 10) return m4Submitted;
+    if (currentSpread === 8) return m3q2Submitted;
+    if (currentSpread === 9) return m4Submitted;
     return true;
 }
 
@@ -1187,7 +1185,9 @@ function initMatchingActivity() {
         return out + '</div>';
     }
 
-    PAIRS.forEach(p => {
+    const shuffledPairs = [...PAIRS].sort(() => Math.random() - 0.5);
+
+    shuffledPairs.forEach(p => {
         const card = document.createElement('div');
         card.className = 'match-pair-card';
         card.id = p.id;
