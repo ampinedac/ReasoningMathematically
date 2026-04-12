@@ -457,8 +457,9 @@ body #ContenedorLibro .activity-spread {
   height: 100%;
   display: flex; /* Flexbox para organizar el contenido de la página */
   flex-direction: column; /* Apila el contenido en columna */
-  justify-content: center; /* Centra el contenido verticalmente */
+  justify-content: flex-start; /* Mantiene un orden natural: texto arriba e imagen debajo */
   align-items: center; /* Centra horizontalmente el contenido */
+  gap: 0.45rem;
   background: transparent;
   font-family: var(--font-general);
   color: var(--pastel-azul-texto);
@@ -567,12 +568,31 @@ body #ContenedorLibro .activity-spread {
      display: block;
      max-width: 95%;
      max-height: 100%;
-     margin: auto;
+      margin: 0 auto;
      border-radius: var(--radius-lg);
      object-fit: contain;
      border: 1.5px solid #ececf3;
      padding: 0.5vw;
      }
+
+        .left-page .story-text + .story-image,
+        .q1-left-page .story-text + .story-image {
+      margin-top: 0.35rem;
+        }
+
+        .left-page .story-image + .story-text,
+        .q1-left-page .story-image + .story-text {
+      margin-top: 0.5rem;
+        }
+
+    .page11-12-spread .q1-left-page .page11-flex-image {
+     flex: 1 1 auto;
+     min-height: 70px;
+     max-height: clamp(90px, 24vh, 230px);
+     height: auto;
+     width: auto;
+     margin: 0 auto 0.45rem auto;
+    }
 
     /* =====================================================================================================
     PÁGINAS 12 Y 13 SITUACION 1 Y PREGUNTA 1
