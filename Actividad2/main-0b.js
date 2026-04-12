@@ -692,7 +692,8 @@ function initAudioRecorder(tag) {
                 recordBtn.style.opacity = '1';
             };
 
-            mr.start();
+            // timeslice corto para evitar blobs vacíos en grabaciones breves
+            mr.start(250);
             recordBtn.style.display = 'none';
             stopBtn.style.display   = '';
             if (submitBtn) {
@@ -716,7 +717,10 @@ function initAudioRecorder(tag) {
 
     stopBtn.addEventListener('click', () => {
         const mr = audioState[tag].mediaRecorder;
-        if (mr && mr.state === 'recording') mr.stop();
+        if (mr && mr.state === 'recording') {
+            try { mr.requestData(); } catch (_) {}
+            mr.stop();
+        }
     });
 
     // Submit de audio (+ imagen de canvas si aplica)
