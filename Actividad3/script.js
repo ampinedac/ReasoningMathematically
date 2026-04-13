@@ -31,6 +31,7 @@ const COMPONENT_IDS = [
 ];
 
 let studentCode = "";
+let studentInfo = null;
 let explorationSeconds = 0;
 let explorationInterval = null;
 let explorationPlacements = createEmptyPlacements();
@@ -99,16 +100,95 @@ function init() {
 }
 
 function setupEntryFlow() {
-  enterBtn.addEventListener("click", () => {
-    const input = studentCodeInput.value.trim();
-    if (!input) {
-      welcomeError.textContent = "Escribe un codigo para continuar.";
+  studentCodeInput.addEventListener("keydown", (event) => {
+    const allowed = [
+      "Backspace",
+      "Delete",
+      "Tab",
+      "Escape",
+      "Enter",
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End"
+    ];
+
+    if (allowed.includes(event.key)) {
       return;
     }
 
-    studentCode = input;
+    if (event.ctrlKey || event.metaKey) {
+      return;
+    }
+
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  });
+
+  studentCodeInput.addEventListener("input", () => {
+    studentCodeInput.value = studentCodeInput.value.replace(/\D/g, "");
+  });
+
+  studentCodeInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      enterBtn.click();
+    }
+  });
+
+  enterBtn.addEventListener("click", () => {
+    const code = studentCodeInput.value.trim();
+    if (!code) {
+      showError(welcomeError, "Por favor escribe tu codigo.");
+      return;
+    }
+
+    if (!/^\d+$/.test(code)) {
+      showError(welcomeError, "Solo se permiten numeros.");
+      return;
+    }
+
+    if (code === "0000") {
+      const providedName = window.prompt("Escribe tu nombre para ingresar como invitado");
+      const guestName = (providedName || "").trim();
+
+      if (!guestName) {
+        showError(welcomeError, "Para ingresar con 0000 debes escribir tu nombre.");
+        return;
+      }
+
+      welcomeError.textContent = "";
+      studentCode = code;
+      studentInfo = {
+        nombre: guestName,
+        apellidos: "",
+        curso: "INVITADO"
+      };
+
+      confirmationQuestion.textContent = `Eres ${toTitle(guestName)}?`;
+      welcomeContainer.style.display = "none";
+      confirmContainer.style.display = "flex";
+      return;
+    }
+
+    const estudiante = (window.estudiantesData || {})[code];
+    if (!estudiante) {
+      showError(welcomeError, "Codigo no encontrado. Verifica que este bien escrito.");
+      return;
+    }
+
     welcomeError.textContent = "";
-    confirmationQuestion.textContent = `Tu codigo es ${studentCode}. Confirmas que esta correcto?`;
+    studentCode = code;
+    studentInfo = estudiante;
+
+    const nombre = toTitle(estudiante.nombre);
+    const apellidos = toTitle(estudiante.apellidos || "");
+    if (estudiante.curso === "DOCENTE") {
+      confirmationQuestion.textContent = `Eres ${nombre} ${apellidos}?`;
+    } else {
+      confirmationQuestion.textContent = `Eres ${nombre} ${apellidos} del curso ${estudiante.curso}?`;
+    }
+
     welcomeContainer.style.display = "none";
     confirmContainer.style.display = "flex";
   });
@@ -116,13 +196,35 @@ function setupEntryFlow() {
   confirmNoBtn.addEventListener("click", () => {
     confirmContainer.style.display = "none";
     welcomeContainer.style.display = "flex";
+    studentCodeInput.focus();
   });
 
   confirmYesBtn.addEventListener("click", () => {
     confirmContainer.style.display = "none";
-    activityApp.style.display = "block";
+    activityApp.style.display = "flex";
     showComponent("contexto");
   });
+}
+
+function showError(element, message) {
+  if (!element) {
+    return;
+  }
+
+  element.textContent = message;
+}
+
+function toTitle(value) {
+  if (!value) {
+    return "";
+  }
+
+  return value
+    .toLocaleLowerCase("es-CO")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toLocaleUpperCase("es-CO") + word.slice(1))
+    .join(" ");
 }
 
 function setupButtons() {
