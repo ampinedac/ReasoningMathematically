@@ -46,7 +46,7 @@ body #ContenedorBienvenida { display: flex; }
 body #ContenedorConfirmacion,
 body #ContenedorPortada,
 body #ContenedorLibro,
-body #ContenedorCocina,
+body #ContenedorMenteAndres,
 body #prevBtn,
 body #nextBtn {
   display: none;
@@ -719,7 +719,7 @@ body #ContenedorLibro .activity-spread {
        }
 
        /* =====================================================================================================
-        Páginas 13 y  14 situación 2 y cocina
+        Páginas 13 y 14 situacion 2 y Mente de Andres
         ===================================================================================================== */
         .q2-guide-card { /* Tarjeta de guía para la situación 2 */
           width: 95%;
@@ -739,7 +739,7 @@ body #ContenedorLibro .activity-spread {
           margin-bottom: 4%;
         } 
           
-        .q1-left-page .btn-cocina { /* Botón para ir a la cocina en la situación 2 */
+        .q1-left-page .btn-mente-andres { /* Boton para ir a Mente de Andres en la situacion 2 */
           width: 95%;
           padding: 12px 24px;
           background: linear-gradient(135deg, #3b83f6ce 0%, #1d4fd8c7 100%);
@@ -752,13 +752,13 @@ body #ContenedorLibro .activity-spread {
           transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
         }
 
-        .q1-left-page .btn-cocina:hover { /* Efecto visual al pasar el mouse sobre el botón de cocina */
+        .q1-left-page .btn-mente-andres:hover { /* Efecto visual al pasar el mouse sobre el boton */
           filter: brightness(.85);
           transform: translateY(-3px);
           box-shadow: 0 3px 9px rgb(224, 253, 253);
         }
 
-        .q1-right-page .btn-cocina-organizar {
+        .q1-right-page .btn-mente-andres-organizar {
           width: 95%;
           padding: 12px 24px;
           margin-top: 0.75rem;
@@ -772,7 +772,7 @@ body #ContenedorLibro .activity-spread {
           transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
         }
 
-        .q1-right-page .btn-cocina-organizar:hover {
+        .q1-right-page .btn-mente-andres-organizar:hover {
           filter: brightness(.85);
           transform: translateY(-3px);
           box-shadow: 0 3px 9px rgb(224, 253, 253);
@@ -820,13 +820,100 @@ body #ContenedorLibro .activity-spread {
           width: min(92%, 640px);
         }
 
+        #thinkSocialSpread #m1q2ResponseBlock {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.8rem;
+          min-height: 58%;
+        }
+
+        #thinkSocialSpread .think-audio-intro {
+          width: 100%;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+        }
+
+        #thinkSocialSpread #m1Q2FinalQuestion {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          justify-content: flex-start;
+          gap: 0.6rem;
+          min-height: 0;
+        }
+
+        #thinkSocialSpread #m1Q2FinalQuestion .audio-controls {
+          margin-top: 0;
+          min-height: 74px;
+          align-items: center;
+          justify-content: center;
+        }
+
+        #thinkSocialSpread #m1Q2FinalQuestion .audio-controls .btn {
+          margin-top: 0;
+        }
+
+        #thinkSocialSpread #m1Q2FinalQuestion #statusM1Q2 {
+          width: 100%;
+          margin-top: 0.15rem;
+          text-align: center;
+          position: static;
+        }
+
+        #thinkSocialSpread .m1q2-board-container {
+          width: 100%;
+          height: 40%;
+          min-height: 220px;
+          flex: 0 0 40%;
+          gap: 0.45rem;
+        }
+
+        #thinkSocialSpread .m1q2-board-container .board-tools {
+          width: 100%;
+          justify-content: center;
+        }
+
+        #thinkSocialSpread .m1q2-board-wrapper {
+          width: 100%;
+          min-height: 180px;
+          height: 100%;
+          flex: 1 1 auto;
+        }
+
         #thinkSocialSpread #step2VerifyBlock:not(.think-hidden),
         #thinkSocialSpread #step2ConversationBlock:not(.think-hidden) {
           display: flex;
           flex-direction: column;
-          align-items: flex-start;
+          align-items: center;
           justify-content: center;
           gap: 0.55rem;
+        }
+
+        #thinkSocialSpread .think-step-card {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: 0.55rem;
+        }
+
+        #thinkSocialSpread .think-step-text {
+          text-align: center;
+        }
+
+        #thinkSocialSpread .think-actions {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         #thinkStartBtn,
@@ -834,6 +921,11 @@ body #ContenedorLibro .activity-spread {
         #socialStartBtn {
           font-family: 'Lobster Two', cursive;
           font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+          min-height: 56px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
         }
 
         .think-force-reveal-btn {
@@ -855,13 +947,16 @@ body #ContenedorLibro .activity-spread {
           --burn-progress: 0;
           display: inline-flex;
           align-items: center;
-          gap: 0.55rem;
+          justify-content: center;
+          gap: 0.35rem;
           margin: 0.3rem 0;
+          min-height: 120px;
+          width: 100%;
         }
 
         .bomb-timer-svg {
-          width: 88px;
-          height: 64px;
+          width: 136px;
+          height: 112px;
           overflow: visible;
           flex: 0 0 auto;
         }
@@ -878,42 +973,99 @@ body #ContenedorLibro .activity-spread {
           stroke-width: 1.2;
         }
 
+        .bomb-floor {
+          fill: #8b5e34;
+          opacity: 0.8;
+        }
+
         .bomb-shine {
           fill: rgba(255, 255, 255, 0.36);
         }
 
         .bomb-fuse {
-          stroke: #7c2d12;
-          stroke-width: 3.8;
+          stroke: #a16207;
+          stroke-width: 4;
           stroke-linecap: round;
+          fill: none;
         }
 
         .bomb-fuse-burn {
           stroke: #f59e0b;
-          stroke-width: 3.8;
+          stroke-width: 4.2;
           stroke-linecap: round;
-          stroke-dasharray: 46;
-          stroke-dashoffset: calc(46 * (1 - var(--burn-progress)));
+          fill: none;
+          stroke-dasharray: 16 160;
+          stroke-dashoffset: calc(var(--burn-progress) * 120);
+        }
+
+        .bomb-fuse-char {
+          stroke: #111827;
+          stroke-width: 4;
+          stroke-linecap: round;
+          fill: none;
+          stroke-dasharray: calc(var(--burn-progress) * 140) 160;
+          stroke-dashoffset: 0;
         }
 
         .bomb-spark {
           fill: #f97316;
-          transform-origin: 86px 8px;
-          transform: translate(
-            calc(var(--burn-progress) * -42px),
-            calc(var(--burn-progress) * 18px)
-          );
+          offset-path: path('M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32');
+          offset-distance: calc(var(--burn-progress) * 100%);
           filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.9));
-          transition: transform 0.18s linear;
+          transition: offset-distance 0.18s linear;
+        }
+
+        .bomb-explosion {
+          opacity: 0;
+          transform-origin: 46px 32px;
+          pointer-events: none;
+        }
+
+        .bomb-timer.is-exploding .bomb-explosion {
+          opacity: 1;
+          animation: bombExplosion 0.75s ease-out forwards;
+        }
+
+        .bomb-timer.is-exploding .bomb-body,
+        .bomb-timer.is-exploding .bomb-cap,
+        .bomb-timer.is-exploding .bomb-shine,
+        .bomb-timer.is-exploding .bomb-fuse,
+        .bomb-timer.is-exploding .bomb-fuse-burn,
+        .bomb-timer.is-exploding .bomb-fuse-char,
+        .bomb-timer.is-exploding .bomb-spark {
+          opacity: 0;
         }
 
         .bomb-timer .timer-text {
           font-family: 'Lobster Two', cursive;
-          font-size: clamp(2rem, 3.1vw, 2.8rem);
+          font-size: clamp(2.2rem, 3.4vw, 3rem);
           color: #1d4ed8;
           line-height: 1;
-          min-width: 102px;
-          text-align: left;
+          min-width: 116px;
+          text-align: center;
+        }
+
+        .bomb-timer-complete {
+          font-family: 'Lobster Two', cursive !important;
+          font-size: clamp(1.8rem, 2.9vw, 2.4rem) !important;
+          line-height: 1.2;
+          text-align: center;
+          width: 100%;
+        }
+
+        @keyframes bombExplosion {
+          0% {
+            transform: scale(0.2);
+            opacity: 0.9;
+          }
+          55% {
+            transform: scale(1.4);
+            opacity: 1;
+          }
+          100% {
+            transform: scale(1.85);
+            opacity: 0;
+          }
         }
         
         /* =====================================================================================================
@@ -1072,6 +1224,129 @@ body #ContenedorLibro .activity-spread {
             gap: 0.35rem;
             width: 100%;
             margin-top: 0.4rem;
+        }
+
+        /* =====================================================================================================
+        Páginas 15 y 16 – Doble momento con tablero y audio
+        ===================================================================================================== */
+        #m3FlowSpread .q1-left-page,
+        #m3FlowSpread .q1-right-page {
+          justify-content: flex-start;
+          align-items: center;
+          gap: 0.55rem;
+          padding-top: clamp(0.85rem, 1.8vw, 1.2rem);
+          padding-bottom: clamp(0.85rem, 1.8vw, 1.2rem);
+        }
+
+        #m3FlowSpread .m3-step-title {
+          margin: 0;
+          text-align: center;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.75rem, 2.6vw, 2.2rem);
+          color: #1d4ed8;
+        }
+
+        #m3FlowSpread .m3-step-text {
+          margin: 0;
+          width: 96%;
+          text-align: justify;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.45rem, 1.95vw, 1.95rem);
+          line-height: 1.22;
+          color: #0f172a;
+        }
+
+        #m3FlowSpread .m3-board-container {
+          width: 100%;
+          height: 40%;
+          min-height: 220px;
+          flex: 0 0 40%;
+          gap: 0.4rem;
+        }
+
+        #m3FlowSpread .m3-board-wrapper {
+          width: 100%;
+          height: 100%;
+          min-height: 180px;
+          flex: 1 1 auto;
+        }
+
+        #m3FlowSpread .audio-controls {
+          margin-top: 0.1rem;
+        }
+
+        #m3FlowSpread #statusM3Q2,
+        #m3FlowSpread #statusM3Q3 {
+          width: 100%;
+          text-align: center;
+          min-height: 1.6em;
+        }
+
+        #m3q3LockedNotice {
+          width: 92%;
+          margin-top: 1.5rem;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.5rem, 2.2vw, 2rem);
+          color: #1e3a8a;
+          background: rgba(255, 255, 255, 0.8);
+          border: 2px dashed rgba(30, 64, 175, 0.35);
+          border-radius: 14px;
+          padding: 1rem 0.9rem;
+        }
+
+        #m3q3StepContent {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.55rem;
+        }
+
+        /* =====================================================================================================
+        Páginas 17 y 18 – Dos preguntas de cierre con audio
+        ===================================================================================================== */
+        #m4StorySpread .q1-left-page,
+        #m4StorySpread .q1-right-page {
+          justify-content: center;
+          align-items: center;
+          gap: 0.55rem;
+          padding-top: clamp(1rem, 1.8vw, 1.35rem);
+          padding-bottom: clamp(1rem, 1.8vw, 1.35rem);
+        }
+
+        .m4-story-question,
+        .m4-story-sentence {
+          margin: 0;
+          width: 95%;
+          text-align: justify;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.5rem, 2vw, 2rem);
+          line-height: 1.25;
+          color: #111827;
+        }
+
+        .m4-story-sentence {
+          font-size: clamp(1.35rem, 1.8vw, 1.8rem);
+          color: #1e3a8a;
+        }
+
+        #m4Q2Block,
+        #m4StoryFinalSection {
+          width: 96%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.55rem;
+        }
+
+        #m4StorySpread #statusM4Q1,
+        #m4StorySpread #statusM4Q2 {
+          width: 100%;
+          text-align: center;
+          min-height: 1.6em;
         }
 
         /* =====================================================================================================
@@ -1342,9 +1617,9 @@ body #ContenedorLibro .activity-spread {
 }
 
 /* =====================================================================================================
-  CONTENEDOR COCINA
+  CONTENEDOR MENTE DE ANDRES
 ===================================================================================================== */
-  #ContenedorCocina {
+  #ContenedorMenteAndres {
   position: relative;
   width: min(96vw, 1320px);
   max-width: 1320px;
@@ -1366,7 +1641,7 @@ body #ContenedorLibro .activity-spread {
   box-sizing: border-box;
   }
 
-  .cocina-header {
+  .mente-andres-header {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1376,7 +1651,7 @@ body #ContenedorLibro .activity-spread {
   }
 
 
- .cocina-header h2 {
+ .mente-andres-header h2 {
   font-family: 'Lobster Two', cursive;
   font-size: clamp(2.1rem, 4vw, 3.4rem);
   color: #93511b;
@@ -1384,7 +1659,7 @@ body #ContenedorLibro .activity-spread {
   align-items: center;
   text-shadow: 0 2px 0 rgba(255,255,255,0.42);
   }
- .cocina-header p {
+ .mente-andres-header p {
   font-family: 'Rancho', cursive;
   font-size: clamp(1.5rem, 2.1vw, 2rem);
   color: #6c4420;
@@ -1393,7 +1668,7 @@ body #ContenedorLibro .activity-spread {
   margin: 0;
   }
 
-  .cocina-body {
+  .mente-andres-body {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -1402,14 +1677,83 @@ body #ContenedorLibro .activity-spread {
   }
 
   
-  #ContenedorCocina #cocinaScreen {
+  #ContenedorMenteAndres #menteAndresScreen {
   width: 100%;
   min-height: calc(100vh - 4rem);
   height: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  position: relative;
   }
+
+ .mente-andres-floating-notice {
+  position: absolute;
+  inset: 0;
+  z-index: 1600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 16, 8, 0.33);
+  animation: menteAndresNoticeIn 0.28s ease-out;
+ }
+
+ .mente-andres-floating-notice.hide {
+  opacity: 0;
+  transition: opacity 0.28s ease;
+ }
+
+ .mente-andres-floating-notice-card {
+  width: min(92%, 900px);
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.35);
+  border: 4px solid transparent;
+ }
+
+ .mente-andres-floating-notice.success .mente-andres-floating-notice-card {
+  border-color: #22c55e;
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+ }
+
+ .mente-andres-floating-notice.error .mente-andres-floating-notice-card {
+  border-color: #ef4444;
+  background: linear-gradient(180deg, #fef2f2 0%, #ffffff 100%);
+ }
+
+ .mente-andres-floating-notice-icon {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  line-height: 1;
+ }
+
+ .mente-andres-floating-notice-text {
+  margin: 0;
+  text-align: center;
+  font-family: 'Rancho', cursive;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.15;
+  color: #12432b;
+ }
+
+ .mente-andres-floating-notice.error .mente-andres-floating-notice-text {
+  color: #7f1d1d;
+ }
+
+ @keyframes menteAndresNoticeIn {
+  from {
+   opacity: 0;
+   transform: translateY(8px);
+  }
+  to {
+   opacity: 1;
+   transform: translateY(0);
+  }
+ }
 
  .bakery-kitchen-bg {
   position: relative;
@@ -1649,7 +1993,7 @@ body #ContenedorLibro .activity-spread {
   background: rgba(255, 236, 206, 0.58);
  }
 
- .cocina-controls {
+ .mente-andres-controls {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -1678,15 +2022,8 @@ body #ContenedorLibro .activity-spread {
   transform: translateY(-2px);
  }
 
- #traysFeedbackM1Q2 {
-  max-width: min(90%, 760px);
-  margin: 0 auto;
-  font-family: 'Rancho', cursive;
-  font-size: clamp(1.35rem, 2vw, 1.8rem);
- }
-
  @media (max-width: 900px) {
-  #ContenedorCocina {
+  #ContenedorMenteAndres {
    width: min(98vw, 1320px);
    padding: 0.8rem;
   }
@@ -1712,8 +2049,8 @@ body #ContenedorLibro .activity-spread {
   }
  }
 
-  /* Overlay de la cocina (sin cambios) */
- .cocina-overlay {
+  /* Overlay de Mente de Andres (sin cambios) */
+ .mente-andres-overlay {
   position: absolute;
   top: 0;
   left: 0;

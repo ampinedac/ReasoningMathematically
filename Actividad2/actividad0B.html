@@ -7,7 +7,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles2.css?v=2026041210">
+    <link rel="stylesheet" href="styles2.css?v=2026041308">
     <link rel="stylesheet" href="trays-styles-0b.css?v=2026040504">
     <link rel="stylesheet" href="bags-styles-0b.css?v=2026040504">
 </head>
@@ -147,7 +147,7 @@
                                     <br>Se queda en silencio unos segundos.
                                     <br>—Son como… sumas misteriosas.
                                     <br><br>Decide entonces pensar en más pedidos para saber si puede hallar más sumas misteriosas:</p1>
-            <button id="goToCocinaBtnM0" class="btn btn-cocina-organizar">👩‍🍳 Ir a organizar pedidos </button>
+            <button id="goToMenteAndresBtnM0" class="btn btn-mente-andres-organizar">👩‍🍳 Ir a la mente de Andrés </button>
         </div>
         <span class="page-number page-number-left">9</span>
         <span class="page-number page-number-right">10</span>
@@ -221,6 +221,20 @@
                 </div>
 
                 <div id="m1Q2FinalQuestion" class="think-audio-box">
+                    <div class="board-container m1q2-board-container">
+                        <div class="board-tools">
+                            <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
+                                <img src="./assets/images/lapiznegro.png" alt="Lapiz negro">
+                            </button>
+                            <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador">
+                                <img src="./assets/images/borrador.png" alt="Borrador">
+                            </button>
+                        </div>
+                        <div class="board-wrapper m1q2-board-wrapper">
+                            <canvas id="boardCanvasM1Q2" class="drawing-board"></canvas>
+                        </div>
+                    </div>
+
                     <div class="audio-controls">
                         <button id="recordBtnM1Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
                         <button id="stopBtnM1Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
@@ -233,109 +247,119 @@
         <span class="page-number page-number-left">13</span>
         <span class="page-number page-number-right">14</span>
     </div>
-    <!-- Story Spread 15-16 (Reto final, reflexión y cierre) -->
-    <div class="page q1-book-spread activity-spread">
+    <!-- Story Spread 15-16 (Dos momentos de explicacion con tablero) -->
+    <div class="page q1-book-spread activity-spread" id="m3FlowSpread">
         <div class="q1-left-page">
-            <h3>Las ventas misteriosas 2️⃣</h3>
-            <div class="book-story-card">
-                <p>Parece que Doña Aurora es experta en ventas misteriosas.</p>
-                <p>Ayúdale a identificar cuando ha vendido la misma cantidad sin necesidad de hacer las sumas</p>
+            <h3 class="m3-step-title">Momento 1</h3>
+            <p class="m3-step-text">Es tu momento de imaginar, imagina pedidos y responde ¿A partir de cualquier pedido se pueden encontrar sumas misteriosas? Explica</p>
+
+            <div class="board-container m3-board-container">
+                <div class="board-tools">
+                    <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
+                        <img src="./assets/images/lapiznegro.png" alt="Lapiz negro">
+                    </button>
+                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo">
+                        <img src="./assets/images/lapizrojo.png" alt="Lapiz rojo">
+                    </button>
+                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador">
+                        <img src="./assets/images/resaltador.png" alt="Resaltador">
+                    </button>
+                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador">
+                        <img src="./assets/images/borrador.png" alt="Borrador">
+                    </button>
+                    <button class="tool-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero">
+                        <img src="./assets/images/borrador-de-pizarra.png" alt="Limpiar tablero">
+                    </button>
+                </div>
+                <div class="board-wrapper m3-board-wrapper">
+                    <canvas id="boardCanvasM3Q2" class="drawing-board"></canvas>
+                </div>
             </div>
-            <div class="envelope-equation">
-                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                </svg>
-                <span class="operator">×</span>
-                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
-                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
-                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
-                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
-                </svg>
-                <span class="operator">=</span>
-                <svg class="envelope blue" width="60" height="50" viewBox="0 0 60 50">
-                    <rect x="5" y="10" width="50" height="35" fill="#2196F3" stroke="#1565C0" stroke-width="2" rx="3"/>
-                    <path d="M5 10 L30 30 L55 10" fill="#42A5F5" stroke="#1565C0" stroke-width="2"/>
-                    <path d="M5 10 L30 30 L55 10 Z" fill="#90CAF9" opacity="0.7"/>
-                </svg>
-                <span class="operator">×</span>
-                <svg class="envelope green" width="60" height="50" viewBox="0 0 60 50">
-                    <rect x="5" y="10" width="50" height="35" fill="#4CAF50" stroke="#2E7D32" stroke-width="2" rx="3"/>
-                    <path d="M5 10 L30 30 L55 10" fill="#66BB6A" stroke="#2E7D32" stroke-width="2"/>
-                    <path d="M5 10 L30 30 L55 10 Z" fill="#81C784" opacity="0.7"/>
-                </svg>
+
+            <div class="audio-controls">
+                <button id="recordBtnM3Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
+                <button id="stopBtnM3Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
+                <button id="submitM3Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar audio"></button>
             </div>
-            <p class="q3-inline-question">¿Piensas que esta igualdad funcionará con cualquier par de números?</p>
+            <p id="statusM3Q2" class="status-text"></p>
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page">
-            <div class="radio-group">
-                <label class="radio-label">
-                    <input type="radio" name="truthQ2" value="yes">
-                    Sí, creo si que es verdadera.
-                </label>
-                <label class="radio-label">
-                <input type="radio" name="truthQ2" value="no">
-                No, creo que no es verdadera.
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="truthQ2" value="unsure">
-                    No estoy segur@.
-                </label>
+            <div id="m3q3LockedNotice" class="book-placeholder">
+                Envía el audio de la página 15 para activar esta página.
+            </div>
 
-            </div>
-            <div id="promptSection2">
-                <div class="prompt-box">
-                    <p id="promptText2"></p>
+            <div id="m3q3StepContent" class="think-hidden">
+                <h3 class="m3-step-title">Momento 2</h3>
+                <p class="m3-step-text">Andrés quiere contarle este gran descubrimiento a su abuela, pero aún no sabe cómo hacerlo. Ayúdalo a encontrar las palabras para explicarle a su abuelita como es una suma misteriosa y cómo encontrarla.</p>
+                <p class="m3-step-text">A continuación encontrarás una hoja en la que puedes hacer un dibujo o una suma misteriosa si lo crees necesario para que la abuela entienda mejor.</p>
+
+                <div class="board-container m3-board-container">
+                    <div class="board-tools">
+                        <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
+                            <img src="./assets/images/lapiznegro.png" alt="Lapiz negro">
+                        </button>
+                        <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo">
+                            <img src="./assets/images/lapizrojo.png" alt="Lapiz rojo">
+                        </button>
+                        <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador">
+                            <img src="./assets/images/resaltador.png" alt="Resaltador">
+                        </button>
+                        <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador">
+                            <img src="./assets/images/borrador.png" alt="Borrador">
+                        </button>
+                        <button class="tool-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero">
+                            <img src="./assets/images/borrador-de-pizarra.png" alt="Limpiar tablero">
+                        </button>
+                    </div>
+                    <div class="board-wrapper m3-board-wrapper">
+                        <canvas id="boardCanvasM3Q3" class="drawing-board"></canvas>
+                    </div>
                 </div>
+
                 <div class="audio-controls">
-                    <button id="recordBtnM3Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
-                    <button id="stopBtnM3Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
-                    <button id="submitM3Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar audio"></button>
+                    <button id="recordBtnM3Q3" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
+                    <button id="stopBtnM3Q3" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
+                    <button id="submitM3Q3" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar audio"></button>
                 </div>
-                <p id="statusM3Q2" class="status-text"></p>
-                
-            </div>
-            <div id="m3Q2Placeholder" class="book-placeholder">
-                Elige una opción para activar este espacio de explicación.
+                <p id="statusM3Q3" class="status-text"></p>
             </div>
         </div>
         <span class="page-number page-number-left">15</span>
         <span class="page-number page-number-right">16</span>
     </div>
-    <!-- Story Spread 17-18 (¡Llegaste al final del cuento!) -->
-    <div class="page q1-book-spread activity-spread">
+    <!-- Story Spread 17-18 (Cierre con dos audios) -->
+    <div class="page q1-book-spread activity-spread" id="m4StorySpread">
         <div class="q1-left-page">
-            <h3>El reto final</h3>
-            <div class="book-story-card">
-                <p>Después de pensar con bolsitas y con sobres, Doña Aurora sonrió y le dijo a Daniel: "Ahora sí viene el reto final".</p>
-                <p>En cada igualdad falta un número escondido. Tu misión es descubrir cuál debe ir allí para que la igualdad sea verdadera.</p>
-                <p>Si lo haces con cuidado, verás que la idea del orden sigue apareciendo una y otra vez.</p>
+            <h3>Pregunta 6</h3>
+            <p class="m4-story-question">¿Habrá algún pedido que no permita encontrar sumas misteriosas? ¿Por qué?</p>
+            <div class="audio-controls">
+                <button id="recordBtnM4Q1" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
+                <button id="stopBtnM4Q1" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
+                <button id="submitM4Q1" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar audio"></button>
             </div>
+            <p id="statusM4Q1" class="status-text"></p>
         </div>
         <div class="spread-fold"></div>
-        <div class="q1-right-page magic-theme">
-            <p class="instruction magic-instruction">🔮 ¿Cuál es el número que hace que la igualdad sea verdadera?</p>
-            <div class="magic-lives-box">
-                <span class="magic-label">✨ Vidas mágicas:</span>
-                <div id="magicLives" class="magic-lives">
-                    <span class="magic-heart">❤️</span>
-                    <span class="magic-heart">❤️</span>
-                    <span class="magic-heart">❤️</span>
+        <div class="q1-right-page">
+            <div id="m4Q2Block" class="think-hidden">
+                <h3>Pregunta 7</h3>
+                <p class="m4-story-question">Graba un audio completando la oración:</p>
+                <p class="m4-story-sentence">Hoy con Andrés, descubrimos que __________________________________________________.</p>
+                <p class="m4-story-sentence">Esto funciona porque ________________________________________________________________.</p>
+                <div class="audio-controls">
+                    <button id="recordBtnM4Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
+                    <button id="stopBtnM4Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
+                    <button id="submitM4Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar audio"></button>
                 </div>
+                <p id="statusM4Q2" class="status-text"></p>
             </div>
-            <div id="itemsWrapper"></div>
-            <p id="moment4Status" class="status-text"></p>
-            <p id="pointsStatus" class="points-status"></p>
-            <canvas id="magicCanvas" class="magic-canvas"></canvas>
-            <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-            <div id="finalQuestionSection">
+
+            <div id="m4StoryFinalSection" class="think-hidden">
                 <div class="final-box">
-                    <h3>¡Felicitaciones! 🎉</h3>
-                    <p class="final-question">Ganaste <strong id="totalPoints">3</strong> puntos positivos</p>
-                    <p class="thank-you">¿El orden de los factores altera el producto o no?</p>
-                    <p class="thank-you-sub">¡Gracias por participar!</p>
+                    <h3>¡Felicitaciones, terminaste este cuento! 🎉</h3>
+                    <p class="thank-you">Serás redirigid@ al inicio en <strong id="m4RedirectCountdown">10</strong> segundos.</p>
+                    <p class="thank-you-sub">Gracias por participar.</p>
                 </div>
             </div>
         </div>
@@ -381,15 +405,15 @@
 <button id="prevBtn" class="nav-btn" aria-label="Pagina anterior">←</button>
 <button id="nextBtn" class="nav-btn" aria-label="Pagina siguiente">→</button>
 
-<!-- CONTENEDOR COCINA: bloque principal de la experiencia de cocina -->
-<div id="ContenedorCocina">
-    <!-- COCINA: Pantalla completa para el juego de bolsitas -->
-    <div id="cocinaScreen">
-        <div class="cocina-header">
+<!-- CONTENEDOR Mente de Andrés: bloque principal de la experiencia de organizacion de pedidos -->
+<div id="ContenedorMenteAndres">
+    <!-- MENTE DE ANDRÉS: Pantalla completa para el juego de organización de pedidos -->
+    <div id="menteAndresScreen">
+        <div class="mente-andres-header">
             <h2>En la mente de Andrés</h2>
             <p>Une por parejas los pedidos que tienen la misma cantidad de arepas</p>
         </div>
-        <div class="cocina-body">
+        <div class="mente-andres-body">
             <!-- Ambiente de panadería alrededor de la mesa -->
             <div class="bakery-kitchen-bg">
                 <div class="bakery-wall"></div>
@@ -399,15 +423,14 @@
                 <div class="bakery-floor"></div>
             </div>
         </div>
-        <div class="cocina-controls">
+        <div class="mente-andres-controls">
             <button id="verifyTraysBtnM1Q2" class="btn btn-primary">Verificar emparejamientos</button>
-            <p id="traysFeedbackM1Q2" class="feedback-text" hidden></p>
         </div>
     </div>
 </div>
 
 <script src="./assets/estudiantes-data.js"></script>
 <script src="./bags-system-0b.js"></script>
-<script type="module" src="./main-0b.js?v=2026041214"></script>
+<script type="module" src="./main-0b.js?v=2026041308"></script>
 </body>
 </html>

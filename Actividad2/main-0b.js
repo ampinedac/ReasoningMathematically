@@ -31,10 +31,11 @@ let m1q1Submitted = false;
 let m1q2Submitted = false;
 let m3q1Submitted = false;
 let m3q2Submitted = false;
+let m3q3Submitted = false;
 
-// Cocina completada
-let cocinaCompleted = false;
-let cocinaM0Completed = false;
+// Mente de Andres completada
+let menteAndresCompleted = false;
+let menteAndresM0Completed = false;
 let matchingCompleted = false;
 let matchingDrawLines = null; // callback para redibujar lazos al volver al spread
 
@@ -47,6 +48,7 @@ let m4Exercises = [];   // array con los 5 ejercicios generados
 let m4Patterns = [];    // patrón de posición de la caja por ejercicio
 let m4Finalized = false;
 let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
+let m4RedirectTimer = null;
 
 // Grabaciones de audio en vuelo
 const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
@@ -82,11 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudioRecorder('M1Q2');
     initAudioRecorder('M3Q1');
     initAudioRecorder('M3Q2');
+    initAudioRecorder('M3Q3');
+    initAudioRecorder('M4Q1');
+    initAudioRecorder('M4Q2');
     initAudioRecorder('M4Reflection');
-    initRadioSpreads();
+    initM3DualStepFlow();
     initMatchingActivity();
     initM1Q2ThinkFlow();
-    initCocinaSystem();
+    initMenteAndresSystem();
+    initM4StoryFlow();
     initM4();
     initEncuesta();
 });
@@ -99,7 +105,7 @@ function initVisibility() {
     hide('ContenedorConfirmacion');
     hide('ContenedorPortada');
     hide('ContenedorLibro');
-    hide('ContenedorCocina');
+    hide('ContenedorMenteAndres');
     hide('prevBtn');
     hide('nextBtn');
     // La sección derecha del spread 13-14 inicia oculta
@@ -110,9 +116,7 @@ function initVisibility() {
         const finalQ = document.getElementById('m1Q2FinalQuestion');
         if (finalQ) hide('m1Q2FinalQuestion');
     }
-    // Ocultar sección de audio M3 (se activa con los radios)
-    hide('promptSection1');
-    hide('promptSection2');
+    setM3Step16Visible(false);
     // Ocultar sección final M4
     hide('finalQuestionSection');
     hide('magicCanvas');
@@ -143,12 +147,10 @@ function show(id) {
         ContenedorConfirmacion: 'flex',
         ContenedorPortada: 'flex',
         ContenedorLibro: 'flex',
-        ContenedorCocina: 'block',
+        ContenedorMenteAndres: 'block',
         prevBtn: 'flex',
         nextBtn: 'flex',
         m1Q2FinalQuestion: 'block',
-        promptSection1: 'block',
-        promptSection2: 'block',
         finalQuestionSection: 'block',
         magicCanvas: 'block',
         confettiCanvas: 'block'
@@ -356,7 +358,7 @@ function getSpreads() {
 function goToSpread(index) {
     const spreads = getSpreads();
 
-    // Llamada de inicialización (mismo índice) o retorno desde cocina: mostrar sin animación
+    // Llamada de inicializacion (mismo indice) o retorno desde Mente de Andres: mostrar sin animacion
     if (index === currentSpread) {
         spreads.forEach((s, i) => {
             s.style.display = (i === index) ? 'flex' : 'none';
@@ -439,7 +441,7 @@ function updateNavButtons() {
 // spread 3 = página 7-8 → requiere m1q0Submitted
 // spread 5 = actividad de emparejamiento (11-12) → requiere m3q1Submitted
 // spread 6 = segunda actividad (13-14) → requiere m1q2Submitted
-// spread 7 = sobres 2 (15-16) → requiere m3q2Submitted
+// spread 7 = momentos 15-16 → requiere m3q3Submitted
 // spread 8 = reto final (17-18) → requiere m4Submitted
 function canAdvance() {
     const spreads = getSpreads();
@@ -450,10 +452,10 @@ function canAdvance() {
     }
 
     if (currentSpread === 3) return m1q0Submitted;
-    if (currentSpread === 4) return cocinaM0Completed;
+    if (currentSpread === 4) return menteAndresM0Completed;
     if (currentSpread === 5) return m3q1Submitted;
     if (currentSpread === 6) return m1q2Submitted;
-    if (currentSpread === 7) return m3q2Submitted;
+    if (currentSpread === 7) return m3q3Submitted;
     if (currentSpread === 8) return m4Submitted;
     return true;
 }
@@ -472,7 +474,10 @@ function initNavigation() {
 // ─────────────────────────────────────────────
 function initBoard() {
     initBoardCanvas('boardCanvasM1Q1');
+    initBoardCanvas('boardCanvasM1Q2');
     initBoardCanvas('boardCanvasM3Q1');
+    initBoardCanvas('boardCanvasM3Q2');
+    initBoardCanvas('boardCanvasM3Q3');
 }
 
 function initBoardCanvas(canvasId) {
@@ -647,7 +652,7 @@ function canvasToBlob(canvasId) {
 // ─────────────────────────────────────────────
 // 7. GRABACIÓN DE AUDIO (genérica por tag)
 // ─────────────────────────────────────────────
-// tag: 'M1Q1' | 'M1Q2' | 'M3Q1' | 'M3Q2' | 'M4Reflection'
+// tag: 'M1Q1' | 'M1Q2' | 'M3Q1' | 'M3Q2' | 'M3Q3' | 'M4Reflection'
 function initAudioRecorder(tag) {
     const recordBtn = document.getElementById(`recordBtn${tag}`);
     const stopBtn   = document.getElementById(`stopBtn${tag}`);
@@ -753,19 +758,22 @@ async function handleSubmit(tag) {
         const basePath = buildStorageBasePath(tag);
         const timestamp = Date.now();
 
-        // Para M3Q1 / M3Q2: leer la respuesta del radio y añadirla al nombre del archivo
+        // Nombres de archivo especiales para momentos de M3
         let audioFileName = `audio_${timestamp}`;
         let m3q1Answer = null;
         let m3q2Answer = null;
+        let m3q3Answer = null;
         if (tag === 'M3Q1') {
             m3q1Answer = 'las_ventas_misteriosas1';
             audioFileName = `audio_${timestamp}_las_ventas_misteriosas1`;
         }
         if (tag === 'M3Q2') {
-            const checked = document.querySelector('input[name="truthQ2"]:checked');
-            const labelMap = { yes: 'si', no: 'no', unsure: 'nose' };
-            m3q2Answer = checked ? (labelMap[checked.value] ?? checked.value) : 'sinrespuesta';
-            audioFileName = `audio_${timestamp}_${m3q2Answer}`;
+            m3q2Answer = 'momento_imaginar_pedidos';
+            audioFileName = `audio_${timestamp}_momento_imaginar_pedidos`;
+        }
+        if (tag === 'M3Q3') {
+            m3q3Answer = 'explicacion_a_la_abuela';
+            audioFileName = `audio_${timestamp}_explicacion_a_la_abuela`;
         }
 
         // Subir audio
@@ -775,9 +783,15 @@ async function handleSubmit(tag) {
 
         let imageURL = null;
 
-        // Si es M1Q1 también subir imagen del canvas
-        if (tag === 'M1Q1' || tag === 'M3Q1') {
-            const canvasId = tag === 'M3Q1' ? 'boardCanvasM3Q1' : 'boardCanvasM1Q1';
+        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
+        if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
+            const canvasId = tag === 'M3Q1'
+                ? 'boardCanvasM3Q1'
+                : (tag === 'M3Q2'
+                    ? 'boardCanvasM3Q2'
+                    : (tag === 'M3Q3'
+                        ? 'boardCanvasM3Q3'
+                        : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
             const canvasBlob = await canvasToBlob(canvasId);
             if (canvasBlob) {
                 const canvasName = tag === 'M3Q1'
@@ -802,6 +816,7 @@ async function handleSubmit(tag) {
             imageURL: imageURL || null,
             ...(m3q1Answer !== null && { m3q1Answer }),
             ...(m3q2Answer !== null && { m3q2Answer }),
+            ...(m3q3Answer !== null && { m3q3Answer }),
             timestamp: serverTimestamp()
         });
 
@@ -851,8 +866,94 @@ function markSubmitted(tag) {
     if (tag === 'M1Q1') m1q1Submitted = true;
     if (tag === 'M1Q2') m1q2Submitted = true;
     if (tag === 'M3Q1') m3q1Submitted = true;
-    if (tag === 'M3Q2') m3q2Submitted = true;
+    if (tag === 'M3Q2') {
+        m3q2Submitted = true;
+        setM3Step16Visible(true);
+    }
+    if (tag === 'M3Q3') m3q3Submitted = true;
+
+    if (tag === 'M4Q1') {
+        setM4Step2Visible(true);
+        const statusQ1 = document.getElementById('statusM4Q1');
+        if (statusQ1) {
+            statusQ1.textContent = '✅ Audio enviado. Ahora completa la pregunta 7.';
+            statusQ1.style.color = '#16a34a';
+        }
+    }
+
+    if (tag === 'M4Q2') {
+        m4Submitted = true;
+        showM4FinalAndRedirect();
+    }
+
     updateNavButtons();
+}
+
+function initM4StoryFlow() {
+    setM4Step2Visible(false);
+    const finalSection = document.getElementById('m4StoryFinalSection');
+    if (finalSection) finalSection.classList.add('think-hidden');
+}
+
+function setM4Step2Visible(visible) {
+    const q2Block = document.getElementById('m4Q2Block');
+    const recordBtnQ2 = document.getElementById('recordBtnM4Q2');
+    if (!q2Block) return;
+
+    if (visible) {
+        q2Block.classList.remove('think-hidden');
+        if (recordBtnQ2) recordBtnQ2.disabled = false;
+    } else {
+        q2Block.classList.add('think-hidden');
+        if (recordBtnQ2) recordBtnQ2.disabled = true;
+    }
+}
+
+function showM4FinalAndRedirect() {
+    const finalSection = document.getElementById('m4StoryFinalSection');
+    const q2Block = document.getElementById('m4Q2Block');
+    const countdownEl = document.getElementById('m4RedirectCountdown');
+    if (!finalSection || !countdownEl) return;
+
+    if (q2Block) q2Block.classList.add('think-hidden');
+    finalSection.classList.remove('think-hidden');
+
+    if (m4RedirectTimer) {
+        clearInterval(m4RedirectTimer);
+        m4RedirectTimer = null;
+    }
+
+    let seconds = 10;
+    countdownEl.textContent = String(seconds);
+
+    m4RedirectTimer = setInterval(() => {
+        seconds -= 1;
+        countdownEl.textContent = String(Math.max(0, seconds));
+
+        if (seconds <= 0) {
+            clearInterval(m4RedirectTimer);
+            m4RedirectTimer = null;
+            window.location.href = '../index.html';
+        }
+    }, 1000);
+}
+
+function setM3Step16Visible(visible) {
+    const locked = document.getElementById('m3q3LockedNotice');
+    const step16 = document.getElementById('m3q3StepContent');
+    if (!locked || !step16) return;
+
+    if (visible) {
+        locked.classList.add('think-hidden');
+        step16.classList.remove('think-hidden');
+    } else {
+        step16.classList.add('think-hidden');
+        locked.classList.remove('think-hidden');
+    }
+}
+
+function initM3DualStepFlow() {
+    setM3Step16Visible(false);
 }
 
 // ─────────────────────────────────────────────
@@ -905,7 +1006,7 @@ function initM1Q2ThinkFlow() {
         const gradId = `bombBodyGradient-${timerEl.id || Math.random().toString(36).slice(2)}`;
         timerEl.classList.add('bomb-timer');
         timerEl.innerHTML = `
-            <svg class="bomb-timer-svg" viewBox="0 0 96 68" aria-hidden="true" focusable="false">
+            <svg class="bomb-timer-svg" viewBox="0 0 128 98" aria-hidden="true" focusable="false">
                 <defs>
                     <radialGradient id="${gradId}" cx="36%" cy="30%" r="70%">
                         <stop offset="0%" stop-color="#4b5563"></stop>
@@ -913,12 +1014,19 @@ function initM1Q2ThinkFlow() {
                         <stop offset="100%" stop-color="#0f172a"></stop>
                     </radialGradient>
                 </defs>
-                <line class="bomb-fuse" x1="44" y1="26" x2="86" y2="8"></line>
-                <line class="bomb-fuse-burn" x1="44" y1="26" x2="86" y2="8"></line>
-                <circle class="bomb-spark" cx="86" cy="8" r="4"></circle>
-                <circle class="bomb-body" cx="36" cy="40" r="23" style="fill:url(#${gradId})"></circle>
-                <ellipse class="bomb-shine" cx="28" cy="31" rx="7" ry="5"></ellipse>
-                <rect class="bomb-cap" x="31" y="14" width="10" height="9" rx="2"></rect>
+                <ellipse class="bomb-floor" cx="102" cy="92" rx="22" ry="5"></ellipse>
+                <path class="bomb-fuse" d="M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32"></path>
+                <path class="bomb-fuse-char" d="M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32"></path>
+                <path class="bomb-fuse-burn" d="M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32"></path>
+                <circle class="bomb-spark" cx="104" cy="12" r="4"></circle>
+                <g class="bomb-explosion">
+                    <circle cx="46" cy="32" r="18" fill="rgba(251, 191, 36, 0.45)"></circle>
+                    <circle cx="46" cy="32" r="11" fill="rgba(249, 115, 22, 0.7)"></circle>
+                    <circle cx="46" cy="32" r="5" fill="rgba(239, 68, 68, 0.95)"></circle>
+                </g>
+                <circle class="bomb-body" cx="38" cy="47" r="23" style="fill:url(#${gradId})"></circle>
+                <ellipse class="bomb-shine" cx="30" cy="38" rx="7" ry="5"></ellipse>
+                <rect class="bomb-cap" x="34" y="22" width="10" height="10" rx="2"></rect>
             </svg>
             <span class="timer-text">${initial}</span>
         `;
@@ -936,6 +1044,14 @@ function initM1Q2ThinkFlow() {
 
         const burnProgress = Math.min(1, Math.max(0, 1 - (secondsLeft / totalSeconds)));
         timerEl.style.setProperty('--burn-progress', burnProgress.toString());
+
+        if (secondsLeft === 0 && timerEl.dataset.exploded !== '1') {
+            timerEl.dataset.exploded = '1';
+            timerEl.classList.add('is-exploding');
+            setTimeout(() => {
+                timerEl.classList.remove('is-exploding');
+            }, 760);
+        }
     };
 
     const showStep2Right = () => {
@@ -957,6 +1073,7 @@ function initM1Q2ThinkFlow() {
         if (thinkStatus) {
             thinkStatus.textContent = 'Se completaron los 3 minutos. Ya puedes continuar al paso 2.';
             thinkStatus.style.color = '#16a34a';
+            thinkStatus.classList.add('bomb-timer-complete');
         }
 
         showStep2Right();
@@ -971,6 +1088,7 @@ function initM1Q2ThinkFlow() {
         if (socialStatus) {
             socialStatus.textContent = 'Tiempo completado. Ya puedes grabar tu respuesta final.';
             socialStatus.style.color = '#16a34a';
+            socialStatus.classList.add('bomb-timer-complete');
         }
 
         rightContent.classList.add('think-hidden');
@@ -995,6 +1113,7 @@ function initM1Q2ThinkFlow() {
         thinkStartBtn.style.cursor = 'not-allowed';
 
         if (thinkStatus) {
+            thinkStatus.classList.remove('bomb-timer-complete');
             thinkStatus.textContent = 'Tiempo corriendo: piensa y escribe tus ideas.';
             thinkStatus.style.color = '#1d4ed8';
         }
@@ -1019,6 +1138,7 @@ function initM1Q2ThinkFlow() {
         step2ConversationBlock.classList.remove('think-hidden');
 
         if (socialStatus) {
+            socialStatus.classList.remove('bomb-timer-complete');
             socialStatus.textContent = 'Cuando inicies, conversen durante los 5 minutos completos.';
             socialStatus.style.color = '#1d4ed8';
         }
@@ -1032,7 +1152,8 @@ function initM1Q2ThinkFlow() {
         socialStartBtn.style.cursor = 'not-allowed';
 
         if (socialStatus) {
-            socialStatus.textContent = 'Conversación en curso: este tiempo no se puede terminar antes.';
+            socialStatus.classList.remove('bomb-timer-complete');
+            socialStatus.textContent = 'Conversación en curso: aprovecha este espacio para escuchar y compartir ideas.';
             socialStatus.style.color = '#1d4ed8';
         }
 
@@ -1053,19 +1174,58 @@ function initM1Q2ThinkFlow() {
 }
 
 // ─────────────────────────────────────────────
-// 9. SPREAD 13-14 – COCINA DE BOLSITAS
+// 9. SPREAD 13-14 – MENTE DE ANDRES (BOLSITAS)
 // ─────────────────────────────────────────────
-function initCocinaSystem() {
-    const gotoBtn    = document.getElementById('goToCocinaBtn');
-    const gotoBtnM0  = document.getElementById('goToCocinaBtnM0');
+function initMenteAndresSystem() {
+    const gotoBtn    = document.getElementById('goToMenteAndresBtn');
+    const gotoBtnM0  = document.getElementById('goToMenteAndresBtnM0');
     const verifyBtn  = document.getElementById('verifyTraysBtnM1Q2');
-    const feedbackEl = document.getElementById('traysFeedbackM1Q2');
     const traysImage = document.getElementById('bandejasFotoM1Q2');
 
     let traysSystem = null;
     let returnSpread = 6;
+    let menteAndresNoticeTimer = null;
 
-    const openCocina = (targetSpread) => {
+    function showMenteAndresNotice(message, type = 'success', durationMs = 2400, onDone = null) {
+        const menteAndresScreen = document.getElementById('menteAndresScreen');
+        if (!menteAndresScreen) {
+            if (typeof onDone === 'function') onDone();
+            return;
+        }
+
+        const oldNotice = document.getElementById('menteAndresFloatingNotice');
+        if (oldNotice) oldNotice.remove();
+        if (menteAndresNoticeTimer) {
+            clearTimeout(menteAndresNoticeTimer);
+            menteAndresNoticeTimer = null;
+        }
+
+        const notice = document.createElement('div');
+        notice.id = 'menteAndresFloatingNotice';
+        notice.className = `mente-andres-floating-notice ${type}`;
+        notice.setAttribute('role', 'status');
+        notice.setAttribute('aria-live', 'polite');
+
+        const icon = type === 'success' ? '✅' : '⚠️';
+        notice.innerHTML = `
+            <div class="mente-andres-floating-notice-card">
+                <span class="mente-andres-floating-notice-icon">${icon}</span>
+                <p class="mente-andres-floating-notice-text">${message}</p>
+            </div>
+        `;
+
+        menteAndresScreen.appendChild(notice);
+
+        menteAndresNoticeTimer = setTimeout(() => {
+            notice.classList.add('hide');
+            setTimeout(() => {
+                notice.remove();
+                if (typeof onDone === 'function') onDone();
+            }, 280);
+        }, durationMs);
+    }
+
+    const openMenteAndres = (targetSpread) => {
         returnSpread = targetSpread;
 
         // Inicializar sistema de bolsitas si no existe
@@ -1077,15 +1237,22 @@ function initCocinaSystem() {
             }
         }
 
+        const oldNotice = document.getElementById('menteAndresFloatingNotice');
+        if (oldNotice) oldNotice.remove();
+        if (menteAndresNoticeTimer) {
+            clearTimeout(menteAndresNoticeTimer);
+            menteAndresNoticeTimer = null;
+        }
+
         if (traysImage) traysImage.style.display = 'none';
         hide('ContenedorLibro');
         hide('prevBtn');
         hide('nextBtn');
-        show('ContenedorCocina');
+        show('ContenedorMenteAndres');
     };
 
-    gotoBtn?.addEventListener('click', () => openCocina(6));
-    gotoBtnM0?.addEventListener('click', () => openCocina(4));
+    gotoBtn?.addEventListener('click', () => openMenteAndres(6));
+    gotoBtnM0?.addEventListener('click', () => openMenteAndres(4));
 
     verifyBtn?.addEventListener('click', () => {
         if (!traysSystem) return;
@@ -1098,17 +1265,17 @@ function initCocinaSystem() {
         const totalPaired = results.length;
 
         if (allCorrect) {
-            if (feedbackEl) {
-                feedbackEl.textContent = '✅ ¡Perfecto! Emparejaste las bolsitas correctas y dejaste sin pareja las que no la tienen.';
-                feedbackEl.style.color = '#16a34a';
-            }
-            setTimeout(() => {
-                hide('ContenedorCocina');
+            showMenteAndresNotice(
+                '¡Perfecto! Emparejaste las bolsitas correctas y dejaste sin pareja las que no la tienen. Te llevaremos al libro.',
+                'success',
+                4000,
+                () => {
+                hide('ContenedorMenteAndres');
                 show('ContenedorLibro');
                 show('prevBtn');
                 show('nextBtn');
                 if (traysImage) traysImage.style.display = 'block';
-                cocinaCompleted = true;
+                menteAndresCompleted = true;
 
                 if (returnSpread === 6) {
                     show('m1Q2FinalQuestion');
@@ -1118,11 +1285,12 @@ function initCocinaSystem() {
                 }
 
                 if (returnSpread === 4) {
-                    cocinaM0Completed = true;
+                    menteAndresM0Completed = true;
                 }
 
                 goToSpread(returnSpread);
-            }, 1000);
+                }
+            );
         } else {
             const wrongCount = results.filter(r => !r.isCorrect).length;
             const missingPairs = Math.max(0, 3 - totalPaired);
@@ -1138,10 +1306,7 @@ function initCocinaSystem() {
                 msg += 'Recuerda que hay dos bolsitas que deben quedar sin pareja.';
             }
 
-            if (feedbackEl) {
-                feedbackEl.textContent = msg || 'Revisa los emparejamientos.';
-                feedbackEl.style.color = '#dc2626';
-            }
+            showMenteAndresNotice(msg || 'Revisa los emparejamientos.', 'error', 3200);
         }
     });
 }
@@ -1570,37 +1735,6 @@ function initMatchingActivity() {
 
     matchingDrawLines = drawLines;
     window.addEventListener('resize', drawLines);
-}
-
-// ─────────────────────────────────────────────
-// 11. SPREADS CON RADIOS – PLACEHOLDERS Y PROMPTS
-// ─────────────────────────────────────────────
-function initRadioSpreads() {
-    setupRadioSpread(
-        'truthQ1',
-        'promptSection1', 'm3Q1Placeholder', 'promptText1'
-    );
-    setupRadioSpread(
-        'truthQ2',
-        'promptSection2', 'm3Q2Placeholder', 'promptText2'
-    );
-}
-
-const PROMPTS = {
-    yes:    '¿Por qué crees que es verdadera? Explica.',
-    no:     '¿Por qué crees que es falsa? ¿Tienes un ejemplo? Explica.',
-    unsure: '¿Qué te hace dudar? Explica.'
-};
-
-function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
-    document.querySelectorAll(`input[name="${radioName}"]`).forEach(radio => {
-        radio.addEventListener('change', () => {
-            const text = document.getElementById(textId);
-            if (text) text.textContent = PROMPTS[radio.value] || '';
-            show(sectionId);
-            hide(placeholderId);
-        });
-    });
 }
 
 // ─────────────────────────────────────────────
