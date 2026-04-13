@@ -649,6 +649,17 @@ function canvasToBlob(canvasId) {
     });
 }
 
+function isCanvasBlank(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return true;
+    const ctx = canvas.getContext('2d');
+    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < data.length; i += 4) {
+        if (data[i] < 250 || data[i + 1] < 250 || data[i + 2] < 250) return false;
+    }
+    return true;
+}
+
 // ─────────────────────────────────────────────
 // 7. GRABACIÓN DE AUDIO (genérica por tag)
 // ─────────────────────────────────────────────
@@ -744,6 +755,14 @@ async function handleSubmit(tag) {
     const audioBlob = audioState[tag]?.blob;
 
     if (!audioBlob) return;
+
+    if (tag === 'M1Q2' && isCanvasBlank('boardCanvasM1Q2')) {
+        if (statusEl) {
+            statusEl.textContent = 'Escribe el ejemplo en el tablero para continuar.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.4';
@@ -876,7 +895,7 @@ function markSubmitted(tag) {
         setM4Step2Visible(true);
         const statusQ1 = document.getElementById('statusM4Q1');
         if (statusQ1) {
-            statusQ1.textContent = '✅ Audio enviado. Ahora completa la pregunta 7.';
+            statusQ1.textContent = '✅ Audio enviado. Ahora completa el segundo audio.';
             statusQ1.style.color = '#16a34a';
         }
     }
@@ -909,6 +928,25 @@ function setM4Step2Visible(visible) {
     }
 }
 
+function createConfetti() {
+    const container = document.getElementById('confetti-container');
+    if (!container) return;
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE'];
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 10 + 5) + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+        confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+        container.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3500);
+    }
+}
+
 function showM4FinalAndRedirect() {
     const finalSection = document.getElementById('m4StoryFinalSection');
     const q2Block = document.getElementById('m4Q2Block');
@@ -917,6 +955,7 @@ function showM4FinalAndRedirect() {
 
     if (q2Block) q2Block.classList.add('think-hidden');
     finalSection.classList.remove('think-hidden');
+    createConfetti();
 
     if (m4RedirectTimer) {
         clearInterval(m4RedirectTimer);
@@ -939,16 +978,12 @@ function showM4FinalAndRedirect() {
 }
 
 function setM3Step16Visible(visible) {
-    const locked = document.getElementById('m3q3LockedNotice');
     const step16 = document.getElementById('m3q3StepContent');
-    if (!locked || !step16) return;
-
+    if (!step16) return;
     if (visible) {
-        locked.classList.add('think-hidden');
         step16.classList.remove('think-hidden');
     } else {
         step16.classList.add('think-hidden');
-        locked.classList.remove('think-hidden');
     }
 }
 
@@ -1014,19 +1049,19 @@ function initM1Q2ThinkFlow() {
                         <stop offset="100%" stop-color="#0f172a"></stop>
                     </radialGradient>
                 </defs>
-                <ellipse class="bomb-floor" cx="102" cy="92" rx="22" ry="5"></ellipse>
-                <path class="bomb-fuse" d="M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32"></path>
-                <path class="bomb-fuse-char" d="M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32"></path>
-                <path class="bomb-fuse-burn" d="M104 12 C114 26, 104 44, 94 60 C86 73, 74 76, 63 62 C56 53, 50 42, 46 32"></path>
-                <circle class="bomb-spark" cx="104" cy="12" r="4"></circle>
+                <ellipse class="bomb-floor" cx="46" cy="91" rx="22" ry="5"></ellipse>
+                <path class="bomb-fuse" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C52 52, 50 40, 46 27"></path>
+                <path class="bomb-fuse-char" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C52 52, 50 40, 46 27"></path>
+                <path class="bomb-fuse-burn" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C52 52, 50 40, 46 27"></path>
+                <circle class="bomb-spark" cx="110" cy="88" r="4"></circle>
                 <g class="bomb-explosion">
-                    <circle cx="46" cy="32" r="18" fill="rgba(251, 191, 36, 0.45)"></circle>
-                    <circle cx="46" cy="32" r="11" fill="rgba(249, 115, 22, 0.7)"></circle>
-                    <circle cx="46" cy="32" r="5" fill="rgba(239, 68, 68, 0.95)"></circle>
+                    <circle cx="46" cy="34" r="18" fill="rgba(251, 191, 36, 0.45)"></circle>
+                    <circle cx="46" cy="34" r="11" fill="rgba(249, 115, 22, 0.7)"></circle>
+                    <circle cx="46" cy="34" r="5" fill="rgba(239, 68, 68, 0.95)"></circle>
                 </g>
-                <circle class="bomb-body" cx="38" cy="47" r="23" style="fill:url(#${gradId})"></circle>
-                <ellipse class="bomb-shine" cx="30" cy="38" rx="7" ry="5"></ellipse>
-                <rect class="bomb-cap" x="34" y="22" width="10" height="10" rx="2"></rect>
+                <circle class="bomb-body" cx="46" cy="62" r="23" style="fill:url(#${gradId})"></circle>
+                <ellipse class="bomb-shine" cx="38" cy="53" rx="7" ry="5"></ellipse>
+                <rect class="bomb-cap" x="41" y="27" width="10" height="14" rx="2"></rect>
             </svg>
             <span class="timer-text">${initial}</span>
         `;
@@ -1044,6 +1079,29 @@ function initM1Q2ThinkFlow() {
 
         const burnProgress = Math.min(1, Math.max(0, 1 - (secondsLeft / totalSeconds)));
         timerEl.style.setProperty('--burn-progress', burnProgress.toString());
+
+        const svg = timerEl.querySelector('.bomb-timer-svg');
+        if (svg) {
+            const fusePath = svg.querySelector('.bomb-fuse');
+            const charPath = svg.querySelector('.bomb-fuse-char');
+            const burnPath = svg.querySelector('.bomb-fuse-burn');
+            const spark    = svg.querySelector('.bomb-spark');
+            if (fusePath && charPath && burnPath && spark) {
+                const len = fusePath.getTotalLength();
+                if (len > 0) {
+                    const progressLen = burnProgress * len;
+                    const point       = fusePath.getPointAtLength(progressLen);
+                    spark.setAttribute('cx', point.x.toFixed(2));
+                    spark.setAttribute('cy', point.y.toFixed(2));
+                    charPath.style.strokeDasharray  = `${progressLen.toFixed(1)} ${len.toFixed(1)}`;
+                    charPath.style.strokeDashoffset = '0';
+                    const glowLen   = Math.min(16, progressLen);
+                    const glowStart = progressLen - glowLen;
+                    burnPath.style.strokeDasharray  = `${glowLen.toFixed(1)} ${len.toFixed(1)}`;
+                    burnPath.style.strokeDashoffset = `${(-glowStart).toFixed(1)}`;
+                }
+            }
+        }
 
         if (secondsLeft === 0 && timerEl.dataset.exploded !== '1') {
             timerEl.dataset.exploded = '1';
