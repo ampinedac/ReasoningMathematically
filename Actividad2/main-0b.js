@@ -950,14 +950,14 @@ function initSpread13Table() {
     if (!bank || !statusEl || dropzones.length === 0) return;
 
     const TOKENS = [
-        { id: 't30a', text: '2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2', total: 30, column: 'aurora' },
-        { id: 't30b', text: '15 + 15', total: 30, column: 'andres' },
-        { id: 't12a', text: '4 + 4 + 4', total: 12, column: 'aurora' },
-        { id: 't18a', text: '6 + 6 + 6', total: 18, column: 'aurora' },
-        { id: 't16a', text: '8 + 8', total: 16, column: 'aurora' },
-        { id: 't12b', text: '3 + 3 + 3 + 3', total: 12, column: 'andres' },
-        { id: 't18b', text: '3 + 3 + 3 + 3 + 3 + 3', total: 18, column: 'andres' },
-        { id: 't16b', text: '2 + 2 + 2 + 2 + 2 + 2 + 2 + 2', total: 16, column: 'andres' }
+        { id: 't30a', text: '2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2', total: 30 },
+        { id: 't30b', text: '15 + 15', total: 30 },
+        { id: 't12a', text: '4 + 4 + 4', total: 12 },
+        { id: 't18a', text: '6 + 6 + 6', total: 18 },
+        { id: 't16a', text: '8 + 8', total: 16 },
+        { id: 't12b', text: '3 + 3 + 3 + 3', total: 12 },
+        { id: 't18b', text: '3 + 3 + 3 + 3 + 3 + 3', total: 18 },
+        { id: 't16b', text: '2 + 2 + 2 + 2 + 2 + 2 + 2 + 2', total: 16 }
     ];
 
     const placed = new Map();
@@ -976,7 +976,6 @@ function initSpread13Table() {
         token.draggable = true;
         token.textContent = tokenData.text;
         token.dataset.total = String(tokenData.total);
-        token.dataset.column = tokenData.column;
         token.addEventListener('dragstart', (e) => {
             e.dataTransfer?.setData('text/plain', tokenData.id);
             token.classList.add('dragging');
@@ -1013,9 +1012,8 @@ function initSpread13Table() {
             if (!token) return;
 
             const totalOk = Number(token.dataset.total) === Number(zone.dataset.total);
-            const colOk = token.dataset.column === zone.dataset.column;
 
-            if (!totalOk || !colOk) {
+            if (!totalOk) {
                 token.classList.add('wrong-drop');
                 setTimeout(() => token.classList.remove('wrong-drop'), 260);
                 statusEl.textContent = 'Esa ficha no corresponde a ese espacio.';
