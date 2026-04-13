@@ -1468,8 +1468,35 @@ function initMatchingActivity() {
             const pR = pAnchor.getBoundingClientRect();
             const sR = sEl.getBoundingClientRect();
 
-            const x1 = pR.right  - sr.left - 6;
-            const y1 = pR.top    - sr.top + pR.height / 2;
+            let renderedLeft = pR.left;
+            let renderedRight = pR.right;
+            let renderedTop = pR.top;
+            let renderedHeight = pR.height;
+
+            // Ajustar al contenido realmente visible del IMG (sin bandas vacías por object-fit: contain).
+            if (pAnchor.tagName === 'IMG' && pAnchor.naturalWidth > 0 && pAnchor.naturalHeight > 0) {
+                const boxW = pR.width;
+                const boxH = pR.height;
+                const boxRatio = boxW / boxH;
+                const imgRatio = pAnchor.naturalWidth / pAnchor.naturalHeight;
+
+                if (imgRatio > boxRatio) {
+                    // Ocupa todo el ancho; se centra verticalmente.
+                    const renderedH = boxW / imgRatio;
+                    const offsetY = (boxH - renderedH) / 2;
+                    renderedTop = pR.top + offsetY;
+                    renderedHeight = renderedH;
+                } else {
+                    // Ocupa todo el alto; se centra horizontalmente.
+                    const renderedW = boxH * imgRatio;
+                    const offsetX = (boxW - renderedW) / 2;
+                    renderedLeft = pR.left + offsetX;
+                    renderedRight = renderedLeft + renderedW;
+                }
+            }
+
+            const x1 = renderedRight - sr.left - 1;
+            const y1 = renderedTop - sr.top + renderedHeight / 2;
             const x2 = sR.left   - sr.left + 2;
             const y2 = sR.top    - sr.top + sR.height / 2;
             const cx = (x1 + x2) / 2;

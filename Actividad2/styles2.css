@@ -883,7 +883,7 @@ body #ContenedorLibro .activity-spread {
             top: 0; left: 0;
             width: 100%; height: 100%;
             pointer-events: none;
-          z-index: 40;
+          z-index: 120;
             overflow: visible;
         }
 
@@ -982,7 +982,7 @@ body #ContenedorLibro .activity-spread {
         }
         .match-sum-text {
             font-family: 'Rancho', cursive;
-          font-size: clamp(1.08rem, 1.75vw, 1.4rem);
+          font-size: clamp(1.3rem, 2.1vw, 1.7rem);
             color: #7c2d12;
             letter-spacing: 0.03em;
           line-height: 1.05;
