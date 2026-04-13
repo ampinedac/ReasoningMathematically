@@ -399,7 +399,7 @@ function goToSpread(index) {
         setTimeout(() => {
             foldInPage.classList.remove('anim-flip-in');
             isFlipping = false;
-            if (index === 6 && typeof matchingDrawLines === 'function') matchingDrawLines();
+            if (index === 5 && typeof matchingDrawLines === 'function') matchingDrawLines();
         }, 320);
 
     }, 320);
@@ -434,11 +434,11 @@ function updateNavButtons() {
 }
 
 // Regla de qué spreads requieren submit para avanzar (índices 0-based):
-// spread 4 = página 9-10 → requiere m1q0Submitted
-// spread 6 = actividad de emparejamiento (13-14) → requiere m3q1Submitted
-// spread 7 = segunda actividad → requiere m1q2Submitted
-// spread 8 = sobres 2 → requiere m3q2Submitted
-// spread 9 = reto final → requiere m4Submitted
+// spread 3 = página 7-8 → requiere m1q0Submitted
+// spread 5 = actividad de emparejamiento (11-12) → requiere m3q1Submitted
+// spread 6 = segunda actividad (13-14) → requiere m1q2Submitted
+// spread 7 = sobres 2 (15-16) → requiere m3q2Submitted
+// spread 8 = reto final (17-18) → requiere m4Submitted
 function canAdvance() {
     const spreads = getSpreads();
     if (currentSpread >= spreads.length - 1) {
@@ -447,11 +447,11 @@ function canAdvance() {
         return checked.length >= 1;
     }
 
-    if (currentSpread === 4) return m1q0Submitted;
-    if (currentSpread === 6) return m3q1Submitted;
-    if (currentSpread === 7) return m1q2Submitted;
-    if (currentSpread === 8) return m3q2Submitted;
-    if (currentSpread === 9) return m4Submitted;
+    if (currentSpread === 3) return m1q0Submitted;
+    if (currentSpread === 5) return m3q1Submitted;
+    if (currentSpread === 6) return m1q2Submitted;
+    if (currentSpread === 7) return m3q2Submitted;
+    if (currentSpread === 8) return m4Submitted;
     return true;
 }
 
@@ -863,7 +863,7 @@ function initCocinaSystem() {
     const traysImage = document.getElementById('bandejasFotoM1Q2');
 
     let traysSystem = null;
-    let returnSpread = 7;
+    let returnSpread = 6;
 
     const openCocina = (targetSpread) => {
         returnSpread = targetSpread;
@@ -884,8 +884,8 @@ function initCocinaSystem() {
         show('ContenedorCocina');
     };
 
-    gotoBtn?.addEventListener('click', () => openCocina(7));
-    gotoBtnM0?.addEventListener('click', () => openCocina(5));
+    gotoBtn?.addEventListener('click', () => openCocina(6));
+    gotoBtnM0?.addEventListener('click', () => openCocina(4));
 
     verifyBtn?.addEventListener('click', () => {
         if (!traysSystem) return;
@@ -910,7 +910,7 @@ function initCocinaSystem() {
                 if (traysImage) traysImage.style.display = 'block';
                 cocinaCompleted = true;
 
-                if (returnSpread === 7) {
+                if (returnSpread === 6) {
                     show('m1Q2FinalQuestion');
                     // Iniciar grabador M1Q2
                     const recordBtn = document.getElementById('recordBtnM1Q2');
@@ -1146,7 +1146,7 @@ function createTraysSystem(containerId) {
 }
 
 // ─────────────────────────────────────────────
-// 10. SPREAD 17-18 – ACTIVIDAD: UNE PAREJAS CON SUMAS MISTERIOSAS
+// 10. SPREAD 11-12 – ACTIVIDAD: UNE PAREJAS CON SUMAS MISTERIOSAS
 // ─────────────────────────────────────────────
 function initMatchingActivity() {
     const pairsEl    = document.getElementById('matchingPairs');
@@ -1341,7 +1341,7 @@ function initMatchingActivity() {
 }
 
 // ─────────────────────────────────────────────
-// 11. SPREADS 15-16 y 19-20 – RADIOS + PLACEHOLDER
+// 11. SPREADS CON RADIOS – PLACEHOLDERS Y PROMPTS
 // ─────────────────────────────────────────────
 function initRadioSpreads() {
     setupRadioSpread(
@@ -1372,7 +1372,7 @@ function setupRadioSpread(radioName, sectionId, placeholderId, textId) {
 }
 
 // ─────────────────────────────────────────────
-// 11. SPREAD 19-20 – EJERCICIOS DE CONMUTATIVIDAD
+// 11. SPREAD 17-18 – EJERCICIOS DE CONMUTATIVIDAD
 // ─────────────────────────────────────────────
 function initM4() {
     m4Submitted = false;
@@ -1644,7 +1644,7 @@ async function finalizeM4() {
 }
 
 // ─────────────────────────────────────────────
-// 12. SPREAD 21-22 – ENCUESTA (Google Forms)
+// 12. SPREAD 19-20 – ENCUESTA (Google Forms)
 // ─────────────────────────────────────────────
 const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc30-KG8YdvHtJ_JFrn385BtNNLcaGsjvzxz2d5m5xKQYe0Gg/viewform';
 const GOOGLE_FORM_RESPONSE_URL = GOOGLE_FORM_URL.replace('/viewform', '/formResponse');
