@@ -1632,14 +1632,55 @@ body #ContenedorLibro .activity-spread {
           gap: 0.55rem;
         }
 
+        .m4-final-story-card {
+          width: min(94%, 620px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.85rem;
+          background: rgba(255, 255, 255, 0.5);
+          border: 2px solid rgba(147, 197, 253, 0.8);
+          border-radius: 16px;
+          padding: 0.75rem;
+        }
+
+        .m4-final-photo {
+          width: min(88%, 430px);
+          max-height: 50vh;
+          object-fit: contain;
+          border-radius: 14px;
+          box-shadow: 0 10px 25px rgba(30, 64, 175, 0.18);
+        }
+
+        .m4-final-story-text {
+          margin: 0;
+          width: 94%;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.55rem, 2.2vw, 2.1rem);
+          line-height: 1.18;
+          color: #123d77;
+        }
+
+        #m4StoryFinalSection {
+          position: relative;
+          overflow: hidden;
+        }
+
         .confetti-canvas {
-          position: fixed;
+          position: absolute;
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
           pointer-events: none;
-          z-index: 1000;
+          z-index: 2;
+        }
+
+        #m4StoryFinalSection .final-box {
+          position: relative;
+          z-index: 3;
         }
 
         @keyframes confetti-fall {
@@ -1650,7 +1691,7 @@ body #ContenedorLibro .activity-spread {
         }
 
         .confetti {
-          position: fixed;
+          position: absolute;
           pointer-events: none;
           animation: confetti-fall 3s ease-in forwards;
         }

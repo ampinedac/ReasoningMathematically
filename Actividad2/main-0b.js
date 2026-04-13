@@ -50,6 +50,7 @@ let m4Patterns = [];    // patrón de posición de la caja por ejercicio
 let m4Finalized = false;
 let m4AttemptsOnCurrent = 0; // intentos fallidos en el ejercicio actual
 let m4RedirectTimer = null;
+let m4StoryCountdownStarted = false;
 
 // Grabaciones de audio en vuelo
 const audioState = {};  // key: tag →  { mediaRecorder, chunks, blob }
@@ -430,9 +431,22 @@ function goToSpread(index) {
             foldInPage.classList.remove('anim-flip-in');
             isFlipping = false;
             if (index === 5 && typeof matchingDrawLines === 'function') matchingDrawLines();
+            if (index === 9) maybeStartM4StoryFinalFlow();
         }, 320);
 
     }, 320);
+}
+
+function maybeStartM4StoryFinalFlow() {
+    const spread = document.getElementById('m4StorySpread');
+    if (!spread) return;
+
+    const hasM4Q2 = !!document.getElementById('m4Q2Block');
+    if (hasM4Q2) return;
+
+    m4Submitted = true;
+    showM4FinalAndRedirect();
+    updateNavButtons();
 }
 
 function updateNavButtons() {
@@ -1103,7 +1117,8 @@ function markSubmitted(tag) {
 }
 
 function initM4StoryFlow() {
-    setM4Step2Visible(false);
+    const hasM4Q1 = !!document.getElementById('recordBtnM4Q1');
+    setM4Step2Visible(!hasM4Q1);
     const finalSection = document.getElementById('m4StoryFinalSection');
     if (finalSection) finalSection.classList.add('think-hidden');
 }
@@ -1125,6 +1140,7 @@ function setM4Step2Visible(visible) {
 function createConfetti() {
     const container = document.getElementById('confetti-container');
     if (!container) return;
+    container.innerHTML = '';
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE'];
     for (let i = 0; i < 50; i++) {
         const confetti = document.createElement('div');
@@ -1149,6 +1165,10 @@ function showM4FinalAndRedirect() {
 
     if (q2Block) q2Block.classList.add('think-hidden');
     finalSection.classList.remove('think-hidden');
+
+    if (m4StoryCountdownStarted) return;
+    m4StoryCountdownStarted = true;
+
     createConfetti();
 
     if (m4RedirectTimer) {
@@ -1166,7 +1186,7 @@ function showM4FinalAndRedirect() {
         if (seconds <= 0) {
             clearInterval(m4RedirectTimer);
             m4RedirectTimer = null;
-            window.location.href = '../index.html';
+            window.location.replace(new URL('../index.html', window.location.href).href);
         }
     }, 1000);
 }
