@@ -11,16 +11,14 @@ class TraysSystem {
             throw new Error(`Container #${containerId} no encontrado`);
         }
         
-        // Datos base de los 8 pedidos (Actividad 0B)
+        // Datos base de los pedidos (Actividad 0B)
         this.BASE_TRAYS = [
-            { id: 'tray-1', pedido: 1, bags: 5, itemsPerBag: 4, total: 20 },
-            { id: 'tray-2', pedido: 2, bags: 3, itemsPerBag: 5, total: 15 },
-            { id: 'tray-3', pedido: 3, bags: 4, itemsPerBag: 2, total: 8 },
-            { id: 'tray-4', pedido: 4, bags: 5, itemsPerBag: 6, total: 30 },
-            { id: 'tray-5', pedido: 5, bags: 6, itemsPerBag: 4, total: 24 },
-            { id: 'tray-6', pedido: 6, bags: 5, itemsPerBag: 3, total: 15 },
-            { id: 'tray-7', pedido: 7, bags: 2, itemsPerBag: 4, total: 8 },
-            { id: 'tray-8', pedido: 8, bags: 6, itemsPerBag: 5, total: 30 }
+            { id: 'tray-1', pedido: 1, bags: 3, itemsPerBag: 5, total: 15 },
+            { id: 'tray-2', pedido: 2, bags: 4, itemsPerBag: 2, total: 8 },
+            { id: 'tray-3', pedido: 3, bags: 5, itemsPerBag: 6, total: 30 },
+            { id: 'tray-4', pedido: 4, bags: 5, itemsPerBag: 3, total: 15 },
+            { id: 'tray-5', pedido: 5, bags: 2, itemsPerBag: 4, total: 8 },
+            { id: 'tray-6', pedido: 6, bags: 6, itemsPerBag: 5, total: 30 }
         ];
         
         // Estado de emparejamiento (Map bidireccional)
@@ -45,7 +43,7 @@ class TraysSystem {
         this.setupEventListeners();
     }
     
-    // Limpiar y renderizar los 8 pedidos
+    // Limpiar y renderizar los pedidos
     render() {
         // CRÍTICO: Limpiar contenedor primero
         this.container.innerHTML = '';
@@ -57,7 +55,7 @@ class TraysSystem {
             this.container.appendChild(trayElement);
         });
         
-        console.log('8 pedidos renderizados correctamente');
+        console.log(`${orderedTrays.length} pedidos renderizados correctamente`);
     }
     
     // Crear tarjeta visual de pedido
@@ -259,7 +257,9 @@ class TraysSystem {
     // Emparejar o desemparejar (toggle)
     togglePairing(id1, id2) {
         if (id1 === id2) return;
-        
+
+        this.clearSelection();
+
         const tray1 = document.getElementById(id1);
         const tray2 = document.getElementById(id2);
         
@@ -283,6 +283,13 @@ class TraysSystem {
         }
     }
     
+    clearSelection() {
+        if (this.selectedTray) {
+            this.selectedTray.classList.remove('selected');
+            this.selectedTray = null;
+        }
+    }
+
     // Emparejar dos bandejas
     pair(id1, id2) {
         this.pairings.set(id1, id2);
@@ -418,7 +425,6 @@ class TraysSystem {
     validatePairings() {
         const pairs = this.getPairings();
         const pairResults = [];
-        const EXPECTED_UNPAIRED_TOTALS = new Set([20, 24]);
         
         for (const [id1, id2] of pairs) {
             const tray1Data = this.BASE_TRAYS.find(t => t.id === id1);
@@ -438,10 +444,7 @@ class TraysSystem {
 
         return {
             pairResults,
-            unpairedTrays,
-            hasExpectedSingles:
-                unpairedTrays.length === 2 &&
-                unpairedTrays.every(tray => EXPECTED_UNPAIRED_TOTALS.has(tray.total))
+            unpairedTrays
         };
     }
     

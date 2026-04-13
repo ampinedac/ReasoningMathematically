@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortada();
     initNavigation();
     initBoard();
-    initAudioRecorder('M1Q0');
+    initTableM1Q0();
     initAudioRecorder('M1Q1');
     initAudioRecorder('M1Q2');
     initAudioRecorder('M3Q1');
@@ -885,6 +885,58 @@ async function handleSubmit(tag) {
     }
 }
 
+function initTableM1Q0() {
+    const btn = document.getElementById('checkTableBtn');
+    const statusEl = document.getElementById('statusTableM1Q0');
+    if (!btn || !statusEl) return;
+
+    const ANSWERS = {
+        aurora:  [3, 7, 21],
+        andres:  [7, 3, 21]
+    };
+    const ids = [
+        't_aurora_platos', 't_aurora_porplato', 't_aurora_total',
+        't_andres_platos', 't_andres_porplato', 't_andres_total'
+    ];
+
+    btn.addEventListener('click', function () {
+        const inputs = ids.map(id => document.getElementById(id));
+        const values = inputs.map(el => el ? el.value.trim() : '');
+
+        // Verificar que todos estén llenos
+        if (values.some(v => v === '')) {
+            statusEl.textContent = 'Falta algo por llenar.';
+            statusEl.style.color = '#b45309';
+            return;
+        }
+
+        const auroraNums = values.slice(0, 3).map(Number);
+        const andresNums = values.slice(3, 6).map(Number);
+
+        const auroraOk = ANSWERS.aurora.every((v, i) => auroraNums[i] === v);
+        const andresOk = ANSWERS.andres.every((v, i) => andresNums[i] === v);
+
+        // Marcar visual por campo
+        inputs.forEach((el, i) => {
+            if (!el) return;
+            const expected = i < 3 ? ANSWERS.aurora[i] : ANSWERS.andres[i - 3];
+            el.classList.toggle('correct', Number(el.value) === expected);
+            el.classList.toggle('incorrect', Number(el.value) !== expected);
+        });
+
+        if (auroraOk && andresOk) {
+            m1q0Submitted = true;
+            statusEl.textContent = '¡Correcto! Puedes continuar.';
+            statusEl.style.color = '#16a34a';
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
+        } else {
+            statusEl.textContent = 'Revisa los valores incorrectos e intenta de nuevo.';
+            statusEl.style.color = '#dc2626';
+        }
+    });
+}
+
 function markSubmitted(tag) {
     if (tag === 'M1Q0') m1q0Submitted = true;
     if (tag === 'M1Q1') m1q1Submitted = true;
@@ -1321,15 +1373,15 @@ function initMenteAndresSystem() {
         if (!traysSystem) return;
         const rawValidation = traysSystem.validatePairings();
         const validation = Array.isArray(rawValidation)
-            ? { pairResults: rawValidation, hasExpectedSingles: true }
+            ? { pairResults: rawValidation }
             : rawValidation;
         const results = validation.pairResults;
-        const allCorrect = results.length === 3 && results.every(r => r.isCorrect) && validation.hasExpectedSingles;
+        const allCorrect = results.length === 3 && results.every(r => r.isCorrect);
         const totalPaired = results.length;
 
         if (allCorrect) {
             showMenteAndresNotice(
-                '¡Perfecto! Emparejaste las bolsitas correctas y dejaste sin pareja las que no la tienen. Te llevaremos al libro.',
+                '¡Perfecto! Emparejaste las bolsitas correctas. Te llevaremos al libro.',
                 'success',
                 4000,
                 () => {
@@ -1365,8 +1417,6 @@ function initMenteAndresSystem() {
 
             if (missingPairs > 0) {
                 msg += `Aún faltan ${missingPairs} pareja(s) por formar.`;
-            } else if (wrongCount === 0 && !validation.hasExpectedSingles) {
-                msg += 'Recuerda que hay dos bolsitas que deben quedar sin pareja.';
             }
 
             showMenteAndresNotice(msg || 'Revisa los emparejamientos.', 'error', 3200);

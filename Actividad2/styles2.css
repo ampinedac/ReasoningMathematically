@@ -1577,6 +1577,95 @@ body #ContenedorLibro .activity-spread {
           line-height: 1.2;
         }
 
+        /* ---- Tabla interactiva página 8 ---- */
+        .table-check-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.7rem;
+          margin-top: 0.8rem;
+          width: 100%;
+        }
+
+        .arepas-table {
+          border-collapse: collapse;
+          width: 100%;
+          background: #dbeafe;
+          border-radius: 10px;
+          overflow: hidden;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+        }
+
+        .arepas-table th {
+          background: #2563eb;
+          color: #fff;
+          padding: 0.45em 0.6em;
+          text-align: center;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(0.8rem, 1.1vw, 1rem);
+        }
+
+        .arepas-table td {
+          padding: 0.4em 0.5em;
+          text-align: center;
+          border: 1px solid #bfdbfe;
+        }
+
+        .arepas-table .row-label {
+          font-family: 'Lobster Two', cursive;
+          font-weight: bold;
+          color: #1e3a8a;
+          background: #bfdbfe;
+          white-space: nowrap;
+        }
+
+        .table-num-input {
+          width: 4em;
+          padding: 0.25em 0.3em;
+          border: 2px solid #93c5fd;
+          border-radius: 6px;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+          color: #1e3a8a;
+          background: #eff6ff;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+
+        .table-num-input:focus {
+          border-color: #2563eb;
+          background: #fff;
+        }
+
+        .table-num-input.correct {
+          border-color: #16a34a;
+          background: #dcfce7;
+        }
+
+        .table-num-input.incorrect {
+          border-color: #dc2626;
+          background: #fee2e2;
+        }
+
+        .btn-table-check {
+          background: #2563eb;
+          color: #fff;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(0.9rem, 1.3vw, 1.15rem);
+          padding: 0.45em 1.4em;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.15s;
+        }
+
+        .btn-table-check:hover {
+          background: #1d4ed8;
+          transform: translateY(-2px);
+        }
+
 /* =====================================================================================================
   PLIEGUE CENTRAL (SEPARADOR ENTRE PÁGINAS)
 ===================================================================================================== */

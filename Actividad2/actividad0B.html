@@ -114,13 +114,35 @@
         <div class="spread-fold"></div>
         <div class="q1-right-page">
             <p1 class="story-text">Cuando Andrés ve la forma en que Doña Aurora organizó las arepas sintió curiosidad, pues era diferente a la que él había hecho. Entonces quiso asegurarse de que la cantidad de arepas fuera correcta.
-                <br><br>¿Los dos pedidos tienen la cantidad de arepas correcta? Explica por qué.</p1>
-            <div class="audio-controls">
-                <button id="recordBtnM1Q0" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                <button id="stopBtnM1Q0" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
-                <button id="submitM1Q0" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
+                <br><br>Completa la siguiente tabla con la información de cada pedido:</p1>
+            <div class="table-check-container">
+                <table class="arepas-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th># Platos</th>
+                            <th># Arepas en un plato</th>
+                            <th># Total de arepas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">Aurora</td>
+                            <td><input id="t_aurora_platos" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
+                            <td><input id="t_aurora_porplato" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
+                            <td><input id="t_aurora_total" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
+                        </tr>
+                        <tr>
+                            <td class="row-label">Andrés</td>
+                            <td><input id="t_andres_platos" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
+                            <td><input id="t_andres_porplato" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
+                            <td><input id="t_andres_total" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="checkTableBtn" class="btn btn-table-check">Comprobar</button>
+                <p id="statusTableM1Q0" class="status-text"></p>
             </div>
-            <p id="statusM1Q0" class="status-text"></p>
         </div>
         <span class="page-number page-number-left">7</span>
         <span class="page-number page-number-right">8</span>
@@ -147,7 +169,7 @@
                                     <br>Se queda en silencio unos segundos.
                                     <br>—Son como… sumas misteriosas.
                                     <br><br>Decide entonces pensar en más pedidos para saber si puede hallar más sumas misteriosas:</p1>
-            <button id="goToMenteAndresBtnM0" class="btn btn-mente-andres-organizar">👩‍🍳 Ir a la mente de Andrés </button>
+            <button id="goToMenteAndresBtnM0" class="btn btn-mente-andres-organizar">👩‍🍳 En la mente de Andrés </button>
         </div>
         <span class="page-number page-number-left">9</span>
         <span class="page-number page-number-right">10</span>
