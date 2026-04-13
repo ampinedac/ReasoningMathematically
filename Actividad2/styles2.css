@@ -947,8 +947,8 @@ body #ContenedorLibro .activity-spread {
           margin-top: 0;
         }
 
-        .bomb-timer {
-          --burn-progress: 0;
+        .candle-timer {
+          --melt-progress: 0;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -958,83 +958,83 @@ body #ContenedorLibro .activity-spread {
           width: 100%;
         }
 
-        .bomb-timer-svg {
+        .candle-timer-svg {
           width: 136px;
           height: 112px;
           overflow: visible;
           flex: 0 0 auto;
         }
 
-        .bomb-body {
-          fill: url(#bombBodyGradient);
-          stroke: #0f172a;
-          stroke-width: 2.3;
+        .candle-shadow {
+          fill: rgba(109, 76, 31, 0.28);
         }
 
-        .bomb-cap {
-          fill: #9ca3af;
-          stroke: #4b5563;
+        .candle-plate {
+          fill: #b45309;
+          filter: drop-shadow(0 2px 4px rgba(120, 53, 15, 0.28));
+        }
+
+        .candle-wax {
+          stroke: #d97706;
+          stroke-width: 1.8;
+          transition: y 0.8s linear, height 0.8s linear;
+        }
+
+        .candle-top {
+          fill: #fff3bf;
+          stroke: #f59e0b;
           stroke-width: 1.2;
+          transition: cy 0.8s linear;
         }
 
-        .bomb-floor {
-          fill: #8b5e34;
-          opacity: 0.8;
+        .candle-drips {
+          fill: rgba(255, 244, 200, 0.95);
+          stroke: #facc15;
+          stroke-width: 1;
+          transition: d 0.8s linear;
         }
 
-        .bomb-shine {
-          fill: rgba(255, 255, 255, 0.36);
-        }
-
-        .bomb-fuse {
-          stroke: #a16207;
-          stroke-width: 4;
+        .candle-wick {
+          stroke: #5b3716;
+          stroke-width: 2.2;
           stroke-linecap: round;
-          fill: none;
+          transition: y1 0.8s linear, y2 0.8s linear;
         }
 
-        .bomb-fuse-burn {
-          stroke: #ff7a00;
-          stroke-width: 4.5;
-          stroke-linecap: round;
-          fill: none;
-          filter: drop-shadow(0 0 6px rgba(255, 154, 0, 0.85));
+        .candle-flame-group {
+          transform-origin: 52px 26px;
+          animation: candleFlicker 1.25s ease-in-out infinite alternate;
+          transition: transform 0.8s linear, opacity 0.35s ease;
         }
 
-        .bomb-fuse-char {
-          stroke: #6b4423;
-          stroke-width: 4;
-          stroke-linecap: round;
-          fill: none;
+        .candle-flame-outer {
+          filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.75));
         }
 
-        .bomb-spark {
-          fill: #ff7a00;
-          filter: drop-shadow(0 0 5px rgba(255, 150, 0, 0.95)) drop-shadow(0 0 3px rgba(255, 220, 0, 0.7));
+        .candle-flame-inner {
+          fill: #fff7c2;
+          opacity: 0.92;
         }
 
-        .bomb-explosion {
+        .candle-smoke {
           opacity: 0;
-          transform-origin: 46px 34px;
           pointer-events: none;
+          transition: opacity 0.35s ease;
         }
 
-        .bomb-timer.is-exploding .bomb-explosion {
-          opacity: 1;
-          animation: bombExplosion 0.75s ease-out forwards;
+        .candle-smoke path {
+          fill: none;
+          stroke: rgba(148, 163, 184, 0.88);
+          stroke-width: 2.2;
+          stroke-linecap: round;
+          animation: candleSmoke 2.2s ease-in-out infinite;
         }
 
-        .bomb-timer.is-exploding .bomb-body,
-        .bomb-timer.is-exploding .bomb-cap,
-        .bomb-timer.is-exploding .bomb-shine,
-        .bomb-timer.is-exploding .bomb-fuse,
-        .bomb-timer.is-exploding .bomb-fuse-burn,
-        .bomb-timer.is-exploding .bomb-fuse-char,
-        .bomb-timer.is-exploding .bomb-spark {
+        .candle-timer.is-extinguished .candle-flame-group {
           opacity: 0;
         }
 
-        .bomb-timer .timer-text {
+        .candle-timer .timer-text {
           font-family: 'Lobster Two', cursive;
           font-size: clamp(2.2rem, 3.4vw, 3rem);
           color: #1d4ed8;
@@ -1043,7 +1043,7 @@ body #ContenedorLibro .activity-spread {
           text-align: center;
         }
 
-        .bomb-timer-complete {
+        .timer-complete {
           font-family: 'Lobster Two', cursive !important;
           font-size: clamp(1.8rem, 2.9vw, 2.4rem) !important;
           line-height: 1.2;
@@ -1051,18 +1051,26 @@ body #ContenedorLibro .activity-spread {
           width: 100%;
         }
 
-        @keyframes bombExplosion {
+        @keyframes candleFlicker {
           0% {
-            transform: scale(0.2);
-            opacity: 0.9;
-          }
-          55% {
-            transform: scale(1.4);
-            opacity: 1;
+            transform: translateY(0) scale(1) rotate(-2deg);
           }
           100% {
-            transform: scale(1.85);
+            transform: translateY(-1px) scale(1.06, 0.94) rotate(2deg);
+          }
+        }
+
+        @keyframes candleSmoke {
+          0% {
+            opacity: 0.2;
+            transform: translateY(0);
+          }
+          50% {
+            opacity: 0.55;
+          }
+          100% {
             opacity: 0;
+            transform: translateY(-10px);
           }
         }
         

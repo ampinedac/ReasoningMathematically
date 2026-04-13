@@ -1094,37 +1094,45 @@ function initM1Q2ThinkFlow() {
         }
     };
 
-    const enhanceBombTimer = (timerEl) => {
-        if (!timerEl || timerEl.dataset.bombReady === '1') return;
+    const enhanceCandleTimer = (timerEl) => {
+        if (!timerEl || timerEl.dataset.candleReady === '1') return;
         const initial = (timerEl.textContent || '05:00').trim();
-        const gradId = `bombBodyGradient-${timerEl.id || Math.random().toString(36).slice(2)}`;
-        timerEl.classList.add('bomb-timer');
+        const waxId = `candleWaxGradient-${timerEl.id || Math.random().toString(36).slice(2)}`;
+        const flameId = `candleFlameGradient-${timerEl.id || Math.random().toString(36).slice(2)}`;
+        timerEl.classList.add('candle-timer');
         timerEl.innerHTML = `
-            <svg class="bomb-timer-svg" viewBox="0 0 128 98" aria-hidden="true" focusable="false">
+            <svg class="candle-timer-svg" viewBox="0 0 128 128" aria-hidden="true" focusable="false">
                 <defs>
-                    <radialGradient id="${gradId}" cx="36%" cy="30%" r="70%">
-                        <stop offset="0%" stop-color="#4b5563"></stop>
-                        <stop offset="55%" stop-color="#1f2937"></stop>
-                        <stop offset="100%" stop-color="#0f172a"></stop>
+                    <linearGradient id="${waxId}" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#fff7d6"></stop>
+                        <stop offset="58%" stop-color="#ffe08a"></stop>
+                        <stop offset="100%" stop-color="#f5b942"></stop>
+                    </linearGradient>
+                    <radialGradient id="${flameId}" cx="50%" cy="35%" r="65%">
+                        <stop offset="0%" stop-color="#fff7a8"></stop>
+                        <stop offset="52%" stop-color="#fbbf24"></stop>
+                        <stop offset="100%" stop-color="#f97316"></stop>
                     </radialGradient>
                 </defs>
-                <ellipse class="bomb-floor" cx="46" cy="91" rx="22" ry="5"></ellipse>
-                <g class="bomb-explosion">
-                    <circle cx="46" cy="34" r="18" fill="rgba(251, 191, 36, 0.45)"></circle>
-                    <circle cx="46" cy="34" r="11" fill="rgba(249, 115, 22, 0.7)"></circle>
-                    <circle cx="46" cy="34" r="5" fill="rgba(239, 68, 68, 0.95)"></circle>
+                <ellipse class="candle-shadow" cx="52" cy="112" rx="25" ry="7"></ellipse>
+                <rect class="candle-plate" x="23" y="103" width="58" height="9" rx="4"></rect>
+                <path class="candle-drips" d="M39 38 C39 47, 34 49, 35 56 C36 63, 41 62, 42 55 C43 49, 48 48, 48 55 C48 61, 52 62, 53 56 C54 49, 59 48, 60 55 C61 62, 66 63, 68 56 C69 49, 65 45, 65 38 Z"></path>
+                <rect class="candle-wax" x="38" y="38" width="28" height="58" rx="8" style="fill:url(#${waxId})"></rect>
+                <ellipse class="candle-top" cx="52" cy="38" rx="14" ry="4.5"></ellipse>
+                <line class="candle-wick" x1="52" y1="27" x2="52" y2="39"></line>
+                <g class="candle-flame-group">
+                    <path class="candle-flame-outer" d="M52 8 C60 16, 61 24, 52 30 C43 24, 44 16, 52 8 Z" style="fill:url(#${flameId})"></path>
+                    <path class="candle-flame-inner" d="M52 13 C57 18, 57 23, 52 27 C47 23, 47 18, 52 13 Z"></path>
                 </g>
-                <circle class="bomb-body" cx="46" cy="62" r="23" style="fill:url(#${gradId})"></circle>
-                <ellipse class="bomb-shine" cx="38" cy="53" rx="7" ry="5"></ellipse>
-                <rect class="bomb-cap" x="41" y="27" width="10" height="14" rx="2"></rect>
-                <path class="bomb-fuse" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C56 50, 55 40, 52 34"></path>
-                <path class="bomb-fuse-char" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C56 50, 55 40, 52 34"></path>
-                <path class="bomb-fuse-burn" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C56 50, 55 40, 52 34"></path>
-                <circle class="bomb-spark" cx="110" cy="88" r="4"></circle>
+                <g class="candle-smoke">
+                    <path d="M46 18 C40 12, 42 6, 48 4"></path>
+                    <path d="M52 15 C48 10, 50 5, 55 2"></path>
+                    <path d="M58 18 C55 13, 58 8, 63 6"></path>
+                </g>
             </svg>
             <span class="timer-text">${initial}</span>
         `;
-        timerEl.dataset.bombReady = '1';
+        timerEl.dataset.candleReady = '1';
     };
 
     const renderTimer = (timerEl, secondsLeft, totalSeconds) => {
@@ -1136,38 +1144,59 @@ function initM1Q2ThinkFlow() {
             timerEl.textContent = formatTime(secondsLeft);
         }
 
-        const burnProgress = Math.min(1, Math.max(0, 1 - (secondsLeft / totalSeconds)));
-        timerEl.style.setProperty('--burn-progress', burnProgress.toString());
+        const meltProgress = Math.min(1, Math.max(0, 1 - (secondsLeft / totalSeconds)));
+        timerEl.style.setProperty('--melt-progress', meltProgress.toString());
 
-        const svg = timerEl.querySelector('.bomb-timer-svg');
+        const svg = timerEl.querySelector('.candle-timer-svg');
         if (svg) {
-            const fusePath = svg.querySelector('.bomb-fuse');
-            const charPath = svg.querySelector('.bomb-fuse-char');
-            const burnPath = svg.querySelector('.bomb-fuse-burn');
-            const spark    = svg.querySelector('.bomb-spark');
-            if (fusePath && charPath && burnPath && spark) {
-                const len = fusePath.getTotalLength();
-                if (len > 0) {
-                    const progressLen = burnProgress * len;
-                    const point       = fusePath.getPointAtLength(progressLen);
-                    spark.setAttribute('cx', point.x.toFixed(2));
-                    spark.setAttribute('cy', point.y.toFixed(2));
-                    charPath.style.strokeDasharray  = `${progressLen.toFixed(1)} ${len.toFixed(1)}`;
-                    charPath.style.strokeDashoffset = '0';
-                    const glowLen   = Math.min(16, progressLen);
-                    const glowStart = progressLen - glowLen;
-                    burnPath.style.strokeDasharray  = `${glowLen.toFixed(1)} ${len.toFixed(1)}`;
-                    burnPath.style.strokeDashoffset = `${(-glowStart).toFixed(1)}`;
-                }
+            const wax = svg.querySelector('.candle-wax');
+            const top = svg.querySelector('.candle-top');
+            const drips = svg.querySelector('.candle-drips');
+            const wick = svg.querySelector('.candle-wick');
+            const flame = svg.querySelector('.candle-flame-group');
+            const smoke = svg.querySelector('.candle-smoke');
+
+            const minHeight = 14;
+            const fullHeight = 58;
+            const waxHeight = minHeight + ((1 - meltProgress) * (fullHeight - minHeight));
+            const waxTopY = 96 - waxHeight;
+            const topCy = waxTopY;
+            const wickTopY = Math.max(14, waxTopY - 11);
+            const flameOffset = Math.max(0, 1 - meltProgress);
+
+            if (wax) {
+                wax.setAttribute('y', waxTopY.toFixed(2));
+                wax.setAttribute('height', waxHeight.toFixed(2));
+            }
+
+            if (top) {
+                top.setAttribute('cy', topCy.toFixed(2));
+            }
+
+            if (drips) {
+                drips.setAttribute(
+                    'd',
+                    `M39 ${topCy.toFixed(2)} C39 ${(topCy + 9).toFixed(2)}, 34 ${(topCy + 11).toFixed(2)}, 35 ${(topCy + 18).toFixed(2)} C36 ${(topCy + 25).toFixed(2)}, 41 ${(topCy + 24).toFixed(2)}, 42 ${(topCy + 17).toFixed(2)} C43 ${(topCy + 11).toFixed(2)}, 48 ${(topCy + 10).toFixed(2)}, 48 ${(topCy + 17).toFixed(2)} C48 ${(topCy + 23).toFixed(2)}, 52 ${(topCy + 24).toFixed(2)}, 53 ${(topCy + 18).toFixed(2)} C54 ${(topCy + 11).toFixed(2)}, 59 ${(topCy + 10).toFixed(2)}, 60 ${(topCy + 17).toFixed(2)} C61 ${(topCy + 24).toFixed(2)}, 66 ${(topCy + 25).toFixed(2)}, 68 ${(topCy + 18).toFixed(2)} C69 ${(topCy + 11).toFixed(2)}, 65 ${(topCy + 7).toFixed(2)}, 65 ${topCy.toFixed(2)} Z`
+                );
+            }
+
+            if (wick) {
+                wick.setAttribute('y1', wickTopY.toFixed(2));
+                wick.setAttribute('y2', (topCy + 1.5).toFixed(2));
+            }
+
+            if (flame) {
+                flame.setAttribute('transform', `translate(0 ${((topCy - 38) * 0.96).toFixed(2)}) scale(${(0.86 + flameOffset * 0.14).toFixed(3)})`);
+            }
+
+            if (smoke) {
+                smoke.style.opacity = secondsLeft === 0 ? '1' : '0';
             }
         }
 
-        if (secondsLeft === 0 && timerEl.dataset.exploded !== '1') {
-            timerEl.dataset.exploded = '1';
-            timerEl.classList.add('is-exploding');
-            setTimeout(() => {
-                timerEl.classList.remove('is-exploding');
-            }, 760);
+        if (secondsLeft === 0 && timerEl.dataset.extinguished !== '1') {
+            timerEl.dataset.extinguished = '1';
+            timerEl.classList.add('is-extinguished');
         }
     };
 
@@ -1190,7 +1219,7 @@ function initM1Q2ThinkFlow() {
         if (thinkStatus) {
             thinkStatus.textContent = 'Se completaron los 3 minutos. Ya puedes continuar al paso 2.';
             thinkStatus.style.color = '#16a34a';
-            thinkStatus.classList.add('bomb-timer-complete');
+            thinkStatus.classList.add('timer-complete');
         }
 
         showStep2Right();
@@ -1205,7 +1234,7 @@ function initM1Q2ThinkFlow() {
         if (socialStatus) {
             socialStatus.textContent = 'Tiempo completado. Ya puedes grabar tu respuesta final.';
             socialStatus.style.color = '#16a34a';
-            socialStatus.classList.add('bomb-timer-complete');
+            socialStatus.classList.add('timer-complete');
         }
 
         rightContent.classList.add('think-hidden');
@@ -1214,8 +1243,8 @@ function initM1Q2ThinkFlow() {
     };
 
     // Estado inicial del flujo
-    enhanceBombTimer(thinkTimerDisplay);
-    enhanceBombTimer(socialTimerDisplay);
+    enhanceCandleTimer(thinkTimerDisplay);
+    enhanceCandleTimer(socialTimerDisplay);
     renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
     renderTimer(socialTimerDisplay, socialSeconds, SOCIAL_TOTAL_SECONDS);
     rightContent.classList.add('think-hidden');
@@ -1230,7 +1259,7 @@ function initM1Q2ThinkFlow() {
         thinkStartBtn.style.cursor = 'not-allowed';
 
         if (thinkStatus) {
-            thinkStatus.classList.remove('bomb-timer-complete');
+            thinkStatus.classList.remove('timer-complete');
             thinkStatus.textContent = 'Tiempo corriendo: piensa y escribe tus ideas.';
             thinkStatus.style.color = '#1d4ed8';
         }
@@ -1255,7 +1284,7 @@ function initM1Q2ThinkFlow() {
         step2ConversationBlock.classList.remove('think-hidden');
 
         if (socialStatus) {
-            socialStatus.classList.remove('bomb-timer-complete');
+            socialStatus.classList.remove('timer-complete');
             socialStatus.textContent = 'Cuando inicies, conversen durante los 5 minutos completos.';
             socialStatus.style.color = '#1d4ed8';
         }
@@ -1269,7 +1298,7 @@ function initM1Q2ThinkFlow() {
         socialStartBtn.style.cursor = 'not-allowed';
 
         if (socialStatus) {
-            socialStatus.classList.remove('bomb-timer-complete');
+            socialStatus.classList.remove('timer-complete');
             socialStatus.textContent = 'Conversación en curso: aprovecha este espacio para escuchar y compartir ideas.';
             socialStatus.style.color = '#1d4ed8';
         }
