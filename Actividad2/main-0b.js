@@ -1781,9 +1781,9 @@ function initMatchingActivity() {
 
     // Pares de pedidos: cada uno apunta a su suma correcta
     const PAIRS = [
-        { id: 'mpair0', imageSrc: './assets/images/pedidos%202%20y%206.png', alt: 'Pedidos 2 y 6', correctSum: 'msum0' },
-        { id: 'mpair1', imageSrc: './assets/images/pedidos%203%20y%207.png', alt: 'Pedidos 3 y 7', correctSum: 'msum1' },
-        { id: 'mpair2', imageSrc: './assets/images/pedidos%204%20y%208.png', alt: 'Pedidos 4 y 8', correctSum: 'msum2' }
+        { id: 'mpair0', imageSrc: './assets/images/pedidos%201%20y%204.png', alt: 'Pedidos 1 y 4', correctSum: 'msum0' },
+        { id: 'mpair1', imageSrc: './assets/images/pedidos%205%20y%202.png', alt: 'Pedidos 5 y 2', correctSum: 'msum1' },
+        { id: 'mpair2', imageSrc: './assets/images/pedidos%206%20y%203.png', alt: 'Pedidos 6 y 3', correctSum: 'msum2' }
     ];
 
     // Sumas misteriosas – se barajan al cargar
