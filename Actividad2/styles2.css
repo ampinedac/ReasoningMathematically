@@ -822,7 +822,7 @@ body #ContenedorLibro .activity-spread {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           gap: 0.8rem;
           min-height: 58%;
         }
@@ -847,17 +847,21 @@ body #ContenedorLibro .activity-spread {
           width: 100%;
           display: flex;
           flex-direction: column;
-          align-items: stretch;
+          align-items: center;
           justify-content: flex-start;
           gap: 0.6rem;
           min-height: 0;
         }
 
         #thinkSocialSpread #m1Q2FinalQuestion .audio-controls {
-          margin-top: 0;
+          width: 100%;
+          margin-top: 0.35rem;
           min-height: 74px;
           align-items: center;
           justify-content: center;
+          flex: 0 0 auto;
+          position: relative;
+          z-index: 1;
         }
 
         #thinkSocialSpread #m1Q2FinalQuestion .audio-controls .btn {
@@ -873,9 +877,10 @@ body #ContenedorLibro .activity-spread {
 
         #thinkSocialSpread .m1q2-board-container {
           width: 100%;
-          height: 40%;
-          min-height: 220px;
-          flex: 0 0 40%;
+          max-width: 100%;
+          height: auto;
+          min-height: 0;
+          flex: 0 0 auto;
           gap: 0.45rem;
         }
 
@@ -886,9 +891,9 @@ body #ContenedorLibro .activity-spread {
 
         #thinkSocialSpread .m1q2-board-wrapper {
           width: 100%;
-          min-height: 180px;
-          height: 100%;
-          flex: 1 1 auto;
+          min-height: 150px;
+          height: clamp(150px, 26vh, 220px);
+          flex: 0 0 auto;
         }
 
         #thinkSocialSpread #step2VerifyBlock:not(.think-hidden),
@@ -1170,13 +1175,14 @@ body #ContenedorLibro .activity-spread {
 
         /* Contenedor de recuadros de sumas (derecha) */
         .matching-sums-container {
-            display: flex;
-            flex-direction: column;
-          gap: 0.75rem;
+            display: grid;
+          grid-template-rows: repeat(3, minmax(0, 1fr));
+          gap: 0.45rem;
             width: 100%;
-            flex: 0 0 auto;
+            flex: 1;
+          min-height: 0;
           justify-content: flex-start;
-          margin-bottom: 0.2rem;
+          margin-bottom: 0;
         }
 
         /* Recuadro de suma misteriosa */
@@ -1215,11 +1221,25 @@ body #ContenedorLibro .activity-spread {
 
         #matchingVerifyBtn {
           align-self: center;
-          margin-top: 0;
+          margin-top: 0.1rem;
+          margin-bottom: 0.15rem;
           padding: 0.65rem 1.3rem;
           border-radius: 12px;
           font-size: clamp(1.2rem, 2.2vw, 1.6rem);
           font-family: 'Lobster Two', cursive;
+        }
+
+        #matchingRightPage {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.35rem;
+        }
+
+        #matchingFeedback {
+          margin-top: 0;
+          min-height: 1.2em;
         }
 
         /* Pregunta final + audio en página 18 */
@@ -1230,6 +1250,153 @@ body #ContenedorLibro .activity-spread {
             gap: 0.35rem;
             width: 100%;
             margin-top: 0.4rem;
+        }
+
+        /* =====================================================================================================
+        Nuevo spread 13-14 – Tabla de equivalencias
+        ===================================================================================================== */
+        #spread13Table {
+          position: relative;
+        }
+
+        #spread13Table .spread-fold {
+          display: none;
+        }
+
+        #spread13Table .q1-left-page,
+        #spread13Table .q1-right-page {
+          width: 50%;
+          background: transparent;
+        }
+
+        #spread13Table .spread13-overlay {
+          position: absolute;
+          inset: 0.7rem 0.9rem 0.95rem 0.9rem;
+          z-index: 8;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.55rem;
+          pointer-events: auto;
+        }
+
+        #spread13Table .spread13-title {
+          margin: 0;
+          width: 96%;
+          text-align: center;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+          color: #1e3a8a;
+          line-height: 1.1;
+        }
+
+        #spread13Table .spread13-grid-table {
+          width: 98%;
+          border-collapse: collapse;
+          background: rgba(255, 255, 255, 0.82);
+          border: 2px solid #7c4a03;
+          border-radius: 12px;
+          overflow: hidden;
+          table-layout: fixed;
+        }
+
+        #spread13Table .spread13-grid-table th,
+        #spread13Table .spread13-grid-table td {
+          border: 1.6px solid #7c4a03;
+          padding: 0.28rem 0.4rem;
+          text-align: center;
+          vertical-align: middle;
+          font-family: 'Lobster Two', cursive;
+          color: #1f2937;
+          font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+        }
+
+        #spread13Table .spread13-grid-table th {
+          background: #e0ecff;
+          color: #1e3a8a;
+          font-size: clamp(1rem, 1.45vw, 1.3rem);
+        }
+
+        #spread13Table .sum-dropzone {
+          width: 100%;
+          min-height: 2rem;
+          border: 2px dashed #60a5fa;
+          border-radius: 9px;
+          background: rgba(239, 246, 255, 0.85);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.2rem;
+          transition: border-color 0.18s, background 0.18s;
+        }
+
+        #spread13Table .sum-dropzone.is-over {
+          border-color: #2563eb;
+          background: #dbeafe;
+        }
+
+        #spread13Table .sum-token-bank {
+          width: 98%;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 0.32rem 0.45rem;
+          padding: 0.35rem;
+          border-radius: 10px;
+          background: rgba(255, 255, 255, 0.65);
+          border: 1.6px solid #93c5fd;
+        }
+
+        #spread13Table .sum-token-chip {
+          font-family: 'Rancho', cursive;
+          font-size: clamp(0.9rem, 1.28vw, 1.2rem);
+          color: #1e3a8a;
+          background: #eff6ff;
+          border: 1.8px solid #60a5fa;
+          border-radius: 9px;
+          padding: 0.2rem 0.42rem;
+          text-align: center;
+          cursor: grab;
+          user-select: none;
+          line-height: 1.03;
+          transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        #spread13Table .sum-token-chip:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22);
+        }
+
+        #spread13Table .sum-token-chip.dragging {
+          opacity: 0.6;
+        }
+
+        #spread13Table .sum-token-chip.placed {
+          cursor: default;
+          border-color: #16a34a;
+          background: #dcfce7;
+          color: #14532d;
+        }
+
+        #spread13Table .sum-token-chip.wrong-drop {
+          animation: wrongDropShake 0.22s linear;
+          border-color: #dc2626;
+          background: #fee2e2;
+          color: #7f1d1d;
+        }
+
+        #spread13Table #statusSpread13Table {
+          margin: 0;
+          min-height: 1.2em;
+          font-size: clamp(1rem, 1.35vw, 1.2rem);
+        }
+
+        @keyframes wrongDropShake {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-4px); }
+          50% { transform: translateX(4px); }
+          75% { transform: translateX(-3px); }
+          100% { transform: translateX(0); }
         }
 
         /* =====================================================================================================

@@ -37,6 +37,7 @@ let m3q3Submitted = false;
 let menteAndresCompleted = false;
 let menteAndresM0Completed = false;
 let matchingCompleted = false;
+let spread13TableCompleted = false;
 let matchingDrawLines = null; // callback para redibujar lazos al volver al spread
 
 // Ejercicios M4
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initBoard();
     initTableM1Q0();
+    initSpread13Table();
     initAudioRecorder('M1Q1');
     initAudioRecorder('M1Q2');
     initAudioRecorder('M3Q1');
@@ -463,10 +465,11 @@ function updateNavButtons() {
 
 // Regla de qué spreads requieren submit para avanzar (índices 0-based):
 // spread 3 = página 7-8 → requiere m1q0Submitted
-// spread 5 = actividad de emparejamiento (11-12) → requiere m3q1Submitted
-// spread 6 = segunda actividad (13-14) → requiere m1q2Submitted
-// spread 7 = momentos 15-16 → requiere m3q3Submitted
-// spread 8 = reto final (17-18) → requiere m4Submitted
+// spread 5 = actividad de emparejamiento (11-12) → requiere matchingCompleted
+// spread 6 = nueva tabla (13-14) → requiere spread13TableCompleted
+// spread 7 = segunda actividad (15-16) → requiere m1q2Submitted
+// spread 8 = momentos 17-18 → requiere m3q3Submitted
+// spread 9 = reto final (19-20) → requiere m4Submitted
 function canAdvance() {
     const spreads = getSpreads();
     if (currentSpread >= spreads.length - 1) {
@@ -477,10 +480,11 @@ function canAdvance() {
 
     if (currentSpread === 3) return m1q0Submitted;
     if (currentSpread === 4) return menteAndresM0Completed;
-    if (currentSpread === 5) return m3q1Submitted;
-    if (currentSpread === 6) return m1q2Submitted;
-    if (currentSpread === 7) return m3q3Submitted;
-    if (currentSpread === 8) return m4Submitted;
+    if (currentSpread === 5) return matchingCompleted;
+    if (currentSpread === 6) return spread13TableCompleted;
+    if (currentSpread === 7) return m1q2Submitted;
+    if (currentSpread === 8) return m3q3Submitted;
+    if (currentSpread === 9) return m4Submitted;
     return true;
 }
 
@@ -891,12 +895,12 @@ function initTableM1Q0() {
     if (!btn || !statusEl) return;
 
     const ANSWERS = {
-        aurora:  [3, 7, 21],
-        andres:  [7, 3, 21]
+        auroraTotal: 21,
+        andresTotal: 21
     };
     const ids = [
-        't_aurora_platos', 't_aurora_porplato', 't_aurora_total',
-        't_andres_platos', 't_andres_porplato', 't_andres_total'
+        't_aurora_total',
+        't_andres_total'
     ];
 
     btn.addEventListener('click', function () {
@@ -910,16 +914,16 @@ function initTableM1Q0() {
             return;
         }
 
-        const auroraNums = values.slice(0, 3).map(Number);
-        const andresNums = values.slice(3, 6).map(Number);
+        const auroraTotal = Number(values[0]);
+        const andresTotal = Number(values[1]);
 
-        const auroraOk = ANSWERS.aurora.every((v, i) => auroraNums[i] === v);
-        const andresOk = ANSWERS.andres.every((v, i) => andresNums[i] === v);
+        const auroraOk = auroraTotal === ANSWERS.auroraTotal;
+        const andresOk = andresTotal === ANSWERS.andresTotal;
 
         // Marcar visual por campo
         inputs.forEach((el, i) => {
             if (!el) return;
-            const expected = i < 3 ? ANSWERS.aurora[i] : ANSWERS.andres[i - 3];
+            const expected = i === 0 ? ANSWERS.auroraTotal : ANSWERS.andresTotal;
             el.classList.toggle('correct', Number(el.value) === expected);
             el.classList.toggle('incorrect', Number(el.value) !== expected);
         });
@@ -939,10 +943,116 @@ function initTableM1Q0() {
     });
 }
 
+function initSpread13Table() {
+    const bank = document.getElementById('sumTokensBank');
+    const statusEl = document.getElementById('statusSpread13Table');
+    const dropzones = Array.from(document.querySelectorAll('#spread13Table .sum-dropzone'));
+    if (!bank || !statusEl || dropzones.length === 0) return;
+
+    const TOKENS = [
+        { id: 't30a', text: '2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2 + 2', total: 30, column: 'aurora' },
+        { id: 't30b', text: '15 + 15', total: 30, column: 'andres' },
+        { id: 't12a', text: '4 + 4 + 4', total: 12, column: 'aurora' },
+        { id: 't18a', text: '6 + 6 + 6', total: 18, column: 'aurora' },
+        { id: 't16a', text: '8 + 8', total: 16, column: 'aurora' },
+        { id: 't12b', text: '3 + 3 + 3 + 3', total: 12, column: 'andres' },
+        { id: 't18b', text: '3 + 3 + 3 + 3 + 3 + 3', total: 18, column: 'andres' },
+        { id: 't16b', text: '2 + 2 + 2 + 2 + 2 + 2 + 2 + 2', total: 16, column: 'andres' }
+    ];
+
+    const placed = new Map();
+
+    const shuffled = [...TOKENS];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    bank.innerHTML = '';
+    shuffled.forEach(tokenData => {
+        const token = document.createElement('div');
+        token.className = 'sum-token-chip';
+        token.id = tokenData.id;
+        token.draggable = true;
+        token.textContent = tokenData.text;
+        token.dataset.total = String(tokenData.total);
+        token.dataset.column = tokenData.column;
+        token.addEventListener('dragstart', (e) => {
+            e.dataTransfer?.setData('text/plain', tokenData.id);
+            token.classList.add('dragging');
+        });
+        token.addEventListener('dragend', () => token.classList.remove('dragging'));
+        bank.appendChild(token);
+    });
+
+    function evaluateCompletion() {
+        const done = placed.size === TOKENS.length;
+        spread13TableCompleted = done;
+        if (done) {
+            statusEl.textContent = '✅ ¡Excelente! Ubicaste correctamente todas las sumas.';
+            statusEl.style.color = '#16a34a';
+        }
+        updateNavButtons();
+    }
+
+    dropzones.forEach(zone => {
+        zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            zone.classList.add('is-over');
+        });
+        zone.addEventListener('dragleave', () => zone.classList.remove('is-over'));
+        zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            zone.classList.remove('is-over');
+
+            if (zone.dataset.filled === '1') return;
+            const tokenId = e.dataTransfer?.getData('text/plain');
+            if (!tokenId) return;
+
+            const token = document.getElementById(tokenId);
+            if (!token) return;
+
+            const totalOk = Number(token.dataset.total) === Number(zone.dataset.total);
+            const colOk = token.dataset.column === zone.dataset.column;
+
+            if (!totalOk || !colOk) {
+                token.classList.add('wrong-drop');
+                setTimeout(() => token.classList.remove('wrong-drop'), 260);
+                statusEl.textContent = 'Esa ficha no corresponde a ese espacio.';
+                statusEl.style.color = '#dc2626';
+                return;
+            }
+
+            zone.dataset.filled = '1';
+            zone.appendChild(token);
+            token.draggable = false;
+            token.classList.add('placed');
+            placed.set(token.id, zone.id);
+
+            statusEl.textContent = 'Muy bien. Sigue ubicando las fichas restantes.';
+            statusEl.style.color = '#1d4ed8';
+            evaluateCompletion();
+        });
+    });
+}
+
 function markSubmitted(tag) {
     if (tag === 'M1Q0') m1q0Submitted = true;
     if (tag === 'M1Q1') m1q1Submitted = true;
-    if (tag === 'M1Q2') m1q2Submitted = true;
+    if (tag === 'M1Q2') {
+        m1q2Submitted = true;
+
+        const responseBlock = document.getElementById('m1q2ResponseBlock');
+        const audioBox = document.getElementById('m1Q2FinalQuestion');
+        const statusEl = document.getElementById('statusM1Q2');
+
+        if (responseBlock) responseBlock.classList.remove('think-hidden');
+        if (audioBox) audioBox.style.display = 'flex';
+        if (statusEl) {
+            statusEl.textContent = '✅ Guardado. Ya puedes pasar a la siguiente página.';
+            statusEl.style.color = '#16a34a';
+        }
+    }
     if (tag === 'M3Q1') m3q1Submitted = true;
     if (tag === 'M3Q2') {
         m3q2Submitted = true;
@@ -1329,7 +1439,7 @@ function initMenteAndresSystem() {
     const traysImage = document.getElementById('bandejasFotoM1Q2');
 
     let traysSystem = null;
-    let returnSpread = 6;
+    let returnSpread = 7;
     let menteAndresNoticeTimer = null;
 
     function showMenteAndresNotice(message, type = 'success', durationMs = 2400, onDone = null) {
@@ -1397,7 +1507,7 @@ function initMenteAndresSystem() {
         show('ContenedorMenteAndres');
     };
 
-    gotoBtn?.addEventListener('click', () => openMenteAndres(6));
+    gotoBtn?.addEventListener('click', () => openMenteAndres(7));
     gotoBtnM0?.addEventListener('click', () => openMenteAndres(4));
 
     verifyBtn?.addEventListener('click', () => {
@@ -1423,7 +1533,7 @@ function initMenteAndresSystem() {
                 if (traysImage) traysImage.style.display = 'block';
                 menteAndresCompleted = true;
 
-                if (returnSpread === 6) {
+                if (returnSpread === 7) {
                     show('m1Q2FinalQuestion');
                     // Iniciar grabador M1Q2
                     const recordBtn = document.getElementById('recordBtnM1Q2');
@@ -1667,10 +1777,7 @@ function initMatchingActivity() {
     const svgEl      = document.getElementById('matchingLinesSVG');
     const verifyBtn  = document.getElementById('matchingVerifyBtn');
     const feedbackEl = document.getElementById('matchingFeedback');
-    const finalQuestionEl = document.querySelector('#matchingRightPage .matching-final-question');
     if (!pairsEl || !sumsEl || !verifyBtn) return;
-
-    if (finalQuestionEl) finalQuestionEl.style.display = 'none';
 
     // Pares de pedidos: cada uno apunta a su suma correcta
     const PAIRS = [
@@ -1751,8 +1858,6 @@ function initMatchingActivity() {
             selectedPair = null;
             matchingCompleted = false;
             updateNavButtons();
-
-            if (finalQuestionEl) finalQuestionEl.style.display = 'none';
 
             drawLines();
             if (feedbackEl) {
@@ -1860,9 +1965,9 @@ function initMatchingActivity() {
         if (allOk) {
             matchingCompleted = true;
             updateNavButtons();
-            if (finalQuestionEl) finalQuestionEl.style.display = 'flex';
         } else {
-            if (finalQuestionEl) finalQuestionEl.style.display = 'none';
+            matchingCompleted = false;
+            updateNavButtons();
         }
     }
 

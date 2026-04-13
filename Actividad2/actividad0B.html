@@ -120,22 +120,16 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th># Platos</th>
-                            <th># Arepas en un plato</th>
                             <th># Total de arepas</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td class="row-label">Aurora</td>
-                            <td><input id="t_aurora_platos" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
-                            <td><input id="t_aurora_porplato" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
                             <td><input id="t_aurora_total" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
                         </tr>
                         <tr>
                             <td class="row-label">Andrés</td>
-                            <td><input id="t_andres_platos" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
-                            <td><input id="t_andres_porplato" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
                             <td><input id="t_andres_total" class="table-num-input" type="number" min="1" max="99" placeholder="?"></td>
                         </tr>
                     </tbody>
@@ -185,24 +179,65 @@
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page" id="matchingRightPage">
-            <div class="matching-sums-container" id="matchingSums"></div>
             <button id="matchingVerifyBtn" class="btn btn-primary">Verificar emparejamientos</button>
+            <div class="matching-sums-container" id="matchingSums"></div>
             <p id="matchingFeedback" class="status-text"></p>
-            <div class="matching-final-question">
-                <p class="q3-inline-question">¿Por qué Andrés dice que estas sumas son sumas misteriosas? Explica.</p>
-                <div class="audio-controls">
-                    <button id="recordBtnM3Q1" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                    <button id="stopBtnM3Q1" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
-                    <button id="submitM3Q1" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
-                </div>
-                <p id="statusM3Q1" class="status-text"></p>
-            </div>
         </div>
         <span class="page-number page-number-left">11</span>
         <span class="page-number page-number-right">12</span>
     </div>
 
-    <!-- Story Spread 13-14 (Momento para pensar y socializar) -->
+    <!-- Story Spread 13-14 (Tabla interactiva de equivalencias) -->
+
+    <div class="page q1-book-spread activity-spread" id="spread13Table">
+        <div class="q1-left-page"></div>
+        <div class="spread-fold"></div>
+        <div class="q1-right-page"></div>
+
+        <div class="spread13-overlay">
+            <p class="spread13-title">Completa la tabla ubicando cada suma en el lugar correcto.</p>
+
+            <table class="spread13-grid-table" aria-label="Tabla de pedidos y orden de sumas">
+                <thead>
+                    <tr>
+                        <th>Pedidos</th>
+                        <th>Orden Aurora</th>
+                        <th>Orden Andrés</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>30 arepas</td>
+                        <td><div id="dz-30-aurora" class="sum-dropzone" data-total="30" data-column="aurora"></div></td>
+                        <td><div id="dz-30-andres" class="sum-dropzone" data-total="30" data-column="andres"></div></td>
+                    </tr>
+                    <tr>
+                        <td>12 arepas</td>
+                        <td><div id="dz-12-aurora" class="sum-dropzone" data-total="12" data-column="aurora"></div></td>
+                        <td><div id="dz-12-andres" class="sum-dropzone" data-total="12" data-column="andres"></div></td>
+                    </tr>
+                    <tr>
+                        <td>18 arepas</td>
+                        <td><div id="dz-18-aurora" class="sum-dropzone" data-total="18" data-column="aurora"></div></td>
+                        <td><div id="dz-18-andres" class="sum-dropzone" data-total="18" data-column="andres"></div></td>
+                    </tr>
+                    <tr>
+                        <td>16 arepas</td>
+                        <td><div id="dz-16-aurora" class="sum-dropzone" data-total="16" data-column="aurora"></div></td>
+                        <td><div id="dz-16-andres" class="sum-dropzone" data-total="16" data-column="andres"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div id="sumTokensBank" class="sum-token-bank"></div>
+            <p id="statusSpread13Table" class="status-text"></p>
+        </div>
+
+        <span class="page-number page-number-left">13</span>
+        <span class="page-number page-number-right">14</span>
+    </div>
+
+    <!-- Story Spread 15-16 (Momento para pensar y socializar) -->
 
     <div class="page q1-book-spread activity-spread" id="thinkSocialSpread">
         <div class="q1-left-page">
@@ -266,10 +301,10 @@
                 </div>
             </div>
         </div>
-        <span class="page-number page-number-left">13</span>
-        <span class="page-number page-number-right">14</span>
+        <span class="page-number page-number-left">15</span>
+        <span class="page-number page-number-right">16</span>
     </div>
-    <!-- Story Spread 15-16 (Dos momentos de explicacion con tablero) -->
+    <!-- Story Spread 17-18 (Dos momentos de explicacion con tablero) -->
     <div class="page q1-book-spread activity-spread" id="m3FlowSpread">
         <div class="q1-left-page">
             <p class="m3-step-text">Es tu momento de imaginar, imagina pedidos y responde ¿A partir de cualquier pedido se pueden encontrar sumas misteriosas? Explica</p>
@@ -340,10 +375,10 @@
                 <p id="statusM3Q3" class="status-text"></p>
             </div>
         </div>
-        <span class="page-number page-number-left">15</span>
-        <span class="page-number page-number-right">16</span>
+        <span class="page-number page-number-left">17</span>
+        <span class="page-number page-number-right">18</span>
     </div>
-    <!-- Story Spread 17-18 (Cierre con dos audios) -->
+    <!-- Story Spread 19-20 (Cierre con dos audios) -->
     <div class="page q1-book-spread activity-spread" id="m4StorySpread">
         <div class="q1-left-page">
             <h3>Pregunta 6</h3>
@@ -378,8 +413,8 @@
                 </div>
             </div>
         </div>
-        <span class="page-number page-number-left">17</span>
-        <span class="page-number page-number-right">18</span>
+        <span class="page-number page-number-left">19</span>
+        <span class="page-number page-number-right">20</span>
     </div>
 
     <div class="page q1-book-spread activity-spread">
@@ -410,8 +445,8 @@
                     <p id="statusM4Reflection" class="status-text"></p>
                 </div>
         </div>
-        <span class="page-number page-number-left">19</span>
-        <span class="page-number page-number-right">20</span>
+        <span class="page-number page-number-left">21</span>
+        <span class="page-number page-number-right">22</span>
     </div>
     </div>
 
