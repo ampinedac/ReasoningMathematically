@@ -7,7 +7,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles2.css?v=2026041209">
+    <link rel="stylesheet" href="styles2.css?v=2026041210">
     <link rel="stylesheet" href="trays-styles-0b.css?v=2026040504">
     <link rel="stylesheet" href="bags-styles-0b.css?v=2026040504">
 </head>
@@ -189,43 +189,44 @@
 
             <div class="think-step-card" id="thinkSoloCard">
                 <p class="think-step-text">Paso 1: Piensa individualmente y escribe tus ideas en una hoja. Para ello tienes 5 minutos.</p>
-                <div class="think-timer" id="thinkTimerDisplay">05:00</div>
+                <div class="think-timer" id="thinkTimerDisplay">03:00</div>
                 <div class="think-actions">
-                    <button id="thinkStartBtn" class="btn btn-primary">Estoy lista</button>
-                    <button id="thinkFinishEarlyBtn" class="btn btn-secondary" disabled>Ya terminé antes de tiempo</button>
+                    <button id="thinkStartBtn" class="btn btn-primary">Iniciar cuenta regresiva</button>
                 </div>
+                <button id="forceShowRightBtn" class="think-force-reveal-btn" aria-label="Mostrar paso 2"></button>
                 <p id="thinkStatusM1Q2" class="status-text"></p>
             </div>
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page" id="q2RightPage">
-            <div class="think-step-card think-hidden" id="thinkSocialPrepCard">
-                <p class="think-step-title">Paso 2: Verifica a tu equipo</p>
-                <p class="think-step-text">Verifica que las 2 personas que están sentadas contigo ya estén en este punto; si no, espéralas pacientemente.</p>
-                <button id="socialReadyBtn" class="btn btn-primary">Todas estamos listas</button>
-            </div>
-
-            <div class="think-step-card think-hidden" id="thinkSocialCard">
-                <p class="think-step-title">Momento para socializar (5 minutos)</p>
-                <p class="think-step-text">Conversen sobre todas las características de las sumas misteriosas. Este tiempo debe completarse.</p>
-                <div class="think-timer" id="socialTimerDisplay">05:00</div>
-                <button id="socialStartBtn" class="btn btn-primary">Iniciar conversación (5:00)</button>
-                <p id="socialStatusM1Q2" class="status-text"></p>
-            </div>
-
-            <div class="think-audio-intro">
-                <h3>Momento de responder 🎙️</h3>
-                <p>Cuando termine el tiempo de conversación, responde:</p>
-                <p class="think-final-question">¿Cuáles son TODAS las características de las sumas misteriosas? Explica y propón un ejemplo de suma misteriosa diferente a los que Andrés se ha imaginado.</p>
-            </div>
-
-            <div id="m1Q2FinalQuestion" class="think-audio-box">
-                <div class="audio-controls">
-                    <button id="recordBtnM1Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                    <button id="stopBtnM1Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
-                    <button id="submitM1Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
+            <div id="m1q2RightContent" class="think-hidden">
+                <div id="step2VerifyBlock">
+                    <p class="think-step-text">Paso 2: Verifica si tus 2 compañeras ya se encuentran en este punto. Si no, espera pacientemente.</p>
+                    <button id="socialReadyBtn" class="btn btn-primary">Todas estamos listas</button>
                 </div>
-                <p id="statusM1Q2" class="status-text"></p>
+
+                <div id="step2ConversationBlock" class="think-hidden">
+                    <p class="think-step-text">Paso 2: Conversen y comparen todas las características que cada una escribió acerca de las sumas misteriosas.</p>
+                    <div class="think-timer" id="socialTimerDisplay">03:00</div>
+                    <button id="socialStartBtn" class="btn btn-primary">Iniciar conversación</button>
+                    <p id="socialStatusM1Q2" class="status-text"></p>
+                </div>
+            </div>
+
+            <div id="m1q2ResponseBlock" class="think-hidden">
+                <div class="think-audio-intro">
+                    <h3>Momento de responder 🎙️</h3>
+                    <p class="think-final-question">¿Cuáles son TODAS las características de las sumas misteriosas? Explica y propón un ejemplo de suma misteriosa diferente a los que Andrés se ha imaginado.</p>
+                </div>
+
+                <div id="m1Q2FinalQuestion" class="think-audio-box">
+                    <div class="audio-controls">
+                        <button id="recordBtnM1Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+                        <button id="stopBtnM1Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
+                        <button id="submitM1Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
+                    </div>
+                    <p id="statusM1Q2" class="status-text"></p>
+                </div>
             </div>
         </div>
         <span class="page-number page-number-left">13</span>
@@ -406,6 +407,6 @@
 
 <script src="./assets/estudiantes-data.js"></script>
 <script src="./bags-system-0b.js"></script>
-<script type="module" src="./main-0b.js?v=2026041204"></script>
+<script type="module" src="./main-0b.js?v=2026041211"></script>
 </body>
 </html>

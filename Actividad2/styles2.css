@@ -796,6 +796,24 @@ body #ContenedorLibro .activity-spread {
           display: none;
         }
 
+        #thinkStartBtn,
+        #socialReadyBtn,
+        #socialStartBtn {
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+        }
+
+        .think-force-reveal-btn {
+          width: 28px;
+          height: 28px;
+          border-radius: 8px;
+          border: 2px solid #166534;
+          background: #22c55e;
+          cursor: pointer;
+          padding: 0;
+          margin-top: 0.35rem;
+        }
+
         .bomb-timer {
           --burn-progress: 0;
           display: inline-flex;

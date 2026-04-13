@@ -860,25 +860,27 @@ function markSubmitted(tag) {
 // ─────────────────────────────────────────────
 function initM1Q2ThinkFlow() {
     const thinkStartBtn = document.getElementById('thinkStartBtn');
-    const thinkFinishEarlyBtn = document.getElementById('thinkFinishEarlyBtn');
+    const forceShowRightBtn = document.getElementById('forceShowRightBtn');
     const thinkTimerDisplay = document.getElementById('thinkTimerDisplay');
     const thinkStatus = document.getElementById('thinkStatusM1Q2');
 
-    const socialPrepCard = document.getElementById('thinkSocialPrepCard');
+    const rightContent = document.getElementById('m1q2RightContent');
+    const step2VerifyBlock = document.getElementById('step2VerifyBlock');
+    const step2ConversationBlock = document.getElementById('step2ConversationBlock');
     const socialReadyBtn = document.getElementById('socialReadyBtn');
-    const socialCard = document.getElementById('thinkSocialCard');
     const socialStartBtn = document.getElementById('socialStartBtn');
     const socialTimerDisplay = document.getElementById('socialTimerDisplay');
     const socialStatus = document.getElementById('socialStatusM1Q2');
 
+    const responseBlock = document.getElementById('m1q2ResponseBlock');
     const audioBox = document.getElementById('m1Q2FinalQuestion');
 
-    if (!thinkStartBtn || !thinkFinishEarlyBtn || !thinkTimerDisplay || !socialReadyBtn || !socialCard || !socialStartBtn || !socialTimerDisplay || !audioBox) {
+    if (!thinkStartBtn || !thinkTimerDisplay || !rightContent || !step2VerifyBlock || !step2ConversationBlock || !socialReadyBtn || !socialStartBtn || !socialTimerDisplay || !responseBlock || !audioBox) {
         return;
     }
 
-    const THINK_TOTAL_SECONDS = 300;
-    const SOCIAL_TOTAL_SECONDS = 300;
+    const THINK_TOTAL_SECONDS = 180;
+    const SOCIAL_TOTAL_SECONDS = 180;
     let thinkSeconds = THINK_TOTAL_SECONDS;
     let socialSeconds = SOCIAL_TOTAL_SECONDS;
     let thinkInterval = null;
@@ -926,23 +928,28 @@ function initM1Q2ThinkFlow() {
         timerEl.style.setProperty('--burn-progress', burnProgress.toString());
     };
 
-    const finishThinkStep = (finishedEarly) => {
+    const showStep2Right = () => {
+        rightContent.classList.remove('think-hidden');
+        step2VerifyBlock.classList.remove('think-hidden');
+        step2ConversationBlock.classList.add('think-hidden');
+        responseBlock.classList.add('think-hidden');
+        audioBox.style.display = 'none';
+    };
+
+    const finishThinkStep = () => {
         stopInterval(thinkInterval);
         thinkInterval = null;
-        thinkFinishEarlyBtn.disabled = true;
         thinkStartBtn.disabled = true;
+        thinkStartBtn.style.opacity = '0.6';
+        thinkStartBtn.style.cursor = 'not-allowed';
         renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
 
         if (thinkStatus) {
-            thinkStatus.textContent = finishedEarly
-                ? 'Perfecto. Terminaste antes de tiempo. Ahora verifica si tus compañeras también están listas.'
-                : 'Se acabó el tiempo individual. Ahora verifica si tus compañeras también están listas.';
+            thinkStatus.textContent = 'Se completaron los 3 minutos. Ya puedes continuar al paso 2.';
             thinkStatus.style.color = '#16a34a';
         }
 
-        if (socialPrepCard) {
-            socialPrepCard.classList.remove('think-hidden');
-        }
+        showStep2Right();
     };
 
     const finishSocialStep = () => {
@@ -956,6 +963,8 @@ function initM1Q2ThinkFlow() {
             socialStatus.style.color = '#16a34a';
         }
 
+        rightContent.classList.add('think-hidden');
+        responseBlock.classList.remove('think-hidden');
         audioBox.style.display = 'flex';
     };
 
@@ -964,16 +973,19 @@ function initM1Q2ThinkFlow() {
     enhanceBombTimer(socialTimerDisplay);
     renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
     renderTimer(socialTimerDisplay, socialSeconds, SOCIAL_TOTAL_SECONDS);
+    rightContent.classList.add('think-hidden');
+    responseBlock.classList.add('think-hidden');
     audioBox.style.display = 'none';
 
     thinkStartBtn.addEventListener('click', () => {
         if (thinkInterval) return;
 
         thinkStartBtn.disabled = true;
-        thinkFinishEarlyBtn.disabled = false;
+        thinkStartBtn.style.opacity = '0.6';
+        thinkStartBtn.style.cursor = 'not-allowed';
 
         if (thinkStatus) {
-            thinkStatus.textContent = 'Tiempo corriendo: piensa, escribe y organiza tus ideas.';
+            thinkStatus.textContent = 'Tiempo corriendo: piensa y escribe tus ideas (3 minutos obligatorios).';
             thinkStatus.style.color = '#1d4ed8';
         }
 
@@ -983,22 +995,21 @@ function initM1Q2ThinkFlow() {
             renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
 
             if (thinkSeconds === 0) {
-                finishThinkStep(false);
+                finishThinkStep();
             }
         }, 1000);
     });
 
-    thinkFinishEarlyBtn.addEventListener('click', () => {
-        if (!thinkInterval) return;
-        finishThinkStep(true);
+    forceShowRightBtn?.addEventListener('click', () => {
+        showStep2Right();
     });
 
     socialReadyBtn.addEventListener('click', () => {
-        socialPrepCard.classList.add('think-hidden');
-        socialCard.classList.remove('think-hidden');
+        step2VerifyBlock.classList.add('think-hidden');
+        step2ConversationBlock.classList.remove('think-hidden');
 
         if (socialStatus) {
-            socialStatus.textContent = 'Cuando inicies, deben conversar durante los 5 minutos completos.';
+            socialStatus.textContent = 'Cuando inicies, conversen durante los 3 minutos completos.';
             socialStatus.style.color = '#1d4ed8';
         }
     });
