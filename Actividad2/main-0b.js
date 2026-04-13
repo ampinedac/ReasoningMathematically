@@ -877,8 +877,10 @@ function initM1Q2ThinkFlow() {
         return;
     }
 
-    let thinkSeconds = 300;
-    let socialSeconds = 300;
+    const THINK_TOTAL_SECONDS = 300;
+    const SOCIAL_TOTAL_SECONDS = 300;
+    let thinkSeconds = THINK_TOTAL_SECONDS;
+    let socialSeconds = SOCIAL_TOTAL_SECONDS;
     let thinkInterval = null;
     let socialInterval = null;
 
@@ -894,12 +896,42 @@ function initM1Q2ThinkFlow() {
         }
     };
 
+    const enhanceBombTimer = (timerEl) => {
+        if (!timerEl || timerEl.dataset.bombReady === '1') return;
+        const initial = (timerEl.textContent || '05:00').trim();
+        timerEl.classList.add('bomb-timer');
+        timerEl.innerHTML = `
+            <svg class="bomb-timer-svg" viewBox="0 0 96 68" aria-hidden="true" focusable="false">
+                <line class="bomb-fuse" x1="44" y1="26" x2="86" y2="8"></line>
+                <line class="bomb-fuse-burn" x1="44" y1="26" x2="86" y2="8"></line>
+                <circle class="bomb-spark" cx="86" cy="8" r="4"></circle>
+                <circle class="bomb-body" cx="36" cy="40" r="23"></circle>
+                <rect class="bomb-cap" x="31" y="14" width="10" height="9" rx="2"></rect>
+            </svg>
+            <span class="timer-text">${initial}</span>
+        `;
+        timerEl.dataset.bombReady = '1';
+    };
+
+    const renderTimer = (timerEl, secondsLeft, totalSeconds) => {
+        if (!timerEl) return;
+        const txt = timerEl.querySelector('.timer-text');
+        if (txt) {
+            txt.textContent = formatTime(secondsLeft);
+        } else {
+            timerEl.textContent = formatTime(secondsLeft);
+        }
+
+        const burnProgress = Math.min(1, Math.max(0, 1 - (secondsLeft / totalSeconds)));
+        timerEl.style.setProperty('--burn-progress', burnProgress.toString());
+    };
+
     const finishThinkStep = (finishedEarly) => {
         stopInterval(thinkInterval);
         thinkInterval = null;
         thinkFinishEarlyBtn.disabled = true;
         thinkStartBtn.disabled = true;
-        thinkTimerDisplay.textContent = formatTime(thinkSeconds);
+        renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
 
         if (thinkStatus) {
             thinkStatus.textContent = finishedEarly
@@ -917,7 +949,7 @@ function initM1Q2ThinkFlow() {
         stopInterval(socialInterval);
         socialInterval = null;
         socialSeconds = 0;
-        socialTimerDisplay.textContent = '00:00';
+        renderTimer(socialTimerDisplay, socialSeconds, SOCIAL_TOTAL_SECONDS);
 
         if (socialStatus) {
             socialStatus.textContent = 'Tiempo completado. Ya puedes grabar tu respuesta final.';
@@ -928,8 +960,10 @@ function initM1Q2ThinkFlow() {
     };
 
     // Estado inicial del flujo
-    thinkTimerDisplay.textContent = formatTime(thinkSeconds);
-    socialTimerDisplay.textContent = formatTime(socialSeconds);
+    enhanceBombTimer(thinkTimerDisplay);
+    enhanceBombTimer(socialTimerDisplay);
+    renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
+    renderTimer(socialTimerDisplay, socialSeconds, SOCIAL_TOTAL_SECONDS);
     audioBox.style.display = 'none';
 
     thinkStartBtn.addEventListener('click', () => {
@@ -946,7 +980,7 @@ function initM1Q2ThinkFlow() {
         thinkInterval = setInterval(() => {
             thinkSeconds -= 1;
             if (thinkSeconds < 0) thinkSeconds = 0;
-            thinkTimerDisplay.textContent = formatTime(thinkSeconds);
+            renderTimer(thinkTimerDisplay, thinkSeconds, THINK_TOTAL_SECONDS);
 
             if (thinkSeconds === 0) {
                 finishThinkStep(false);
@@ -984,7 +1018,7 @@ function initM1Q2ThinkFlow() {
         socialInterval = setInterval(() => {
             socialSeconds -= 1;
             if (socialSeconds < 0) socialSeconds = 0;
-            socialTimerDisplay.textContent = formatTime(socialSeconds);
+            renderTimer(socialTimerDisplay, socialSeconds, SOCIAL_TOTAL_SECONDS);
 
             if (socialSeconds === 0) {
                 finishSocialStep();
@@ -1430,12 +1464,13 @@ function initMatchingActivity() {
             const sEl = document.getElementById(sumId);
             if (!pEl || !sEl) continue;
 
-            const pR = pEl.getBoundingClientRect();
+            const pAnchor = pEl.querySelector('.match-pair-image') || pEl;
+            const pR = pAnchor.getBoundingClientRect();
             const sR = sEl.getBoundingClientRect();
 
-            const x1 = pR.right  - sr.left;
+            const x1 = pR.right  - sr.left - 6;
             const y1 = pR.top    - sr.top + pR.height / 2;
-            const x2 = sR.left   - sr.left;
+            const x2 = sR.left   - sr.left + 2;
             const y2 = sR.top    - sr.top + sR.height / 2;
             const cx = (x1 + x2) / 2;
 

@@ -795,6 +795,65 @@ body #ContenedorLibro .activity-spread {
         .think-hidden {
           display: none;
         }
+
+        .bomb-timer {
+          --burn-progress: 0;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          margin: 0.2rem 0;
+        }
+
+        .bomb-timer-svg {
+          width: 58px;
+          height: 42px;
+          overflow: visible;
+          flex: 0 0 auto;
+        }
+
+        .bomb-body {
+          fill: #1f2937;
+          stroke: #0f172a;
+          stroke-width: 2;
+        }
+
+        .bomb-cap {
+          fill: #6b7280;
+        }
+
+        .bomb-fuse {
+          stroke: #92400e;
+          stroke-width: 3;
+          stroke-linecap: round;
+        }
+
+        .bomb-fuse-burn {
+          stroke: #f59e0b;
+          stroke-width: 3;
+          stroke-linecap: round;
+          stroke-dasharray: 46;
+          stroke-dashoffset: calc(46 * (1 - var(--burn-progress)));
+        }
+
+        .bomb-spark {
+          fill: #f97316;
+          transform-origin: 86px 8px;
+          transform: translate(
+            calc(var(--burn-progress) * -42px),
+            calc(var(--burn-progress) * 18px)
+          );
+          filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.9));
+          transition: transform 0.18s linear;
+        }
+
+        .bomb-timer .timer-text {
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.35rem, 2.3vw, 2rem);
+          color: #1d4ed8;
+          line-height: 1;
+          min-width: 72px;
+          text-align: left;
+        }
         
         /* =====================================================================================================
         Páginas 11 y 12 – Actividad: une parejas con sumas misteriosas
@@ -896,8 +955,9 @@ body #ContenedorLibro .activity-spread {
             flex-direction: column;
           gap: 0.75rem;
             width: 100%;
-            flex: 1;
+            flex: 0 0 auto;
           justify-content: flex-start;
+          margin-bottom: 0.2rem;
         }
 
         /* Recuadro de suma misteriosa */
@@ -908,8 +968,8 @@ body #ContenedorLibro .activity-spread {
             background: #fff7ed;
             border: 2.5px solid #fb923c;
             border-radius: 14px;
-          min-height: 2.9rem;
-          padding: 0.55rem 0.8rem;
+          min-height: 3.5rem;
+          padding: 0.72rem 0.9rem;
             cursor: pointer;
             transition: border-color .15s, box-shadow .15s, transform .1s;
             text-align: center;
@@ -922,7 +982,7 @@ body #ContenedorLibro .activity-spread {
         }
         .match-sum-text {
             font-family: 'Rancho', cursive;
-          font-size: clamp(0.95rem, 1.55vw, 1.24rem);
+          font-size: clamp(1.08rem, 1.75vw, 1.4rem);
             color: #7c2d12;
             letter-spacing: 0.03em;
           line-height: 1.05;
@@ -936,10 +996,10 @@ body #ContenedorLibro .activity-spread {
 
         #matchingVerifyBtn {
           align-self: center;
-          margin-top: 0.15rem;
+          margin-top: 0;
           padding: 0.65rem 1.3rem;
           border-radius: 12px;
-          font-size: clamp(1rem, 1.4vw, 1.2rem);
+          font-size: clamp(1.2rem, 2.2vw, 1.6rem);
           font-family: 'Lobster Two', cursive;
         }
 
