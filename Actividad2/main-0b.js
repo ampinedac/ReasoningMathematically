@@ -273,16 +273,34 @@ function normalizeStorageSegment(value) {
         .toLowerCase();
 }
 
+// Mapeo de tags a componentes pedagógicos
+function getComponentFromTag(tag) {
+    const componentMap = {
+        'M1Q0': '1Contexto',
+        'M1Q1': '1Contexto',
+        'M3Q1': '2Exploración',
+        'M1Q2': '3Conjetura',
+        'M3Q2': '4Generalización',
+        'M3Q3': '5Justificación',
+        'M4Q1': '6Validez',
+        'M4Q2': '7Reflexión',
+        'M4Reflection': null // Reflexión final, no tiene componente pedagógico
+    };
+    return componentMap[tag] || null;
+}
+
 function buildStorageBasePath(tag) {
     const isGuest = studentCode === '0000';
     const guestFolder = normalizeStorageSegment(studentInfo?.nombre || 'invitado');
     const safeGuestFolder = guestFolder || 'invitado';
-
+    
+    const component = getComponentFromTag(tag);
+    
     if (isGuest) {
-        return `Actividad2/${safeGuestFolder}/${tag}`;
+        return component ? `Actividad2/${safeGuestFolder}/${component}` : `Actividad2/${safeGuestFolder}`;
     }
 
-    return `Actividad2/${studentCode}/${tag}`;
+    return component ? `Actividad2/${studentCode}/${component}` : `Actividad2/${studentCode}`;
 }
 
 function initStudentCodeDisplays() {
@@ -306,7 +324,13 @@ function initStudentCodeDisplays() {
 
 function updateStudentCodeDisplays() {
     document.querySelectorAll('.spread-student-code').forEach(el => {
-        el.textContent = studentCode ? `Código: ${studentCode}` : '';
+        if (!studentCode) {
+            el.textContent = '';
+            return;
+        }
+        
+        const displayText = studentInfo?.curso ? studentInfo.curso : 'profe';
+        el.textContent = `Código: ${displayText}`;
     });
 }
 
@@ -775,25 +799,10 @@ async function handleSubmit(tag) {
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
         const basePath = buildStorageBasePath(tag);
-        const timestamp = Date.now();
+        const component = getComponentFromTag(tag);
 
-        // Nombres de archivo especiales para momentos de M3
-        let audioFileName = `audio_${timestamp}`;
-        let m3q1Answer = null;
-        let m3q2Answer = null;
-        let m3q3Answer = null;
-        if (tag === 'M3Q1') {
-            m3q1Answer = 'las_ventas_misteriosas1';
-            audioFileName = `audio_${timestamp}_las_ventas_misteriosas1`;
-        }
-        if (tag === 'M3Q2') {
-            m3q2Answer = 'momento_imaginar_pedidos';
-            audioFileName = `audio_${timestamp}_momento_imaginar_pedidos`;
-        }
-        if (tag === 'M3Q3') {
-            m3q3Answer = 'explicacion_a_la_abuela';
-            audioFileName = `audio_${timestamp}_explicacion_a_la_abuela`;
-        }
+        // Nombre de archivo = código del estudiante (sin timestamp)
+        const audioFileName = studentCode;
 
         // Subir audio
         const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
@@ -813,31 +822,27 @@ async function handleSubmit(tag) {
                         : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
             const canvasBlob = await canvasToBlob(canvasId);
             if (canvasBlob) {
-                const canvasName = tag === 'M3Q1'
-                    ? `canvas_${timestamp}_las_ventas_misteriosas1.png`
-                    : `canvas_${timestamp}.png`;
+                // Nombre de canvas también = código del estudiante
+                const canvasName = `${studentCode}.png`;
                 const imgRef = ref(storage, `${basePath}/${canvasName}`);
                 await uploadBytes(imgRef, canvasBlob);
                 imageURL = await getDownloadURL(imgRef);
             }
         }
 
-        const firestoreTag = tag === 'M3Q1' ? 'LasVentasMisteriosas1' : tag;
-
         // Guardar registro en Firestore
-        await addDoc(collection(db, 'Actividad2'), {
+        const firestoreDoc = {
             studentCode,
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
             curso: studentInfo?.curso || '',
-            tag: firestoreTag,
+            tag,
+            componente: component,
             storageBasePath: basePath,
             audioURL,
             imageURL: imageURL || null,
-            ...(m3q1Answer !== null && { m3q1Answer }),
-            ...(m3q2Answer !== null && { m3q2Answer }),
-            ...(m3q3Answer !== null && { m3q3Answer }),
             timestamp: serverTimestamp()
-        });
+        };
+        await addDoc(collection(db, 'Actividad2'), firestoreDoc);
 
         if (statusEl) {
             statusEl.textContent = tag === 'M4Reflection'
@@ -1050,10 +1055,6 @@ function initM1Q2ThinkFlow() {
                     </radialGradient>
                 </defs>
                 <ellipse class="bomb-floor" cx="46" cy="91" rx="22" ry="5"></ellipse>
-                <path class="bomb-fuse" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C52 52, 50 40, 46 27"></path>
-                <path class="bomb-fuse-char" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C52 52, 50 40, 46 27"></path>
-                <path class="bomb-fuse-burn" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C52 52, 50 40, 46 27"></path>
-                <circle class="bomb-spark" cx="110" cy="88" r="4"></circle>
                 <g class="bomb-explosion">
                     <circle cx="46" cy="34" r="18" fill="rgba(251, 191, 36, 0.45)"></circle>
                     <circle cx="46" cy="34" r="11" fill="rgba(249, 115, 22, 0.7)"></circle>
@@ -1062,6 +1063,10 @@ function initM1Q2ThinkFlow() {
                 <circle class="bomb-body" cx="46" cy="62" r="23" style="fill:url(#${gradId})"></circle>
                 <ellipse class="bomb-shine" cx="38" cy="53" rx="7" ry="5"></ellipse>
                 <rect class="bomb-cap" x="41" y="27" width="10" height="14" rx="2"></rect>
+                <path class="bomb-fuse" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C56 50, 55 40, 52 34"></path>
+                <path class="bomb-fuse-char" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C56 50, 55 40, 52 34"></path>
+                <path class="bomb-fuse-burn" d="M110 88 C120 78, 112 60, 95 62 C78 64, 68 72, 60 62 C56 50, 55 40, 52 34"></path>
+                <circle class="bomb-spark" cx="110" cy="88" r="4"></circle>
             </svg>
             <span class="timer-text">${initial}</span>
         `;

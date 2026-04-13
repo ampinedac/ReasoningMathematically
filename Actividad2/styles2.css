@@ -699,7 +699,7 @@ body #ContenedorLibro .activity-spread {
        justify-content: center;
        align-items: center;
        margin-top: 0.4em; /* Espacio encima de los botones de audio */
-       background-color: transparent;
+      background-color: #ffffff;
        }
        
        .audio-controls .btn:hover { /* Resalta el botón enfocado con un borde azul */
@@ -825,6 +825,12 @@ body #ContenedorLibro .activity-spread {
           justify-content: center;
           gap: 0.8rem;
           min-height: 58%;
+        }
+
+        #thinkSocialSpread #m1q2RightContent.think-hidden,
+        #thinkSocialSpread #m1q2ResponseBlock.think-hidden,
+        #thinkSocialSpread #step2ConversationBlock.think-hidden {
+          display: none;
         }
 
         #thinkSocialSpread .think-audio-intro {
@@ -1225,21 +1231,22 @@ body #ContenedorLibro .activity-spread {
         #m3FlowSpread .q1-right-page {
           justify-content: center;
           align-items: center;
-          gap: 0.55rem;
-          padding-top: clamp(0.85rem, 1.8vw, 1.2rem);
-          padding-bottom: clamp(0.85rem, 1.8vw, 1.2rem);
+          gap: clamp(0.45rem, 1.1vh, 0.85rem);
+          padding-top: clamp(0.4rem, 0.9vh, 0.75rem);
+          padding-bottom: clamp(0.4rem, 0.9vh, 0.75rem);
         }
 
         #m3FlowSpread .m3-step-text {
           margin: 0;
           width: 96%;
           text-align: justify;
+          flex: 0 0 auto;
         }
 
         #m3FlowSpread .m3-board-container {
           width: 100%;
-          flex: 1 1 0;
-          min-height: 260px;
+          flex: 0 0 clamp(220px, 44%, 300px);
+          min-height: 220px;
           gap: 0.4rem;
         }
 
@@ -1252,6 +1259,7 @@ body #ContenedorLibro .activity-spread {
 
         #m3FlowSpread .audio-controls {
           margin-top: 0.1rem;
+          flex: 0 0 auto;
         }
 
         #m3FlowSpread #statusM3Q2,
@@ -1259,6 +1267,23 @@ body #ContenedorLibro .activity-spread {
           width: 100%;
           text-align: center;
           min-height: 1.6em;
+          flex: 0 0 auto;
+        }
+
+        #m3FlowSpread .board-tools .tool-btn,
+        #m3FlowSpread .audio-controls .btn {
+          -webkit-appearance: none;
+          appearance: none;
+          background: transparent;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 0;
+        }
+
+        #m3FlowSpread .board-tools .tool-btn:hover,
+        #m3FlowSpread .audio-controls .btn:hover {
+          box-shadow: none;
         }
 
         #m3q3LockedNotice {
@@ -1281,6 +1306,11 @@ body #ContenedorLibro .activity-spread {
           align-items: center;
           justify-content: center;
           gap: 0.55rem;
+          min-height: 100%;
+        }
+
+        #m3q3StepContent.think-hidden {
+          display: none;
         }
 
         /* =====================================================================================================
