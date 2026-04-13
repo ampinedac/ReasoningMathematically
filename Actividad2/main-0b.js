@@ -930,6 +930,8 @@ function initTableM1Q0() {
             statusEl.style.color = '#16a34a';
             btn.disabled = true;
             btn.style.opacity = '0.6';
+            btn.style.cursor = 'not-allowed';
+            updateNavButtons();
         } else {
             statusEl.textContent = 'Revisa los valores incorrectos e intenta de nuevo.';
             statusEl.style.color = '#dc2626';
