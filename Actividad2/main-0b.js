@@ -1154,7 +1154,10 @@ function initMatchingActivity() {
     const svgEl      = document.getElementById('matchingLinesSVG');
     const verifyBtn  = document.getElementById('matchingVerifyBtn');
     const feedbackEl = document.getElementById('matchingFeedback');
+    const finalQuestionEl = document.querySelector('#matchingRightPage .matching-final-question');
     if (!pairsEl || !sumsEl || !verifyBtn) return;
+
+    if (finalQuestionEl) finalQuestionEl.style.display = 'none';
 
     // Pares de pedidos: cada uno apunta a su suma correcta
     const PAIRS = [
@@ -1169,16 +1172,31 @@ function initMatchingActivity() {
         { id: 'msum1', text: '2+2+2+2+2=4+4' },
         { id: 'msum2', text: '6+6+6+6+6=5+5+5+5+5+5' }
     ];
-    const shuffledSums = [...SUMS].sort(() => Math.random() - 0.5);
+    let shuffledSums = [...SUMS].sort(() => Math.random() - 0.5);
 
     // Estado
     const connections = {}; // pairId → sumId
     let selectedPair  = null;
 
-    // Color por pareja para los lazos
-    const LAZO_COLORS = { mpair0: '#e11d48', mpair1: '#7c3aed', mpair2: '#0ea5e9' };
+    // Color fijo por pareja solicitado
+    // mpair0 = pedidos 2 y 6 (verde)
+    // mpair1 = pedidos 3 y 7 (azul fuerte)
+    // mpair2 = pedidos 4 y 8 (rojo)
+    const LAZO_COLORS = { mpair0: '#16a34a', mpair1: '#1d4ed8', mpair2: '#dc2626' };
+    const LAZO_BOX_BG = { mpair0: 'rgba(22, 163, 74, 0.14)', mpair1: 'rgba(29, 78, 216, 0.14)', mpair2: 'rgba(220, 38, 38, 0.14)' };
+
+    function formatSumText(text) {
+        const [left, right] = text.split('=');
+        return `${left}<span class="match-equal">=</span>${right}`;
+    }
 
     const shuffledPairs = [...PAIRS].sort(() => Math.random() - 0.5);
+
+    // Evita coincidencia visual por filas: ninguna imagen debe quedar frente a su suma correcta.
+    const isRowAligned = (pairs, sums) => pairs.every((p, idx) => p.correctSum === sums[idx]?.id);
+    if (isRowAligned(shuffledPairs, shuffledSums)) {
+        shuffledSums = [shuffledSums[1], shuffledSums[2], shuffledSums[0]];
+    }
 
     shuffledPairs.forEach(p => {
         const card = document.createElement('button');
@@ -1201,7 +1219,7 @@ function initMatchingActivity() {
         const box = document.createElement('div');
         box.className = 'match-sum-box';
         box.id = s.id;
-        box.innerHTML = `<span class="match-sum-text">${s.text}</span>`;
+        box.innerHTML = `<span class="match-sum-text">${formatSumText(s.text)}</span>`;
         box.addEventListener('click', () => {
             if (!selectedPair) return;
 
@@ -1220,6 +1238,8 @@ function initMatchingActivity() {
             selectedPair = null;
             matchingCompleted = false;
             updateNavButtons();
+
+            if (finalQuestionEl) finalQuestionEl.style.display = 'none';
 
             drawLines();
             if (feedbackEl) {
@@ -1243,6 +1263,22 @@ function initMatchingActivity() {
         svgEl.innerHTML = '';
 
         const sr = spread.getBoundingClientRect();
+
+        // Colorear las cajas de sumas según la cuerda conectada (correcta o incorrecta)
+        sumsEl.querySelectorAll('.match-sum-box').forEach(box => {
+            box.style.borderColor = '';
+            box.style.background = '';
+            box.style.boxShadow = '';
+        });
+
+        for (const [pairId, sumId] of Object.entries(connections)) {
+            const sumBox = document.getElementById(sumId);
+            if (sumBox) {
+                sumBox.style.borderColor = LAZO_COLORS[pairId] || '#fb923c';
+                sumBox.style.background = LAZO_BOX_BG[pairId] || '#fff7ed';
+                sumBox.style.boxShadow = `0 0 0 2px ${LAZO_BOX_BG[pairId] || 'rgba(0,0,0,0.08)'}`;
+            }
+        }
 
         for (const [pairId, sumId] of Object.entries(connections)) {
             const pEl = document.getElementById(pairId);
@@ -1272,16 +1308,20 @@ function initMatchingActivity() {
     // ── Verificar si todas son correctas (solo al presionar botón) ─────────────────────────
     function verifyAll() {
         if (Object.keys(connections).length < 3) return;
-        const allOk = PAIRS.every(p => connections[p.id] === p.correctSum);
+        const wrongCount = PAIRS.filter(p => connections[p.id] !== p.correctSum).length;
+        const allOk = wrongCount === 0;
         if (feedbackEl) {
             feedbackEl.textContent = allOk
                 ? '✅ ¡Perfecto! Todas las parejas son correctas.'
-                : '🔁 Hay alguna pareja incorrecta, ¡inténtalo de nuevo!';
+                : `🔁 Tienes ${wrongCount} emparejamiento(s) incorrecto(s). Inténtalo de nuevo.`;
             feedbackEl.style.color = allOk ? '#16a34a' : '#dc2626';
         }
         if (allOk) {
             matchingCompleted = true;
             updateNavButtons();
+            if (finalQuestionEl) finalQuestionEl.style.display = 'flex';
+        } else {
+            if (finalQuestionEl) finalQuestionEl.style.display = 'none';
         }
     }
 

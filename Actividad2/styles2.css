@@ -842,8 +842,8 @@ body #ContenedorLibro .activity-spread {
 
         .match-pair-image {
           display: block;
-          width: 100%;
-          max-width: 620px;
+          width: 94%;
+          max-width: 560px;
           height: auto;
           margin: 0 auto;
           border-radius: 14px;
@@ -885,17 +885,24 @@ body #ContenedorLibro .activity-spread {
             letter-spacing: 0.03em;
         }
 
+        .match-equal {
+          display: inline-block;
+          margin-left: 3px;
+          margin-right: 3px;
+        }
+
         #matchingVerifyBtn {
           align-self: center;
           margin-top: 0.15rem;
           padding: 0.65rem 1.3rem;
           border-radius: 12px;
           font-size: clamp(1rem, 1.4vw, 1.2rem);
+          font-family: 'Lobster Two', cursive;
         }
 
         /* Pregunta final + audio en página 18 */
         .matching-final-question {
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             gap: 0.35rem;
