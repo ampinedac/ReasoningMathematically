@@ -247,9 +247,10 @@ class TraysSystem {
                 console.log('Deseleccionada');
             } else {
                 // Emparejar o desemparejar
-                this.togglePairing(this.selectedTray.id, tray.id);
-                this.selectedTray.classList.remove('selected');
+                const firstSelected = this.selectedTray;
+                firstSelected.classList.remove('selected');
                 this.selectedTray = null;
+                this.togglePairing(firstSelected.id, tray.id);
             }
         }
     }

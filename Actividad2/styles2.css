@@ -1085,7 +1085,9 @@ body #ContenedorLibro .activity-spread {
 
         #matchingLeftPage,
         #matchingRightPage {
-          justify-content: flex-start;
+          display: grid;
+          grid-template-rows: clamp(8.5rem, 14vh, 11rem) minmax(0, 1fr) auto;
+          justify-content: stretch;
           padding-top: clamp(1.8rem, 3.2vw, 2.6rem);
           padding-bottom: clamp(1rem, 1.8vw, 1.6rem);
           min-height: 0;
@@ -1093,11 +1095,12 @@ body #ContenedorLibro .activity-spread {
 
         #matchingLeftPage {
           align-items: stretch;
-          gap: 0.65rem;
+          gap: 0.35rem;
         }
 
         #matchingRightPage {
-          align-items: center;
+          align-items: stretch;
+          justify-items: center;
           gap: 0.35rem;
         }
 
@@ -1116,10 +1119,14 @@ body #ContenedorLibro .activity-spread {
             font-family: 'Rancho', cursive;
           font-size: clamp(1.02rem, 1.45vw, 1.28rem);
             color: #3b0764;
-            text-align: center;
+            text-align: justify;
           margin: 0 auto 0.2rem auto;
           line-height: 1.1;
           width: 94%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           flex: 0 0 auto;
         }
 
@@ -1130,7 +1137,9 @@ body #ContenedorLibro .activity-spread {
           gap: 0.45rem;
             width: 100%;
             flex: 1;
+          height: 100%;
           min-height: 0;
+          grid-row: 2;
         }
 
         /* Botón de una pareja de pedidos (usa imagen real) */
@@ -1181,9 +1190,12 @@ body #ContenedorLibro .activity-spread {
             width: 100%;
             flex: 1;
           min-height: 0;
+          height: 100%;
+          align-self: stretch;
           justify-content: flex-start;
-          margin-top: clamp(4.8rem, 8.8vh, 6.9rem);
+          margin-top: 0;
           margin-bottom: 0;
+          grid-row: 2;
         }
 
         /* Recuadro de suma misteriosa */
@@ -1209,7 +1221,7 @@ body #ContenedorLibro .activity-spread {
         }
         .match-sum-text {
             font-family: 'Rancho', cursive;
-          font-size: clamp(1.6rem, 2.55vw, 2.12rem);
+          font-size: clamp(1.75rem, 2.75vw, 2.3rem);
             color: #7c2d12;
             letter-spacing: 0.03em;
           line-height: 1.05;
@@ -1229,19 +1241,26 @@ body #ContenedorLibro .activity-spread {
           border-radius: 12px;
           font-size: clamp(1.2rem, 2.2vw, 1.6rem);
           font-family: 'Lobster Two', cursive;
+          grid-row: 1;
         }
 
         #matchingRightPage {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
+          display: grid;
+          grid-template-rows: clamp(8.5rem, 14vh, 11rem) minmax(0, 1fr) auto;
+          align-items: stretch;
+          justify-items: center;
           gap: 0.35rem;
         }
 
         #matchingFeedback {
-          margin-top: 0;
+          margin-top: 0.1rem;
           min-height: 1.2em;
+          width: 100%;
+          text-align: center;
+          color: #111827;
+          font-family: 'Lobster Two', cursive;
+          grid-row: 1;
+          align-self: end;
         }
 
         /* Pregunta final + audio en página 18 */
@@ -1278,19 +1297,19 @@ body #ContenedorLibro .activity-spread {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: center;
           gap: 0.55rem;
           pointer-events: auto;
         }
 
         #spread13Table .spread13-title {
           margin: 0;
-          width: 96%;
+          width: 98%;
           text-align: center;
           font-family: 'Lobster Two', cursive;
-          font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+          font-size: clamp(1.55rem, 1.95vw, 2rem);
           color: #1e3a8a;
-          line-height: 1.1;
+          line-height: 1.12;
         }
 
         #spread13Table .spread13-grid-table {
@@ -1303,26 +1322,46 @@ body #ContenedorLibro .activity-spread {
           table-layout: fixed;
         }
 
+        #spread13Table .spread13-grid-table col:nth-child(1) { width: 26%; }
+        #spread13Table .spread13-grid-table col:nth-child(2) { width: 33%; }
+        #spread13Table .spread13-grid-table col:nth-child(3) { width: 8%; }
+        #spread13Table .spread13-grid-table col:nth-child(4) { width: 33%; }
+
         #spread13Table .spread13-grid-table th,
         #spread13Table .spread13-grid-table td {
-          border: 1.6px solid #7c4a03;
-          padding: 0.28rem 0.4rem;
+          border-top: 1.6px solid #7c4a03;
+          border-bottom: 1.6px solid #7c4a03;
+          border-left: none;
+          border-right: none;
+          padding: 0.3rem 0.42rem;
           text-align: center;
           vertical-align: middle;
           font-family: 'Lobster Two', cursive;
           color: #1f2937;
-          font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+          font-size: clamp(1.55rem, 1.9vw, 1.95rem);
         }
 
         #spread13Table .spread13-grid-table th {
           background: #e0ecff;
           color: #1e3a8a;
-          font-size: clamp(1rem, 1.45vw, 1.3rem);
+          font-size: clamp(1.6rem, 2vw, 2.05rem);
+        }
+
+        #spread13Table .spread13-grid-table .equal-col-head {
+          color: transparent;
+        }
+
+        #spread13Table .spread13-grid-table .equal-col {
+          font-family: 'Lobster Two', cursive;
+          color: #1e3a8a;
+          font-size: clamp(2rem, 2.7vw, 2.7rem);
+          font-weight: 700;
+          line-height: 1;
         }
 
         #spread13Table .sum-dropzone {
           width: 100%;
-          min-height: 2rem;
+          min-height: 2.25rem;
           border: 2px dashed #60a5fa;
           border-radius: 9px;
           background: rgba(239, 246, 255, 0.85);
@@ -1342,8 +1381,8 @@ body #ContenedorLibro .activity-spread {
           width: 98%;
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 0.32rem 0.45rem;
-          padding: 0.35rem;
+          gap: 0.36rem 0.5rem;
+          padding: 0.4rem;
           border-radius: 10px;
           background: rgba(255, 255, 255, 0.65);
           border: 1.6px solid #93c5fd;
@@ -1351,16 +1390,16 @@ body #ContenedorLibro .activity-spread {
 
         #spread13Table .sum-token-chip {
           font-family: 'Rancho', cursive;
-          font-size: clamp(0.9rem, 1.28vw, 1.2rem);
+          font-size: clamp(1.45rem, 1.75vw, 1.85rem);
           color: #1e3a8a;
           background: #eff6ff;
           border: 1.8px solid #60a5fa;
           border-radius: 9px;
-          padding: 0.2rem 0.42rem;
+          padding: 0.16rem 0.5rem;
           text-align: center;
           cursor: grab;
           user-select: none;
-          line-height: 1.03;
+          line-height: 1.05;
           transition: transform 0.15s, box-shadow 0.15s;
         }
 
@@ -1390,7 +1429,7 @@ body #ContenedorLibro .activity-spread {
         #spread13Table #statusSpread13Table {
           margin: 0;
           min-height: 1.2em;
-          font-size: clamp(1rem, 1.35vw, 1.2rem);
+          font-size: clamp(1.35rem, 1.6vw, 1.65rem);
         }
 
         @keyframes wrongDropShake {
@@ -1771,7 +1810,7 @@ body #ContenedorLibro .activity-spread {
           border-radius: 10px;
           overflow: hidden;
           font-family: 'Rancho', cursive;
-          font-size: clamp(0.85rem, 1.2vw, 1.1rem);
+          font-size: clamp(1.7rem, 1.95vw, 2rem);
         }
 
         .arepas-table th {
@@ -1780,7 +1819,7 @@ body #ContenedorLibro .activity-spread {
           padding: 0.45em 0.6em;
           text-align: center;
           font-family: 'Lobster Two', cursive;
-           font-size: clamp(0.95rem, 1.35vw, 1.2rem);
+          font-size: clamp(1.7rem, 1.95vw, 2rem);
         }
 
         .arepas-table td {
@@ -1804,7 +1843,7 @@ body #ContenedorLibro .activity-spread {
           border-radius: 6px;
           text-align: center;
           font-family: 'Rancho', cursive;
-          font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+          font-size: clamp(1.7rem, 1.95vw, 2rem);
           color: #1e3a8a;
           background: #eff6ff;
           outline: none;
@@ -1830,7 +1869,7 @@ body #ContenedorLibro .activity-spread {
           background: #2563eb;
           color: #fff;
           font-family: 'Lobster Two', cursive;
-            font-size: clamp(0.78rem, 1.05vw, 0.95rem);
+          font-size: clamp(1.7rem, 1.95vw, 2rem);
           padding: 0.45em 1.4em;
           border: none;
           border-radius: 8px;

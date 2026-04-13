@@ -1960,7 +1960,7 @@ function initMatchingActivity() {
             feedbackEl.textContent = allOk
                 ? '✅ ¡Perfecto! Todas las parejas son correctas.'
                 : `🔁 Tienes ${wrongCount} emparejamiento(s) incorrecto(s). Inténtalo de nuevo.`;
-            feedbackEl.style.color = allOk ? '#16a34a' : '#dc2626';
+            feedbackEl.style.color = '#111827';
         }
         if (allOk) {
             matchingCompleted = true;
@@ -1975,7 +1975,7 @@ function initMatchingActivity() {
         if (Object.keys(connections).length < 3) {
             if (feedbackEl) {
                 feedbackEl.textContent = 'Une las 3 parejas antes de verificar.';
-                feedbackEl.style.color = '#dc2626';
+                feedbackEl.style.color = '#111827';
             }
             return;
         }
