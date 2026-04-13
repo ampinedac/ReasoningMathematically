@@ -875,7 +875,7 @@ body #ContenedorLibro .activity-spread {
             transform: translateY(-1px);
         }
 
-        .match-pair-image {
+        .q1-left-page img.match-pair-image {
           display: block;
           width: 100%;
           height: 100%;
