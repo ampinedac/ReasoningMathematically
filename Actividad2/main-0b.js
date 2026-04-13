@@ -118,7 +118,7 @@ function initVisibility() {
         const finalQ = document.getElementById('m1Q2FinalQuestion');
         if (finalQ) hide('m1Q2FinalQuestion');
     }
-    setM3Step16Visible(false);
+    setM3Step16Visible(true);
     // Ocultar sección final M4
     hide('finalQuestionSection');
     hide('magicCanvas');
@@ -481,7 +481,7 @@ function canAdvance() {
     if (currentSpread === 3) return m1q0Submitted;
     if (currentSpread === 4) return menteAndresM0Completed;
     if (currentSpread === 5) return matchingCompleted;
-    if (currentSpread === 6) return spread13TableCompleted;
+    if (currentSpread === 6) return spread13TableCompleted && m3q1Submitted;
     if (currentSpread === 7) return m1q2Submitted;
     if (currentSpread === 8) return m3q3Submitted;
     if (currentSpread === 9) return m4Submitted;
@@ -946,6 +946,7 @@ function initTableM1Q0() {
 function initSpread13Table() {
     const bank = document.getElementById('sumTokensBank');
     const statusEl = document.getElementById('statusSpread13Table');
+    const audioBlock = document.getElementById('spread13AudioBlock');
     const dropzones = Array.from(document.querySelectorAll('#spread13Table .sum-dropzone'));
     if (!bank || !statusEl || dropzones.length === 0) return;
 
@@ -995,6 +996,8 @@ function initSpread13Table() {
             bank.appendChild(token);
 
             spread13TableCompleted = false;
+            m3q1Submitted = false;
+            if (audioBlock) audioBlock.classList.add('think-hidden');
             statusEl.textContent = 'Ficha regresada. Ubícala de nuevo en el espacio correcto.';
             statusEl.style.color = '#1d4ed8';
             updateNavButtons();
@@ -1009,6 +1012,10 @@ function initSpread13Table() {
         if (done) {
             statusEl.textContent = '✅ ¡Excelente! Ubicaste correctamente todas las sumas.';
             statusEl.style.color = '#16a34a';
+            if (audioBlock) audioBlock.classList.remove('think-hidden');
+        } else {
+            m3q1Submitted = false;
+            if (audioBlock) audioBlock.classList.add('think-hidden');
         }
         updateNavButtons();
     }
@@ -1175,7 +1182,7 @@ function setM3Step16Visible(visible) {
 }
 
 function initM3DualStepFlow() {
-    setM3Step16Visible(false);
+    setM3Step16Visible(true);
 }
 
 // ─────────────────────────────────────────────

@@ -191,7 +191,9 @@
     <!-- Story Spread 13-14 (Tabla interactiva de equivalencias) -->
 
     <div class="page q1-book-spread activity-spread" id="spread13Table">
-        <div class="q1-left-page"></div>
+        <div class="q1-left-page">
+            <p class="m3-step-text">Andrés quiere contarle a su abuelita un descubrimiento muy especial. Todavía no sabe cómo explicarle qué es una suma misteriosa ni cómo encontrarla. Necesita ayuda para encontrar palabras fáciles que su abuela pueda entender. Recuerda incluir TOdas las características que encontraste en el paso anterior.</p>
+        </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page"></div>
 
@@ -243,6 +245,16 @@
 
             <div id="sumTokensBank" class="sum-token-bank"></div>
             <p id="statusSpread13Table" class="status-text"></p>
+
+            <div id="spread13AudioBlock" class="spread13-audio-block think-hidden">
+                <p class="spread13-audio-question">¿Por qué Andrés dice que estas sumas son sumas misteriosas? Explica.</p>
+                <div class="audio-controls">
+                    <button id="recordBtnM3Q1" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+                    <button id="stopBtnM3Q1" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
+                    <button id="submitM3Q1" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
+                </div>
+                <p id="statusM3Q1" class="status-text"></p>
+            </div>
         </div>
 
         <span class="page-number page-number-left">13</span>
@@ -285,8 +297,8 @@
 
             <div id="m1q2ResponseBlock" class="think-hidden">
                 <div class="think-audio-intro">
-                    <h3>Momento de responder 🎙️</h3>
-                    <p class="think-final-question">¿Cuáles son TODAS las características de las sumas misteriosas? Explica y propón un ejemplo de suma misteriosa diferente a los que Andrés se ha imaginado.</p>
+                    
+                    <p class="think-final-question"> Propón un ejemplo de suma misteriosa diferente a los que Andrés se ha imaginado.</p>
                 </div>
 
                 <div id="m1Q2FinalQuestion" class="think-audio-box">
@@ -318,43 +330,12 @@
     </div>
     <!-- Story Spread 17-18 (Dos momentos de explicacion con tablero) -->
     <div class="page q1-book-spread activity-spread" id="m3FlowSpread">
-        <div class="q1-left-page">
-            <p class="m3-step-text">Es tu momento de imaginar, imagina pedidos y responde ¿A partir de cualquier pedido se pueden encontrar sumas misteriosas? Explica</p>
-
-            <div class="board-container m3-board-container">
-                <div class="board-tools">
-                    <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
-                        <img src="./assets/images/lapiznegro.png" alt="Lapiz negro">
-                    </button>
-                    <button class="tool-btn" data-tool="red" title="Lápiz rojo" aria-label="Lápiz rojo">
-                        <img src="./assets/images/lapizrojo.png" alt="Lapiz rojo">
-                    </button>
-                    <button class="tool-btn" data-tool="yellow" title="Resaltador" aria-label="Resaltador">
-                        <img src="./assets/images/resaltador.png" alt="Resaltador">
-                    </button>
-                    <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador">
-                        <img src="./assets/images/borrador.png" alt="Borrador">
-                    </button>
-                    <button class="tool-btn" data-tool="clear" title="Limpiar tablero" aria-label="Limpiar tablero">
-                        <img src="./assets/images/borrador-de-pizarra.png" alt="Limpiar tablero">
-                    </button>
-                </div>
-                <div class="board-wrapper m3-board-wrapper">
-                    <canvas id="boardCanvasM3Q2" class="drawing-board"></canvas>
-                </div>
-            </div>
-
-            <div class="audio-controls">
-                <button id="recordBtnM3Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
-                <button id="stopBtnM3Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
-                <button id="submitM3Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar audio"></button>
-            </div>
-            <p id="statusM3Q2" class="status-text"></p>
-        </div>
+        <div class="q1-left-page"></div>
         <div class="spread-fold"></div>
         <div class="q1-right-page">
             <div id="m3q3StepContent" class="think-hidden">
-                <p class="m3-step-text">Andrés quiere contarle a su abuelita un descubrimiento muy especial. Todavía no sabe cómo explicarle qué es una suma misteriosa ni cómo encontrarla. Necesita ayuda para encontrar palabras fáciles que su abuela pueda entender. En la hoja que sigue, puedes hacer un dibujo o escribir una suma misteriosa para que ella lo vea más claro.</p>
+                <p class="m3-step-text">Si crees que un dibujo en el tablero o una suma misteriosa puede ayudar
+                    a la abuelita de Andrés para entender mejor úsalo.</p>
 
                 <div class="board-container m3-board-container">
                     <div class="board-tools">

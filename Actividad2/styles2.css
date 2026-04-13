@@ -1469,6 +1469,35 @@ body #ContenedorLibro .activity-spread {
           font-size: clamp(1.35rem, 1.6vw, 1.65rem);
         }
 
+        #spread13Table .spread13-audio-block {
+          width: 98%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.35rem;
+        }
+
+        #spread13Table .spread13-audio-question {
+          margin: 0;
+          width: 100%;
+          text-align: center;
+          font-family: 'Rancho', cursive;
+          color: #0f2f7a;
+          font-size: clamp(1.55rem, 2vw, 2.05rem);
+          line-height: 1.1;
+        }
+
+        #spread13Table .spread13-audio-block .audio-controls {
+          margin-top: 0;
+          justify-content: center;
+        }
+
+        #spread13Table #statusM3Q1 {
+          min-height: 1.2em;
+          text-align: center;
+        }
+
         @keyframes wrongDropShake {
           0% { transform: translateX(0); }
           25% { transform: translateX(-4px); }
@@ -1523,8 +1552,7 @@ body #ContenedorLibro .activity-spread {
           flex: 0 0 auto;
         }
 
-        #m3FlowSpread .board-tools .tool-btn,
-        #m3FlowSpread .audio-controls .btn {
+        #m3FlowSpread .board-tools .tool-btn {
           -webkit-appearance: none;
           appearance: none;
           background: transparent;
@@ -1534,8 +1562,16 @@ body #ContenedorLibro .activity-spread {
           padding: 0;
         }
 
-        #m3FlowSpread .board-tools .tool-btn:hover,
-        #m3FlowSpread .audio-controls .btn:hover {
+        #m3FlowSpread .audio-controls .btn {
+          -webkit-appearance: none;
+          appearance: none;
+          background: #ffffff;
+          border: none;
+          border-radius: 10px;
+          padding: 0.14rem;
+        }
+
+        #m3FlowSpread .board-tools .tool-btn:hover {
           box-shadow: none;
         }
 
