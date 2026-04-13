@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mision Robot V</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="ContenedorBienvenida">
+    <section id="welcomeScreen" class="entry-card">
+      <h1 class="entry-title">Mision Robot V</h1>
+      <p class="entry-subtitle">Laboratorio de numeros magicos</p>
+      <div class="entry-box">
+        <label for="studentCodeInput">Escribe tu codigo estudiantil:</label>
+        <input id="studentCodeInput" type="text" maxlength="12" autocomplete="off" placeholder="Ej: 20314">
+        <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+        <p id="welcomeError" class="status-line"></p>
+      </div>
+    </section>
+  </div>
+
+  <div id="ContenedorConfirmacion">
+    <section id="confirmationScreen" class="entry-card">
+      <h1 class="entry-title">Confirmacion</h1>
+      <div class="entry-box">
+        <p id="confirmationQuestion" class="confirmation-question"></p>
+        <div class="confirmation-actions">
+          <button id="confirmYesBtn" class="btn btn-success">Si, soy yo</button>
+          <button id="confirmNoBtn" class="btn btn-secondary">No, corregir</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <main id="activityApp" class="lab-shell" aria-live="polite">
+    <section id="contexto" class="component active">
+      <div class="panel hero-panel">
+        <h2>1Contexto</h2>
+        <div class="hero-grid">
+          <img class="robot-image" src="assets/img/robot-broken.png" alt="Robot danado" onerror="this.style.display='none';this.parentElement.classList.add('no-image');">
+          <div class="story-card">
+            <p>Hola, ingeniera. Soy V-Bot y tuve un fallo en mi sistema de numeros magicos. Antes podia construir Magic V, pero ahora mezclo los numeros y no logro equilibrarlas. Necesito tu ayuda para descubrir como funcionan y reparar mi laboratorio.</p>
+            <button id="startMissionBtn" class="btn btn-primary">Entrar al laboratorio</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="exploracion" class="component hidden">
+      <div class="panel">
+        <h2>2Exploracion</h2>
+        <div class="exploration-topbar">
+          <p id="timerDisplay" class="chip">Tiempo: 00:00</p>
+          <p id="foundDisplay" class="chip">Magic V encontradas: 0/3</p>
+        </div>
+
+        <div class="exploration-grid">
+          <div class="builder-card">
+            <h3>Numeros disponibles</h3>
+            <div id="numberPool" class="number-pool" aria-label="Numeros arrastrables"></div>
+
+            <h3>Construye la Magic V</h3>
+            <div class="v-board" id="explorationBoard">
+              <div class="dropzone" data-pos="leftTop">Izq superior</div>
+              <div class="dropzone" data-pos="rightTop">Der superior</div>
+              <div class="dropzone" data-pos="leftMid">Izq media</div>
+              <div class="dropzone" data-pos="rightMid">Der media</div>
+              <div class="dropzone bottom-zone" data-pos="bottom">Inferior</div>
+            </div>
+
+            <div class="action-row">
+              <button id="checkExplorationBtn" class="btn btn-primary">Comprobar</button>
+              <button id="resetExplorationBtn" class="btn btn-secondary">Reiniciar</button>
+            </div>
+            <p id="explorationFeedback" class="status-line">Arrastra los numeros para probar.</p>
+          </div>
+
+          <aside class="gallery-card">
+            <h3>Galeria de Magic V</h3>
+            <div id="foundGallery" class="mini-gallery"></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="conjetura" class="component hidden">
+      <div class="panel">
+        <h2>3Conjetura</h2>
+        <p class="intro-text">V-Bot noto algo extrano en el numero de abajo.</p>
+        <p class="question-text">Mira el numero de abajo en las tres Magic V. Que sospechas sobre ese lugar?</p>
+
+        <div id="conjeturaGallery" class="mini-gallery highlight-bottom"></div>
+
+        <div class="audio-block">
+          <button id="recordConjeturaBtn" class="btn btn-primary">Grabar audio</button>
+          <button id="stopConjeturaBtn" class="btn btn-secondary">Detener</button>
+          <p id="statusConjetura" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <textarea id="conjeturaText" rows="4" placeholder="Creo que abajo..."></textarea>
+
+        <div class="action-row end-row">
+          <button id="continueConjeturaBtn" class="btn btn-success">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="generalizacion" class="component hidden">
+      <div class="panel">
+        <h2>4Generalizacion</h2>
+        <p class="intro-text">Ahora ayudale a V-Bot a escribir una regla.</p>
+
+        <div class="support-grid">
+          <textarea id="generalizacionText" rows="6" placeholder="En una Magic V, el numero de abajo..."></textarea>
+          <div class="support-panel">
+            <h3>Pistas</h3>
+            <p>siempre...</p>
+            <p>nunca...</p>
+            <p>funciona cuando...</p>
+          </div>
+        </div>
+
+        <div class="action-row end-row">
+          <button id="continueGeneralizacionBtn" class="btn btn-success">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="justificacion" class="component hidden">
+      <div class="panel">
+        <h2>5Justificacion</h2>
+        <article class="quote-card">
+          Una ingeniera del laboratorio dijo: "Es imposible hacer una Magic V con un numero par abajo".
+        </article>
+        <p class="question-text">Estas de acuerdo? Explica como convencerias a otra persona.</p>
+
+        <div class="audio-block">
+          <button id="recordJustificacionBtn" class="btn btn-primary">Grabar audio</button>
+          <button id="stopJustificacionBtn" class="btn btn-secondary">Detener</button>
+          <p id="statusJustificacion" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <div class="action-row end-row">
+          <button id="continueJustificacionBtn" class="btn btn-success">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="validez" class="component hidden">
+      <div class="panel">
+        <h2>6Validez</h2>
+        <p class="intro-text">Prueba de reparacion final: V-Bot necesita comprobar si tu idea funciona siempre.</p>
+
+        <div class="chip-wrap">
+          <p id="validezPhase" class="chip">Fase: vertice inferior fijo en 2</p>
+          <p id="validezAttempts" class="chip">Intentos con 2: 0 | Intentos con 4: 0</p>
+        </div>
+
+        <div class="exploration-grid">
+          <div class="builder-card">
+            <h3>Numeros disponibles</h3>
+            <div id="validezNumberPool" class="number-pool"></div>
+
+            <h3>Magic V de validacion</h3>
+            <div class="v-board" id="validezBoard">
+              <div class="dropzone" data-pos="leftTop">Izq superior</div>
+              <div class="dropzone" data-pos="rightTop">Der superior</div>
+              <div class="dropzone" data-pos="leftMid">Izq media</div>
+              <div class="dropzone" data-pos="rightMid">Der media</div>
+              <div class="dropzone bottom-zone fixed" data-pos="bottom">Inferior</div>
+            </div>
+
+            <div class="action-row">
+              <button id="checkValidezBtn" class="btn btn-primary">Comprobar</button>
+              <button id="resetValidezBtn" class="btn btn-secondary">Reiniciar</button>
+            </div>
+            <p id="validezFeedback" class="status-line">Completa la V para probar.</p>
+          </div>
+
+          <aside class="gallery-card">
+            <h3>Resultado de prueba</h3>
+            <p id="validezSummary" class="intro-text">Todavia no has probado ambos numeros pares.</p>
+          </aside>
+        </div>
+
+        <div id="validezReflectionBlock" class="hidden">
+          <p class="question-text">Despues de probar con 2 y con 4, crees que tu regla funciona siempre? Por que?</p>
+          <div class="audio-block">
+            <button id="recordValidezBtn" class="btn btn-primary">Grabar audio</button>
+            <button id="stopValidezBtn" class="btn btn-secondary">Detener</button>
+            <p id="statusValidez" class="status-line">Sin grabacion.</p>
+          </div>
+          <div class="action-row end-row">
+            <button id="continueValidezBtn" class="btn btn-success">Continuar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflexion" class="component hidden">
+      <div class="panel">
+        <h2>7Reflexion</h2>
+        <img class="robot-image" src="assets/img/robot-happy.png" alt="Robot feliz" onerror="this.style.display='none';this.parentElement.classList.add('no-image');">
+        <p class="intro-text">Mision cumplida! Gracias a ti, V-Bot entendio como funcionan las Magic V.</p>
+
+        <textarea id="reflexionText" rows="5" placeholder="Descubri que... Esto pasa porque..."></textarea>
+
+        <div class="audio-block">
+          <button id="recordReflexionBtn" class="btn btn-primary">Grabar audio (opcional)</button>
+          <button id="stopReflexionBtn" class="btn btn-secondary">Detener</button>
+          <p id="statusReflexion" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <p class="badge">Insignia: Ingeniera de patrones</p>
+
+        <div class="summary-card" id="finalSummary"></div>
+
+        <div class="action-row end-row">
+          <button id="restartMissionBtn" class="btn btn-primary">Reiniciar mision</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

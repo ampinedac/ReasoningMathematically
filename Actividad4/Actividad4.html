@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actividad 4 - El closet de Sarita</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="ContenedorBienvenida">
+    <section id="welcomeScreen" class="entry-card">
+      <h1 class="entry-title">Actividad 4</h1>
+      <p class="entry-subtitle">El closet de Sarita</p>
+      <div class="entry-box">
+        <label for="studentCodeInput">Escribe tu codigo estudiantil:</label>
+        <input id="studentCodeInput" type="text" maxlength="12" autocomplete="off" placeholder="Ej: 20314">
+        <button id="enterBtn" class="btn btn-primary">Ingresar</button>
+        <p id="welcomeError" class="status-line"></p>
+      </div>
+    </section>
+  </div>
+
+  <div id="ContenedorConfirmacion">
+    <section id="confirmationScreen" class="entry-card">
+      <h1 class="entry-title">Confirmacion</h1>
+      <div class="entry-box">
+        <p id="confirmationQuestion" class="confirmation-question"></p>
+        <div class="confirmation-actions">
+          <button id="confirmYesBtn" class="btn btn-success">Si, soy yo</button>
+          <button id="confirmNoBtn" class="btn btn-secondary">No, corregir</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <main id="activityApp" class="app-shell" aria-live="polite">
+    <section id="contexto" class="component active">
+      <div class="card boutique-card">
+        <div class="decor-row" aria-hidden="true">
+          <span>★</span>
+          <span>✦</span>
+          <span>🪄</span>
+          <span>✦</span>
+          <span>★</span>
+        </div>
+        <h2>1Contexto</h2>
+        <p class="story-text">Sarita cree que no tiene nada que ponerse... pero en realidad no sabe combinar su ropa.</p>
+
+        <div class="closet-showcase">
+          <div class="top-items" aria-label="Prendas de arriba">
+            <h3>Parte de arriba</h3>
+            <div class="item-grid mini-grid">
+              <div class="dress-item top pink">👕 Camiseta rosa</div>
+              <div class="dress-item top lilac">👚 Camiseta lila</div>
+              <div class="dress-item top aqua">🎽 Camiseta turquesa</div>
+            </div>
+          </div>
+
+          <div class="bottom-items" aria-label="Prendas de abajo">
+            <h3>Parte de abajo</h3>
+            <div class="item-grid mini-grid">
+              <div class="dress-item bottom blue">👖 Pantalon</div>
+              <div class="dress-item bottom yellow">🩳 Falda</div>
+            </div>
+          </div>
+        </div>
+
+        <button id="startActivityBtn" class="btn btn-primary">AYUDAR A SARITA</button>
+      </div>
+    </section>
+
+    <section id="exploracion" class="component">
+      <div class="card">
+        <h2>2Exploracion</h2>
+        <p class="section-guide">Construye pintas combinando una camiseta con una prenda de abajo.</p>
+
+        <div class="status-strip">
+          <p id="outfitCounter" class="pill">Pintas encontradas: 0</p>
+          <p id="timerDisplay" class="pill">Tiempo: 00:00</p>
+        </div>
+
+        <div class="exploration-layout">
+          <div class="workspace-panel">
+            <div class="wardrobe-panel top-panel">
+              <h3>Perchero de camisetas</h3>
+              <div class="hanger-row" aria-hidden="true">
+                <span>🧷</span><span>🧷</span><span>🧷</span>
+              </div>
+              <div id="topsPool" class="drag-pool"></div>
+            </div>
+
+            <div class="mannequin-panel">
+              <h3>Maniqui</h3>
+              <div id="mannequin" class="mannequin">
+                <div id="dropTop" class="dropzone" data-zone="top">Suelta aqui la prenda de arriba</div>
+                <div class="mannequin-body" aria-hidden="true">🧍</div>
+                <div id="dropBottom" class="dropzone" data-zone="bottom">Suelta aqui la prenda de abajo</div>
+              </div>
+            </div>
+
+            <div class="wardrobe-panel bottom-panel">
+              <h3>Perchero de abajo</h3>
+              <div class="hanger-row" aria-hidden="true">
+                <span>🧷</span><span>🧷</span>
+              </div>
+              <div id="bottomsPool" class="drag-pool"></div>
+            </div>
+
+            <div class="button-row">
+              <button id="saveOutfitBtn" class="btn btn-success">Guardar pinta</button>
+              <button id="resetSelectionBtn" class="btn btn-secondary">Reiniciar</button>
+            </div>
+            <p id="explorationFeedback" class="status-line"></p>
+          </div>
+
+          <aside class="gallery-panel">
+            <h3>Galeria de pintas</h3>
+            <div id="savedGallery" class="saved-gallery"></div>
+          </aside>
+        </div>
+
+        <div class="audio-area">
+          <p class="audio-question">Mira las pintas que ya hiciste. Que cambia y que se mantiene?</p>
+          <div class="audio-buttons">
+            <button id="recordExploracionBtn" class="btn btn-primary">Grabar audio</button>
+            <button id="stopExploracionBtn" class="btn btn-secondary">Detener</button>
+          </div>
+          <p id="statusExploracion" class="status-line">Sin grabacion.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="conjetura" class="component">
+      <div class="card">
+        <h2>3Conjetura</h2>
+        <p class="section-guide">Observa las pintas que descubriste.</p>
+        <div id="conjeturaGallery" class="saved-gallery"></div>
+
+        <label for="predictedTotalInput" class="question-label">Si Sarita usa toda su ropa, cuantos pintas crees que puede formar en total?</label>
+        <input id="predictedTotalInput" class="text-input" type="number" min="0" step="1" placeholder="Escribe un numero">
+
+        <label for="conjeturaReasonInput" class="question-label">Explica por que</label>
+        <textarea id="conjeturaReasonInput" class="text-area" rows="4" placeholder="Escribe tu idea..."></textarea>
+
+        <div class="audio-area compact">
+          <p class="audio-question">Explica por que crees eso</p>
+          <div class="audio-buttons">
+            <button id="recordConjeturaBtn" class="btn btn-primary">Grabar audio</button>
+            <button id="stopConjeturaBtn" class="btn btn-secondary">Detener</button>
+          </div>
+          <p id="statusConjetura" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <div class="button-row end">
+          <button id="goGeneralizacionBtn" class="btn btn-primary">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="generalizacion" class="component">
+      <div class="card">
+        <h2>4Generalizacion</h2>
+
+        <div class="table-wrap">
+          <table class="combo-table" aria-label="Tabla de combinaciones">
+            <thead>
+              <tr>
+                <th>Camiseta</th>
+                <th>Pantalon</th>
+                <th>Falda</th>
+              </tr>
+            </thead>
+            <tbody id="generalizacionBody">
+              <tr data-top="camiseta-rosa">
+                <td>Camiseta rosa</td>
+                <td><input type="checkbox" data-top="camiseta-rosa" data-bottom="pantalon"></td>
+                <td><input type="checkbox" data-top="camiseta-rosa" data-bottom="falda"></td>
+              </tr>
+              <tr data-top="camiseta-lila">
+                <td>Camiseta lila</td>
+                <td><input type="checkbox" data-top="camiseta-lila" data-bottom="pantalon"></td>
+                <td><input type="checkbox" data-top="camiseta-lila" data-bottom="falda"></td>
+              </tr>
+              <tr data-top="camiseta-turquesa">
+                <td>Camiseta turquesa</td>
+                <td><input type="checkbox" data-top="camiseta-turquesa" data-bottom="pantalon"></td>
+                <td><input type="checkbox" data-top="camiseta-turquesa" data-bottom="falda"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <label for="patternInput" class="question-label">Que patron ves?</label>
+        <textarea id="patternInput" class="text-area" rows="3" placeholder="Escribe el patron que encuentras..."></textarea>
+
+        <label for="withoutCountingInput" class="question-label">Como puedes saber el total sin contarlas una por una?</label>
+        <textarea id="withoutCountingInput" class="text-area" rows="3" placeholder="Explica tu forma de pensar..."></textarea>
+
+        <div class="button-row end">
+          <button id="goJustificacionBtn" class="btn btn-primary">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="justificacion" class="component">
+      <div class="card">
+        <h2>5Justificacion</h2>
+        <p class="quote-box">Una nina dice: Sarita solo puede hacer 5 pintas.</p>
+
+        <div class="audio-area">
+          <p class="audio-question">Estas de acuerdo? Como convencerias a otra persona?</p>
+          <div class="audio-buttons">
+            <button id="recordJustificacionBtn" class="btn btn-primary">Grabar audio</button>
+            <button id="stopJustificacionBtn" class="btn btn-secondary">Detener</button>
+          </div>
+          <p id="statusJustificacion" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <div class="button-row end">
+          <button id="goValidezBtn" class="btn btn-primary">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="validez" class="component">
+      <div class="card">
+        <h2>6Validez</h2>
+        <p class="section-guide">Revisa las pintas y completa las que falten.</p>
+
+        <div id="validezGallery" class="saved-gallery"></div>
+
+        <label for="allOutfitsCheck" class="question-label">Ya estan todas o falta alguna?</label>
+        <select id="allOutfitsCheck" class="text-input">
+          <option value="">Selecciona una opcion</option>
+          <option value="estan-todas">Ya estan todas</option>
+          <option value="faltan">Falta alguna</option>
+        </select>
+
+        <div class="missing-block">
+          <h3>Completar pintas faltantes</h3>
+          <div id="missingOutfitsList" class="missing-list"></div>
+        </div>
+
+        <div class="audio-area">
+          <p class="audio-question">Como sabes que no falta ninguna pinta?</p>
+          <div class="audio-buttons">
+            <button id="recordValidezBtn" class="btn btn-primary">Grabar audio</button>
+            <button id="stopValidezBtn" class="btn btn-secondary">Detener</button>
+          </div>
+          <p id="statusValidez" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <div class="button-row end">
+          <button id="goReflexionBtn" class="btn btn-primary">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflexion" class="component">
+      <div class="card boutique-card">
+        <h2>7Reflexion</h2>
+        <div class="happy-row">
+          <div class="sarita-happy" aria-hidden="true">😊👗✨</div>
+          <p class="story-text">Ahora Sarita sabe combinar su ropa!</p>
+        </div>
+
+        <label for="discoverInput" class="question-label">Descubri que...</label>
+        <textarea id="discoverInput" class="text-area" rows="3" placeholder="Escribe lo que descubriste..."></textarea>
+
+        <label for="allOutfitsIdeaInput" class="question-label">Para saber todas las pintas...</label>
+        <textarea id="allOutfitsIdeaInput" class="text-area" rows="3" placeholder="Escribe tu estrategia..."></textarea>
+
+        <div class="audio-area compact">
+          <p class="audio-question">Audio opcional</p>
+          <div class="audio-buttons">
+            <button id="recordReflexionBtn" class="btn btn-primary">Grabar audio</button>
+            <button id="stopReflexionBtn" class="btn btn-secondary">Detener</button>
+          </div>
+          <p id="statusReflexion" class="status-line">Sin grabacion.</p>
+        </div>
+
+        <div id="summaryBox" class="summary-box"></div>
+
+        <div class="button-row end">
+          <button id="restartBtn" class="btn btn-secondary">Reiniciar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

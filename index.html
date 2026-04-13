@@ -28,13 +28,21 @@
                     <div class="activity-badge">Actividad 2</div>
                     <h2 class="activity-title">El Misterio de las Sumas Repetidas</h2>
                 </button>
-                <!-- Aquí irán más actividades en el futuro
-                <button id="activity1Btn" class="activity-card">
-                    <span class="activity-emoji">🌟</span>
+                <button id="activity3Btn" class="activity-card">
+                    <span class="activity-emoji">🤖</span>
                     <div class="activity-badge">Actividad 3</div>
-                    <h2 class="activity-title">Título de Actividad 3</h2>
+                    <h2 class="activity-title">Misión Robot V</h2>
                 </button>
-                -->
+                <button id="activity4Btn" class="activity-card">
+                    <span class="activity-emoji">👗</span>
+                    <div class="activity-badge">Actividad 4</div>
+                    <h2 class="activity-title">El closet de Sarita</h2>
+                </button>
+                <button id="activity5Btn" class="activity-card">
+                    <span class="activity-emoji">🎬</span>
+                    <div class="activity-badge">Actividad 5</div>
+                    <h2 class="activity-title">La película</h2>
+                </button>
             </div>
         </div>
     </section>
@@ -53,12 +61,24 @@
             activity0BBtn.addEventListener('click', () => {
                 window.location.href = 'Actividad2/actividad0B.html';
             });
-            
-            // Future activities will be added here
-            // const activity1Btn = document.getElementById('activity1Btn');
-            // activity1Btn.addEventListener('click', () => {
-            //     window.location.href = 'actividad1.html';
-            // });
+
+            // Redirigir a Actividad 3
+            const activity3Btn = document.getElementById('activity3Btn');
+            activity3Btn.addEventListener('click', () => {
+                window.location.href = 'Actividad3/Actividad3.html';
+            });
+
+            // Redirigir a Actividad 4
+            const activity4Btn = document.getElementById('activity4Btn');
+            activity4Btn.addEventListener('click', () => {
+                window.location.href = 'Actividad4/Actividad4.html';
+            });
+
+            // Redirigir a Actividad 5
+            const activity5Btn = document.getElementById('activity5Btn');
+            activity5Btn.addEventListener('click', () => {
+                window.location.href = 'Actividad5/Actividad5.html';
+            });
         });
     </script>
 </body>

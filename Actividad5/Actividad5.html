@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actividad 5 - La pelicula</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="ContenedorBienvenida">
+    <section id="welcomeScreen" class="entry-card">
+      <h1 class="entry-title">Actividad 5</h1>
+      <p class="entry-subtitle">La pelicula</p>
+      <div class="entry-box">
+        <label for="studentCodeInput">Escribe tu codigo estudiantil:</label>
+        <input id="studentCodeInput" type="text" maxlength="12" autocomplete="off" placeholder="Ej: 20314">
+        <button id="enterBtn" class="btn btn-primary" type="button">Ingresar</button>
+        <p id="welcomeError" class="status-line"></p>
+      </div>
+    </section>
+  </div>
+
+  <div id="ContenedorConfirmacion">
+    <section id="confirmationScreen" class="entry-card">
+      <h1 class="entry-title">Confirmacion</h1>
+      <div class="entry-box">
+        <p id="confirmationQuestion" class="confirmation-question"></p>
+        <div class="confirmation-actions">
+          <button id="confirmYesBtn" class="btn btn-success" type="button">Si, soy yo</button>
+          <button id="confirmNoBtn" class="btn btn-secondary" type="button">No, corregir</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <main id="activityApp" class="app-shell" aria-live="polite">
+    <section id="contexto" class="component active">
+      <div class="card movie-card">
+        <div class="decor-strip" aria-hidden="true">
+          <span>🎬</span>
+          <span>⭐</span>
+          <span>🎞️</span>
+          <span>📽️</span>
+          <span>⭐</span>
+        </div>
+        <h2>1Contexto</h2>
+        <p class="story-text">Una pelicula se dano durante la edicion. Algunas escenas muestran un salto y otras muestran aplausos. Necesitamos descubrir como esta organizada la pelicula para poder reconstruirla.</p>
+
+        <div class="panel">
+          <h3>Primeras escenas encontradas</h3>
+          <table class="scene-table" aria-label="Escenas 1 a 6">
+            <thead>
+              <tr>
+                <th>Escena</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Salto</td></tr>
+              <tr><td>2</td><td>1 aplauso</td></tr>
+              <tr><td>3</td><td>Salto</td></tr>
+              <tr><td>4</td><td>2 aplausos</td></tr>
+              <tr><td>5</td><td>Salto</td></tr>
+              <tr><td>6</td><td>3 aplausos</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="button-row end">
+          <button id="startActivityBtn" class="btn btn-primary" type="button">Comenzar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="exploracion" class="component">
+      <div class="card">
+        <h2>2Exploracion</h2>
+        <p class="section-guide">Observa las escenas y completa la secuencia.</p>
+
+        <div class="panel">
+          <h3>Escenas conocidas</h3>
+          <table class="scene-table compact" aria-label="Escenas conocidas">
+            <tbody>
+              <tr><td>Escena 1</td><td>Salto</td><td>Escena 2</td><td>1 aplauso</td></tr>
+              <tr><td>Escena 3</td><td>Salto</td><td>Escena 4</td><td>2 aplausos</td></tr>
+              <tr><td>Escena 5</td><td>Salto</td><td>Escena 6</td><td>3 aplausos</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="two-col">
+          <label class="question-card" for="scene7Prediction">Que deberia suceder en la escena 7?
+            <textarea id="scene7Prediction" rows="2" placeholder="Escribe tu idea..."></textarea>
+          </label>
+          <label class="question-card" for="scene8Prediction">Que deberia suceder en la escena 8?
+            <textarea id="scene8Prediction" rows="2" placeholder="Escribe tu idea..."></textarea>
+          </label>
+        </div>
+
+        <div class="panel">
+          <h3>Completa las escenas 7 a 12</h3>
+          <table class="scene-table" aria-label="Completar escenas 7 a 12">
+            <thead>
+              <tr>
+                <th>Escena</th>
+                <th>Accion</th>
+                <th>Cantidad de aplausos</th>
+              </tr>
+            </thead>
+            <tbody id="explorationRows">
+              <tr data-scene="7">
+                <td>7</td>
+                <td>
+                  <select data-scene="7" class="action-select">
+                    <option value="">Selecciona</option>
+                    <option value="salto">Salto</option>
+                    <option value="aplausos">Aplausos</option>
+                  </select>
+                </td>
+                <td><input data-scene="7" class="clap-input" type="number" min="1" step="1" disabled></td>
+              </tr>
+              <tr data-scene="8">
+                <td>8</td>
+                <td>
+                  <select data-scene="8" class="action-select">
+                    <option value="">Selecciona</option>
+                    <option value="salto">Salto</option>
+                    <option value="aplausos">Aplausos</option>
+                  </select>
+                </td>
+                <td><input data-scene="8" class="clap-input" type="number" min="1" step="1" disabled></td>
+              </tr>
+              <tr data-scene="9">
+                <td>9</td>
+                <td>
+                  <select data-scene="9" class="action-select">
+                    <option value="">Selecciona</option>
+                    <option value="salto">Salto</option>
+                    <option value="aplausos">Aplausos</option>
+                  </select>
+                </td>
+                <td><input data-scene="9" class="clap-input" type="number" min="1" step="1" disabled></td>
+              </tr>
+              <tr data-scene="10">
+                <td>10</td>
+                <td>
+                  <select data-scene="10" class="action-select">
+                    <option value="">Selecciona</option>
+                    <option value="salto">Salto</option>
+                    <option value="aplausos">Aplausos</option>
+                  </select>
+                </td>
+                <td><input data-scene="10" class="clap-input" type="number" min="1" step="1" disabled></td>
+              </tr>
+              <tr data-scene="11">
+                <td>11</td>
+                <td>
+                  <select data-scene="11" class="action-select">
+                    <option value="">Selecciona</option>
+                    <option value="salto">Salto</option>
+                    <option value="aplausos">Aplausos</option>
+                  </select>
+                </td>
+                <td><input data-scene="11" class="clap-input" type="number" min="1" step="1" disabled></td>
+              </tr>
+              <tr data-scene="12">
+                <td>12</td>
+                <td>
+                  <select data-scene="12" class="action-select">
+                    <option value="">Selecciona</option>
+                    <option value="salto">Salto</option>
+                    <option value="aplausos">Aplausos</option>
+                  </select>
+                </td>
+                <td><input data-scene="12" class="clap-input" type="number" min="1" step="1" disabled></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="audio-area">
+          <p class="audio-question">Mira las escenas de la pelicula. Que cambia y que se mantiene?</p>
+          <div class="audio-buttons">
+            <button id="recordExploracionBtn" class="btn btn-primary" type="button">Iniciar grabacion</button>
+            <button id="stopExploracionBtn" class="btn btn-secondary" type="button">Detener grabacion</button>
+          </div>
+          <p id="statusExploracion" class="status-line">No grabado</p>
+          <label for="exploracionTexto" class="optional-label">Si prefieres, puedes escribir una respuesta breve:</label>
+          <textarea id="exploracionTexto" rows="2" placeholder="Respuesta breve opcional"></textarea>
+        </div>
+
+        <div class="button-row end">
+          <button id="goConjeturaBtn" class="btn btn-primary" type="button">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="conjetura" class="component">
+      <div class="card">
+        <h2>3Conjetura</h2>
+        <p class="section-guide">Resume lo que completaste y formula tus sospechas.</p>
+
+        <div id="conjeturaResumen" class="panel"></div>
+
+        <label for="conjeturaSalto" class="question-label">Que sospechas sobre las escenas en las que hay salto?</label>
+        <textarea id="conjeturaSalto" rows="3" placeholder="Escribe tu conjetura sobre los saltos..."></textarea>
+
+        <label for="conjeturaAplausos" class="question-label">Que sospechas sobre las escenas en las que hay aplausos?</label>
+        <textarea id="conjeturaAplausos" rows="3" placeholder="Escribe tu conjetura sobre los aplausos..."></textarea>
+
+        <div class="audio-area compact">
+          <p class="audio-question">Explica que crees que pasa siempre en esta pelicula.</p>
+          <div class="audio-buttons">
+            <button id="recordConjeturaBtn" class="btn btn-primary" type="button">Iniciar grabacion</button>
+            <button id="stopConjeturaBtn" class="btn btn-secondary" type="button">Detener grabacion</button>
+          </div>
+          <p id="statusConjetura" class="status-line">No grabado</p>
+        </div>
+
+        <div class="button-row end">
+          <button id="goGeneralizacionBtn" class="btn btn-primary" type="button">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="generalizacion" class="component">
+      <div class="card">
+        <h2>4Generalizacion</h2>
+        <p class="section-guide">Organiza y revisa como se repiten las escenas del 1 al 12.</p>
+
+        <div class="two-col">
+          <div class="panel">
+            <h3>Escenas donde hay salto</h3>
+            <ul id="saltoList" class="scene-list"></ul>
+          </div>
+          <div class="panel">
+            <h3>Escenas donde hay aplausos</h3>
+            <ul id="aplausosList" class="scene-list"></ul>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Clasificador de tarjetas</h3>
+          <p class="section-guide">Arrastra cada escena al grupo que corresponda.</p>
+          <div id="sceneCards" class="cards-row" aria-label="Tarjetas de escenas"></div>
+          <div class="drop-groups">
+            <div id="dropSalto" class="drop-group" data-group="salto">
+              <h4>Grupo salto</h4>
+              <div class="drop-slot"></div>
+            </div>
+            <div id="dropAplausos" class="drop-group" data-group="aplausos">
+              <h4>Grupo aplausos</h4>
+              <div class="drop-slot"></div>
+            </div>
+          </div>
+        </div>
+
+        <label for="generalizacionSaltos" class="question-label">Que tienen en comun los numeros de las escenas con salto?</label>
+        <textarea id="generalizacionSaltos" rows="3" placeholder="Escribe tu observacion..."></textarea>
+
+        <label for="generalizacionAplausos" class="question-label">Que tienen en comun los numeros de las escenas con aplausos?</label>
+        <textarea id="generalizacionAplausos" rows="3" placeholder="Escribe tu observacion..."></textarea>
+
+        <label for="reglaGeneral" class="question-label">Como puedes saber que pasa en cualquier escena?</label>
+        <textarea id="reglaGeneral" rows="3" placeholder="Explica tu regla..."></textarea>
+
+        <div class="button-row end">
+          <button id="goJustificacionBtn" class="btn btn-primary" type="button">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="justificacion" class="component">
+      <div class="card">
+        <h2>5Justificacion</h2>
+
+        <div class="panel affirmations">
+          <p><strong>Afirmacion 1:</strong> En la escena 10 pasan cinco aplausos.</p>
+          <p><strong>Afirmacion 2:</strong> En la escena 11 tambien deberia haber aplausos.</p>
+        </div>
+
+        <label for="justificacionTexto" class="question-label">Explica quien tiene razon y por que.</label>
+        <textarea id="justificacionTexto" rows="4" placeholder="Escribe tu explicacion..."></textarea>
+
+        <div class="audio-area">
+          <p class="audio-question">Como convencerias a otra persona de que sabes que pasa en una escena?</p>
+          <div class="audio-buttons">
+            <button id="recordJustificacionBtn" class="btn btn-primary" type="button">Iniciar grabacion</button>
+            <button id="stopJustificacionBtn" class="btn btn-secondary" type="button">Detener grabacion</button>
+          </div>
+          <p id="statusJustificacion" class="status-line">No grabado</p>
+        </div>
+
+        <div class="button-row end">
+          <button id="goValidezBtn" class="btn btn-primary" type="button">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="validez" class="component">
+      <div class="card">
+        <h2>6Validez</h2>
+        <p class="section-guide">Pon a prueba tu regla con escenas lejanas.</p>
+
+        <div class="two-col">
+          <div class="question-card">
+            <label for="scene30Action">Que deberia pasar en la escena 30?</label>
+            <select id="scene30Action">
+              <option value="">Selecciona</option>
+              <option value="salto">Salto</option>
+              <option value="aplausos">Aplausos</option>
+            </select>
+            <label for="scene30Claps">Si hay aplausos, cuantos aplausos habria?</label>
+            <input id="scene30Claps" type="number" min="1" step="1" disabled>
+          </div>
+
+          <div class="question-card">
+            <label for="scene45Action">Que deberia pasar en la escena 45?</label>
+            <select id="scene45Action">
+              <option value="">Selecciona</option>
+              <option value="salto">Salto</option>
+              <option value="aplausos">Aplausos</option>
+            </select>
+            <label for="scene45Claps">Si hay aplausos, cuantos aplausos habria?</label>
+            <input id="scene45Claps" type="number" min="1" step="1" disabled>
+          </div>
+        </div>
+
+        <label for="validezExplicacion" class="question-label">Como lo sabes?</label>
+        <textarea id="validezExplicacion" rows="4" placeholder="Escribe tu explicacion..."></textarea>
+
+        <div class="audio-area">
+          <p class="audio-question">Crees que tu regla sirve para cualquier escena? Por que?</p>
+          <div class="audio-buttons">
+            <button id="recordValidezBtn" class="btn btn-primary" type="button">Iniciar grabacion</button>
+            <button id="stopValidezBtn" class="btn btn-secondary" type="button">Detener grabacion</button>
+          </div>
+          <p id="statusValidez" class="status-line">No grabado</p>
+        </div>
+
+        <div class="button-row end">
+          <button id="goReflexionBtn" class="btn btn-primary" type="button">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="reflexion" class="component">
+      <div class="card movie-card">
+        <h2>7Reflexion</h2>
+        <p class="final-message">La pelicula fue reconstruida!</p>
+
+        <label for="reflexionDescubri" class="question-label">Descubri que...</label>
+        <textarea id="reflexionDescubri" rows="3" placeholder="Escribe tu descubrimiento..."></textarea>
+
+        <label for="reflexionEscena" class="question-label">Para saber que pasa en una escena...</label>
+        <textarea id="reflexionEscena" rows="3" placeholder="Completa la idea..."></textarea>
+
+        <label for="nombrePelicula" class="question-label">El nombre de la pelicula podria ser...</label>
+        <input id="nombrePelicula" type="text" placeholder="Escribe un titulo divertido">
+
+        <div class="audio-area compact">
+          <p class="audio-question">Audio final opcional</p>
+          <div class="audio-buttons">
+            <button id="recordReflexionBtn" class="btn btn-primary" type="button">Iniciar grabacion</button>
+            <button id="stopReflexionBtn" class="btn btn-secondary" type="button">Detener grabacion</button>
+          </div>
+          <p id="statusReflexion" class="status-line">No grabado</p>
+        </div>
+
+        <div id="finalSummary" class="panel summary-box"></div>
+
+        <div class="button-row end">
+          <button id="restartBtn" class="btn btn-secondary" type="button">Reiniciar actividad</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
