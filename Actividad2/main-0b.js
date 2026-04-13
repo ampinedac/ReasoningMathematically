@@ -34,6 +34,7 @@ let m3q2Submitted = false;
 
 // Cocina completada
 let cocinaCompleted = false;
+let cocinaM0Completed = false;
 let matchingCompleted = false;
 let matchingDrawLines = null; // callback para redibujar lazos al volver al spread
 
@@ -449,6 +450,7 @@ function canAdvance() {
     }
 
     if (currentSpread === 3) return m1q0Submitted;
+    if (currentSpread === 4) return cocinaM0Completed;
     if (currentSpread === 5) return m3q1Submitted;
     if (currentSpread === 6) return m1q2Submitted;
     if (currentSpread === 7) return m3q2Submitted;
@@ -1054,6 +1056,10 @@ function initCocinaSystem() {
                     // Iniciar grabador M1Q2
                     const recordBtn = document.getElementById('recordBtnM1Q2');
                     if (recordBtn) recordBtn.disabled = false;
+                }
+
+                if (returnSpread === 4) {
+                    cocinaM0Completed = true;
                 }
 
                 goToSpread(returnSpread);
