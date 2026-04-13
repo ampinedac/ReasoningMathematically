@@ -869,6 +869,7 @@ function initM1Q2ThinkFlow() {
     const step2ConversationBlock = document.getElementById('step2ConversationBlock');
     const socialReadyBtn = document.getElementById('socialReadyBtn');
     const socialStartBtn = document.getElementById('socialStartBtn');
+    const forceFinishSocialBtn = document.getElementById('forceFinishSocialBtn');
     const socialTimerDisplay = document.getElementById('socialTimerDisplay');
     const socialStatus = document.getElementById('socialStatusM1Q2');
 
@@ -880,7 +881,7 @@ function initM1Q2ThinkFlow() {
     }
 
     const THINK_TOTAL_SECONDS = 180;
-    const SOCIAL_TOTAL_SECONDS = 180;
+    const SOCIAL_TOTAL_SECONDS = 300;
     let thinkSeconds = THINK_TOTAL_SECONDS;
     let socialSeconds = SOCIAL_TOTAL_SECONDS;
     let thinkInterval = null;
@@ -901,13 +902,22 @@ function initM1Q2ThinkFlow() {
     const enhanceBombTimer = (timerEl) => {
         if (!timerEl || timerEl.dataset.bombReady === '1') return;
         const initial = (timerEl.textContent || '05:00').trim();
+        const gradId = `bombBodyGradient-${timerEl.id || Math.random().toString(36).slice(2)}`;
         timerEl.classList.add('bomb-timer');
         timerEl.innerHTML = `
             <svg class="bomb-timer-svg" viewBox="0 0 96 68" aria-hidden="true" focusable="false">
+                <defs>
+                    <radialGradient id="${gradId}" cx="36%" cy="30%" r="70%">
+                        <stop offset="0%" stop-color="#4b5563"></stop>
+                        <stop offset="55%" stop-color="#1f2937"></stop>
+                        <stop offset="100%" stop-color="#0f172a"></stop>
+                    </radialGradient>
+                </defs>
                 <line class="bomb-fuse" x1="44" y1="26" x2="86" y2="8"></line>
                 <line class="bomb-fuse-burn" x1="44" y1="26" x2="86" y2="8"></line>
                 <circle class="bomb-spark" cx="86" cy="8" r="4"></circle>
-                <circle class="bomb-body" cx="36" cy="40" r="23"></circle>
+                <circle class="bomb-body" cx="36" cy="40" r="23" style="fill:url(#${gradId})"></circle>
+                <ellipse class="bomb-shine" cx="28" cy="31" rx="7" ry="5"></ellipse>
                 <rect class="bomb-cap" x="31" y="14" width="10" height="9" rx="2"></rect>
             </svg>
             <span class="timer-text">${initial}</span>
@@ -985,7 +995,7 @@ function initM1Q2ThinkFlow() {
         thinkStartBtn.style.cursor = 'not-allowed';
 
         if (thinkStatus) {
-            thinkStatus.textContent = 'Tiempo corriendo: piensa y escribe tus ideas (3 minutos obligatorios).';
+            thinkStatus.textContent = 'Tiempo corriendo: piensa y escribe tus ideas.';
             thinkStatus.style.color = '#1d4ed8';
         }
 
@@ -1009,7 +1019,7 @@ function initM1Q2ThinkFlow() {
         step2ConversationBlock.classList.remove('think-hidden');
 
         if (socialStatus) {
-            socialStatus.textContent = 'Cuando inicies, conversen durante los 3 minutos completos.';
+            socialStatus.textContent = 'Cuando inicies, conversen durante los 5 minutos completos.';
             socialStatus.style.color = '#1d4ed8';
         }
     });
@@ -1035,6 +1045,10 @@ function initM1Q2ThinkFlow() {
                 finishSocialStep();
             }
         }, 1000);
+    });
+
+    forceFinishSocialBtn?.addEventListener('click', () => {
+        finishSocialStep();
     });
 }
 

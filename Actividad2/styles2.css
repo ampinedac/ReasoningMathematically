@@ -796,6 +796,39 @@ body #ContenedorLibro .activity-spread {
           display: none;
         }
 
+        #thinkSocialSpread .q1-left-page,
+        #thinkSocialSpread .q1-right-page {
+          justify-content: center;
+          align-items: center;
+          gap: clamp(0.6rem, 1.3vw, 1.1rem);
+        }
+
+        #thinkSocialSpread .q1-left-page {
+          padding-top: clamp(1rem, 2vw, 1.6rem);
+          padding-bottom: clamp(1rem, 2vw, 1.6rem);
+        }
+
+        #thinkSocialSpread .q1-right-page {
+          padding-top: clamp(1rem, 2vw, 1.6rem);
+          padding-bottom: clamp(1rem, 2vw, 1.6rem);
+        }
+
+        #thinkSocialSpread .think-main-question,
+        #thinkSocialSpread .think-step-card,
+        #thinkSocialSpread #m1q2RightContent,
+        #thinkSocialSpread #m1q2ResponseBlock {
+          width: min(92%, 640px);
+        }
+
+        #thinkSocialSpread #step2VerifyBlock:not(.think-hidden),
+        #thinkSocialSpread #step2ConversationBlock:not(.think-hidden) {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 0.55rem;
+        }
+
         #thinkStartBtn,
         #socialReadyBtn,
         #socialStartBtn {
@@ -814,40 +847,50 @@ body #ContenedorLibro .activity-spread {
           margin-top: 0.35rem;
         }
 
+        #step2ConversationBlock .think-force-reveal-btn {
+          margin-top: 0;
+        }
+
         .bomb-timer {
           --burn-progress: 0;
           display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          margin: 0.2rem 0;
+          gap: 0.55rem;
+          margin: 0.3rem 0;
         }
 
         .bomb-timer-svg {
-          width: 58px;
-          height: 42px;
+          width: 88px;
+          height: 64px;
           overflow: visible;
           flex: 0 0 auto;
         }
 
         .bomb-body {
-          fill: #1f2937;
+          fill: url(#bombBodyGradient);
           stroke: #0f172a;
-          stroke-width: 2;
+          stroke-width: 2.3;
         }
 
         .bomb-cap {
-          fill: #6b7280;
+          fill: #9ca3af;
+          stroke: #4b5563;
+          stroke-width: 1.2;
+        }
+
+        .bomb-shine {
+          fill: rgba(255, 255, 255, 0.36);
         }
 
         .bomb-fuse {
-          stroke: #92400e;
-          stroke-width: 3;
+          stroke: #7c2d12;
+          stroke-width: 3.8;
           stroke-linecap: round;
         }
 
         .bomb-fuse-burn {
           stroke: #f59e0b;
-          stroke-width: 3;
+          stroke-width: 3.8;
           stroke-linecap: round;
           stroke-dasharray: 46;
           stroke-dashoffset: calc(46 * (1 - var(--burn-progress)));
@@ -866,10 +909,10 @@ body #ContenedorLibro .activity-spread {
 
         .bomb-timer .timer-text {
           font-family: 'Lobster Two', cursive;
-          font-size: clamp(1.35rem, 2.3vw, 2rem);
+          font-size: clamp(2rem, 3.1vw, 2.8rem);
           color: #1d4ed8;
           line-height: 1;
-          min-width: 72px;
+          min-width: 102px;
           text-align: left;
         }
         
