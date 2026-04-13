@@ -981,6 +981,25 @@ function initSpread13Table() {
             token.classList.add('dragging');
         });
         token.addEventListener('dragend', () => token.classList.remove('dragging'));
+
+        // Si la ficha ya está colocada y se hace clic, vuelve al banco.
+        token.addEventListener('click', () => {
+            const parentZone = token.parentElement;
+            if (!parentZone || !parentZone.classList.contains('sum-dropzone')) return;
+
+            parentZone.dataset.filled = '0';
+            placed.delete(token.id);
+
+            token.classList.remove('placed');
+            token.draggable = true;
+            bank.appendChild(token);
+
+            spread13TableCompleted = false;
+            statusEl.textContent = 'Ficha regresada. Ubícala de nuevo en el espacio correcto.';
+            statusEl.style.color = '#1d4ed8';
+            updateNavButtons();
+        });
+
         bank.appendChild(token);
     });
 
@@ -995,6 +1014,7 @@ function initSpread13Table() {
     }
 
     dropzones.forEach(zone => {
+        zone.dataset.filled = '0';
         zone.addEventListener('dragover', (e) => {
             e.preventDefault();
             zone.classList.add('is-over');
@@ -1264,13 +1284,12 @@ function initM1Q2ThinkFlow() {
             const flame = svg.querySelector('.candle-flame-group');
             const smoke = svg.querySelector('.candle-smoke');
 
-            const minHeight = 14;
-            const fullHeight = 58;
+            const minHeight = 6;
+            const fullHeight = 90;
             const waxHeight = minHeight + ((1 - meltProgress) * (fullHeight - minHeight));
             const waxTopY = 96 - waxHeight;
             const topCy = waxTopY;
-            const wickTopY = Math.max(14, waxTopY - 11);
-            const flameOffset = Math.max(0, 1 - meltProgress);
+            const wickTopY = Math.max(6, waxTopY - 9);
 
             if (wax) {
                 wax.setAttribute('y', waxTopY.toFixed(2));
@@ -1294,7 +1313,10 @@ function initM1Q2ThinkFlow() {
             }
 
             if (flame) {
-                flame.setAttribute('transform', `translate(0 ${((topCy - 38) * 0.96).toFixed(2)}) scale(${(0.86 + flameOffset * 0.14).toFixed(3)})`);
+                const flameBaseY = wickTopY + 1;
+                const translateY = flameBaseY - 30;
+                const flameScale = Math.max(0.72, 1 - (meltProgress * 0.22));
+                flame.setAttribute('transform', `translate(0 ${translateY.toFixed(2)}) scale(${flameScale.toFixed(3)})`);
             }
 
             if (smoke) {
@@ -1883,7 +1905,6 @@ function initMatchingActivity() {
         // Colorear las cajas de sumas según la cuerda conectada (correcta o incorrecta)
         sumsEl.querySelectorAll('.match-sum-box').forEach(box => {
             box.style.borderColor = '';
-            box.style.background = '';
             box.style.boxShadow = '';
         });
 
@@ -1891,7 +1912,6 @@ function initMatchingActivity() {
             const sumBox = document.getElementById(sumId);
             if (sumBox) {
                 sumBox.style.borderColor = LAZO_COLORS[pairId] || '#fb923c';
-                sumBox.style.background = LAZO_BOX_BG[pairId] || '#fff7ed';
                 sumBox.style.boxShadow = `0 0 0 2px ${LAZO_BOX_BG[pairId] || 'rgba(0,0,0,0.08)'}`;
             }
         }
