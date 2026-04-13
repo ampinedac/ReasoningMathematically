@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAudioRecorder('M4Reflection');
     initRadioSpreads();
     initMatchingActivity();
+    initM1Q2ThinkFlow();
     initCocinaSystem();
     initM4();
     initEncuesta();
@@ -850,6 +851,144 @@ function markSubmitted(tag) {
     if (tag === 'M3Q1') m3q1Submitted = true;
     if (tag === 'M3Q2') m3q2Submitted = true;
     updateNavButtons();
+}
+
+// ─────────────────────────────────────────────
+// 9. SPREAD 13-14 – MOMENTO PARA PENSAR Y SOCIALIZAR
+// ─────────────────────────────────────────────
+function initM1Q2ThinkFlow() {
+    const thinkStartBtn = document.getElementById('thinkStartBtn');
+    const thinkFinishEarlyBtn = document.getElementById('thinkFinishEarlyBtn');
+    const thinkTimerDisplay = document.getElementById('thinkTimerDisplay');
+    const thinkStatus = document.getElementById('thinkStatusM1Q2');
+
+    const socialPrepCard = document.getElementById('thinkSocialPrepCard');
+    const socialReadyBtn = document.getElementById('socialReadyBtn');
+    const socialCard = document.getElementById('thinkSocialCard');
+    const socialStartBtn = document.getElementById('socialStartBtn');
+    const socialTimerDisplay = document.getElementById('socialTimerDisplay');
+    const socialStatus = document.getElementById('socialStatusM1Q2');
+
+    const audioBox = document.getElementById('m1Q2FinalQuestion');
+
+    if (!thinkStartBtn || !thinkFinishEarlyBtn || !thinkTimerDisplay || !socialReadyBtn || !socialCard || !socialStartBtn || !socialTimerDisplay || !audioBox) {
+        return;
+    }
+
+    let thinkSeconds = 300;
+    let socialSeconds = 300;
+    let thinkInterval = null;
+    let socialInterval = null;
+
+    const formatTime = (totalSeconds) => {
+        const m = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+        const s = String(totalSeconds % 60).padStart(2, '0');
+        return `${m}:${s}`;
+    };
+
+    const stopInterval = (ref) => {
+        if (ref) {
+            clearInterval(ref);
+        }
+    };
+
+    const finishThinkStep = (finishedEarly) => {
+        stopInterval(thinkInterval);
+        thinkInterval = null;
+        thinkFinishEarlyBtn.disabled = true;
+        thinkStartBtn.disabled = true;
+        thinkTimerDisplay.textContent = formatTime(thinkSeconds);
+
+        if (thinkStatus) {
+            thinkStatus.textContent = finishedEarly
+                ? 'Perfecto. Terminaste antes de tiempo. Ahora verifica si tus compañeras también están listas.'
+                : 'Se acabó el tiempo individual. Ahora verifica si tus compañeras también están listas.';
+            thinkStatus.style.color = '#16a34a';
+        }
+
+        if (socialPrepCard) {
+            socialPrepCard.classList.remove('think-hidden');
+        }
+    };
+
+    const finishSocialStep = () => {
+        stopInterval(socialInterval);
+        socialInterval = null;
+        socialSeconds = 0;
+        socialTimerDisplay.textContent = '00:00';
+
+        if (socialStatus) {
+            socialStatus.textContent = 'Tiempo completado. Ya puedes grabar tu respuesta final.';
+            socialStatus.style.color = '#16a34a';
+        }
+
+        audioBox.style.display = 'flex';
+    };
+
+    // Estado inicial del flujo
+    thinkTimerDisplay.textContent = formatTime(thinkSeconds);
+    socialTimerDisplay.textContent = formatTime(socialSeconds);
+    audioBox.style.display = 'none';
+
+    thinkStartBtn.addEventListener('click', () => {
+        if (thinkInterval) return;
+
+        thinkStartBtn.disabled = true;
+        thinkFinishEarlyBtn.disabled = false;
+
+        if (thinkStatus) {
+            thinkStatus.textContent = 'Tiempo corriendo: piensa, escribe y organiza tus ideas.';
+            thinkStatus.style.color = '#1d4ed8';
+        }
+
+        thinkInterval = setInterval(() => {
+            thinkSeconds -= 1;
+            if (thinkSeconds < 0) thinkSeconds = 0;
+            thinkTimerDisplay.textContent = formatTime(thinkSeconds);
+
+            if (thinkSeconds === 0) {
+                finishThinkStep(false);
+            }
+        }, 1000);
+    });
+
+    thinkFinishEarlyBtn.addEventListener('click', () => {
+        if (!thinkInterval) return;
+        finishThinkStep(true);
+    });
+
+    socialReadyBtn.addEventListener('click', () => {
+        socialPrepCard.classList.add('think-hidden');
+        socialCard.classList.remove('think-hidden');
+
+        if (socialStatus) {
+            socialStatus.textContent = 'Cuando inicies, deben conversar durante los 5 minutos completos.';
+            socialStatus.style.color = '#1d4ed8';
+        }
+    });
+
+    socialStartBtn.addEventListener('click', () => {
+        if (socialInterval) return;
+
+        socialStartBtn.disabled = true;
+        socialStartBtn.style.opacity = '0.6';
+        socialStartBtn.style.cursor = 'not-allowed';
+
+        if (socialStatus) {
+            socialStatus.textContent = 'Conversación en curso: este tiempo no se puede terminar antes.';
+            socialStatus.style.color = '#1d4ed8';
+        }
+
+        socialInterval = setInterval(() => {
+            socialSeconds -= 1;
+            if (socialSeconds < 0) socialSeconds = 0;
+            socialTimerDisplay.textContent = formatTime(socialSeconds);
+
+            if (socialSeconds === 0) {
+                finishSocialStep();
+            }
+        }, 1000);
+    });
 }
 
 // ─────────────────────────────────────────────

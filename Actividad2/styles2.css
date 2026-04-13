@@ -788,10 +788,145 @@ body #ContenedorLibro .activity-spread {
           padding: 0.5vw;
           display: block;
         }
+
+        /* =====================================================================================================
+        Páginas 13 y 14 – Momento para pensar y socializar
+        ===================================================================================================== */
+        .think-flow-left,
+        .think-flow-right {
+          justify-content: flex-start;
+          align-items: stretch;
+          padding-top: clamp(2.7rem, 4.5vw, 4rem);
+          padding-bottom: clamp(1.4rem, 2.2vw, 2.2rem);
+          gap: 0.7rem;
+        }
+
+        .think-main-question {
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.45rem, 2.1vw, 1.9rem);
+          color: #1e3a8a;
+          text-align: left;
+          margin: 0;
+          line-height: 1.15;
+        }
+
+        .think-helper-text {
+          font-size: clamp(1.15rem, 1.45vw, 1.38rem);
+          color: #1f2937;
+          margin: 0;
+          line-height: 1.2;
+          text-align: justify;
+        }
+
+        .think-step-card {
+          border: 2px solid rgba(30, 58, 138, 0.35);
+          border-radius: 14px;
+          background: rgba(255, 255, 255, 0.7);
+          padding: 0.6rem 0.7rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.45rem;
+        }
+
+        .think-step-title {
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+          color: #1d4ed8;
+          margin: 0;
+          text-align: left;
+        }
+
+        .think-step-text {
+          font-size: clamp(1.08rem, 1.35vw, 1.28rem);
+          color: #111827;
+          margin: 0;
+          line-height: 1.15;
+        }
+
+        .think-timer {
+          align-self: center;
+          min-width: 130px;
+          text-align: center;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.6rem, 2.2vw, 2rem);
+          color: #0f172a;
+          background: #ffffff;
+          border: 2px solid #60a5fa;
+          border-radius: 12px;
+          padding: 0.15rem 0.65rem;
+        }
+
+        .think-actions {
+          display: flex;
+          gap: 0.45rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .think-actions .btn,
+        #socialReadyBtn,
+        #socialStartBtn {
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1rem, 1.2vw, 1.16rem);
+          padding: 0.46rem 0.8rem;
+          border-radius: 12px;
+        }
+
+        .think-hidden {
+          display: none;
+        }
+
+        .think-audio-intro h3 {
+          margin: 0;
+          color: #1d4ed8;
+        }
+
+        .think-audio-intro p {
+          margin: 0;
+          line-height: 1.2;
+          font-size: clamp(1.12rem, 1.4vw, 1.35rem);
+        }
+
+        .think-final-question {
+          background: rgba(255, 255, 255, 0.78);
+          border: 2px dashed #1d4ed8;
+          border-radius: 12px;
+          padding: 0.55rem 0.65rem;
+        }
+
+        .think-audio-box {
+          display: none;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.45rem;
+          margin-top: 0.6rem;
+          background: rgba(255, 255, 255, 0.7);
+          border: 2px solid rgba(29, 78, 216, 0.3);
+          border-radius: 14px;
+          padding: 0.7rem;
+        }
         
         /* =====================================================================================================
-        Páginas 17 y 18 – Actividad: une parejas con sumas misteriosas
+        Páginas 11 y 12 – Actividad: une parejas con sumas misteriosas
         ===================================================================================================== */
+
+        #matchingLeftPage,
+        #matchingRightPage {
+          justify-content: flex-start;
+          padding-top: clamp(2.9rem, 5vw, 4.4rem);
+          padding-bottom: clamp(2.2rem, 3vw, 3rem);
+          min-height: 0;
+        }
+
+        #matchingLeftPage {
+          align-items: stretch;
+          gap: 0.65rem;
+        }
+
+        #matchingRightPage {
+          align-items: center;
+          gap: 0.65rem;
+        }
 
         /* SVG de lazos: capa encima del spread, sin capturar clics */
         .matching-lines-svg {
@@ -806,21 +941,23 @@ body #ContenedorLibro .activity-spread {
         /* Instrucción de la actividad */
         .matching-instruction {
             font-family: 'Rancho', cursive;
-            font-size: clamp(1.3rem, 2vw, 1.7rem);
+          font-size: clamp(1.12rem, 1.7vw, 1.45rem);
             color: #3b0764;
             text-align: center;
-            margin: 0 0 0.5rem 0;
-            line-height: 1.3;
+          margin: 0 auto 0.25rem auto;
+          line-height: 1.12;
+          width: 94%;
+          flex: 0 0 auto;
         }
 
         /* Contenedor de tarjetas de parejas (izquierda) */
         .matching-pairs-container {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+          gap: 0.7rem;
             width: 100%;
             flex: 1;
-            justify-content: center;
+          justify-content: flex-start;
         }
 
         /* Botón de una pareja de pedidos (usa imagen real) */
@@ -842,8 +979,8 @@ body #ContenedorLibro .activity-spread {
 
         .match-pair-image {
           display: block;
-          width: 94%;
-          max-width: 560px;
+          width: 88%;
+          max-width: 500px;
           height: auto;
           margin: 0 auto;
           border-radius: 14px;
@@ -853,10 +990,10 @@ body #ContenedorLibro .activity-spread {
         .matching-sums-container {
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
+          gap: 0.75rem;
             width: 100%;
             flex: 1;
-            justify-content: center;
+          justify-content: flex-start;
         }
 
         /* Recuadro de suma misteriosa */
@@ -867,7 +1004,8 @@ body #ContenedorLibro .activity-spread {
             background: #fff7ed;
             border: 2.5px solid #fb923c;
             border-radius: 14px;
-            padding: 0.5rem 0.8rem;
+          min-height: 2.9rem;
+          padding: 0.55rem 0.8rem;
             cursor: pointer;
             transition: border-color .15s, box-shadow .15s, transform .1s;
             text-align: center;
@@ -880,9 +1018,10 @@ body #ContenedorLibro .activity-spread {
         }
         .match-sum-text {
             font-family: 'Rancho', cursive;
-            font-size: clamp(1rem, 1.8vw, 1.4rem);
+          font-size: clamp(0.95rem, 1.55vw, 1.24rem);
             color: #7c2d12;
             letter-spacing: 0.03em;
+          line-height: 1.05;
         }
 
         .match-equal {

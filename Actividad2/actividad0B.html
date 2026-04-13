@@ -7,7 +7,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='52'%3E%F0%9F%98%8E%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles2.css?v=2026040102">
+    <link rel="stylesheet" href="styles2.css?v=2026041201">
     <link rel="stylesheet" href="trays-styles-0b.css?v=2026040504">
     <link rel="stylesheet" href="bags-styles-0b.css?v=2026040504">
 </head>
@@ -180,31 +180,49 @@
         <span class="page-number page-number-right">12</span>
     </div>
 
-    <!-- Story Spread 13-14 (Pregunta izquierda, actividad bolsitas y audio derecha) -->
+    <!-- Story Spread 13-14 (Momento para pensar y socializar) -->
 
     <div class="page q1-book-spread activity-spread">
-        <div class="q1-left-page">
+        <div class="q1-left-page think-flow-left">
             <span id="studentCodeM1" class="student-code-display"></span>
-            <h3>Situación 2</h3>
-            <p>Doña Aurora y Andrés prepararon varias bolsitas de arepas. Tu misión es unir las bolsitas que tienen la misma cantidad de arepas</p>
-            <div class="q2-guide-card">
-                <p class="q2-guide-title"><strong>Guía rápida</strong></p>
-                <ul class="q2-guide-list">
-                    <li>Haz clic en una bolsita para seleccionarla.</li>
-                    <li>Haz clic en otra bolsita para formar el par.</li>
-                    <li>Repite hasta armar todas las parejas posibles.</li>
-                </ul>
+            <h3>Momento para pensar ⏳</h3>
+            <p class="think-main-question">¿Cuáles son TODAS las características de las sumas misteriosas?</p>
+            <p class="think-helper-text">Primero piensa individualmente y escribe tus ideas en una hoja. Luego conversa con dos compañeras y, al final, responde en audio con un ejemplo nuevo.</p>
+
+            <div class="think-step-card" id="thinkSoloCard">
+                <p class="think-step-title">Paso 1: Tiempo individual (5 minutos)</p>
+                <p class="think-step-text">Cuando estés lista, inicia el tiempo para pensar y escribir.</p>
+                <div class="think-timer" id="thinkTimerDisplay">05:00</div>
+                <div class="think-actions">
+                    <button id="thinkStartBtn" class="btn btn-primary">Estoy lista</button>
+                    <button id="thinkFinishEarlyBtn" class="btn btn-secondary" disabled>Ya terminé antes de tiempo</button>
+                </div>
+                <p id="thinkStatusM1Q2" class="status-text"></p>
             </div>
-            <button id="goToCocinaBtn" class="btn btn-cocina">👩‍🍳 Ir a la cocina</button>
+
+            <div class="think-step-card think-hidden" id="thinkSocialPrepCard">
+                <p class="think-step-title">Paso 2: Verifica a tu equipo</p>
+                <p class="think-step-text">Verifica que las 2 personas que están sentadas contigo ya estén en este punto; si no, espéralas pacientemente.</p>
+                <button id="socialReadyBtn" class="btn btn-primary">Todas estamos listas</button>
+            </div>
+
+            <div class="think-step-card think-hidden" id="thinkSocialCard">
+                <p class="think-step-title">Momento para socializar (5 minutos)</p>
+                <p class="think-step-text">Conversen sobre todas las características de las sumas misteriosas. Este tiempo debe completarse.</p>
+                <div class="think-timer" id="socialTimerDisplay">05:00</div>
+                <button id="socialStartBtn" class="btn btn-primary">Iniciar conversación (5:00)</button>
+                <p id="socialStatusM1Q2" class="status-text"></p>
+            </div>
         </div>
         <div class="spread-fold"></div>
-        <div class="q1-right-page" id="q2RightPage">
-            <img id="bandejasFotoM1Q2" class="BandejasFoto" src="./assets/images/BolsasFoto.png" alt="Bolsitas de arepas">
-            <!-- Pregunta final + audio (se activa al completar la cocina) -->
-            <div id="m1Q2FinalQuestion">
-                <h3><strong>Para pensar 🤔</strong></h3>
-                <p>Cada pedido se organiza de manera diferente, pero como ya viste hay pedidos que tienen la misma cantidad de arepas.</p>
-                <p>¿Por qué, aunque se ven diferentes tienen la misma cantidad de arepas? Explícalo.</p>
+        <div class="q1-right-page think-flow-right" id="q2RightPage">
+            <div class="think-audio-intro">
+                <h3>Momento de responder 🎙️</h3>
+                <p>Cuando termine el tiempo de conversación, responde:</p>
+                <p class="think-final-question">¿Cuáles son TODAS las características de las sumas misteriosas? Explica y propón un ejemplo de suma misteriosa diferente a los que Andrés se ha imaginado.</p>
+            </div>
+
+            <div id="m1Q2FinalQuestion" class="think-audio-box">
                 <div class="audio-controls">
                     <button id="recordBtnM1Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
                     <button id="stopBtnM1Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
@@ -391,6 +409,6 @@
 
 <script src="./assets/estudiantes-data.js"></script>
 <script src="./bags-system-0b.js"></script>
-<script type="module" src="./main-0b.js"></script>
+<script type="module" src="./main-0b.js?v=2026041201"></script>
 </body>
 </html>
