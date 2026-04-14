@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mision Robot V</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
+  <title>Mision: Reiniciar el Laboratorio V</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%232967ff'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dominant-baseline='central' font-size='36' font-family='Arial' fill='white'%3EV%3C/text%3E%3C/svg%3E">
+  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="ContenedorBienvenida">
     <section id="welcomeScreen">
-      <h1 class="main-title">Mision Robot V</h1>
-      <p class="subtitle">Laboratorio de numeros magicos</p>
+      <h1 class="main-title">Mision: Reiniciar el Laboratorio V</h1>
+      <p class="subtitle">Ciudad de Numetrix</p>
       <div class="welcome-box">
         <label for="studentCodeInput">Escribe tu codigo estudiantil:</label>
         <input id="studentCodeInput" class="chalk-input" type="text" maxlength="12" autocomplete="off" placeholder="Ej: 20314">
@@ -28,198 +29,222 @@
       <div class="welcome-box confirmation-box">
         <p id="confirmationQuestion" class="confirmation-question"></p>
         <div class="confirmation-buttons">
-          <button id="confirmYesBtn" class="btn btn-success"><img src="../Actividad2/assets/images/BTconfirmar.png" alt="Confirmar"></button>
-          <button id="confirmNoBtn" class="btn btn-secondary"><img src="../Actividad2/assets/images/BTrechazado.png" alt="Rechazar"></button>
+          <button id="confirmYesBtn" class="btn btn-success" aria-label="Confirmar"><img src="../Actividad2/assets/images/BTconfirmar.png" alt="Confirmar"></button>
+          <button id="confirmNoBtn" class="btn btn-secondary" aria-label="Rechazar"><img src="../Actividad2/assets/images/BTrechazado.png" alt="Rechazar"></button>
         </div>
       </div>
     </section>
   </div>
 
-  <main id="activityApp" class="lab-shell" aria-live="polite">
-    <section id="contexto" class="component active">
-      <div class="panel hero-panel">
-        <h2>1Contexto</h2>
-        <div class="hero-grid">
-          <img class="robot-image" src="assets/img/robot-broken.png" alt="Robot danado" onerror="this.style.display='none';this.parentElement.classList.add('no-image');">
-          <div class="story-card">
-            <p>Hola, ingeniera. Soy V-Bot y tuve un fallo en mi sistema de numeros magicos. Antes podia construir Magic V, pero ahora mezclo los numeros y no logro equilibrarlas. Necesito tu ayuda para descubrir como funcionan y reparar mi laboratorio.</p>
-            <button id="startMissionBtn" class="btn btn-primary">Entrar al laboratorio</button>
+  <main id="activityApp" aria-live="polite">
+    <section id="characterMissionScreen" class="app-screen active-screen">
+      <div class="screen-shell">
+        <header class="screen-header">
+          <h2>Mision Inicial: Elige tu guia</h2>
+          <p>Antes de entrar al mapa, selecciona un animal guia de Colombia.</p>
+        </header>
+
+        <div class="character-grid" id="characterGrid">
+          <button class="character-card" data-character="condor" data-name="Condor" data-image="assets/images/condor.png">
+            <img src="assets/images/condor.png" alt="Condor">
+            <span>Condor</span>
+          </button>
+          <button class="character-card" data-character="rana" data-name="Rana dorada" data-image="assets/images/ranavenenosadorada.png">
+            <img src="assets/images/ranavenenosadorada.png" alt="Rana dorada">
+            <span>Rana dorada</span>
+          </button>
+          <button class="character-card" data-character="colibri" data-name="Colibri" data-image="assets/images/colibri.png">
+            <img src="assets/images/colibri.png" alt="Colibri">
+            <span>Colibri</span>
+          </button>
+          <button class="character-card" data-character="jaguar" data-name="Jaguar" data-image="assets/images/jaguar.png">
+            <img src="assets/images/jaguar.png" alt="Jaguar">
+            <span>Jaguar</span>
+          </button>
+          <button class="character-card" data-character="oso" data-name="Oso de anteojos" data-image="assets/images/osoanteojos.png">
+            <img src="assets/images/osoanteojos.png" alt="Oso de anteojos">
+            <span>Oso de anteojos</span>
+          </button>
+          <button class="character-card" data-character="delfin" data-name="Delfin rosado" data-image="assets/images/delfinrosado.png">
+            <img src="assets/images/delfinrosado.png" alt="Delfin rosado">
+            <span>Delfin rosado</span>
+          </button>
+        </div>
+
+        <div class="character-footer">
+          <p id="characterStatus" class="status-pill">Selecciona un personaje para continuar.</p>
+          <button id="confirmCharacterBtn" class="btn btn-primary" disabled>Entrar al mapa de misiones</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="mapScreen" class="app-screen">
+      <div class="screen-shell map-shell">
+        <header class="screen-header map-header">
+          <div>
+            <h2>Mapa de Misiones</h2>
+            <p>Recorre Numetrix y repara el sistema de patrones.</p>
           </div>
-        </div>
-      </div>
-    </section>
+          <div id="guideBadge" class="guide-badge"></div>
+        </header>
 
-    <section id="exploracion" class="component hidden">
-      <div class="panel">
-        <h2>2Exploracion</h2>
-        <div class="exploration-topbar">
-          <p id="timerDisplay" class="chip">Tiempo: 00:00</p>
-          <p id="foundDisplay" class="chip">Magic V encontradas: 0/3</p>
-        </div>
+        <div class="map-stage">
+          <div class="map-aura map-aura-1"></div>
+          <div class="map-aura map-aura-2"></div>
 
-        <div class="exploration-grid">
-          <div class="builder-card">
-            <h3>Numeros disponibles</h3>
-            <div id="numberPool" class="number-pool" aria-label="Numeros arrastrables"></div>
+          <svg class="map-shape" viewBox="0 0 1200 800" aria-hidden="true">
+            <path d="M389 70 L525 50 L622 88 L698 165 L760 243 L860 309 L885 410 L853 522 L771 603 L699 690 L576 743 L437 719 L330 669 L245 596 L203 510 L183 413 L204 314 L244 228 L313 154 Z"></path>
+          </svg>
 
-            <h3>Construye la Magic V</h3>
-            <div class="v-board" id="explorationBoard">
-              <div class="dropzone" data-pos="leftTop">Izq superior</div>
-              <div class="dropzone" data-pos="rightTop">Der superior</div>
-              <div class="dropzone" data-pos="leftMid">Izq media</div>
-              <div class="dropzone" data-pos="rightMid">Der media</div>
-              <div class="dropzone bottom-zone" data-pos="bottom">Inferior</div>
-            </div>
+          <svg class="map-paths" viewBox="0 0 1200 800" aria-hidden="true">
+            <path d="M320 180 C420 220, 470 290, 460 360" />
+            <path d="M460 360 C540 350, 650 340, 710 390" />
+            <path d="M710 390 C760 450, 780 510, 730 570" />
+            <path d="M730 570 C640 610, 520 610, 430 560" />
+          </svg>
 
-            <div class="action-row">
-              <button id="checkExplorationBtn" class="btn btn-primary">Comprobar</button>
-              <button id="resetExplorationBtn" class="btn btn-secondary">Reiniciar</button>
-            </div>
-            <p id="explorationFeedback" class="status-line">Arrastra los numeros para probar.</p>
+          <div class="mission-node" data-mission="1" style="left: 28%; top: 24%;">
+            <button class="node-button" aria-label="Mision 1"></button>
+            <span class="node-label">Mision 1</span>
+            <span class="node-state" id="state-m1"></span>
           </div>
 
-          <aside class="gallery-card">
-            <h3>Galeria de Magic V</h3>
-            <div id="foundGallery" class="mini-gallery"></div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <section id="conjetura" class="component hidden">
-      <div class="panel">
-        <h2>3Conjetura</h2>
-        <p class="intro-text">V-Bot noto algo extrano en el numero de abajo.</p>
-        <p class="question-text">Mira el numero de abajo en las tres Magic V. Que sospechas sobre ese lugar?</p>
-
-        <div id="conjeturaGallery" class="mini-gallery highlight-bottom"></div>
-
-        <div class="audio-block">
-          <button id="recordConjeturaBtn" class="btn btn-primary">Grabar audio</button>
-          <button id="stopConjeturaBtn" class="btn btn-secondary">Detener</button>
-          <p id="statusConjetura" class="status-line">Sin grabacion.</p>
-        </div>
-
-        <textarea id="conjeturaText" rows="4" placeholder="Creo que abajo..."></textarea>
-
-        <div class="action-row end-row">
-          <button id="continueConjeturaBtn" class="btn btn-success">Continuar</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="generalizacion" class="component hidden">
-      <div class="panel">
-        <h2>4Generalizacion</h2>
-        <p class="intro-text">Ahora ayudale a V-Bot a escribir una regla.</p>
-
-        <div class="support-grid">
-          <textarea id="generalizacionText" rows="6" placeholder="En una Magic V, el numero de abajo..."></textarea>
-          <div class="support-panel">
-            <h3>Pistas</h3>
-            <p>siempre...</p>
-            <p>nunca...</p>
-            <p>funciona cuando...</p>
+          <div class="mission-node" data-mission="2" style="left: 38%; top: 44%;">
+            <button class="node-button" aria-label="Mision 2"></button>
+            <span class="node-label">Mision 2</span>
+            <span class="node-state" id="state-m2"></span>
           </div>
+
+          <div class="mission-node" data-mission="3" style="left: 60%; top: 47%;">
+            <button class="node-button" aria-label="Mision 3"></button>
+            <span class="node-label">Mision 3</span>
+            <span class="node-state" id="state-m3"></span>
+          </div>
+
+          <div class="mission-node" data-mission="4" style="left: 63%; top: 68%;">
+            <button class="node-button" aria-label="Mision 4"></button>
+            <span class="node-label">Mision 4</span>
+            <span class="node-state" id="state-m4"></span>
+          </div>
+
+          <div class="mission-node" data-mission="5" style="left: 36%; top: 66%;">
+            <button class="node-button" aria-label="Mision 5"></button>
+            <span class="node-label">Mision 5</span>
+            <span class="node-state" id="state-m5"></span>
+          </div>
+
+          <span class="math-star" style="left: 18%; top: 26%;"></span>
+          <span class="math-star" style="left: 77%; top: 19%;"></span>
+          <span class="math-star" style="left: 82%; top: 61%;"></span>
+          <span class="math-star" style="left: 23%; top: 72%;"></span>
+
+          <span class="gear gear-a"></span>
+          <span class="gear gear-b"></span>
         </div>
 
-        <div class="action-row end-row">
-          <button id="continueGeneralizacionBtn" class="btn btn-success">Continuar</button>
-        </div>
+        <p id="mapHint" class="map-hint">Completa una mision para desbloquear la siguiente.</p>
       </div>
     </section>
 
-    <section id="justificacion" class="component hidden">
-      <div class="panel">
-        <h2>5Justificacion</h2>
-        <article class="quote-card">
-          Una ingeniera del laboratorio dijo: "Es imposible hacer una Magic V con un numero par abajo".
+    <section id="mission1Screen" class="app-screen mission-screen">
+      <div class="screen-shell">
+        <header class="screen-header mission-header">
+          <h2>Punto 1: Diagnostico de Robot V</h2>
+          <div class="guide-inline" id="guideInlineMission1"></div>
+        </header>
+
+        <article class="narrative-card">
+          <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que pruebes que todavia funciona.</p>
+          <p>Construye una Magic V valida para detectar combinaciones estables.</p>
         </article>
-        <p class="question-text">Estas de acuerdo? Explica como convencerias a otra persona.</p>
 
-        <div class="audio-block">
-          <button id="recordJustificacionBtn" class="btn btn-primary">Grabar audio</button>
-          <button id="stopJustificacionBtn" class="btn btn-secondary">Detener</button>
-          <p id="statusJustificacion" class="status-line">Sin grabacion.</p>
-        </div>
+        <div class="magicv-card">
+          <h3>Exploracion inicial: Construccion de Magic V</h3>
+          <p class="objective">Objetivo: encontrar una combinacion valida.</p>
 
-        <div class="action-row end-row">
-          <button id="continueJustificacionBtn" class="btn btn-success">Continuar</button>
+          <div class="magicv-grid">
+            <label>Izq superior<select id="m1-leftTop"></select></label>
+            <label>Der superior<select id="m1-rightTop"></select></label>
+            <label>Izq media<select id="m1-leftMid"></select></label>
+            <label>Der media<select id="m1-rightMid"></select></label>
+            <label>Inferior<select id="m1-bottom"></select></label>
+          </div>
+
+          <div class="mission-actions">
+            <button id="checkMagicVBtn" class="btn btn-primary">Comprobar combinacion</button>
+            <button id="resetMagicVBtn" class="btn btn-secondary">Reiniciar</button>
+          </div>
+
+          <p id="magicVFeedback" class="status-pill">Aun no has comprobado.</p>
+          <button id="completeMission1Btn" class="btn btn-success" disabled>Marcar mision 1 como completada</button>
         </div>
       </div>
     </section>
 
-    <section id="validez" class="component hidden">
-      <div class="panel">
-        <h2>6Validez</h2>
-        <p class="intro-text">Prueba de reparacion final: V-Bot necesita comprobar si tu idea funciona siempre.</p>
-
-        <div class="chip-wrap">
-          <p id="validezPhase" class="chip">Fase: vertice inferior fijo en 2</p>
-          <p id="validezAttempts" class="chip">Intentos con 2: 0 | Intentos con 4: 0</p>
-        </div>
-
-        <div class="exploration-grid">
-          <div class="builder-card">
-            <h3>Numeros disponibles</h3>
-            <div id="validezNumberPool" class="number-pool"></div>
-
-            <h3>Magic V de validacion</h3>
-            <div class="v-board" id="validezBoard">
-              <div class="dropzone" data-pos="leftTop">Izq superior</div>
-              <div class="dropzone" data-pos="rightTop">Der superior</div>
-              <div class="dropzone" data-pos="leftMid">Izq media</div>
-              <div class="dropzone" data-pos="rightMid">Der media</div>
-              <div class="dropzone bottom-zone fixed" data-pos="bottom">Inferior</div>
-            </div>
-
-            <div class="action-row">
-              <button id="checkValidezBtn" class="btn btn-primary">Comprobar</button>
-              <button id="resetValidezBtn" class="btn btn-secondary">Reiniciar</button>
-            </div>
-            <p id="validezFeedback" class="status-line">Completa la V para probar.</p>
-          </div>
-
-          <aside class="gallery-card">
-            <h3>Resultado de prueba</h3>
-            <p id="validezSummary" class="intro-text">Todavia no has probado ambos numeros pares.</p>
-          </aside>
-        </div>
-
-        <div id="validezReflectionBlock" class="hidden">
-          <p class="question-text">Despues de probar con 2 y con 4, crees que tu regla funciona siempre? Por que?</p>
-          <div class="audio-block">
-            <button id="recordValidezBtn" class="btn btn-primary">Grabar audio</button>
-            <button id="stopValidezBtn" class="btn btn-secondary">Detener</button>
-            <p id="statusValidez" class="status-line">Sin grabacion.</p>
-          </div>
-          <div class="action-row end-row">
-            <button id="continueValidezBtn" class="btn btn-success">Continuar</button>
-          </div>
+    <section id="mission2Screen" class="app-screen mission-screen">
+      <div class="screen-shell">
+        <header class="screen-header mission-header">
+          <h2>Punto 2: Rutas de Patron</h2>
+          <div class="guide-inline" id="guideInlineMission2"></div>
+        </header>
+        <article class="narrative-card">
+          <p>Analiza dos rutas del laboratorio y escribe que regularidad observas.</p>
+          <textarea id="m2Input" rows="5" placeholder="Describe el patron que observas..."></textarea>
+        </article>
+        <div class="mission-actions">
+          <button id="completeMission2Btn" class="btn btn-success">Completar mision 2</button>
+          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
         </div>
       </div>
     </section>
 
-    <section id="reflexion" class="component hidden">
-      <div class="panel">
-        <h2>7Reflexion</h2>
-        <img class="robot-image" src="assets/img/robot-happy.png" alt="Robot feliz" onerror="this.style.display='none';this.parentElement.classList.add('no-image');">
-        <p class="intro-text">Mision cumplida! Gracias a ti, V-Bot entendio como funcionan las Magic V.</p>
-
-        <textarea id="reflexionText" rows="5" placeholder="Descubri que... Esto pasa porque..."></textarea>
-
-        <div class="audio-block">
-          <button id="recordReflexionBtn" class="btn btn-primary">Grabar audio (opcional)</button>
-          <button id="stopReflexionBtn" class="btn btn-secondary">Detener</button>
-          <p id="statusReflexion" class="status-line">Sin grabacion.</p>
+    <section id="mission3Screen" class="app-screen mission-screen">
+      <div class="screen-shell">
+        <header class="screen-header mission-header">
+          <h2>Punto 3: Taller de Generalizacion</h2>
+          <div class="guide-inline" id="guideInlineMission3"></div>
+        </header>
+        <article class="narrative-card">
+          <p>Propone una regla general para mantener estable el sistema.</p>
+          <textarea id="m3Input" rows="5" placeholder="Escribe tu regla general..."></textarea>
+        </article>
+        <div class="mission-actions">
+          <button id="completeMission3Btn" class="btn btn-success">Completar mision 3</button>
+          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
         </div>
+      </div>
+    </section>
 
-        <p class="badge">Insignia: Ingeniera de patrones</p>
+    <section id="mission4Screen" class="app-screen mission-screen">
+      <div class="screen-shell">
+        <header class="screen-header mission-header">
+          <h2>Punto 4: Zona de Justificacion</h2>
+          <div class="guide-inline" id="guideInlineMission4"></div>
+        </header>
+        <article class="narrative-card">
+          <p>Justifica por que tu regla funciona en casos diferentes.</p>
+          <textarea id="m4Input" rows="5" placeholder="Escribe tu justificacion..."></textarea>
+        </article>
+        <div class="mission-actions">
+          <button id="completeMission4Btn" class="btn btn-success">Completar mision 4</button>
+          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
+        </div>
+      </div>
+    </section>
 
-        <div class="summary-card" id="finalSummary"></div>
-
-        <div class="action-row end-row">
-          <button id="restartMissionBtn" class="btn btn-primary">Reiniciar mision</button>
+    <section id="mission5Screen" class="app-screen mission-screen">
+      <div class="screen-shell">
+        <header class="screen-header mission-header">
+          <h2>Punto 5: Reinicio Final</h2>
+          <div class="guide-inline" id="guideInlineMission5"></div>
+        </header>
+        <article class="narrative-card">
+          <p>Comprobacion final: resume como reparaste el laboratorio.</p>
+          <textarea id="m5Input" rows="5" placeholder="Resumen final de la ingeniera de patrones..."></textarea>
+        </article>
+        <div class="mission-actions">
+          <button id="completeMission5Btn" class="btn btn-success">Completar mision 5</button>
+          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
         </div>
       </div>
     </section>
