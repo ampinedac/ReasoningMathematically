@@ -29,6 +29,14 @@ const guideBadge = document.getElementById("guideBadge");
 
 const missionNodes = Array.from(document.querySelectorAll(".mission-node"));
 const mapHint = document.getElementById("mapHint");
+const mapStage = document.querySelector(".map-stage");
+
+const dragState = {
+  active: false,
+  pointerId: null,
+  ghost: null,
+  hoverMission: null
+};
 
 const mission1Controls = {
   leftTop: document.getElementById("m1-leftTop"),
@@ -50,6 +58,7 @@ function init() {
   setupIntroductionScreen();
   setupCharacterMission();
   setupMap();
+  setupGuideDragAndDrop();
   setupMission1();
   setupMissionCompletionButtons();
   setupBackToMapButtons();
@@ -191,24 +200,147 @@ function setupCharacterMission() {
 function setupMap() {
   missionNodes.forEach((node) => {
     node.addEventListener("click", () => {
-      const mission = Number(node.dataset.mission);
-      if (!canAccessMission(mission)) {
-        setMessage(mapHint, "Este punto sigue bloqueado. Completa la mision anterior.", "bad");
-        return;
-      }
-
-      setMessage(mapHint, `Abriendo mision ${mission}...`, "");
-      showScreen(`mission${mission}Screen`);
-      registerTimestamp(`mission${mission}Opened`);
+      setMessage(mapHint, "Para entrar a la mision, arrastra tu guia y sueltalo sobre el marcador activo.", "");
     });
   });
 }
 
+function setupGuideDragAndDrop() {
+  guideBadge.addEventListener("pointerdown", (event) => {
+    const dragHandle = event.target.closest(".guide-dragger");
+    if (!dragHandle || !sessionData.character) {
+      return;
+    }
+
+    const currentMission = getCurrentAvailableMission();
+    if (!currentMission) {
+      setMessage(mapHint, "No hay una mision disponible para abrir ahora.", "bad");
+      return;
+    }
+
+    event.preventDefault();
+    startGuideDrag(event);
+  });
+
+  window.addEventListener("pointermove", (event) => {
+    if (!dragState.active || event.pointerId !== dragState.pointerId) {
+      return;
+    }
+
+    event.preventDefault();
+    moveGuideGhost(event.clientX, event.clientY);
+    updateDropHover(event.clientX, event.clientY);
+  }, { passive: false });
+
+  window.addEventListener("pointerup", (event) => {
+    if (!dragState.active || event.pointerId !== dragState.pointerId) {
+      return;
+    }
+
+    event.preventDefault();
+    finishGuideDrag(event.clientX, event.clientY);
+  });
+}
+
+function startGuideDrag(event) {
+  dragState.active = true;
+  dragState.pointerId = event.pointerId;
+  dragState.hoverMission = null;
+  mapStage.classList.add("dragging-guide");
+
+  const ghost = document.createElement("div");
+  ghost.className = "guide-drag-ghost";
+  ghost.innerHTML = `<img src="${sessionData.character.image}" alt="${sessionData.character.name}">`;
+  document.body.appendChild(ghost);
+
+  dragState.ghost = ghost;
+  moveGuideGhost(event.clientX, event.clientY);
+  setMessage(mapHint, "Arrastra tu guia al marcador resaltado y sueltalo para entrar.", "");
+}
+
+function moveGuideGhost(clientX, clientY) {
+  if (!dragState.ghost) {
+    return;
+  }
+
+  dragState.ghost.style.left = `${clientX}px`;
+  dragState.ghost.style.top = `${clientY}px`;
+}
+
+function updateDropHover(clientX, clientY) {
+  const currentMission = getCurrentAvailableMission();
+  const hoveredNode = document.elementFromPoint(clientX, clientY)?.closest(".mission-node");
+  const hoveredMission = hoveredNode ? Number(hoveredNode.dataset.mission) : null;
+  const isValidHover = currentMission && hoveredMission === currentMission;
+
+  missionNodes.forEach((node) => {
+    node.classList.remove("drop-hover");
+  });
+
+  if (isValidHover && hoveredNode) {
+    hoveredNode.classList.add("drop-hover");
+    dragState.hoverMission = hoveredMission;
+    setMessage(mapHint, `Suelta para entrar a la mision ${hoveredMission}.`, "good");
+    return;
+  }
+
+  dragState.hoverMission = null;
+  setMessage(mapHint, "Suelta sobre el marcador activo para abrir la siguiente mision.", "");
+}
+
+function finishGuideDrag(clientX, clientY) {
+  const currentMission = getCurrentAvailableMission();
+  const droppedNode = document.elementFromPoint(clientX, clientY)?.closest(".mission-node");
+  const droppedMission = droppedNode ? Number(droppedNode.dataset.mission) : null;
+  const isValidDrop = currentMission && droppedMission === currentMission;
+
+  if (isValidDrop) {
+    openMission(currentMission);
+  } else {
+    setMessage(mapHint, "Punto invalido. El guia vuelve a su lugar.", "bad");
+  }
+
+  missionNodes.forEach((node) => {
+    node.classList.remove("drop-hover");
+  });
+
+  mapStage.classList.remove("dragging-guide");
+  if (dragState.ghost) {
+    dragState.ghost.remove();
+  }
+
+  dragState.active = false;
+  dragState.pointerId = null;
+  dragState.ghost = null;
+  dragState.hoverMission = null;
+}
+
+function getCurrentAvailableMission() {
+  const nextMission = sessionData.progress;
+  if (!nextMission || nextMission > TOTAL_MISSIONS) {
+    return null;
+  }
+
+  if (sessionData.missionsCompleted.includes(nextMission)) {
+    return null;
+  }
+
+  return nextMission;
+}
+
+function openMission(mission) {
+  setMessage(mapHint, `Abriendo mision ${mission}...`, "good");
+  showScreen(`mission${mission}Screen`);
+  registerTimestamp(`mission${mission}Opened`);
+}
+
 function renderMap() {
+  const currentMission = getCurrentAvailableMission();
+
   missionNodes.forEach((node) => {
     const mission = Number(node.dataset.mission);
     const stateSpan = node.querySelector(".node-state");
-    node.classList.remove("locked", "available", "completed");
+    node.classList.remove("locked", "available", "completed", "drop-hover");
 
     if (sessionData.missionsCompleted.includes(mission)) {
       node.classList.add("completed");
@@ -217,7 +349,7 @@ function renderMap() {
       return;
     }
 
-    if (mission <= sessionData.progress) {
+    if (mission === currentMission) {
       node.classList.add("available");
       stateSpan.textContent = "⭐";
       stateSpan.setAttribute("aria-label", "Mision desbloqueada");
@@ -233,7 +365,11 @@ function renderMap() {
   if (done === TOTAL_MISSIONS) {
     setMessage(mapHint, "Laboratorio reiniciado. Todas las misiones estan completadas.", "good");
   } else {
-    setMessage(mapHint, `Misiones completadas: ${done}/${TOTAL_MISSIONS}.`, "");
+    setMessage(
+      mapHint,
+      `Misiones completadas: ${done}/${TOTAL_MISSIONS}. Arrastra tu guia al marcador activo para abrir la siguiente.`,
+      ""
+    );
   }
 }
 
@@ -331,12 +467,19 @@ function hydrateGuideBadges() {
     return;
   }
 
-  const html = `
+  const mapGuideHtml = `
+    <button class="guide-dragger" aria-label="Arrastrar guia ${sessionData.character.name}" type="button">
+      <img src="${sessionData.character.image}" alt="${sessionData.character.name}">
+    </button>
+    <span>Guia: ${sessionData.character.name}</span>
+  `;
+
+  const inlineGuideHtml = `
     <img src="${sessionData.character.image}" alt="${sessionData.character.name}">
     <span>Guia: ${sessionData.character.name}</span>
   `;
 
-  guideBadge.innerHTML = html;
+  guideBadge.innerHTML = mapGuideHtml;
 
   [
     "guideInlineMission1",
@@ -347,7 +490,7 @@ function hydrateGuideBadges() {
   ].forEach((id) => {
     const target = document.getElementById(id);
     if (target) {
-      target.innerHTML = html;
+      target.innerHTML = inlineGuideHtml;
     }
   });
 }

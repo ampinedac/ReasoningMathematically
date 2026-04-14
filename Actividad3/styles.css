@@ -334,6 +334,57 @@ body {
   font-size: 1.02rem; /* Tamano de texto en badge */
 }
 
+.guide-badge {
+  user-select: none; /* Evita seleccionar texto mientras se arrastra */
+}
+
+.guide-dragger {
+  width: 52px; /* Tamano de control arrastrable */
+  height: 52px; /* Tamano vertical de control arrastrable */
+  padding: 0; /* Quita padding por defecto de boton */
+  border: 2px dashed #6aaef5; /* Marco para indicar accion de arrastre */
+  border-radius: 50%; /* Control redondo */
+  background: rgba(255, 255, 255, 0.9); /* Fondo claro de control */
+  display: inline-flex; /* Centra imagen interna */
+  align-items: center; /* Centra imagen verticalmente */
+  justify-content: center; /* Centra imagen horizontalmente */
+  cursor: grab; /* Cursor de agarre */
+  touch-action: none; /* Permite drag con touch sin scroll */
+}
+
+.guide-dragger:active {
+  cursor: grabbing; /* Cursor durante arrastre */
+}
+
+.guide-dragger img {
+  width: 84%; /* Ajusta imagen dentro del control */
+  height: 84%; /* Ajusta imagen dentro del control */
+}
+
+.guide-drag-ghost {
+  position: fixed; /* Sigue el puntero en pantalla */
+  left: 0; /* Posicion inicial, luego se actualiza por JS */
+  top: 0; /* Posicion inicial, luego se actualiza por JS */
+  width: 56px; /* Tamano del avatar flotante */
+  height: 56px; /* Tamano vertical del avatar flotante */
+  transform: translate(-50%, -50%); /* Centra sobre el puntero */
+  border-radius: 50%; /* Forma circular */
+  border: 2px solid #7fb9ff; /* Borde visual del avatar flotante */
+  background: rgba(255, 255, 255, 0.95); /* Fondo de contraste */
+  box-shadow: 0 10px 22px rgba(37, 74, 130, 0.35); /* Sombra para separarlo del fondo */
+  display: flex; /* Centra imagen interna */
+  align-items: center; /* Centra imagen verticalmente */
+  justify-content: center; /* Centra imagen horizontalmente */
+  pointer-events: none; /* No bloquea deteccion del objetivo */
+  z-index: 9999; /* Siempre por encima durante arrastre */
+}
+
+.guide-drag-ghost img {
+  width: 86%; /* Escala imagen dentro del avatar flotante */
+  height: 86%; /* Escala imagen dentro del avatar flotante */
+  object-fit: contain; /* Conserva proporcion */
+}
+
 .guide-badge img,
 .guide-inline img {
   width: 48px; /* Ancho fijo de miniatura de guia */
@@ -458,6 +509,20 @@ body {
 
 .mission-node.available .node-button {
   filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35)); /* Brillo de disponibilidad */
+}
+
+.map-stage.dragging-guide .mission-node.available .node-button {
+  filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35)); /* Mantiene brillo del objetivo durante arrastre */
+}
+
+.map-stage.dragging-guide .mission-node.drop-hover .node-button {
+  transform: scale(1.1) translateY(-3px); /* Resalta objetivo al pasar encima */
+  filter: drop-shadow(0 0 14px rgba(251, 221, 82, 0.95)) drop-shadow(0 10px 14px rgba(194, 149, 42, 0.44)); /* Brillo dorado de destino valido */
+}
+
+.map-stage.dragging-guide .mission-node.drop-hover .node-caption {
+  border-color: rgba(255, 233, 128, 0.98); /* Borde dorado al estar listo para soltar */
+  background: rgba(255, 251, 223, 0.86); /* Fondo dorado suave del label */
 }
 
 .mission-node.completed .node-button {
