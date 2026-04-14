@@ -1559,8 +1559,9 @@ body #ContenedorLibro .activity-spread {
 
         #spread13Table .spread13-audio-block {
           width: 98%;
-          height: auto;
-          min-height: 0;
+          height: fit-content;
+          min-height: fit-content;
+          flex: 0 0 auto;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -1581,17 +1582,21 @@ body #ContenedorLibro .activity-spread {
           color: #0f2f7a;
           font-size: var(--spread13-uniform-text-size);
           line-height: 1.1;
+          flex: 0 0 auto;
         }
 
         #spread13Table .spread13-audio-block .audio-controls {
           margin-top: 0;
           justify-content: center;
+          flex: 0 0 auto;
+          min-height: 0;
         }
 
         #spread13Table #statusM3Q1 {
-          min-height: 1.2em;
+          min-height: 0;
           text-align: center;
           font-size: var(--spread13-uniform-text-size);
+          flex: 0 0 auto;
         }
 
         @keyframes wrongDropShake {

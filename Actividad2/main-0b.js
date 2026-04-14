@@ -1083,6 +1083,7 @@ function initSpread13Table() {
 
     const placed = new Map();
     let successMessageTimer = null;
+    let tableLocked = false;
 
     const shuffled = [...TOKENS];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -1106,6 +1107,8 @@ function initSpread13Table() {
 
         // Si la ficha ya está colocada y se hace clic, vuelve al banco.
         token.addEventListener('click', () => {
+            if (tableLocked) return;
+
             const parentZone = token.parentElement;
             if (!parentZone || !parentZone.classList.contains('sum-dropzone')) return;
 
@@ -1141,6 +1144,8 @@ function initSpread13Table() {
         }
 
         if (done) {
+            tableLocked = true;
+            bank.style.display = 'none';
             statusEl.textContent = '✅ ¡Excelente! Ubicaste correctamente todas las sumas.';
             statusEl.style.color = '#16a34a';
             if (audioBlock) audioBlock.classList.remove('think-hidden');
@@ -1166,6 +1171,8 @@ function initSpread13Table() {
         zone.addEventListener('drop', (e) => {
             e.preventDefault();
             zone.classList.remove('is-over');
+
+            if (tableLocked) return;
 
             if (zone.dataset.filled === '1') return;
             const tokenId = e.dataTransfer?.getData('text/plain');
