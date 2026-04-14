@@ -243,7 +243,7 @@ body {
    ====================================== */
 .character-grid {
   display: grid; /* Rejilla para tarjetas de personaje */
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Columnas fluidas y responsivas */
+  grid-template-columns: repeat(3, minmax(170px, 1fr)); /* Tres guias por fila en desktop */
   gap: 14px; /* Separacion uniforme entre tarjetas */
 }
 
@@ -406,52 +406,76 @@ body {
   transform: translate(-50%, -50%); /* Centra el nodo respecto al punto */
   display: grid; /* Ordena boton y etiquetas */
   justify-items: center; /* Centra hijos del nodo */
-  gap: 6px; /* Espaciado vertical interno */
+  gap: 4px; /* Espaciado vertical interno */
 }
 
 .node-button {
-  width: 70px; /* Diametro del nodo principal */
-  height: 70px; /* Altura del nodo principal */
-  border-radius: 999px; /* Forma circular */
-  border: 3px solid #7eb7ff; /* Borde base del nodo */
-  background: radial-gradient(circle at 30% 30%, #ffffff, #d7ebff); /* Relleno tipo burbuja */
-  box-shadow: 0 10px 20px rgba(88, 133, 196, 0.35); /* Sombra del nodo */
+  width: 78px; /* Ancho del marcador */
+  height: 86px; /* Alto del marcador */
+  border: none; /* Sin borde para usar la imagen completa */
+  border-radius: 0; /* La forma la define la imagen */
+  background: url("assets/images/marcador-de-posicion.png") no-repeat center center; /* Imagen marcador */
+  background-size: contain; /* Mantiene proporcion del marcador */
+  filter: drop-shadow(0 7px 11px rgba(33, 63, 109, 0.42)); /* Sombra del marcador */
   cursor: pointer; /* Cursor de interaccion */
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animacion de hover en nodo */
+  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease; /* Animacion de hover en nodo */
 }
 
 .node-button:hover {
-  transform: scale(1.06); /* Aumenta ligeramente en hover */
+  transform: scale(1.06) translateY(-2px); /* Aumenta ligeramente en hover */
+}
+
+.node-caption {
+  display: inline-flex; /* Alinea texto e icono en una sola fila */
+  align-items: center; /* Centra texto e icono verticalmente */
+  gap: 6px; /* Espacio entre nombre de mision y estado */
+  padding: 4px 10px; /* Espaciado interno del contenedor */
+  border-radius: 999px; /* Forma de capsula */
+  border: 1px solid rgba(255, 255, 255, 0.88); /* Borde sutil luminoso */
+  background: rgba(255, 255, 255, 0.73); /* Fondo blanco semitransparente */
+  backdrop-filter: blur(5px); /* Efecto difuminado sobre el mapa */
+  box-shadow: 0 6px 12px rgba(38, 58, 94, 0.22); /* Sombra de separacion */
 }
 
 .node-label {
   font-family: 'Lobster Two', cursive; /* Fuente de etiqueta de mision */
-  font-size: 1.05rem; /* Tamano de etiqueta */
-  color: #214374; /* Color de etiqueta */
-  text-shadow: 0 1px 4px rgba(255, 255, 255, 0.7); /* Contraste de etiqueta sobre fondo */
+  font-size: 1rem; /* Tamano de etiqueta */
+  color: #15386b; /* Color de etiqueta */
+  line-height: 1; /* Compacta la etiqueta en la capsula */
 }
 
 .node-state {
-  font-size: 1.1rem; /* Tamano del indicador de estado */
+  font-size: 1rem; /* Tamano del indicador de estado */
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif; /* Garantiza render de iconos */
   line-height: 1; /* Compacta la altura de la linea del icono */
 }
 
 .mission-node.locked .node-button {
-  border-color: #b3bdcf; /* Borde del estado bloqueado */
-  background: radial-gradient(circle at 30% 30%, #f3f4f8, #d3d8e5); /* Fondo bloqueado */
-  box-shadow: 0 6px 14px rgba(111, 121, 143, 0.26); /* Sombra de estado bloqueado */
+  opacity: 0.62; /* Atenua marcador bloqueado */
+  filter: grayscale(0.65) drop-shadow(0 5px 9px rgba(90, 98, 118, 0.32)); /* Estilo apagado bloqueado */
   cursor: not-allowed; /* Cursor de bloqueo */
 }
 
 .mission-node.available .node-button {
-  border-color: #52a9ff; /* Borde de nodo desbloqueado */
-  box-shadow: 0 0 0 8px rgba(80, 173, 255, 0.2), 0 12px 24px rgba(75, 132, 201, 0.32); /* Halo de disponibilidad */
+  filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35)); /* Brillo de disponibilidad */
 }
 
 .mission-node.completed .node-button {
-  border-color: #0ea56d; /* Borde de mision completada */
-  background: radial-gradient(circle at 30% 30%, #ffffff, #ddffe5); /* Fondo de exito */
-  box-shadow: 0 0 0 8px rgba(24, 197, 126, 0.2), 0 12px 24px rgba(36, 150, 109, 0.31); /* Halo de completado */
+  filter: drop-shadow(0 0 10px rgba(29, 194, 122, 0.8)) drop-shadow(0 10px 14px rgba(36, 150, 109, 0.34)); /* Brillo verde de completado */
+}
+
+.mission-node.locked .node-caption {
+  border-color: rgba(207, 216, 230, 0.95); /* Borde de etiqueta bloqueada */
+  background: rgba(247, 249, 254, 0.76); /* Fondo de etiqueta bloqueada */
+}
+
+.mission-node.available .node-caption {
+  border-color: rgba(167, 216, 255, 0.95); /* Borde de etiqueta desbloqueada */
+}
+
+.mission-node.completed .node-caption {
+  border-color: rgba(142, 224, 191, 0.95); /* Borde de etiqueta completada */
+  background: rgba(239, 255, 247, 0.78); /* Fondo de etiqueta completada */
 }
 
 .math-star {
@@ -535,18 +559,24 @@ body {
   align-items: center; /* Alinea verticalmente */
 }
 
+.intro-center-block {
+  display: grid; /* Organiza narrativa inferior */
+  gap: 12px; /* Espaciado uniforme entre bloques */
+  text-align: center; /* Esta seccion va centrada */
+}
+
 .intro-text {
   margin: 0; /* Elimina margen externo */
   font-size: clamp(1.2rem, 2.8vw, 1.6rem); /* Escala responsiva del texto */
   line-height: 1.6; /* Espaciado entre lineas para legibilidad */
   color: var(--texto); /* Color base de texto */
-  text-align: right; /* Alinea texto narrativo a la derecha */
+  text-align: inherit; /* Hereda alineacion del bloque contenedor */
 }
 
 .intro-list {
   margin: 8px auto; /* Centrado con pequeno margen */
   padding: 0 18px; /* Indentacion de lista */
-  text-align: right; /* Alinea items a la derecha */
+  text-align: inherit; /* Hereda alineacion del bloque contenedor */
   font-size: clamp(1.15rem, 2.6vw, 1.55rem); /* Escala de items de lista */
   list-style: none; /* Quita bullets por defecto */
 }
@@ -699,13 +729,17 @@ textarea {
    10) Responsive general de pantallas
    ====================================== */
 @media (max-width: 900px) {
+  .character-grid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr)); /* Dos por fila en tablet */
+  }
+
   .map-stage {
     min-height: 560px; /* Ajusta altura del mapa en tablet */
   }
 
   .node-button {
-    width: 62px; /* Reduce tamano de nodos en tablet */
-    height: 62px; /* Reduce alto de nodos en tablet */
+    width: 68px; /* Reduce tamano de marcador en tablet */
+    height: 76px; /* Reduce alto de marcador en tablet */
   }
 
   .screen-header {
@@ -715,6 +749,10 @@ textarea {
 }
 
 @media (max-width: 640px) {
+  .character-grid {
+    grid-template-columns: 1fr; /* Una por fila en movil */
+  }
+
   #ContenedorBienvenida,
   #ContenedorConfirmacion,
   .app-screen {
@@ -732,6 +770,11 @@ textarea {
 
   .node-label {
     font-size: 0.95rem; /* Escala etiqueta de nodo en movil */
+  }
+
+  .node-caption {
+    padding: 4px 8px; /* Compacta capsula de etiqueta en movil */
+    gap: 4px; /* Reduce separacion en movil */
   }
 
   .guide-badge,

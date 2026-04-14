@@ -212,18 +212,21 @@ function renderMap() {
 
     if (sessionData.missionsCompleted.includes(mission)) {
       node.classList.add("completed");
-      stateSpan.textContent = "💫";
+      stateSpan.textContent = "⭐";
+      stateSpan.setAttribute("aria-label", "Mision completada");
       return;
     }
 
     if (mission <= sessionData.progress) {
       node.classList.add("available");
-      stateSpan.textContent = "";
+      stateSpan.textContent = "⭐";
+      stateSpan.setAttribute("aria-label", "Mision desbloqueada");
       return;
     }
 
     node.classList.add("locked");
-    stateSpan.textContent = "🔐";
+    stateSpan.textContent = "🔒";
+    stateSpan.setAttribute("aria-label", "Mision bloqueada");
   });
 
   const done = sessionData.missionsCompleted.length;

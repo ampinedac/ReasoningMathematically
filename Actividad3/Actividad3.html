@@ -49,21 +49,6 @@
               <p class="intro-text">El robot encargado de organizar los patrones, V-Bot, se ha desconfigurado…<br>y desde entonces, todo el sistema está en desorden.</p>
 
               <p class="intro-text">Las máquinas ya no reconocen los patrones,<br>las secuencias se rompieron,<br>y nadie sabe qué debería pasar después…</p>
-
-              <p class="intro-text"><strong>🛠️ Pero no todo está perdido.</strong></p>
-
-              <p class="intro-text">Hemos llamado a la mejor ingeniera de patrones, ¡bienvenida!</p>
-
-              <p class="intro-text"><strong>Tu misión será:</strong></p>
-              <ul class="intro-list">
-                <li>explorar lo que aún funciona,</li>
-                <li>descubrir pistas,</li>
-                <li>y ayudar a V-Bot a volver a entender el sistema.</li>
-              </ul>
-
-              <p class="intro-text"><strong>🗺️ Para lograrlo, deberás recorrer el Mapa de Reparación</strong><br>y completar cada misión.</p>
-
-              <p class="intro-text"><strong>Cada paso que completes…<br>👉 acercará al laboratorio a volver a funcionar.</strong></p>
             </div>
 
             <div class="intro-image-column">
@@ -71,6 +56,23 @@
                 <img src="assets/images/robot-broken.png" alt="V-Bot desconfigurado" class="robot-image">
               </div>
             </div>
+          </div>
+
+          <div class="intro-center-block">
+            <p class="intro-text"><strong>🛠️ Pero no todo está perdido.</strong></p>
+
+            <p class="intro-text">Hemos llamado a la mejor ingeniera de patrones, ¡bienvenida!</p>
+
+            <p class="intro-text"><strong>Tu misión será:</strong></p>
+            <ul class="intro-list">
+              <li>explorar lo que aún funciona,</li>
+              <li>descubrir pistas,</li>
+              <li>y ayudar a V-Bot a volver a entender el sistema.</li>
+            </ul>
+
+            <p class="intro-text"><strong>🗺️ Para lograrlo, deberás recorrer el Mapa de Reparación</strong><br>y completar cada misión.</p>
+
+            <p class="intro-text"><strong>Cada paso que completes…<br>👉 acercará al laboratorio a volver a funcionar.</strong></p>
           </div>
 
           <div class="intro-actions">
@@ -132,35 +134,45 @@
         </header>
 
         <div class="map-stage">
-          <!-- Cinco nodos en forma de V -->
-          <div class="mission-node" data-mission="1" style="left: 15%; top: 15%;">
+          <!-- Cinco nodos anclados a hitos reales del mapa -->
+          <div class="mission-node" data-mission="1" style="left: 13%; top: 20%;">
             <button class="node-button" aria-label="Mision 1"></button>
-            <span class="node-label">Misión 1</span>
-            <span class="node-state" id="state-m1"></span>
+            <div class="node-caption">
+              <span class="node-label">Mision 1</span>
+              <span class="node-state" id="state-m1" aria-live="polite"></span>
+            </div>
           </div>
 
-          <div class="mission-node" data-mission="2" style="left: 28%; top: 48%;">
+          <div class="mission-node" data-mission="2" style="left: 29%; top: 50%;">
             <button class="node-button" aria-label="Mision 2"></button>
-            <span class="node-label">Misión 2</span>
-            <span class="node-state" id="state-m2"></span>
+            <div class="node-caption">
+              <span class="node-label">Mision 2</span>
+              <span class="node-state" id="state-m2" aria-live="polite"></span>
+            </div>
           </div>
 
-          <div class="mission-node" data-mission="3" style="left: 50%; top: 72%;">
+          <div class="mission-node" data-mission="3" style="left: 50%; top: 75%;">
             <button class="node-button" aria-label="Misión 3"></button>
-            <span class="node-label">Misión 3</span>
-            <span class="node-state" id="state-m3"></span>
+            <div class="node-caption">
+              <span class="node-label">Mision 3</span>
+              <span class="node-state" id="state-m3" aria-live="polite"></span>
+            </div>
           </div>
 
-          <div class="mission-node" data-mission="4" style="left: 72%; top: 48%;">
+          <div class="mission-node" data-mission="4" style="left: 71%; top: 50%;">
             <button class="node-button" aria-label="Mision 4"></button>
-            <span class="node-label">Misión 4</span>
-            <span class="node-state" id="state-m4"></span>
+            <div class="node-caption">
+              <span class="node-label">Mision 4</span>
+              <span class="node-state" id="state-m4" aria-live="polite"></span>
+            </div>
           </div>
 
-          <div class="mission-node" data-mission="5" style="left: 85%; top: 15%;">
+          <div class="mission-node" data-mission="5" style="left: 84%; top: 18%;">
             <button class="node-button" aria-label="Mision 5"></button>
-            <span class="node-label">Misión 5</span>
-            <span class="node-state" id="state-m5"></span>
+            <div class="node-caption">
+              <span class="node-label">Mision 5</span>
+              <span class="node-state" id="state-m5" aria-live="polite"></span>
+            </div>
           </div>
 
           <span class="gear gear-a"></span>
