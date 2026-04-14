@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initM3DualStepFlow();
     initMatchingActivity();
     initM1Q2ThinkFlow();
+    initM1Q2EquationForm();
     initMenteAndresSystem();
     initM4StoryFlow();
     initM4();
@@ -153,7 +154,7 @@ function show(id) {
         ContenedorMenteAndres: 'block',
         prevBtn: 'flex',
         nextBtn: 'flex',
-        m1Q2FinalQuestion: 'block',
+        m1Q2FinalQuestion: 'flex',
         finalQuestionSection: 'block',
         magicCanvas: 'block',
         confettiCanvas: 'block'
@@ -903,6 +904,111 @@ async function handleSubmit(tag) {
     }
 }
 
+async function submitM1Q2Equation() {
+    const leftInput = document.getElementById('m1q2LeftInput');
+    const rightInput = document.getElementById('m1q2RightInput');
+    const submitBtn = document.getElementById('submitM1Q2Equation');
+    const statusEl = document.getElementById('statusM1Q2');
+
+    if (!leftInput || !rightInput || !submitBtn) return;
+
+    const leftRaw = leftInput.value.trim();
+    const rightRaw = rightInput.value.trim();
+
+    if (leftRaw === '' || rightRaw === '') {
+        if (statusEl) {
+            statusEl.textContent = 'Completa ambos números para continuar.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    const leftNum = Number(leftRaw);
+    const rightNum = Number(rightRaw);
+    if (!Number.isFinite(leftNum) || !Number.isFinite(rightNum) || leftNum < 0 || rightNum < 0) {
+        if (statusEl) {
+            statusEl.textContent = 'Ingresa solo números válidos.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    const izquierda = `${leftNum} + ${rightNum}`;
+    const derecha = String(leftNum + rightNum);
+    const equationText = `${izquierda} = ${derecha}`;
+
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.cursor = 'not-allowed';
+    if (statusEl) {
+        statusEl.textContent = 'Guardando...';
+        statusEl.style.color = '#555';
+    }
+
+    try {
+        if (!firebaseServices?.db) throw new Error('Firebase no disponible');
+
+        const { db, collection, addDoc, serverTimestamp } = firebaseServices;
+        const basePath = buildStorageBasePath('M1Q2');
+        const component = getComponentFromTag('M1Q2');
+
+        await addDoc(collection(db, 'Actividad2'), {
+            studentCode,
+            studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
+            curso: studentInfo?.curso || '',
+            tag: 'M1Q2',
+            componente: component,
+            storageBasePath: basePath,
+            audioURL: null,
+            imageURL: null,
+            izquierda,
+            derecha,
+            equationText,
+            timestamp: serverTimestamp()
+        });
+
+        markSubmitted('M1Q2');
+    } catch (error) {
+        console.error('❌ Error al guardar M1Q2:', error);
+        if (statusEl) {
+            statusEl.textContent = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            statusEl.style.color = '#dc2626';
+        }
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.cursor = 'pointer';
+    }
+}
+
+function initM1Q2EquationForm() {
+    const leftInput = document.getElementById('m1q2LeftInput');
+    const rightInput = document.getElementById('m1q2RightInput');
+    const submitBtn = document.getElementById('submitM1Q2Equation');
+    const statusEl = document.getElementById('statusM1Q2');
+
+    if (!leftInput || !rightInput || !submitBtn) return;
+
+    const updateSubmitState = () => {
+        const ready = leftInput.value.trim() !== '' && rightInput.value.trim() !== '';
+        submitBtn.disabled = !ready;
+        submitBtn.style.opacity = ready ? '1' : '0.5';
+        submitBtn.style.cursor = ready ? 'pointer' : 'not-allowed';
+    };
+
+    leftInput.addEventListener('input', () => {
+        if (statusEl) statusEl.textContent = '';
+        updateSubmitState();
+    });
+
+    rightInput.addEventListener('input', () => {
+        if (statusEl) statusEl.textContent = '';
+        updateSubmitState();
+    });
+
+    submitBtn.addEventListener('click', submitM1Q2Equation);
+    updateSubmitState();
+}
+
 function initTableM1Q0() {
     const btn = document.getElementById('checkTableBtn');
     const statusEl = document.getElementById('statusTableM1Q0');
@@ -976,6 +1082,7 @@ function initSpread13Table() {
     ];
 
     const placed = new Map();
+    let successMessageTimer = null;
 
     const shuffled = [...TOKENS];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -1012,6 +1119,10 @@ function initSpread13Table() {
             spread13TableCompleted = false;
             m3q1Submitted = false;
             if (audioBlock) audioBlock.classList.add('think-hidden');
+            if (successMessageTimer) {
+                clearTimeout(successMessageTimer);
+                successMessageTimer = null;
+            }
             statusEl.textContent = 'Ficha regresada. Ubícala de nuevo en el espacio correcto.';
             statusEl.style.color = '#1d4ed8';
             updateNavButtons();
@@ -1023,10 +1134,21 @@ function initSpread13Table() {
     function evaluateCompletion() {
         const done = placed.size === TOKENS.length;
         spread13TableCompleted = done;
+
+        if (successMessageTimer) {
+            clearTimeout(successMessageTimer);
+            successMessageTimer = null;
+        }
+
         if (done) {
             statusEl.textContent = '✅ ¡Excelente! Ubicaste correctamente todas las sumas.';
             statusEl.style.color = '#16a34a';
             if (audioBlock) audioBlock.classList.remove('think-hidden');
+            successMessageTimer = setTimeout(() => {
+                if (spread13TableCompleted) {
+                    statusEl.textContent = '';
+                }
+            }, 3000);
         } else {
             m3q1Submitted = false;
             if (audioBlock) audioBlock.classList.add('think-hidden');
@@ -1582,9 +1704,8 @@ function initMenteAndresSystem() {
 
                 if (returnSpread === 7) {
                     show('m1Q2FinalQuestion');
-                    // Iniciar grabador M1Q2
-                    const recordBtn = document.getElementById('recordBtnM1Q2');
-                    if (recordBtn) recordBtn.disabled = false;
+                    const leftInput = document.getElementById('m1q2LeftInput');
+                    if (leftInput) leftInput.focus();
                 }
 
                 if (returnSpread === 4) {

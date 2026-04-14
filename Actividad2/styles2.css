@@ -853,6 +853,62 @@ body #ContenedorLibro .activity-spread {
           min-height: 0;
         }
 
+        #thinkSocialSpread .m1q2-equation-form {
+          width: 100%;
+          max-width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.65rem;
+          padding: 0.45rem 0.3rem;
+          background: rgba(255, 255, 255, 0.55);
+          border: 1.8px solid rgba(30, 64, 175, 0.35);
+          border-radius: 12px;
+        }
+
+        #thinkSocialSpread .m1q2-equation-row {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        #thinkSocialSpread .m1q2-num-input {
+          width: min(38%, 180px);
+          min-width: 110px;
+          padding: 0.4rem 0.45rem;
+          border: 2px solid #60a5fa;
+          border-radius: 10px;
+          background: #eff6ff;
+          color: #1e3a8a;
+          font-family: 'Rancho', cursive;
+          font-size: clamp(1.5rem, 2.2vw, 2rem);
+          text-align: center;
+          outline: none;
+        }
+
+        #thinkSocialSpread .m1q2-num-input:focus {
+          border-color: #1d4ed8;
+          background: #ffffff;
+        }
+
+        #thinkSocialSpread .m1q2-equation-plus {
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+          color: #1e3a8a;
+          line-height: 1;
+        }
+
+        #thinkSocialSpread #submitM1Q2Equation {
+          margin: 0;
+          min-height: 46px;
+          padding: 0.55rem 1.2rem;
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+        }
+
         #thinkSocialSpread #m1Q2FinalQuestion .audio-controls {
           width: 100%;
           margin-top: 0.35rem;
@@ -873,6 +929,10 @@ body #ContenedorLibro .activity-spread {
           margin-top: 0.15rem;
           text-align: center;
           position: static;
+        }
+
+        #thinkSocialSpread #m1Q2FinalQuestion .audio-controls {
+          display: none;
         }
 
         #thinkSocialSpread .m1q2-board-container {
@@ -1321,13 +1381,11 @@ body #ContenedorLibro .activity-spread {
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           box-sizing: border-box;
           padding: 0.35rem 0.2rem 0.35rem;
           gap: 0.55rem;
           pointer-events: auto;
-          overflow-y: auto;
-          overflow-x: hidden;
         }
 
         #spread13Table .spread13-title {
@@ -1367,6 +1425,7 @@ body #ContenedorLibro .activity-spread {
           font-family: 'Lobster Two', cursive;
           color: #1f2937;
           font-size: var(--spread13-uniform-text-size);
+          overflow: hidden;
         }
 
         #spread13Table .spread13-grid-table th {
@@ -1389,6 +1448,8 @@ body #ContenedorLibro .activity-spread {
 
         #spread13Table .sum-dropzone {
           width: 100%;
+          max-width: 100%;
+          min-width: 0;
           min-height: 2.25rem;
           border: 2px dashed #60a5fa;
           border-radius: 9px;
@@ -1398,6 +1459,17 @@ body #ContenedorLibro .activity-spread {
           justify-content: center;
           padding: 0.2rem;
           transition: border-color 0.18s, background 0.18s;
+        }
+
+        #spread13Table .sum-dropzone .sum-token-chip {
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+          white-space: normal;
+          overflow-wrap: anywhere;
+          word-break: break-word;
+          text-align: center;
         }
 
         #spread13Table .sum-dropzone[data-column="aurora"] {
@@ -1477,10 +1549,12 @@ body #ContenedorLibro .activity-spread {
 
         #spread13Table .spread13-audio-block {
           width: 98%;
+          height: auto;
+          min-height: 0;
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
+          justify-content: flex-start;
           gap: 0.35rem;
         }
 

@@ -300,24 +300,13 @@
                 </div>
 
                 <div id="m1Q2FinalQuestion" class="think-audio-box">
-                    <div class="board-container m1q2-board-container">
-                        <div class="board-tools">
-                            <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
-                                <img src="./assets/images/lapiznegro.png" alt="Lapiz negro">
-                            </button>
-                            <button class="tool-btn" data-tool="eraser" title="Borrador" aria-label="Borrador">
-                                <img src="./assets/images/borrador.png" alt="Borrador">
-                            </button>
+                    <div class="m1q2-equation-form" aria-label="Ejemplo de suma misteriosa">
+                        <div class="m1q2-equation-row">
+                            <input id="m1q2LeftInput" class="m1q2-num-input" type="number" min="0" step="1" placeholder="Número 1" autocomplete="off">
+                            <span class="m1q2-equation-plus">+</span>
+                            <input id="m1q2RightInput" class="m1q2-num-input" type="number" min="0" step="1" placeholder="Número 2" autocomplete="off">
                         </div>
-                        <div class="board-wrapper m1q2-board-wrapper">
-                            <canvas id="boardCanvasM1Q2" class="drawing-board"></canvas>
-                        </div>
-                    </div>
-
-                    <div class="audio-controls">
-                        <button id="recordBtnM1Q2" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                        <button id="stopBtnM1Q2" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener"></button>
-                        <button id="submitM1Q2" class="btn btn-audiosubmit" disabled><img src="./assets/images/enviar.png" alt="Enviar"></button>
+                        <button id="submitM1Q2Equation" class="btn btn-primary" disabled>Guardar ejemplo</button>
                     </div>
                     <p id="statusM1Q2" class="status-text"></p>
                 </div>
