@@ -4,30 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mision Robot V</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rancho&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="ContenedorBienvenida">
-    <section id="welcomeScreen" class="entry-card">
-      <h1 class="entry-title">Mision Robot V</h1>
-      <p class="entry-subtitle">Laboratorio de numeros magicos</p>
-      <div class="entry-box">
+    <section id="welcomeScreen">
+      <h1 class="main-title">Mision Robot V</h1>
+      <p class="subtitle">Laboratorio de numeros magicos</p>
+      <div class="welcome-box">
         <label for="studentCodeInput">Escribe tu codigo estudiantil:</label>
-        <input id="studentCodeInput" type="text" maxlength="12" autocomplete="off" placeholder="Ej: 20314">
+        <input id="studentCodeInput" class="chalk-input" type="text" maxlength="12" autocomplete="off" placeholder="Ej: 20314">
         <button id="enterBtn" class="btn btn-primary">Ingresar</button>
-        <p id="welcomeError" class="status-line"></p>
+        <div id="welcomeError"></div>
       </div>
     </section>
   </div>
 
   <div id="ContenedorConfirmacion">
-    <section id="confirmationScreen" class="entry-card">
-      <h1 class="entry-title">Confirmacion</h1>
-      <div class="entry-box">
+    <section id="confirmationScreen">
+      <h1 class="main-title">Confirmacion</h1>
+      <div class="welcome-box confirmation-box">
         <p id="confirmationQuestion" class="confirmation-question"></p>
-        <div class="confirmation-actions">
-          <button id="confirmYesBtn" class="btn btn-success">Si, soy yo</button>
-          <button id="confirmNoBtn" class="btn btn-secondary">No, corregir</button>
+        <div class="confirmation-buttons">
+          <button id="confirmYesBtn" class="btn btn-success"><img src="../Actividad2/assets/images/BTconfirmar.png" alt="Confirmar"></button>
+          <button id="confirmNoBtn" class="btn btn-secondary"><img src="../Actividad2/assets/images/BTrechazado.png" alt="Rechazar"></button>
         </div>
       </div>
     </section>

@@ -19,23 +19,30 @@
 body {
   margin: 0;
   color: var(--texto);
-  font-family: "Segoe UI", "Trebuchet MS", "Verdana", sans-serif;
+  font-family: 'Rancho', cursive;
   background: url("assets/images/Fondo.png") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
   justify-content: center;
 }
 
 #ContenedorBienvenida,
 #ContenedorConfirmacion {
-  min-height: 100vh;
-  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  min-width: 100vw;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible;
+  font-family: 'Lobster Two', cursive;
 }
 
 #ContenedorConfirmacion,
@@ -50,55 +57,156 @@ body {
   justify-content: center;
 }
 
-.entry-card {
-  width: min(760px, 100%);
-  background: linear-gradient(145deg, rgba(214, 200, 255, 0.9), rgba(184, 244, 243, 0.86));
-  border: 2px solid rgba(156, 183, 217, 0.95);
-  border-radius: 26px;
-  box-shadow: var(--sombra);
-  padding: 26px;
+#ContenedorBienvenida .main-title {
+  font-size: clamp(4rem, 10vw, 6rem);
+  color: #0077ff;
   text-align: center;
 }
 
-.entry-title {
-  margin: 6px 0 4px;
-  font-size: clamp(2rem, 5vw, 3rem);
+#ContenedorBienvenida .subtitle {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  color: #009dff;
+  margin-bottom: 24px;
 }
 
-.entry-subtitle {
-  margin: 0 0 18px;
-  color: var(--texto-suave);
-  font-size: clamp(1rem, 2.8vw, 1.3rem);
-}
-
-.entry-box {
-  background: var(--panel);
-  border-radius: 18px;
-  padding: 20px;
-  border: 2px dashed var(--borde);
-}
-
-.entry-box input {
-  width: min(320px, 100%);
-  margin: 10px auto;
-  display: block;
-  border-radius: 12px;
-  border: 2px solid var(--borde);
-  padding: 12px;
-  font-size: 1rem;
-  text-align: center;
-}
-
-.confirmation-question {
-  font-size: 1.1rem;
-  margin: 10px auto 18px;
-}
-
-.confirmation-actions {
+#ContenedorBienvenida .welcome-box {
+  width: min(92vw, 620px);
+  padding: clamp(20px, 3vw, 40px);
+  background: rgba(62, 216, 255, 0.589);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .14);
+  backdrop-filter: blur(8px);
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ContenedorBienvenida .welcome-box label {
+  display: block;
+  text-align: center;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: #003f67;
+}
+
+#ContenedorBienvenida .chalk-input {
+  width: min(100%, 360px);
+  margin: 0 auto 16px auto;
+  display: block;
+  padding: 12px 18px;
+  border: 2px solid #127afa;
+  border-radius: 16px;
+  background: #fff;
+  color: #111827;
+  text-align: center;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-family: 'Lobster Two', cursive;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+#ContenedorBienvenida .chalk-input:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, .15);
+}
+
+#ContenedorBienvenida .btn {
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform .15s ease, filter .15s ease, box-shadow .2s ease;
+  box-shadow: 0 3px 9px rgb(224, 253, 253);
+  font-family: 'Lobster Two', cursive;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: #fff;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+}
+
+#ContenedorBienvenida .btn:hover {
+  filter: brightness(.85);
+  transform: translateY(-3px);
+}
+
+#ContenedorBienvenida #welcomeError {
+  margin-top: 10px;
+  color: #b91c1c;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  text-align: center;
+  font-family: 'Rancho', cursive;
+}
+
+#ContenedorConfirmacion {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(2rem, 8vw, 4rem);
+}
+
+#ContenedorConfirmacion .main-title {
+  font-family: 'Lobster Two', cursive;
+  color: #222;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+#ContenedorConfirmacion .confirmation-box {
+  width: min(92vw, 640px);
+  padding: clamp(20px, 3vw, 40px);
+  background: rgba(62, 216, 255, 0.589);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: 16px;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .14);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#ContenedorConfirmacion .confirmation-question {
+  width: 100%;
+  margin: 0 0 24px 0;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.5rem, 3.4vw, 2.6rem);
+  line-height: 1.25;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+}
+
+#ContenedorConfirmacion .confirmation-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
+}
+
+#ContenedorConfirmacion .confirmation-buttons .btn {
+  width: 100px;
+  height: 100px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+#ContenedorConfirmacion .confirmation-buttons .btn:hover {
+  filter: brightness(.85);
+  transform: translateY(-3px);
+}
+
+#ContenedorConfirmacion .confirmation-buttons .btn img {
+  max-width: 50%;
+  max-height: 50%;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 .lab-shell {
