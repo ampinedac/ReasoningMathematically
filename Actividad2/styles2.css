@@ -1592,11 +1592,24 @@ body #ContenedorLibro .activity-spread {
           min-height: 0;
         }
 
+        #spread13Table .spread13-audio-block .audio-controls .btn {
+          margin-top: 0;
+          padding: 0.12rem;
+          line-height: 1;
+        }
+
         #spread13Table #statusM3Q1 {
+          margin: 0;
           min-height: 0;
           text-align: center;
-          font-size: var(--spread13-uniform-text-size);
+          font-family: 'Lobster Two', cursive;
+          font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+          line-height: 1.15;
           flex: 0 0 auto;
+        }
+
+        #spread13Table #statusM3Q1:empty {
+          display: none;
         }
 
         @keyframes wrongDropShake {
