@@ -870,14 +870,15 @@ body #ContenedorLibro .activity-spread {
         #thinkSocialSpread .m1q2-equation-row {
           width: 100%;
           display: flex;
-          align-items: center;
+          align-items: stretch;
           justify-content: center;
           gap: 0.5rem;
         }
 
         #thinkSocialSpread .m1q2-num-input {
-          width: min(38%, 180px);
-          min-width: 110px;
+          width: min(41%, 240px);
+          min-width: 130px;
+          min-height: 52px;
           padding: 0.4rem 0.45rem;
           border: 2px solid #60a5fa;
           border-radius: 10px;
@@ -886,7 +887,18 @@ body #ContenedorLibro .activity-spread {
           font-family: 'Rancho', cursive;
           font-size: clamp(1.5rem, 2.2vw, 2rem);
           text-align: center;
+          line-height: 1.12;
+          resize: none;
+          overflow: hidden;
+          overflow-wrap: anywhere;
+          white-space: pre-wrap;
+          display: block;
           outline: none;
+        }
+
+        #thinkSocialSpread .m1q2-num-input::placeholder {
+          color: #3b82f6;
+          opacity: 0.9;
         }
 
         #thinkSocialSpread .m1q2-num-input:focus {

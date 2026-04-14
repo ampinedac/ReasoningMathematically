@@ -917,24 +917,37 @@ async function submitM1Q2Equation() {
 
     if (leftRaw === '' || rightRaw === '') {
         if (statusEl) {
-            statusEl.textContent = 'Completa ambos números para continuar.';
+            statusEl.textContent = 'Completa ambas sumas para continuar.';
             statusEl.style.color = '#dc2626';
         }
         return;
     }
 
-    const leftNum = Number(leftRaw);
-    const rightNum = Number(rightRaw);
-    if (!Number.isFinite(leftNum) || !Number.isFinite(rightNum) || leftNum < 0 || rightNum < 0) {
+    const normalizeExpression = (value) => value.replace(/\s+/g, ' ').trim();
+    const leftExpr = normalizeExpression(leftRaw);
+    const rightExpr = normalizeExpression(rightRaw);
+
+    const isValidExpression = (value) => /\d/.test(value) && /^[\d+\s]+$/.test(value);
+
+    if (!isValidExpression(leftExpr) || !isValidExpression(rightExpr)) {
         if (statusEl) {
-            statusEl.textContent = 'Ingresa solo números válidos.';
+            statusEl.textContent = 'Usa solo números y el signo + en cada caja.';
             statusEl.style.color = '#dc2626';
         }
         return;
     }
 
-    const izquierda = `${leftNum} + ${rightNum}`;
-    const derecha = String(leftNum + rightNum);
+    const confirmed = window.confirm('¿Estás segur@ de guardar este ejemplo?');
+    if (!confirmed) {
+        if (statusEl) {
+            statusEl.textContent = 'Puedes seguir editando tu ejemplo antes de guardar.';
+            statusEl.style.color = '#1d4ed8';
+        }
+        return;
+    }
+
+    const izquierda = leftExpr;
+    const derecha = rightExpr;
     const equationText = `${izquierda} = ${derecha}`;
 
     submitBtn.disabled = true;
@@ -988,6 +1001,11 @@ function initM1Q2EquationForm() {
 
     if (!leftInput || !rightInput || !submitBtn) return;
 
+    const autoResize = (textarea) => {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${Math.max(textarea.scrollHeight, 52)}px`;
+    };
+
     const updateSubmitState = () => {
         const ready = leftInput.value.trim() !== '' && rightInput.value.trim() !== '';
         submitBtn.disabled = !ready;
@@ -997,15 +1015,19 @@ function initM1Q2EquationForm() {
 
     leftInput.addEventListener('input', () => {
         if (statusEl) statusEl.textContent = '';
+        autoResize(leftInput);
         updateSubmitState();
     });
 
     rightInput.addEventListener('input', () => {
         if (statusEl) statusEl.textContent = '';
+        autoResize(rightInput);
         updateSubmitState();
     });
 
     submitBtn.addEventListener('click', submitM1Q2Equation);
+    autoResize(leftInput);
+    autoResize(rightInput);
     updateSubmitState();
 }
 
