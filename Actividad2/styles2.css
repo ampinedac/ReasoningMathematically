@@ -1313,16 +1313,18 @@ body #ContenedorLibro .activity-spread {
 
         #spread13Table .spread13-overlay {
           position: absolute;
-          inset: 0;
+          inset: 0.7rem 0.9rem 0.95rem;
           z-index: 8;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           box-sizing: border-box;
-          padding: 0.7rem 0.9rem 0.95rem;
+          padding: 0.35rem 0.2rem 0.35rem;
           gap: 0.55rem;
           pointer-events: auto;
+          overflow-y: auto;
+          overflow-x: hidden;
         }
 
         #spread13Table .spread13-title {
