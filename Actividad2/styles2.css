@@ -1241,8 +1241,11 @@ body #ContenedorLibro .activity-spread {
 
         #matchingVerifyBtn {
           align-self: center;
+          justify-self: center;
           margin-top: 0.2rem;
           margin-bottom: 0.1rem;
+          margin-left: auto;
+          margin-right: auto;
           padding: 0.72rem 1.65rem;
           border-radius: 12px;
           font-size: clamp(1.2rem, 2.2vw, 1.6rem);

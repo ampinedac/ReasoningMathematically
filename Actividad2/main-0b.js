@@ -1844,6 +1844,7 @@ function initMatchingActivity() {
     // Estado
     const connections = {}; // pairId → sumId
     let selectedPair  = null;
+    let selectedSum   = null;
 
     // Color fijo por pareja solicitado
     // mpair0 = pedidos 2 y 6 (verde)
@@ -1851,6 +1852,27 @@ function initMatchingActivity() {
     // mpair2 = pedidos 4 y 8 (rojo)
     const LAZO_COLORS = { mpair0: '#16a34a', mpair1: '#1d4ed8', mpair2: '#dc2626' };
     const LAZO_BOX_BG = { mpair0: 'rgba(22, 163, 74, 0.14)', mpair1: 'rgba(29, 78, 216, 0.14)', mpair2: 'rgba(220, 38, 38, 0.14)' };
+
+    function connectPairAndSum(pairId, sumId) {
+        // Liberar ocupante previo de esta suma
+        for (const [pid, sid] of Object.entries(connections)) {
+            if (sid === sumId && pid !== pairId) {
+                delete connections[pid];
+                break;
+            }
+        }
+
+        // Conectar la pareja a la suma elegida
+        connections[pairId] = sumId;
+
+        // Limpiar selección y refrescar estado
+        selectedPair = null;
+        selectedSum = null;
+        matchingCompleted = false;
+        updateNavButtons();
+        drawLines();
+        if (feedbackEl) feedbackEl.textContent = '';
+    }
 
     function formatSumText(text) {
         const [left, right] = text.split('=');
@@ -1872,6 +1894,12 @@ function initMatchingActivity() {
         card.id = p.id;
         card.innerHTML = `<img src="${p.imageSrc}" alt="${p.alt}" class="match-pair-image">`;
         card.addEventListener('click', () => {
+            // Si ya hay una suma elegida, conectar inmediatamente (caja -> imagen)
+            if (selectedSum) {
+                connectPairAndSum(p.id, selectedSum);
+                return;
+            }
+
             if (selectedPair === p.id) {
                 selectedPair = null;
             } else {
@@ -1888,28 +1916,14 @@ function initMatchingActivity() {
         box.id = s.id;
         box.innerHTML = `<span class="match-sum-text">${formatSumText(s.text)}</span>`;
         box.addEventListener('click', () => {
-            if (!selectedPair) return;
-
-            // Liberar ocupante previo de esta suma
-            for (const [pid, sid] of Object.entries(connections)) {
-                if (sid === s.id) {
-                    delete connections[pid];
-                    break;
-                }
+            // Si ya hay pareja elegida, conectar inmediatamente (imagen -> caja)
+            if (selectedPair) {
+                connectPairAndSum(selectedPair, s.id);
+                return;
             }
 
-            // Crear nueva conexión
-            connections[selectedPair] = s.id;
-
-            // Deseleccionar
-            selectedPair = null;
-            matchingCompleted = false;
-            updateNavButtons();
-
-            drawLines();
-            if (feedbackEl) {
-                feedbackEl.textContent = '';
-            }
+            // Si no hay pareja elegida, dejar esta suma seleccionada para el próximo clic en imagen
+            selectedSum = (selectedSum === s.id) ? null : s.id;
         });
         sumsEl.appendChild(box);
     });
