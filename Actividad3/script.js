@@ -20,6 +20,8 @@ const confirmationQuestion = document.getElementById("confirmationQuestion");
 const confirmYesBtn = document.getElementById("confirmYesBtn");
 const confirmNoBtn = document.getElementById("confirmNoBtn");
 
+const startIntroBtn = document.getElementById("startIntroBtn");
+
 const characterGrid = document.getElementById("characterGrid");
 const characterStatus = document.getElementById("characterStatus");
 const confirmCharacterBtn = document.getElementById("confirmCharacterBtn");
@@ -45,6 +47,7 @@ init();
 
 function init() {
   setupEntryFlow();
+  setupIntroductionScreen();
   setupCharacterMission();
   setupMap();
   setupMission1();
@@ -86,7 +89,7 @@ function setupEntryFlow() {
     confirmContainer.style.display = "none";
     activityApp.style.display = "block";
     registerTimestamp("confirmationAccepted");
-    showScreen("characterMissionScreen");
+    showScreen("introductionScreen");
   });
 }
 
@@ -142,6 +145,13 @@ function handleCodeSubmit() {
   setMessage(welcomeError, "", "");
   welcomeContainer.style.display = "none";
   confirmContainer.style.display = "flex";
+}
+
+function setupIntroductionScreen() {
+  startIntroBtn.addEventListener("click", () => {
+    registerTimestamp("introductionViewed");
+    showScreen("characterMissionScreen");
+  });
 }
 
 function setupCharacterMission() {
@@ -202,18 +212,18 @@ function renderMap() {
 
     if (sessionData.missionsCompleted.includes(mission)) {
       node.classList.add("completed");
-      stateSpan.textContent = "?";
+      stateSpan.textContent = "💫";
       return;
     }
 
     if (mission <= sessionData.progress) {
       node.classList.add("available");
-      stateSpan.textContent = "??";
+      stateSpan.textContent = "";
       return;
     }
 
     node.classList.add("locked");
-    stateSpan.textContent = "??";
+    stateSpan.textContent = "🔐";
   });
 
   const done = sessionData.missionsCompleted.length;

@@ -200,10 +200,12 @@ body {
   display: none; /* Oculta todas las pantallas por defecto */
   min-height: 100vh; /* Garantiza alto completo */
   padding: clamp(14px, 3vw, 28px); /* Respira en bordes para responsive */
+  align-items: center; /* Centra verticalmente contenido */
+  justify-content: center; /* Centra horizontalmente contenido */
 }
 
 .active-screen {
-  display: block; /* Muestra la pantalla activa */
+  display: flex; /* Muestra la pantalla activa con flex para centrado */
 }
 
 .screen-shell {
@@ -484,6 +486,75 @@ body {
   text-align: center; /* Centra mensaje de guia */
   font-size: clamp(1.05rem, 2.2vw, 1.35rem); /* Escala del texto de pista */
   color: var(--texto-suave); /* Color secundario del mensaje */
+}
+
+/* ======================================
+   7.5) Pantalla de introduccion (narrativa)
+   ====================================== */
+.introduction-shell {
+  background: linear-gradient(160deg, rgba(241, 241, 255, 0.94), rgba(230, 243, 255, 0.92)); /* Fondo narrativo */
+  max-width: 850px; /* Limite de ancho para legibilidad de narrativa */
+}
+
+.intro-content {
+  display: grid; /* Organiza contenido en flujo */
+  gap: 14px; /* Espaciado uniforme entre elementos */
+  padding: 12px 0; /* Espaciado vertical comprimido */
+}
+
+.intro-alert {
+  margin: 0; /* Elimina margen por defecto */
+  font-family: 'Lobster Two', cursive; /* Fuente de titulo */
+  font-size: clamp(2.2rem, 5.5vw, 3.2rem); /* Escala responsiva del titulo */
+  color: #e84545; /* Rojo para alerta */
+  text-align: center; /* Centra titulo de alerta */
+}
+
+.intro-text {
+  margin: 0; /* Elimina margen externo */
+  font-size: clamp(1.2rem, 2.8vw, 1.6rem); /* Escala responsiva del texto */
+  line-height: 1.6; /* Espaciado entre lineas para legibilidad */
+  color: var(--texto); /* Color base de texto */
+  text-align: center; /* Centra texto narrativo */
+}
+
+.intro-list {
+  margin: 8px auto; /* Centrado con pequeno margen */
+  padding: 0 18px; /* Indentacion de lista */
+  text-align: center; /* Centra items */
+  font-size: clamp(1.15rem, 2.6vw, 1.55rem); /* Escala de items de lista */
+  list-style: none; /* Quita bullets por defecto */
+}
+
+.intro-list li {
+  margin: 6px 0; /* Espaciado entre items */
+}
+
+.intro-list li::before {
+  content: "• "; /* Bullet personalizado */
+  color: #1c91ff; /* Color azul del bullet */
+  margin-right: 6px; /* Espacio despues del bullet */
+}
+
+.robot-display {
+  display: flex; /* Centrado del robot */
+  justify-content: center; /* Alinea robot en eje horizontal */
+  align-items: center; /* Alinea robot en eje vertical */
+  padding: 10px; /* Espaciado interno */
+  margin: 8px 0; /* Margen externo */
+}
+
+.robot-image {
+  max-width: 220px; /* Limite de ancho del robot */
+  max-height: 220px; /* Limite de alto del robot */
+  object-fit: contain; /* Conserva proporcion de imagen */
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18)); /* Sombra del robot */
+}
+
+.intro-actions {
+  display: flex; /* Alinea boton */
+  justify-content: center; /* Centra boton horizontalmente */
+  margin-top: 8px; /* Separacion superior del bloque de acciones */
 }
 
 /* ======================================
