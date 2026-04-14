@@ -346,7 +346,10 @@ body {
   width: 100%; /* Ocupa ancho completo del shell */
   min-height: 620px; /* Altura minima del escenario del mapa */
   border-radius: 20px; /* Redondeo del escenario */
-  background: radial-gradient(circle at 20% 10%, rgba(250, 245, 177, 0.5), rgba(188, 232, 255, 0.5) 34%, rgba(188, 232, 255, 0.2) 100%); /* Fondo atmosferico */
+  background-image: url("assets/images/NumetrixMapa.png"); /* Imagen del mapa */
+  background-size: cover; /* Cubre todo el area */
+  background-position: center; /* Centra la imagen */
+  background-repeat: no-repeat; /* Sin repeticion */
   border: 2px solid #acd0f2; /* Marco del mapa */
   overflow: hidden; /* Recorta decoracion al contenedor */
 }
@@ -510,6 +513,27 @@ body {
   text-align: center; /* Centra titulo de alerta */
 }
 
+.intro-layout {
+  display: flex; /* Layout horizontal */
+  gap: 24px; /* Espacio entre columnas */
+  align-items: flex-start; /* Alinea al inicio */
+  justify-content: space-between; /* Distribuye espacio */
+}
+
+.intro-text-column {
+  flex: 1; /* Toma espacio disponible */
+  display: flex; /* Flex para organizar contenido */
+  flex-direction: column; /* Apila verticalmente */
+  gap: 12px; /* Espaciado entre parrafos */
+}
+
+.intro-image-column {
+  flex: 0 0 auto; /* No se encoge */
+  display: flex; /* Centrado del contenido */
+  justify-content: center; /* Centra imagen */
+  align-items: center; /* Alinea verticalmente */
+}
+
 .intro-text {
   margin: 0; /* Elimina margen externo */
   font-size: clamp(1.2rem, 2.8vw, 1.6rem); /* Escala responsiva del texto */
@@ -540,8 +564,8 @@ body {
   display: flex; /* Centrado del robot */
   justify-content: center; /* Alinea robot en eje horizontal */
   align-items: center; /* Alinea robot en eje vertical */
-  padding: 10px; /* Espaciado interno */
-  margin: 8px 0; /* Margen externo */
+  padding: 8px; /* Espaciado interno */
+  margin: 0; /* Sin margen para layout lateral */
 }
 
 .robot-image {
@@ -713,5 +737,14 @@ textarea {
   .guide-inline {
     width: 100%; /* Permite badge a ancho completo en movil */
     justify-content: center; /* Centra contenido del badge */
+  }
+
+  .intro-layout {
+    flex-direction: column; /* Apila verticalmente en movil */
+    align-items: center; /* Centra contenido */
+  }
+
+  .intro-image-column {
+    order: -1; /* Muestra imagen primero en movil */
   }
 }

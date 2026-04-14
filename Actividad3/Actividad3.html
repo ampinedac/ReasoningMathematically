@@ -42,30 +42,36 @@
         <div class="intro-content">
           <h2 class="intro-alert">⚠️ Alerta del sistema…</h2>
 
-          <p class="intro-text">Algo no está funcionando en el Laboratorio V.</p>
+          <div class="intro-layout">
+            <div class="intro-text-column">
+              <p class="intro-text">Algo no está funcionando en el Laboratorio V.</p>
 
-          <p class="intro-text">El robot encargado de organizar los patrones, V-Bot, se ha desconfigurado…<br>y desde entonces, todo el sistema está en desorden.</p>
+              <p class="intro-text">El robot encargado de organizar los patrones, V-Bot, se ha desconfigurado…<br>y desde entonces, todo el sistema está en desorden.</p>
 
-          <p class="intro-text">Las máquinas ya no reconocen los patrones,<br>las secuencias se rompieron,<br>y nadie sabe qué debería pasar después…</p>
+              <p class="intro-text">Las máquinas ya no reconocen los patrones,<br>las secuencias se rompieron,<br>y nadie sabe qué debería pasar después…</p>
 
-          <div class="robot-display">
-            <img src="assets/images/robot-broken.png" alt="V-Bot desconfigurado" class="robot-image">
+              <p class="intro-text"><strong>🛠️ Pero no todo está perdido.</strong></p>
+
+              <p class="intro-text">Hemos llamado a la mejor ingeniera de patrones, ¡bienvenida!</p>
+
+              <p class="intro-text"><strong>Tu misión será:</strong></p>
+              <ul class="intro-list">
+                <li>explorar lo que aún funciona,</li>
+                <li>descubrir pistas,</li>
+                <li>y ayudar a V-Bot a volver a entender el sistema.</li>
+              </ul>
+
+              <p class="intro-text"><strong>🗺️ Para lograrlo, deberás recorrer el Mapa de Reparación</strong><br>y completar cada misión.</p>
+
+              <p class="intro-text"><strong>Cada paso que completes…<br>👉 acercará al laboratorio a volver a funcionar.</strong></p>
+            </div>
+
+            <div class="intro-image-column">
+              <div class="robot-display">
+                <img src="assets/images/robot-broken.png" alt="V-Bot desconfigurado" class="robot-image">
+              </div>
+            </div>
           </div>
-
-          <p class="intro-text"><strong>🛠️ Pero no todo está perdido.</strong></p>
-
-          <p class="intro-text">Hemos llamado a la mejor ingeniera de patrones, ¡bienvenida!</p>
-
-          <p class="intro-text"><strong>Tu misión será:</strong></p>
-          <ul class="intro-list">
-            <li>explorar lo que aún funciona,</li>
-            <li>descubrir pistas,</li>
-            <li>y ayudar a V-Bot a volver a entender el sistema.</li>
-          </ul>
-
-          <p class="intro-text"><strong>🗺️ Para lograrlo, deberás recorrer el Mapa de Reparación</strong><br>y completar cada misión.</p>
-
-          <p class="intro-text"><strong>Cada paso que completes…<br>👉 acercará al laboratorio a volver a funcionar.</strong></p>
 
           <div class="intro-actions">
             <button id="startIntroBtn" class="btn btn-success">✨ ¿Lista para comenzar?</button>
@@ -126,24 +132,8 @@
         </header>
 
         <div class="map-stage">
-          <div class="map-aura map-aura-1"></div>
-          <div class="map-aura map-aura-2"></div>
-
-          <!-- Forma de Colombia estilizada -->
-          <svg class="map-shape" viewBox="0 0 1200 800" aria-hidden="true">
-            <path d="M 300 150 Q 400 100, 550 120 Q 700 140, 800 200 L 820 300 Q 840 400, 800 500 Q 750 600, 650 680 Q 500 720, 350 700 Q 200 680, 150 550 Q 120 400, 150 250 Q 200 180, 300 150 Z" fill="#c8e6c9" stroke="#4caf50" stroke-width="3"/>
-            <path d="M 450 250 Q 500 270, 520 320" fill="none" stroke="#81c784" stroke-width="2"/>
-          </svg>
-
-          <!-- Caminos en forma de V Mágica -->
-          <svg class="map-paths" viewBox="0 0 1200 800" aria-hidden="true">
-            <path d="M 280 200 Q 380 350, 480 480" stroke="#ffd54f" stroke-width="4" stroke-dasharray="8,6" fill="none"/>
-            <path d="M 920 200 Q 820 350, 720 480" stroke="#ffe082" stroke-width="4" stroke-dasharray="8,6" fill="none"/>
-            <path d="M 480 480 L 720 480" stroke="#fff176" stroke-width="4" stroke-dasharray="8,6" fill="none"/>
-          </svg>
-
-          <!-- Nodos en forma de V Mágica: dos arriba, dos en medio, uno en el vértice abajo -->
-          <div class="mission-node" data-mission="1" style="left: 18%; top: 18%;">
+          <!-- Cinco nodos en forma de V -->
+          <div class="mission-node" data-mission="1" style="left: 15%; top: 15%;">
             <button class="node-button" aria-label="Mision 1"></button>
             <span class="node-label">Misión 1</span>
             <span class="node-state" id="state-m1"></span>
@@ -155,8 +145,8 @@
             <span class="node-state" id="state-m2"></span>
           </div>
 
-          <div class="mission-node" data-mission="3" style="left: 50%; top: 68%;">
-            <button class="node-button" aria-label="Misión 3</button>
+          <div class="mission-node" data-mission="3" style="left: 50%; top: 72%;">
+            <button class="node-button" aria-label="Misión 3"></button>
             <span class="node-label">Misión 3</span>
             <span class="node-state" id="state-m3"></span>
           </div>
@@ -167,73 +157,11 @@
             <span class="node-state" id="state-m4"></span>
           </div>
 
-          <div class="mission-node" data-mission="5" style="left: 82%; top: 18%;">
+          <div class="mission-node" data-mission="5" style="left: 85%; top: 15%;">
             <button class="node-button" aria-label="Mision 5"></button>
             <span class="node-label">Misión 5</span>
             <span class="node-state" id="state-m5"></span>
           </div>
-
-          <!-- Estrellas decorativas tipo colombiano -->
-          <span class="math-star" style="left: 10%; top: 30%;"></span>
-          <span class="math-star" style="left: 90%; top: 25%;"></span>
-          <span class="math-star" style="left: 50%; top: 82%;"></span>
-          <span class="math-star" style="left: 25%; top: 75%;"></span>
-          <span class="math-star" style="left: 75%; top: 75%;"></span>
-
-          <!-- Decoraciones geométricas coloridas -->
-          <!-- Triángulos arcoíris -->
-          <svg style="position: absolute; left: 8%; top: 10%; width: 60px; height: 60px;" viewBox="0 0 60 60" aria-hidden="true">
-            <polygon points="30,5 55,50 5,50" fill="#FF6B9D" opacity="0.8"/>
-            <polygon points="30,15 50,45 10,45" fill="#C44569" opacity="0.6"/>
-          </svg>
-
-          <!-- Flores geométricas -->
-          <svg style="position: absolute; left: 12%; top: 65%; width: 50px; height: 50px;" viewBox="0 0 50 50" aria-hidden="true">
-            <circle cx="25" cy="25" r="8" fill="#FFD700"/>
-            <circle cx="25" cy="10" r="6" fill="#FF69B4"/>
-            <circle cx="38" cy="17" r="6" fill="#FF1493"/>
-            <circle cx="40" cy="30" r="6" fill="#FF69B4"/>
-            <circle cx="38" cy="43" r="6" fill="#FFD700"/>
-            <circle cx="25" cy="40" r="6" fill="#FF1493"/>
-            <circle cx="12" cy="43" r="6" fill="#FF69B4"/>
-            <circle cx="10" cy="30" r="6" fill="#FFD700"/>
-            <circle cx="12" cy="17" r="6" fill="#FF1493"/>
-          </svg>
-
-          <!-- Círculos concéntricos -->
-          <svg style="position: absolute; right: 10%; top: 12%; width: 50px; height: 50px;" viewBox="0 0 50 50" aria-hidden="true">
-            <circle cx="25" cy="25" r="20" fill="none" stroke="#42A5F5" stroke-width="2"/>
-            <circle cx="25" cy="25" r="14" fill="none" stroke="#66BB6A" stroke-width="2"/>
-            <circle cx="25" cy="25" r="8" fill="none" stroke="#AB47BC" stroke-width="2"/>
-            <circle cx="25" cy="25" r="3" fill="#FFA726"/>
-          </svg>
-
-          <!-- Diamantes y patrones -->
-          <svg style="position: absolute; right: 8%; top: 70%; width: 55px; height: 55px;" viewBox="0 0 55 55" aria-hidden="true">
-            <polygon points="27.5,5 50,27.5 27.5,50 5,27.5" fill="#E91E63" opacity="0.7"/>
-            <polygon points="27.5,15 40,27.5 27.5,40 15,27.5" fill="#C2185B" opacity="0.8"/>
-            <polygon points="27.5,20 35,27.5 27.5,35 20,27.5" fill="#FFB6C1"/>
-          </svg>
-
-          <!-- Hexágono -->
-          <svg style="position: absolute; left: 85%; top: 50%; width: 45px; height: 45px;" viewBox="0 0 45 45" aria-hidden="true">
-            <polygon points="22.5,2 38,12 38,33 22.5,43 7,33 7,12" fill="none" stroke="#00BCD4" stroke-width="2.5"/>
-            <polygon points="22.5,10 32,17 32,30 22.5,37 13,30 13,17" fill="#B2EBF2" opacity="0.5"/>
-          </svg>
-
-          <!-- Espiral decorativa -->
-          <svg style="position: absolute; left: 5%; top: 50%; width: 45px; height: 45px;" viewBox="0 0 45 45" aria-hidden="true">
-            <circle cx="22.5" cy="22.5" r="18" fill="none" stroke="#9C27B0" stroke-width="1.5" opacity="0.6"/>
-            <circle cx="22.5" cy="22.5" r="14" fill="none" stroke="#9C27B0" stroke-width="1.5" opacity="0.7"/>
-            <circle cx="22.5" cy="22.5" r="10" fill="none" stroke="#9C27B0" stroke-width="1.5" opacity="0.8"/>
-            <circle cx="22.5" cy="22.5" r="6" fill="none" stroke="#9C27B0" stroke-width="1.5" opacity="0.9"/>
-            <circle cx="22.5" cy="22.5" r="2" fill="#9C27B0"/>
-          </svg>
-
-          <!-- Corazón con simetría geométrica -->
-          <svg style="position: absolute; left: 80%; top: 8%; width: 50px; height: 50px;" viewBox="0 0 50 50" aria-hidden="true">
-            <path d="M25,40 Q10,30 10,20 Q10,10 17,10 Q25,18 25,18 Q25,18 33,10 Q40,10 40,20 Q40,30 25,40 Z" fill="#FF69B4" opacity="0.8"/>
-          </svg>
 
           <span class="gear gear-a"></span>
           <span class="gear gear-b"></span>
