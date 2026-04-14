@@ -525,6 +525,7 @@ body {
   display: flex; /* Flex para organizar contenido */
   flex-direction: column; /* Apila verticalmente */
   gap: 12px; /* Espaciado entre parrafos */
+  text-align: right; /* Alinea el bloque narrativo a la derecha */
 }
 
 .intro-image-column {
@@ -539,13 +540,13 @@ body {
   font-size: clamp(1.2rem, 2.8vw, 1.6rem); /* Escala responsiva del texto */
   line-height: 1.6; /* Espaciado entre lineas para legibilidad */
   color: var(--texto); /* Color base de texto */
-  text-align: center; /* Centra texto narrativo */
+  text-align: right; /* Alinea texto narrativo a la derecha */
 }
 
 .intro-list {
   margin: 8px auto; /* Centrado con pequeno margen */
   padding: 0 18px; /* Indentacion de lista */
-  text-align: center; /* Centra items */
+  text-align: right; /* Alinea items a la derecha */
   font-size: clamp(1.15rem, 2.6vw, 1.55rem); /* Escala de items de lista */
   list-style: none; /* Quita bullets por defecto */
 }
