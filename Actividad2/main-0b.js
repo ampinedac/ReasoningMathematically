@@ -1967,12 +1967,12 @@ function initMatchingActivity() {
     let selectedPair  = null;
     let selectedSum   = null;
 
-    // Color fijo por pareja solicitado
-    // mpair0 = pedidos 2 y 6 (verde)
-    // mpair1 = pedidos 3 y 7 (azul fuerte)
-    // mpair2 = pedidos 4 y 8 (rojo)
-    const LAZO_COLORS = { mpair0: '#16a34a', mpair1: '#1d4ed8', mpair2: '#dc2626' };
-    const LAZO_BOX_BG = { mpair0: 'rgba(22, 163, 74, 0.14)', mpair1: 'rgba(29, 78, 216, 0.14)', mpair2: 'rgba(220, 38, 38, 0.14)' };
+    // Color fijo por pareja visual
+    // mpair0 = pedidos 1 y 4 (rojo)
+    // mpair1 = pedidos 5 y 2 (azul fuerte)
+    // mpair2 = pedidos 6 y 3 (verde)
+    const LAZO_COLORS = { mpair0: '#dc2626', mpair1: '#1d4ed8', mpair2: '#16a34a' };
+    const LAZO_BOX_BG = { mpair0: 'rgba(220, 38, 38, 0.14)', mpair1: 'rgba(29, 78, 216, 0.14)', mpair2: 'rgba(22, 163, 74, 0.14)' };
 
     function connectPairAndSum(pairId, sumId) {
         // Liberar ocupante previo de esta suma
