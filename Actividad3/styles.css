@@ -569,8 +569,8 @@ body {
 }
 
 .robot-image {
-  max-width: 220px; /* Limite de ancho del robot */
-  max-height: 220px; /* Limite de alto del robot */
+  max-width: 320px; /* Limite de ancho del robot */
+  max-height: 320px; /* Limite de alto del robot */
   object-fit: contain; /* Conserva proporcion de imagen */
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18)); /* Sombra del robot */
 }
