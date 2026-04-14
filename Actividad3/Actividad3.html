@@ -65,9 +65,7 @@
 
             <p class="intro-text"><strong>Tu misión será:</strong></p>
             <ul class="intro-list">
-              <li>explorar lo que aún funciona,</li>
-              <li>descubrir pistas,</li>
-              <li>y ayudar a V-Bot a volver a entender el sistema.</li>
+              <li>explorar lo que aún funciona,descubrir pistas y ayudar a V-Bot a volver a entender el sistema.</li>
             </ul>
 
             <p class="intro-text"><strong>🗺️ Para lograrlo, deberás recorrer el Mapa de Reparación</strong><br>y completar cada misión.</p>
@@ -190,21 +188,41 @@
           <div class="guide-inline" id="guideInlineMission1"></div>
         </header>
 
-        <article class="narrative-card">
-          <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que pruebes que todavia funciona.</p>
-          <p>Construye una Magic V valida para detectar combinaciones estables.</p>
+        <article class="narrative-card narrative-card-m1">
+          <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
+          <div class="narrative-card-text">
+            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que pruebes que todavia funciona.</p>
+            <p>Construye una Magic V valida para detectar combinaciones estables.</p>
+          </div>
         </article>
 
         <div class="magicv-card">
           <h3>Exploracion inicial: Construccion de Magic V</h3>
-          <p class="objective">Objetivo: encontrar una combinacion valida.</p>
+          <p class="objective">Objetivo: encontrar 3 combinaciones validas. Una combinacion es valida cuando los dos brazos de la Magic V suman lo mismo.</p>
 
-          <div class="magicv-grid">
-            <label>Izq superior<select id="m1-leftTop"></select></label>
-            <label>Der superior<select id="m1-rightTop"></select></label>
-            <label>Izq media<select id="m1-leftMid"></select></label>
-            <label>Der media<select id="m1-rightMid"></select></label>
-            <label>Inferior<select id="m1-bottom"></select></label>
+          <div class="magicv-layout">
+            <div class="magicv-play-area">
+              <div class="magicv-board" aria-label="Tablero de la Magic V">
+                <div class="magicv-drop" data-slot="leftTop" aria-label="Posicion izquierda superior"></div>
+                <div class="magicv-drop" data-slot="rightTop" aria-label="Posicion derecha superior"></div>
+                <div class="magicv-drop" data-slot="leftMid" aria-label="Posicion izquierda media"></div>
+                <div class="magicv-drop" data-slot="rightMid" aria-label="Posicion derecha media"></div>
+                <div class="magicv-drop" data-slot="bottom" aria-label="Posicion inferior"></div>
+              </div>
+
+              <div class="magicv-chip-tray" id="mission1ChipTray" aria-label="Fichas disponibles">
+                <button class="magicv-chip" type="button" data-value="1">1</button>
+                <button class="magicv-chip" type="button" data-value="2">2</button>
+                <button class="magicv-chip" type="button" data-value="3">3</button>
+                <button class="magicv-chip" type="button" data-value="4">4</button>
+                <button class="magicv-chip" type="button" data-value="5">5</button>
+              </div>
+            </div>
+
+            <aside class="magicv-results-panel" aria-live="polite">
+              <h4>Combinaciones guardadas <span id="mission1SavedCount">0/3</span></h4>
+              <div id="mission1SavedList" class="magicv-saved-list"></div>
+            </aside>
           </div>
 
           <div class="mission-actions">

@@ -2,7 +2,11 @@ const sessionData = {
   character: null,
   progress: 0,
   missionsCompleted: [],
-  timestamps: {}
+  timestamps: {},
+  mission1: {
+    current: createEmptyMission1Assignment(),
+    saved: []
+  }
 };
 
 const TOTAL_MISSIONS = 5;
@@ -38,18 +42,26 @@ const dragState = {
   hoverMission: null
 };
 
-const mission1Controls = {
-  leftTop: document.getElementById("m1-leftTop"),
-  rightTop: document.getElementById("m1-rightTop"),
-  leftMid: document.getElementById("m1-leftMid"),
-  rightMid: document.getElementById("m1-rightMid"),
-  bottom: document.getElementById("m1-bottom")
-};
+const mission1SlotOrder = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
+const mission1ChipTray = document.getElementById("mission1ChipTray");
+const mission1Drops = Array.from(document.querySelectorAll(".magicv-drop"));
+const mission1SavedCount = document.getElementById("mission1SavedCount");
+const mission1SavedList = document.getElementById("mission1SavedList");
 
 const magicVFeedback = document.getElementById("magicVFeedback");
 const checkMagicVBtn = document.getElementById("checkMagicVBtn");
 const resetMagicVBtn = document.getElementById("resetMagicVBtn");
 const completeMission1Btn = document.getElementById("completeMission1Btn");
+
+const mission1DragState = {
+  active: false,
+  pointerId: null,
+  chip: null,
+  originSlot: null,
+  ghost: null,
+  hoverDrop: null,
+  hoverTray: false
+};
 
 init();
 
@@ -62,7 +74,8 @@ function init() {
   setupMission1();
   setupMissionCompletionButtons();
   setupBackToMapButtons();
-  seedMission1Selects();
+  renderMission1SavedCombinations();
+  clearMission1Board(false);
 }
 
 function setupEntryFlow() {
@@ -378,48 +391,286 @@ function canAccessMission(missionNumber) {
 }
 
 function setupMission1() {
-  checkMagicVBtn.addEventListener("click", () => {
-    const values = readMission1Values();
-    const hasZero = values.some((n) => n === 0);
+  mission1ChipTray.addEventListener("pointerdown", startMission1ChipDrag);
+  mission1Drops.forEach((drop) => {
+    drop.addEventListener("pointerdown", startMission1ChipDrag);
+  });
 
-    if (hasZero) {
-      setMessage(magicVFeedback, "Completa todas las posiciones con numeros entre 1 y 9.", "bad");
+  window.addEventListener("pointermove", handleMission1ChipMove, { passive: false });
+  window.addEventListener("pointerup", handleMission1ChipDrop);
+
+  checkMagicVBtn.addEventListener("click", () => {
+    const current = sessionData.mission1.current;
+    const hasMissing = mission1SlotOrder.some((slot) => current[slot] === null);
+
+    if (hasMissing) {
+      setMessage(magicVFeedback, "Completa toda la V antes de comprobar.", "bad");
       return;
     }
 
-    const leftArm = values[0] + values[2];
-    const rightArm = values[1] + values[3];
-    const bottom = values[4];
-    const valid = leftArm === rightArm && bottom % 2 === 1;
+    const leftArm = current.leftTop + current.leftMid;
+    const rightArm = current.rightTop + current.rightMid;
+    const valid = leftArm === rightArm;
 
     if (!valid) {
-      setMessage(
-        magicVFeedback,
-        "Combinacion no valida. Recuerda: ambos brazos deben sumar igual y el inferior debe ser impar.",
-        "bad"
-      );
+      setMessage(magicVFeedback, "Verifica si la suma de los brazos es correcta.", "bad");
       return;
     }
 
-    setMessage(
-      magicVFeedback,
-      `Combinacion valida. Brazos equilibrados (${leftArm}) y vertice inferior impar (${bottom}).`,
-      "good"
-    );
-    completeMission1Btn.disabled = false;
+    const serialized = serializeMission1Combination(current);
+    const isDuplicate = sessionData.mission1.saved.some((item) => serializeMission1Combination(item) === serialized);
+
+    if (isDuplicate) {
+      setMessage(magicVFeedback, "Esa combinacion ya fue registrada, intenta una diferente.", "bad");
+      return;
+    }
+
+    if (sessionData.mission1.saved.length >= 3) {
+      setMessage(magicVFeedback, "Ya registraste las 3 combinaciones validas. Marca la mision como completada.", "good");
+      return;
+    }
+
+    sessionData.mission1.saved.push({ ...current });
+    renderMission1SavedCombinations();
+    clearMission1Board(false);
+
+    if (sessionData.mission1.saved.length === 3) {
+      completeMission1Btn.disabled = false;
+      setMessage(magicVFeedback, "Excelente. Ya completaste 3 combinaciones validas distintas.", "good");
+      return;
+    }
+
+    const missing = 3 - sessionData.mission1.saved.length;
+    setMessage(magicVFeedback, `Combinacion guardada. Te faltan ${missing} combinaciones validas.`, "good");
   });
 
   resetMagicVBtn.addEventListener("click", () => {
-    Object.values(mission1Controls).forEach((select) => {
-      select.value = "0";
-    });
-    completeMission1Btn.disabled = true;
-    setMessage(magicVFeedback, "Aun no has comprobado.", "");
+    clearMission1Board(false);
+    setMessage(magicVFeedback, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
   });
 
   completeMission1Btn.addEventListener("click", () => {
+    if (sessionData.mission1.saved.length < 3) {
+      setMessage(magicVFeedback, "Debes registrar 3 combinaciones validas distintas antes de completar la mision.", "bad");
+      return;
+    }
+
     completeMission(1);
   });
+}
+
+function startMission1ChipDrag(event) {
+  const chip = event.target.closest(".magicv-chip");
+  if (!chip) {
+    return;
+  }
+
+  event.preventDefault();
+
+  mission1DragState.active = true;
+  mission1DragState.pointerId = event.pointerId;
+  mission1DragState.chip = chip;
+  mission1DragState.originSlot = chip.dataset.slot || null;
+  mission1DragState.hoverDrop = null;
+  mission1DragState.hoverTray = false;
+
+  chip.classList.add("dragging");
+
+  const ghost = document.createElement("div");
+  ghost.className = "magicv-chip-ghost";
+  ghost.textContent = chip.dataset.value;
+  document.body.appendChild(ghost);
+  mission1DragState.ghost = ghost;
+  moveMission1ChipGhost(event.clientX, event.clientY);
+}
+
+function handleMission1ChipMove(event) {
+  if (!mission1DragState.active || event.pointerId !== mission1DragState.pointerId) {
+    return;
+  }
+
+  event.preventDefault();
+  moveMission1ChipGhost(event.clientX, event.clientY);
+  updateMission1DropHover(event.clientX, event.clientY);
+}
+
+function handleMission1ChipDrop(event) {
+  if (!mission1DragState.active || event.pointerId !== mission1DragState.pointerId) {
+    return;
+  }
+
+  event.preventDefault();
+
+  const chip = mission1DragState.chip;
+  const targetDrop = document.elementFromPoint(event.clientX, event.clientY)?.closest(".magicv-drop");
+  const droppedInTray = Boolean(document.elementFromPoint(event.clientX, event.clientY)?.closest("#mission1ChipTray"));
+
+  if (targetDrop) {
+    assignChipToDrop(chip, targetDrop);
+  } else if (droppedInTray) {
+    sendChipToTray(chip);
+  }
+
+  cleanupMission1Drag();
+}
+
+function moveMission1ChipGhost(clientX, clientY) {
+  if (!mission1DragState.ghost) {
+    return;
+  }
+
+  mission1DragState.ghost.style.left = `${clientX}px`;
+  mission1DragState.ghost.style.top = `${clientY}px`;
+}
+
+function updateMission1DropHover(clientX, clientY) {
+  const targetDrop = document.elementFromPoint(clientX, clientY)?.closest(".magicv-drop");
+  const hoverTray = Boolean(document.elementFromPoint(clientX, clientY)?.closest("#mission1ChipTray"));
+
+  mission1Drops.forEach((drop) => drop.classList.remove("drop-target"));
+  mission1ChipTray.classList.remove("tray-target");
+
+  mission1DragState.hoverDrop = targetDrop;
+  mission1DragState.hoverTray = hoverTray;
+
+  if (targetDrop) {
+    targetDrop.classList.add("drop-target");
+  }
+
+  if (hoverTray) {
+    mission1ChipTray.classList.add("tray-target");
+  }
+}
+
+function cleanupMission1Drag() {
+  if (mission1DragState.chip) {
+    mission1DragState.chip.classList.remove("dragging");
+  }
+
+  if (mission1DragState.ghost) {
+    mission1DragState.ghost.remove();
+  }
+
+  mission1Drops.forEach((drop) => drop.classList.remove("drop-target"));
+  mission1ChipTray.classList.remove("tray-target");
+
+  mission1DragState.active = false;
+  mission1DragState.pointerId = null;
+  mission1DragState.chip = null;
+  mission1DragState.originSlot = null;
+  mission1DragState.ghost = null;
+  mission1DragState.hoverDrop = null;
+  mission1DragState.hoverTray = false;
+}
+
+function assignChipToDrop(chip, targetDrop) {
+  const targetSlot = targetDrop.dataset.slot;
+  const currentSlot = chip.dataset.slot || null;
+
+  if (currentSlot && currentSlot !== targetSlot) {
+    clearMission1Slot(currentSlot);
+  }
+
+  const existingChip = targetDrop.querySelector(".magicv-chip");
+  if (existingChip && existingChip !== chip) {
+    sendChipToTray(existingChip);
+  }
+
+  targetDrop.appendChild(chip);
+  chip.dataset.slot = targetSlot;
+  sessionData.mission1.current[targetSlot] = Number(chip.dataset.value);
+  targetDrop.classList.add("filled");
+}
+
+function sendChipToTray(chip) {
+  const currentSlot = chip.dataset.slot || null;
+  if (currentSlot) {
+    clearMission1Slot(currentSlot);
+  }
+
+  chip.dataset.slot = "";
+  mission1ChipTray.appendChild(chip);
+  orderMission1TrayChips();
+}
+
+function clearMission1Slot(slot) {
+  const drop = mission1Drops.find((item) => item.dataset.slot === slot);
+  if (!drop) {
+    return;
+  }
+
+  sessionData.mission1.current[slot] = null;
+  drop.classList.remove("filled");
+}
+
+function clearMission1Board(resetMessage) {
+  mission1SlotOrder.forEach((slot) => {
+    sessionData.mission1.current[slot] = null;
+    const drop = mission1Drops.find((item) => item.dataset.slot === slot);
+    if (drop) {
+      drop.classList.remove("filled", "drop-target");
+    }
+  });
+
+  const chips = Array.from(document.querySelectorAll(".magicv-chip"));
+  chips.forEach((chip) => {
+    chip.dataset.slot = "";
+    mission1ChipTray.appendChild(chip);
+  });
+
+  orderMission1TrayChips();
+  completeMission1Btn.disabled = sessionData.mission1.saved.length < 3;
+
+  if (resetMessage) {
+    setMessage(magicVFeedback, "Tablero reiniciado.", "");
+  }
+}
+
+function orderMission1TrayChips() {
+  const chips = Array.from(mission1ChipTray.querySelectorAll(".magicv-chip"));
+  chips
+    .sort((a, b) => Number(a.dataset.value) - Number(b.dataset.value))
+    .forEach((chip) => mission1ChipTray.appendChild(chip));
+}
+
+function renderMission1SavedCombinations() {
+  mission1SavedCount.textContent = `${sessionData.mission1.saved.length}/3`;
+
+  if (sessionData.mission1.saved.length === 0) {
+    mission1SavedList.innerHTML = "<p class=\"magicv-saved-item-label\">Aun no tienes combinaciones guardadas.</p>";
+    return;
+  }
+
+  mission1SavedList.innerHTML = sessionData.mission1.saved
+    .map((combination, index) => {
+      return `
+        <article class="magicv-saved-item">
+          <p class="magicv-saved-item-label">Valida ${index + 1}</p>
+          <div class="magicv-mini-board">
+            <span class="magicv-mini-dot" data-slot="leftTop">${combination.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${combination.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${combination.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${combination.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${combination.bottom}</span>
+          </div>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function serializeMission1Combination(combination) {
+  return mission1SlotOrder.map((slot) => combination[slot]).join("-");
+}
+
+function createEmptyMission1Assignment() {
+  return {
+    leftTop: null,
+    rightTop: null,
+    leftMid: null,
+    rightMid: null,
+    bottom: null
+  };
 }
 
 function setupMissionCompletionButtons() {
@@ -493,28 +744,6 @@ function hydrateGuideBadges() {
       target.innerHTML = inlineGuideHtml;
     }
   });
-}
-
-function seedMission1Selects() {
-  const optionList = ['<option value="0">Selecciona</option>'];
-  for (let i = 1; i <= 9; i += 1) {
-    optionList.push(`<option value="${i}">${i}</option>`);
-  }
-
-  Object.values(mission1Controls).forEach((select) => {
-    select.innerHTML = optionList.join("");
-    select.value = "0";
-  });
-}
-
-function readMission1Values() {
-  return [
-    Number(mission1Controls.leftTop.value),
-    Number(mission1Controls.rightTop.value),
-    Number(mission1Controls.leftMid.value),
-    Number(mission1Controls.rightMid.value),
-    Number(mission1Controls.bottom.value)
-  ];
 }
 
 function registerTimestamp(key) {

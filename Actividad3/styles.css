@@ -705,6 +705,27 @@ body {
   margin-bottom: 0; /* Evita espacio extra en ultimo parrafo */
 }
 
+.narrative-card-m1 {
+  display: flex; /* Imagen y texto en fila */
+  align-items: stretch; /* Hace que ambos bloques compartan altura */
+  gap: 14px; /* Separacion entre imagen y texto */
+}
+
+.narrative-bot-image {
+  width: auto; /* Conserva proporcion */
+  height: auto; /* Escala dinamica */
+  max-height: 100%; /* No supera la altura del bloque narrativo */
+  max-width: 120px; /* Limite visual del bot */
+  object-fit: contain; /* Evita deformacion */
+  align-self: stretch; /* Toma la altura del contenido textual */
+}
+
+.narrative-card-text {
+  flex: 1; /* El texto ocupa el ancho restante */
+  display: grid; /* Mantiene espaciado consistente entre parrafos */
+  gap: 8px; /* Separacion de lineas narrativas */
+}
+
 .magicv-card {
   border-radius: 18px; /* Redondeo del bloque de actividad */
   border: 2px solid #a8d0f2; /* Borde principal del bloque */
@@ -721,6 +742,214 @@ body {
 .objective {
   margin: 0 0 12px 0; /* Espacio antes de la rejilla */
   color: #2b4f84; /* Color de texto de objetivo */
+}
+
+.magicv-layout {
+  display: grid; /* Distribuye tablero y resultados */
+  grid-template-columns: minmax(320px, 1fr) minmax(250px, 0.85fr); /* Columna de juego + panel derecho */
+  gap: 20px; /* Separacion entre areas */
+  align-items: start; /* Alinea arriba ambos bloques */
+}
+
+.magicv-play-area {
+  border-right: 2px solid #83b8e9; /* Separador visual al estilo referencia */
+  padding-right: 18px; /* Aire antes del panel derecho */
+}
+
+.magicv-board {
+  position: relative; /* Permite ubicar las 5 posiciones de la V */
+  min-height: 330px; /* Espacio de armado */
+  margin-bottom: 14px; /* Separacion de fichas */
+}
+
+.magicv-drop {
+  position: absolute; /* Ubicacion puntual de cada nodo */
+  width: 86px; /* Tamano del nodo */
+  height: 86px; /* Tamano vertical del nodo */
+  border-radius: 50%; /* Forma circular */
+  border: 2px solid #4e9cf0; /* Borde base */
+  background: rgba(161, 205, 226, 0.95); /* Color de nodo vacio */
+  color: #0e5f89; /* Color del numero */
+  font-family: 'Lobster Two', cursive; /* Numero legible y decorativo */
+  font-size: 2rem; /* Tamano de ficha colocada */
+  display: flex; /* Centrado de contenido */
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; /* Feedback visual */
+}
+
+.magicv-drop[data-slot="leftTop"] {
+  left: 0;
+  top: 0;
+}
+
+.magicv-drop[data-slot="rightTop"] {
+  left: 250px;
+  top: 0;
+}
+
+.magicv-drop[data-slot="leftMid"] {
+  left: 76px;
+  top: 108px;
+}
+
+.magicv-drop[data-slot="rightMid"] {
+  left: 174px;
+  top: 108px;
+}
+
+.magicv-drop[data-slot="bottom"] {
+  left: 126px;
+  top: 216px;
+}
+
+.magicv-drop.drop-target {
+  background: rgba(181, 224, 247, 0.98); /* Resalte al pasar ficha */
+  box-shadow: 0 0 0 6px rgba(93, 179, 255, 0.25); /* Halo de destino */
+  transform: scale(1.05); /* Pulso suave */
+}
+
+.magicv-drop.filled {
+  background: rgba(197, 232, 255, 1); /* Nodo ocupado */
+}
+
+.magicv-chip-tray {
+  display: flex; /* Fichas en una sola fila */
+  flex-wrap: wrap; /* Permite ajuste si falta espacio */
+  gap: 12px; /* Separacion de fichas */
+  padding-top: 8px; /* Aire superior */
+}
+
+.magicv-chip-tray.tray-target {
+  outline: 2px dashed #7fbaf4; /* Marca zona para devolver fichas */
+  outline-offset: 6px;
+}
+
+.magicv-chip {
+  width: 74px; /* Tamano de ficha */
+  height: 74px; /* Tamano vertical de ficha */
+  border-radius: 50%; /* Ficha circular */
+  border: 2px solid #4e9cf0; /* Borde de ficha */
+  background: rgba(197, 226, 243, 0.95); /* Color de ficha */
+  color: #17688f; /* Color de numero */
+  font-family: 'Lobster Two', cursive; /* Estilo numerico */
+  font-size: 2.7rem; /* Numero grande */
+  line-height: 1; /* Compacta texto */
+  display: inline-flex; /* Centrado */
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
+  cursor: grab; /* Accion arrastrable */
+  touch-action: none; /* Permite drag en touch */
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease; /* Feedback */
+}
+
+.magicv-chip:hover {
+  transform: translateY(-3px); /* Levanta la ficha */
+  box-shadow: 0 8px 16px rgba(61, 124, 187, 0.3); /* Sombra de hover */
+}
+
+.magicv-chip.dragging {
+  opacity: 0.3; /* Atenua la ficha original durante arrastre */
+}
+
+.magicv-chip-ghost {
+  position: fixed; /* Sigue el puntero */
+  left: 0;
+  top: 0;
+  width: 74px; /* Igual a ficha base */
+  height: 74px;
+  transform: translate(-50%, -50%); /* Centrado en puntero */
+  border-radius: 50%;
+  border: 2px solid #4e9cf0;
+  background: rgba(197, 226, 243, 0.98);
+  color: #17688f;
+  font-family: 'Lobster Two', cursive;
+  font-size: 2.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10000;
+  box-shadow: 0 8px 16px rgba(43, 96, 148, 0.34);
+}
+
+.magicv-results-panel {
+  min-height: 330px; /* Equilibra altura con tablero */
+}
+
+.magicv-results-panel h4 {
+  margin: 0 0 12px 0; /* Separacion del listado */
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.2rem, 2.8vw, 1.7rem);
+  color: #244878;
+}
+
+.magicv-results-panel h4 span {
+  color: #0f7f55; /* Destaca progreso */
+}
+
+.magicv-saved-list {
+  display: grid;
+  gap: 10px;
+}
+
+.magicv-saved-item {
+  border: 1px solid #bfdcf8;
+  border-radius: 14px;
+  background: rgba(242, 250, 255, 0.95);
+  padding: 10px;
+}
+
+.magicv-saved-item-label {
+  margin: 0 0 8px 0;
+  color: #2f5a90;
+  font-size: 1rem;
+}
+
+.magicv-mini-board {
+  position: relative;
+  width: 150px;
+  height: 106px;
+}
+
+.magicv-mini-dot {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #6ca8e8;
+  background: #d8edff;
+  color: #1f5f96;
+  font-family: 'Lobster Two', cursive;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.magicv-mini-dot[data-slot="leftTop"] {
+  left: 0;
+  top: 0;
+}
+
+.magicv-mini-dot[data-slot="rightTop"] {
+  left: 118px;
+  top: 0;
+}
+
+.magicv-mini-dot[data-slot="leftMid"] {
+  left: 36px;
+  top: 36px;
+}
+
+.magicv-mini-dot[data-slot="rightMid"] {
+  left: 82px;
+  top: 36px;
+}
+
+.magicv-mini-dot[data-slot="bottom"] {
+  left: 60px;
+  top: 72px;
 }
 
 .magicv-grid {
@@ -811,6 +1040,17 @@ textarea {
     flex-direction: column; /* Apila cabecera en pantallas medianas */
     align-items: flex-start; /* Alinea cabecera al inicio */
   }
+
+  .magicv-layout {
+    grid-template-columns: 1fr; /* En tablet apila tablero y panel */
+  }
+
+  .magicv-play-area {
+    border-right: none; /* Quita separador vertical al apilar */
+    border-bottom: 2px solid #83b8e9; /* Separador horizontal */
+    padding-right: 0;
+    padding-bottom: 14px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -840,6 +1080,50 @@ textarea {
   .node-caption {
     padding: 4px 8px; /* Compacta capsula de etiqueta en movil */
     gap: 4px; /* Reduce separacion en movil */
+  }
+
+  .narrative-card-m1 {
+    gap: 10px; /* Ajusta separacion en pantallas pequenas */
+  }
+
+  .narrative-bot-image {
+    max-width: 82px; /* Reduce bot sin romper la fila */
+  }
+
+  .magicv-board {
+    min-height: 300px;
+  }
+
+  .magicv-drop {
+    width: 74px;
+    height: 74px;
+    font-size: 1.7rem;
+  }
+
+  .magicv-drop[data-slot="rightTop"] {
+    left: 210px;
+  }
+
+  .magicv-drop[data-slot="leftMid"] {
+    left: 62px;
+    top: 96px;
+  }
+
+  .magicv-drop[data-slot="rightMid"] {
+    left: 148px;
+    top: 96px;
+  }
+
+  .magicv-drop[data-slot="bottom"] {
+    left: 106px;
+    top: 192px;
+  }
+
+  .magicv-chip,
+  .magicv-chip-ghost {
+    width: 62px;
+    height: 62px;
+    font-size: 2.1rem;
   }
 
   .guide-badge,
