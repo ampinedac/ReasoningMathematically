@@ -1979,10 +1979,18 @@ function initMatchingActivity() {
                 }
             }
 
-            const x1 = renderedRight - sr.left - 1;
+            const pairCenterX = (renderedLeft + renderedRight) / 2;
+            const sumCenterX = sR.left + (sR.width / 2);
+            const pairIsLeftOfSum = pairCenterX < sumCenterX;
+
+            const x1 = pairIsLeftOfSum
+                ? (renderedRight - sr.left - 1)
+                : (renderedLeft - sr.left + 1);
             const y1 = renderedTop - sr.top + renderedHeight / 2;
-            const x2 = sR.left   - sr.left + 2;
-            const y2 = sR.top    - sr.top + sR.height / 2;
+            const x2 = pairIsLeftOfSum
+                ? (sR.left - sr.left + 2)
+                : (sR.right - sr.left - 2);
+            const y2 = sR.top - sr.top + sR.height / 2;
             const cx = (x1 + x2) / 2;
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
