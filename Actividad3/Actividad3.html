@@ -36,6 +36,15 @@
     </section>
   </div>
 
+  <!-- Modal Magic V Guardadas -->
+  <div id="magicVSavedModal" class="modal-magicv" style="display:none;">
+    <div class="modal-magicv-content">
+      <button id="closeMagicVSavedModal" class="btn btn-secondary" style="float:right;">Cerrar</button>
+      <h3>Magic V guardadas</h3>
+      <div id="magicVSavedModalContent"></div>
+    </div>
+  </div>
+
   <main id="activityApp" aria-live="polite">
     <section id="introductionScreen" class="app-screen">
       <div class="screen-shell introduction-shell">
@@ -238,13 +247,13 @@
           <div class="mission-actions">
             <button id="checkMagicVBtn" class="btn btn-primary">Comprobar combinacion</button>
             <button id="resetMagicVBtn" class="btn btn-secondary">Reiniciar</button>
+            <button id="showMagicVSavedBtn" class="btn btn-info" type="button">Ver Magic V guardadas</button>
           </div>
 
           <p id="magicVFeedback" class="status-pill">Aun no has comprobado.</p>
 
           <section id="mission1ExploracionBlock" class="mission1-exploration is-hidden" aria-live="polite">
             <p class="mission1-exploration-question">Según las Magic V que encontraste, ¿el número del núcleo puede ser cualquiera? Explícale a V-Bot.</p>
-            <p class="mission1-audio-tip">Para reducir el ruido de fondo, habla cerca del micrófono y evita moverlo mientras grabas.</p>
             <div class="audio-controls">
               <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
               <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
@@ -269,6 +278,7 @@
         <div class="mission-actions">
           <button id="completeMission2Btn" class="btn btn-success">Completar mision 2</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
+          <button id="showMagicVSavedBtn2" class="btn btn-info" type="button">Ver Magic V guardadas</button>
         </div>
       </div>
     </section>
@@ -286,6 +296,7 @@
         <div class="mission-actions">
           <button id="completeMission3Btn" class="btn btn-success">Completar mision 3</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
+          <button id="showMagicVSavedBtn3" class="btn btn-info" type="button">Ver Magic V guardadas</button>
         </div>
       </div>
     </section>
@@ -303,6 +314,7 @@
         <div class="mission-actions">
           <button id="completeMission4Btn" class="btn btn-success">Completar mision 4</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
+          <button id="showMagicVSavedBtn4" class="btn btn-info" type="button">Ver Magic V guardadas</button>
         </div>
       </div>
     </section>
@@ -320,6 +332,7 @@
         <div class="mission-actions">
           <button id="completeMission5Btn" class="btn btn-success">Completar mision 5</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
+          <button id="showMagicVSavedBtn5" class="btn btn-info" type="button">Ver Magic V guardadas</button>
         </div>
       </div>
     </section>

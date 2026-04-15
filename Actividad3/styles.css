@@ -1,23 +1,23 @@
 /* Permutaciones Magic V */
-.magicv-permutaciones-label {
-  font-size: 0.95em;
-  color: #2a6b7a;
-  margin-top: 0.5em;
+/* Agrupación visual de Magic V y equivalentes */
+.magicv-v-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
   margin-bottom: 0.2em;
-  font-style: italic;
 }
 .magicv-permutaciones-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
-  margin-bottom: 0.5em;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
 }
 .magicv-mini-board-permutacion {
   opacity: 0.7;
   transform: scale(0.85);
   border: 1.5px dashed #2a6b7a;
   background: #f3fafd;
-  margin-bottom: 0.2em;
 }
 /* ======================================
    1) Variables globales y tokens base
@@ -49,7 +49,7 @@ body {
   margin: 0; /* Elimina margenes por defecto del navegador */
   min-height: 100vh; /* Asegura altura minima completa de ventana */
   font-family: 'Rancho', cursive; /* Tipografia principal de la experiencia */
-  font-size: clamp(2rem, 2vw, 2rem); /* Escala de texto responsiva */
+  font-size: clamp(1.5rem, 1.5vw, 1.5rem); /* Escala de texto responsiva */
   color: var(--texto); /* Color de texto base */
   background: url("assets/images/Fondo.png") no-repeat center center fixed; /* Fondo principal del escenario */
   background-size: cover; /* Ajusta imagen de fondo para cubrir toda la pantalla */
