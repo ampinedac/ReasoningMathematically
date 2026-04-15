@@ -38,6 +38,17 @@ const guideBadge = document.getElementById("guideBadge");
 const missionNodes = Array.from(document.querySelectorAll(".mission-node"));
 const mapHint = document.getElementById("mapHint");
 const mapStage = document.querySelector(".map-stage");
+const mapGlowCanvas = document.getElementById("mapGlowCanvas");
+const mapFogCanvas = document.getElementById("mapFogCanvas");
+const mapMissionAnchors = missionNodes.map((node) => ({
+  id: Number(node.dataset.mission),
+  left: Number.parseFloat(node.style.left),
+  top: Number.parseFloat(node.style.top)
+}));
+const mapRevealProgress = Object.fromEntries(mapMissionAnchors.map((mission) => [mission.id, 0]));
+const mapAnimatingMissions = new Set();
+let mapVoronoiOwnerByPixel = null;
+let mapResizeFrame = null;
 
 const dragState = {
   active: false,
@@ -246,6 +257,8 @@ function setupMap() {
       setMessage(mapHint, "Para entrar a la mision, arrastra tu guia y sueltalo sobre el marcador activo.", "");
     });
   });
+
+  window.addEventListener("resize", queueMapFogResize);
 }
 
 function setupGuideDragAndDrop() {
@@ -414,6 +427,186 @@ function renderMap() {
       ""
     );
   }
+
+  syncMapFogWithProgress();
+}
+
+function queueMapFogResize() {
+  if (!document.getElementById("mapScreen")?.classList.contains("active-screen")) {
+    return;
+  }
+
+  if (mapResizeFrame) {
+    cancelAnimationFrame(mapResizeFrame);
+  }
+
+  mapResizeFrame = window.requestAnimationFrame(() => {
+    mapResizeFrame = null;
+    ensureMapFogCanvases();
+    drawMapFog();
+    drawMapGlow();
+  });
+}
+
+function ensureMapFogCanvases() {
+  if (!mapStage || !mapFogCanvas || !mapGlowCanvas) {
+    return false;
+  }
+
+  const width = Math.round(mapStage.clientWidth);
+  const height = Math.round(mapStage.clientHeight);
+
+  if (!width || !height) {
+    return false;
+  }
+
+  const needsResize = mapFogCanvas.width !== width || mapFogCanvas.height !== height;
+
+  if (needsResize) {
+    mapFogCanvas.width = width;
+    mapFogCanvas.height = height;
+    mapGlowCanvas.width = width;
+    mapGlowCanvas.height = height;
+    mapVoronoiOwnerByPixel = computeMapVoronoi(width, height);
+  } else if (!mapVoronoiOwnerByPixel) {
+    mapVoronoiOwnerByPixel = computeMapVoronoi(width, height);
+  }
+
+  return true;
+}
+
+function computeMapVoronoi(width, height) {
+  const pixelOwners = new Uint8Array(width * height);
+  const nodes = mapMissionAnchors.map((mission) => ({
+    id: mission.id,
+    x: (mission.left / 100) * width,
+    y: (mission.top / 100) * height
+  }));
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      let closestMission = nodes[0].id;
+      let minimumDistance = Number.POSITIVE_INFINITY;
+
+      nodes.forEach((node) => {
+        const deltaX = x - node.x;
+        const deltaY = y - node.y;
+        const distance = (deltaX * deltaX) + (deltaY * deltaY);
+
+        if (distance < minimumDistance) {
+          minimumDistance = distance;
+          closestMission = node.id;
+        }
+      });
+
+      pixelOwners[(y * width) + x] = closestMission;
+    }
+  }
+
+  return pixelOwners;
+}
+
+function drawMapFog() {
+  if (!ensureMapFogCanvases()) {
+    return;
+  }
+
+  const width = mapFogCanvas.width;
+  const height = mapFogCanvas.height;
+  const context = mapFogCanvas.getContext("2d");
+  const imageData = context.createImageData(width, height);
+  const pixels = imageData.data;
+  const maximumFogAlpha = 210;
+
+  for (let index = 0; index < width * height; index += 1) {
+    const missionId = mapVoronoiOwnerByPixel[index];
+    const progress = mapRevealProgress[missionId] || 0;
+    const easedProgress = progress < 1 ? 1 - ((1 - progress) ** 3) : 1;
+    const alpha = Math.round(maximumFogAlpha * (1 - easedProgress));
+    const pixelIndex = index * 4;
+
+    pixels[pixelIndex] = 10;
+    pixels[pixelIndex + 1] = 18;
+    pixels[pixelIndex + 2] = 40;
+    pixels[pixelIndex + 3] = alpha;
+  }
+
+  context.putImageData(imageData, 0, 0);
+}
+
+function drawMapGlow() {
+  if (!ensureMapFogCanvases()) {
+    return;
+  }
+
+  const width = mapGlowCanvas.width;
+  const height = mapGlowCanvas.height;
+  const context = mapGlowCanvas.getContext("2d");
+  context.clearRect(0, 0, width, height);
+
+  mapMissionAnchors.forEach((mission) => {
+    const progress = mapRevealProgress[mission.id] || 0;
+    if (progress <= 0) {
+      return;
+    }
+
+    const centerX = (mission.left / 100) * width;
+    const centerY = (mission.top / 100) * height;
+    const radius = 72 + (progress * (width * 0.18));
+    const alpha = progress * 0.24;
+    const gradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+
+    gradient.addColorStop(0, `rgba(255, 236, 170, ${alpha})`);
+    gradient.addColorStop(0.38, `rgba(255, 220, 145, ${alpha * 0.48})`);
+    gradient.addColorStop(0.72, `rgba(255, 205, 120, ${alpha * 0.18})`);
+    gradient.addColorStop(1, "rgba(255, 190, 100, 0)");
+
+    context.beginPath();
+    context.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    context.fillStyle = gradient;
+    context.fill();
+  });
+}
+
+function animateMapReveal(missionId) {
+  if (mapRevealProgress[missionId] >= 1) {
+    mapRevealProgress[missionId] = 1;
+    mapAnimatingMissions.delete(missionId);
+    drawMapFog();
+    drawMapGlow();
+    return;
+  }
+
+  mapRevealProgress[missionId] = Math.min(mapRevealProgress[missionId] + 0.011, 1);
+  drawMapFog();
+  drawMapGlow();
+  window.requestAnimationFrame(() => animateMapReveal(missionId));
+}
+
+function syncMapFogWithProgress() {
+  if (!ensureMapFogCanvases()) {
+    return;
+  }
+
+  mapMissionAnchors.forEach((mission) => {
+    const isCompleted = sessionData.missionsCompleted.includes(mission.id);
+
+    if (!isCompleted) {
+      mapRevealProgress[mission.id] = 0;
+      mapAnimatingMissions.delete(mission.id);
+      return;
+    }
+
+    if (mapRevealProgress[mission.id] >= 1 || mapAnimatingMissions.has(mission.id)) {
+      return;
+    }
+
+    mapAnimatingMissions.add(mission.id);
+    window.requestAnimationFrame(() => animateMapReveal(mission.id));
+  });
+
+  drawMapFog();
+  drawMapGlow();
 }
 
 function canAccessMission(missionNumber) {
@@ -744,6 +937,13 @@ function showScreen(id) {
   const target = document.getElementById(id);
   if (target) {
     target.classList.add("active-screen");
+  }
+
+  if (id === "mapScreen") {
+    window.requestAnimationFrame(() => {
+      ensureMapFogCanvases();
+      syncMapFogWithProgress();
+    });
   }
 }
 

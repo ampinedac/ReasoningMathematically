@@ -46,6 +46,9 @@
               <p class="intro-paragraph">En el centro de nuestra ciudad, Numetrix, no hay cables de electricidad comunes. Todo funciona gracias a los "Conectores V".</p>
               <p class="intro-paragraph">¿Por qué son tan importantes? Porque en Numetrix, la energía solo fluye si hay <strong>Equilibrio Perfecto</strong>. Los Conectores V son los encargados de unir la Energía del Cielo (un brazo de la V) con la Energía de la Tierra (el otro brazo).</p>
               <p class="intro-paragraph">Para que la ciudad tenga luz, que los trenes se muevan y que las fábricas de helados funcionen, la fuerza en ambos brazos de la V debe ser exactamente la misma. El punto de abajo, donde se cruzan, es el "Núcleo de Poder", es especial porque ayuda a ambos brazos al mismo tiempo.</p>
+              <figure class="intro-figure">
+                <img src="assets/images/ConectoresV.png" alt="Conectores V de Numetrix" class="intro-story-image conectores-v-img">
+              </figure>
               <div class="intro-nav">
                 <button id="introNextStep1" class="intro-arrow" type="button" aria-label="Siguiente parte de la historia">➜</button>
               </div>
@@ -68,7 +71,7 @@
               <ul class="intro-list">
                 <li>Analizar el Núcleo: Mira qué número está en la punta de la V.</li>
                 <li>Equilibrar las Fuerzas: Reparte los suministros (los otros números) para que ambos brazos sumen lo mismo.</li>
-                <li>Activar el Mapa de Reparación: Cada "V" que logres equilibrar encenderá un sector de Numetrix.</li>
+                <li>Activar el Mapa de Reparación: Con cada misión que logres completar Numetrix estará más cerca de restaurar su equilibrio.</li>
               </ul>
               <div class="intro-actions">
                 <button id="startIntroBtn" class="btn btn-success">✨ ¿Lista para comenzar?</button>
@@ -131,6 +134,8 @@
         </header>
 
         <div class="map-stage">
+          <canvas id="mapGlowCanvas" class="map-layer-canvas map-glow-layer" aria-hidden="true"></canvas>
+          <canvas id="mapFogCanvas" class="map-layer-canvas map-fog-layer" aria-hidden="true"></canvas>
           <!-- Cinco nodos anclados a hitos reales del mapa -->
           <div class="mission-node" data-mission="1" style="left: 13%; top: 20%;">
             <button class="node-button" aria-label="Mision 1"></button>
@@ -190,14 +195,20 @@
         <article class="narrative-card narrative-card-m1">
           <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
           <div class="narrative-card-text">
-            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que pruebes que todavia funciona.</p>
-            <p>Construye una Magic V valida para detectar combinaciones estables.</p>
+            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que descubras cómo funcionaba.</p>
+            <p>Construye una Magic V para detectar combinaciones estables. 
+            </p>
           </div>
         </article>
 
         <div class="magicv-card">
           <h3>Exploracion inicial: Construccion de Magic V</h3>
-          <p class="objective">Objetivo: encontrar 3 combinaciones validas. Una combinacion es valida cuando los dos brazos de la Magic V suman lo mismo.</p>
+          <p class="narrative-card-text">Reglas: 
+            <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación, de manera que la suma de los dos brazos de la V sea la misma.
+            <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
+            <br>3. Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
+            <br>4. Supondremos que si dos o más V mágicas tienen el mismo total mágico, son la misma V mágica.El número en la punta de la V (el núcleo) se suma a ambos brazos.
+          </p>
 
           <div class="magicv-layout">
             <div class="magicv-play-area">

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Niebla Voronoi – Mapa Numetrix</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      background: #e8f0fe;
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    h1  { color: #1a3a6b; font-size: 1.4rem; text-align: center; }
+    .subtitle {
+      color: #555; font-size: 0.9rem; text-align: center;
+      max-width: 620px; line-height: 1.6;
+    }
+
+    /* Controles */
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-mission {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      font-weight: bold;
+      background: #2967ff;
+      color: #fff;
+      transition: background 0.2s, transform 0.15s, opacity 0.2s;
+    }
+    .btn-mission:hover:not(:disabled) { background: #1a50d4; transform: translateY(-2px); }
+    .btn-mission:disabled { opacity: 0.4; cursor: default; transform: none; }
+    .btn-mission.done  { background: #17a262; }
+    .btn-reset {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      background: #dde4f0;
+      color: #333;
+      transition: background 0.2s;
+    }
+    .btn-reset:hover { background: #c8d3e8; }
+
+    /* Contenedor del mapa */
+    .map-wrap {
+      background: #fff;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.13);
+      width: 100%;
+      max-width: 720px;
+    }
+    .map-wrap h2 { color: #1a3a6b; margin-bottom: 6px; font-size: 1rem; }
+    .map-wrap p  { color: #666; font-size: 0.84rem; margin-bottom: 14px; line-height: 1.5; }
+
+    .map-stage {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      border-radius: 14px;
+      background-image: url("assets/images/NumetrixMapa.png");
+      background-size: cover;
+      background-position: center;
+      border: 2px solid #acd0f2;
+      overflow: hidden;
+    }
+
+    /* Canvas de glow cálido (z=4, debajo de niebla) */
+    #glowCanvas {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 4;
+      filter: blur(14px) saturate(0.82);
+      opacity: 0.72;
+    }
+
+    /* Canvas de niebla (z=5, encima del glow, debajo de nodos) */
+    #fogCanvas {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 5;
+      filter: blur(10px);
+      transform: scale(1.03);
+      transform-origin: center;
+    }
+
+    /* Nodos de misión */
+    .m-node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      z-index: 10;
+    }
+    .m-node .dot {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #5580b0;
+      border: 3px solid #fff;
+      box-shadow: 0 3px 12px rgba(0,0,0,.4);
+      transition: background 0.5s, box-shadow 0.5s;
+    }
+    .m-node.available .dot {
+      background: #2967ff;
+      box-shadow: 0 0 12px rgba(80,160,255,.85), 0 3px 12px rgba(0,0,0,.35);
+    }
+    .m-node.completed .dot {
+      background: #17a262;
+      box-shadow: 0 0 16px rgba(30,210,130,.9), 0 3px 12px rgba(0,0,0,.3);
+    }
+    .m-node.locked .dot { background: #888; }
+    .m-node .lbl {
+      font-size: 0.72rem;
+      font-weight: bold;
+      color: #fff;
+      background: rgba(0,0,0,.55);
+      border-radius: 8px;
+      padding: 2px 7px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🗺️ Niebla por sectores Voronoi — Mapa Numetrix</h1>
+  <p class="subtitle">
+    El mapa se divide en <strong>5 sectores</strong> (uno por misión) usando un diagrama Voronoi:
+    cada píxel pertenece al sector cuyo nodo está más cercano.
+    Al completar las 5 misiones, <strong>el mapa queda completamente iluminado</strong>.
+    Completa las misiones en orden para ver el efecto progresivo.
+  </p>
+
+  <div class="controls">
+    <button class="btn-mission" data-id="1" onclick="completeMission(1)">✅ Misión 1 completada</button>
+    <button class="btn-mission" data-id="2" onclick="completeMission(2)" disabled>✅ Misión 2 completada</button>
+    <button class="btn-mission" data-id="3" onclick="completeMission(3)" disabled>✅ Misión 3 completada</button>
+    <button class="btn-mission" data-id="4" onclick="completeMission(4)" disabled>✅ Misión 4 completada</button>
+    <button class="btn-mission" data-id="5" onclick="completeMission(5)" disabled>✅ Misión 5 completada</button>
+    <button class="btn-reset" onclick="resetAll()">🔄 Reiniciar</button>
+  </div>
+
+  <div class="map-wrap">
+    <h2>Vista previa del efecto</h2>
+    <p>
+      Cada sector se ilumina con una transición suave al completar su misión.
+      Un halo dorado-cálido aparece bajo la niebla indicando que la zona recuperó energía.
+    </p>
+    <div class="map-stage" id="mapStage">
+      <canvas id="glowCanvas"></canvas>
+      <canvas id="fogCanvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // ── Posiciones de los 5 nodos (coinciden con Actividad3.html) ──────
+    const MISSIONS = [
+      { id: 1, left: 13, top: 20 },
+      { id: 2, left: 29, top: 50 },
+      { id: 3, left: 50, top: 75 },
+      { id: 4, left: 71, top: 50 },
+      { id: 5, left: 84, top: 18 },
+    ];
+
+    // Estado
+    const revealProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    const completed      = new Set();
+    const animating      = new Set();
+    let   voronoiMap     = null; // Uint8Array – ID de misión por píxel
+
+    // ── Nodos del mapa ────────────────────────────────────────────────
+    function buildNodes() {
+      const stage = document.getElementById("mapStage");
+      MISSIONS.forEach(m => {
+        const el = document.createElement("div");
+        el.className  = "m-node locked";
+        el.id         = `node-${m.id}`;
+        el.style.left = m.left + "%";
+        el.style.top  = m.top  + "%";
+        el.innerHTML  = `<div class="dot"></div><span class="lbl">M${m.id}</span>`;
+        stage.appendChild(el);
+      });
+    }
+
+    function updateNodes() {
+      MISSIONS.forEach((m, i) => {
+        const el = document.getElementById(`node-${m.id}`);
+        el.classList.remove("locked", "available", "completed");
+        if (completed.has(m.id))                                { el.classList.add("completed"); }
+        else if (i === 0 || completed.has(MISSIONS[i-1].id))   { el.classList.add("available");  }
+        else                                                    { el.classList.add("locked");     }
+      });
+    }
+
+    // ── Diagrama Voronoi ──────────────────────────────────────────────
+    // Para cada píxel (x,y) determina cuál nodo es el más cercano.
+    // Guarda el ID de misión (1–5) en un Uint8Array de tamaño W*H.
+    function computeVoronoi(W, H) {
+      const nodes = MISSIONS.map(m => ({
+        id: m.id,
+        x : (m.left / 100) * W,
+        y : (m.top  / 100) * H,
+      }));
+
+      const map = new Uint8Array(W * H);
+
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          let minD = Infinity, closest = 1;
+          for (const n of nodes) {
+            const d = (x - n.x) * (x - n.x) + (y - n.y) * (y - n.y);
+            if (d < minD) { minD = d; closest = n.id; }
+          }
+          map[y * W + x] = closest;
+        }
+      }
+      return map;
+    }
+
+    // ── Dibujo: niebla ────────────────────────────────────────────────
+    // Cada píxel recibe opacidad según el progreso de su sector.
+    // Easing cúbico para que la revelación se sienta natural.
+    function drawFog(W, H) {
+      const canvas = document.getElementById("fogCanvas");
+      const ctx    = canvas.getContext("2d");
+      const img    = ctx.createImageData(W, H);
+      const d      = img.data;
+      const FOG    = 210; // 0.82 × 255
+
+      for (let i = 0; i < W * H; i++) {
+        const mId   = voronoiMap[i];
+        const t     = revealProgress[mId];
+        // Easing out-cubic
+        const eased = t < 1 ? 1 - Math.pow(1 - t, 3) : 1;
+        const alpha = Math.round(FOG * (1 - eased));
+        const p = i * 4;
+        d[p]     = 10;
+        d[p + 1] = 18;
+        d[p + 2] = 40;
+        d[p + 3] = alpha;
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    // ── Dibujo: halo cálido bajo la niebla ───────────────────────────
+    function drawGlow(W, H) {
+      const canvas = document.getElementById("glowCanvas");
+      const ctx    = canvas.getContext("2d");
+      ctx.clearRect(0, 0, W, H);
+
+      MISSIONS.forEach(m => {
+        const t = revealProgress[m.id];
+        if (t <= 0) return;
+
+        const cx = (m.left / 100) * W;
+        const cy = (m.top  / 100) * H;
+        // Halo mas suave y menos amarillo para no tapar el mapa
+        const r  = 72 + t * (W * 0.18);
+        const a  = t * 0.24;
+
+        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+        grad.addColorStop(0,    `rgba(255, 236, 170, ${a})`);
+        grad.addColorStop(0.38, `rgba(255, 220, 145, ${a * 0.48})`);
+        grad.addColorStop(0.72, `rgba(255, 205, 120, ${a * 0.18})`);
+        grad.addColorStop(1,    `rgba(255, 190, 100, 0)`);
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      });
+    }
+
+    // ── Animación por misión ──────────────────────────────────────────
+    function animateReveal(mId, W, H) {
+      if (revealProgress[mId] >= 1) {
+        revealProgress[mId] = 1;
+        animating.delete(mId);
+        drawFog(W, H);
+        drawGlow(W, H);
+        return;
+      }
+      revealProgress[mId] = Math.min(revealProgress[mId] + 0.011, 1);
+      drawFog(W, H);
+      drawGlow(W, H);
+      requestAnimationFrame(() => animateReveal(mId, W, H));
+    }
+
+    // ── API pública ───────────────────────────────────────────────────
+    function completeMission(id) {
+      if (completed.has(id)) return;
+      completed.add(id);
+
+      const btn = document.querySelector(`.btn-mission[data-id="${id}"]`);
+      if (btn) { btn.classList.add("done"); btn.disabled = true; }
+
+      // Habilitar siguiente botón
+      const nextBtn = document.querySelector(`.btn-mission[data-id="${id + 1}"]`);
+      if (nextBtn) nextBtn.disabled = false;
+
+      updateNodes();
+
+      const W = document.getElementById("fogCanvas").width;
+      const H = document.getElementById("fogCanvas").height;
+
+      if (!animating.has(id)) {
+        animating.add(id);
+        requestAnimationFrame(() => animateReveal(id, W, H));
+      }
+    }
+
+    function resetAll() {
+      completed.clear();
+      for (let i = 1; i <= 5; i++) revealProgress[i] = 0;
+      animating.clear();
+
+      document.querySelectorAll(".btn-mission").forEach((b, idx) => {
+        b.classList.remove("done");
+        b.disabled = idx !== 0;
+      });
+
+      const W = document.getElementById("fogCanvas").width;
+      const H = document.getElementById("fogCanvas").height;
+
+      updateNodes();
+      drawFog(W, H);
+      drawGlow(W, H);
+    }
+
+    // ── Inicialización ────────────────────────────────────────────────
+    function setup() {
+      const stage = document.getElementById("mapStage");
+      const W = stage.offsetWidth;
+      const H = stage.offsetHeight;
+
+      ["fogCanvas", "glowCanvas"].forEach(id => {
+        const c = document.getElementById(id);
+        c.width  = W;
+        c.height = H;
+      });
+
+      voronoiMap = computeVoronoi(W, H);
+      drawFog(W, H);
+      drawGlow(W, H);
+    }
+
+    buildNodes();
+    updateNodes();
+    requestAnimationFrame(setup);
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(setup, 220);
+    });
+  </script>
+</body>
+</html>

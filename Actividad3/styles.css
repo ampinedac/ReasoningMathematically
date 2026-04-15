@@ -405,6 +405,28 @@ body {
   overflow: hidden; /* Recorta decoracion al contenedor */
 }
 
+.map-layer-canvas {
+  position: absolute; /* Superpone capas dinamicas sobre el mapa */
+  inset: 0; /* Cubre todo el escenario */
+  width: 100%; /* Mantiene ancho completo del canvas */
+  height: 100%; /* Mantiene alto completo del canvas */
+  pointer-events: none; /* No interfiere con nodos ni arrastre */
+  border-radius: 18px; /* Respeta las esquinas del mapa */
+}
+
+.map-glow-layer {
+  z-index: 2; /* Debajo de la niebla y de los nodos */
+  filter: blur(14px) saturate(0.82); /* Glow mas suave y menos invasivo */
+  opacity: 0.72; /* Reduce presencia del halo */
+}
+
+.map-fog-layer {
+  z-index: 3; /* Encima del glow, debajo de nodos */
+  filter: blur(10px); /* Difumina borde entre sectores revelados */
+  transform: scale(1.03); /* Evita ver recorte duro en bordes tras blur */
+  transform-origin: center; /* Mantiene expansion centrada */
+}
+
 .map-aura {
   position: absolute; /* Posicionamiento libre de auras */
   border-radius: 999px; /* Forma circular suave */
@@ -458,6 +480,7 @@ body {
   display: grid; /* Ordena boton y etiquetas */
   justify-items: center; /* Centra hijos del nodo */
   gap: 4px; /* Espaciado vertical interno */
+  z-index: 6; /* Mantiene nodos por encima de niebla y glow */
 }
 
 .node-button {
@@ -560,6 +583,7 @@ body {
   border-radius: 50%; /* Base circular del engranaje */
   border: 7px dotted rgba(100, 145, 199, 0.55); /* Borde punteado simbolizando dientes */
   animation: rotateGear 9s linear infinite; /* Rotacion continua */
+  z-index: 1; /* Queda bajo la niebla del mapa */
 }
 
 .gear-a {
@@ -653,6 +677,17 @@ body {
   border-radius: 18px; /* Bordes suaves */
   border: 2px solid rgba(95, 153, 214, 0.5); /* Marco ligero */
   box-shadow: 0 10px 24px rgba(60, 96, 158, 0.24); /* Profundidad */
+}
+
+.conectores-v-img {
+  width: min(100%, 220px);
+  max-height: 180px;
+  border-radius: 22px;
+  border: 2px solid rgba(95, 153, 214, 0.5);
+  box-shadow: 0 8px 20px rgba(60, 96, 158, 0.30);
+  transform: translateY(-4px);
+  display: block;
+  margin: 10px auto 0;
 }
 
 .intro-nav {
