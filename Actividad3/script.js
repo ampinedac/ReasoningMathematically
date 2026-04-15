@@ -670,21 +670,48 @@ function setupMission1() {
       return;
     }
 
-    const serialized = serializeMission1Combination(current);
-    const isDuplicate = sessionData.mission1.saved.some((item) => serializeMission1Combination(item) === serialized);
+    // --- Lógica avanzada de Magic V: núcleo y permutaciones ---
+    const nucleo = current.bottom;
+    const brazos = [current.leftTop, current.rightTop, current.leftMid, current.rightMid];
+    const sumaMagica = current.leftTop + current.leftMid + current.bottom; // suma de un brazo + núcleo
 
-    if (isDuplicate) {
-      setMessage(magicVFeedback, "Esa combinacion ya fue registrada, intenta una diferente.", "bad");
+    // Buscar Magic V con el mismo núcleo
+    let existente = sessionData.mission1.saved.find(item => item.nucleo === nucleo);
+    if (existente) {
+      // Duplicado exacto (misma disposición)
+      const esExacta = existente.leftTop === current.leftTop && existente.rightTop === current.rightTop &&
+        existente.leftMid === current.leftMid && existente.rightMid === current.rightMid;
+      if (esExacta) {
+        setMessage(magicVFeedback, "Esta Magic V ya está registrada.", "bad");
+        return;
+      }
+      // Permutación: mismo núcleo, suma mágica igual, pero brazos permutados
+      const brazosExistente = [existente.leftTop, existente.rightTop, existente.leftMid, existente.rightMid];
+      const esPermutacion =
+        brazos.slice().sort((a,b)=>a-b).join('-') === brazosExistente.slice().sort((a,b)=>a-b).join('-') &&
+        sumaMagica === (existente.leftTop + existente.leftMid + existente.bottom);
+      if (esPermutacion) {
+        // Guardar como permutación asociada
+        if (!existente.permutaciones) existente.permutaciones = [];
+        existente.permutaciones.push({ ...current });
+        setMessage(magicVFeedback, `Esta Magic V es equivalente a la registrada con núcleo ${nucleo} porque la suma mágica es la misma.`, "good");
+        renderMission1SavedCombinations();
+        clearMission1Board(false);
+        return;
+      }
+      // Si mismo núcleo pero brazos diferentes y suma diferente, permitir guardar como permutación (opcional, aquí lo bloqueamos)
+      setMessage(magicVFeedback, "Esta Magic V ya tiene ese núcleo pero no es una permutación válida.", "bad");
       return;
     }
 
+    // Si el núcleo es nuevo, guardar como nueva válida
     if (sessionData.mission1.saved.length >= 3) {
       unlockMission1Exploration();
       setMessage(magicVFeedback, "Ya registraste las 3 combinaciones validas. Responde la pregunta por audio para cerrar la misión.", "good");
       return;
     }
 
-    sessionData.mission1.saved.push({ ...current, sumaMagica: null });
+    sessionData.mission1.saved.push({ ...current, sumaMagica: null, nucleo, permutaciones: [] });
     renderMission1SavedCombinations();
     clearMission1Board(false);
 
@@ -1151,11 +1178,7 @@ function renderMission1SavedCombinations() {
 }
 
 function serializeMission1Combination(combination) {
-  // El núcleo es el vértice inferior
-  const nucleo = combination.bottom;
-  // La suma mágica es la suma de un brazo (ambos deben ser iguales para ser válida)
-  const suma = combination.leftTop + combination.leftMid;
-  return `${nucleo}-${suma}`;
+  return mission1SlotOrder.map((slot) => combination[slot]).join("-");
 }
 
 function createEmptyMission1Assignment() {
@@ -1203,13 +1226,12 @@ function showScreen(id) {
   });
 
   if (id === "introductionScreen") {
-      // Solo cuenta como nueva si cambia el núcleo (bottom) o la suma mágica
-      const isDuplicate = sessionData.mission1.saved.some((item) => serializeMission1Combination(item) === serialized);
+    setIntroStep(0);
+  }
 
-      if (isDuplicate) {
-        setMessage(magicVFeedback, "Ya registraste una Magic V con ese núcleo y esa suma. Cambia el núcleo para una nueva combinación.", "bad");
-        return;
-      }
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add("active-screen");
   }
 
   if (id === "mission1Screen") {
