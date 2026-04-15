@@ -214,7 +214,10 @@ const mission1AudioState = {
   submitting: false
 };
 
-init();
+// --- INICIALIZACIÓN SEGURA DEL DOM ---
+// Elimina o comenta la línea: init();
+// Y usa este listener para asegurar que todo el DOM esté cargado antes de ejecutar la lógica principal.
+document.addEventListener('DOMContentLoaded', init);
 
 function init() {
   loadMission1ProgressFromLocal();
