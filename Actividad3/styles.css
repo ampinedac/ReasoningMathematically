@@ -1015,13 +1015,29 @@ body {
   padding: 8px 10px;
   border-radius: 10px;
   border: 2px solid #7bbdf4;
-  background: #f6fbff;
+  background: #e8f4ff;
   font-family: 'Lobster Two', cursive;
   font-size: clamp(1.5rem, 2.5vw, 1.5rem);
   text-align: center;
-  color: #1d4f8a;
+  color: #0a3d7a;
   outline: none;
   transition: border-color 0.2s ease;
+}
+
+.magicv-suma-input::placeholder {
+  color: #5b8ac5;
+}
+
+/* Remover flechitas del input number */
+.magicv-suma-input::-webkit-outer-spin-button,
+.magicv-suma-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.magicv-suma-input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .magicv-suma-input:focus {
@@ -1060,42 +1076,42 @@ body {
 
 .magicv-mini-dot {
   position: absolute;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 1px solid #6ca8e8;
   background: #d8edff;
   color: #1f5f96;
   font-family: 'Lobster Two', cursive;
-  font-size: 1.1rem;
+  font-size: 0.85rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .magicv-mini-dot[data-slot="leftTop"] {
-  left: 0;
+  left: 6px;
   top: 0;
 }
 
 .magicv-mini-dot[data-slot="rightTop"] {
-  left: 118px;
+  left: 113px;
   top: 0;
 }
 
 .magicv-mini-dot[data-slot="leftMid"] {
-  left: 36px;
-  top: 36px;
+  left: 34px;
+  top: 29px;
 }
 
 .magicv-mini-dot[data-slot="rightMid"] {
-  left: 82px;
-  top: 36px;
+  left: 85px;
+  top: 29px;
 }
 
 .magicv-mini-dot[data-slot="bottom"] {
   left: 60px;
-  top: 72px;
+  top: 58px;
 }
 
 .magicv-grid {
@@ -1131,6 +1147,103 @@ textarea {
   flex-wrap: wrap; /* Ajusta filas en pantallas pequenas */
   gap: 10px; /* Separacion entre botones */
   margin-top: 10px; /* Espacio superior del bloque de acciones */
+}
+
+.magicv-card .status-pill {
+  margin-top: 12px;
+}
+
+.mission1-exploration {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 2px solid #b7d8f5;
+  background: linear-gradient(160deg, rgba(241, 249, 255, 0.96), rgba(231, 255, 245, 0.9));
+  display: grid;
+  gap: 10px;
+  animation: fadeInIntro 0.28s ease;
+}
+
+.mission1-exploration.is-hidden {
+  display: none;
+}
+
+.mission1-exploration h4 {
+  margin: 0;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  color: #244878;
+}
+
+.mission1-exploration-question {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+  color: var(--texto);
+}
+
+.mission1-audio-tip {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: clamp(1.2rem, 2.2vw, 1.3rem);
+}
+
+.audio-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 0.65em;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.4em;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.audio-controls .btn {
+  width: 82px;
+  height: 82px;
+  padding: 0;
+  border-radius: 20px;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.audio-controls .btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  filter: brightness(1.15);
+  box-shadow: 0 6px 18px rgba(255, 231, 10, 0.42);
+}
+
+.audio-controls .btn:disabled {
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+.audio-controls button img {
+  max-width: 40px;
+  max-height: 40px;
+  object-fit: contain;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.status-text {
+  min-height: 28px;
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.25rem, 2.3vw, 1.35rem);
+  color: #2b4f84;
+}
+
+.status-text.good {
+  color: #11784f;
+}
+
+.status-text.bad {
+  color: #9d2c46;
 }
 
 /* ======================================
@@ -1282,6 +1395,11 @@ textarea {
   .guide-inline {
     width: 100%; /* Permite badge a ancho completo en movil */
     justify-content: center; /* Centra contenido del badge */
+  }
+
+  .audio-controls .btn {
+    width: 70px;
+    height: 70px;
   }
 
   .intro-layout {

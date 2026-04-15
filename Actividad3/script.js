@@ -5,7 +5,9 @@ const sessionData = {
   timestamps: {},
   mission1: {
     current: createEmptyMission1Assignment(),
-    saved: []
+    saved: [],
+    explorationUnlocked: false,
+    audioSubmitted: false
   }
 };
 
@@ -66,7 +68,11 @@ const mission1SavedList = document.getElementById("mission1SavedList");
 const magicVFeedback = document.getElementById("magicVFeedback");
 const checkMagicVBtn = document.getElementById("checkMagicVBtn");
 const resetMagicVBtn = document.getElementById("resetMagicVBtn");
-const completeMission1Btn = document.getElementById("completeMission1Btn");
+const mission1ExploracionBlock = document.getElementById("mission1ExploracionBlock");
+const mission1AudioRecordBtn = document.getElementById("recordBtnA3M1Exploracion");
+const mission1AudioStopBtn = document.getElementById("stopBtnA3M1Exploracion");
+const mission1AudioSubmitBtn = document.getElementById("submitA3M1Exploracion");
+const mission1AudioStatus = document.getElementById("statusA3M1Exploracion");
 
 const mission1DragState = {
   active: false,
@@ -76,6 +82,14 @@ const mission1DragState = {
   ghost: null,
   hoverDrop: null,
   hoverTray: false
+};
+
+const mission1AudioState = {
+  mediaRecorder: null,
+  chunks: [],
+  blob: null,
+  stream: null,
+  submitting: false
 };
 
 init();
@@ -91,6 +105,7 @@ function init() {
   setupBackToMapButtons();
   renderMission1SavedCombinations();
   clearMission1Board(false);
+  syncMission1ExplorationState();
 }
 
 function setupEntryFlow() {
@@ -614,6 +629,8 @@ function canAccessMission(missionNumber) {
 }
 
 function setupMission1() {
+  setupMission1AudioRecorder();
+
   mission1ChipTray.addEventListener("pointerdown", startMission1ChipDrag);
   mission1Drops.forEach((drop) => {
     drop.addEventListener("pointerdown", startMission1ChipDrag);
@@ -662,7 +679,8 @@ function setupMission1() {
     }
 
     if (sessionData.mission1.saved.length >= 3) {
-      setMessage(magicVFeedback, "Ya registraste las 3 combinaciones validas. Marca la mision como completada.", "good");
+      unlockMission1Exploration();
+      setMessage(magicVFeedback, "Ya registraste las 3 combinaciones validas. Responde la pregunta por audio para cerrar la misión.", "good");
       return;
     }
 
@@ -671,8 +689,8 @@ function setupMission1() {
     clearMission1Board(false);
 
     if (sessionData.mission1.saved.length === 3) {
-      completeMission1Btn.disabled = false;
-      setMessage(magicVFeedback, "Excelente. Ya completaste 3 combinaciones validas distintas.", "good");
+      unlockMission1Exploration();
+      setMessage(magicVFeedback, "Excelente. Ya encontraste 3 combinaciones válidas distintas. Ahora responde la pregunta por audio.", "good");
       return;
     }
 
@@ -683,15 +701,6 @@ function setupMission1() {
   resetMagicVBtn.addEventListener("click", () => {
     clearMission1Board(false);
     setMessage(magicVFeedback, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
-  });
-
-  completeMission1Btn.addEventListener("click", () => {
-    if (sessionData.mission1.saved.length < 3) {
-      setMessage(magicVFeedback, "Debes registrar 3 combinaciones validas distintas antes de completar la mision.", "bad");
-      return;
-    }
-
-    completeMission(1);
   });
 }
 
@@ -855,11 +864,209 @@ function clearMission1Board(resetMessage) {
   });
 
   orderMission1TrayChips();
-  completeMission1Btn.disabled = sessionData.mission1.saved.length < 3;
 
   if (resetMessage) {
     setMessage(magicVFeedback, "Tablero reiniciado.", "");
   }
+}
+
+function setupMission1AudioRecorder() {
+  if (!mission1AudioRecordBtn || !mission1AudioStopBtn || !mission1AudioSubmitBtn || !mission1AudioStatus) {
+    return;
+  }
+
+  syncMission1AudioButtons();
+
+  mission1AudioRecordBtn.addEventListener("click", async () => {
+    if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
+      return;
+    }
+
+    try {
+      const stream = await requestMission1AudioStream();
+      const mediaRecorder = new MediaRecorder(stream);
+
+      mission1AudioState.mediaRecorder = mediaRecorder;
+      mission1AudioState.stream = stream;
+      mission1AudioState.chunks = [];
+      mission1AudioState.blob = null;
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          mission1AudioState.chunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        mission1AudioState.blob = new Blob(mission1AudioState.chunks, {
+          type: mission1AudioState.chunks[0]?.type || "audio/webm"
+        });
+
+        if (mission1AudioState.stream) {
+          mission1AudioState.stream.getTracks().forEach((track) => track.stop());
+        }
+
+        mission1AudioState.stream = null;
+        setMessage(mission1AudioStatus, "Audio listo para enviar.", "good");
+        syncMission1AudioButtons();
+      };
+
+      mediaRecorder.start(250);
+      setMessage(mission1AudioStatus, "Grabando...", "");
+      syncMission1AudioButtons();
+    } catch (error) {
+      console.error("Error al acceder al micrófono de Misión 1:", error);
+      setMessage(mission1AudioStatus, "No se pudo acceder al micrófono. Revisa permisos e intenta de nuevo.", "bad");
+      syncMission1AudioButtons();
+    }
+  });
+
+  mission1AudioStopBtn.addEventListener("click", () => {
+    const mediaRecorder = mission1AudioState.mediaRecorder;
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      try {
+        mediaRecorder.requestData();
+      } catch (error) {
+        console.warn("No fue posible forzar el volcado del buffer de audio:", error);
+      }
+      mediaRecorder.stop();
+    }
+  });
+
+  mission1AudioSubmitBtn.addEventListener("click", () => {
+    handleMission1AudioSubmit();
+  });
+}
+
+function syncMission1AudioButtons() {
+  if (!mission1AudioRecordBtn || !mission1AudioStopBtn || !mission1AudioSubmitBtn) {
+    return;
+  }
+
+  const isRecording = Boolean(mission1AudioState.mediaRecorder && mission1AudioState.mediaRecorder.state === "recording");
+  const hasAudio = Boolean(mission1AudioState.blob && mission1AudioState.blob.size > 0);
+  const isLocked = sessionData.mission1.audioSubmitted || mission1AudioState.submitting;
+
+  mission1AudioRecordBtn.style.display = isRecording ? "none" : "inline-flex";
+  mission1AudioStopBtn.style.display = isRecording ? "inline-flex" : "none";
+
+  mission1AudioRecordBtn.disabled = isLocked;
+  mission1AudioStopBtn.disabled = !isRecording || isLocked;
+  mission1AudioSubmitBtn.disabled = !hasAudio || isLocked;
+}
+
+async function requestMission1AudioStream() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    throw new Error("getUserMedia no está disponible en este navegador");
+  }
+
+  const preferredConstraints = {
+    audio: {
+      echoCancellation: true,
+      noiseSuppression: true,
+      autoGainControl: true,
+      channelCount: 1
+    }
+  };
+
+  try {
+    return await navigator.mediaDevices.getUserMedia(preferredConstraints);
+  } catch (error) {
+    if (error?.name === "NotAllowedError") {
+      throw error;
+    }
+
+    return navigator.mediaDevices.getUserMedia({ audio: true });
+  }
+}
+
+async function handleMission1AudioSubmit() {
+  if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
+    return;
+  }
+
+  if (!mission1AudioState.blob || mission1AudioState.blob.size === 0) {
+    setMessage(mission1AudioStatus, "Primero graba una respuesta antes de enviarla.", "bad");
+    return;
+  }
+
+  const firebaseServices = window.firebaseServices;
+  if (!firebaseServices?.storage || !firebaseServices?.db) {
+    setMessage(mission1AudioStatus, "Firebase no está disponible en este momento. Intenta de nuevo en unos segundos.", "bad");
+    return;
+  }
+
+  mission1AudioState.submitting = true;
+  syncMission1AudioButtons();
+  setMessage(mission1AudioStatus, "Subiendo audio...", "");
+
+  try {
+    const {
+      storage,
+      db,
+      ref,
+      uploadBytes,
+      getDownloadURL,
+      collection,
+      addDoc,
+      serverTimestamp
+    } = firebaseServices;
+
+    const basePath = buildMission1ExplorationStorageBasePath();
+    const fileName = buildMission1ExplorationFileName();
+    const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
+
+    await uploadBytes(storageRef, mission1AudioState.blob, {
+      contentType: mission1AudioState.blob.type || "audio/webm"
+    });
+
+    const audioURL = await getDownloadURL(storageRef);
+
+    await addDoc(collection(db, "Actividad3"), {
+      studentCode,
+      studentName: getStudentDisplayName(),
+      curso: studentInfo?.curso || "",
+      isGuest: studentCode === "0000",
+      tag: "A3M1Exploracion",
+      componente: "1Exploración",
+      storageBasePath: basePath,
+      fileName: `${fileName}.webm`,
+      audioURL,
+      timestamp: serverTimestamp()
+    });
+
+    sessionData.mission1.audioSubmitted = true;
+    setMessage(mission1AudioStatus, "✅ Audio enviado correctamente.", "good");
+    setMessage(magicVFeedback, "Respuesta enviada. La misión 1 quedó completada.", "good");
+    syncMission1AudioButtons();
+    completeMission(1);
+  } catch (error) {
+    console.error("Error al enviar el audio de 1Exploración:", error);
+    setMessage(mission1AudioStatus, "Error al guardar el audio. Revisa tu conexión e intenta de nuevo.", "bad");
+  } finally {
+    mission1AudioState.submitting = false;
+    syncMission1AudioButtons();
+  }
+}
+
+function unlockMission1Exploration() {
+  sessionData.mission1.explorationUnlocked = true;
+  syncMission1ExplorationState();
+
+  if (!sessionData.mission1.audioSubmitted && !mission1AudioState.blob) {
+    setMessage(mission1AudioStatus, "Cuando estés lista, graba tu respuesta y envíala.", "");
+  }
+}
+
+function syncMission1ExplorationState() {
+  if (!mission1ExploracionBlock) {
+    return;
+  }
+
+  const shouldShow = sessionData.mission1.explorationUnlocked || sessionData.mission1.saved.length >= 3 || sessionData.mission1.audioSubmitted;
+  sessionData.mission1.explorationUnlocked = shouldShow;
+  mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
+  syncMission1AudioButtons();
 }
 
 function orderMission1TrayChips() {
@@ -1000,6 +1207,10 @@ function showScreen(id) {
     target.classList.add("active-screen");
   }
 
+  if (id === "mission1Screen") {
+    syncMission1ExplorationState();
+  }
+
   if (id === "mapScreen") {
     window.requestAnimationFrame(() => {
       ensureMapFogCanvases();
@@ -1060,6 +1271,34 @@ function setMessage(target, text, mode) {
   if (mode === "bad") {
     target.classList.add("bad");
   }
+}
+
+function normalizeStorageSegment(value) {
+  return (value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9\s_-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+}
+
+function buildMission1ExplorationStorageBasePath() {
+  return "Actividad3/1Exploración";
+}
+
+function buildMission1ExplorationFileName() {
+  const suffix = studentCode === "0000"
+    ? (normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado")
+    : (normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso");
+
+  return `${studentCode}_1Exploracion_${suffix}`;
+}
+
+function getStudentDisplayName() {
+  const nombre = toTitle(studentInfo?.nombre || "");
+  const apellidos = toTitle(studentInfo?.apellidos || "");
+  return [nombre, apellidos].filter(Boolean).join(" ");
 }
 
 function toTitle(value) {

@@ -241,7 +241,18 @@
           </div>
 
           <p id="magicVFeedback" class="status-pill">Aun no has comprobado.</p>
-          <button id="completeMission1Btn" class="btn btn-success" disabled>Marcar mision 1 como completada</button>
+
+          <section id="mission1ExploracionBlock" class="mission1-exploration is-hidden" aria-live="polite">
+            <h4>1Exploración</h4>
+            <p class="mission1-exploration-question">¿Qué le dirías a V-Bot para que empiece a recordar cómo se deben acomodar los números para encontrar Magic V's?</p>
+            <p class="mission1-audio-tip">Para reducir el ruido de fondo, habla cerca del micrófono y evita moverlo mientras grabas.</p>
+            <div class="audio-controls">
+              <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+              <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
+              <button id="submitA3M1Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 1Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
+            </div>
+            <p id="statusA3M1Exploracion" class="status-text"></p>
+          </section>
         </div>
       </div>
     </section>
@@ -316,6 +327,7 @@
   </main>
 
   <script src="assets/estudiantes-data.js"></script>
+  <script type="module" src="firebase3.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
