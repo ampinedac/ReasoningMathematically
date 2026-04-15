@@ -1151,7 +1151,6 @@ function renderMission1SavedCombinations() {
 }
 
 function serializeMission1Combination(combination) {
-  return mission1SlotOrder.map((slot) => combination[slot]).join("-");
   // El núcleo es el vértice inferior
   const nucleo = combination.bottom;
   // La suma mágica es la suma de un brazo (ambos deben ser iguales para ser válida)
