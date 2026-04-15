@@ -28,6 +28,7 @@ body {
   margin: 0; /* Elimina margenes por defecto del navegador */
   min-height: 100vh; /* Asegura altura minima completa de ventana */
   font-family: 'Rancho', cursive; /* Tipografia principal de la experiencia */
+  font-size: clamp(3rem, 3.5vw, 3.25rem); /* Escala de texto responsiva */
   color: var(--texto); /* Color de texto base */
   background: url("assets/images/Fondo.png") no-repeat center center fixed; /* Fondo principal del escenario */
   background-size: cover; /* Ajusta imagen de fondo para cubrir toda la pantalla */
