@@ -622,6 +622,19 @@ function setupMission1() {
   window.addEventListener("pointermove", handleMission1ChipMove, { passive: false });
   window.addEventListener("pointerup", handleMission1ChipDrop);
 
+  // Verificación de suma mágica por delegación
+  mission1SavedList.addEventListener("click", (e) => {
+    const btn = e.target.closest(".magicv-suma-check");
+    if (!btn) return;
+    verificarSumaMagica(Number(btn.dataset.index));
+  });
+
+  mission1SavedList.addEventListener("keydown", (e) => {
+    const input = e.target.closest(".magicv-suma-input");
+    if (!input || e.key !== "Enter") return;
+    verificarSumaMagica(Number(input.dataset.index));
+  });
+
   checkMagicVBtn.addEventListener("click", () => {
     const current = sessionData.mission1.current;
     const hasMissing = mission1SlotOrder.some((slot) => current[slot] === null);
@@ -653,7 +666,7 @@ function setupMission1() {
       return;
     }
 
-    sessionData.mission1.saved.push({ ...current });
+    sessionData.mission1.saved.push({ ...current, sumaMagica: null });
     renderMission1SavedCombinations();
     clearMission1Board(false);
 
@@ -856,6 +869,31 @@ function orderMission1TrayChips() {
     .forEach((chip) => mission1ChipTray.appendChild(chip));
 }
 
+function verificarSumaMagica(index) {
+  const comb = sessionData.mission1.saved[index];
+  if (!comb || comb.sumaMagica !== null) return;
+
+  const input = mission1SavedList.querySelector(`.magicv-suma-input[data-index="${index}"]`);
+  const errorSpan = document.getElementById(`sumaMagicaError${index}`);
+
+  const ingresado = parseInt(input.value, 10);
+  if (isNaN(ingresado) || input.value.trim() === "") {
+    errorSpan.textContent = "Ingresa un número.";
+    return;
+  }
+
+  const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
+
+  if (ingresado === sumaCorrecta) {
+    comb.sumaMagica = ingresado;
+    renderMission1SavedCombinations();
+  } else {
+    errorSpan.textContent = "Verifica tu respuesta.";
+    input.value = "";
+    input.focus();
+  }
+}
+
 function renderMission1SavedCombinations() {
   mission1SavedCount.textContent = `${sessionData.mission1.saved.length}/3`;
 
@@ -864,22 +902,45 @@ function renderMission1SavedCombinations() {
     return;
   }
 
-  mission1SavedList.innerHTML = sessionData.mission1.saved
-    .map((combination, index) => {
-      return `
-        <article class="magicv-saved-item">
-          <p class="magicv-saved-item-label">Valida ${index + 1}</p>
-          <div class="magicv-mini-board">
-            <span class="magicv-mini-dot" data-slot="leftTop">${combination.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${combination.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${combination.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${combination.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${combination.bottom}</span>
-          </div>
-        </article>
-      `;
-    })
-    .join("");
+  const rows = sessionData.mission1.saved.map((comb, index) => {
+    const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
+
+    const sumaCell = comb.sumaMagica !== null
+      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
+      : `<div class="magicv-suma-input-group">
+           <input class="magicv-suma-input" type="number" min="1" max="99"
+             data-index="${index}" placeholder="¿Cuánto suma cada brazo?"
+             aria-label="Ingresa la suma mágica de la combinación ${index + 1}">
+           <button class="magicv-suma-check btn btn-primary" data-index="${index}" type="button">Verificar</button>
+           <span class="magicv-suma-error" id="sumaMagicaError${index}"></span>
+         </div>`;
+
+    return `<tr>
+      <td>
+        <p class="magicv-saved-item-label">V válida ${index + 1}</p>
+        <div class="magicv-mini-board">
+          <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
+          <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
+          <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
+          <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
+          <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
+        </div>
+      </td>
+      <td class="magicv-suma-cell">${sumaCell}</td>
+    </tr>`;
+  }).join("");
+
+  mission1SavedList.innerHTML = `
+    <table class="magicv-saved-table">
+      <thead>
+        <tr>
+          <th>Magic V</th>
+          <th>Suma mágica</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
 }
 
 function serializeMission1Combination(combination) {

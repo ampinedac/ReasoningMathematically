@@ -234,7 +234,7 @@ body {
 
 .screen-header p {
   margin: 4px 0 0 0; /* Espacio superior ligero respecto al h2 */
-  font-size: clamp(1rem, 2.3vw, 1.35rem); /* Escala del subtitulo de pantalla */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
   color: var(--texto-suave); /* Color secundario */
 }
 
@@ -295,7 +295,7 @@ body {
   border-radius: 999px; /* Forma de capsula */
   background: linear-gradient(160deg, #f2f8ff 0%, #deedff 100%); /* Fondo claro de estado */
   border: 1px solid #b8d5f3; /* Delimita visualmente el estado */
-  font-size: 1.1rem; /* Tamano base para mensajes de estado */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
 }
 
 .status-pill.good {
@@ -600,7 +600,7 @@ body {
 .map-hint {
   margin: 14px 0 0 0; /* Separacion respecto al mapa */
   text-align: center; /* Centra mensaje de guia */
-  font-size: clamp(1.05rem, 2.2vw, 1.35rem); /* Escala del texto de pista */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
   color: var(--texto-suave); /* Color secundario del mensaje */
 }
 
@@ -640,7 +640,7 @@ body {
 
 .intro-paragraph {
   margin: 0; /* Elimina margen externo */
-  font-size: clamp(1.2rem, 2.7vw, 1.55rem); /* Escala responsiva del texto */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
   line-height: 1.6; /* Espaciado entre lineas para legibilidad */
   color: var(--texto); /* Color base de texto */
   text-align: justify; /* Justifica parrafos de historia */
@@ -650,7 +650,7 @@ body {
   margin: 0; /* Sin margen para control exacto */
   padding: 0 0 0 24px; /* Indentacion de lista */
   text-align: left; /* Lista alineada a la izquierda */
-  font-size: clamp(1.15rem, 2.5vw, 1.5rem); /* Escala de items de lista */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
   list-style: none; /* Quita bullets por defecto */
 }
 
@@ -753,7 +753,7 @@ body {
   background: linear-gradient(160deg, rgba(255, 251, 231, 0.82), rgba(226, 243, 255, 0.84)); /* Fondo narrativo */
   padding: 14px; /* Espacio interno */
   margin-bottom: 14px; /* Separacion inferior */
-  font-size: clamp(1.1rem, 2.3vw, 1.4rem); /* Escala narrativa */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
 }
 
 .narrative-card p {
@@ -800,6 +800,7 @@ body {
 
 .objective {
   margin: 0 0 12px 0; /* Espacio antes de la rejilla */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
   color: #2b4f84; /* Color de texto de objetivo */
 }
 
@@ -817,8 +818,9 @@ body {
 
 .magicv-board {
   position: relative; /* Permite ubicar las 5 posiciones de la V */
-  min-height: 330px; /* Espacio de armado */
-  margin-bottom: 14px; /* Separacion de fichas */
+  width: min(100%, 420px); /* Da un ancho real al tablero para centrar la V */
+  min-height: 320px; /* Espacio de armado */
+  margin: 0 auto 14px; /* Centra el tablero dentro del area de juego */
 }
 
 .magicv-drop {
@@ -838,28 +840,28 @@ body {
 }
 
 .magicv-drop[data-slot="leftTop"] {
-  left: 0;
+  left: 18px;
   top: 0;
 }
 
 .magicv-drop[data-slot="rightTop"] {
-  left: 250px;
+  left: 316px;
   top: 0;
 }
 
 .magicv-drop[data-slot="leftMid"] {
-  left: 76px;
-  top: 108px;
+  left: 96px;
+  top: 88px;
 }
 
 .magicv-drop[data-slot="rightMid"] {
-  left: 174px;
-  top: 108px;
+  left: 238px;
+  top: 88px;
 }
 
 .magicv-drop[data-slot="bottom"] {
-  left: 126px;
-  top: 216px;
+  left: 167px;
+  top: 176px;
 }
 
 .magicv-drop.drop-target {
@@ -965,6 +967,90 @@ body {
   font-size: 1rem;
 }
 
+/* Tabla de combinaciones guardadas */
+.magicv-saved-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+}
+
+.magicv-saved-table thead th {
+  background: #dbeeff;
+  color: #1d4f8a;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+  padding: 8px 12px;
+  text-align: center;
+  border-bottom: 2px solid #9dc4e8;
+}
+
+.magicv-saved-table tbody tr {
+  border-bottom: 1px solid #cde4f8;
+}
+
+.magicv-saved-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.magicv-saved-table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.magicv-suma-cell {
+  min-width: 160px;
+  text-align: center;
+}
+
+.magicv-suma-input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.magicv-suma-input {
+  width: 110px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 2px solid #7bbdf4;
+  background: #f6fbff;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+  text-align: center;
+  color: #1d4f8a;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.magicv-suma-input:focus {
+  border-color: #1d7eed;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.magicv-suma-check {
+  padding: 6px 16px;
+  font-size: 1rem;
+}
+
+.magicv-suma-error {
+  min-height: 20px;
+  color: #b91c1c;
+  font-size: 0.95rem;
+}
+
+.magicv-suma-confirmed {
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border: 1.5px solid #34d399;
+  color: #065f46;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+}
+
 .magicv-mini-board {
   position: relative;
   width: 150px;
@@ -1032,7 +1118,7 @@ textarea {
   background: #fff; /* Fondo de entrada */
   padding: 10px; /* Espaciado interno del control */
   font-family: 'Rancho', cursive; /* Fuente del contenido de entrada */
-  font-size: 1.05rem; /* Tamano del texto de entrada */
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
 }
 
 textarea {
@@ -1150,7 +1236,9 @@ textarea {
   }
 
   .magicv-board {
-    min-height: 300px;
+    width: min(100%, 312px);
+    min-height: 270px;
+    margin: 0 auto 14px;
   }
 
   .magicv-drop {
@@ -1159,23 +1247,27 @@ textarea {
     font-size: 1.7rem;
   }
 
+  .magicv-drop[data-slot="leftTop"] {
+    left: 12px;
+  }
+
   .magicv-drop[data-slot="rightTop"] {
-    left: 210px;
+    left: 226px;
   }
 
   .magicv-drop[data-slot="leftMid"] {
-    left: 62px;
-    top: 96px;
+    left: 78px;
+    top: 86px;
   }
 
   .magicv-drop[data-slot="rightMid"] {
-    left: 148px;
-    top: 96px;
+    left: 160px;
+    top: 86px;
   }
 
   .magicv-drop[data-slot="bottom"] {
-    left: 106px;
-    top: 192px;
+    left: 119px;
+    top: 160px;
   }
 
   .magicv-chip,
