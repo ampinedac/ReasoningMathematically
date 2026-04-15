@@ -1,32 +1,3 @@
-// --- Persistencia local de progreso de misión 1 ---
-const LOCAL_STORAGE_KEY_M1 = "magicv_m1_progress";
-
-function saveMission1ProgressToLocal() {
-  const data = {
-    saved: sessionData.mission1.saved,
-    explorationUnlocked: sessionData.mission1.explorationUnlocked,
-    audioSubmitted: sessionData.mission1.audioSubmitted
-  };
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY_M1, JSON.stringify(data));
-  } catch (e) { /* ignorar errores de almacenamiento */ }
-}
-
-function loadMission1ProgressFromLocal() {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY_M1);
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (Array.isArray(data.saved)) sessionData.mission1.saved = data.saved;
-    if (typeof data.explorationUnlocked === "boolean") sessionData.mission1.explorationUnlocked = data.explorationUnlocked;
-    if (typeof data.audioSubmitted === "boolean") sessionData.mission1.audioSubmitted = data.audioSubmitted;
-  } catch (e) { /* ignorar errores de parseo */ }
-}
-
-function clearMission1ProgressLocal() {
-  try { localStorage.removeItem(LOCAL_STORAGE_KEY_M1); } catch (e) {}
-}
-
 // --- Modal Magic V Guardadas global ---
 function setupMagicVSavedModal() {
   const modal = document.getElementById("magicVSavedModal");
@@ -66,49 +37,25 @@ function renderMagicVSavedTable() {
   }
   const rows = sessionData.mission1.saved.map((comb, index) => {
     const sumaCell = comb.sumaMagica !== null
-      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
-      : `<div class="magicv-suma-input-group">
-           <input class="magicv-suma-input" type="number" min="1" max="99"
-             data-index="${index}"
-             aria-label="Ingresa la suma mágica de la combinación ${index + 1}">
-           <button class="magicv-suma-check btn btn-primary" data-index="${index}" type="button">Verificar</button>
-           <span class="magicv-suma-error" id="sumaMagicaError${index}"></span>
-         </div>`;
-
-    // Permutaciones asociadas visuales
+      ? `<span class=\"magicv-suma-confirmed\">✔ ${comb.sumaMagica}</span>`
+      : `<span class=\"magicv-suma-pending\">Sin verificar</span>`;
     let permutacionesHtml = "";
     if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
+      permutacionesHtml = `<div class=\"magicv-permutaciones-list\">` +
         comb.permutaciones.map((perm) => `
-          <div class="magicv-mini-board magicv-mini-board-permutacion">
-            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
-          </div>`).join("") + `</div>`;
+          <div class=\"magicv-mini-board magicv-mini-board-permutacion\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${perm.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${perm.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${perm.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${perm.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${perm.bottom}</span>\n          </div>`).join("") + `</div>`;
     }
-
     return `<tr>
       <td>
-        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
-        <div class="magicv-v-group">
-          <div class="magicv-mini-board">
-            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
-          </div>
-          ${permutacionesHtml}
+        <div class=\"magicv-saved-item-label\">V válida ${index + 1}</div>
+        <div class=\"magicv-v-group\">\n          <div class=\"magicv-mini-board\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${comb.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${comb.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${comb.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${comb.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${comb.bottom}</span>\n          </div>\n          ${permutacionesHtml}
         </div>
       </td>
-      <td class="magicv-suma-cell">${sumaCell}</td>
+      <td class=\"magicv-suma-cell\">${sumaCell}</td>
     </tr>`;
   }).join("");
-
-  mission1SavedList.innerHTML = `
-    <table class="magicv-saved-table">
+  return `
+    <table class=\"magicv-saved-table\">
       <thead>
         <tr>
           <th>Magic V</th>
@@ -120,18 +67,70 @@ function renderMagicVSavedTable() {
   `;
 }
 
-const sessionData = {
-  character: null,
-  progress: 0,
-  missionsCompleted: [],
-  timestamps: {},
-  mission1: {
-    current: createEmptyMission1Assignment(),
-    saved: [],
-    explorationUnlocked: false,
-    audioSubmitted: false
-  }
-};
+// --- Persistencia de progreso con sessionStorage ---
+function getInitialSessionData() {
+  try {
+    const saved = sessionStorage.getItem("actividad3_sessionData");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Asegura estructura mínima
+      return Object.assign({
+        character: null,
+        progress: 0,
+        missionsCompleted: [],
+        timestamps: {},
+        mission1: {
+          current: createEmptyMission1Assignment(),
+          saved: [],
+          explorationUnlocked: false,
+          audioSubmitted: false
+        }
+      }, parsed, {
+        mission1: Object.assign({
+          current: createEmptyMission1Assignment(),
+          saved: [],
+          explorationUnlocked: false,
+          audioSubmitted: false
+        }, parsed.mission1 || {})
+      });
+    }
+  } catch (e) {}
+  // Por defecto
+  return {
+    character: null,
+    progress: 0,
+    missionsCompleted: [],
+    timestamps: {},
+    mission1: {
+      current: createEmptyMission1Assignment(),
+      saved: [],
+      explorationUnlocked: false,
+      audioSubmitted: false
+    }
+  };
+}
+
+let sessionData = getInitialSessionData();
+
+// Guarda el progreso relevante en sessionStorage
+function saveSessionProgress() {
+  try {
+    // Solo guardamos lo relevante (sin referencias a nodos DOM ni funciones)
+    const toSave = {
+      character: sessionData.character,
+      progress: sessionData.progress,
+      missionsCompleted: sessionData.missionsCompleted,
+      timestamps: sessionData.timestamps,
+      mission1: {
+        current: sessionData.mission1.current,
+        saved: sessionData.mission1.saved,
+        explorationUnlocked: sessionData.mission1.explorationUnlocked,
+        audioSubmitted: sessionData.mission1.audioSubmitted
+      }
+    };
+    sessionStorage.setItem("actividad3_sessionData", JSON.stringify(toSave));
+  } catch (e) {}
+}
 
 const TOTAL_MISSIONS = 5;
 let studentCode = "";
@@ -214,13 +213,17 @@ const mission1AudioState = {
   submitting: false
 };
 
-// --- INICIALIZACIÓN SEGURA DEL DOM ---
-// Elimina o comenta la línea: init();
-// Y usa este listener para asegurar que todo el DOM esté cargado antes de ejecutar la lógica principal.
-document.addEventListener('DOMContentLoaded', init);
+init();
 
 function init() {
-  loadMission1ProgressFromLocal();
+  setupEntryFlow();
+  setupIntroductionScreen();
+  setupCharacterMission();
+  setupMap();
+  setupGuideDragAndDrop();
+  setupMission1();
+  setupMissionCompletionButtons();
+  setupBackToMapButtons();
   renderMission1SavedCombinations();
   clearMission1Board(false);
   syncMission1ExplorationState();
@@ -366,7 +369,7 @@ function setupCharacterMission() {
       name: card.dataset.name,
       image: card.dataset.image
     };
-
+    saveSessionProgress();
     setMessage(characterStatus, `${sessionData.character.name} sera tu guia en Numetrix.`, "good");
     confirmCharacterBtn.disabled = false;
   });
@@ -378,6 +381,7 @@ function setupCharacterMission() {
     }
 
     sessionData.progress = 1;
+    saveSessionProgress();
     registerTimestamp("characterSelected");
     hydrateGuideBadges();
     renderMap();
@@ -813,6 +817,7 @@ function setupMission1() {
         // Guardar como permutación asociada
         if (!existente.permutaciones) existente.permutaciones = [];
         existente.permutaciones.push({ ...current });
+        saveSessionProgress();
         setMessage(magicVFeedback, `Esta Magic V es equivalente a la registrada con núcleo ${nucleo} porque la suma mágica es la misma.`, "good");
         renderMission1SavedCombinations();
         clearMission1Board(false);
@@ -831,6 +836,7 @@ function setupMission1() {
     }
 
     sessionData.mission1.saved.push({ ...current, sumaMagica: null, nucleo, permutaciones: [] });
+    saveSessionProgress();
     renderMission1SavedCombinations();
     clearMission1Board(false);
 
@@ -1010,7 +1016,7 @@ function clearMission1Board(resetMessage) {
   });
 
   orderMission1TrayChips();
-
+  saveSessionProgress();
   if (resetMessage) {
     setMessage(magicVFeedback, "Tablero reiniciado.", "");
   }
@@ -1158,8 +1164,8 @@ async function handleMission1AudioSubmit() {
       serverTimestamp
     } = firebaseServices;
 
-    const basePath = buildMission1ExploracionStorageBasePath();
-    const fileName = buildMission1ExploracionFileName();
+    const basePath = buildMission1ExplorationStorageBasePath();
+    const fileName = buildMission1ExplorationFileName();
     const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
 
     await uploadBytes(storageRef, mission1AudioState.blob, {
@@ -1182,7 +1188,6 @@ async function handleMission1AudioSubmit() {
     });
 
     sessionData.mission1.audioSubmitted = true;
-    saveMission1ProgressToLocal();
     setMessage(mission1AudioStatus, "✅ Audio enviado correctamente.", "good");
     setMessage(magicVFeedback, "Respuesta enviada. La misión 1 quedó completada.", "good");
     syncMission1AudioButtons();
@@ -1199,7 +1204,7 @@ async function handleMission1AudioSubmit() {
 function unlockMission1Exploration() {
   sessionData.mission1.explorationUnlocked = true;
   syncMission1ExplorationState();
-  saveMission1ProgressToLocal();
+
   if (!sessionData.mission1.audioSubmitted && !mission1AudioState.blob) {
     setMessage(mission1AudioStatus, "Cuando estés lista, graba tu respuesta y envíala.", "");
   }
@@ -1210,10 +1215,7 @@ function syncMission1ExplorationState() {
     return;
   }
 
-  // Deben estar las 3 Magic V y todas con sumaMagica confirmada
-  const saved = sessionData.mission1.saved;
-  const allSumas = saved.length === 3 && saved.every(c => typeof c.sumaMagica === "number");
-  const shouldShow = sessionData.mission1.explorationUnlocked || allSumas || sessionData.mission1.audioSubmitted;
+  const shouldShow = sessionData.mission1.explorationUnlocked || sessionData.mission1.saved.length >= 3 || sessionData.mission1.audioSubmitted;
   sessionData.mission1.explorationUnlocked = shouldShow;
   mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
   syncMission1AudioButtons();
@@ -1243,6 +1245,7 @@ function verificarSumaMagica(index) {
 
   if (ingresado === sumaCorrecta) {
     comb.sumaMagica = ingresado;
+    saveSessionProgress();
     renderMission1SavedCombinations();
   } else {
     errorSpan.textContent = "Verifica tu respuesta.";
@@ -1253,7 +1256,7 @@ function verificarSumaMagica(index) {
 
 function renderMission1SavedCombinations() {
   mission1SavedCount.textContent = `${sessionData.mission1.saved.length}/3`;
-  saveMission1ProgressToLocal();
+
   if (sessionData.mission1.saved.length === 0) {
     mission1SavedList.innerHTML = "<p class=\"magicv-saved-item-label\">Aun no tienes combinaciones guardadas.</p>";
     return;
@@ -1351,12 +1354,11 @@ function completeMission(missionNumber) {
   if (!sessionData.missionsCompleted.includes(missionNumber)) {
     sessionData.missionsCompleted.push(missionNumber);
   }
+
   sessionData.missionsCompleted.sort((a, b) => a - b);
   sessionData.progress = Math.min(TOTAL_MISSIONS, Math.max(sessionData.progress, missionNumber + 1));
   registerTimestamp(`mission${missionNumber}Completed`);
-  if (missionNumber === 1) {
-    clearMission1ProgressLocal();
-  }
+
   renderMap();
   showScreen("mapScreen");
 }
@@ -1451,11 +1453,11 @@ function normalizeStorageSegment(value) {
     .toLowerCase();
 }
 
-function buildMission1ExploracionStorageBasePath() {
-  return "Actividad3/1Exploracion";
+function buildMission1ExplorationStorageBasePath() {
+  return "Actividad3/1Exploración";
 }
 
-function buildMission1ExploracionFileName() {
+function buildMission1ExplorationFileName() {
   const suffix = studentCode === "0000"
     ? (normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado")
     : (normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso");
