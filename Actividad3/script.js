@@ -1116,7 +1116,7 @@ function renderMission1SavedCombinations() {
       ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
       : `<div class="magicv-suma-input-group">
            <input class="magicv-suma-input" type="number" min="1" max="99"
-             data-index="${index}" placeholder="¿Cuánto suma cada brazo?"
+             data-index="${index}"
              aria-label="Ingresa la suma mágica de la combinación ${index + 1}">
            <button class="magicv-suma-check btn btn-primary" data-index="${index}" type="button">Verificar</button>
            <span class="magicv-suma-error" id="sumaMagicaError${index}"></span>
@@ -1152,6 +1152,11 @@ function renderMission1SavedCombinations() {
 
 function serializeMission1Combination(combination) {
   return mission1SlotOrder.map((slot) => combination[slot]).join("-");
+  // El núcleo es el vértice inferior
+  const nucleo = combination.bottom;
+  // La suma mágica es la suma de un brazo (ambos deben ser iguales para ser válida)
+  const suma = combination.leftTop + combination.leftMid;
+  return `${nucleo}-${suma}`;
 }
 
 function createEmptyMission1Assignment() {
@@ -1199,12 +1204,13 @@ function showScreen(id) {
   });
 
   if (id === "introductionScreen") {
-    setIntroStep(0);
-  }
+      // Solo cuenta como nueva si cambia el núcleo (bottom) o la suma mágica
+      const isDuplicate = sessionData.mission1.saved.some((item) => serializeMission1Combination(item) === serialized);
 
-  const target = document.getElementById(id);
-  if (target) {
-    target.classList.add("active-screen");
+      if (isDuplicate) {
+        setMessage(magicVFeedback, "Ya registraste una Magic V con ese núcleo y esa suma. Cambia el núcleo para una nueva combinación.", "bad");
+        return;
+      }
   }
 
   if (id === "mission1Screen") {
