@@ -24,7 +24,11 @@ const confirmationQuestion = document.getElementById("confirmationQuestion");
 const confirmYesBtn = document.getElementById("confirmYesBtn");
 const confirmNoBtn = document.getElementById("confirmNoBtn");
 
+const introSteps = Array.from(document.querySelectorAll(".intro-step"));
+const introNextStep1Btn = document.getElementById("introNextStep1");
+const introNextStep2Btn = document.getElementById("introNextStep2");
 const startIntroBtn = document.getElementById("startIntroBtn");
+let introCurrentStep = 0;
 
 const characterGrid = document.getElementById("characterGrid");
 const characterStatus = document.getElementById("characterStatus");
@@ -170,9 +174,35 @@ function handleCodeSubmit() {
 }
 
 function setupIntroductionScreen() {
+  setIntroStep(0);
+
+  if (introNextStep1Btn) {
+    introNextStep1Btn.addEventListener("click", () => {
+      setIntroStep(1);
+    });
+  }
+
+  if (introNextStep2Btn) {
+    introNextStep2Btn.addEventListener("click", () => {
+      setIntroStep(2);
+    });
+  }
+
   startIntroBtn.addEventListener("click", () => {
     registerTimestamp("introductionViewed");
     showScreen("characterMissionScreen");
+  });
+}
+
+function setIntroStep(stepIndex) {
+  if (!introSteps.length) {
+    return;
+  }
+
+  introCurrentStep = Math.max(0, Math.min(stepIndex, introSteps.length - 1));
+
+  introSteps.forEach((step, index) => {
+    step.classList.toggle("is-active", index === introCurrentStep);
   });
 }
 
@@ -706,6 +736,10 @@ function showScreen(id) {
   document.querySelectorAll(".app-screen").forEach((screen) => {
     screen.classList.remove("active-screen");
   });
+
+  if (id === "introductionScreen") {
+    setIntroStep(0);
+  }
 
   const target = document.getElementById(id);
   if (target) {

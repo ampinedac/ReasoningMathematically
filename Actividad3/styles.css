@@ -585,96 +585,120 @@ body {
    ====================================== */
 .introduction-shell {
   background: linear-gradient(160deg, rgba(241, 241, 255, 0.94), rgba(230, 243, 255, 0.92)); /* Fondo narrativo */
-  max-width: 850px; /* Limite de ancho para legibilidad de narrativa */
+  max-width: 920px; /* Limite de ancho para legibilidad de narrativa */
 }
 
 .intro-content {
-  display: grid; /* Organiza contenido en flujo */
-  gap: 14px; /* Espaciado uniforme entre elementos */
-  padding: 12px 0; /* Espaciado vertical comprimido */
+  padding: 6px 0; /* Espaciado vertical comprimido */
 }
 
-.intro-alert {
+.intro-sequence {
+  min-height: 440px; /* Evita saltos bruscos al cambiar de paso */
+}
+
+.intro-step {
+  display: none; /* Oculta pasos inactivos */
+  animation: fadeInIntro 0.28s ease; /* Aparicion suave */
+}
+
+.intro-step.is-active {
+  display: grid; /* Muestra el paso actual */
+  gap: 14px; /* Espaciado interno */
+}
+
+.intro-title {
   margin: 0; /* Elimina margen por defecto */
   font-family: 'Lobster Two', cursive; /* Fuente de titulo */
-  font-size: clamp(2.2rem, 5.5vw, 3.2rem); /* Escala responsiva del titulo */
-  color: #e84545; /* Rojo para alerta */
-  text-align: center; /* Centra titulo de alerta */
+  font-size: clamp(2rem, 5vw, 3rem); /* Escala responsiva del titulo */
+  color: #0c4f92; /* Azul fuerte para narrativa */
+  text-align: center; /* Centra titulo */
 }
 
-.intro-layout {
-  display: flex; /* Layout horizontal */
-  gap: 24px; /* Espacio entre columnas */
-  align-items: flex-start; /* Alinea al inicio */
-  justify-content: space-between; /* Distribuye espacio */
-}
-
-.intro-text-column {
-  flex: 1; /* Toma espacio disponible */
-  display: flex; /* Flex para organizar contenido */
-  flex-direction: column; /* Apila verticalmente */
-  gap: 12px; /* Espaciado entre parrafos */
-  text-align: right; /* Alinea el bloque narrativo a la derecha */
-}
-
-.intro-image-column {
-  flex: 0 0 auto; /* No se encoge */
-  display: flex; /* Centrado del contenido */
-  justify-content: center; /* Centra imagen */
-  align-items: center; /* Alinea verticalmente */
-}
-
-.intro-center-block {
-  display: grid; /* Organiza narrativa inferior */
-  gap: 12px; /* Espaciado uniforme entre bloques */
-  text-align: center; /* Esta seccion va centrada */
-}
-
-.intro-text {
+.intro-paragraph {
   margin: 0; /* Elimina margen externo */
-  font-size: clamp(1.2rem, 2.8vw, 1.6rem); /* Escala responsiva del texto */
+  font-size: clamp(1.2rem, 2.7vw, 1.55rem); /* Escala responsiva del texto */
   line-height: 1.6; /* Espaciado entre lineas para legibilidad */
   color: var(--texto); /* Color base de texto */
-  text-align: inherit; /* Hereda alineacion del bloque contenedor */
+  text-align: justify; /* Justifica parrafos de historia */
 }
 
 .intro-list {
-  margin: 8px auto; /* Centrado con pequeno margen */
-  padding: 0 18px; /* Indentacion de lista */
-  text-align: inherit; /* Hereda alineacion del bloque contenedor */
-  font-size: clamp(1.15rem, 2.6vw, 1.55rem); /* Escala de items de lista */
+  margin: 0; /* Sin margen para control exacto */
+  padding: 0 0 0 24px; /* Indentacion de lista */
+  text-align: left; /* Lista alineada a la izquierda */
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem); /* Escala de items de lista */
   list-style: none; /* Quita bullets por defecto */
 }
 
 .intro-list li {
-  margin: 6px 0; /* Espaciado entre items */
+  margin: 8px 0; /* Espaciado entre items */
+  line-height: 1.5; /* Mejor lectura de items largos */
+  text-align: justify; /* Justifica cada item */
 }
 
 .intro-list li::before {
-  content: "• "; /* Bullet personalizado */
+  content: "* "; /* Bullet solicitado */
   color: #1c91ff; /* Color azul del bullet */
   margin-right: 6px; /* Espacio despues del bullet */
 }
 
-.robot-display {
-  display: flex; /* Centrado del robot */
-  justify-content: center; /* Alinea robot en eje horizontal */
-  align-items: center; /* Alinea robot en eje vertical */
-  padding: 8px; /* Espaciado interno */
-  margin: 0; /* Sin margen para layout lateral */
+.intro-figure {
+  margin: 2px auto; /* Centra la imagen narrativa */
 }
 
-.robot-image {
-  max-width: 320px; /* Limite de ancho del robot */
-  max-height: 320px; /* Limite de alto del robot */
+.intro-story-image {
+  width: min(100%, 520px); /* Limite visual de la imagen */
+  max-height: 290px; /* Controla alto para evitar desborde */
   object-fit: contain; /* Conserva proporcion de imagen */
-  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18)); /* Sombra del robot */
+  border-radius: 18px; /* Bordes suaves */
+  border: 2px solid rgba(95, 153, 214, 0.5); /* Marco ligero */
+  box-shadow: 0 10px 24px rgba(60, 96, 158, 0.24); /* Profundidad */
+}
+
+.intro-nav {
+  display: flex; /* Centra flecha de avance */
+  justify-content: center; /* Flecha al centro */
+  margin-top: 4px; /* Separacion ligera superior */
+}
+
+.intro-arrow {
+  width: 54px; /* Tamano circular del control */
+  height: 54px; /* Tamano circular del control */
+  border: none; /* Sin borde por defecto */
+  border-radius: 999px; /* Forma circular */
+  background: linear-gradient(145deg, #47b0ff, #1d7eed); /* Fondo azul de accion */
+  color: #ffffff; /* Contraste alto del icono */
+  font-size: 1.65rem; /* Tamano del icono */
+  cursor: pointer; /* Cursor de interaccion */
+  box-shadow: 0 10px 20px rgba(40, 108, 194, 0.34); /* Relieve */
+  transition: transform 0.2s ease, filter 0.2s ease; /* Animacion de interaccion */
+}
+
+.intro-arrow:hover {
+  transform: translateY(-2px) scale(1.03); /* Feedback de hover */
+  filter: brightness(1.03); /* Refuerzo de brillo */
+}
+
+.intro-arrow:focus-visible {
+  outline: 3px solid rgba(28, 145, 255, 0.4); /* Foco accesible */
+  outline-offset: 2px; /* Separacion del foco */
 }
 
 .intro-actions {
   display: flex; /* Alinea boton */
   justify-content: center; /* Centra boton horizontalmente */
   margin-top: 8px; /* Separacion superior del bloque de acciones */
+}
+
+@keyframes fadeInIntro {
+  from {
+    opacity: 0; /* Estado inicial transparente */
+    transform: translateY(6px); /* Entrada con leve ascenso */
+  }
+  to {
+    opacity: 1; /* Estado final visible */
+    transform: translateY(0); /* Termina en posicion natural */
+  }
 }
 
 /* ======================================

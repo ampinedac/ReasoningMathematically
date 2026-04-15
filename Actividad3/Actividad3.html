@@ -40,38 +40,40 @@
     <section id="introductionScreen" class="app-screen">
       <div class="screen-shell introduction-shell">
         <div class="intro-content">
-          <h2 class="intro-alert">⚠️ Alerta del sistema…</h2>
-
-          <div class="intro-layout">
-            <div class="intro-text-column">
-              <p class="intro-text">Algo no está funcionando en el Laboratorio V.</p>
-
-              <p class="intro-text">El robot encargado de organizar los patrones, V-Bot, se ha desconfigurado…<br>y desde entonces, todo el sistema está en desorden.</p>
-
-              <p class="intro-text">Las máquinas ya no reconocen los patrones,<br>las secuencias se rompieron,<br>y nadie sabe qué debería pasar después…</p>
-            </div>
-
-            <div class="intro-image-column">
-              <div class="robot-display">
-                <img src="assets/images/robot-broken.png" alt="V-Bot desconfigurado" class="robot-image">
+          <div class="intro-sequence" id="introSequence">
+            <article class="intro-step is-active" data-step="1">
+              <h2 class="intro-title">🏙️ La Leyenda de los Corazones de Numetrix</h2>
+              <p class="intro-paragraph">En el centro de nuestra ciudad, Numetrix, no hay cables de electricidad comunes. Todo funciona gracias a los "Conectores V".</p>
+              <p class="intro-paragraph">¿Por qué son tan importantes? Porque en Numetrix, la energía solo fluye si hay <strong>Equilibrio Perfecto</strong>. Los Conectores V son los encargados de unir la Energía del Cielo (un brazo de la V) con la Energía de la Tierra (el otro brazo).</p>
+              <p class="intro-paragraph">Para que la ciudad tenga luz, que los trenes se muevan y que las fábricas de helados funcionen, la fuerza en ambos brazos de la V debe ser exactamente la misma. El punto de abajo, donde se cruzan, es el "Núcleo de Poder", es especial porque ayuda a ambos brazos al mismo tiempo.</p>
+              <div class="intro-nav">
+                <button id="introNextStep1" class="intro-arrow" type="button" aria-label="Siguiente parte de la historia">➜</button>
               </div>
-            </div>
-          </div>
+            </article>
 
-          <div class="intro-center-block">
-            <p class="intro-text"><strong>🛠️ Pero no todo está perdido: </strong> Hemos llamado a la mejor ingeniera de patrones, ¡bienvenida!</p>
+            <article class="intro-step" data-step="2">
+              <h2 class="intro-title">🚨 El Gran Apagón de V-Bot</h2>
+              <p class="intro-paragraph">V-Bot era la guardiana de estos núcleos, pero un rayo cósmico desconfiguró su sistema de equilibrio. Ahora, V-Bot está poniendo los números al azar. ¡Un lado de la ciudad tiene demasiada fuerza y el otro casi nada! Las luces parpadean, los hologramas se borran y Numetrix se está quedando a oscuras.</p>
+              <figure class="intro-figure">
+                <img src="assets/images/NumediGranapagon.png" alt="El gran apagón en Numetrix" class="intro-story-image">
+              </figure>
+              <div class="intro-nav">
+                <button id="introNextStep2" class="intro-arrow" type="button" aria-label="Siguiente parte de la historia">➜</button>
+              </div>
+            </article>
 
-            <p class="intro-text"><strong>Tu misión será:</strong> explorar lo que aún funciona, descubrir 
-              pistas y ayudar a V-Bot a volver a entender el sistema. 🗺️ Para lograrlo, deberás recorrer 
-              el Mapa de Reparación y completar cada misión.</p>
-            <ul class="intro-list">
-            </ul>
-
-            <p class="intro-text">Cada paso que completes acercará al laboratorio a volver a funcionar.</p>
-          </div>
-
-          <div class="intro-actions">
-            <button id="startIntroBtn" class="btn btn-success">✨ ¿Lista para comenzar?</button>
+            <article class="intro-step" data-step="3">
+              <h2 class="intro-title">🛠️ Tu Misión: Ingeniera de Patrones</h2>
+              <p class="intro-paragraph">Hemos detectado que tú tienes la visión lógica necesaria para recalibrar los sistemas. Tu tarea no es solo poner números; es encontrar la armonía.</p>
+              <ul class="intro-list">
+                <li>Analizar el Núcleo: Mira qué número está en la punta de la V.</li>
+                <li>Equilibrar las Fuerzas: Reparte los suministros (los otros números) para que ambos brazos sumen lo mismo.</li>
+                <li>Activar el Mapa de Reparación: Cada "V" que logres equilibrar encenderá un sector de Numetrix.</li>
+              </ul>
+              <div class="intro-actions">
+                <button id="startIntroBtn" class="btn btn-success">✨ ¿Lista para comenzar?</button>
+              </div>
+            </article>
           </div>
         </div>
       </div>
@@ -81,7 +83,7 @@
       <div class="screen-shell">
         <header class="screen-header">
           <h2>Mision Inicial: Elige tu guia</h2>
-          <p>Antes de entrar al mapa, selecciona un animal guia de Colombia.</p>
+          <p>Antes de entrar al mapa, selecciona un animal guia de Numetrix.</p>
         </header>
 
         <div class="character-grid" id="characterGrid">
