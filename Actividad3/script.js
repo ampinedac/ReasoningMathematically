@@ -1149,6 +1149,20 @@ function renderMission1SavedCombinations() {
            <span class="magicv-suma-error" id="sumaMagicaError${index}"></span>
          </div>`;
 
+    // Permutaciones asociadas visuales
+    let permutacionesHtml = "";
+    if (comb.permutaciones && comb.permutaciones.length > 0) {
+      permutacionesHtml = `<div class="magicv-permutaciones-label">Permutaciones equivalentes:</div><div class="magicv-permutaciones-list">` +
+        comb.permutaciones.map((perm, pidx) => `
+          <div class="magicv-mini-board magicv-mini-board-permutacion">
+            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
+          </div>`).join("") + `</div>`;
+    }
+
     return `<tr>
       <td>
         <p class="magicv-saved-item-label">V válida ${index + 1}</p>
@@ -1159,6 +1173,7 @@ function renderMission1SavedCombinations() {
           <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
           <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
         </div>
+        ${permutacionesHtml}
       </td>
       <td class="magicv-suma-cell">${sumaCell}</td>
     </tr>`;
