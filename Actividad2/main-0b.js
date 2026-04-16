@@ -400,10 +400,12 @@ function initPortada() {
         show('nextBtn');
         window.requestAnimationFrame(() => {
             const spreads = document.querySelectorAll('#ContenedorLibro .q1-book-spread');
-            if (spreads.length > 0) {
+            if (spreads.length > 0 && !isFlipping) {
                 goToSpread(0);
-            } else {
+            } else if (spreads.length === 0) {
                 console.error('❌ No hay spreads disponibles al iniciar');
+            } else if (isFlipping) {
+                console.warn('⏳ Animación activa, esperando para navegar');
             }
         });
     });
