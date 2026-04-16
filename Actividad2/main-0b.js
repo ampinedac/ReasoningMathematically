@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
     normalizeNavigationLabels();
     initStudentCodeDisplays();
-    ensureM3SpreadStructure();
     initVisibility();
     initWelcome();
     initConfirmation();
