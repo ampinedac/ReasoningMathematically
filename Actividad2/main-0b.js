@@ -115,20 +115,17 @@ function initM4ReflectionFlow() {
 
 
 
-    // Oculta todo, muestra solo la portada final (tipo portada de inicio)
+    // Oculta todo, muestra solapa final
     const spreads = document.querySelectorAll('.page.q1-book-spread');
     spreads.forEach(s => s.style.display = 'none');
-    hide('ContenedorLibro');
-    hide('ContenedorMenteAndres');
-    hide('ContenedorBienvenida');
-    hide('ContenedorConfirmacion');
-    hide('ContenedorPortada');
-    hide('prevBtn');
-    hide('nextBtn');
-    const finalCover = document.getElementById('FinalCover');
+    const finalCover = document.getElementById('m4FinalCoverSpread');
     if (finalCover) finalCover.style.display = 'flex';
+    currentSpread = -2;
+    updateNavButtons();
+
     // Mostrar confeti
     showConfettiFinal();
+<<<<<<< HEAD
     // Animar reloj de arena SVG
     const top = document.getElementById('hourglassTop');
     const bottom = document.getElementById('hourglassBottom');
@@ -151,6 +148,21 @@ function initM4ReflectionFlow() {
     setTimeout(() => {
         window.location.href = '../index.html';
     }, 10*1000);
+=======
+
+    // Temporizador de 10 segundos antes de volver a index
+    const countdownEl = document.getElementById('finalCountdown');
+    let seconds = 10;
+    if (countdownEl) countdownEl.textContent = `Volverás al inicio en ${seconds} segundos...`;
+    const timer = setInterval(() => {
+        seconds--;
+        if (countdownEl) countdownEl.textContent = `Volverás al inicio en ${seconds} segundos...`;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = '../index.html';
+        }
+    }, 1000);
+>>>>>>> parent of 623e187 (.)
 
 
 function showConfettiFinal() {
