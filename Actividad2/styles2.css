@@ -38,7 +38,9 @@ body {
   background-size: cover;
   font-family: var(--font-general);
   margin: 0;
+  display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 /* Estado inicial obligatorio del flujo: solo bienvenida visible */
@@ -1677,16 +1679,6 @@ body #ContenedorLibro .activity-spread {
           flex: 0 0 auto;
         }
 
-        #m3FlowSpread .board-tools .tool-btn {
-          -webkit-appearance: none;
-          appearance: none;
-          background: transparent;
-          border: none;
-          border-radius: 0;
-          box-shadow: none;
-          padding: 0;
-        }
-
         #m3FlowSpread .audio-controls .btn {
           -webkit-appearance: none;
           appearance: none;
@@ -1694,10 +1686,6 @@ body #ContenedorLibro .activity-spread {
           border: none;
           border-radius: 10px;
           padding: 0.14rem;
-        }
-
-        #m3FlowSpread .board-tools .tool-btn:hover {
-          box-shadow: none;
         }
 
         #m3q3LockedNotice {
