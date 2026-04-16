@@ -96,51 +96,58 @@ document.addEventListener('DOMContentLoaded', () => {
     initM1Q2ThinkFlow();
     initM1Q2EquationForm();
     initMenteAndresSystem();
-    initCustomReflectionFlow();
-    initM4();
+    initM4ReflectionFlow();
     initEncuesta();
 });
 // ─────────────────────────────────────────────
-// FLUJO PERSONALIZADO DE REFLEXIÓN Y CIERRE
+// FLUJO DE REFLEXIÓN, FELICITACIÓN Y CIERRE FINAL
 // ─────────────────────────────────────────────
-function initCustomReflectionFlow() {
-    // Página 19: reflexión
-    const submitBtn = document.getElementById('submitM4Reflection');
-    const nextBtn = document.getElementById('nextBtn');
-    const congratsSpread = document.getElementById('congratsSpread');
-    const reflectionSpread = document.getElementById('reflectionSpread');
-    const finalSpread = document.getElementById('finalSpread');
-    const goToFinalPage = document.getElementById('goToFinalPage');
-    const returnToStart = document.getElementById('returnToStart');
-
-    // Ocultar botón siguiente hasta enviar audio
-    if (nextBtn) nextBtn.style.display = 'none';
-
-    // Cuando se envía el audio, mostrar felicitación y activar siguiente
-    if (submitBtn) {
-        submitBtn.addEventListener('click', () => {
-            // Mostrar felicitación (página 20)
-            if (reflectionSpread) reflectionSpread.style.display = 'none';
-            if (congratsSpread) congratsSpread.style.display = 'flex';
-            if (nextBtn) nextBtn.style.display = 'none';
+function initM4ReflectionFlow() {
+    // Botón siguiente de la felicitación
+    const btnCongrats = document.getElementById('goToFinalCover');
+    if (btnCongrats) {
+        btnCongrats.addEventListener('click', () => {
+            goToSpreadFinalCover();
         });
     }
-
-    // Botón para ir a la solapa final
-    if (goToFinalPage) {
-        goToFinalPage.addEventListener('click', () => {
-            if (congratsSpread) congratsSpread.style.display = 'none';
-            if (finalSpread) finalSpread.style.display = 'flex';
-            if (nextBtn) nextBtn.style.display = 'none';
-        });
-    }
-
-    // Botón para volver al inicio
-    if (returnToStart) {
-        returnToStart.addEventListener('click', () => {
+    // Botón volver al inicio
+    const btnReturn = document.getElementById('returnToHome');
+    if (btnReturn) {
+        btnReturn.addEventListener('click', () => {
             window.location.reload();
         });
     }
+    // Interceptar envío de audio reflexión
+    const submitBtn = document.getElementById('submitM4Reflection');
+    if (submitBtn) {
+        const origHandler = submitBtn.onclick;
+        submitBtn.onclick = function(e) {
+            if (typeof origHandler === 'function') origHandler(e);
+            setTimeout(() => {
+                showCongratsSpread();
+            }, 400); // Pequeño retardo para UX
+        };
+    }
+}
+
+function showCongratsSpread() {
+    // Oculta reflexión, muestra felicitación
+    const spreads = document.querySelectorAll('.page.q1-book-spread');
+    spreads.forEach(s => s.style.display = 'none');
+    const congrats = document.getElementById('m4CongratsSpread');
+    if (congrats) congrats.style.display = 'flex';
+    currentSpread = -1; // fuera del flujo normal
+    updateNavButtons();
+}
+
+function goToSpreadFinalCover() {
+    // Oculta felicitación, muestra solapa final
+    const spreads = document.querySelectorAll('.page.q1-book-spread');
+    spreads.forEach(s => s.style.display = 'none');
+    const finalCover = document.getElementById('m4FinalCoverSpread');
+    if (finalCover) finalCover.style.display = 'flex';
+    currentSpread = -2;
+    updateNavButtons();
 }
 
 function ensureM3SpreadStructure() {
@@ -202,7 +209,7 @@ function show(id) {
         ContenedorConfirmacion: 'flex',
         ContenedorPortada: 'flex',
         ContenedorLibro: 'flex',
-        ContenedorMenteAndres: 'flex', // Cambiado a flex para layout correcto
+        ContenedorMenteAndres: 'block',
         prevBtn: 'flex',
         nextBtn: 'flex',
         m1Q2FinalQuestion: 'flex',
@@ -212,9 +219,6 @@ function show(id) {
     };
 
     el.style.display = displayById[id] || 'block';
-    if(id === 'ContenedorMenteAndres') {
-        console.log('[MENTE ANDRES] show ejecutado, display:', el.style.display, el);
-    }
 }
 function hide(id) {
     const el = document.getElementById(id);
@@ -846,45 +850,6 @@ function initAudioRecorder(tag) {
 // _____________________________________________________________________________________
 // 8. ENVIO A FIREBASE
 // --------------------------------------------------------------------------------------
-// Utilidad para obtener nombre base según tipo de usuario y momento
-function getCustomFileName(tag, ext) {
-    // ext: extensión con punto, ej: '.webm' o '.png'
-    let nombre = '';
-    let curso = studentInfo?.curso || '';
-    let esDocente = curso === 'DOCENTE';
-    let esInvitado = studentCode === '0000';
-    let nombreBase = '';
-    if (esDocente) {
-        nombreBase = `${studentCode}_docente`;
-    } else if (esInvitado) {
-        nombreBase = `${(studentInfo?.nombre || 'invitado').replace(/\s+/g, '_')}`;
-    } else {
-        nombreBase = `${studentCode}_${curso}`;
-    }
-    if (tag === 'M1Q1') {
-        nombre = `${nombreBase}_exploracion${ext}`;
-    } else if (tag === 'M3Q3') {
-        nombre = `${nombreBase}_ReglaJustif${ext}`;
-    } else if (tag === 'M4Reflection') {
-        nombre = `${nombreBase}_reflexion${ext}`;
-    } else {
-        nombre = `${nombreBase}${ext}`;
-    }
-    return nombre;
-}
-
-// Utilidad para obtener ruta base personalizada
-function getCustomBasePath(tag, isAudio) {
-    if (tag === 'M1Q1') {
-        return 'Actividad2/1Exploración';
-    } else if (tag === 'M3Q3') {
-        return isAudio ? 'Actividad2/2_3ReglageneralJustificacion/Audio' : 'Actividad2/2_3ReglageneralJustificacion/Img';
-    } else if (tag === 'M4Reflection') {
-        return 'Actividad2/Reflexion';
-    }
-    return 'Actividad2/Otros';
-}
-
 async function handleSubmit(tag) {
     const submitBtn = document.getElementById(`submit${tag}`);
     const statusEl  = document.getElementById(`status${tag}`);
@@ -904,48 +869,52 @@ async function handleSubmit(tag) {
     submitBtn.style.opacity = '0.4';
     if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
 
-
     try {
         if (!firebaseServices?.storage || !firebaseServices?.db) {
             throw new Error('Firebase no disponible');
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        let audioURL = null;
+        const basePath = buildStorageBasePath(tag);
+        const component = getComponentFromTag(tag);
+
+        // Nombre de archivo = código del estudiante (sin timestamp)
+        const audioFileName = studentCode;
+
+        // Subir audio
+        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
+        await uploadBytes(audioRef, audioBlob);
+        const audioURL = await getDownloadURL(audioRef);
+
         let imageURL = null;
 
-        // AUDIO
-        let audioExt = '.webm';
-        let audioPath = getCustomBasePath(tag, true);
-        let audioFileName = getCustomFileName(tag, audioExt);
-        const audioRef = ref(storage, `${audioPath}/${audioFileName}`);
-        await uploadBytes(audioRef, audioBlob);
-        audioURL = await getDownloadURL(audioRef);
-
-        // CANVAS (solo para M3Q3 y si tiene dibujo)
-        if (tag === 'M3Q3') {
-            const canvasId = 'boardCanvasM3Q3';
-            if (!isCanvasBlank(canvasId)) {
-                let imgPath = getCustomBasePath(tag, false);
-                let imgFileName = getCustomFileName(tag, '.png');
-                const canvasBlob = await canvasToBlob(canvasId);
-                if (canvasBlob) {
-                    const imgRef = ref(storage, `${imgPath}/${imgFileName}`);
-                    await uploadBytes(imgRef, canvasBlob);
-                    imageURL = await getDownloadURL(imgRef);
-                }
+        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
+        if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
+            const canvasId = tag === 'M3Q1'
+                ? 'boardCanvasM3Q1'
+                : (tag === 'M3Q2'
+                    ? 'boardCanvasM3Q2'
+                    : (tag === 'M3Q3'
+                        ? 'boardCanvasM3Q3'
+                        : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
+            const canvasBlob = await canvasToBlob(canvasId);
+            if (canvasBlob) {
+                // Nombre de canvas también = código del estudiante
+                const canvasName = `${studentCode}.png`;
+                const imgRef = ref(storage, `${basePath}/${canvasName}`);
+                await uploadBytes(imgRef, canvasBlob);
+                imageURL = await getDownloadURL(imgRef);
             }
         }
 
-
         // Guardar registro en Firestore
-        const component = getComponentFromTag(tag);
         const firestoreDoc = {
             studentCode,
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
             curso: studentInfo?.curso || '',
             tag,
             componente: component,
+            storageBasePath: basePath,
             audioURL,
             imageURL: imageURL || null,
             timestamp: serverTimestamp()
@@ -1840,13 +1809,11 @@ function initMenteAndresSystem() {
 
         // Inicializar sistema de bolsitas si no existe
         if (!traysSystem) {
-            console.log('[MENTE ANDRES] TraysSystem:', window.TraysSystem);
             if (typeof window.TraysSystem === 'function') {
                 traysSystem = new window.TraysSystem('traysAreaM1Q2');
             } else {
                 traysSystem = createTraysSystem('traysAreaM1Q2');
             }
-            console.log('[MENTE ANDRES] traysSystem creado:', traysSystem);
         }
 
         const oldNotice = document.getElementById('menteAndresFloatingNotice');
@@ -1863,14 +1830,8 @@ function initMenteAndresSystem() {
         show('ContenedorMenteAndres');
     };
 
-    gotoBtn?.addEventListener('click', () => {
-        console.log('[MENTE ANDRES] Botón principal clickeado');
-        openMenteAndres(7);
-    });
-    gotoBtnM0?.addEventListener('click', () => {
-        console.log('[MENTE ANDRES] Botón M0 clickeado');
-        openMenteAndres(4);
-    });
+    gotoBtn?.addEventListener('click', () => openMenteAndres(7));
+    gotoBtnM0?.addEventListener('click', () => openMenteAndres(4));
 
     verifyBtn?.addEventListener('click', () => {
         if (!traysSystem) return;

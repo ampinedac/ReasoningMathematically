@@ -361,18 +361,19 @@
         <span class="page-number page-number-left">17</span>
         <span class="page-number page-number-right">18</span>
     </div>
+    <!-- Story Spread 19-20 -->
 
-    <!-- Página 19: Reflexión con audio -->
-    <div class="page q1-book-spread activity-spread" id="reflectionSpread">
+    <div class="page q1-book-spread activity-spread" id="m4ReflectionSpread">
         <div class="q1-left-page">
-            <h3>Hoy, junto a Andrés y Aurora...</h3>
-            <p>Hoy, junto a Andrés y Aurora, descubrimos cosas nuevas sobre las sumas misteriosas.<br>
-            Cuéntanos, ¿qué aprendiste tú? ¿Por qué crees que esto funciona?<br>
-            <span style="font-size:0.95em; color:#555;">Puedes grabar tu respuesta para compartir tu experiencia.</span></p>
+            <h3>¡Llegamos al final de nuestra aventura!</h3>
+            <p>Hoy, junto a Andrés y Doña Aurora, descubrimos secretos de las sumas misteriosas.<br>
+            ¿Te animas a contarnos qué fue lo más importante que aprendiste y por qué crees que eso funciona?</p>
+            <p>Graba tu respuesta para compartir tu experiencia.</p>
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page">
             <div class="reflection-audio-box">
+                <p class="reflection-audio-title">Tu reflexión final</p>
                 <div class="audio-controls">
                     <button id="recordBtnM4Reflection" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
                     <button id="stopBtnM4Reflection" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
@@ -385,17 +386,19 @@
         <span class="page-number page-number-right">20</span>
     </div>
 
-    <!-- Página 20: Felicitación tras enviar audio -->
-    <div class="page q1-book-spread activity-spread" id="congratsSpread" style="display:none;">
+    <div class="page q1-book-spread activity-spread" id="m4CongratsSpread" style="display:none;">
         <div class="q1-left-page">
-            <img src="./assets/images/FotoFinal.png" alt="Doña Aurora y Andrés celebran" class="m4-final-photo">
+            <div class="m4-final-story-card">
+                <img src="./assets/images/FotoFinal.png" alt="Doña Aurora y Andrés celebran" class="m4-final-photo">
+                <p class="m4-final-story-text">Doña Aurora y Andrés están muy felices de que hayas llegado hasta aquí y compartido tus ideas.</p>
+            </div>
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page">
             <div class="final-box">
                 <h3>¡Felicitaciones, terminaste este cuento! 🎉</h3>
-                <p class="thank-you">¡Gracias por participar y compartir tus ideas!</p>
-                <button id="goToFinalPage" class="btn btn-primary">Siguiente</button>
+                <p class="thank-you">¡Gracias por tu esfuerzo y creatividad!</p>
+                <button id="goToFinalCover" class="btn btn-primary">Siguiente</button>
             </div>
         </div>
         <span class="page-number page-number-left">21</span>
@@ -403,21 +406,22 @@
     </div>
 
     <!-- Página final: Solapa de cierre -->
-    <div class="page q1-book-spread activity-spread" id="finalSpread" style="display:none;">
+    <div class="page q1-book-spread activity-spread" id="m4FinalCoverSpread" style="display:none;">
         <div class="q1-left-page">
-            <h2>Y colorín colorado...</h2>
-            <p class="thank-you">Las sumas misteriosas se han revelado.<br>¡Felicitaciones por llegar hasta aquí!</p>
+            <h2>Y colorín colorado,<br>las sumas misteriosas se han revelado.</h2>
+            <p class="thank-you-sub">¡Felicitaciones por terminar esta aventura matemática!</p>
         </div>
         <div class="spread-fold"></div>
         <div class="q1-right-page">
             <div class="final-box">
-                <h3>¡Gracias por tu esfuerzo y dedicación!</h3>
-                <button id="returnToStart" class="btn btn-primary">Volver al inicio</button>
+                <h3>¡Gracias por participar!</h3>
+                <button id="returnToHome" class="btn btn-primary">Volver al inicio</button>
             </div>
         </div>
-        <span class="page-number page-number-left">FIN</span>
-        <span class="page-number page-number-right">FIN</span>
+        <span class="page-number page-number-left">23</span>
+        <span class="page-number page-number-right">24</span>
     </div>
+    <!-- Fin del libro -->
 
 
 <!-- Navigation Controls -->
