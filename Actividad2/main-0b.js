@@ -2521,21 +2521,9 @@ function renderExercise(index) {
         input.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(correctValue); });
     }
 
-    // Actualizar estado de vidas
-    renderLives();
 }
 
-function renderLives() {
-    const livesEl = document.getElementById('magicLives');
-    if (!livesEl) return;
-    livesEl.innerHTML = '';
-    for (let i = 0; i < 3; i++) {
-        const heart = document.createElement('span');
-        heart.className = 'magic-heart';
-        heart.textContent = i < m4Lives ? '❤️' : '🖤';
-        livesEl.appendChild(heart);
-    }
-}
+
 
 function checkAnswer(correctValue) {
     if (m4Finalized) return;
@@ -2641,84 +2629,7 @@ async function finalizeM4() {
     updateNavButtons();
 }
 
-// ─────────────────────────────────────────────
-// 12. SPREAD 19-20 – ENCUESTA (Google Forms)
-// ─────────────────────────────────────────────
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc30-KG8YdvHtJ_JFrn385BtNNLcaGsjvzxz2d5m5xKQYe0Gg/viewform';
-const GOOGLE_FORM_RESPONSE_URL = GOOGLE_FORM_URL.replace('/viewform', '/formResponse');
-const FORM_ENTRY_CODIGO = 'entry.975342770';
-// Campo detectado en tu Form actual: "Esta actividad fue"
-const FORM_ENTRY_RESPUESTA = 'entry.637654905';
 
-function initEncuesta() {
-    // Límite máximo de 2 checkboxes
-    const checkboxes = document.querySelectorAll('input[name="m4Reflection"]');
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => {
-            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
-            if (checked.length > 2) cb.checked = false;
-            updateNavButtons(); // actualizar estado del botón siguiente
-            updateM4ReflectionSubmitState(); // submit final requiere check + audio
-        });
-    });
-
-    // El envío del formulario final se ejecuta desde initNavigation
-    // cuando el usuario está en el último spread y pulsa "siguiente".
-}
-
-async function submitEncuesta(checkedBoxes) {
-    const reflectionLabelMap = {
-        facil: 'Fácil',
-        interesante: 'Interesante',
-        dificil: 'Difícil',
-        'pensar-mucho': 'Me hizo pensar mucho',
-        confusa: 'Confusa'
-    };
-    const valores = Array.from(checkedBoxes)
-        .map(cb => reflectionLabelMap[cb.value] || cb.value);
-
-    const payload = new URLSearchParams();
-    if (FORM_ENTRY_CODIGO) {
-        payload.append(FORM_ENTRY_CODIGO, studentCode || '');
-    }
-    valores.forEach(v => payload.append(FORM_ENTRY_RESPUESTA, v));
-
-    // Mostrar mensaje de agradecimiento
-    const spreads = getSpreads();
-    const lastSpread = spreads[spreads.length - 1];
-    if (lastSpread) {
-        lastSpread.innerHTML = `
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-                        height:100%;width:100%;text-align:center;padding:40px;gap:20px;">
-                <h2 style="font-family:'Lobster Two',cursive;color:#8000ff;font-size:2.5rem;">
-                    ¡Muchas gracias! 🎉
-                </h2>
-                <p style="font-size:1.4rem;color:#333;">
-                    Tus respuestas han sido enviadas. En 3 segundos regresas al inicio.
-                </p>
-            </div>
-        `;
-    }
-
-    // Envío silencioso al formulario (sin pedir correo ni abrir pestaña)
-    try {
-        await fetch(GOOGLE_FORM_RESPONSE_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: payload.toString()
-        });
-    } catch (error) {
-        console.error('No se pudo enviar al Google Form:', error);
-    }
-
-    // Redirigir al index después de 3 segundos
-    setTimeout(() => {
-        window.location.href = '../index.html';
-    }, 3000);
-}
 
 // Fin de main.js
 
