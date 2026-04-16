@@ -102,7 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initEncuesta();
 });
 
+function ensureM3SpreadStructure() {
+    const spread = document.getElementById('m3FlowSpread');
+    const content = document.getElementById('m3q3StepContent');
+    if (!spread || !content) return;
 
+    const leftPage = spread.querySelector('.q1-left-page');
+    if (!leftPage) return;
+}
 
 // ─────────────────────────────────────────────
 // 1. VISIBILIDAD INICIAL
