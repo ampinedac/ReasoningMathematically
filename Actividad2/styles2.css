@@ -1591,7 +1591,6 @@ body #ContenedorLibro .activity-spread {
           width: 100%;
           text-align: center;
           font-family: 'Rancho', cursive;
-          color: #0f2f7a;
           font-size: var(--spread13-uniform-text-size);
           line-height: 1.1;
           flex: 0 0 auto;
