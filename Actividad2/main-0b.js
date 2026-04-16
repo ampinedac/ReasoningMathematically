@@ -1026,14 +1026,7 @@ async function submitM1Q2Equation() {
         return;
     }
 
-    const confirmed = window.confirm('¿Estás segur@ de guardar este ejemplo?');
-    if (!confirmed) {
-        if (statusEl) {
-            statusEl.textContent = 'Puedes seguir editando tu ejemplo antes de guardar.';
-            statusEl.style.color = '#1d4ed8';
-        }
-        return;
-    }
+    // Ya no se pregunta confirmación, se guarda directamente y se muestra mensaje de éxito
 
     const izquierda = leftArr.join(' + ');
     const derecha = rightArr.join(' + ');
