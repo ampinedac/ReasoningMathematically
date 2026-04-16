@@ -206,7 +206,7 @@ function show(id) {
         ContenedorConfirmacion: 'flex',
         ContenedorPortada: 'flex',
         ContenedorLibro: 'flex',
-        ContenedorMenteAndres: 'block',
+        ContenedorMenteAndres: 'flex',
         prevBtn: 'flex',
         nextBtn: 'flex',
         m1Q2FinalQuestion: 'flex',
