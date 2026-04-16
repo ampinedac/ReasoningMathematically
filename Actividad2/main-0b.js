@@ -255,9 +255,14 @@ function initWelcome() {
 
         // Rellenar pregunta de confirmación
         const q = document.getElementById('confirmationQuestion');
+
         if (q) {
-            const nombre = toTitle(estudiante.nombre);
-            const apellidos = toTitle(estudiante.apellidos || '');
+            // Capitalizar cada palabra y reemplazar coma por espacio
+            function toTitleCase(str) {
+                return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            }
+            const nombre = toTitleCase((estudiante.nombre || '').replace(/,/g, ' '));
+            const apellidos = toTitleCase((estudiante.apellidos || '').replace(/,/g, ' '));
             if (estudiante.curso === 'DOCENTE') {
                 q.textContent = `¿Eres ${nombre} ${apellidos}?`;
             } else {
