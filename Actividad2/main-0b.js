@@ -115,17 +115,20 @@ function initM4ReflectionFlow() {
 
 
 
-    // Oculta todo, muestra solapa final
+    // Oculta todo, muestra solo la portada final (tipo portada de inicio)
     const spreads = document.querySelectorAll('.page.q1-book-spread');
     spreads.forEach(s => s.style.display = 'none');
-    const finalCover = document.getElementById('m4FinalCoverSpread');
+    hide('ContenedorLibro');
+    hide('ContenedorMenteAndres');
+    hide('ContenedorBienvenida');
+    hide('ContenedorConfirmacion');
+    hide('ContenedorPortada');
+    hide('prevBtn');
+    hide('nextBtn');
+    const finalCover = document.getElementById('FinalCover');
     if (finalCover) finalCover.style.display = 'flex';
-    currentSpread = -2;
-    updateNavButtons();
-
     // Mostrar confeti
     showConfettiFinal();
-
     // Temporizador de 10 segundos antes de volver a index
     const countdownEl = document.getElementById('finalCountdown');
     let seconds = 10;
