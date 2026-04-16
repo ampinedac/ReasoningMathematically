@@ -424,7 +424,7 @@ function initPortada() {
         show('ContenedorLibro');
         show('prevBtn');
         show('nextBtn');
-        goToSpread(0);
+        setTimeout(() => goToSpread(0), 0);
     });
 }
 
