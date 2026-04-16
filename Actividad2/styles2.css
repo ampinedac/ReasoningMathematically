@@ -1,107 +1,4 @@
-﻿/* =============================
-   SOLAPA DE CIERRE FINAL
-============================== */
-#ContenedorSolapa {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
-  border: 3px solid rgba(180, 138, 0, .25);
-  box-shadow: 0 14px 30px rgba(0,0,0,.14);
-  padding: 2vw;
-  overflow: hidden;
-  border-radius: 14px;
-}
-
-#ContenedorSolapa .cover-book-title {
-  font-family: 'Lobster Two';
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  color: #8000ff;
-  text-align: center;
-  width: 100%;
-  margin-bottom: 1.2rem;
-}
-
-#ContenedorSolapa .solapa-final-img {
-  display: block;
-  max-width: 340px;
-  width: 60vw;
-  height: auto;
-  margin: 0 auto 1.2rem auto;
-  border-radius: 18px;
-  object-fit: contain;
-  box-shadow: 0 6px 24px rgba(80, 50, 10, 0.18);
-  border: 2.5px solid #ececf3;
-  background: #fff;
-}
-
-#ContenedorSolapa .final-felicitacion {
-  font-family: 'Rancho', cursive;
-  font-size: clamp(1.7rem, 3vw, 2.2rem);
-  color: #0077ff;
-  background: rgba(255,255,255,0.7);
-  border-radius: 14px;
-  padding: 1.1rem 2.2rem;
-  margin: 1.2rem auto 1.2rem auto;
-  text-align: center;
-  max-width: 600px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-}
-
-#ContenedorSolapa #confettiFinal {
-  position: absolute;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none;
-  z-index: 10001;
-}
-
-#ContenedorSolapa .hourglass-timer {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2em;
-  margin-bottom: 0.5em;
-}
-
-/* Oculta navegación y numeración cuando la solapa está activa */
-body.solapa-activa #prevBtn,
-body.solapa-activa #nextBtn,
-body.solapa-activa .page-number,
-body.solapa-activa .page-number-left,
-body.solapa-activa .page-number-right {
-  display: none !important;
-}
-.hourglass-timer {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2em;
-}
-
-#hourglassSVG {
-  display: block;
-}
-
-#hourglassTop, #hourglassBottom {
-  transition: all 10s linear;
-}
-
-#hourglassSand {
-  transition: cy 10s linear, ry 10s linear, opacity 10s linear;
-}
-
-#hourglassStream {
-  transition: height 10s linear, y 10s linear, opacity 10s linear;
-}
-/* =====================================================================================================
+﻿/* =====================================================================================================
    VARIABLES CSS GLOBALES
 ===================================================================================================== */
 :root {
@@ -112,23 +9,17 @@ body.solapa-activa .page-number-right {
   --pastel-azul-num: #007bff;
   --blanco: #fff;
   --gris-suave: #c7c7c7;
-    position: relative;
-    width: min(95vw, 600px); /* Máximo 600px, pero responsivo */
-    max-width: 100vw;
-    height: min(98vh, 800px); /* Ocupa casi toda la altura de la ventana, pero con un máximo */
-    max-height: 92vh;
-    margin: auto;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #e0c0f6 0%, #9896f7cb 45%, #96dcf8 100%);
-    border: 3px solid rgba(180, 138, 0, .25);
-    box-shadow: 0 14px 30px rgba(0,0,0,.14);
-    padding: 2vw;
-    overflow: hidden;
-    border-radius: 14px;
+  /* Tipografías */
+  --font-titulo: 'Lobster Two', cursive;
+  --font-general: 'Rancho', cursive;
+  /* Bordes y radios */
+  --radius-xl: 32px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  /* Sombras */
+  --shadow-suave: 0 2px 16px 0 rgba(91, 91, 163, 0.692);
+  --shadow-casi-nada: 0 1px 4px 0 rgba(120, 120, 180, 0.589);
   /* Espaciados */
   --gap-xl: 3.5vw;
   --gap-lg: 2vw;
