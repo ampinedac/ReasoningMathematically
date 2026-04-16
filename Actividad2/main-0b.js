@@ -202,7 +202,7 @@ function show(id) {
         ContenedorConfirmacion: 'flex',
         ContenedorPortada: 'flex',
         ContenedorLibro: 'flex',
-        ContenedorMenteAndres: 'block',
+        ContenedorMenteAndres: 'flex', // Cambiado a flex para layout correcto
         prevBtn: 'flex',
         nextBtn: 'flex',
         m1Q2FinalQuestion: 'flex',
