@@ -125,45 +125,6 @@ function initM4ReflectionFlow() {
 
     // Mostrar confeti
     showConfettiFinal();
-<<<<<<< HEAD
-    // Animar reloj de arena SVG
-    const top = document.getElementById('hourglassTop');
-    const bottom = document.getElementById('hourglassBottom');
-    const sand = document.getElementById('hourglassSand');
-    const stream = document.getElementById('hourglassStream');
-    if (top && bottom && sand && stream) {
-        // Arena superior desaparece, inferior aparece, stream se acorta
-        setTimeout(() => {
-            top.setAttribute('points', '40,60 40,60 40,60'); // Vacía arriba
-            sand.setAttribute('cy', '100');
-            sand.setAttribute('ry', '12');
-            sand.setAttribute('opacity', '1');
-            stream.setAttribute('height', '0');
-            stream.setAttribute('y', '90');
-            stream.setAttribute('opacity', '0');
-            bottom.setAttribute('points', '20,100 60,100 40,100'); // Llena abajo
-        }, 10*1000);
-    }
-    // Redirigir tras 10s
-    setTimeout(() => {
-        window.location.href = '../index.html';
-    }, 10*1000);
-=======
-
-    // Temporizador de 10 segundos antes de volver a index
-    const countdownEl = document.getElementById('finalCountdown');
-    let seconds = 10;
-    if (countdownEl) countdownEl.textContent = `Volverás al inicio en ${seconds} segundos...`;
-    const timer = setInterval(() => {
-        seconds--;
-        if (countdownEl) countdownEl.textContent = `Volverás al inicio en ${seconds} segundos...`;
-        if (seconds <= 0) {
-            clearInterval(timer);
-            window.location.href = '../index.html';
-        }
-    }, 1000);
->>>>>>> parent of 623e187 (.)
-
 
 function showConfettiFinal() {
     const confettiDiv = document.getElementById('confettiFinal');
