@@ -212,6 +212,9 @@ function show(id) {
     };
 
     el.style.display = displayById[id] || 'block';
+    if(id === 'ContenedorMenteAndres') {
+        console.log('[MENTE ANDRES] show ejecutado, display:', el.style.display, el);
+    }
 }
 function hide(id) {
     const el = document.getElementById(id);
@@ -1837,11 +1840,13 @@ function initMenteAndresSystem() {
 
         // Inicializar sistema de bolsitas si no existe
         if (!traysSystem) {
+            console.log('[MENTE ANDRES] TraysSystem:', window.TraysSystem);
             if (typeof window.TraysSystem === 'function') {
                 traysSystem = new window.TraysSystem('traysAreaM1Q2');
             } else {
                 traysSystem = createTraysSystem('traysAreaM1Q2');
             }
+            console.log('[MENTE ANDRES] traysSystem creado:', traysSystem);
         }
 
         const oldNotice = document.getElementById('menteAndresFloatingNotice');
@@ -1858,8 +1863,14 @@ function initMenteAndresSystem() {
         show('ContenedorMenteAndres');
     };
 
-    gotoBtn?.addEventListener('click', () => openMenteAndres(7));
-    gotoBtnM0?.addEventListener('click', () => openMenteAndres(4));
+    gotoBtn?.addEventListener('click', () => {
+        console.log('[MENTE ANDRES] Botón principal clickeado');
+        openMenteAndres(7);
+    });
+    gotoBtnM0?.addEventListener('click', () => {
+        console.log('[MENTE ANDRES] Botón M0 clickeado');
+        openMenteAndres(4);
+    });
 
     verifyBtn?.addEventListener('click', () => {
         if (!traysSystem) return;
