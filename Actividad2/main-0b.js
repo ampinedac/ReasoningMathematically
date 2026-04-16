@@ -60,8 +60,7 @@ function updateM4ReflectionSubmitState() {
     if (!submitBtn) return;
 
     const hasAudio = !!(audioState['M4Reflection']?.blob && audioState['M4Reflection'].blob.size > 0);
-    const checkedCount = document.querySelectorAll('input[name="m4Reflection"]:checked').length;
-    const canSubmit = hasAudio && checkedCount >= 1;
+    const canSubmit = hasAudio;
 
     submitBtn.disabled = !canSubmit;
     submitBtn.style.opacity = canSubmit ? '1' : '0.5';
@@ -927,21 +926,11 @@ async function handleSubmit(tag) {
 
         // En el último spread, el envío del audio final dispara el formulario de cierre.
         if (tag === 'M4Reflection') {
-            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
-            if (checked.length === 0) {
-                if (statusEl) {
-                    statusEl.textContent = 'Selecciona al menos una opción antes de enviar.';
-                    statusEl.style.color = '#dc2626';
-                }
-                updateM4ReflectionSubmitState();
-                return;
-            }
-
             if (statusEl) {
                 statusEl.textContent = 'Enviando respuestas finales...';
                 statusEl.style.color = '#555';
             }
-            submitEncuesta(checked);
+            submitEncuesta([]);
             return;
         }
 
