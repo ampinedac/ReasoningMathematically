@@ -102,19 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initEncuesta();
 });
 
-function ensureM3SpreadStructure() {
-    const spread = document.getElementById('m3FlowSpread');
-    const content = document.getElementById('m3q3StepContent');
-    if (!spread || !content) return;
-
-    const leftPage = spread.querySelector('.q1-left-page');
-    if (!leftPage) return;
-
-    // Blindaje: si el bloque quedó movido por edición accidental, lo regresamos a la página 17.
-    if (!leftPage.contains(content)) {
-        leftPage.prepend(content);
-    }
-}
 
 // ─────────────────────────────────────────────
 // 1. VISIBILIDAD INICIAL
@@ -1424,15 +1411,6 @@ function showM4FinalAndRedirect() {
     }, 1000);
 }
 
-function setM3Step16Visible(visible) {
-    const step16 = document.getElementById('m3q3StepContent');
-    if (!step16) return;
-    if (visible) {
-        step16.classList.remove('think-hidden');
-    } else {
-        step16.classList.add('think-hidden');
-    }
-}
 
 function initM3DualStepFlow() {
     setM3Step16Visible(true);
