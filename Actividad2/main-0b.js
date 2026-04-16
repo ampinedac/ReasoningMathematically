@@ -445,13 +445,12 @@ function getSpreads() {
 function goToSpread(index) {
     const spreads = getSpreads();
 
-
     if (!spreads || spreads.length === 0) {
         console.error('❌ No hay spreads en el DOM');
         return;
     }
     // Validación de límites y animación
-    if (isFlipping || index < 0 || index >= spreads.length) {
+    if (isFlipping || typeof index !== 'number' || index < 0 || index >= spreads.length) {
         console.error('❌ Índice de spread fuera de rango o animación activa. index:', index, 'spreads:', spreads.length, 'isFlipping:', isFlipping);
         return;
     }
@@ -465,13 +464,18 @@ function goToSpread(index) {
         return;
     }
 
-    if (isFlipping || index < 0 || index >= spreads.length) return;
+    // Protección extra: si currentSpread es inválido, lo ajustamos al primer spread
+    let safeCurrentSpread = currentSpread;
+    if (typeof safeCurrentSpread !== 'number' || safeCurrentSpread < 0 || safeCurrentSpread >= spreads.length) {
+        console.warn('⚠️ currentSpread inválido, ajustando a 0');
+        safeCurrentSpread = 0;
+    }
 
-    const direction = index > currentSpread ? 'forward' : 'backward';
-    const oldSpread = spreads[currentSpread];
+    const direction = index > safeCurrentSpread ? 'forward' : 'backward';
+    const oldSpread = spreads[safeCurrentSpread];
 
     if (!oldSpread) {
-        console.error('❌ oldSpread es undefined. currentSpread:', currentSpread);
+        console.error('❌ oldSpread es undefined. currentSpread:', safeCurrentSpread);
         console.log('Spreads encontrados:', spreads.length);
         return;
     }
@@ -494,7 +498,7 @@ function goToSpread(index) {
             s.style.display = (i === index) ? 'flex' : 'none';
         });
 
-    console.log('✅ goToSpread protegido contra undefined');
+        console.log('✅ goToSpread protegido contra undefined');
         currentSpread = index;
         updateNavButtons();
 
