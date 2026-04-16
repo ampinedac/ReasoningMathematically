@@ -1025,6 +1025,9 @@ async function handleSubmit(tag) {
                         const contSolapa = document.getElementById('contenedorSolapa');
                         if (contLibro) contLibro.style.display = 'none';
                         if (contSolapa) contSolapa.style.display = 'flex';
+                        // Ocultar flechas de navegación
+                        hide('prevBtn');
+                        hide('nextBtn');
                     });
                     nextBtn.dataset.solapaReady = '1';
                 }
