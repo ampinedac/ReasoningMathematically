@@ -1,3 +1,4 @@
+console.log('[MENTE ANDRES][bags-system-0b.js] archivo ejecutado');
 // ========================================
 // SISTEMA DE BOLSAS - DRAG & DROP
 // ========================================
@@ -6,6 +7,7 @@ const AREPA_ICON_EMOJI = '🫓';
 
 class TraysSystem {
     constructor(containerId) {
+        console.log('[MENTE ANDRES][TraysSystem] constructor ejecutado');
         this.container = document.getElementById(containerId);
         if (!this.container) {
             throw new Error(`Container #${containerId} no encontrado`);
@@ -38,7 +40,7 @@ class TraysSystem {
     }
     
     init() {
-        console.log('Inicializando sistema de bolsas...');
+        console.log('[MENTE ANDRES][TraysSystem] init ejecutado');
         this.render();
         this.setupEventListeners();
     }
