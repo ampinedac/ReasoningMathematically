@@ -102,51 +102,63 @@ document.addEventListener('DOMContentLoaded', () => {
 // FLUJO DE REFLEXIÓN, FELICITACIÓN Y CIERRE FINAL
 // ─────────────────────────────────────────────
 function initM4ReflectionFlow() {
-    // Botón siguiente de la felicitación
-    const btnCongrats = document.getElementById('goToFinalCover');
-    if (btnCongrats) {
-        btnCongrats.addEventListener('click', () => {
-            goToSpreadFinalCover();
-        });
-    }
-    // Botón volver al inicio
-    const btnReturn = document.getElementById('returnToHome');
-    if (btnReturn) {
-        btnReturn.addEventListener('click', () => {
-            window.location.reload();
-        });
-    }
     // Interceptar envío de audio reflexión
     const submitBtn = document.getElementById('submitM4Reflection');
     if (submitBtn) {
         const origHandler = submitBtn.onclick;
         submitBtn.onclick = function(e) {
             if (typeof origHandler === 'function') origHandler(e);
-            setTimeout(() => {
-                showCongratsSpread();
-            }, 400); // Pequeño retardo para UX
+            // Ya no se avanza automáticamente, solo se habilita la flecha
         };
     }
 }
 
-function showCongratsSpread() {
-    // Oculta reflexión, muestra felicitación
-    const spreads = document.querySelectorAll('.page.q1-book-spread');
-    spreads.forEach(s => s.style.display = 'none');
-    const congrats = document.getElementById('m4CongratsSpread');
-    if (congrats) congrats.style.display = 'flex';
-    currentSpread = -1; // fuera del flujo normal
-    updateNavButtons();
-}
 
-function goToSpreadFinalCover() {
-    // Oculta felicitación, muestra solapa final
+
+    // Oculta todo, muestra solapa final
     const spreads = document.querySelectorAll('.page.q1-book-spread');
     spreads.forEach(s => s.style.display = 'none');
     const finalCover = document.getElementById('m4FinalCoverSpread');
     if (finalCover) finalCover.style.display = 'flex';
     currentSpread = -2;
     updateNavButtons();
+
+    // Mostrar confeti
+    showConfettiFinal();
+
+    // Temporizador de 10 segundos antes de volver a index
+    const countdownEl = document.getElementById('finalCountdown');
+    let seconds = 10;
+    if (countdownEl) countdownEl.textContent = `Volverás al inicio en ${seconds} segundos...`;
+    const timer = setInterval(() => {
+        seconds--;
+        if (countdownEl) countdownEl.textContent = `Volverás al inicio en ${seconds} segundos...`;
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = '../index.html';
+        }
+    }, 1000);
+}
+
+function showConfettiFinal() {
+    const confettiDiv = document.getElementById('confettiFinal');
+    if (!confettiDiv) return;
+    confettiDiv.innerHTML = '';
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE'];
+    for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 10 + 5) + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+        confetti.style.position = 'absolute';
+        confetti.style.animation = `fall ${2 + Math.random() * 2}s linear forwards`;
+        confettiDiv.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
+    }
 }
 
 function ensureM3SpreadStructure() {
