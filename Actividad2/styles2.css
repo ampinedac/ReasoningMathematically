@@ -2176,25 +2176,30 @@ body #ContenedorLibro .activity-spread {
   CONTENEDOR MENTE DE ANDRES
 ===================================================================================================== */
   #ContenedorMenteAndres {
-  position: relative;
-  width: min(96vw, 1320px);
-  max-width: 1320px;
-  min-height: calc(100vh - 2rem);
-  align-items: center;
-  justify-content: center;
-  margin: 1rem auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background:
-    radial-gradient(circle at top left, rgba(255, 245, 216, 0.75), transparent 28%),
-    radial-gradient(circle at top right, rgba(255, 224, 197, 0.55), transparent 24%),
-    linear-gradient(160deg, #f4d9ef 0%, #d8d2ff 34%, #c6ecff 100%);
-  border: 3px solid rgba(156, 97, 38, 0.22);
-  box-shadow: 0 18px 42px rgba(80, 52, 24, 0.18);
-  padding: 1.1rem;
-  border-radius: 28px;
-  box-sizing: border-box;
+    position: relative;
+    width: min(96vw, 1320px);
+    max-width: 1320px;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem auto;
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    background:
+      radial-gradient(circle at top left, rgba(255, 245, 216, 0.75), transparent 28%),
+      radial-gradient(circle at top right, rgba(255, 224, 197, 0.55), transparent 24%),
+      linear-gradient(160deg, #f4d9ef 0%, #d8d2ff 34%, #c6ecff 100%);
+    border: 3px solid rgba(156, 97, 38, 0.22);
+    box-shadow: 0 18px 42px rgba(80, 52, 24, 0.18);
+    padding: 1.1rem;
+    border-radius: 28px;
+    box-sizing: border-box;
+  }
+
+  #ContenedorMenteAndres[style*="display: flex"] {
+    display: flex !important;
+    min-height: 100vh;
   }
 
   .mente-andres-header {
