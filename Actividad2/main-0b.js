@@ -102,30 +102,76 @@ document.addEventListener('DOMContentLoaded', () => {
 // FLUJO DE REFLEXIÓN, FELICITACIÓN Y CIERRE FINAL
 // ─────────────────────────────────────────────
 function initM4ReflectionFlow() {
-    // Ya no se avanza automáticamente al enviar reflexión final
-    // Solo se muestra mensaje de éxito y el usuario debe pasar manualmente
-    // (Eliminado el avance automático y el spread de felicitación)
-    // Si existiera lógica de avance automático aquí, queda deshabilitada.
+    // Interceptar envío de audio reflexión
+    const submitBtn = document.getElementById('submitM4Reflection');
+    if (submitBtn) {
+        const origHandler = submitBtn.onclick;
+        submitBtn.onclick = function(e) {
+            if (typeof origHandler === 'function') origHandler(e);
+            // Ya no se avanza automáticamente, solo se habilita la flecha
+        };
+    }
 }
 
-function showCongratsSpread() {
-    // Oculta reflexión, muestra felicitación
-    const spreads = document.querySelectorAll('.page.q1-book-spread');
-    spreads.forEach(s => s.style.display = 'none');
-    const congrats = document.getElementById('m4CongratsSpread');
-    if (congrats) congrats.style.display = 'flex';
-    currentSpread = -1; // fuera del flujo normal
-    updateNavButtons();
-}
 
-function goToSpreadFinalCover() {
-    // Oculta felicitación, muestra solapa final
+
+    // Oculta todo, muestra solo la portada final (tipo portada de inicio)
     const spreads = document.querySelectorAll('.page.q1-book-spread');
     spreads.forEach(s => s.style.display = 'none');
-    const finalCover = document.getElementById('m4FinalCoverSpread');
+    hide('ContenedorLibro');
+    hide('ContenedorMenteAndres');
+    hide('ContenedorBienvenida');
+    hide('ContenedorConfirmacion');
+    hide('ContenedorPortada');
+    hide('prevBtn');
+    hide('nextBtn');
+    const finalCover = document.getElementById('FinalCover');
     if (finalCover) finalCover.style.display = 'flex';
-    currentSpread = -2;
-    updateNavButtons();
+    // Mostrar confeti
+    showConfettiFinal();
+    // Animar reloj de arena SVG
+    const top = document.getElementById('hourglassTop');
+    const bottom = document.getElementById('hourglassBottom');
+    const sand = document.getElementById('hourglassSand');
+    const stream = document.getElementById('hourglassStream');
+    if (top && bottom && sand && stream) {
+        // Arena superior desaparece, inferior aparece, stream se acorta
+        setTimeout(() => {
+            top.setAttribute('points', '40,60 40,60 40,60'); // Vacía arriba
+            sand.setAttribute('cy', '100');
+            sand.setAttribute('ry', '12');
+            sand.setAttribute('opacity', '1');
+            stream.setAttribute('height', '0');
+            stream.setAttribute('y', '90');
+            stream.setAttribute('opacity', '0');
+            bottom.setAttribute('points', '20,100 60,100 40,100'); // Llena abajo
+        }, 10*1000);
+    }
+    // Redirigir tras 10s
+    setTimeout(() => {
+        window.location.href = '../index.html';
+    }, 10*1000);
+
+
+function showConfettiFinal() {
+    const confettiDiv = document.getElementById('confettiFinal');
+    if (!confettiDiv) return;
+    confettiDiv.innerHTML = '';
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE'];
+    for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 10 + 5) + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+        confetti.style.position = 'absolute';
+        confetti.style.animation = `fall ${2 + Math.random() * 2}s linear forwards`;
+        confettiDiv.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 4000);
+    }
 }
 
 function ensureM3SpreadStructure() {
@@ -844,41 +890,68 @@ async function handleSubmit(tag) {
     submitBtn.style.opacity = '0.4';
     if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
 
+
     try {
         if (!firebaseServices?.storage || !firebaseServices?.db) {
             throw new Error('Firebase no disponible');
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        const basePath = buildStorageBasePath(tag);
         const component = getComponentFromTag(tag);
 
-        // Nombre de archivo = código del estudiante (sin timestamp)
-        const audioFileName = studentCode;
+        // --- Lógica de rutas y nombres ---
+        let carpeta = '';
+        let nombreArchivo = '';
+        let carpetaImg = '';
+        let nombreCanvas = '';
+        const esEstudiante = studentInfo && studentInfo.curso && studentCode !== '0000' && studentInfo.curso !== 'INVITADO' && !studentInfo.curso.toLowerCase().includes('docente');
+        const esInvitado = studentCode === '0000' || (studentInfo && studentInfo.curso === 'INVITADO');
+        const esDocente = studentInfo && studentInfo.curso && studentInfo.curso.toLowerCase().includes('docente');
+        const curso = esEstudiante ? studentInfo.curso : '';
+        const nombreBase = esEstudiante
+            ? `${studentCode}_${curso}`
+            : esInvitado
+                ? `${studentInfo.nombre.trim().replace(/\s+/g, '_')}`
+                : esDocente
+                    ? `${studentCode}_docente`
+                    : 'desconocido';
+
+        if (tag === 'M3Q1') {
+            carpeta = 'Actividad2/1Exploración';
+            nombreArchivo = `${nombreBase}_exploracion`;
+        } else if (tag === 'M3Q3') {
+            carpeta = 'Actividad2/2_3ReglageneralJustificacion/Audio';
+            nombreArchivo = `${nombreBase}_ReglaJustif`;
+            carpetaImg = 'Actividad2/2_3ReglageneralJustificacion/Img';
+            nombreCanvas = `${nombreBase}_ReglaJustif`;
+        } else if (tag === 'M4Reflection') {
+            carpeta = 'Actividad2/Reflexion';
+            nombreArchivo = `${nombreBase}_reflexion`;
+        } else {
+            // Por defecto, mantener la lógica anterior
+            carpeta = buildStorageBasePath(tag);
+            nombreArchivo = studentCode;
+        }
 
         // Subir audio
-        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
+        const audioRef = ref(storage, `${carpeta}/${nombreArchivo}.webm`);
         await uploadBytes(audioRef, audioBlob);
         const audioURL = await getDownloadURL(audioRef);
 
         let imageURL = null;
 
-        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
-        if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
-            const canvasId = tag === 'M3Q1'
-                ? 'boardCanvasM3Q1'
-                : (tag === 'M3Q2'
-                    ? 'boardCanvasM3Q2'
-                    : (tag === 'M3Q3'
-                        ? 'boardCanvasM3Q3'
-                        : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
-            const canvasBlob = await canvasToBlob(canvasId);
-            if (canvasBlob) {
-                // Nombre de canvas también = código del estudiante
-                const canvasName = `${studentCode}.png`;
-                const imgRef = ref(storage, `${basePath}/${canvasName}`);
-                await uploadBytes(imgRef, canvasBlob);
-                imageURL = await getDownloadURL(imgRef);
+        // Guardar canvas solo para M3Q3 (regla general y justificación)
+        if (tag === 'M3Q3') {
+            const canvasId = 'boardCanvasM3Q3';
+            const canvas = document.getElementById(canvasId);
+            if (canvas) {
+                // Guardar como JPEG
+                const canvasBlob = await new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.92));
+                if (canvasBlob) {
+                    const imgRef = ref(storage, `${carpetaImg}/${nombreCanvas}.jpg`);
+                    await uploadBytes(imgRef, canvasBlob);
+                    imageURL = await getDownloadURL(imgRef);
+                }
             }
         }
 
@@ -889,7 +962,7 @@ async function handleSubmit(tag) {
             curso: studentInfo?.curso || '',
             tag,
             componente: component,
-            storageBasePath: basePath,
+            storagePath: `${carpeta}/${nombreArchivo}.webm`,
             audioURL,
             imageURL: imageURL || null,
             timestamp: serverTimestamp()
@@ -898,13 +971,17 @@ async function handleSubmit(tag) {
 
         if (statusEl) {
             statusEl.textContent = tag === 'M4Reflection'
-                ? '✅ Audio enviado. Ya puedes pasar a la siguiente página.'
+                ? '✅ Audio enviado. Finalizando actividad...'
                 : '✅ Guardado. Ya puedes pasar a la siguiente página.';
             statusEl.style.color = '#16a34a';
         }
 
-        // En el último spread, el envío del audio final solo envía la encuesta, no avanza de página.
+        // En el último spread, el envío del audio final dispara el formulario de cierre.
         if (tag === 'M4Reflection') {
+            if (statusEl) {
+                statusEl.textContent = 'Enviando respuestas finales...';
+                statusEl.style.color = '#555';
+            }
             submitEncuesta([]);
             return;
         }
