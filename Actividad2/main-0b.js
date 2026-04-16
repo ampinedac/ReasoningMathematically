@@ -424,7 +424,14 @@ function initPortada() {
         show('ContenedorLibro');
         show('prevBtn');
         show('nextBtn');
-        setTimeout(() => goToSpread(0), 0);
+        window.requestAnimationFrame(() => {
+            const spreads = document.querySelectorAll('#ContenedorLibro .q1-book-spread');
+            if (spreads.length > 0) {
+                goToSpread(0);
+            } else {
+                console.error('❌ No hay spreads disponibles al iniciar');
+            }
+        });
     });
 }
 
@@ -437,6 +444,11 @@ function getSpreads() {
 
 function goToSpread(index) {
     const spreads = getSpreads();
+
+    if (!spreads || spreads.length === 0) {
+        console.error('❌ No hay spreads en el DOM');
+        return;
+    }
 
     // Llamada de inicializacion (mismo indice) o retorno desde Mente de Andres: mostrar sin animacion
     if (index === currentSpread) {
@@ -451,6 +463,12 @@ function goToSpread(index) {
 
     const direction = index > currentSpread ? 'forward' : 'backward';
     const oldSpread = spreads[currentSpread];
+
+    if (!oldSpread) {
+        console.error('❌ oldSpread es undefined. currentSpread:', currentSpread);
+        console.log('Spreads encontrados:', spreads.length);
+        return;
+    }
 
     // La página que se pliega hacia el lomo (sale)
     const foldOutPage = direction === 'forward'
@@ -469,6 +487,8 @@ function goToSpread(index) {
         spreads.forEach((s, i) => {
             s.style.display = (i === index) ? 'flex' : 'none';
         });
+
+    console.log('✅ goToSpread protegido contra undefined');
         currentSpread = index;
         updateNavButtons();
 
