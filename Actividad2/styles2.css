@@ -1,4 +1,7 @@
-﻿/* ================= SOLAPA FINAL DEL LIBRO =================== */
+﻿.think-force-reveal-btn {
+  display: none !important;
+}
+/* ================= SOLAPA FINAL DEL LIBRO =================== */
 #contenedorSolapa.cover-book {
   display: none;
   flex-direction: column;
