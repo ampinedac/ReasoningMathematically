@@ -138,7 +138,7 @@ function initM4ReflectionFlow() {
             window.location.href = '../index.html';
         }
     }, 1000);
-}
+
 
 function showConfettiFinal() {
     const confettiDiv = document.getElementById('confettiFinal');
