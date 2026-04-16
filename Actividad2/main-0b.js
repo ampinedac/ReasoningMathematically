@@ -877,41 +877,68 @@ async function handleSubmit(tag) {
     submitBtn.style.opacity = '0.4';
     if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
 
+
     try {
         if (!firebaseServices?.storage || !firebaseServices?.db) {
             throw new Error('Firebase no disponible');
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        const basePath = buildStorageBasePath(tag);
         const component = getComponentFromTag(tag);
 
-        // Nombre de archivo = código del estudiante (sin timestamp)
-        const audioFileName = studentCode;
+        // --- Lógica de rutas y nombres ---
+        let carpeta = '';
+        let nombreArchivo = '';
+        let carpetaImg = '';
+        let nombreCanvas = '';
+        const esEstudiante = studentInfo && studentInfo.curso && studentCode !== '0000' && studentInfo.curso !== 'INVITADO' && !studentInfo.curso.toLowerCase().includes('docente');
+        const esInvitado = studentCode === '0000' || (studentInfo && studentInfo.curso === 'INVITADO');
+        const esDocente = studentInfo && studentInfo.curso && studentInfo.curso.toLowerCase().includes('docente');
+        const curso = esEstudiante ? studentInfo.curso : '';
+        const nombreBase = esEstudiante
+            ? `${studentCode}_${curso}`
+            : esInvitado
+                ? `${studentInfo.nombre.trim().replace(/\s+/g, '_')}`
+                : esDocente
+                    ? `${studentCode}_docente`
+                    : 'desconocido';
+
+        if (tag === 'M3Q1') {
+            carpeta = 'Actividad2/1Exploración';
+            nombreArchivo = `${nombreBase}_exploracion`;
+        } else if (tag === 'M3Q3') {
+            carpeta = 'Actividad2/2_3ReglageneralJustificacion/Audio';
+            nombreArchivo = `${nombreBase}_ReglaJustif`;
+            carpetaImg = 'Actividad2/2_3ReglageneralJustificacion/Img';
+            nombreCanvas = `${nombreBase}_ReglaJustif`;
+        } else if (tag === 'M4Reflection') {
+            carpeta = 'Actividad2/Reflexion';
+            nombreArchivo = `${nombreBase}_reflexion`;
+        } else {
+            // Por defecto, mantener la lógica anterior
+            carpeta = buildStorageBasePath(tag);
+            nombreArchivo = studentCode;
+        }
 
         // Subir audio
-        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
+        const audioRef = ref(storage, `${carpeta}/${nombreArchivo}.webm`);
         await uploadBytes(audioRef, audioBlob);
         const audioURL = await getDownloadURL(audioRef);
 
         let imageURL = null;
 
-        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
-        if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
-            const canvasId = tag === 'M3Q1'
-                ? 'boardCanvasM3Q1'
-                : (tag === 'M3Q2'
-                    ? 'boardCanvasM3Q2'
-                    : (tag === 'M3Q3'
-                        ? 'boardCanvasM3Q3'
-                        : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
-            const canvasBlob = await canvasToBlob(canvasId);
-            if (canvasBlob) {
-                // Nombre de canvas también = código del estudiante
-                const canvasName = `${studentCode}.png`;
-                const imgRef = ref(storage, `${basePath}/${canvasName}`);
-                await uploadBytes(imgRef, canvasBlob);
-                imageURL = await getDownloadURL(imgRef);
+        // Guardar canvas solo para M3Q3 (regla general y justificación)
+        if (tag === 'M3Q3') {
+            const canvasId = 'boardCanvasM3Q3';
+            const canvas = document.getElementById(canvasId);
+            if (canvas) {
+                // Guardar como JPEG
+                const canvasBlob = await new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.92));
+                if (canvasBlob) {
+                    const imgRef = ref(storage, `${carpetaImg}/${nombreCanvas}.jpg`);
+                    await uploadBytes(imgRef, canvasBlob);
+                    imageURL = await getDownloadURL(imgRef);
+                }
             }
         }
 
@@ -922,7 +949,7 @@ async function handleSubmit(tag) {
             curso: studentInfo?.curso || '',
             tag,
             componente: component,
-            storageBasePath: basePath,
+            storagePath: `${carpeta}/${nombreArchivo}.webm`,
             audioURL,
             imageURL: imageURL || null,
             timestamp: serverTimestamp()
