@@ -1012,6 +1012,17 @@ async function handleSubmit(tag) {
                 nextBtn.disabled = false;
                 nextBtn.style.opacity = '1';
                 nextBtn.style.cursor = 'pointer';
+                // Solo agregar el listener una vez
+                if (!nextBtn.dataset.solapaReady) {
+                    nextBtn.addEventListener('click', () => {
+                        // Ocultar libro y mostrar solapa final
+                        const contLibro = document.getElementById('ContenedorLibro');
+                        const contSolapa = document.getElementById('contenedorSolapa');
+                        if (contLibro) contLibro.style.display = 'none';
+                        if (contSolapa) contSolapa.style.display = 'flex';
+                    });
+                    nextBtn.dataset.solapaReady = '1';
+                }
             }
             return;
         }
@@ -1057,6 +1068,17 @@ async function submitM1Q2Equation() {
     }
 
     // --- Validación de suma mágica ---
+    // Si la suma no es misteriosa, mostrar mensaje personalizado
+    const leftVal = eval(leftRaw.replace(/[^0-9+\-*/() ]/g, ''));
+    const rightVal = eval(rightRaw.replace(/[^0-9+\-*/() ]/g, ''));
+    if (leftVal !== rightVal) {
+        if (statusEl) {
+            statusEl.textContent = 'Esta no es una suma misteriosa';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
     // Lista de sumas mágicas ya vistas (izquierda = derecha, sin espacios)
     const SUMAS_PROHIBIDAS = [
         // Ejemplos del cuento y tabla
