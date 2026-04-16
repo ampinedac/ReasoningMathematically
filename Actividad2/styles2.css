@@ -437,7 +437,7 @@ body #ContenedorLibro .activity-spread {
   display: flex; /* Flexbox para organizar las páginas internas del spread */
   flex-direction: row; /* Páginas internas una al lado de la otra */
   justify-content: center; /* Centra horizontalmente las páginas internas dentro del spread */
-  align-items: center; /* Centra verticalmente las páginas internas dentro del spread */
+  align-items: stretch; /* Estira las páginas internas para que ambas ocupen toda la altura */
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-suave);
   padding: var(--gap-lg);
