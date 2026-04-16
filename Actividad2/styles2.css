@@ -1,4 +1,47 @@
-﻿/* =====================================================================================================
+﻿/* ================= SOLAPA FINAL DEL LIBRO =================== */
+#contenedorSolapa.cover-book {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.solapa-title {
+  margin-top: 40px;
+  font-size: 8rem !important;
+  text-align: center;
+  color: #8000ff;
+  font-family: 'Lobster Two', cursive;
+}
+
+.solapa-foto-final {
+  margin: 32px auto 24px auto;
+  display: block;
+  border-radius: 32px;
+  max-width: 340px;
+  box-shadow: 0 4px 24px #0002;
+}
+
+.solapa-felicitacion {
+  font-size: 5.4rem !important;
+  color: #a21caf;
+  background: rgba(255,255,255,0.85);
+  border-radius: 18px;
+  padding: 18px 28px;
+  margin: 18px auto 0 auto;
+  max-width: 900px;
+  box-shadow: 0 2px 12px #a21caf22;
+  text-align: center;
+  font-family: 'Rancho', cursive;
+}
+
+.solapa-reloj-arena {
+  margin: 32px auto 0 auto;
+  width: 80px;
+  height: 80px;
+}
+/* =====================================================================================================
    VARIABLES CSS GLOBALES
 ===================================================================================================== */
 :root {
