@@ -281,8 +281,16 @@ function toTitle(str) {
         .toLocaleLowerCase('es-CO')
         .split(/\s+/)
         .filter(Boolean)
-        .map(word => word.charAt(0).toLocaleUpperCase('es-CO') + word.slice(1))
-        .join(' ');
+
+        /*
+        ============================================================
+          main-0b.js – Lógica principal de Actividad 2
+          Organización y comentarios por bloques según el HTML
+        ============================================================
+        */
+
+        // ===================== INICIALIZACIÓN GENERAL =====================
+        // Importa y configura Firebase, define variables globales de estado.
 }
 
 function normalizeStorageSegment(value) {
@@ -902,22 +910,70 @@ async function handleSubmit(tag) {
             nombreArchivo = studentCode;
         }
 
-        // Subir audio
-        const audioRef = ref(storage, `${carpeta}/${nombreArchivo}.webm`);
+        // Subir audio con sufijo incremental si ya existe
+        async function getAvailableAudioRef(basePath, ext) {
+            let idx = 0;
+            let refPath = `${basePath}.${ext}`;
+            let fileRef = ref(storage, refPath);
+            // Verifica existencia
+            try {
+                await getDownloadURL(fileRef);
+                // Si existe, buscar siguiente disponible
+                while (true) {
+                    idx++;
+                    refPath = `${basePath}_${idx}.${ext}`;
+                    fileRef = ref(storage, refPath);
+                    try {
+                        await getDownloadURL(fileRef);
+                    } catch {
+                        break;
+                    }
+                }
+            } catch {
+                // No existe, usar el base
+            }
+            return fileRef;
+        }
+
+        const audioBasePath = `${carpeta}/${nombreArchivo}`;
+        const audioRef = await getAvailableAudioRef(audioBasePath, 'webm');
         await uploadBytes(audioRef, audioBlob);
         const audioURL = await getDownloadURL(audioRef);
 
         let imageURL = null;
 
-        // Guardar canvas solo para M3Q3 (regla general y justificación)
+        // Guardar canvas solo para M3Q3 (regla general y justificación, página 18)
         if (tag === 'M3Q3') {
             const canvasId = 'boardCanvasM3Q3';
             const canvas = document.getElementById(canvasId);
             if (canvas) {
-                // Guardar como JPEG
-                const canvasBlob = await new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.92));
+                // Guardar como PNG
+                const canvasBlob = await new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'));
                 if (canvasBlob) {
-                    const imgRef = ref(storage, `${carpetaImg}/${nombreCanvas}.jpg`);
+                    // Buscar nombre disponible
+                    async function getAvailableImgRef(basePath, ext) {
+                        let idx = 0;
+                        let refPath = `${basePath}.${ext}`;
+                        let fileRef = ref(storage, refPath);
+                        try {
+                            await getDownloadURL(fileRef);
+                            while (true) {
+                                idx++;
+                                refPath = `${basePath}_${idx}.${ext}`;
+                                fileRef = ref(storage, refPath);
+                                try {
+                                    await getDownloadURL(fileRef);
+                                } catch {
+                                    break;
+                                }
+                            }
+                        } catch {
+                            // No existe, usar el base
+                        }
+                        return fileRef;
+                    }
+                    const imgBasePath = `${carpetaImg}/${nombreCanvas}`;
+                    const imgRef = await getAvailableImgRef(imgBasePath, 'png');
                     await uploadBytes(imgRef, canvasBlob);
                     imageURL = await getDownloadURL(imgRef);
                 }
@@ -951,7 +1007,6 @@ async function handleSubmit(tag) {
                 statusEl.textContent = 'Enviando respuestas finales...';
                 statusEl.style.color = '#555';
             }
-            submitEncuesta([]);
             return;
         }
 
@@ -961,7 +1016,14 @@ async function handleSubmit(tag) {
     } catch (error) {
         console.error(`❌ Error al enviar ${tag}:`, error);
         if (statusEl) {
-            statusEl.textContent = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            let msg = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            // Mostrar detalle del error para depuración
+            if (error && error.message) {
+                msg += `\n[${error.message}]`;
+            } else if (typeof error === 'string') {
+                msg += `\n[${error}]`;
+            }
+            statusEl.textContent = msg;
             statusEl.style.color = '#dc2626';
         }
         submitBtn.disabled = false;
