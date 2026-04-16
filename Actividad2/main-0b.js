@@ -843,6 +843,45 @@ function initAudioRecorder(tag) {
 // _____________________________________________________________________________________
 // 8. ENVIO A FIREBASE
 // --------------------------------------------------------------------------------------
+// Utilidad para obtener nombre base según tipo de usuario y momento
+function getCustomFileName(tag, ext) {
+    // ext: extensión con punto, ej: '.webm' o '.png'
+    let nombre = '';
+    let curso = studentInfo?.curso || '';
+    let esDocente = curso === 'DOCENTE';
+    let esInvitado = studentCode === '0000';
+    let nombreBase = '';
+    if (esDocente) {
+        nombreBase = `${studentCode}_docente`;
+    } else if (esInvitado) {
+        nombreBase = `${(studentInfo?.nombre || 'invitado').replace(/\s+/g, '_')}`;
+    } else {
+        nombreBase = `${studentCode}_${curso}`;
+    }
+    if (tag === 'M1Q1') {
+        nombre = `${nombreBase}_exploracion${ext}`;
+    } else if (tag === 'M3Q3') {
+        nombre = `${nombreBase}_ReglaJustif${ext}`;
+    } else if (tag === 'M4Reflection') {
+        nombre = `${nombreBase}_reflexion${ext}`;
+    } else {
+        nombre = `${nombreBase}${ext}`;
+    }
+    return nombre;
+}
+
+// Utilidad para obtener ruta base personalizada
+function getCustomBasePath(tag, isAudio) {
+    if (tag === 'M1Q1') {
+        return 'Actividad2/1Exploración';
+    } else if (tag === 'M3Q3') {
+        return isAudio ? 'Actividad2/2_3ReglageneralJustificacion/Audio' : 'Actividad2/2_3ReglageneralJustificacion/Img';
+    } else if (tag === 'M4Reflection') {
+        return 'Actividad2/Reflexion';
+    }
+    return 'Actividad2/Otros';
+}
+
 async function handleSubmit(tag) {
     const submitBtn = document.getElementById(`submit${tag}`);
     const statusEl  = document.getElementById(`status${tag}`);
@@ -862,52 +901,48 @@ async function handleSubmit(tag) {
     submitBtn.style.opacity = '0.4';
     if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
 
+
     try {
         if (!firebaseServices?.storage || !firebaseServices?.db) {
             throw new Error('Firebase no disponible');
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        const basePath = buildStorageBasePath(tag);
-        const component = getComponentFromTag(tag);
-
-        // Nombre de archivo = código del estudiante (sin timestamp)
-        const audioFileName = studentCode;
-
-        // Subir audio
-        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
-        await uploadBytes(audioRef, audioBlob);
-        const audioURL = await getDownloadURL(audioRef);
-
+        let audioURL = null;
         let imageURL = null;
 
-        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
-        if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
-            const canvasId = tag === 'M3Q1'
-                ? 'boardCanvasM3Q1'
-                : (tag === 'M3Q2'
-                    ? 'boardCanvasM3Q2'
-                    : (tag === 'M3Q3'
-                        ? 'boardCanvasM3Q3'
-                        : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
-            const canvasBlob = await canvasToBlob(canvasId);
-            if (canvasBlob) {
-                // Nombre de canvas también = código del estudiante
-                const canvasName = `${studentCode}.png`;
-                const imgRef = ref(storage, `${basePath}/${canvasName}`);
-                await uploadBytes(imgRef, canvasBlob);
-                imageURL = await getDownloadURL(imgRef);
+        // AUDIO
+        let audioExt = '.webm';
+        let audioPath = getCustomBasePath(tag, true);
+        let audioFileName = getCustomFileName(tag, audioExt);
+        const audioRef = ref(storage, `${audioPath}/${audioFileName}`);
+        await uploadBytes(audioRef, audioBlob);
+        audioURL = await getDownloadURL(audioRef);
+
+        // CANVAS (solo para M3Q3 y si tiene dibujo)
+        if (tag === 'M3Q3') {
+            const canvasId = 'boardCanvasM3Q3';
+            if (!isCanvasBlank(canvasId)) {
+                let imgPath = getCustomBasePath(tag, false);
+                let imgFileName = getCustomFileName(tag, '.png');
+                const canvasBlob = await canvasToBlob(canvasId);
+                if (canvasBlob) {
+                    const imgRef = ref(storage, `${imgPath}/${imgFileName}`);
+                    await uploadBytes(imgRef, canvasBlob);
+                    imageURL = await getDownloadURL(imgRef);
+                }
             }
         }
 
+
         // Guardar registro en Firestore
+        const component = getComponentFromTag(tag);
         const firestoreDoc = {
             studentCode,
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
             curso: studentInfo?.curso || '',
             tag,
             componente: component,
-            storageBasePath: basePath,
             audioURL,
             imageURL: imageURL || null,
             timestamp: serverTimestamp()
