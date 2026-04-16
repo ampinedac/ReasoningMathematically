@@ -49,10 +49,13 @@ class TraysSystem {
         this.container.innerHTML = '';
         // Renderizar en orden natural: Pedido 1, 2, 3...
         const orderedTrays = [...this.BASE_TRAYS].sort((a, b) => a.pedido - b.pedido);
+        console.log('[MENTE ANDRES][render] BASE_TRAYS:', this.BASE_TRAYS);
+        console.log('[MENTE ANDRES][render] orderedTrays:', orderedTrays);
 
         orderedTrays.forEach((trayData, index) => {
             const trayElement = this.createTrayElement(trayData, index);
             this.container.appendChild(trayElement);
+            console.log('[MENTE ANDRES][render] Tray agregado:', trayElement);
         });
         
         console.log(`${orderedTrays.length} pedidos renderizados correctamente`);
