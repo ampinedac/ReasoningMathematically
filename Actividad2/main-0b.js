@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
     normalizeNavigationLabels();
     initStudentCodeDisplays();
-    ensureM3SpreadStructure();
     initVisibility();
     initWelcome();
     initConfirmation();
@@ -97,10 +96,52 @@ document.addEventListener('DOMContentLoaded', () => {
     initM1Q2ThinkFlow();
     initM1Q2EquationForm();
     initMenteAndresSystem();
-    initM4StoryFlow();
+    initCustomReflectionFlow();
     initM4();
     initEncuesta();
 });
+// ─────────────────────────────────────────────
+// FLUJO PERSONALIZADO DE REFLEXIÓN Y CIERRE
+// ─────────────────────────────────────────────
+function initCustomReflectionFlow() {
+    // Página 19: reflexión
+    const submitBtn = document.getElementById('submitM4Reflection');
+    const nextBtn = document.getElementById('nextBtn');
+    const congratsSpread = document.getElementById('congratsSpread');
+    const reflectionSpread = document.getElementById('reflectionSpread');
+    const finalSpread = document.getElementById('finalSpread');
+    const goToFinalPage = document.getElementById('goToFinalPage');
+    const returnToStart = document.getElementById('returnToStart');
+
+    // Ocultar botón siguiente hasta enviar audio
+    if (nextBtn) nextBtn.style.display = 'none';
+
+    // Cuando se envía el audio, mostrar felicitación y activar siguiente
+    if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+            // Mostrar felicitación (página 20)
+            if (reflectionSpread) reflectionSpread.style.display = 'none';
+            if (congratsSpread) congratsSpread.style.display = 'flex';
+            if (nextBtn) nextBtn.style.display = 'none';
+        });
+    }
+
+    // Botón para ir a la solapa final
+    if (goToFinalPage) {
+        goToFinalPage.addEventListener('click', () => {
+            if (congratsSpread) congratsSpread.style.display = 'none';
+            if (finalSpread) finalSpread.style.display = 'flex';
+            if (nextBtn) nextBtn.style.display = 'none';
+        });
+    }
+
+    // Botón para volver al inicio
+    if (returnToStart) {
+        returnToStart.addEventListener('click', () => {
+            window.location.reload();
+        });
+    }
+}
 
 function ensureM3SpreadStructure() {
     const spread = document.getElementById('m3FlowSpread');
