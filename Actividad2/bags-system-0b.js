@@ -45,22 +45,41 @@ class TraysSystem {
         this.setupEventListeners();
     }
     
-    // Limpiar y renderizar los pedidos
+    // Limpiar y renderizar los pedidos en orden aleatorio seguro
     render() {
-        // CRÍTICO: Limpiar contenedor primero
         this.container.innerHTML = '';
-        // Renderizar en orden natural: Pedido 1, 2, 3...
-        const orderedTrays = [...this.BASE_TRAYS].sort((a, b) => a.pedido - b.pedido);
-        console.log('[MENTE ANDRES][render] BASE_TRAYS:', this.BASE_TRAYS);
-        console.log('[MENTE ANDRES][render] orderedTrays:', orderedTrays);
 
-        orderedTrays.forEach((trayData, index) => {
+        // --- SHUFFLE seguro ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Función para verificar que ninguna pareja quede al lado ni debajo
+        function isValidOrder(arr) {
+            // Por ahora, solo evitamos que dos tarjetas consecutivas sean pareja (puedes ajustar la lógica si tienes reglas de pareja específicas)
+            for (let i = 0; i < arr.length - 1; i++) {
+                // Si el total es igual, se consideran pareja
+                if (arr[i].total === arr[i + 1].total) return false;
+            }
+            return true;
+        }
+
+        let shuffledTrays = [...this.BASE_TRAYS];
+        let maxTries = 50, tries = 0;
+        do {
+            shuffleArray(shuffledTrays);
+            tries++;
+        } while (!isValidOrder(shuffledTrays) && tries < maxTries);
+
+        shuffledTrays.forEach((trayData, index) => {
             const trayElement = this.createTrayElement(trayData, index);
             this.container.appendChild(trayElement);
-            console.log('[MENTE ANDRES][render] Tray agregado:', trayElement);
+            //console.log('[MENTE ANDRES][render] Tray agregado:', trayElement);
         });
-        
-        console.log(`${orderedTrays.length} pedidos renderizados correctamente`);
+        //console.log(`${shuffledTrays.length} pedidos renderizados correctamente`);
     }
     
     // Crear tarjeta visual de pedido
