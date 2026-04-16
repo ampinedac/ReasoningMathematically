@@ -113,39 +113,6 @@ function initM4ReflectionFlow() {
 }
 
 
-
-    // Oculta todo, muestra solapa final
-    const spreads = document.querySelectorAll('.page.q1-book-spread');
-    spreads.forEach(s => s.style.display = 'none');
-    const finalCover = document.getElementById('m4FinalCoverSpread');
-    if (finalCover) finalCover.style.display = 'flex';
-    currentSpread = -2;
-    updateNavButtons();
-
-    // Mostrar confeti
-    showConfettiFinal();
-
-function showConfettiFinal() {
-    const confettiDiv = document.getElementById('confettiFinal');
-    if (!confettiDiv) return;
-    confettiDiv.innerHTML = '';
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE'];
-    for (let i = 0; i < 80; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.top = '-10px';
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = (Math.random() * 10 + 5) + 'px';
-        confetti.style.height = (Math.random() * 10 + 5) + 'px';
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
-        confetti.style.position = 'absolute';
-        confetti.style.animation = `fall ${2 + Math.random() * 2}s linear forwards`;
-        confettiDiv.appendChild(confetti);
-        setTimeout(() => confetti.remove(), 4000);
-    }
-}
-
 function ensureM3SpreadStructure() {
     const spread = document.getElementById('m3FlowSpread');
     const content = document.getElementById('m3q3StepContent');
