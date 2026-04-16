@@ -1215,7 +1215,9 @@ function syncMission1ExplorationState() {
     return;
   }
 
-  const shouldShow = sessionData.mission1.explorationUnlocked || sessionData.mission1.saved.length >= 3 || sessionData.mission1.audioSubmitted;
+  // Solo mostrar si hay 3 combinaciones y todas tienen suma mágica verificada, o si ya se envió el audio
+  const allSumaVerificada = sessionData.mission1.saved.length === 3 && sessionData.mission1.saved.every(c => c.sumaMagica !== null);
+  const shouldShow = sessionData.mission1.explorationUnlocked || allSumaVerificada || sessionData.mission1.audioSubmitted;
   sessionData.mission1.explorationUnlocked = shouldShow;
   mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
   syncMission1AudioButtons();
