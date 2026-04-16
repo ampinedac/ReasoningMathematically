@@ -938,15 +938,89 @@ async function submitM1Q2Equation() {
         return;
     }
 
-    const normalizeExpression = (value) => value.replace(/\s+/g, ' ').trim();
+    // --- Validación de suma mágica ---
+    // Lista de sumas mágicas ya vistas (izquierda = derecha, sin espacios)
+    const SUMAS_PROHIBIDAS = [
+        // Ejemplos del cuento y tabla
+        '7+7+7=3+3+3+3+3+3+3',
+        '3+3+3+3+3+3+3=7+7+7',
+        '5+5+5=3+3+3+3+3',
+        '3+3+3+3+3=5+5+5',
+        '2+2+2+2=4+4',
+        '4+4=2+2+2+2',
+        '6+6+6+6+6=5+5+5+5+5+5',
+        '5+5+5+5+5+5=6+6+6+6+6',
+        // Tabla spread 13-14
+        '2+2+2+2+2+2+2+2+2+2+2+2+2+2+2=15+15',
+        '15+15=2+2+2+2+2+2+2+2+2+2+2+2+2+2+2',
+        '4+4+4=3+3+3+3',
+        '3+3+3+3=4+4+4',
+        '6+6+6=3+3+3+3+3+3',
+        '3+3+3+3+3+3=6+6+6',
+        '8+8=2+2+2+2+2+2+2+2',
+        '2+2+2+2+2+2+2+2=8+8'
+    ];
+
+    // Normaliza y quita espacios
+    const normalizeExpression = (value) => value.replace(/\s+/g, '').trim();
     const leftExpr = normalizeExpression(leftRaw);
     const rightExpr = normalizeExpression(rightRaw);
 
-    const isValidExpression = (value) => /\d/.test(value) && /^[\d+\s]+$/.test(value);
-
+    // Verifica que solo haya números y +
+    const isValidExpression = (value) => /\d/.test(value) && /^[\d+]+$/.test(value);
     if (!isValidExpression(leftExpr) || !isValidExpression(rightExpr)) {
         if (statusEl) {
             statusEl.textContent = 'Usa solo números y el signo + en cada caja.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Parsea sumandos
+    function parseSum(str) {
+        return str.split('+').map(Number).filter(n => !isNaN(n));
+    }
+    const leftArr = parseSum(leftExpr);
+    const rightArr = parseSum(rightExpr);
+
+    // Suma total
+    const sum = arr => arr.reduce((a, b) => a + b, 0);
+    if (sum(leftArr) !== sum(rightArr)) {
+        if (statusEl) {
+            statusEl.textContent = 'La suma de ambos lados debe ser igual.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Ambos lados deben ser sumandos iguales
+    const allEqual = arr => arr.every(n => n === arr[0]);
+    if (!allEqual(leftArr) || !allEqual(rightArr)) {
+        if (statusEl) {
+            statusEl.textContent = 'Cada lado debe tener sumandos iguales.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Conmutatividad: n sumandos de a = a sumandos de n
+    const a = leftArr[0], n = leftArr.length;
+    const b = rightArr[0], m = rightArr.length;
+    const isMagica = (n === b && m === a) && (a !== b || n !== m);
+    if (!isMagica) {
+        if (statusEl) {
+            statusEl.textContent = 'Esa suma no es mágica. Debe cumplir la conmutatividad: a veces b = b veces a, y ser diferente.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Chequeo de suma repetida (en cualquier orden)
+    const eqNorm1 = `${leftArr.join('+')}=${rightArr.join('+')}`;
+    const eqNorm2 = `${rightArr.join('+')}=${leftArr.join('+')}`;
+    if (SUMAS_PROHIBIDAS.includes(eqNorm1) || SUMAS_PROHIBIDAS.includes(eqNorm2)) {
+        if (statusEl) {
+            statusEl.textContent = 'Esa suma mágica ya la dijo Andrés.';
             statusEl.style.color = '#dc2626';
         }
         return;
@@ -961,8 +1035,8 @@ async function submitM1Q2Equation() {
         return;
     }
 
-    const izquierda = leftExpr;
-    const derecha = rightExpr;
+    const izquierda = leftArr.join(' + ');
+    const derecha = rightArr.join(' + ');
     const equationText = `${izquierda} = ${derecha}`;
 
     submitBtn.disabled = true;
@@ -2000,9 +2074,9 @@ function initMatchingActivity() {
 
     // Sumas misteriosas – se barajan al cargar
     const SUMS = [
-        { id: 'msum0', text: '5+5+5=3+3+3+3+3' },
-        { id: 'msum1', text: '2+2+2+2+2=4+4' },
-        { id: 'msum2', text: '6+6+6+6+6=5+5+5+5+5+5' }
+        { id: 'msum0', text: '5+5+5 = 3+3+3+3+3'},
+        { id: 'msum1', text: '2+2+2+2 = 4+4'},
+        { id: 'msum2', text: '6+6+6+6+6 = 5+5+5+5+5+5'}
     ];
     let shuffledSums = [...SUMS].sort(() => Math.random() - 0.5);
 

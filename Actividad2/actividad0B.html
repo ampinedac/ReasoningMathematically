@@ -175,8 +175,10 @@
     <div class="page q1-book-spread activity-spread" id="matchingSpread">
         <svg id="matchingLinesSVG" class="matching-lines-svg" xmlns="http://www.w3.org/2000/svg"></svg>
         <div class="q1-left-page" id="matchingLeftPage">
-            <p class="matching-instruction">Une la pareja de pedidos con su correspondiente suma misteriosa haciendo clic en la imagen y luego en la igualdad correspondiente.</p>
-            <div class="matching-sums-container" id="matchingSums"></div>
+                <p class="matching-instruction">Une la pareja de pedidos con su correspondiente suma misteriosa haciendo clic en la imagen y luego en la igualdad correspondiente.</p>
+                <div class="matching-sums-container" id="matchingSums">
+                    
+                </div>
             <button id="matchingVerifyBtn" class="btn btn-primary">Verificar emparejamientos</button>
             <p id="matchingFeedback" class="status-text"></p>
         </div>
@@ -318,10 +320,13 @@
     <!-- Story Spread 17-18 (Dos momentos de explicacion con tablero) -->
     <div class="page q1-book-spread activity-spread" id="m3FlowSpread">
         <div class="q1-left-page">
-            <div id="m3q3StepContent" class="think-hidden">
+            <p>Andrés miró a su abuelita y quiso contarle el secreto de las sumas misteriosas que había descubierto. Pero, al intentarlo, no encontraba las palabras adecuadas. ¿Cómo podría explicarle a la abuela, con palabras claras, qué es una suma repetida? Andrés necesita tu ayuda para encontrar la mejor forma de contárselo.</p>
+        </div>
+        <div class="spread-fold"></div>
+        <div class="q1-right-page">
+            <div id="m3q3StepContent">
                 <p class="m3-step-text">Si crees que un dibujo en el tablero o una suma misteriosa puede ayudar
                     a la abuelita de Andrés para entender mejor úsalo.</p>
-
                 <div class="board-container m3-board-container">
                     <div class="board-tools">
                         <button class="tool-btn" data-tool="black" title="Lápiz negro" aria-label="Lápiz negro">
@@ -344,7 +349,6 @@
                         <canvas id="boardCanvasM3Q3" class="drawing-board"></canvas>
                     </div>
                 </div>
-
                 <div class="audio-controls">
                     <button id="recordBtnM3Q3" class="btn btn-audiorecord"><img src="./assets/images/grabadora-de-voz.png" alt="Grabar audio"></button>
                     <button id="stopBtnM3Q3" class="btn btn-audiostop"><img src="./assets/images/boton-detener.png" alt="Detener audio"></button>
@@ -353,8 +357,6 @@
                 <p id="statusM3Q3" class="status-text"></p>
             </div>
         </div>
-        <div class="spread-fold"></div>
-        <div class="q1-right-page"></div>
         <span class="page-number page-number-left">17</span>
         <span class="page-number page-number-right">18</span>
     </div>
