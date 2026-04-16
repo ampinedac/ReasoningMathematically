@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initM1Q2EquationForm();
     initMenteAndresSystem();
     initM4ReflectionFlow();
-    initEncuesta();
 });
 // ─────────────────────────────────────────────
 // FLUJO DE REFLEXIÓN, FELICITACIÓN Y CIERRE FINAL
