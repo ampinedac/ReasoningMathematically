@@ -436,7 +436,6 @@ body #ContenedorLibro .activity-spread {
   margin: 0.5em auto;
   display: flex; /* Flexbox para organizar las páginas internas del spread */
   flex-direction: row; /* Páginas internas una al lado de la otra */
-  align-items: stretch; /* Asegura que las páginas internas ocupen toda la altura del spread */
   justify-content: center; /* Centra horizontalmente las páginas internas dentro del spread */
   align-items: center; /* Centra verticalmente las páginas internas dentro del spread */
   border-radius: var(--radius-xl);
@@ -1591,6 +1590,7 @@ body #ContenedorLibro .activity-spread {
           width: 100%;
           text-align: center;
           font-family: 'Rancho', cursive;
+          color: #0f2f7a;
           font-size: var(--spread13-uniform-text-size);
           line-height: 1.1;
           flex: 0 0 auto;
