@@ -445,8 +445,14 @@ function getSpreads() {
 function goToSpread(index) {
     const spreads = getSpreads();
 
+
     if (!spreads || spreads.length === 0) {
         console.error('❌ No hay spreads en el DOM');
+        return;
+    }
+    // Validación de límites y animación
+    if (isFlipping || index < 0 || index >= spreads.length) {
+        console.error('❌ Índice de spread fuera de rango o animación activa. index:', index, 'spreads:', spreads.length, 'isFlipping:', isFlipping);
         return;
     }
 
