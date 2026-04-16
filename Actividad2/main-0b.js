@@ -999,20 +999,19 @@ async function handleSubmit(tag) {
 
         if (statusEl) {
             statusEl.textContent = tag === 'M4Reflection'
-                ? '✅ Audio enviado. Ya puedes pasar a la solapa final.'
+                ? '✅ Ya puedes continuar.'
                 : '✅ Guardado. Ya puedes pasar a la siguiente página.';
             statusEl.style.color = '#16a34a';
         }
 
         if (tag === 'M4Reflection') {
-            // Habilitar flecha de siguiente y preparar navegación a la solapa final
+            // Mostrar y habilitar la flecha de siguiente
+            show('nextBtn');
             const nextBtn = document.getElementById('nextBtn');
             if (nextBtn) {
                 nextBtn.disabled = false;
                 nextBtn.style.opacity = '1';
                 nextBtn.style.cursor = 'pointer';
-                // Opcional: si quieres navegar automáticamente a la solapa final cuando exista
-                // nextBtn.addEventListener('click', () => goToSpread(FINAL_SOLAPA_INDEX));
             }
             return;
         }
