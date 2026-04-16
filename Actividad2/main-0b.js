@@ -902,7 +902,7 @@ async function handleSubmit(tag) {
             carpetaImg = 'Actividad2/2_3ReglageneralJustificacion/Img';
             nombreCanvas = `${nombreBase}_ReglaJustif`;
         } else if (tag === 'M4Reflection') {
-            carpeta = 'Actividad2/Reflexion';
+            carpeta = 'Actividad2/4Reflexion';
             nombreArchivo = `${nombreBase}_reflexion`;
         } else {
             // Por defecto, mantener la lógica anterior
