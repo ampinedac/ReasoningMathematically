@@ -1763,13 +1763,13 @@ function initMenteAndresSystem() {
     let menteAndresNoticeTimer = null;
 
     function showMenteAndresNotice(message, type = 'success', durationMs = 2400, onDone = null) {
-        const menteAndresScreen = document.getElementById('menteAndresScreen');
+        const menteAndresScreen = document.getElementById('MenteAndresScreen');
         if (!menteAndresScreen) {
             if (typeof onDone === 'function') onDone();
             return;
         }
 
-        const oldNotice = document.getElementById('menteAndresFloatingNotice');
+        const oldNotice = document.getElementById('MenteAndresFloatingNotice');
         if (oldNotice) oldNotice.remove();
         if (menteAndresNoticeTimer) {
             clearTimeout(menteAndresNoticeTimer);
@@ -1777,7 +1777,7 @@ function initMenteAndresSystem() {
         }
 
         const notice = document.createElement('div');
-        notice.id = 'menteAndresFloatingNotice';
+        notice.id = 'MenteAndresFloatingNotice';
         notice.className = `mente-andres-floating-notice ${type}`;
         notice.setAttribute('role', 'status');
         notice.setAttribute('aria-live', 'polite');
@@ -1813,7 +1813,7 @@ function initMenteAndresSystem() {
             }
         }
 
-        const oldNotice = document.getElementById('menteAndresFloatingNotice');
+        const oldNotice = document.getElementById('MenteAndresFloatingNotice');
         if (oldNotice) oldNotice.remove();
         if (menteAndresNoticeTimer) {
             clearTimeout(menteAndresNoticeTimer);
