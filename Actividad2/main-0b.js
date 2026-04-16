@@ -121,11 +121,6 @@ function initVisibility() {
         const finalQ = document.getElementById('m1Q2FinalQuestion');
         if (finalQ) hide('m1Q2FinalQuestion');
     }
-    setM3Step16Visible(true);
-    // Ocultar sección final M4
-    hide('finalQuestionSection');
-    hide('magicCanvas');
-    hide('confettiCanvas');
 }
 
 function normalizeNavigationLabels() {
