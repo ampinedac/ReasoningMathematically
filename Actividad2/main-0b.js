@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
     normalizeNavigationLabels();
     initStudentCodeDisplays();
+    ensureM3SpreadStructure();
     initVisibility();
     initWelcome();
     initConfirmation();
@@ -102,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
 // ─────────────────────────────────────────────
 // 1. VISIBILIDAD INICIAL
 // ─────────────────────────────────────────────
@@ -121,6 +123,11 @@ function initVisibility() {
         const finalQ = document.getElementById('m1Q2FinalQuestion');
         if (finalQ) hide('m1Q2FinalQuestion');
     }
+    setM3Step16Visible(true);
+    // Ocultar sección final M4
+    hide('finalQuestionSection');
+    hide('magicCanvas');
+    hide('confettiCanvas');
 }
 
 function normalizeNavigationLabels() {
@@ -1405,6 +1412,15 @@ function showM4FinalAndRedirect() {
     }, 1000);
 }
 
+function setM3Step16Visible(visible) {
+    const step16 = document.getElementById('m3q3StepContent');
+    if (!step16) return;
+    if (visible) {
+        step16.classList.remove('think-hidden');
+    } else {
+        step16.classList.add('think-hidden');
+    }
+}
 
 function initM3DualStepFlow() {
     setM3Step16Visible(true);
