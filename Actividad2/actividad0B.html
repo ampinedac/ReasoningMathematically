@@ -321,7 +321,7 @@
     <div class="page q1-book-spread activity-spread" id="m3FlowSpread">
         <div class="q1-left-page">
             <p>Andrés miró a su abuelita y quiso contarle el secreto de las sumas misteriosas que había descubierto. Pero, al intentarlo, no encontraba las palabras adecuadas. Ayúdalo a encontrar la mejor forma de contárselo.</p>
-            <img src="./assets/images/contarle.png" alt="Contarle a la abuela" style="max-width: 90%; margin: 1.5em auto 0.5em auto; display: block; border-radius: 18px; box-shadow: 0 2px 12px #0002;">
+            <img src="./assets/images/contarle.png" alt="Contarle a la abuelita" class="contarle-img" style="max-width: 90%; margin: 18px auto 0; display: block;" />
         </div>
     
         <div class="spread-fold"></div>
@@ -389,27 +389,14 @@
     </div>
 
 
-    <!-- Solapa de cierre (tipo portada de inicio, fuera de los spreads) -->
-    <div id="Solapa" class="Solapa-book" style="display:none;">
-        <h2 class="cover-book-title" aria-label="Cierre de la aventura">
-            <span>Y colorín colorado, las sumas misteriosas se han revelado.</span>
-        </h2>
-        <img src="./assets/images/FotoFinal.png" alt="Doña Aurora y Andrés" class="cover-leer-image" style="max-width: 70%; margin: 2em auto 1em auto; border-radius: 18px; box-shadow: 0 2px 12px #0002;">
-        <div class="final-felicitacion" style="font-size: 1.5em; color: #16a34a; margin: 1em 0 2em 0; text-align: center; font-family: 'Rancho', cursive;">
-            ¡Felicitaciones por descubrir el misterio de las sumas repetidas!<br>¡Eres una verdadera exploradora matemática!
-        </div>
-        <div id="confettiFinal"></div>
-        <div id="finalCountdown" class="hourglass-timer" aria-label="Reloj de arena" style="margin-top: 2em; display: flex; justify-content: center; align-items: center;">
-            <svg id="hourglassSVG" width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g>
-                    <rect x="10" y="10" width="60" height="100" rx="20" fill="#f3e8ff" stroke="#a78bfa" stroke-width="4"/>
-                    <polygon id="hourglassTop" points="20,20 60,20 40,60" fill="#fde68a"/>
-                    <polygon id="hourglassBottom" points="20,100 60,100 40,60" fill="#fde68a"/>
-                    <ellipse id="hourglassSand" cx="40" cy="60" rx="7" ry="7" fill="#fbbf24"/>
-                    <rect x="36" y="60" width="8" height="30" rx="4" fill="#fbbf24" id="hourglassStream"/>
-                </g>
-            </svg>
-        </div>
+
+    <!-- Página final: Solapa de cierre -->
+    <div class="page q1-book-spread activity-spread" id="m4FinalCoverSpread" style="display:none;">
+        <div class="q1-left-page"></div>
+        <div class="spread-fold"></div>
+        <div class="q1-right-page"></div>
+        <span class="page-number page-number-left">23</span>
+        <span class="page-number page-number-right">24</span>
     </div>
 
     <!-- Fin del libro -->
