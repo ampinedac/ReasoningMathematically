@@ -2238,16 +2238,7 @@ body #ContenedorLibro .activity-spread {
   }
 
   
-  #ContenedorMenteAndres #MenteAndresScreen {
-  #ContenedorMenteAndres {
-    width: 100vw;
-    min-height: 100vh;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
+  #ContenedorMenteAndres #menteAndresScreen {
   width: 100%;
   min-height: calc(100vh - 4rem);
   height: auto;
