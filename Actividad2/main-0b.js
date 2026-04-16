@@ -994,18 +994,23 @@ async function handleSubmit(tag) {
         };
         await addDoc(collection(db, 'Actividad2'), firestoreDoc);
 
+
         if (statusEl) {
             statusEl.textContent = tag === 'M4Reflection'
-                ? '✅ Audio enviado. Finalizando actividad...'
+                ? '✅ Audio enviado. Ya puedes pasar a la solapa final.'
                 : '✅ Guardado. Ya puedes pasar a la siguiente página.';
             statusEl.style.color = '#16a34a';
         }
 
-        // En el último spread, el envío del audio final dispara el formulario de cierre.
         if (tag === 'M4Reflection') {
-            if (statusEl) {
-                statusEl.textContent = 'Enviando respuestas finales...';
-                statusEl.style.color = '#555';
+            // Habilitar flecha de siguiente y preparar navegación a la solapa final
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+                // Opcional: si quieres navegar automáticamente a la solapa final cuando exista
+                // nextBtn.addEventListener('click', () => goToSpread(FINAL_SOLAPA_INDEX));
             }
             return;
         }
