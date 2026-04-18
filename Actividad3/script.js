@@ -227,7 +227,7 @@ function init() {
   setupMap();
   setupGuideDragAndDrop();
   setupMission1();
-  setupMissionCompletionButtons();
+
   setupBackToMapButtons();
   renderMission1SavedCombinations();
   clearMission1Board(false);
@@ -1376,12 +1376,7 @@ function createEmptyMission1Assignment() {
   };
 }
 
-function setupMissionCompletionButtons() {
-  document.getElementById("completeMission2Btn").addEventListener("click", () => completeMission(2));
-  document.getElementById("completeMission3Btn").addEventListener("click", () => completeMission(3));
-  document.getElementById("completeMission4Btn").addEventListener("click", () => completeMission(4));
-  document.getElementById("completeMission5Btn").addEventListener("click", () => completeMission(5));
-}
+
 
 function setupBackToMapButtons() {
   document.querySelectorAll(".back-to-map").forEach((button) => {
