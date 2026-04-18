@@ -190,6 +190,11 @@ const magicVFeedback = document.getElementById("magicVFeedback");
 const checkMagicVBtn = document.getElementById("checkMagicVBtn");
 const resetMagicVBtn = document.getElementById("resetMagicVBtn");
 const mission1ExploracionBlock = document.getElementById("mission1ExploracionBlock");
+// Modal total mágico
+const modalTotalMagico = document.getElementById("modalTotalMagico");
+const inputTotalMagico = document.getElementById("inputTotalMagico");
+const btnValidarTotalMagico = document.getElementById("btnValidarTotalMagico");
+const feedbackTotalMagico = document.getElementById("feedbackTotalMagico");
 const mission1AudioRecordBtn = document.getElementById("recordBtnA3M1Exploracion");
 const mission1AudioStopBtn = document.getElementById("stopBtnA3M1Exploracion");
 const mission1AudioSubmitBtn = document.getElementById("submitA3M1Exploracion");
@@ -775,46 +780,50 @@ function setupMission1() {
     verificarSumaMagica(Number(input.dataset.index));
   });
 
+  let totalMagicoMostrado = false;
   checkMagicVBtn.addEventListener("click", () => {
     const current = sessionData.mission1.current;
     const hasMissing = mission1SlotOrder.some((slot) => current[slot] === null);
-
     if (hasMissing) {
       setMessage(magicVFeedback, "Completa toda la V antes de comprobar.", "bad");
       return;
     }
-
     const leftArm = current.leftTop + current.leftMid;
     const rightArm = current.rightTop + current.rightMid;
     const valid = leftArm === rightArm;
-
     if (!valid) {
       setMessage(magicVFeedback, "Verifica si la suma de los brazos es igual.", "bad");
       return;
     }
-
     // --- Lógica avanzada de Magic V: núcleo y permutaciones ---
     const nucleo = current.bottom;
     const brazos = [current.leftTop, current.rightTop, current.leftMid, current.rightMid];
     const sumaMagica = current.leftTop + current.leftMid + current.bottom; // suma de un brazo + núcleo
-
+    // Si es la PRIMERA Magic V válida, mostrar modal de total mágico
+    if (sessionData.mission1.saved.length === 0 && !totalMagicoMostrado) {
+      modalTotalMagico.style.display = "flex";
+      inputTotalMagico.value = "";
+      feedbackTotalMagico.textContent = "";
+      inputTotalMagico.focus();
+      totalMagicoMostrado = true;
+      // Guardar temporalmente la combinación para validar después
+      sessionData.mission1._tmpFirstMagicV = { ...current };
+      return;
+    }
     // Buscar Magic V con el mismo núcleo
     let existente = sessionData.mission1.saved.find(item => item.nucleo === nucleo);
     if (existente) {
-      // Duplicado exacto (misma disposición)
       const esExacta = existente.leftTop === current.leftTop && existente.rightTop === current.rightTop &&
         existente.leftMid === current.leftMid && existente.rightMid === current.rightMid;
       if (esExacta) {
         setMessage(magicVFeedback, "Esta Magic V ya está registrada.", "bad");
         return;
       }
-      // Permutación: mismo núcleo, suma mágica igual, pero brazos permutados
       const brazosExistente = [existente.leftTop, existente.rightTop, existente.leftMid, existente.rightMid];
       const esPermutacion =
         brazos.slice().sort((a,b)=>a-b).join('-') === brazosExistente.slice().sort((a,b)=>a-b).join('-') &&
         sumaMagica === (existente.leftTop + existente.leftMid + existente.bottom);
       if (esPermutacion) {
-        // Guardar como permutación asociada
         if (!existente.permutaciones) existente.permutaciones = [];
         existente.permutaciones.push({ ...current });
         saveSessionProgress();
@@ -823,31 +832,62 @@ function setupMission1() {
         clearMission1Board(false);
         return;
       }
-      // Si mismo núcleo pero brazos diferentes y suma diferente, permitir guardar como permutación (opcional, aquí lo bloqueamos)
       setMessage(magicVFeedback, "Esta Magic V ya tiene ese núcleo pero no es una permutación válida.", "bad");
       return;
     }
-
-    // Si el núcleo es nuevo, guardar como nueva válida
     if (sessionData.mission1.saved.length >= 3) {
       unlockMission1Exploration();
       setMessage(magicVFeedback, "Ya registraste las 3 combinaciones validas. Responde la pregunta por audio para cerrar la misión.", "good");
       return;
     }
-
     sessionData.mission1.saved.push({ ...current, sumaMagica: null, nucleo, permutaciones: [] });
     saveSessionProgress();
     renderMission1SavedCombinations();
     clearMission1Board(false);
-
     if (sessionData.mission1.saved.length === 3) {
       unlockMission1Exploration();
       setMessage(magicVFeedback, "Excelente. Ya encontraste 3 combinaciones válidas distintas. Ahora responde la pregunta por audio.", "good");
       return;
     }
-
     const missing = 3 - sessionData.mission1.saved.length;
     setMessage(magicVFeedback, `Combinacion guardada. Te faltan ${missing} combinaciones validas.`, "good");
+  });
+
+  // Validación del total mágico en el modal
+  btnValidarTotalMagico.addEventListener("click", () => {
+    const valor = parseInt(inputTotalMagico.value, 10);
+    const comb = sessionData.mission1._tmpFirstMagicV;
+    if (!comb) {
+      feedbackTotalMagico.textContent = "Error interno. Recarga la página.";
+      return;
+    }
+    const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
+    if (isNaN(valor)) {
+      feedbackTotalMagico.textContent = "Ingresa un número válido.";
+      inputTotalMagico.focus();
+      return;
+    }
+    if (valor !== sumaCorrecta) {
+      feedbackTotalMagico.textContent = "No es correcto. Observa bien la suma de un brazo y el núcleo.";
+      inputTotalMagico.focus();
+      return;
+    }
+    // Guardar la combinación como válida
+    sessionData.mission1.saved.push({ ...comb, sumaMagica: valor, nucleo: comb.bottom, permutaciones: [] });
+    delete sessionData.mission1._tmpFirstMagicV;
+    saveSessionProgress();
+    renderMission1SavedCombinations();
+    clearMission1Board(false);
+    modalTotalMagico.style.display = "none";
+    setMessage(magicVFeedback, "¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.", "good");
+    totalMagicoMostrado = false;
+  });
+
+  // Permitir Enter en el input
+  inputTotalMagico.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      btnValidarTotalMagico.click();
+    }
   });
 
   resetMagicVBtn.addEventListener("click", () => {
