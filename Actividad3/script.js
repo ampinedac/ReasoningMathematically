@@ -195,6 +195,7 @@ const dragState = {
 };
 
 // --- BLOQUE 1: Foto y suma mágica ---
+let bloque1Congelado = false; // Variable de control global para el bloqueo del tablero
 const mission1SlotOrder = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
 const boardFoto = document.getElementById("magicvBoardFoto");
 const chipTrayFoto = document.getElementById("mission1ChipTray");
