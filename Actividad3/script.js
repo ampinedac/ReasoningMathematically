@@ -211,6 +211,8 @@ const mission1DragStateA = { active: false, pointerId: null, chip: null, originS
 const mission1DragStateB = { active: false, pointerId: null, chip: null, originSlot: null, ghost: null, hoverDrop: null, hoverTray: false };
 const mission2DragState = { active: false, pointerId: null, chip: null, originSlot: null, ghost: null, hoverDrop: null, hoverTray: false };
 
+
+// --- Estados de audio independientes para cada misión ---
 const mission1AudioState = {
   mediaRecorder: null,
   chunks: [],
@@ -218,6 +220,25 @@ const mission1AudioState = {
   stream: null,
   submitting: false
 };
+const mission2AudioState = {
+  mediaRecorder: null,
+  chunks: [],
+  blob: null,
+  stream: null,
+  submitting: false
+};
+
+// --- Botones de audio para misión 1 y 2 ---
+const mission1AudioRecordBtn = document.getElementById("recordBtnA3M1Exploracion");
+const mission1AudioStopBtn = document.getElementById("stopBtnA3M1Exploracion");
+const mission1AudioSubmitBtn = document.getElementById("submitBtnA3M1Exploracion");
+const mission1AudioStatus = document.getElementById("audioStatusA3M1Exploracion");
+
+const mission2AudioRecordBtn = document.getElementById("recordBtnA3M2ReglaGeneral");
+const mission2AudioStopBtn = document.getElementById("stopBtnA3M2ReglaGeneral");
+const mission2AudioSubmitBtn = document.getElementById("submitBtnA3M2ReglaGeneral");
+const mission2AudioStatus = document.getElementById("audioStatusA3M2ReglaGeneral");
+
 
 init();
 
@@ -228,6 +249,7 @@ function init() {
   setupMap();
   setupGuideDragAndDrop();
   setupMission1();
+  setupMission2AudioRecorder();
   setupMissionCompletionButtons();
   setupBackToMapButtons();
   renderMission1SavedCombinations();
@@ -1028,47 +1050,39 @@ function clearMission1Board(resetMessage) {
   }
 }
 
+
 function setupMission1AudioRecorder() {
   if (!mission1AudioRecordBtn || !mission1AudioStopBtn || !mission1AudioSubmitBtn || !mission1AudioStatus) {
     return;
   }
-
   syncMission1AudioButtons();
-
   mission1AudioRecordBtn.addEventListener("click", async () => {
     if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
       return;
     }
-
     try {
-      const stream = await requestMission1AudioStream();
+      const stream = await requestMissionAudioStream();
       const mediaRecorder = new MediaRecorder(stream);
-
       mission1AudioState.mediaRecorder = mediaRecorder;
       mission1AudioState.stream = stream;
       mission1AudioState.chunks = [];
       mission1AudioState.blob = null;
-
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           mission1AudioState.chunks.push(event.data);
         }
       };
-
       mediaRecorder.onstop = () => {
         mission1AudioState.blob = new Blob(mission1AudioState.chunks, {
           type: mission1AudioState.chunks[0]?.type || "audio/webm"
         });
-
         if (mission1AudioState.stream) {
           mission1AudioState.stream.getTracks().forEach((track) => track.stop());
         }
-
         mission1AudioState.stream = null;
         setMessage(mission1AudioStatus, "Audio listo para enviar.", "good");
         syncMission1AudioButtons();
       };
-
       mediaRecorder.start(250);
       setMessage(mission1AudioStatus, "Grabando...", "");
       syncMission1AudioButtons();
@@ -1078,7 +1092,6 @@ function setupMission1AudioRecorder() {
       syncMission1AudioButtons();
     }
   });
-
   mission1AudioStopBtn.addEventListener("click", () => {
     const mediaRecorder = mission1AudioState.mediaRecorder;
     if (mediaRecorder && mediaRecorder.state === "recording") {
@@ -1090,34 +1103,102 @@ function setupMission1AudioRecorder() {
       mediaRecorder.stop();
     }
   });
-
   mission1AudioSubmitBtn.addEventListener("click", () => {
     handleMission1AudioSubmit();
   });
 }
 
+function setupMission2AudioRecorder() {
+  if (!mission2AudioRecordBtn || !mission2AudioStopBtn || !mission2AudioSubmitBtn || !mission2AudioStatus) {
+    return;
+  }
+  syncMission2AudioButtons();
+  mission2AudioRecordBtn.addEventListener("click", async () => {
+    if (mission2AudioState.submitting) {
+      return;
+    }
+    try {
+      const stream = await requestMissionAudioStream();
+      const mediaRecorder = new MediaRecorder(stream);
+      mission2AudioState.mediaRecorder = mediaRecorder;
+      mission2AudioState.stream = stream;
+      mission2AudioState.chunks = [];
+      mission2AudioState.blob = null;
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          mission2AudioState.chunks.push(event.data);
+        }
+      };
+      mediaRecorder.onstop = () => {
+        mission2AudioState.blob = new Blob(mission2AudioState.chunks, {
+          type: mission2AudioState.chunks[0]?.type || "audio/webm"
+        });
+        if (mission2AudioState.stream) {
+          mission2AudioState.stream.getTracks().forEach((track) => track.stop());
+        }
+        mission2AudioState.stream = null;
+        setMessage(mission2AudioStatus, "Audio listo para enviar.", "good");
+        syncMission2AudioButtons();
+      };
+      mediaRecorder.start(250);
+      setMessage(mission2AudioStatus, "Grabando...", "");
+      syncMission2AudioButtons();
+    } catch (error) {
+      console.error("Error al acceder al micrófono de Misión 2:", error);
+      setMessage(mission2AudioStatus, "No se pudo acceder al micrófono. Revisa permisos e intenta de nuevo.", "bad");
+      syncMission2AudioButtons();
+    }
+  });
+  mission2AudioStopBtn.addEventListener("click", () => {
+    const mediaRecorder = mission2AudioState.mediaRecorder;
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      try {
+        mediaRecorder.requestData();
+      } catch (error) {
+        console.warn("No fue posible forzar el volcado del buffer de audio:", error);
+      }
+      mediaRecorder.stop();
+    }
+  });
+  mission2AudioSubmitBtn.addEventListener("click", () => {
+    handleMission2AudioSubmit();
+  });
+}
+
+
 function syncMission1AudioButtons() {
   if (!mission1AudioRecordBtn || !mission1AudioStopBtn || !mission1AudioSubmitBtn) {
     return;
   }
-
   const isRecording = Boolean(mission1AudioState.mediaRecorder && mission1AudioState.mediaRecorder.state === "recording");
   const hasAudio = Boolean(mission1AudioState.blob && mission1AudioState.blob.size > 0);
   const isLocked = sessionData.mission1.audioSubmitted || mission1AudioState.submitting;
-
   mission1AudioRecordBtn.style.display = isRecording ? "none" : "inline-flex";
   mission1AudioStopBtn.style.display = isRecording ? "inline-flex" : "none";
-
   mission1AudioRecordBtn.disabled = isLocked;
   mission1AudioStopBtn.disabled = !isRecording || isLocked;
   mission1AudioSubmitBtn.disabled = !hasAudio || isLocked;
 }
 
-async function requestMission1AudioStream() {
+function syncMission2AudioButtons() {
+  if (!mission2AudioRecordBtn || !mission2AudioStopBtn || !mission2AudioSubmitBtn) {
+    return;
+  }
+  const isRecording = Boolean(mission2AudioState.mediaRecorder && mission2AudioState.mediaRecorder.state === "recording");
+  const hasAudio = Boolean(mission2AudioState.blob && mission2AudioState.blob.size > 0);
+  const isLocked = mission2AudioState.submitting;
+  mission2AudioRecordBtn.style.display = isRecording ? "none" : "inline-flex";
+  mission2AudioStopBtn.style.display = isRecording ? "inline-flex" : "none";
+  mission2AudioRecordBtn.disabled = isLocked;
+  mission2AudioStopBtn.disabled = !isRecording || isLocked;
+  mission2AudioSubmitBtn.disabled = !hasAudio || isLocked;
+}
+
+
+async function requestMissionAudioStream() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     throw new Error("getUserMedia no está disponible en este navegador");
   }
-
   const preferredConstraints = {
     audio: {
       echoCancellation: true,
@@ -1126,38 +1207,33 @@ async function requestMission1AudioStream() {
       channelCount: 1
     }
   };
-
   try {
     return await navigator.mediaDevices.getUserMedia(preferredConstraints);
   } catch (error) {
     if (error?.name === "NotAllowedError") {
       throw error;
     }
-
     return navigator.mediaDevices.getUserMedia({ audio: true });
   }
 }
+
 
 async function handleMission1AudioSubmit() {
   if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
     return;
   }
-
   if (!mission1AudioState.blob || mission1AudioState.blob.size === 0) {
     setMessage(mission1AudioStatus, "Primero graba una respuesta antes de enviarla.", "bad");
     return;
   }
-
   const firebaseServices = window.firebaseServices;
   if (!firebaseServices?.storage || !firebaseServices?.db) {
     setMessage(mission1AudioStatus, "Firebase no está disponible en este momento. Intenta de nuevo en unos segundos.", "bad");
     return;
   }
-
   mission1AudioState.submitting = true;
   syncMission1AudioButtons();
   setMessage(mission1AudioStatus, "Subiendo audio...", "");
-
   try {
     const {
       storage,
@@ -1169,17 +1245,13 @@ async function handleMission1AudioSubmit() {
       addDoc,
       serverTimestamp
     } = firebaseServices;
-
     const basePath = buildMission1ExplorationStorageBasePath();
     const fileName = buildMission1ExplorationFileName();
     const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
-
     await uploadBytes(storageRef, mission1AudioState.blob, {
       contentType: mission1AudioState.blob.type || "audio/webm"
     });
-
     const audioURL = await getDownloadURL(storageRef);
-
     await addDoc(collection(db, "Actividad3"), {
       studentCode,
       studentName: getStudentDisplayName(),
@@ -1192,7 +1264,6 @@ async function handleMission1AudioSubmit() {
       audioURL,
       timestamp: serverTimestamp()
     });
-
     sessionData.mission1.audioSubmitted = true;
     setMessage(mission1AudioStatus, "✅ Audio enviado correctamente.", "good");
     setMessage(magicVFeedback, "Respuesta enviada. La misión 1 quedó completada.", "good");
@@ -1204,6 +1275,64 @@ async function handleMission1AudioSubmit() {
   } finally {
     mission1AudioState.submitting = false;
     syncMission1AudioButtons();
+  }
+}
+
+async function handleMission2AudioSubmit() {
+  if (mission2AudioState.submitting) {
+    return;
+  }
+  if (!mission2AudioState.blob || mission2AudioState.blob.size === 0) {
+    setMessage(mission2AudioStatus, "Primero graba una respuesta antes de enviarla.", "bad");
+    return;
+  }
+  const firebaseServices = window.firebaseServices;
+  if (!firebaseServices?.storage || !firebaseServices?.db) {
+    setMessage(mission2AudioStatus, "Firebase no está disponible en este momento. Intenta de nuevo en unos segundos.", "bad");
+    return;
+  }
+  mission2AudioState.submitting = true;
+  syncMission2AudioButtons();
+  setMessage(mission2AudioStatus, "Subiendo audio...", "");
+  try {
+    const {
+      storage,
+      db,
+      ref,
+      uploadBytes,
+      getDownloadURL,
+      collection,
+      addDoc,
+      serverTimestamp
+    } = firebaseServices;
+    const basePath = buildMission2ReglaGeneralStorageBasePath();
+    const fileName = buildMission2ReglaGeneralFileName();
+    const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
+    await uploadBytes(storageRef, mission2AudioState.blob, {
+      contentType: mission2AudioState.blob.type || "audio/webm"
+    });
+    const audioURL = await getDownloadURL(storageRef);
+    await addDoc(collection(db, "Actividad3"), {
+      studentCode,
+      studentName: getStudentDisplayName(),
+      curso: studentInfo?.curso || "",
+      isGuest: studentCode === "0000",
+      tag: "A3M2ReglaGeneral",
+      componente: "2ReglaGeneral",
+      storageBasePath: basePath,
+      fileName: `${fileName}.webm`,
+      audioURL,
+      timestamp: serverTimestamp()
+    });
+    setMessage(mission2AudioStatus, "✅ Audio enviado correctamente.", "good");
+    syncMission2AudioButtons();
+    completeMission(2);
+  } catch (error) {
+    console.error("Error al enviar el audio de 2ReglaGeneral:", error);
+    setMessage(mission2AudioStatus, "Error al guardar el audio. Revisa tu conexión e intenta de nuevo.", "bad");
+  } finally {
+    mission2AudioState.submitting = false;
+    syncMission2AudioButtons();
   }
 }
 
@@ -1459,16 +1588,35 @@ function normalizeStorageSegment(value) {
     .toLowerCase();
 }
 
+
 function buildMission1ExplorationStorageBasePath() {
   return "Actividad3/1Exploración";
 }
-
 function buildMission1ExplorationFileName() {
-  const suffix = studentCode === "0000"
-    ? (normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado")
-    : (normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso");
+  if (studentCode === "0000") {
+    // Invitado: nombre_1exploracion
+    const nombre = normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado";
+    return `${nombre}_1exploracion`;
+  } else {
+    // Estudiante: codigo_curso_1exploracion
+    const curso = normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso";
+    return `${studentCode}_${curso}_1exploracion`;
+  }
+}
 
-  return `${studentCode}_1Exploracion_${suffix}`;
+function buildMission2ReglaGeneralStorageBasePath() {
+  return "Actividad3/2ReglaGeneral";
+}
+function buildMission2ReglaGeneralFileName() {
+  if (studentCode === "0000") {
+    // Invitado: nombre_2reglageneral
+    const nombre = normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado";
+    return `${nombre}_2reglageneral`;
+  } else {
+    // Estudiante: codigo_curso_2reglageneral
+    const curso = normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso";
+    return `${studentCode}_${curso}_2reglageneral`;
+  }
 }
 
 function getStudentDisplayName() {
