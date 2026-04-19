@@ -74,52 +74,44 @@ function getInitialSessionData() {
     if (saved) {
       const parsed = JSON.parse(saved);
       // Asegura estructura mínima
-      return Object.assign({
-        character: null,
-        progress: 0,
-        missionsCompleted: [],
-        timestamps: {},
-        mission1: {
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }
-      }, parsed, {
-        mission1: Object.assign({
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }, parsed.mission1 || {})
-      });
-    }
-  } catch (e) {}
-  // Por defecto
-  return {
-    character: null,
-    progress: 0,
-    missionsCompleted: [],
-    timestamps: {},
-    mission1: {
-      current: createEmptyMission1Assignment(),
-      saved: [],
-      explorationUnlocked: false,
-      audioSubmitted: false
-    }
-  };
-}
+      function setupMission1() {
+        setupMission1AudioRecorder();
 
-let sessionData = getInitialSessionData();
+        // --- Card A ---
+        mission1ChipTrayA.addEventListener("pointerdown", startMission1ChipDragA);
+        mission1DropsA.forEach((drop) => {
+          drop.addEventListener("pointerdown", startMission1ChipDragA);
+        });
 
-// Guarda el progreso relevante en sessionStorage
-function saveSessionProgress() {
-  try {
-    // Solo guardamos lo relevante (sin referencias a nodos DOM ni funciones)
-    const toSave = {
-      character: sessionData.character,
-      progress: sessionData.progress,
-      missionsCompleted: sessionData.missionsCompleted,
+        // --- Card B ---
+        mission1ChipTrayB.addEventListener("pointerdown", startMission1ChipDragB);
+        mission1DropsB.forEach((drop) => {
+          drop.addEventListener("pointerdown", startMission1ChipDragB);
+        });
+
+        // Listeners globales para ambos (puedes separar si lo deseas)
+        window.addEventListener("pointermove", handleMission1ChipMoveA, { passive: false });
+        window.addEventListener("pointerup", handleMission1ChipDropA);
+        window.addEventListener("pointermove", handleMission1ChipMoveB, { passive: false });
+        window.addEventListener("pointerup", handleMission1ChipDropB);
+
+        // Verificación de suma mágica por delegación (puedes separar si cada card tiene su lista)
+        mission1SavedList.addEventListener("click", (e) => {
+          const btn = e.target.closest(".magicv-suma-check");
+          if (!btn) return;
+          verificarSumaMagica(Number(btn.dataset.index));
+        });
+
+        mission1SavedList.addEventListener("keydown", (e) => {
+          const input = e.target.closest(".magicv-suma-input");
+          if (!input || e.key !== "Enter") return;
+          verificarSumaMagica(Number(input.dataset.index));
+        });
+
+        // Si tienes botones de verificación separados para cada card, sepáralos aquí
+        // checkMagicVBtnA.addEventListener(...)
+        // checkMagicVBtnB.addEventListener(...)
+      }
       timestamps: sessionData.timestamps,
       mission1: {
         current: sessionData.mission1.current,
