@@ -247,38 +247,38 @@
          <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación.
          <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
         </p>
-            
-        <div class="magicv-play-area">
-         <div class="magicv-drop" data-slot="leftTop" aria-label="Posición izquierda superior"></div>
-         <div class="magicv-drop" data-slot="rightTop" aria-label="Posición derecha superior"></div>
-         <div class="magicv-drop" data-slot="leftMid" aria-label="Posición izquierda media"></div>
-         <div class="magicv-drop" data-slot="rightMid" aria-label="Posición derecha media"></div>
-         <div class="magicv-drop" data-slot="bottom" aria-label="Posición inferior"></div>
+
+        <!-- Contenedor de la V y las fichas -->
+        <div id="magicVsection">
+          <div class="magicv-board" id="magicvBoardA" aria-label="Tablero de la Magic V">
+            <div class="magicv-drop" data-slot="leftTop" aria-label="Posición izquierda superior"></div>
+            <div class="magicv-drop" data-slot="rightTop" aria-label="Posición derecha superior"></div>
+            <div class="magicv-drop" data-slot="leftMid" aria-label="Posición izquierda media"></div>
+            <div class="magicv-drop" data-slot="rightMid" aria-label="Posición derecha media"></div>
+            <div class="magicv-drop" data-slot="bottom" aria-label="Posición inferior"></div>
+          </div>
+          <div class="magicv-chip-tray" id="mission1ChipTrayA" aria-label="Fichas disponibles">
+            <button class="magicv-chip" type="button" data-value="1">1</button>
+            <button class="magicv-chip" type="button" data-value="2">2</button>
+            <button class="magicv-chip" type="button" data-value="3">3</button>
+            <button class="magicv-chip" type="button" data-value="4">4</button>
+            <button class="magicv-chip" type="button" data-value="5">5</button>
+          </div>
         </div>
-               
-        <div class="magicv-chip-tray" id="mission1ChipTrayA" aria-label="Fichas disponibles">
-         <button class="magicv-chip" type="button" data-value="1">1</button>
-         <button class="magicv-chip" type="button" data-value="2">2</button>
-         <button class="magicv-chip" type="button" data-value="3">3</button>
-         <button class="magicv-chip" type="button" data-value="4">4</button>
-         <button class="magicv-chip" type="button" data-value="5">5</button>
-        </div>
-          
+
         <div class="mission-actions">
           <button id="checkMagicVBtnA" class="btn btn-primary">Comprobar combinación</button>
           <button id="resetMagicVBtnA" class="btn btn-secondary">Reiniciar</button>
         </div>
 
-        <div class="magicv-card" id="magicvCardB">
-          <p> Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.</p>
-          <p>¿Cuál sería el total mágico de tu Magic V? Escribe el resultado y comprueba si es correcto.</p>
-          <div style="margin-bottom: 10px;">
-            <input id="inputTotalMagicoA" type="number" placeholder="Escribe el total mágico" style="width: 180px; padding: 4px;">
-            <button id="btnVerificarTotalMagicoA" class="btn btn-primary" type="button">Verificar</button>
-          </div>
-          <p id="feedbackTotalMagicoA" class="status-pill"></p>
-          </p>
+        <!-- Texto y verificación del total mágico, fuera de magicVsection pero dentro de magicvCardA -->
+        <p>Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.</p>
+        <p>¿Cuál sería el total mágico de tu Magic V? Escribe el resultado y comprueba si es correcto.</p>
+        <div style="margin-bottom: 10px;">
+          <input id="inputTotalMagicoA" type="number" placeholder="Escribe el total mágico" style="width: 180px; padding: 4px;">
+          <button id="btnVerificarTotalMagicoA" class="btn btn-primary" type="button">Verificar</button>
         </div>
+        <p id="feedbackTotalMagicoA" class="status-pill"></p>
      </div>
           
 
