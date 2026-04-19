@@ -1,38 +1,8 @@
-// --- Inicialización de sessionData ---
+// --- Inicialización simple de sessionData ---
 function getInitialSessionData() {
-  try {
-    const saved = sessionStorage.getItem("actividad3_sessionData");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Asegura estructura mínima
-      return Object.assign({
-        character: null,
-        progress: 0,
-        missionsCompleted: [],
-        timestamps: {},
-        mission1: {
-          current: {},
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }
-      }, parsed, {
-        mission1: Object.assign({
-          current: {},
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }, parsed.mission1 || {})
-      });
-    }
-  } catch (e) {}
-  // Por defecto
   return {
     character: null,
-    progress: 0,
-    missionsCompleted: [],
-    timestamps: {},
-    mission1: {
+    mission2: {
       current: {},
       saved: [],
       explorationUnlocked: false,
@@ -41,7 +11,19 @@ function getInitialSessionData() {
   };
 }
 
+
 let sessionData = getInitialSessionData();
+// Parche defensivo: asegurar que mission2 existe y tiene audioSubmitted
+
+// Parche defensivo: asegurar que mission2 existe y tiene audioSubmitted
+if (typeof sessionData.mission2 === 'undefined') {
+  sessionData.mission2 = {
+    current: createEmptyMission2Assignment ? createEmptyMission2Assignment() : {},
+    saved: [],
+    explorationUnlocked: false,
+    audioSubmitted: false
+  };
+} 
 
 // --- Misión 2: Audio y exploración ---
 const mission2ExploracionBlock = document.getElementById("mission2ExploracionBlock");
