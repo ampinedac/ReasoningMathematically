@@ -236,7 +236,13 @@ const mission1AudioState = {
   submitting: false
 };
 
-init();
+
+// Asegura que init() se ejecute solo cuando el DOM esté listo
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
 
 function init() {
   setupEntryFlow();
