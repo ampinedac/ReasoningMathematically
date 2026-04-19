@@ -1383,11 +1383,12 @@ function syncMission1ExplorationState() {
   syncMission1AudioButtons();
 }
 
-function orderMission1TrayChips() {
-  const chips = Array.from(mission1ChipTray.querySelectorAll(".magicv-chip"));
+function orderMission1TrayChips(trayElement) {
+  if (!trayElement || typeof trayElement.querySelectorAll !== 'function') return;
+  const chips = Array.from(trayElement.querySelectorAll('.magicv-chip'));
   chips
     .sort((a, b) => Number(a.dataset.value) - Number(b.dataset.value))
-    .forEach((chip) => mission1ChipTray.appendChild(chip));
+    .forEach((chip) => trayElement.appendChild(chip));
 }
 
 function verificarSumaMagica(index) {
