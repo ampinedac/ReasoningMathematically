@@ -905,8 +905,8 @@ function setupMission1() {
     cardTotalMagicoContainer.innerHTML = `
       <article class="narrative-card narrative-card-magico">
         <h3>¿Qué es un total mágico?</h3>
-        <p>Llamaremos <strong>\"total mágico\"</strong> a la suma de los tres números que forman un brazo de una V mágica.</p>
-        <p>En tu Magic V, el núcleo elegido es <strong>${comb.bottom}</strong>. ¿Cuál es el total mágico?</p>
+        <p>Llamaremos <strong>"total mágico"</strong> a la suma de los tres números que forman un brazo de una V mágica.</p>
+        <p>En tu Magic V ¿cuál es el total mágico de cada brazo en tu Magic V?</p>
         <label for="inputTotalMagico">Total mágico:</label>
         <input id="inputTotalMagico" type="number" min="1" max="100" class="chalk-input" style="width:120px; margin: 0 10px;">
         <button id="btnValidarTotalMagico" class="btn btn-primary">Validar</button>
@@ -930,22 +930,179 @@ function setupMission1() {
         input.focus();
         return;
       }
-      // Suma mágica correcta: inhabilitar todo el bloque 1 y mostrar bloque 2
+      // Suma mágica correcta: inhabilitar inputs pero mantener visible la card
       bloque1SumaMagicaCorrecta = true;
-      cardTotalMagicoContainer.innerHTML = '<div class="status-text good">¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.</div>';
-      setTimeout(() => {
-        document.getElementById('magicv-card-foto').style.opacity = '0.6';
-        exploracionBlock.style.display = '';
-        setupBloque2();
-      }, 1200);
+      input.disabled = true;
+      btn.disabled = true;
+      feedback.textContent = '¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.';
+      feedback.classList.add('good');
+      document.getElementById('magicv-card-foto').style.opacity = '0.6';
+      exploracionBlock.style.display = '';
+      setupBloque2();
     };
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') btn.click(); });
   }
 
   // Inicializar bloque 2 (exploración y registro)
   function setupBloque2() {
-    // ...aquí va la lógica normal de exploración y registro de Magic V...
-    // Puedes reutilizar la lógica previa de guardado, validación y panel de combinaciones
+    // --- Núcleo fijo y 4 fichas ---
+    const board = document.getElementById('magicvBoardExploracion');
+    const tray = document.getElementById('mission1ChipTrayExploracion');
+    const feedback = document.getElementById('magicVFeedbackExploracion');
+    const checkBtn = document.getElementById('checkMagicVBtnExploracion');
+    const resetBtn = document.getElementById('resetMagicVBtnExploracion');
+    const savedList = document.getElementById('mission1SavedList');
+    const savedCount = document.getElementById('mission1SavedCount');
+    const audioBlock = document.getElementById('mission1ExploracionBlock');
+    // Limpiar tablero y bandeja
+    board.innerHTML = '';
+    tray.innerHTML = '';
+    // Obtener núcleo de la primera Magic V
+    const nucleo = primeraMagicV.bottom;
+    // Crear slots
+    const slots = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
+    slots.forEach(slot => {
+      const div = document.createElement('div');
+      div.className = 'magicv-drop';
+      div.dataset.slot = slot;
+      if (slot === 'bottom') {
+        div.innerHTML = `<span class='magicv-chip fixed'>${nucleo}</span>`;
+      }
+      board.appendChild(div);
+    });
+    // Crear fichas (las 4 restantes)
+    const fichas = [1,2,3,4,5].filter(n => n !== nucleo);
+    fichas.forEach(n => {
+      const btn = document.createElement('button');
+      btn.className = 'magicv-chip';
+      btn.type = 'button';
+      btn.dataset.value = n;
+      btn.textContent = n;
+      tray.appendChild(btn);
+    });
+    // Drag and drop
+    let dragState = { active: false, pointerId: null, chip: null, ghost: null };
+    function startDrag(event) {
+      const chip = event.target.closest('.magicv-chip:not(.fixed)');
+      if (!chip) return;
+      event.preventDefault();
+      dragState.active = true;
+      dragState.pointerId = event.pointerId;
+      dragState.chip = chip;
+      dragState.ghost = document.createElement('div');
+      dragState.ghost.className = 'magicv-chip-ghost';
+      dragState.ghost.textContent = chip.dataset.value;
+      document.body.appendChild(dragState.ghost);
+      moveGhost(event.clientX, event.clientY);
+    }
+    function moveGhost(x, y) {
+      if (!dragState.ghost) return;
+      dragState.ghost.style.left = `${x}px`;
+      dragState.ghost.style.top = `${y}px`;
+    }
+    function handleMove(event) {
+      if (!dragState.active || event.pointerId !== dragState.pointerId) return;
+      event.preventDefault();
+      moveGhost(event.clientX, event.clientY);
+    }
+    function handleDrop(event) {
+      if (!dragState.active || event.pointerId !== dragState.pointerId) return;
+      event.preventDefault();
+      const chip = dragState.chip;
+      const targetDrop = document.elementFromPoint(event.clientX, event.clientY)?.closest('.magicv-drop:not([data-slot="bottom"])');
+      const droppedInTray = Boolean(document.elementFromPoint(event.clientX, event.clientY)?.closest('#mission1ChipTrayExploracion'));
+      if (targetDrop) {
+        if (targetDrop.querySelector('.magicv-chip')) {
+          tray.appendChild(targetDrop.querySelector('.magicv-chip'));
+        }
+        targetDrop.appendChild(chip);
+      } else if (droppedInTray) {
+        tray.appendChild(chip);
+      }
+      if (dragState.ghost) dragState.ghost.remove();
+      dragState = { active: false, pointerId: null, chip: null, ghost: null };
+    }
+    Array.from(board.querySelectorAll('.magicv-drop')).forEach(drop => {
+      if (drop.dataset.slot !== 'bottom') drop.addEventListener('pointerdown', startDrag);
+    });
+    Array.from(tray.querySelectorAll('.magicv-chip')).forEach(chip => {
+      chip.addEventListener('pointerdown', startDrag);
+    });
+    window.addEventListener('pointermove', handleMove, { passive: false });
+    window.addEventListener('pointerup', handleDrop);
+    // Validar combinación
+    checkBtn.disabled = false;
+    checkBtn.onclick = () => {
+      const current = {};
+      Array.from(board.querySelectorAll('.magicv-drop')).forEach(drop => {
+        if (drop.dataset.slot === 'bottom') {
+          current[drop.dataset.slot] = nucleo;
+        } else {
+          current[drop.dataset.slot] = drop.querySelector('.magicv-chip') ? Number(drop.querySelector('.magicv-chip').dataset.value) : null;
+        }
+      });
+      const hasMissing = slots.some(slot => current[slot] === null);
+      if (hasMissing) {
+        feedback.textContent = 'Completa toda la V antes de comprobar.';
+        return;
+      }
+      const leftArm = current.leftTop + current.leftMid;
+      const rightArm = current.rightTop + current.rightMid;
+      if (leftArm !== rightArm) {
+        feedback.textContent = 'Verifica si la suma de los brazos es igual.';
+        return;
+      }
+      // Validar unicidad (no repetida)
+      const combinacion = [current.leftTop, current.rightTop, current.leftMid, current.rightMid];
+      const yaExiste = sessionData.mission1.exploracionCombinaciones?.some(c =>
+        c.leftTop === current.leftTop &&
+        c.rightTop === current.rightTop &&
+        c.leftMid === current.leftMid &&
+        c.rightMid === current.rightMid
+      );
+      if (yaExiste) {
+        feedback.textContent = 'Esa combinación ya la encontraste.';
+        return;
+      }
+      // Guardar combinación
+      if (!sessionData.mission1.exploracionCombinaciones) sessionData.mission1.exploracionCombinaciones = [];
+      sessionData.mission1.exploracionCombinaciones.push({ ...current });
+      feedback.textContent = '¡Combinación guardada!';
+      renderExploracionCombinaciones();
+      // Limpiar tablero (solo las 4 fichas)
+      slots.filter(s=>s!=='bottom').forEach(slot=>{
+        const drop = board.querySelector(`.magicv-drop[data-slot="${slot}"]`);
+        if (drop && drop.querySelector('.magicv-chip')) tray.appendChild(drop.querySelector('.magicv-chip'));
+      });
+      // Habilitar audio si ya tiene 8
+      if (sessionData.mission1.exploracionCombinaciones.length >= 8) {
+        audioBlock.classList.remove('is-hidden');
+        checkBtn.disabled = true;
+        feedback.textContent = '¡Has encontrado todas las combinaciones! Ahora responde la pregunta por audio.';
+      }
+    };
+    // Renderizar combinaciones encontradas
+    function renderExploracionCombinaciones() {
+      const arr = sessionData.mission1.exploracionCombinaciones || [];
+      savedList.innerHTML = arr.map((c,i)=>
+        `<div class='magicv-mini-board'><span>${c.leftTop}</span><span>${c.rightTop}</span><span>${c.leftMid}</span><span>${c.rightMid}</span><span>${c.bottom}</span></div>`
+      ).join('');
+      savedCount.textContent = `${arr.length}/8`;
+    }
+    renderExploracionCombinaciones();
+    // Reset
+    resetBtn.onclick = () => {
+      sessionData.mission1.exploracionCombinaciones = [];
+      renderExploracionCombinaciones();
+      feedback.textContent = '';
+      checkBtn.disabled = false;
+      // Limpiar tablero
+      slots.filter(s=>s!=='bottom').forEach(slot=>{
+        const drop = board.querySelector(`.magicv-drop[data-slot="${slot}"]`);
+        if (drop && drop.querySelector('.magicv-chip')) tray.appendChild(drop.querySelector('.magicv-chip'));
+      });
+      audioBlock.classList.add('is-hidden');
+    };
   }
 
   // Inicialización
@@ -965,7 +1122,7 @@ function setupMission1() {
     card.innerHTML = `
       <h3>¿Qué es un total mágico?</h3>
       <p>Llamaremos <strong>"total mágico"</strong> a la suma de los tres números que forman un brazo de una V mágica.</p>
-      <p>En tu Magic V, el núcleo elegido es <strong>${comb.bottom}</strong>. ¿Cuál es el total mágico?</p>
+      <p>En tu Magic V ¿cuál es el total mágico?</p>
       <label for="inputTotalMagico">Total mágico:</label>
       <input id="inputTotalMagico" type="number" min="1" max="100" class="chalk-input" style="width:120px; margin: 0 10px;">
       <button id="btnValidarTotalMagico" class="btn btn-primary">Validar</button>
@@ -992,7 +1149,7 @@ function setupMission1() {
         return;
       }
       if (valor !== sumaCorrecta) {
-        feedback.textContent = "No es correcto. Observa bien la suma de un brazo y el núcleo.";
+        feedback.textContent = "Suma solamente los tres números de un brazo.";
         input.focus();
         return;
       }
