@@ -1143,7 +1143,7 @@ function setupMission1() {
 
   // Inicialización
   resetBloque1();
-}
+
 
 
   // Card dinámica para total mágico
