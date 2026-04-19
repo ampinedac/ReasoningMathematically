@@ -180,30 +180,36 @@ const dragState = {
   hoverMission: null
 };
 
-const mission1SlotOrder = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
-const mission1ChipTray = document.getElementById("mission1ChipTray");
-const mission1Drops = Array.from(document.querySelectorAll(".magicv-drop"));
+
+// --- Misión 1: Card A ---
+const mission1SlotOrderA = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
+const mission1ChipTrayA = document.getElementById("mission1ChipTrayA_m1");
+const mission1DropsA = Array.from(document.querySelectorAll(".magicv-dropA-m1"));
+const checkMagicVBtnA = document.getElementById("checkMagicVBtnA");
+const resetMagicVBtnA = document.getElementById("resetMagicVBtnA");
+const inputTotalMagicoA = document.getElementById("inputTotalMagicoA");
+const btnVerificarTotalMagicoA = document.getElementById("btnVerificarTotalMagicoA");
+const feedbackTotalMagicoA = document.getElementById("feedbackTotalMagicoA");
+
+// --- Misión 1: Card B ---
+const mission1SlotOrderB = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
+const mission1ChipTrayB = document.getElementById("mission1ChipTrayB_m1");
+const mission1DropsB = Array.from(document.querySelectorAll(".magicv-dropB-m1"));
+const checkMagicVBtnB = document.getElementById("checkMagicVBtn");
+const resetMagicVBtnB = document.getElementById("resetMagicVBtn");
+const magicVFeedbackB = document.getElementById("magicVFeedback");
 const mission1SavedCount = document.getElementById("mission1SavedCount");
 const mission1SavedList = document.getElementById("mission1SavedList");
 
-const magicVFeedback = document.getElementById("magicVFeedback");
-const checkMagicVBtn = document.getElementById("checkMagicVBtn");
-const resetMagicVBtn = document.getElementById("resetMagicVBtn");
-const mission1ExploracionBlock = document.getElementById("mission1ExploracionBlock");
-const mission1AudioRecordBtn = document.getElementById("recordBtnA3M1Exploracion");
-const mission1AudioStopBtn = document.getElementById("stopBtnA3M1Exploracion");
-const mission1AudioSubmitBtn = document.getElementById("submitA3M1Exploracion");
-const mission1AudioStatus = document.getElementById("statusA3M1Exploracion");
+// --- Misión 2 ---
+const mission2SlotOrder = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
+const mission2ChipTray = document.getElementById("mission2ChipTray");
+const mission2Drops = Array.from(document.querySelectorAll(".magicv-dropA-m2"));
 
-const mission1DragState = {
-  active: false,
-  pointerId: null,
-  chip: null,
-  originSlot: null,
-  ghost: null,
-  hoverDrop: null,
-  hoverTray: false
-};
+// Estados de drag independientes
+const mission1DragStateA = { active: false, pointerId: null, chip: null, originSlot: null, ghost: null, hoverDrop: null, hoverTray: false };
+const mission1DragStateB = { active: false, pointerId: null, chip: null, originSlot: null, ghost: null, hoverDrop: null, hoverTray: false };
+const mission2DragState = { active: false, pointerId: null, chip: null, originSlot: null, ghost: null, hoverDrop: null, hoverTray: false };
 
 const mission1AudioState = {
   mediaRecorder: null,
