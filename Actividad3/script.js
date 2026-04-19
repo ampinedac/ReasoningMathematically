@@ -1001,7 +1001,7 @@ function setupMission1() {
     clearMission1Board(false);
     setMessage(magicVFeedback, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
   });
-}
+// Eliminar llave de cierre extra aquí
 
 function startMission1ChipDrag(event) {
   const chip = event.target.closest(".magicv-chip");
