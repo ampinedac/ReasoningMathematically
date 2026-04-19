@@ -1,136 +1,248 @@
 // =============================
-// 1. Persistencia y Datos de Sesión
+// 1. Persistencia y Datos de Sesión (sin misiones)
 // =============================
 // Manejo de sessionStorage y datos globales
 
-function setupMagicVSavedModal() {
-  const modal = document.getElementById("magicVSavedModal");
-  const closeBtn = document.getElementById("closeMagicVSavedModal");
-  const content = document.getElementById("magicVSavedModalContent");
-  // Botones en cada misión
-  const btns = [
-    document.getElementById("showMagicVSavedBtn"),
-    document.getElementById("showMagicVSavedBtn2"),
-    document.getElementById("showMagicVSavedBtn3"),
-    document.getElementById("showMagicVSavedBtn4"),
-    document.getElementById("showMagicVSavedBtn5")
-  ].filter(Boolean);
-
-  btns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      // Renderizar tabla igual que en misión 1
-      content.innerHTML = renderMagicVSavedTable();
-      modal.style.display = "block";
-    });
-  })
-  closeBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
-  // Cerrar al hacer click fuera del contenido
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
-  });
-}
-
-// Devuelve el HTML de la tabla de Magic V guardadas (idéntico a misión 1)
-function renderMagicVSavedTable() {
-  if (!sessionData.mission1.saved.length) {
-    return '<p class="magicv-saved-item-label">Aún no tienes combinaciones guardadas.</p>';
-  }
-  const rows = sessionData.mission1.saved.map((comb, index) => {
-    const sumaCell = comb.sumaMagica !== null
-      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
-      : `<span class="magicv-suma-pending">Sin verificar</span>`;
-    let permutacionesHtml = "";
-    if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
-        comb.permutaciones.map((perm) => `
-          <div class="magicv-mini-board magicv-mini-board-permutacion">
-            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
-          </div>`).join("") + `</div>`;
-    }
-    return `<tr>
-      <td>
-        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
-        <div class="magicv-v-group">
-          <div class="magicv-mini-board">
-            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
-          </div>
-          ${permutacionesHtml}
-        </div>
-      </td>
-      <td class="magicv-suma-cell">${sumaCell}</td>
-    </tr>`;
-  }).join("");
-  return `
-    <table class="magicv-saved-table">
-      <thead>
-        <tr>
-          <th>Magic V</th>
-          <th>Suma mágica</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
-
-// --- Persistencia de progreso con sessionStorage ---
-function getInitialSessionData() {
-  try {
-    const saved = sessionStorage.getItem("actividad3_sessionData");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Asegura estructura mínima
-      return Object.assign({
-        character: null,
-        progress: 0,
-        missionsCompleted: [],
-        timestamps: {},
-        mission1: {
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }
-      }, parsed, {
-        mission1: Object.assign({
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }, parsed.mission1 || {})
-      });
-    }
-  } catch (e) {}
-  // Por defecto
-  return {
-    character: null,
-    progress: 0,
-    missionsCompleted: [],
-    timestamps: {},
-    mission1: {
-      current: createEmptyMission1Assignment(),
-      saved: [],
-      explorationUnlocked: false,
-      audioSubmitted: false
-    }
-  };
-}
-
-const TOTAL_MISSIONS = 5;
 let studentCode = "";
 let studentInfo = null;
+
+const welcomeContainer = document.getElementById("ContenedorBienvenida");
+const confirmContainer = document.getElementById("ContenedorConfirmacion");
+const activityApp = document.getElementById("activityApp");
+
+const studentCodeInput = document.getElementById("studentCodeInput");
+const enterBtn = document.getElementById("enterBtn");
+const welcomeError = document.getElementById("welcomeError");
+const confirmationQuestion = document.getElementById("confirmationQuestion");
+const confirmYesBtn = document.getElementById("confirmYesBtn");
+const confirmNoBtn = document.getElementById("confirmNoBtn");
+
+const introSteps = Array.from(document.querySelectorAll(".intro-step"));
+const introNextStep1Btn = document.getElementById("introNextStep1");
+const introNextStep2Btn = document.getElementById("introNextStep2");
+const startIntroBtn = document.getElementById("startIntroBtn");
+let introCurrentStep = 0;
+
+const characterGrid = document.getElementById("characterGrid");
+const characterStatus = document.getElementById("characterStatus");
+const confirmCharacterBtn = document.getElementById("confirmCharacterBtn");
+const guideBadge = document.getElementById("guideBadge");
+
+// --- MAPA ---
+const missionNodes = Array.from(document.querySelectorAll(".mission-node"));
+const mapHint = document.getElementById("mapHint");
+const mapStage = document.querySelector(".map-stage");
+const mapGlowCanvas = document.getElementById("mapGlowCanvas");
+const mapFogCanvas = document.getElementById("mapFogCanvas");
+const mapMissionAnchors = missionNodes.map((node) => ({
+  id: Number(node.dataset.mission),
+  left: Number.parseFloat(node.style.left),
+  top: Number.parseFloat(node.style.top)
+}));
+const mapRevealProgress = Object.fromEntries(mapMissionAnchors.map((mission) => [mission.id, 0]));
+const mapAnimatingMissions = new Set();
+let mapVoronoiOwnerByPixel = null;
+let mapResizeFrame = null;
+
+// Inicialización básica (sin misiones)
+init();
+
+function init() {
+  setupEntryFlow();
+  setupIntroductionScreen();
+  setupCharacterMission();
+  setupMap();
+  renderMap();
+}
+
+function setupEntryFlow() {
+  studentCodeInput.addEventListener("keydown", (event) => {
+    const allowed = ["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight", "Home", "End"];
+    if (allowed.includes(event.key) || event.ctrlKey || event.metaKey) {
+      return;
+    }
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  });
+
+  studentCodeInput.addEventListener("input", () => {
+    studentCodeInput.value = studentCodeInput.value.replace(/\D/g, "");
+  });
+
+  studentCodeInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      enterBtn.click();
+    }
+  });
+
+  enterBtn.addEventListener("click", handleCodeSubmit);
+
+  confirmNoBtn.addEventListener("click", () => {
+    confirmContainer.style.display = "none";
+    welcomeContainer.style.display = "flex";
+    studentCodeInput.focus();
+  });
+
+  confirmYesBtn.addEventListener("click", () => {
+    confirmContainer.style.display = "none";
+    activityApp.style.display = "block";
+    // Solo navegación básica, sin misiones
+  });
+}
+
+function handleCodeSubmit() {
+  const code = studentCodeInput.value.trim();
+
+  if (!code) {
+    setMessage(welcomeError, "Por favor escribe tu codigo.", "bad");
+    return;
+  }
+
+  if (!/^\d+$/.test(code)) {
+    setMessage(welcomeError, "Solo se permiten numeros.", "bad");
+    return;
+  }
+
+  if (code === "0000") {
+    const guest = window.prompt("Escribe tu nombre para ingresar como invitado");
+    const guestName = (guest || "").trim();
+    if (!guestName) {
+      setMessage(welcomeError, "Para continuar como invitado debes escribir tu nombre.", "bad");
+      return;
+    }
+
+    studentCode = code;
+    studentInfo = { nombre: guestName, apellidos: "", curso: "INVITADO" };
+    confirmationQuestion.textContent = `Eres ${toTitle(guestName)}?`;
+    setMessage(welcomeError, "", "");
+    welcomeContainer.style.display = "none";
+    confirmContainer.style.display = "flex";
+    return;
+  }
+
+  const estudiante = (window.estudiantesData || {})[code];
+  if (!estudiante) {
+    setMessage(welcomeError, "Codigo no encontrado. Verifica que este bien escrito.", "bad");
+    return;
+  }
+
+  studentCode = code;
+  studentInfo = estudiante;
+
+  const nombre = toTitle(estudiante.nombre || "");
+  const apellidos = toTitle(estudiante.apellidos || "");
+  const curso = estudiante.curso || "";
+
+  if (curso === "DOCENTE") {
+    confirmationQuestion.textContent = `Eres ${nombre} ${apellidos}?`;
+  } else {
+    confirmationQuestion.textContent = `Eres ${nombre} ${apellidos} del curso ${curso}?`;
+  }
+
+  setMessage(welcomeError, "", "");
+  welcomeContainer.style.display = "none";
+  confirmContainer.style.display = "flex";
+}
+
+function setupIntroductionScreen() {
+  setIntroStep(0);
+
+  if (introNextStep1Btn) {
+    introNextStep1Btn.addEventListener("click", () => {
+      setIntroStep(1);
+    });
+  }
+
+  if (introNextStep2Btn) {
+    introNextStep2Btn.addEventListener("click", () => {
+      setIntroStep(2);
+    });
+  }
+
+  startIntroBtn.addEventListener("click", () => {
+    // Aquí iría la navegación a la siguiente pantalla, si aplica
+  });
+}
+
+function setIntroStep(stepIndex) {
+  if (!introSteps.length) {
+    return;
+  }
+
+  introCurrentStep = Math.max(0, Math.min(stepIndex, introSteps.length - 1));
+
+  introSteps.forEach((step, index) => {
+    step.classList.toggle("is-active", index === introCurrentStep);
+  });
+}
+
+function setupCharacterMission() {
+  characterGrid.addEventListener("click", (event) => {
+    const card = event.target.closest(".character-card");
+    if (!card) {
+      return;
+    }
+
+    document.querySelectorAll(".character-card").forEach((item) => item.classList.remove("selected"));
+    card.classList.add("selected");
+
+    studentInfo = {
+      id: card.dataset.character,
+      name: card.dataset.name,
+      image: card.dataset.image
+    };
+    setMessage(characterStatus, `${card.dataset.name} será tu guía en Numetrix.`, "good");
+    confirmCharacterBtn.disabled = false;
+  });
+
+  confirmCharacterBtn.addEventListener("click", () => {
+    if (!studentInfo) {
+      setMessage(characterStatus, "Selecciona un personaje para continuar.", "bad");
+      return;
+    }
+    // Aquí iría la navegación a la siguiente pantalla, si aplica
+  });
+}
+
+// --- MAPA: funciones principales ---
+function setupMap() {
+  // Aquí puedes agregar lógica para inicializar el mapa si es necesario
+}
+
+function renderMap() {
+  // Aquí puedes agregar lógica para renderizar el mapa si es necesario
+}
+
+function setMessage(target, text, mode) {
+  if (!target) {
+    return;
+  }
+
+  target.textContent = text;
+  target.classList.remove("good", "bad");
+
+  if (mode === "good") {
+    target.classList.add("good");
+  }
+
+  if (mode === "bad") {
+    target.classList.add("bad");
+  }
+}
+
+function toTitle(value) {
+  if (!value) {
+    return "";
+  }
+
+  return value
+    .toLocaleLowerCase("es-CO")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toLocaleUpperCase("es-CO") + word.slice(1))
+    .join(" ");
+}
 
  const welcomeContainer = document.getElementById("ContenedorBienvenida");
  const confirmContainer = document.getElementById("ContenedorConfirmacion");
