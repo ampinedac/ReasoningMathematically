@@ -960,11 +960,16 @@ function setupMission1() {
     const savedList = document.getElementById('mission1SavedList');
     const savedCount = document.getElementById('mission1SavedCount');
     const audioBlock = document.getElementById('mission1ExploracionBlock');
+    const exploracionNucleoTexto = document.getElementById('exploracionNucleoTexto');
     // Limpiar tablero y bandeja
     board.innerHTML = '';
     tray.innerHTML = '';
     // Obtener núcleo de la primera Magic V
     const nucleo = primeraMagicV.bottom;
+    // Actualizar texto dinámico del núcleo
+    if (exploracionNucleoTexto) {
+      exploracionNucleoTexto.innerHTML = `El núcleo de tus Magic V es <strong>${nucleo}</strong>. Conservando ese núcleo, explora ¿Cuántas otras Magic V's puedes encontrar con ese mismo total mágico? Búscalas todas 🔍.`;
+    }
     // Crear slots
     const slots = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
     slots.forEach(slot => {
