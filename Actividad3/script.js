@@ -1,4 +1,8 @@
-// --- Modal Magic V Guardadas global ---
+// =============================
+// 1. Persistencia y Datos de Sesión
+// =============================
+// Manejo de sessionStorage y datos globales
+
 function setupMagicVSavedModal() {
   const modal = document.getElementById("magicVSavedModal");
   const closeBtn = document.getElementById("closeMagicVSavedModal");
@@ -37,25 +41,39 @@ function renderMagicVSavedTable() {
   }
   const rows = sessionData.mission1.saved.map((comb, index) => {
     const sumaCell = comb.sumaMagica !== null
-      ? `<span class=\"magicv-suma-confirmed\">✔ ${comb.sumaMagica}</span>`
-      : `<span class=\"magicv-suma-pending\">Sin verificar</span>`;
+      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
+      : `<span class="magicv-suma-pending">Sin verificar</span>`;
     let permutacionesHtml = "";
     if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class=\"magicv-permutaciones-list\">` +
+      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
         comb.permutaciones.map((perm) => `
-          <div class=\"magicv-mini-board magicv-mini-board-permutacion\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${perm.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${perm.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${perm.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${perm.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${perm.bottom}</span>\n          </div>`).join("") + `</div>`;
+          <div class="magicv-mini-board magicv-mini-board-permutacion">
+            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
+          </div>`).join("") + `</div>`;
     }
     return `<tr>
       <td>
-        <div class=\"magicv-saved-item-label\">V válida ${index + 1}</div>
-        <div class=\"magicv-v-group\">\n          <div class=\"magicv-mini-board\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${comb.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${comb.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${comb.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${comb.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${comb.bottom}</span>\n          </div>\n          ${permutacionesHtml}
+        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
+        <div class="magicv-v-group">
+          <div class="magicv-mini-board">
+            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
+          </div>
+          ${permutacionesHtml}
         </div>
       </td>
-      <td class=\"magicv-suma-cell\">${sumaCell}</td>
+      <td class="magicv-suma-cell">${sumaCell}</td>
     </tr>`;
   }).join("");
   return `
-    <table class=\"magicv-saved-table\">
+    <table class="magicv-saved-table">
       <thead>
         <tr>
           <th>Magic V</th>
@@ -74,107 +92,93 @@ function getInitialSessionData() {
     if (saved) {
       const parsed = JSON.parse(saved);
       // Asegura estructura mínima
-      function setupMission1() {
-        setupMission1AudioRecorder();
-
-        // --- Card A ---
-        mission1ChipTrayA.addEventListener("pointerdown", startMission1ChipDragA);
-        mission1DropsA.forEach((drop) => {
-          drop.addEventListener("pointerdown", startMission1ChipDragA);
-        });
-
-        // --- Card B ---
-        mission1ChipTrayB.addEventListener("pointerdown", startMission1ChipDragB);
-        mission1DropsB.forEach((drop) => {
-          drop.addEventListener("pointerdown", startMission1ChipDragB);
-        });
-
-        // Listeners globales para ambos (puedes separar si lo deseas)
-        window.addEventListener("pointermove", handleMission1ChipMoveA, { passive: false });
-        window.addEventListener("pointerup", handleMission1ChipDropA);
-        window.addEventListener("pointermove", handleMission1ChipMoveB, { passive: false });
-        window.addEventListener("pointerup", handleMission1ChipDropB);
-
-        // Verificación de suma mágica por delegación (puedes separar si cada card tiene su lista)
-        mission1SavedList.addEventListener("click", (e) => {
-          const btn = e.target.closest(".magicv-suma-check");
-          if (!btn) return;
-          verificarSumaMagica(Number(btn.dataset.index));
-        });
-
-        mission1SavedList.addEventListener("keydown", (e) => {
-          const input = e.target.closest(".magicv-suma-input");
-          if (!input || e.key !== "Enter") return;
-          verificarSumaMagica(Number(input.dataset.index));
-        });
-
-        // Si tienes botones de verificación separados para cada card, sepáralos aquí
-        // checkMagicVBtnA.addEventListener(...)
-        // checkMagicVBtnB.addEventListener(...)
-      }
-      timestamps: sessionData.timestamps,
-      mission1: {
-        current: sessionData.mission1.current,
-        saved: sessionData.mission1.saved,
-        explorationUnlocked: sessionData.mission1.explorationUnlocked,
-        audioSubmitted: sessionData.mission1.audioSubmitted
-      }
-    };
-    sessionStorage.setItem("actividad3_sessionData", JSON.stringify(toSave));
+      return Object.assign({
+        character: null,
+        progress: 0,
+        missionsCompleted: [],
+        timestamps: {},
+        mission1: {
+          current: createEmptyMission1Assignment(),
+          saved: [],
+          explorationUnlocked: false,
+          audioSubmitted: false
+        }
+      }, parsed, {
+        mission1: Object.assign({
+          current: createEmptyMission1Assignment(),
+          saved: [],
+          explorationUnlocked: false,
+          audioSubmitted: false
+        }, parsed.mission1 || {})
+      });
+    }
   } catch (e) {}
+  // Por defecto
+  return {
+    character: null,
+    progress: 0,
+    missionsCompleted: [],
+    timestamps: {},
+    mission1: {
+      current: createEmptyMission1Assignment(),
+      saved: [],
+      explorationUnlocked: false,
+      audioSubmitted: false
+    }
+  };
 }
 
 const TOTAL_MISSIONS = 5;
 let studentCode = "";
 let studentInfo = null;
 
-const welcomeContainer = document.getElementById("ContenedorBienvenida");
-const confirmContainer = document.getElementById("ContenedorConfirmacion");
-const activityApp = document.getElementById("activityApp");
+ const welcomeContainer = document.getElementById("ContenedorBienvenida");
+ const confirmContainer = document.getElementById("ContenedorConfirmacion");
+ const activityApp = document.getElementById("activityApp");
 
-const studentCodeInput = document.getElementById("studentCodeInput");
-const enterBtn = document.getElementById("enterBtn");
-const welcomeError = document.getElementById("welcomeError");
-const confirmationQuestion = document.getElementById("confirmationQuestion");
-const confirmYesBtn = document.getElementById("confirmYesBtn");
-const confirmNoBtn = document.getElementById("confirmNoBtn");
+ const studentCodeInput = document.getElementById("studentCodeInput");
+ const enterBtn = document.getElementById("enterBtn");
+ const welcomeError = document.getElementById("welcomeError");
+ const confirmationQuestion = document.getElementById("confirmationQuestion");
+ const confirmYesBtn = document.getElementById("confirmYesBtn");
+ const confirmNoBtn = document.getElementById("confirmNoBtn");
 
-const introSteps = Array.from(document.querySelectorAll(".intro-step"));
-const introNextStep1Btn = document.getElementById("introNextStep1");
-const introNextStep2Btn = document.getElementById("introNextStep2");
-const startIntroBtn = document.getElementById("startIntroBtn");
-let introCurrentStep = 0;
+ const introSteps = Array.from(document.querySelectorAll(".intro-step"));
+ const introNextStep1Btn = document.getElementById("introNextStep1");
+ const introNextStep2Btn = document.getElementById("introNextStep2");
+ const startIntroBtn = document.getElementById("startIntroBtn");
+ let introCurrentStep = 0;
 
-const characterGrid = document.getElementById("characterGrid");
-const characterStatus = document.getElementById("characterStatus");
-const confirmCharacterBtn = document.getElementById("confirmCharacterBtn");
-const guideBadge = document.getElementById("guideBadge");
+ const characterGrid = document.getElementById("characterGrid");
+ const characterStatus = document.getElementById("characterStatus");
+ const confirmCharacterBtn = document.getElementById("confirmCharacterBtn");
+ const guideBadge = document.getElementById("guideBadge");
 
-const missionNodes = Array.from(document.querySelectorAll(".mission-node"));
-const mapHint = document.getElementById("mapHint");
-const mapStage = document.querySelector(".map-stage");
-const mapGlowCanvas = document.getElementById("mapGlowCanvas");
-const mapFogCanvas = document.getElementById("mapFogCanvas");
-const mapMissionAnchors = missionNodes.map((node) => ({
+ const missionNodes = Array.from(document.querySelectorAll(".mission-node"));
+ const mapHint = document.getElementById("mapHint");
+ const mapStage = document.querySelector(".map-stage");
+ const mapGlowCanvas = document.getElementById("mapGlowCanvas");
+ const mapFogCanvas = document.getElementById("mapFogCanvas");
+ const mapMissionAnchors = missionNodes.map((node) => ({
   id: Number(node.dataset.mission),
   left: Number.parseFloat(node.style.left),
   top: Number.parseFloat(node.style.top)
-}));
-const mapRevealProgress = Object.fromEntries(mapMissionAnchors.map((mission) => [mission.id, 0]));
-const mapAnimatingMissions = new Set();
-let mapVoronoiOwnerByPixel = null;
-let mapResizeFrame = null;
+ }));
+ const mapRevealProgress = Object.fromEntries(mapMissionAnchors.map((mission) => [mission.id, 0]));
+ const mapAnimatingMissions = new Set();
+ let mapVoronoiOwnerByPixel = null;
+ let mapResizeFrame = null;
 
-const dragState = {
+ const dragState = {
   active: false,
   pointerId: null,
   ghost: null,
   hoverMission: null
-};
+ };
 
 
-// --- Misión 1: Card A ---
-const mission1SlotOrderA = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
+ // --- Misión 1: Card A ---
+ const mission1SlotOrderA = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
 const mission1ChipTrayA = document.getElementById("mission1ChipTrayA_m1");
 const mission1DropsA = Array.from(document.querySelectorAll(".magicv-dropA-m1"));
 const checkMagicVBtnA = document.getElementById("checkMagicVBtnA");
@@ -1237,8 +1241,8 @@ async function handleMission1AudioSubmit() {
       addDoc,
       serverTimestamp
     } = firebaseServices;
-    const basePath = buildMission1ExplorationStorageBasePath();
-    const fileName = buildMission1ExplorationFileName();
+    const basePath = buildMission1ExploracionStorageBasePath();
+    const fileName = buildMission1ExploracionFileName();
     const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
     await uploadBytes(storageRef, mission1AudioState.blob, {
       contentType: mission1AudioState.blob.type || "audio/webm"
@@ -1581,10 +1585,10 @@ function normalizeStorageSegment(value) {
 }
 
 
-function buildMission1ExplorationStorageBasePath() {
-  return "Actividad3/1Exploración";
+function buildMission1ExploracionStorageBasePath() {
+  return "Actividad3/1Exploracion";
 }
-function buildMission1ExplorationFileName() {
+function buildMission1ExploracionFileName() {
   if (studentCode === "0000") {
     // Invitado: nombre_1exploracion
     const nombre = normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado";
