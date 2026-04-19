@@ -237,8 +237,12 @@
     <!--======================== Card A ====================================== -->
 
           <div class="magicv-card" id="magicvCardA">
-            <h3>Construcción de una Magic V</h3>
-            <p class="narrative-card-text">Coloca los números del 1 al 5 en la forma de V. Cuando logres una Magic V válida, avanzarás al siguiente paso.</p>
+            <h3>Exploracion inicial: Construccion de una Magic V</h3>
+             <p class="narrative-card-text">Reglas: 
+              <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación.
+              <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
+             </p>
+            
               <div class="magicv-play-area">
                 <div class="magicv-board" aria-label="Tablero de la Magic V" id="magicvBoardA">
                   <div class="magicv-drop" data-slot="leftTop" aria-label="Posición izquierda superior"></div>
@@ -255,23 +259,29 @@
                   <button class="magicv-chip" type="button" data-value="5">5</button>
                 </div>
               </div>
-            </div>
+            
           
-            <div class="mission-actions">
+             <div class="mission-actions">
               <button id="checkMagicVBtnA" class="btn btn-primary">Comprobar combinación</button>
               <button id="resetMagicVBtnA" class="btn btn-secondary">Reiniciar</button>
-            </div>
+             </div>
           </div>
 
-<!--======================== Card A ====================================== -->
+          <div class="magicv-card" id="magicvCardB">
+          <p> Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.</p>
+          <p>¿Cuál sería el total mágico de tu Magic V? Escribe el resultado y comprueba si es correcto.</p>
+          <div style="margin-bottom: 10px;">
+            <input id="inputTotalMagicoA" type="number" placeholder="Escribe el total mágico" style="width: 180px; padding: 4px;">
+            <button id="btnVerificarTotalMagicoA" class="btn btn-primary" type="button">Verificar</button>
+          </div>
+          <p id="feedbackTotalMagicoA" class="status-pill"></p>
+          </p>
+
+<!--======================== Card B ====================================== -->
 
         <div class="magicv-card" id="magicvCardB">
-          <h3>Exploracion inicial: Construccion de Magic V</h3>
-          <p class="narrative-card-text">Reglas: 
-            <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación, de manera que la suma de los dos brazos de la V sea la misma.
-            <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
-            <br>3. Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
-            <br>4. Si dos o más V mágicas tienen el mismo total mágico, son la misma V mágica. El número en la punta de la V (el núcleo) se suma a ambos brazos.
+          <h3>Encuentra más magic V's</h3>
+          <p> Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
           </p>
 
           <div class="magicv-layout">
@@ -549,5 +559,49 @@
   <script src="assets/estudiantes-data.js"></script>
   <script type="module" src="firebase3.js"></script>
   <script src="script.js"></script>
+
+  <script>
+  // Lógica para verificar el total mágico en magicvCardA
+  document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('btnVerificarTotalMagicoA');
+    const input = document.getElementById('inputTotalMagicoA');
+    const feedback = document.getElementById('feedbackTotalMagicoA');
+    const board = document.getElementById('magicvBoardA');
+    if (btn && input && feedback && board) {
+      btn.addEventListener('click', function() {
+        // Obtener los valores de los slots
+        const leftTop = getSlotValue(board, 'leftTop');
+        const leftMid = getSlotValue(board, 'leftMid');
+        const bottom = getSlotValue(board, 'bottom');
+        if (leftTop === null || leftMid === null || bottom === null) {
+          feedback.textContent = 'Coloca los números en la V antes de calcular el total mágico.';
+          feedback.className = 'status-pill bad';
+          return;
+        }
+        const sumaMagica = leftTop + leftMid + bottom;
+        const valorIngresado = parseInt(input.value, 10);
+        if (isNaN(valorIngresado)) {
+          feedback.textContent = 'Por favor, escribe un número.';
+          feedback.className = 'status-pill bad';
+          return;
+        }
+        if (valorIngresado === sumaMagica) {
+          feedback.textContent = '¡Bien! El total mágico es correcto.';
+          feedback.className = 'status-pill good';
+        } else {
+          feedback.textContent = 'No es correcto. Recuerda: la suma mágica se obtiene sumando los tres números de un brazo (izquierda superior + izquierda media + inferior).';
+          feedback.className = 'status-pill bad';
+        }
+      });
+    }
+    function getSlotValue(board, slot) {
+      const slotDiv = board.querySelector('.magicv-drop[data-slot="' + slot + '"]');
+      if (!slotDiv) return null;
+      const chip = slotDiv.querySelector('.magicv-chip');
+      if (!chip) return null;
+      return parseInt(chip.dataset.value, 10);
+    }
+  });
+  </script>
 </body>
 </html>
