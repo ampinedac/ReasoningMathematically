@@ -237,7 +237,7 @@ function init() {
   setupCharacterMission();
   setupMap();
   setupGuideDragAndDrop();
-  setupMission1();
+  // setupMission1(); // Eliminado: ya no existe ni es necesario
 
   setupBackToMapButtons();
   renderMission1SavedCombinations();
@@ -520,44 +520,7 @@ function finishGuideDrag(clientX, clientY) {
   }
 
   dragState.active = false;
-  dragState.pointerId = null;
-  dragState.ghost = null;
-  dragState.hoverMission = null;
-}
-
-function getCurrentAvailableMission() {
-  const nextMission = sessionData.progress;
-  if (!nextMission || nextMission > TOTAL_MISSIONS) {
-    return null;
-  }
-
-  if (sessionData.missionsCompleted.includes(nextMission)) {
-    return null;
-  }
-
-  return nextMission;
-}
-
-function openMission(mission) {
-  setMessage(mapHint, `Abriendo mision ${mission}...`, "good");
-  showScreen(`mission${mission}Screen`);
-  registerTimestamp(`mission${mission}Opened`);
-}
-
-function renderMap() {
-  const currentMission = getCurrentAvailableMission();
-
-  missionNodes.forEach((node) => {
-    const mission = Number(node.dataset.mission);
-    const stateSpan = node.querySelector(".node-state");
-    node.classList.remove("locked", "available", "completed", "drop-hover");
-
-    if (sessionData.missionsCompleted.includes(mission)) {
-      node.classList.add("completed");
-      stateSpan.textContent = "⭐";
-      stateSpan.setAttribute("aria-label", "Mision completada");
-      return;
-    }
+// ...eliminado: fragmentos de lógica de drag & drop y referencias a setupMission1...
 
     if (mission === currentMission) {
       node.classList.add("available");
