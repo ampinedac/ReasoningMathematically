@@ -1193,10 +1193,12 @@ function setupMission1() {
     });
   }
 
-  resetMagicVBtn.addEventListener("click", () => {
-    clearMission1Board(false);
-    setMessage(magicVFeedback, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
-  });
+  if (resetMagicVBtn && typeof resetMagicVBtn.addEventListener === 'function') {
+    resetMagicVBtn.addEventListener("click", () => {
+      clearMission1Board(false);
+      setMessage(magicVFeedback, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
+    });
+  }
 // Eliminar llave de cierre extra aquí
 
 function startMission1ChipDrag(event) {
