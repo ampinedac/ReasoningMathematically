@@ -10,9 +10,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- ====================================================================== -->
-  <!-- BLOQUE: Pantalla de Bienvenida -->
-  <!-- ====================================================================== -->
   <div id="ContenedorBienvenida">
     <section id="welcomeScreen">
       <h1 class="main-title">Misión: Reiniciar el Laboratorio V</h1>
@@ -26,9 +23,6 @@
     </section>
   </div>
 
-  <!-- ====================================================================== -->
-  <!-- BLOQUE: Pantalla de Confirmación de usuario -->
-  <!-- ======================================================= -->
   <div id="ContenedorConfirmacion">
     <section id="confirmationScreen">
       <h1 class="main-title">Confirmación</h1>
@@ -42,9 +36,7 @@
     </section>
   </div>
 
-  <!-- ======================================================= -->
-  <!-- BLOQUE: Modal de Magic V Guardadas -->
-  <!-- ======================================================= -->
+  <!-- Modal Magic V Guardadas -->
   <div id="magicVSavedModal" class="modal-magicv" style="display:none;">
     <div class="modal-magicv-content">
       <button id="closeMagicVSavedModal" class="btn btn-secondary" style="float:right;">Cerrar</button>
@@ -53,13 +45,7 @@
     </div>
   </div>
 
-  <!-- ======================================================= -->
-  <!-- BLOQUE: Contenido principal de la actividad (todas las pantallas) -->
-  <!-- ======================================================= -->
   <main id="activityApp" aria-live="polite">
-    <!-- ======================================================= -->
-    <!-- BLOQUE: Introducción e historia -->
-    <!-- ======================================================= -->
     <section id="introductionScreen" class="app-screen">
       <div class="screen-shell introduction-shell">
         <div class="intro-content">
@@ -105,9 +91,6 @@
       </div>
     </section>
 
-    <!-- ======================================================= -->
-    <!-- BLOQUE: Selección de personaje guía -->
-    <!-- ======================================================= -->
     <section id="characterMissionScreen" class="app-screen">
       <div class="screen-shell">
         <header class="screen-header">
@@ -149,9 +132,6 @@
       </div>
     </section>
 
-    <!-- ======================================================= -->
-    <!-- BLOQUE: Mapa de misiones -->
-    <!-- ======================================================= -->
     <section id="mapScreen" class="app-screen">
       <div class="screen-shell map-shell">
         <header class="screen-header map-header">
@@ -214,105 +194,47 @@
       </div>
     </section>
 
+    <section id="mission1Screen" class="app-screen mission-screen">
+      <div class="screen-shell">
+        <header class="screen-header mission-header">
+          <h2>Punto 1: Diagnostico de Robot V</h2>
+          <div class="guide-inline" id="guideInlineMission1"></div>
+        </header>
 
-<!-- ======================================================= -->
-<!-- BLOQUE: Misión 1 (Diagnóstico de Robot V y Magic V) -->
-<!-- ======================================================= -->
-
-<section id="mission1Screen" class="app-screen mission-screen">
-  <div id="screenShellprincipal" class="screen-shell">
-        
-   <!-- Contenedor de título y animal guía -->
-    <div id="m1-momentoA" class="m1-momento">
-      <header class="screen-header mission-header">
-       <h2>Punto 1: Diagnóstico de Robot V</h2>
-      </header>
-     
-    <div class="guide-inline" id="guideInlineMission1"></div>
-
-    <!-- El contenedor donde está la V-Bot -->
-    <article class="narrative-card narrative-card-m1">
-     <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
-     <div class="narrative-card-text">
-      <p><strong>V-Bot:</strong> Mi sistema de patrones se rompió... necesito que descubras cómo funcionaba.</p>
-      <p>Construye una Magic V para detectar una combinación estable.</p>
-      </div>
-    </article>
-
-    <!--======================== Card A ====================================== -->
-
-      <div class="magicv-card" id="magicvCardA">
-        <h3>Exploracion inicial: Construccion de una Magic V</h3>
-        <p>Reglas: 
-         <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación.
-         <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
-        </p>
-
-        <!-- Contenedor de la V y las fichas -->
-        <div id="magicVsection">
-          <div class="magicv-board" id="magicvBoardA_m1" aria-label="Tablero de la Magic V A m1">
-            <div class="magicv-drop magicv-dropA-m1" data-slot="leftTop" aria-label="Posición izquierda superior"></div>
-            <div class="magicv-drop magicv-dropA-m1" data-slot="rightTop" aria-label="Posición derecha superior"></div>
-            <div class="magicv-drop magicv-dropA-m1" data-slot="leftMid" aria-label="Posición izquierda media"></div>
-            <div class="magicv-drop magicv-dropA-m1" data-slot="rightMid" aria-label="Posición derecha media"></div>
-            <div class="magicv-drop magicv-dropA-m1" data-slot="bottom" aria-label="Posición inferior"></div>
+        <article class="narrative-card narrative-card-m1">
+          <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
+          <div class="narrative-card-text">
+            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que descubras cómo funcionaba.</p>
+            <p>Construye una Magic V para detectar combinaciones estables. 
+            </p>
           </div>
-          <div class="magicv-chip-tray" id="mission1ChipTrayA_m1" aria-label="Fichas disponibles A m1">
-            <button class="magicv-chip magicv-chipA-m1" type="button" data-value="1">1</button>
-            <button class="magicv-chip magicv-chipA-m1" type="button" data-value="2">2</button>
-            <button class="magicv-chip magicv-chipA-m1" type="button" data-value="3">3</button>
-            <button class="magicv-chip magicv-chipA-m1" type="button" data-value="4">4</button>
-            <button class="magicv-chip magicv-chipA-m1" type="button" data-value="5">5</button>
-          </div>
-        </div>
+        </article>
 
-        <div class="mission-actions">
-                  <!-- Controles de audio para Misión 2: Regla General -->
-                  <div class="mission2-audio-block" style="margin-top: 24px;">
-                    <h4>Explica la regla general (audio)</h4>
-                    <div class="audio-controls">
-                      <button id="recordBtnA3M2ReglaGeneral" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 2ReglaGeneral"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                      <button id="stopBtnA3M2ReglaGeneral" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 2ReglaGeneral"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
-                      <button id="submitBtnA3M2ReglaGeneral" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 2ReglaGeneral" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
-                    </div>
-                    <p id="audioStatusA3M2ReglaGeneral" class="status-text"></p>
-                  </div>
-          <button id="checkMagicVBtnA" class="btn btn-primary">Comprobar combinación</button>
-          <button id="resetMagicVBtnA" class="btn btn-secondary">Reiniciar</button>
-        </div>
+        <div class="magicv-card">
+          <h3>Exploracion inicial: Construccion de Magic V</h3>
+          <p class="narrative-card-text">Reglas: 
+            <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación, de manera que la suma de los dos brazos de la V sea la misma.
+            <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
+            <br>3. Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
+            <br>4. Si dos o más V mágicas tienen el mismo total mágico, son la misma V mágica. El número en la punta de la V (el núcleo) se suma a ambos brazos.
+          </p>
 
-        <!-- Texto y verificación del total mágico, fuera de magicVsection pero dentro de magicvCardA -->
-        <p>Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.</p>
-        <p>¿Cuál sería el total mágico de tu Magic V? Escribe el resultado y comprueba si es correcto.</p>
-        <div style="margin-bottom: 10px;">
-          <input id="inputTotalMagicoA" type="number" placeholder="Escribe el total mágico" style="width: 180px; padding: 4px;">
-          <button id="btnVerificarTotalMagicoA" class="btn btn-primary" type="button">Verificar</button>
-        </div>
-        <p id="feedbackTotalMagicoA" class="status-pill"></p>
-     </div>
-          
-
-    <!--======================== Card B ====================================== -->
-      <div class="magicv-card" id="magicvCardB">
-        <h3>Encuentra más magic V's</h3>
-        <p> ¿Cuántas otras Magic V's puedes encontrar con ese mismo total mágico?</p>
-
-          <div class="magicv-layout2">
-            <div class="magicv-play-area2">
-              <div class="magicv-board2" id="magicvBoardB_m1" aria-label="Tablero de la Magic V B m1">
-                <div class="magicv-drop magicv-dropB-m1" data-slot="leftTop" aria-label="Posicion izquierda superior"></div>
-                <div class="magicv-drop magicv-dropB-m1" data-slot="rightTop" aria-label="Posicion derecha superior"></div>
-                <div class="magicv-drop magicv-dropB-m1" data-slot="leftMid" aria-label="Posicion izquierda media"></div>
-                <div class="magicv-drop magicv-dropB-m1" data-slot="rightMid" aria-label="Posicion derecha media"></div>
-                <div class="magicv-drop magicv-dropB-m1" data-slot="bottom" aria-label="Posicion inferior"></div>
+          <div class="magicv-layout">
+            <div class="magicv-play-area">
+              <div class="magicv-board" aria-label="Tablero de la Magic V">
+                <div class="magicv-drop" data-slot="leftTop" aria-label="Posicion izquierda superior"></div>
+                <div class="magicv-drop" data-slot="rightTop" aria-label="Posicion derecha superior"></div>
+                <div class="magicv-drop" data-slot="leftMid" aria-label="Posicion izquierda media"></div>
+                <div class="magicv-drop" data-slot="rightMid" aria-label="Posicion derecha media"></div>
+                <div class="magicv-drop" data-slot="bottom" aria-label="Posicion inferior"></div>
               </div>
 
-              <div class="magicv-chip-tray2" id="mission1ChipTrayB_m1" aria-label="Fichas disponibles B m1">
-                <button class="magicv-chip magicv-chipB-m1" type="button" data-value="1">1</button>
-                <button class="magicv-chip magicv-chipB-m1" type="button" data-value="2">2</button>
-                <button class="magicv-chip magicv-chipB-m1" type="button" data-value="3">3</button>
-                <button class="magicv-chip magicv-chipB-m1" type="button" data-value="4">4</button>
-                <button class="magicv-chip magicv-chipB-m1" type="button" data-value="5">5</button>
+              <div class="magicv-chip-tray" id="mission1ChipTray" aria-label="Fichas disponibles">
+                <button class="magicv-chip" type="button" data-value="1">1</button>
+                <button class="magicv-chip" type="button" data-value="2">2</button>
+                <button class="magicv-chip" type="button" data-value="3">3</button>
+                <button class="magicv-chip" type="button" data-value="4">4</button>
+                <button class="magicv-chip" type="button" data-value="5">5</button>
               </div>
             </div>
 
@@ -336,93 +258,15 @@
               <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
               <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
               <button id="submitA3M1Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 1Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
-
             </div>
-            <p id="magicVFeedbackA" class="status-pill">Aún no has comprobado.</p>
-          </div>
-        </div>
-
-        <!-- Momento B: Explicación y cálculo del total mágico -->
-        <div id="m1-momentoB" class="m1-momento" style="display:none;">
-          <header class="screen-header mission-header">
-            <h2>Punto 1: ¿Qué es el total mágico?</h2>
-          </header>
-          <article class="narrative-card narrative-card-m1">
-            <div class="narrative-card-text">
-              <p><strong>V-Bot:</strong> Llamaremos <strong>“total mágico”</strong> a la suma de los tres números que forman un brazo de una V mágica.</p>
-              <p>¿Cuál es el total mágico de la Magic V que encontraste?</p>
-            </div>
-          </article>
-          <div class="magicv-card">
-            <div class="magicv-layout">
-              <div class="magicv-play-area">
-                <div class="magicv-board" aria-label="Tablero de la Magic V" id="magicvBoardB">
-                  <!-- Se rellena por JS con la Magic V encontrada -->
-                </div>
-              </div>
-            </div>
-            <div class="mission-actions">
-              <label for="magicVTotalInput" class="magicv-total-label">Total mágico:</label>
-              <input id="magicVTotalInput" class="magicv-total-input" type="number" min="0" autocomplete="off" placeholder="Escribe el total mágico">
-            </div>
-            <p id="magicVTotalFeedback" class="status-pill"></p>
-          </div>
-        </div>
-
-        <!-- Momento C: Exploración con núcleo fijo -->
-        <div id="m1-momentoC" class="m1-momento" style="display:none;">
-          <header class="screen-header mission-header">
-            <h2>Punto 1: Explora todas las Magic V posibles</h2>
-          </header>
-          <article class="narrative-card narrative-card-m1">
-            <div class="narrative-card-text">
-              <p><strong>V-Bot:</strong> Ahora, mantén fijo el núcleo que encontraste y busca todas las Magic V posibles con ese núcleo.</p>
-              <p>Cuando encuentres las 8, responde la pregunta final.</p>
-            </div>
-          </article>
-          <div class="magicv-card magicv-exploration">
-            <div class="magicv-exploration-layout">
-              <!-- Columna izquierda: Magic V interactiva con núcleo fijo -->
-              <div class="magicv-exploration-left">
-                <div class="magicv-board" aria-label="Tablero de la Magic V" id="magicvBoardC">
-                  <!-- Núcleo fijo, los otros 4 slots libres -->
-                </div>
-                <div class="magicv-chip-tray" id="mission1ChipTrayC" aria-label="Fichas disponibles">
-                  <!-- Solo los 4 números restantes -->
-                </div>
-                <div class="mission-actions">
-                  <button id="checkMagicVBtnC" class="btn btn-primary">Comprobar combinación</button>
-                  <button id="resetMagicVBtnC" class="btn btn-secondary">Reiniciar</button>
-                </div>
-                <p id="magicVFeedbackC" class="status-pill"></p>
-              </div>
-              <!-- Columna derecha: Lista de Magic V válidas encontradas -->
-              <div class="magicv-exploration-right">
-                <h4>Magic V encontradas <span id="mission1SavedCountC">0/8</span></h4>
-                <div id="mission1SavedListC" class="magicv-saved-list magicv-saved-list-grid"></div>
-                <p id="magicVRepeatMsg" class="magicv-repeat-msg" style="display:none;"></p>
-              </div>
-            </div>
-            <!-- Pregunta final por audio -->
-            <div id="magicVFinalBlock" class="magicv-final-block" style="display:none;">
-              <p class="mission1-exploration-question">¿Cómo sabes que esas son todas las posibilidades? Explica.</p>
-              <div class="audio-controls">
-                <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
-                <button id="submitA3M1Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 1Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
-              </div>
-              <p id="statusA3M1Exploracion" class="status-text"></p>
-            </div>
-          </div>
+            <p id="statusA3M1Exploracion" class="status-text"></p>
+          </section>
         </div>
       </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- BLOQUE: Misión 2 (Rutas de Patrón) -->
-    <!-- ========================= -->
     <section id="mission2Screen" class="app-screen mission-screen">
-      <div class="screen-shell" id="PrincipalCard">
+      <div class="screen-shell">
         <header class="screen-header mission-header">
           <h2>Punto 2: Rutas de Patron</h2>
           <div class="guide-inline" id="guideInlineMission2"></div>
@@ -431,83 +275,14 @@
           <p>Analiza dos rutas del laboratorio y escribe que regularidad observas.</p>
           <textarea id="m2Input" rows="5" placeholder="Describe el patron que observas..."></textarea>
         </article>
-
-
-        <!-- Tarjeta de construcción de Magic V -->
-        <div class="magicv-card">
-            <h3>Exploracion inicial: Construccion de Magic V</h3>
-            <p class="narrative-card-text">Reglas: 
-              <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación, de manera que la suma de los dos brazos de la V sea la misma.
-              <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
-              <br>3. Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
-              <br>4. Si dos o más V mágicas tienen el mismo total mágico, son la misma V mágica. El número en la punta de la V (el núcleo) se suma a ambos brazos.
-            </p>
-
-            <!-- Área de juego y fichas -->
-            <div class="magicv-layout">
-              <div class="magicv-play-area">
-                <div class="magicv-board" aria-label="Tablero de la Magic V">
-                  <div class="magicv-drop magicv-dropA-m2" data-slot="leftTop" aria-label="Posicion izquierda superior"></div>
-                  <div class="magicv-drop magicv-dropA-m2" data-slot="rightTop" aria-label="Posicion derecha superior"></div>
-                  <div class="magicv-drop magicv-dropA-m2" data-slot="leftMid" aria-label="Posicion izquierda media"></div>
-                  <div class="magicv-drop magicv-dropA-m2" data-slot="rightMid" aria-label="Posicion derecha media"></div>
-                  <div class="magicv-drop magicv-dropA-m2" data-slot="bottom" aria-label="Posicion inferior"></div>
-                </div>
-
-                <div class="magicv-chip-tray" id="mission2ChipTray" aria-label="Fichas disponibles">
-                  <button class="magicv-chip magicv-chipA-m2" type="button" data-value="1">1</button>
-                  <button class="magicv-chip magicv-chipA-m2" type="button" data-value="2">2</button>
-                  <button class="magicv-chip magicv-chipA-m2" type="button" data-value="3">3</button>
-                  <button class="magicv-chip magicv-chipA-m2" type="button" data-value="4">4</button>
-                  <button class="magicv-chip magicv-chipA-m2" type="button" data-value="5">5</button>
-                </div>
-              </div>
-
-              <!-- Panel de resultados -->
-              <aside class="magicv-results-panel" aria-live="polite">
-                <h4>Combinaciones guardadas <span id="mission1SavedCount">0/3</span></h4>
-                <div id="mission1SavedList" class="magicv-saved-list"></div>
-              </aside>
-            </div>
-
-            <!-- Acciones de la misión -->
-            <div class="mission-actions">
-              <button id="checkMagicVBtn" class="btn btn-primary">Comprobar combinacion</button>
-              <button id="resetMagicVBtn" class="btn btn-secondary">Reiniciar</button>
-              <button id="showMagicVSavedBtn" class="btn btn-info" type="button">Ver Magic V guardadas</button>
-            </div>
-
-            <!-- Feedback de comprobación -->
-            <p id="magicVFeedback" class="status-pill">Aun no has comprobado.</p>
-
-            <!-- Bloque de exploración y audio -->
-            <section id="mission1ExploracionBlock" class="mission1-exploration is-hidden" aria-live="polite">
-              <p class="mission1-exploration-question">Según las Magic V que encontraste, ¿el número del núcleo tiene alguna característica especial? Explícale a V-Bot.</p>
-              <div class="audio-controls">
-                <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-                <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
-                <button id="submitA3M1Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 1Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
-              </div>
-              <p id="statusA3M1Exploracion" class="status-text"></p>
-            </section>
-=======
-=======
->>>>>>> parent of 1e5127e (.)
         <div class="mission-actions">
           <button id="completeMission2Btn" class="btn btn-success">Completar mision 2</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
           <button id="showMagicVSavedBtn2" class="btn btn-info" type="button">Ver Magic V guardadas</button>
-<<<<<<< HEAD
->>>>>>> parent of 1e5127e (.)
-=======
->>>>>>> parent of 1e5127e (.)
         </div>
       </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- BLOQUE: Misión 3 (Generalización) -->
-    <!-- ========================= -->
     <section id="mission3Screen" class="app-screen mission-screen">
       <div class="screen-shell">
         <header class="screen-header mission-header">
@@ -526,9 +301,6 @@
       </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- BLOQUE: Misión 4 (Justificación) -->
-    <!-- ========================= -->
     <section id="mission4Screen" class="app-screen mission-screen">
       <div class="screen-shell">
         <header class="screen-header mission-header">
@@ -547,9 +319,6 @@
       </div>
     </section>
 
-    <!-- ========================= -->
-    <!-- BLOQUE: Misión 5 (Reinicio Final) -->
-    <!-- ========================= -->
     <section id="mission5Screen" class="app-screen mission-screen">
       <div class="screen-shell">
         <header class="screen-header mission-header">
@@ -572,49 +341,5 @@
   <script src="assets/estudiantes-data.js"></script>
   <script type="module" src="firebase3.js"></script>
   <script src="script.js"></script>
-
-  <script>
-  // Lógica para verificar el total mágico en magicvCardA
-  document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('btnVerificarTotalMagicoA');
-    const input = document.getElementById('inputTotalMagicoA');
-    const feedback = document.getElementById('feedbackTotalMagicoA');
-    const board = document.getElementById('magicvBoardA');
-    if (btn && input && feedback && board) {
-      btn.addEventListener('click', function() {
-        // Obtener los valores de los slots
-        const leftTop = getSlotValue(board, 'leftTop');
-        const leftMid = getSlotValue(board, 'leftMid');
-        const bottom = getSlotValue(board, 'bottom');
-        if (leftTop === null || leftMid === null || bottom === null) {
-          feedback.textContent = 'Coloca los números en la V antes de calcular el total mágico.';
-          feedback.className = 'status-pill bad';
-          return;
-        }
-        const sumaMagica = leftTop + leftMid + bottom;
-        const valorIngresado = parseInt(input.value, 10);
-        if (isNaN(valorIngresado)) {
-          feedback.textContent = 'Por favor, escribe un número.';
-          feedback.className = 'status-pill bad';
-          return;
-        }
-        if (valorIngresado === sumaMagica) {
-          feedback.textContent = '¡Bien! El total mágico es correcto.';
-          feedback.className = 'status-pill good';
-        } else {
-          feedback.textContent = 'No es correcto. Recuerda: la suma mágica se obtiene sumando los tres números de un brazo (izquierda superior + izquierda media + inferior).';
-          feedback.className = 'status-pill bad';
-        }
-      });
-    }
-    function getSlotValue(board, slot) {
-      const slotDiv = board.querySelector('.magicv-drop[data-slot="' + slot + '"]');
-      if (!slotDiv) return null;
-      const chip = slotDiv.querySelector('.magicv-chip');
-      if (!chip) return null;
-      return parseInt(chip.dataset.value, 10);
-    }
-  });
-  </script>
 </body>
 </html>
