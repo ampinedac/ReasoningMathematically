@@ -214,64 +214,78 @@
         </article>
 
         <div class="magicv-card">
-          <h3>Exploracion inicial: Construccion de Magic V</h3>
-          <p class="narrative-card-text">Reglas: 
-            <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación, de manera que la suma de los dos brazos de la V sea la misma.
-            <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma. 
-          </p>
-
-          <div class="magicv-layout">
-
-            <div class="magicv-play-area">
-              <div class="magicv-board" aria-label="Tablero de la Magic V">
-                <div class="magicv-drop" data-slot="leftTop" aria-label="Posicion izquierda superior"></div>
-                <div class="magicv-drop" data-slot="rightTop" aria-label="Posicion derecha superior"></div>
-                <div class="magicv-drop" data-slot="leftMid" aria-label="Posicion izquierda media"></div>
-                <div class="magicv-drop" data-slot="rightMid" aria-label="Posicion derecha media"></div>
-                <div class="magicv-drop" data-slot="bottom" aria-label="Posicion inferior"></div>
-              </div>
-
-              <div class="magicv-chip-tray" id="mission1ChipTray" aria-label="Fichas disponibles">
+          <!-- BLOQUE 1: Foto y suma mágica de la primera Magic V -->
+          <div id="magicv-card-foto" class="magicv-card-foto">
+            <h3>Exploración inicial: Construcción de Magic V</h3>
+            <p class="narrative-card-text">Reglas:
+              <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación, de manera que la suma de los dos brazos de la V sea la misma.
+              <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
+            </p>
+            <div class="magicv-layout">
+              <div class="magicv-play-area">
+                <div class="magicv-board" id="magicvBoardFoto" aria-label="Tablero de la Magic V"></div>
+                <div class="magicv-chip-tray" id="mission1ChipTray" aria-label="Fichas disponibles">
                   <button class="magicv-chip" type="button" data-value="1">1</button>
                   <button class="magicv-chip" type="button" data-value="2">2</button>
                   <button class="magicv-chip" type="button" data-value="3">3</button>
                   <button class="magicv-chip" type="button" data-value="4">4</button>
                   <button class="magicv-chip" type="button" data-value="5">5</button>
+                </div>
               </div>
             </div>
-
-            <!-- Panel de combinaciones guardadas oculto en la primera fase de misión 1 -->
-            <aside class="magicv-results-panel" aria-live="polite" style="display:none;">
-              <h4>Combinaciones guardadas <span id="mission1SavedCount">0/3</span></h4>
-              <div id="mission1SavedList" class="magicv-saved-list"></div>
-            </aside>
-          </div>
-
-          <div class="mission-actions">
-            <button id="checkMagicVBtn" class="btn btn-primary">Comprobar combinacion</button>
-            <button id="resetMagicVBtn" class="btn btn-secondary">Reiniciar</button>
-            <button id="showMagicVSavedBtn" class="btn btn-info" type="button">Ver Magic V guardadas</button>
-          </div>
-
-          <p id="magicVFeedback" class="status-pill">Aun no has comprobado.</p>
-
-          <section id="mission1ExploracionBlock" class="mission1-exploration is-hidden" aria-live="polite">
-            <p class="mission1-exploration-question">Según las Magic V que encontraste, ¿el número del núcleo tiene alguna característica especial? Explícale a V-Bot.</p>
-            <div class="audio-controls">
-              <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-              <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
-              <button id="submitA3M1Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 1Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
+            <div class="mission-actions">
+              <button id="checkMagicVBtn" class="btn btn-primary">Comprobar combinación</button>
+              <button id="resetMagicVBtn" class="btn btn-secondary">Reiniciar</button>
             </div>
-            <p id="statusA3M1Exploracion" class="status-text"></p>
-          </section>
+            <p id="magicVFeedback" class="status-pill">Aún no has comprobado.</p>
+            <!-- Aquí se insertará dinámicamente la card de suma mágica -->
+            <div id="cardTotalMagicoContainer"></div>
+          </div>
+
+          <!-- BLOQUE 2: Exploración y registro de más Magic V (aparece solo después de la suma mágica) -->
+          <div id="magicv-card-exploracion" class="magicv-card-exploracion" style="display:none;">
+            <h3>Exploración: Busca más Magic V</h3>
+            <p class="narrative-card-text">Ahora busca y registra otras combinaciones de Magic V diferentes a la primera. Guarda al menos 3 combinaciones válidas.</p>
+            <div class="magicv-layout">
+              <div class="magicv-play-area">
+                <div class="magicv-board" id="magicvBoardExploracion" aria-label="Tablero de la Magic V"></div>
+                <div class="magicv-chip-tray" id="mission1ChipTrayExploracion" aria-label="Fichas disponibles">
+                  <button class="magicv-chip" type="button" data-value="1">1</button>
+                  <button class="magicv-chip" type="button" data-value="2">2</button>
+                  <button class="magicv-chip" type="button" data-value="3">3</button>
+                  <button class="magicv-chip" type="button" data-value="4">4</button>
+                  <button class="magicv-chip" type="button" data-value="5">5</button>
+                </div>
+              </div>
+              <aside class="magicv-results-panel" aria-live="polite">
+                <h4>Combinaciones guardadas <span id="mission1SavedCount">0/3</span></h4>
+                <div id="mission1SavedList" class="magicv-saved-list"></div>
+              </aside>
+            </div>
+            <div class="mission-actions">
+              <button id="checkMagicVBtnExploracion" class="btn btn-primary">Comprobar combinación</button>
+              <button id="resetMagicVBtnExploracion" class="btn btn-secondary">Reiniciar</button>
+              <button id="showMagicVSavedBtn" class="btn btn-info" type="button">Ver Magic V guardadas</button>
+            </div>
+            <p id="magicVFeedbackExploracion" class="status-pill">Aún no has comprobado.</p>
+            <section id="mission1ExploracionBlock" class="mission1-exploration is-hidden" aria-live="polite">
+              <p class="mission1-exploration-question">Según las Magic V que encontraste, ¿el número del núcleo tiene alguna característica especial? Explícale a V-Bot.</p>
+              <div class="audio-controls">
+                <button id="recordBtnA3M1Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 1Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+                <button id="stopBtnA3M1Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 1Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
+                <button id="submitA3M1Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 1Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
+              </div>
+              <p id="statusA3M1Exploracion" class="status-text"></p>
+            </section>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Misión 2: Diagnóstico de Robot V -->
-    <!-- ========================== -->
+    <!-- =============================================================================================== -->
     <!-- INICIO MISIÓN 2           -->
-    <!-- ========================== -->
+    <!-- =============================================================================================== -->
     <section id="mission2Screen" class="app-screen mission-screen">
       <div class="screen-shell">
         <!-- Encabezado de la misión -->
