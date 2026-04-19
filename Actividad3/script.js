@@ -187,12 +187,6 @@ const mapAnimatingMissions = new Set();
 let mapVoronoiOwnerByPixel = null;
 let mapResizeFrame = null;
 
-const dragState = {
-  active: false,
-  pointerId: null,
-  ghost: null,
-  hoverMission: null
-};
 
 // --- BLOQUE 1: Foto y suma mágica ---
 let bloque1Congelado = false; // Variable de control global para el bloqueo del tablero
@@ -203,17 +197,6 @@ const checkMagicVBtn = document.getElementById("checkMagicVBtn");
 const resetMagicVBtn = document.getElementById("resetMagicVBtn");
 const magicVFeedback = document.getElementById("magicVFeedback");
 
-// ...eliminado: referencias a contenedores y elementos dinámicos de bloques ahora estáticos...
-
-const mission1DragState = {
-  active: false,
-  pointerId: null,
-  chip: null,
-  originSlot: null,
-  ghost: null,
-  hoverDrop: null,
-  hoverTray: false
-};
 
 const mission1AudioState = {
   mediaRecorder: null,
@@ -1295,16 +1278,14 @@ function unlockMission1Exploration() {
 }
 
 function syncMission1ExplorationState() {
-  if (!mission1ExploracionBlock) {
-    return;
+  if (typeof mission1ExploracionBlock !== 'undefined' && mission1ExploracionBlock && typeof mission1ExploracionBlock.classList !== 'undefined') {
+    // Solo mostrar si hay 3 combinaciones y todas tienen suma mágica verificada, o si ya se envió el audio
+    const allSumaVerificada = sessionData.mission1.saved.length === 3 && sessionData.mission1.saved.every(c => c.sumaMagica !== null);
+    const shouldShow = sessionData.mission1.explorationUnlocked || allSumaVerificada || sessionData.mission1.audioSubmitted;
+    sessionData.mission1.explorationUnlocked = shouldShow;
+    mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
+    syncMission1AudioButtons();
   }
-
-  // Solo mostrar si hay 3 combinaciones y todas tienen suma mágica verificada, o si ya se envió el audio
-  const allSumaVerificada = sessionData.mission1.saved.length === 3 && sessionData.mission1.saved.every(c => c.sumaMagica !== null);
-  const shouldShow = sessionData.mission1.explorationUnlocked || allSumaVerificada || sessionData.mission1.audioSubmitted;
-  sessionData.mission1.explorationUnlocked = shouldShow;
-  mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
-  syncMission1AudioButtons();
 }
 
 function orderMission1TrayChips(trayElement) {
