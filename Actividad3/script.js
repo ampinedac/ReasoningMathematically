@@ -18,7 +18,7 @@ function setupMagicVSavedModal() {
       content.innerHTML = renderMagicVSavedTable();
       modal.style.display = "block";
     });
-  })a 
+  })
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
