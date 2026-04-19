@@ -28,7 +28,7 @@ function setupMagicVSavedModal() {
       modal.style.display = "none";
     }
   });
-// (Llave de cierre extra eliminada)
+}
 
 // Devuelve el HTML de la tabla de Magic V guardadas (idéntico a misión 1)
 function renderMagicVSavedTable() {
