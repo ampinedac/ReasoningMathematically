@@ -1141,11 +1141,6 @@ function setupMission1() {
     };
   }
 
-  // Inicialización
-  resetBloque1();
-
-
-
   // Card dinámica para total mágico
   function mostrarCardTotalMagico(comb) {
     // Eliminar si ya existe
