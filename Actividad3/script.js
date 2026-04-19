@@ -507,19 +507,7 @@ function syncMapFogWithProgress() {
   const board = document.querySelector(boardSelector);
   if (!board) return;
 
-      const stream = await requestMission1AudioStream();
-      const mediaRecorder = new MediaRecorder(stream);
 
-      mission1AudioState.mediaRecorder = mediaRecorder;
-      mission1AudioState.stream = stream;
-      mission1AudioState.chunks = [];
-      mission1AudioState.blob = null;
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          mission1AudioState.chunks.push(event.data);
-        }
-      };
 
       mediaRecorder.onstop = () => {
         mission1AudioState.blob = new Blob(mission1AudioState.chunks, {
