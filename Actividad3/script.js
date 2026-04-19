@@ -532,7 +532,7 @@ function finishGuideDrag(clientX, clientY) {
     node.classList.add("locked");
     stateSpan.textContent = "🔒";
     stateSpan.setAttribute("aria-label", "Mision bloqueada");
-  });
+  };
 
   const done = sessionData.missionsCompleted.length;
   if (done === TOTAL_MISSIONS) {
