@@ -18,7 +18,7 @@ function setupMagicVSavedModal() {
       content.innerHTML = renderMagicVSavedTable();
       modal.style.display = "block";
     });
-  });
+  })a 
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
@@ -1215,11 +1215,9 @@ function syncMission1ExplorationState() {
     return;
   }
 
-  // Solo mostrar si hay 3 combinaciones y todas tienen suma mágica verificada, o si ya se envió el audio
-  const allSumaVerificada = sessionData.mission1.saved.length === 3 && sessionData.mission1.saved.every(c => c.sumaMagica !== null);
-  const shouldShow = sessionData.mission1.explorationUnlocked || allSumaVerificada || sessionData.mission1.audioSubmitted;
-  sessionData.mission1.explorationUnlocked = shouldShow;
-  mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
+  // Siempre mostrar el bloque de exploración
+  sessionData.mission1.explorationUnlocked = true;
+  mission1ExploracionBlock.classList.remove("is-hidden");
   syncMission1AudioButtons();
 }
 

@@ -1196,9 +1196,6 @@ textarea {
   animation: fadeInIntro 0.28s ease;
 }
 
-.mission1-exploration.is-hidden {
-  display: none;
-}
 
 .mission1-exploration h4 {
   margin: 0;
