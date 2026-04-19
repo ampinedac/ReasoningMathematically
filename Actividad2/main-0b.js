@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initFirebaseServices();
     normalizeNavigationLabels();
     initStudentCodeDisplays();
-    ensureM3SpreadStructure();
     initVisibility();
     initWelcome();
     initConfirmation();
@@ -101,20 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initM4();
     initEncuesta();
 });
-
-function ensureM3SpreadStructure() {
-    const spread = document.getElementById('m3FlowSpread');
-    const content = document.getElementById('m3q3StepContent');
-    if (!spread || !content) return;
-
-    const leftPage = spread.querySelector('.q1-left-page');
-    if (!leftPage) return;
-
-    // Blindaje: si el bloque quedó movido por edición accidental, lo regresamos a la página 17.
-    if (!leftPage.contains(content)) {
-        leftPage.prepend(content);
-    }
-}
 
 // ─────────────────────────────────────────────
 // 1. VISIBILIDAD INICIAL

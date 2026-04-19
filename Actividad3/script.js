@@ -1,9 +1,13 @@
-// --- Modal Magic V Guardadas global ---
+// ===============================
+// MODAL MAGIC V GUARDADAS
+// ===============================
 function setupMagicVSavedModal() {
   const modal = document.getElementById("magicVSavedModal");
   const closeBtn = document.getElementById("closeMagicVSavedModal");
   const content = document.getElementById("magicVSavedModalContent");
-  // Botones en cada misión
+
+  if (!modal || !closeBtn || !content) return;
+
   const btns = [
     document.getElementById("showMagicVSavedBtn"),
     document.getElementById("showMagicVSavedBtn2"),
@@ -12,17 +16,17 @@ function setupMagicVSavedModal() {
     document.getElementById("showMagicVSavedBtn5")
   ].filter(Boolean);
 
-  btns.forEach(btn => {
+  btns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      // Renderizar tabla igual que en misión 1
-      content.innerHTML = renderMagicVSavedTable();
+      content.innerHTML = '<p class="magicv-saved-item-label">Funcionalidad deshabilitada.</p>';
       modal.style.display = "block";
     });
   });
+
   closeBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
-  // Cerrar al hacer click fuera del contenido
+
   window.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.style.display = "none";
@@ -30,35 +34,55 @@ function setupMagicVSavedModal() {
   });
 }
 
-// --- Persistencia de progreso con sessionStorage ---
+// ===============================
+// SESSION DATA
+// ===============================
+function createEmptyMission1Assignment() {
+  return {
+    leftTop: null,
+    rightTop: null,
+    leftMid: null,
+    rightMid: null,
+    bottom: null
+  };
+}
+
 function getInitialSessionData() {
   try {
     const saved = sessionStorage.getItem("actividad3_sessionData");
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Asegura estructura mínima
-      return Object.assign({
-        character: null,
-        progress: 0,
-        missionsCompleted: [],
-        timestamps: {},
-        mission1: {
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
+      return Object.assign(
+        {
+          character: null,
+          progress: 0,
+          missionsCompleted: [],
+          timestamps: {},
+          mission1: {
+            current: createEmptyMission1Assignment(),
+            saved: [],
+            explorationUnlocked: false,
+            audioSubmitted: false
+          }
+        },
+        parsed,
+        {
+          mission1: Object.assign(
+            {
+              current: createEmptyMission1Assignment(),
+              saved: [],
+              explorationUnlocked: false,
+              audioSubmitted: false
+            },
+            parsed.mission1 || {}
+          )
         }
-      }, parsed, {
-        mission1: Object.assign({
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }, parsed.mission1 || {})
-      });
+      );
     }
-  } catch (e) {}
-  // Por defecto
+  } catch (error) {
+    console.warn("No se pudo leer sessionStorage:", error);
+  }
+
   return {
     character: null,
     progress: 0,
@@ -75,10 +99,8 @@ function getInitialSessionData() {
 
 let sessionData = getInitialSessionData();
 
-// Guarda el progreso relevante en sessionStorage
 function saveSessionProgress() {
   try {
-    // Solo guardamos lo relevante (sin referencias a nodos DOM ni funciones)
     const toSave = {
       character: sessionData.character,
       progress: sessionData.progress,
@@ -91,13 +113,23 @@ function saveSessionProgress() {
         audioSubmitted: sessionData.mission1.audioSubmitted
       }
     };
+
     sessionStorage.setItem("actividad3_sessionData", JSON.stringify(toSave));
-  } catch (e) {}
+  } catch (error) {
+    console.warn("No se pudo guardar sessionStorage:", error);
+  }
 }
 
+// ===============================
+// CONSTANTES Y REFERENCIAS DOM
+// ===============================
 const TOTAL_MISSIONS = 5;
+
 let studentCode = "";
 let studentInfo = null;
+let introCurrentStep = 0;
+let mapVoronoiOwnerByPixel = null;
+let mapResizeFrame = null;
 
 const welcomeContainer = document.getElementById("ContenedorBienvenida");
 const confirmContainer = document.getElementById("ContenedorConfirmacion");
@@ -114,7 +146,6 @@ const introSteps = Array.from(document.querySelectorAll(".intro-step"));
 const introNextStep1Btn = document.getElementById("introNextStep1");
 const introNextStep2Btn = document.getElementById("introNextStep2");
 const startIntroBtn = document.getElementById("startIntroBtn");
-let introCurrentStep = 0;
 
 const characterGrid = document.getElementById("characterGrid");
 const characterStatus = document.getElementById("characterStatus");
@@ -126,21 +157,22 @@ const mapHint = document.getElementById("mapHint");
 const mapStage = document.querySelector(".map-stage");
 const mapGlowCanvas = document.getElementById("mapGlowCanvas");
 const mapFogCanvas = document.getElementById("mapFogCanvas");
+
 const mapMissionAnchors = missionNodes.map((node) => ({
   id: Number(node.dataset.mission),
   left: Number.parseFloat(node.style.left),
   top: Number.parseFloat(node.style.top)
 }));
-const mapRevealProgress = Object.fromEntries(mapMissionAnchors.map((mission) => [mission.id, 0]));
+
+const mapRevealProgress = Object.fromEntries(
+  mapMissionAnchors.map((mission) => [mission.id, 0])
+);
+
 const mapAnimatingMissions = new Set();
-let mapVoronoiOwnerByPixel = null;
-let mapResizeFrame = null;
 
-
-
-
-
-// Asegura que init() se ejecute solo cuando el DOM esté listo
+// ===============================
+// INIT
+// ===============================
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
@@ -152,17 +184,31 @@ function init() {
   setupIntroductionScreen();
   setupCharacterMission();
   setupMap();
-  setupGuideDragAndDrop();
   setupBackToMapButtons();
   setupMagicVSavedModal();
 }
 
+// ===============================
+// ENTRY FLOW
+// ===============================
 function setupEntryFlow() {
+  if (!studentCodeInput || !enterBtn) return;
+
   studentCodeInput.addEventListener("keydown", (event) => {
-    const allowed = ["Backspace", "Delete", "Tab", "Escape", "Enter", "ArrowLeft", "ArrowRight", "Home", "End"];
-    if (allowed.includes(event.key) || event.ctrlKey || event.metaKey) {
-      return;
-    }
+    const allowed = [
+      "Backspace",
+      "Delete",
+      "Tab",
+      "Escape",
+      "Enter",
+      "ArrowLeft",
+      "ArrowRight",
+      "Home",
+      "End"
+    ];
+
+    if (allowed.includes(event.key) || event.ctrlKey || event.metaKey) return;
+
     if (!/^\d$/.test(event.key)) {
       event.preventDefault();
     }
@@ -180,13 +226,13 @@ function setupEntryFlow() {
 
   enterBtn.addEventListener("click", handleCodeSubmit);
 
-  confirmNoBtn.addEventListener("click", () => {
+  confirmNoBtn?.addEventListener("click", () => {
     confirmContainer.style.display = "none";
     welcomeContainer.style.display = "flex";
     studentCodeInput.focus();
   });
 
-  confirmYesBtn.addEventListener("click", () => {
+  confirmYesBtn?.addEventListener("click", () => {
     confirmContainer.style.display = "none";
     activityApp.style.display = "block";
     registerTimestamp("confirmationAccepted");
@@ -210,13 +256,23 @@ function handleCodeSubmit() {
   if (code === "0000") {
     const guest = window.prompt("Escribe tu nombre para ingresar como invitado");
     const guestName = (guest || "").trim();
+
     if (!guestName) {
-      setMessage(welcomeError, "Para continuar como invitado debes escribir tu nombre.", "bad");
+      setMessage(
+        welcomeError,
+        "Para continuar como invitado debes escribir tu nombre.",
+        "bad"
+      );
       return;
     }
 
     studentCode = code;
-    studentInfo = { nombre: guestName, apellidos: "", curso: "INVITADO" };
+    studentInfo = {
+      nombre: guestName,
+      apellidos: "",
+      curso: "INVITADO"
+    };
+
     confirmationQuestion.textContent = `Eres ${toTitle(guestName)}?`;
     setMessage(welcomeError, "", "");
     welcomeContainer.style.display = "none";
@@ -225,8 +281,13 @@ function handleCodeSubmit() {
   }
 
   const estudiante = (window.estudiantesData || {})[code];
+
   if (!estudiante) {
-    setMessage(welcomeError, "Codigo no encontrado. Verifica que este bien escrito.", "bad");
+    setMessage(
+      welcomeError,
+      "Codigo no encontrado. Verifica que este bien escrito.",
+      "bad"
+    );
     return;
   }
 
@@ -248,31 +309,23 @@ function handleCodeSubmit() {
   confirmContainer.style.display = "flex";
 }
 
+// ===============================
+// INTRODUCCIÓN
+// ===============================
 function setupIntroductionScreen() {
   setIntroStep(0);
 
-  if (introNextStep1Btn) {
-    introNextStep1Btn.addEventListener("click", () => {
-      setIntroStep(1);
-    });
-  }
+  introNextStep1Btn?.addEventListener("click", () => setIntroStep(1));
+  introNextStep2Btn?.addEventListener("click", () => setIntroStep(2));
 
-  if (introNextStep2Btn) {
-    introNextStep2Btn.addEventListener("click", () => {
-      setIntroStep(2);
-    });
-  }
-
-  startIntroBtn.addEventListener("click", () => {
+  startIntroBtn?.addEventListener("click", () => {
     registerTimestamp("introductionViewed");
     showScreen("characterMissionScreen");
   });
 }
 
 function setIntroStep(stepIndex) {
-  if (!introSteps.length) {
-    return;
-  }
+  if (!introSteps.length) return;
 
   introCurrentStep = Math.max(0, Math.min(stepIndex, introSteps.length - 1));
 
@@ -281,14 +334,20 @@ function setIntroStep(stepIndex) {
   });
 }
 
+// ===============================
+// PERSONAJES
+// ===============================
 function setupCharacterMission() {
+  if (!characterGrid) return;
+
   characterGrid.addEventListener("click", (event) => {
     const card = event.target.closest(".character-card");
-    if (!card) {
-      return;
-    }
+    if (!card) return;
 
-    document.querySelectorAll(".character-card").forEach((item) => item.classList.remove("selected"));
+    document
+      .querySelectorAll(".character-card")
+      .forEach((item) => item.classList.remove("selected"));
+
     card.classList.add("selected");
 
     sessionData.character = {
@@ -296,12 +355,20 @@ function setupCharacterMission() {
       name: card.dataset.name,
       image: card.dataset.image
     };
+
     saveSessionProgress();
-    setMessage(characterStatus, `${sessionData.character.name} sera tu guia en Numetrix.`, "good");
-    confirmCharacterBtn.disabled = false;
+    setMessage(
+      characterStatus,
+      `${sessionData.character.name} sera tu guia en Numetrix.`,
+      "good"
+    );
+
+    if (confirmCharacterBtn) {
+      confirmCharacterBtn.disabled = false;
+    }
   });
 
-  confirmCharacterBtn.addEventListener("click", () => {
+  confirmCharacterBtn?.addEventListener("click", () => {
     if (!sessionData.character) {
       setMessage(characterStatus, "Selecciona un personaje para continuar.", "bad");
       return;
@@ -316,22 +383,99 @@ function setupCharacterMission() {
   });
 }
 
+// ===============================
+// MAPA
+// ===============================
 function setupMap() {
   missionNodes.forEach((node) => {
     node.addEventListener("click", () => {
-      setMessage(mapHint, "Para entrar a la mision, arrastra tu guia y sueltalo sobre el marcador activo.", "");
+      const mission = Number(node.dataset.mission);
+      const currentMission = getCurrentAvailableMission();
+
+      if (mission === currentMission) {
+        openMission(mission);
+      } else if (sessionData.missionsCompleted.includes(mission)) {
+        setMessage(mapHint, `La mision ${mission} ya fue completada.`, "good");
+      } else {
+        setMessage(
+          mapHint,
+          "Completa una mision para desbloquear la siguiente.",
+          "bad"
+        );
+      }
     });
   });
 
   window.addEventListener("resize", queueMapFogResize);
 }
 
-// Eliminada la función setupGuideDragAndDrop y toda la lógica de drag & drop
+function getCurrentAvailableMission() {
+  const nextMission = sessionData.progress;
 
+  if (!nextMission || nextMission > TOTAL_MISSIONS) return null;
+  if (sessionData.missionsCompleted.includes(nextMission)) return null;
 
+  return nextMission;
+}
 
+function openMission(mission) {
+  setMessage(mapHint, `Abriendo mision ${mission}...`, "good");
+  showScreen(`mission${mission}Screen`);
+  registerTimestamp(`mission${mission}Opened`);
+}
 
+function renderMap() {
+  const currentMission = getCurrentAvailableMission();
 
+  missionNodes.forEach((node) => {
+    const mission = Number(node.dataset.mission);
+    const stateSpan = node.querySelector(".node-state");
+
+    node.classList.remove("locked", "available", "completed", "drop-hover");
+
+    if (sessionData.missionsCompleted.includes(mission)) {
+      node.classList.add("completed");
+      if (stateSpan) {
+        stateSpan.textContent = "⭐";
+        stateSpan.setAttribute("aria-label", "Mision completada");
+      }
+      return;
+    }
+
+    if (mission === currentMission) {
+      node.classList.add("available");
+      if (stateSpan) {
+        stateSpan.textContent = "⭐";
+        stateSpan.setAttribute("aria-label", "Mision desbloqueada");
+      }
+      return;
+    }
+
+    node.classList.add("locked");
+    if (stateSpan) {
+      stateSpan.textContent = "🔒";
+      stateSpan.setAttribute("aria-label", "Mision bloqueada");
+    }
+  });
+
+  const done = sessionData.missionsCompleted.length;
+
+  if (done === TOTAL_MISSIONS) {
+    setMessage(
+      mapHint,
+      "Laboratorio reiniciado. Todas las misiones estan completadas.",
+      "good"
+    );
+  } else {
+    setMessage(
+      mapHint,
+      `Misiones completadas: ${done}/${TOTAL_MISSIONS}. Haz clic en la mision disponible para abrirla.`,
+      ""
+    );
+  }
+
+  syncMapFogWithProgress();
+}
 
 function queueMapFogResize() {
   if (!document.getElementById("mapScreen")?.classList.contains("active-screen")) {
@@ -351,18 +495,15 @@ function queueMapFogResize() {
 }
 
 function ensureMapFogCanvases() {
-  if (!mapStage || !mapFogCanvas || !mapGlowCanvas) {
-    return false;
-  }
+  if (!mapStage || !mapFogCanvas || !mapGlowCanvas) return false;
 
   const width = Math.round(mapStage.clientWidth);
   const height = Math.round(mapStage.clientHeight);
 
-  if (!width || !height) {
-    return false;
-  }
+  if (!width || !height) return false;
 
-  const needsResize = mapFogCanvas.width !== width || mapFogCanvas.height !== height;
+  const needsResize =
+    mapFogCanvas.width !== width || mapFogCanvas.height !== height;
 
   if (needsResize) {
     mapFogCanvas.width = width;
@@ -379,6 +520,7 @@ function ensureMapFogCanvases() {
 
 function computeMapVoronoi(width, height) {
   const pixelOwners = new Uint8Array(width * height);
+
   const nodes = mapMissionAnchors.map((mission) => ({
     id: mission.id,
     x: (mission.left / 100) * width,
@@ -409,9 +551,7 @@ function computeMapVoronoi(width, height) {
 }
 
 function drawMapFog() {
-  if (!ensureMapFogCanvases()) {
-    return;
-  }
+  if (!ensureMapFogCanvases()) return;
 
   const width = mapFogCanvas.width;
   const height = mapFogCanvas.height;
@@ -437,9 +577,7 @@ function drawMapFog() {
 }
 
 function drawMapGlow() {
-  if (!ensureMapFogCanvases()) {
-    return;
-  }
+  if (!ensureMapFogCanvases()) return;
 
   const width = mapGlowCanvas.width;
   const height = mapGlowCanvas.height;
@@ -448,15 +586,20 @@ function drawMapGlow() {
 
   mapMissionAnchors.forEach((mission) => {
     const progress = mapRevealProgress[mission.id] || 0;
-    if (progress <= 0) {
-      return;
-    }
+    if (progress <= 0) return;
 
     const centerX = (mission.left / 100) * width;
     const centerY = (mission.top / 100) * height;
     const radius = 72 + (progress * (width * 0.18));
     const alpha = progress * 0.24;
-    const gradient = context.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+    const gradient = context.createRadialGradient(
+      centerX,
+      centerY,
+      0,
+      centerX,
+      centerY,
+      radius
+    );
 
     gradient.addColorStop(0, `rgba(255, 236, 170, ${alpha})`);
     gradient.addColorStop(0.38, `rgba(255, 220, 145, ${alpha * 0.48})`);
@@ -482,13 +625,12 @@ function animateMapReveal(missionId) {
   mapRevealProgress[missionId] = Math.min(mapRevealProgress[missionId] + 0.011, 1);
   drawMapFog();
   drawMapGlow();
+
   window.requestAnimationFrame(() => animateMapReveal(missionId));
 }
 
 function syncMapFogWithProgress() {
-  if (!ensureMapFogCanvases()) {
-    return;
-  }
+  if (!ensureMapFogCanvases()) return;
 
   mapMissionAnchors.forEach((mission) => {
     const isCompleted = sessionData.missionsCompleted.includes(mission.id);
@@ -503,261 +645,17 @@ function syncMapFogWithProgress() {
       return;
     }
 
+    mapAnimatingMissions.add(mission.id);
+    animateMapReveal(mission.id);
+  });
 
-  const board = document.querySelector(boardSelector);
-  if (!board) return;
-
-
-
-      mediaRecorder.onstop = () => {
-        mission1AudioState.blob = new Blob(mission1AudioState.chunks, {
-          type: mission1AudioState.chunks[0]?.type || "audio/webm"
-        });
-
-
-
-  const isRecording = Boolean(mission1AudioState.mediaRecorder && mission1AudioState.mediaRecorder.state === "recording");
-  const hasAudio = Boolean(mission1AudioState.blob && mission1AudioState.blob.size > 0);
-  const isLocked = sessionData.mission1.audioSubmitted || mission1AudioState.submitting;
-
-  mission1AudioRecordBtn.style.display = isRecording ? "none" : "inline-flex";
-  mission1AudioStopBtn.style.display = isRecording ? "inline-flex" : "none";
-
-  mission1AudioRecordBtn.disabled = isLocked;
-  mission1AudioStopBtn.disabled = !isRecording || isLocked;
-  mission1AudioSubmitBtn.disabled = !hasAudio || isLocked;
+  drawMapFog();
+  drawMapGlow();
 }
 
-async function requestMission1AudioStream() {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    throw new Error("getUserMedia no está disponible en este navegador");
-  }
-
-  const preferredConstraints = {
-    audio: {
-      echoCancellation: true,
-      noiseSuppression: true,
-      autoGainControl: true,
-      channelCount: 1
-    }
-  };
-
-  try {
-    return await navigator.mediaDevices.getUserMedia(preferredConstraints);
-  } catch (error) {
-    if (error?.name === "NotAllowedError") {
-      throw error;
-    }
-
-    return navigator.mediaDevices.getUserMedia({ audio: true });
-  }
-}
-
-async function handleMission1AudioSubmit() {
-  if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
-    return;
-  }
-
-  if (!mission1AudioState.blob || mission1AudioState.blob.size === 0) {
-    setMessage(mission1AudioStatus, "Primero graba una respuesta antes de enviarla.", "bad");
-    return;
-  }
-
-  const firebaseServices = window.firebaseServices;
-  if (!firebaseServices?.storage || !firebaseServices?.db) {
-    setMessage(mission1AudioStatus, "Firebase no está disponible en este momento. Intenta de nuevo en unos segundos.", "bad");
-    return;
-  }
-
-  mission1AudioState.submitting = true;
-  syncMission1AudioButtons();
-  setMessage(mission1AudioStatus, "Subiendo audio...", "");
-
-  try {
-    const {
-      storage,
-      db,
-      ref,
-      uploadBytes,
-      getDownloadURL,
-      collection,
-      addDoc,
-      serverTimestamp
-    } = firebaseServices;
-
-    const basePath = buildMission1ExplorationStorageBasePath();
-    const fileName = buildMission1ExploracionFileName();
-    const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
-
-    await uploadBytes(storageRef, mission1AudioState.blob, {
-      contentType: mission1AudioState.blob.type || "audio/webm"
-    });
-
-    const audioURL = await getDownloadURL(storageRef);
-
-    await addDoc(collection(db, "Actividad3"), {
-      studentCode,
-      studentName: getStudentDisplayName(),
-      curso: studentInfo?.curso || "",
-      isGuest: studentCode === "0000",
-      tag: "A3M1Exploracion",
-      componente: "1Exploración",
-      storageBasePath: basePath,
-      fileName: `${fileName}.webm`,
-      audioURL,
-      timestamp: serverTimestamp()
-    });
-
-    sessionData.mission1.audioSubmitted = true;
-    setMessage(mission1AudioStatus, "✅ Audio enviado correctamente.", "good");
-    setMessage(magicVFeedback, "Respuesta enviada. La misión 1 quedó completada.", "good");
-    syncMission1AudioButtons();
-    completeMission(1);
-  } catch (error) {
-    console.error("Error al enviar el audio de 1Exploración:", error);
-    setMessage(mission1AudioStatus, "Error al guardar el audio. Revisa tu conexión e intenta de nuevo.", "bad");
-  } finally {
-    mission1AudioState.submitting = false;
-    syncMission1AudioButtons();
-  }
-}
-
-function unlockMission1Exploration() {
-  sessionData.mission1.explorationUnlocked = true;
-  syncMission1ExplorationState();
-
-  if (!sessionData.mission1.audioSubmitted && !mission1AudioState.blob) {
-    setMessage(mission1AudioStatus, "Cuando estés lista, graba tu respuesta y envíala.", "");
-  }
-}
-
-function syncMission1ExplorationState() {
-  if (typeof mission1ExploracionBlock !== 'undefined' && mission1ExploracionBlock && typeof mission1ExploracionBlock.classList !== 'undefined') {
-    // Solo mostrar si hay 3 combinaciones y todas tienen suma mágica verificada, o si ya se envió el audio
-    const allSumaVerificada = sessionData.mission1.saved.length === 3 && sessionData.mission1.saved.every(c => c.sumaMagica !== null);
-    const shouldShow = sessionData.mission1.explorationUnlocked || allSumaVerificada || sessionData.mission1.audioSubmitted;
-    sessionData.mission1.explorationUnlocked = shouldShow;
-    mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
-    syncMission1AudioButtons();
-  }
-}
-
-function orderMission1TrayChips(trayElement) {
-  if (!trayElement || typeof trayElement.querySelectorAll !== 'function') return;
-  const chips = Array.from(trayElement.querySelectorAll('.magicv-chip'));
-  chips
-    .sort((a, b) => Number(a.dataset.value) - Number(b.dataset.value))
-    .forEach((chip) => trayElement.appendChild(chip));
-}
-
-function verificarSumaMagica(index) {
-  const comb = sessionData.mission1.saved[index];
-  if (!comb || comb.sumaMagica !== null) return;
-
-  const input = mission1SavedList.querySelector(`.magicv-suma-input[data-index="${index}"]`);
-  const errorSpan = document.getElementById(`sumaMagicaError${index}`);
-
-  const ingresado = parseInt(input.value, 10);
-  if (isNaN(ingresado) || input.value.trim() === "") {
-    errorSpan.textContent = "Ingresa un número.";
-    return;
-  }
-
-  const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
-
-  if (ingresado === sumaCorrecta) {
-    comb.sumaMagica = ingresado;
-    saveSessionProgress();
-    renderMission1SavedCombinations();
-  } else {
-    errorSpan.textContent = "Verifica tu respuesta.";
-    input.value = "";
-    input.focus();
-  }
-}
-
-function renderMission1SavedCombinations() {
-  mission1SavedCount.textContent = `${sessionData.mission1.saved.length}/3`;
-
-  if (sessionData.mission1.saved.length === 0) {
-    mission1SavedList.innerHTML = "<p class=\"magicv-saved-item-label\">Aun no tienes combinaciones guardadas.</p>";
-    return;
-  }
-
-  const rows = sessionData.mission1.saved.map((comb, index) => {
-    const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
-
-    const sumaCell = comb.sumaMagica !== null
-      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
-      : `<div class="magicv-suma-input-group">
-           <input class="magicv-suma-input" type="number" min="1" max="99"
-             data-index="${index}"
-             aria-label="Ingresa la suma mágica de la combinación ${index + 1}">
-           <button class="magicv-suma-check btn btn-primary" data-index="${index}" type="button">Verificar</button>
-           <span class="magicv-suma-error" id="sumaMagicaError${index}"></span>
-         </div>`;
-
-    // Permutaciones asociadas visuales
-    let permutacionesHtml = "";
-    if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
-        comb.permutaciones.map((perm) => `
-          <div class="magicv-mini-board magicv-mini-board-permutacion">
-            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
-          </div>`).join("") + `</div>`;
-    }
-
-    return `<tr>
-      <td>
-        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
-        <div class="magicv-v-group">
-          <div class="magicv-mini-board">
-            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
-          </div>
-          ${permutacionesHtml}
-        </div>
-      </td>
-      <td class="magicv-suma-cell">${sumaCell}</td>
-    </tr>`;
-  }).join("");
-
-  mission1SavedList.innerHTML = `
-    <table class="magicv-saved-table">
-      <thead>
-        <tr>
-          <th>Magic V</th>
-          <th>Suma mágica</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
-
-function serializeMission1Combination(combination) {
-  return mission1SlotOrder.map((slot) => combination[slot]).join("-");
-}
-
-function createEmptyMission1Assignment() {
-  return {
-    leftTop: null,
-    rightTop: null,
-    leftMid: null,
-    rightMid: null,
-    bottom: null
-  };
-}
-
-
-
+// ===============================
+// UTILIDADES GENERALES
+// ===============================
 function setupBackToMapButtons() {
   document.querySelectorAll(".back-to-map").forEach((button) => {
     button.addEventListener("click", () => {
@@ -773,7 +671,12 @@ function completeMission(missionNumber) {
   }
 
   sessionData.missionsCompleted.sort((a, b) => a - b);
-  sessionData.progress = Math.min(TOTAL_MISSIONS, Math.max(sessionData.progress, missionNumber + 1));
+  sessionData.progress = Math.min(
+    TOTAL_MISSIONS,
+    Math.max(sessionData.progress, missionNumber + 1)
+  );
+
+  saveSessionProgress();
   registerTimestamp(`mission${missionNumber}Completed`);
 
   renderMap();
@@ -794,10 +697,6 @@ function showScreen(id) {
     target.classList.add("active-screen");
   }
 
-  if (id === "mission1Screen") {
-    syncMission1ExplorationState();
-  }
-
   if (id === "mapScreen") {
     window.requestAnimationFrame(() => {
       ensureMapFogCanvases();
@@ -807,14 +706,9 @@ function showScreen(id) {
 }
 
 function hydrateGuideBadges() {
-  if (!sessionData.character) {
-    return;
-  }
+  if (!sessionData.character) return;
 
   const mapGuideHtml = `
-    <button class="guide-dragger" aria-label="Arrastrar guia ${sessionData.character.name}" type="button">
-      <img src="${sessionData.character.image}" alt="${sessionData.character.name}">
-    </button>
     <span>Guia: ${sessionData.character.name}</span>
   `;
 
@@ -823,7 +717,9 @@ function hydrateGuideBadges() {
     <span>Guia: ${sessionData.character.name}</span>
   `;
 
-  guideBadge.innerHTML = mapGuideHtml;
+  if (guideBadge) {
+    guideBadge.innerHTML = mapGuideHtml;
+  }
 
   [
     "guideInlineMission1",
@@ -841,12 +737,11 @@ function hydrateGuideBadges() {
 
 function registerTimestamp(key) {
   sessionData.timestamps[key] = new Date().toISOString();
+  saveSessionProgress();
 }
 
 function setMessage(target, text, mode) {
-  if (!target) {
-    return;
-  }
+  if (!target) return;
 
   target.textContent = text;
   target.classList.remove("good", "bad");
@@ -860,6 +755,542 @@ function setMessage(target, text, mode) {
   }
 }
 
+function toTitle(text) {
+  return String(text || "")
+    .toLowerCase()
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+// ===============================
+// MISIÓN 1 COMPLETA (NUEVA)
+// ===============================
+
+function setupMission1() {
+
+  // ===== ELEMENTOS =====
+  const momentoA = document.getElementById("m1-momentoA");
+  const momentoB = document.getElementById("m1-momentoB");
+  const momentoC = document.getElementById("m1-momentoC");
+
+  // A
+  const boardA = document.getElementById("magicvBoardA");
+  const trayA = document.getElementById("mission1ChipTrayA");
+  const checkA = document.getElementById("checkMagicVBtnA");
+  const resetA = document.getElementById("resetMagicVBtnA");
+  const feedbackA = document.getElementById("magicVFeedbackA");
+
+  // B
+  const boardB = document.getElementById("magicvBoardB");
+  const inputTotal = document.getElementById("magicVTotalInput");
+  const feedbackB = document.getElementById("magicVTotalFeedback");
+
+  // C
+  const boardC = document.getElementById("magicvBoardC");
+  const trayC = document.getElementById("mission1ChipTrayC");
+  const checkC = document.getElementById("checkMagicVBtnC");
+  const resetC = document.getElementById("resetMagicVBtnC");
+  const feedbackC = document.getElementById("magicVFeedbackC");
+
+  const savedList = document.getElementById("mission1SavedListC");
+  const savedCount = document.getElementById("mission1SavedCountC");
+  const finalBlock = document.getElementById("magicVFinalBlock");
+
+  // AUDIO
+  const recordBtn = document.getElementById("recordBtnA3M1Exploracion");
+  const stopBtn = document.getElementById("stopBtnA3M1Exploracion");
+  const submitBtn = document.getElementById("submitA3M1Exploracion");
+  const status = document.getElementById("statusA3M1Exploracion");
+
+  // ===== ESTADO =====
+  let V_inicial = null;
+  let nucleo = null;
+  let totalMagico = null;
+
+  let soluciones = [];
+  let serials = new Set();
+
+  const slots = ["leftTop","rightTop","leftMid","rightMid","bottom"];
+
+  // ===============================
+  // UTILIDADES
+  // ===============================
+
+  function getValues(board) {
+    const vals = {};
+    slots.forEach(s => {
+      const el = board.querySelector(`[data-slot="${s}"]`);
+      vals[s] = el && el.textContent ? Number(el.textContent) : null;
+    });
+    return vals;
+  }
+
+  function setBoard(board, vals, lockNucleo=false) {
+    slots.forEach(s => {
+      const el = board.querySelector(`[data-slot="${s}"]`);
+      if (!el) return;
+
+      if (lockNucleo && s==="bottom") {
+        el.textContent = vals[s];
+        el.classList.add("nucleo-fijo");
+      } else {
+        el.textContent = vals[s] ?? "";
+        el.classList.remove("nucleo-fijo");
+      }
+    });
+  }
+
+  function clearBoard(board, lock=false) {
+    slots.forEach(s => {
+      const el = board.querySelector(`[data-slot="${s}"]`);
+      if (!el) return;
+
+      if (lock && s==="bottom") return;
+      el.textContent = "";
+    });
+  }
+
+  function setTray(tray, nums) {
+    tray.innerHTML = "";
+    nums.forEach(n=>{
+      const b = document.createElement("button");
+      b.className="magicv-chip";
+      b.textContent=n;
+      b.dataset.value=n;
+      tray.appendChild(b);
+    });
+  }
+
+  function isMagicV(v){
+    if(slots.some(s=>v[s]==null)) return false;
+    return (v.leftTop+v.leftMid+v.bottom) === (v.rightTop+v.rightMid+v.bottom);
+  }
+
+  function serial(v){
+    return slots.map(s=>v[s]).join("-");
+  }
+
+  function total(v){
+    return v.leftTop+v.leftMid+v.bottom;
+  }
+
+  // ===============================
+  // MOMENTO A
+  // ===============================
+
+  function initA(){
+    clearBoard(boardA);
+    setTray(trayA,[1,2,3,4,5]);
+    feedbackA.textContent="";
+
+    trayA.onclick=e=>{
+      if(!e.target.classList.contains("magicv-chip")) return;
+      for(const s of slots){
+        const el=boardA.querySelector(`[data-slot="${s}"]`);
+        if(!el.textContent){
+          el.textContent=e.target.textContent;
+          e.target.remove();
+          break;
+        }
+      }
+    };
+
+    boardA.onclick=e=>{
+      if(!e.target.textContent) return;
+      const val=e.target.textContent;
+      e.target.textContent="";
+      setTray(trayA,[...getTrayVals(trayA),Number(val)]);
+    };
+
+    checkA.onclick=()=>{
+      const v=getValues(boardA);
+
+      if(!isMagicV(v)){
+        feedbackA.textContent="No es Magic V";
+        return;
+      }
+
+      V_inicial={...v};
+      nucleo=v.bottom;
+      totalMagico=total(v);
+
+      feedbackA.textContent="✔ Correcto";
+
+      setTimeout(()=>{
+        momentoA.style.display="none";
+        initB();
+        momentoB.style.display="block";
+      },800);
+    };
+
+    resetA.onclick=initA;
+  }
+
+  function getTrayVals(tray){
+    return [...tray.querySelectorAll(".magicv-chip")].map(b=>Number(b.dataset.value));
+  }
+
+  // ===============================
+  // MOMENTO B
+  // ===============================
+
+  function initB(){
+    setBoard(boardB,V_inicial);
+
+    inputTotal.value="";
+    feedbackB.textContent="";
+
+    inputTotal.oninput=()=>{
+      const val=Number(inputTotal.value);
+
+      if(val===totalMagico){
+        feedbackB.textContent="✔ Correcto";
+
+        setTimeout(()=>{
+          momentoB.style.display="none";
+          initC();
+          momentoC.style.display="block";
+        },800);
+      }else{
+        feedbackB.textContent="Revisa";
+      }
+    };
+  }
+
+  // ===============================
+  // MOMENTO C
+  // ===============================
+
+  function initC(){
+
+    // tablero
+    setBoard(boardC,{bottom:nucleo},true);
+
+    // fichas
+    const restantes=[1,2,3,4,5].filter(n=>n!==nucleo);
+    setTray(trayC,restantes);
+
+    soluciones=[];
+    serials=new Set();
+
+    updateSaved();
+
+    trayC.onclick=e=>{
+      if(!e.target.classList.contains("magicv-chip")) return;
+
+      for(const s of slots){
+        if(s==="bottom") continue;
+        const el=boardC.querySelector(`[data-slot="${s}"]`);
+        if(!el.textContent){
+          el.textContent=e.target.textContent;
+          e.target.remove();
+          break;
+        }
+      }
+    };
+
+    boardC.onclick=e=>{
+      if(!e.target.textContent || e.target.dataset.slot==="bottom") return;
+
+      const val=e.target.textContent;
+      e.target.textContent="";
+      setTray(trayC,[...getTrayVals(trayC),Number(val)]);
+    };
+
+    checkC.onclick=()=>{
+      const v=getValues(boardC);
+
+      if(!isMagicV(v)){
+        feedbackC.textContent="No válida";
+        return;
+      }
+
+      const s=serial(v);
+
+      if(serials.has(s)){
+        feedbackC.textContent="Repetida";
+        return;
+      }
+
+      soluciones.push(v);
+      serials.add(s);
+
+      feedbackC.textContent="✔ Guardada";
+
+      updateSaved();
+
+      if(soluciones.length===8){
+        finalBlock.style.display="block";
+      }
+    };
+
+    resetC.onclick=()=>initC();
+  }
+
+  function updateSaved(){
+    savedCount.textContent=`${soluciones.length}/8`;
+
+    savedList.innerHTML=soluciones.map(v=>
+      `<div class="miniV">${serial(v)}</div>`
+    ).join("");
+  }
+
+  // ===============================
+  // AUDIO
+  // ===============================
+
+  let recorder, chunks=[];
+
+  recordBtn.onclick=async()=>{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    recorder=new MediaRecorder(stream);
+
+    recorder.ondataavailable=e=>chunks.push(e.data);
+
+    recorder.onstop=()=>{
+      const blob=new Blob(chunks,{type:"audio/webm"});
+      submitBtn.disabled=false;
+      status.textContent="Listo";
+      chunks=[];
+    };
+
+    recorder.start();
+    recordBtn.disabled=true;
+    stopBtn.disabled=false;
+    status.textContent="Grabando...";
+  };
+
+  stopBtn.onclick=()=>{
+    recorder.stop();
+    recordBtn.disabled=false;
+    stopBtn.disabled=true;
+  };
+
+  submitBtn.onclick=()=>{
+    status.textContent="Enviado ✔";
+    completeMission(1);
+  };
+
+  // ===============================
+  // INICIO
+  // ===============================
+  initA();
+  momentoA.style.display="block";
+  momentoB.style.display="none";
+  momentoC.style.display="none";
+  finalBlock.style.display="none";
+}
+
+// activar automáticamente
+document.addEventListener("DOMContentLoaded",()=>{
+  if(document.getElementById("mission1Screen")){
+    setupMission1();
+  }
+});
 
 
+// ===============================
+// MISIÓN 2 (ANTIGUA MISIÓN 1)
+// ===============================
 
+function setupMission2() {
+
+  const slots = ["leftTop","rightTop","leftMid","rightMid","bottom"];
+
+  const tray = document.getElementById("mission2ChipTray");
+  const drops = Array.from(document.querySelectorAll("#mission2Screen .magicv-drop"));
+
+  const checkBtn = document.getElementById("checkMagicVBtnM2");
+  const resetBtn = document.getElementById("resetMagicVBtnM2");
+
+  const savedList = document.getElementById("mission2SavedList");
+  const savedCount = document.getElementById("mission2SavedCount");
+
+  const feedback = document.getElementById("magicVFeedbackM2");
+
+  const recordBtn = document.getElementById("recordBtnA3M2Exploracion");
+  const stopBtn = document.getElementById("stopBtnA3M2Exploracion");
+  const submitBtn = document.getElementById("submitA3M2Exploracion");
+  const status = document.getElementById("statusA3M2Exploracion");
+
+  // ===== SESSION =====
+  if (!sessionData.mission2) {
+    sessionData.mission2 = {
+      current: createEmptyAssignment(),
+      saved: [],
+      explorationUnlocked: false,
+      audioSubmitted: false
+    };
+  }
+
+  // ===== UTILS =====
+  function createEmptyAssignment() {
+    return {
+      leftTop:null,
+      rightTop:null,
+      leftMid:null,
+      rightMid:null,
+      bottom:null
+    };
+  }
+
+  function isMagicV(v){
+    return (v.leftTop+v.leftMid) === (v.rightTop+v.rightMid);
+  }
+
+  function serial(v){
+    return slots.map(s=>v[s]).join("-");
+  }
+
+  function getValues(){
+    const vals = {};
+    slots.forEach(s=>{
+      const el = document.querySelector(`#mission2Screen [data-slot="${s}"]`);
+      vals[s] = el && el.textContent ? Number(el.textContent) : null;
+    });
+    return vals;
+  }
+
+  function clearBoard(){
+    drops.forEach(d=>{
+      d.textContent="";
+      d.classList.remove("filled");
+    });
+
+    tray.innerHTML="";
+    [1,2,3,4,5].forEach(n=>{
+      const b=document.createElement("button");
+      b.className="magicv-chip";
+      b.textContent=n;
+      b.dataset.value=n;
+      tray.appendChild(b);
+    });
+
+    sessionData.mission2.current = createEmptyAssignment();
+  }
+
+  // ===== DRAG SIMPLE =====
+  tray.onclick = e=>{
+    if(!e.target.classList.contains("magicv-chip")) return;
+
+    for(const d of drops){
+      if(!d.textContent){
+        d.textContent = e.target.textContent;
+        sessionData.mission2.current[d.dataset.slot]=Number(e.target.textContent);
+        d.classList.add("filled");
+        e.target.remove();
+        break;
+      }
+    }
+  };
+
+  drops.forEach(d=>{
+    d.onclick = ()=>{
+      if(!d.textContent) return;
+
+      const val = d.textContent;
+      d.textContent="";
+      d.classList.remove("filled");
+
+      sessionData.mission2.current[d.dataset.slot]=null;
+
+      const b=document.createElement("button");
+      b.className="magicv-chip";
+      b.textContent=val;
+      b.dataset.value=val;
+      tray.appendChild(b);
+    };
+  });
+
+  // ===== CHECK =====
+  checkBtn.onclick = ()=>{
+    const v = getValues();
+
+    if(Object.values(v).includes(null)){
+      feedback.textContent="Completa la V";
+      return;
+    }
+
+    if(!isMagicV(v)){
+      feedback.textContent="No es Magic V";
+      return;
+    }
+
+    const s = serial(v);
+
+    if(sessionData.mission2.saved.includes(s)){
+      feedback.textContent="Repetida";
+      return;
+    }
+
+    sessionData.mission2.saved.push(s);
+    updateSaved();
+
+    feedback.textContent="✔ Guardada";
+
+    if(sessionData.mission2.saved.length===3){
+      sessionData.mission2.explorationUnlocked=true;
+      enableAudio();
+    }
+
+    clearBoard();
+  };
+
+  resetBtn.onclick = clearBoard;
+
+  // ===== SAVE LIST =====
+  function updateSaved(){
+    savedCount.textContent = `${sessionData.mission2.saved.length}/3`;
+
+    savedList.innerHTML = sessionData.mission2.saved.map(v=>
+      `<div class="miniV">${v}</div>`
+    ).join("");
+  }
+
+  // ===== AUDIO =====
+  let recorder, chunks=[];
+
+  function enableAudio(){
+    status.textContent="Graba tu explicación";
+    recordBtn.disabled=false;
+  }
+
+  recordBtn.onclick = async ()=>{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    recorder = new MediaRecorder(stream);
+
+    recorder.ondataavailable = e=>chunks.push(e.data);
+
+    recorder.onstop = ()=>{
+      submitBtn.disabled=false;
+      status.textContent="Audio listo";
+    };
+
+    recorder.start();
+    recordBtn.disabled=true;
+    stopBtn.disabled=false;
+  };
+
+  stopBtn.onclick = ()=>{
+    recorder.stop();
+    stopBtn.disabled=true;
+  };
+
+  submitBtn.onclick = ()=>{
+    sessionData.mission2.audioSubmitted=true;
+    completeMission(2);
+  };
+
+  // ===== INIT =====
+  clearBoard();
+  updateSaved();
+}
+
+// AUTO
+document.addEventListener("DOMContentLoaded",()=>{
+  if(document.getElementById("mission2Screen")){
+    setupMission2();
+  }
+});
