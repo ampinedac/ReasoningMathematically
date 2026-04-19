@@ -780,7 +780,7 @@ function setupMission1() {
     verificarSumaMagica(Number(input.dataset.index));
   });
 
-  let totalMagicoMostrado = false;
+  let totalMagicoCardMostrada = false;
   checkMagicVBtn.addEventListener("click", () => {
     const current = sessionData.mission1.current;
     const hasMissing = mission1SlotOrder.some((slot) => current[slot] === null);
@@ -799,14 +799,10 @@ function setupMission1() {
     const nucleo = current.bottom;
     const brazos = [current.leftTop, current.rightTop, current.leftMid, current.rightMid];
     const sumaMagica = current.leftTop + current.leftMid + current.bottom; // suma de un brazo + núcleo
-    // Si es la PRIMERA Magic V válida, mostrar modal de total mágico
-    if (sessionData.mission1.saved.length === 0 && !totalMagicoMostrado) {
-      modalTotalMagico.style.display = "flex";
-      inputTotalMagico.value = "";
-      feedbackTotalMagico.textContent = "";
-      inputTotalMagico.focus();
-      totalMagicoMostrado = true;
-      // Guardar temporalmente la combinación para validar después
+    // Si es la PRIMERA Magic V válida, mostrar card de total mágico
+    if (sessionData.mission1.saved.length === 0 && !totalMagicoCardMostrada) {
+      mostrarCardTotalMagico(current);
+      totalMagicoCardMostrada = true;
       sessionData.mission1._tmpFirstMagicV = { ...current };
       return;
     }
@@ -853,42 +849,64 @@ function setupMission1() {
     setMessage(magicVFeedback, `Combinacion guardada. Te faltan ${missing} combinaciones validas.`, "good");
   });
 
-  // Validación del total mágico en el modal
-  btnValidarTotalMagico.addEventListener("click", () => {
-    const valor = parseInt(inputTotalMagico.value, 10);
-    const comb = sessionData.mission1._tmpFirstMagicV;
-    if (!comb) {
-      feedbackTotalMagico.textContent = "Error interno. Recarga la página.";
-      return;
-    }
-    const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
-    if (isNaN(valor)) {
-      feedbackTotalMagico.textContent = "Ingresa un número válido.";
-      inputTotalMagico.focus();
-      return;
-    }
-    if (valor !== sumaCorrecta) {
-      feedbackTotalMagico.textContent = "No es correcto. Observa bien la suma de un brazo y el núcleo.";
-      inputTotalMagico.focus();
-      return;
-    }
-    // Guardar la combinación como válida
-    sessionData.mission1.saved.push({ ...comb, sumaMagica: valor, nucleo: comb.bottom, permutaciones: [] });
-    delete sessionData.mission1._tmpFirstMagicV;
-    saveSessionProgress();
-    renderMission1SavedCombinations();
-    clearMission1Board(false);
-    modalTotalMagico.style.display = "none";
-    setMessage(magicVFeedback, "¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.", "good");
-    totalMagicoMostrado = false;
-  });
 
-  // Permitir Enter en el input
-  inputTotalMagico.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      btnValidarTotalMagico.click();
-    }
-  });
+  // Card dinámica para total mágico
+  function mostrarCardTotalMagico(comb) {
+    // Elimina si ya existe
+    const existente = document.getElementById("cardTotalMagico");
+    if (existente) existente.remove();
+    // Construir la card
+    const card = document.createElement("article");
+    card.className = "narrative-card narrative-card-magico";
+    card.id = "cardTotalMagico";
+    card.innerHTML = `
+      <h3>¿Qué es un total mágico?</h3>
+      <p>Llamaremos <strong>"total mágico"</strong> a la suma de los tres números que forman un brazo de una V mágica.</p>
+      <p>En tu Magic V, el núcleo elegido es <strong>${comb.bottom}</strong>. ¿Cuál es el total mágico?</p>
+      <label for="inputTotalMagico">Total mágico:</label>
+      <input id="inputTotalMagico" type="number" min="1" max="100" class="chalk-input" style="width:120px; margin: 0 10px;">
+      <button id="btnValidarTotalMagico" class="btn btn-primary">Validar</button>
+      <div id="feedbackTotalMagico" class="status-text"></div>
+    `;
+    // Insertar debajo de la card principal
+    const contenedor = document.querySelector("#mission1Screen > div > div");
+    contenedor.appendChild(card);
+    // Lógica de validación
+    const input = card.querySelector("#inputTotalMagico");
+    const btn = card.querySelector("#btnValidarTotalMagico");
+    const feedback = card.querySelector("#feedbackTotalMagico");
+    input.focus();
+    btn.addEventListener("click", () => {
+      const valor = parseInt(input.value, 10);
+      if (!comb) {
+        feedback.textContent = "Error interno. Recarga la página.";
+        return;
+      }
+      const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
+      if (isNaN(valor)) {
+        feedback.textContent = "Ingresa un número válido.";
+        input.focus();
+        return;
+      }
+      if (valor !== sumaCorrecta) {
+        feedback.textContent = "No es correcto. Observa bien la suma de un brazo y el núcleo.";
+        input.focus();
+        return;
+      }
+      // Guardar la combinación como válida
+      sessionData.mission1.saved.push({ ...comb, sumaMagica: valor, nucleo: comb.bottom, permutaciones: [] });
+      delete sessionData.mission1._tmpFirstMagicV;
+      saveSessionProgress();
+      renderMission1SavedCombinations();
+      clearMission1Board(false);
+      card.remove();
+      setMessage(magicVFeedback, "¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.", "good");
+      totalMagicoCardMostrada = false;
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btn.click();
+    });
+  }
 
   resetMagicVBtn.addEventListener("click", () => {
     clearMission1Board(false);
