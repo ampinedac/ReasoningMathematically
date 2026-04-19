@@ -546,7 +546,7 @@ function finishGuideDrag(clientX, clientY) {
   }
 
   syncMapFogWithProgress();
-}
+
 
 function queueMapFogResize() {
   if (!document.getElementById("mapScreen")?.classList.contains("active-screen")) {
