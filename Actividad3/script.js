@@ -778,7 +778,7 @@ function canAccessMission(missionNumber) {
       moveGhost(event.clientX, event.clientY);
       feedback.textContent = '';
       feedback.classList.remove('good');
-    }
+    
     function moveGhost(x, y) {
       if (!dragState.ghost) return;
       dragState.ghost.style.left = `${x}px`;
@@ -910,7 +910,7 @@ function canAccessMission(missionNumber) {
       audioBlock.classList.add('is-hidden');
       feedback.textContent = '';
     };
-  }
+  
 
   // Card dinámica para total mágico
   function mostrarCardTotalMagico(comb) {
