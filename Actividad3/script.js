@@ -1,3 +1,491 @@
+// --- Misión 2: Audio y exploración ---
+const mission2ExploracionBlock = document.getElementById("mission2ExploracionBlock");
+const mission2AudioRecordBtn = document.getElementById("recordBtnA3M2Exploracion");
+const mission2AudioStopBtn = document.getElementById("stopBtnA3M2Exploracion");
+const mission2AudioSubmitBtn = document.getElementById("submitA3M2Exploracion");
+const mission2AudioStatus = document.getElementById("statusA3M2Exploracion");
+
+const mission2AudioState = {
+  mediaRecorder: null,
+  chunks: [],
+  blob: null,
+  stream: null,
+  submitting: false
+};
+
+function syncMission2AudioButtons() {
+  if (!mission2AudioRecordBtn || !mission2AudioStopBtn || !mission2AudioSubmitBtn) return;
+  const isRecording = Boolean(mission2AudioState.mediaRecorder && mission2AudioState.mediaRecorder.state === "recording");
+  const hasAudio = Boolean(mission2AudioState.blob && mission2AudioState.blob.size > 0);
+  const isLocked = sessionData.mission2.audioSubmitted || mission2AudioState.submitting;
+  mission2AudioRecordBtn.style.display = isRecording ? "none" : "inline-flex";
+  mission2AudioStopBtn.style.display = isRecording ? "inline-flex" : "none";
+  mission2AudioRecordBtn.disabled = isLocked;
+  mission2AudioStopBtn.disabled = !isRecording || isLocked;
+  mission2AudioSubmitBtn.disabled = !hasAudio || isLocked;
+}
+
+function setupMission2AudioRecorder() {
+  if (!mission2AudioRecordBtn || !mission2AudioStopBtn || !mission2AudioSubmitBtn || !mission2AudioStatus) return;
+  syncMission2AudioButtons();
+  mission2AudioRecordBtn.addEventListener("click", async () => {
+    if (sessionData.mission2.audioSubmitted || mission2AudioState.submitting) return;
+    try {
+      const stream = await requestMission2AudioStream();
+      const mediaRecorder = new MediaRecorder(stream);
+      mission2AudioState.mediaRecorder = mediaRecorder;
+      mission2AudioState.stream = stream;
+      mission2AudioState.chunks = [];
+      mission2AudioState.blob = null;
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) mission2AudioState.chunks.push(event.data);
+      };
+      mediaRecorder.onstop = () => {
+        mission2AudioState.blob = new Blob(mission2AudioState.chunks, {
+          type: mission2AudioState.chunks[0]?.type || "audio/webm"
+        });
+        if (mission2AudioState.stream) mission2AudioState.stream.getTracks().forEach((track) => track.stop());
+        mission2AudioState.stream = null;
+        setMessage(mission2AudioStatus, "Audio listo para enviar.", "good");
+        syncMission2AudioButtons();
+      };
+      mediaRecorder.start(250);
+      setMessage(mission2AudioStatus, "Grabando...", "");
+      syncMission2AudioButtons();
+    } catch (error) {
+      setMessage(mission2AudioStatus, "No se pudo acceder al micrófono. Revisa permisos e intenta de nuevo.", "bad");
+      syncMission2AudioButtons();
+    }
+  });
+  mission2AudioStopBtn.addEventListener("click", () => {
+    const mediaRecorder = mission2AudioState.mediaRecorder;
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      try { mediaRecorder.requestData(); } catch (error) {}
+      mediaRecorder.stop();
+    }
+  });
+  mission2AudioSubmitBtn.addEventListener("click", () => { handleMission2AudioSubmit(); });
+}
+
+async function requestMission2AudioStream() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error("getUserMedia no está disponible en este navegador");
+  const preferredConstraints = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } };
+  try {
+    return await navigator.mediaDevices.getUserMedia(preferredConstraints);
+  } catch (error) {
+    if (error?.name === "NotAllowedError") throw error;
+    return navigator.mediaDevices.getUserMedia({ audio: true });
+  }
+}
+
+async function handleMission2AudioSubmit() {
+  if (sessionData.mission2.audioSubmitted || mission2AudioState.submitting) return;
+  if (!mission2AudioState.blob || mission2AudioState.blob.size === 0) {
+    setMessage(mission2AudioStatus, "Primero graba una respuesta antes de enviarla.", "bad");
+    return;
+  }
+  const firebaseServices = window.firebaseServices;
+  if (!firebaseServices?.storage || !firebaseServices?.db) {
+    setMessage(mission2AudioStatus, "Firebase no está disponible en este momento. Intenta de nuevo en unos segundos.", "bad");
+    return;
+  }
+  mission2AudioState.submitting = true;
+  syncMission2AudioButtons();
+  setMessage(mission2AudioStatus, "Subiendo audio...", "");
+  try {
+    const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
+    const basePath = buildMission2ExplorationStorageBasePath();
+    const fileName = buildMission2ExplorationFileName();
+    const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
+    await uploadBytes(storageRef, mission2AudioState.blob, { contentType: mission2AudioState.blob.type || "audio/webm" });
+    const audioURL = await getDownloadURL(storageRef);
+    await addDoc(collection(db, "Actividad3"), {
+      studentCode,
+      studentName: getStudentDisplayName(),
+      curso: studentInfo?.curso || "",
+      isGuest: studentCode === "0000",
+      tag: "A3M2Exploracion",
+      componente: "2Exploración",
+      storageBasePath: basePath,
+      fileName: `${fileName}.webm`,
+      audioURL,
+      timestamp: serverTimestamp()
+    });
+    sessionData.mission2.audioSubmitted = true;
+    setMessage(mission2AudioStatus, "✅ Audio enviado correctamente.", "good");
+    setMessage(magicVFeedback2, "Respuesta enviada. La misión 2 quedó completada.", "good");
+    syncMission2AudioButtons();
+    completeMission(2);
+  } catch (error) {
+    setMessage(mission2AudioStatus, "Error al guardar el audio. Revisa tu conexión e intenta de nuevo.", "bad");
+  } finally {
+    mission2AudioState.submitting = false;
+    syncMission2AudioButtons();
+  }
+}
+
+function unlockMission2Exploration() {
+  sessionData.mission2.explorationUnlocked = true;
+  syncMission2ExplorationState();
+  if (!sessionData.mission2.audioSubmitted && !mission2AudioState.blob) {
+    setMessage(mission2AudioStatus, "Cuando estés lista, graba tu respuesta y envíala.", "");
+  }
+}
+
+function syncMission2ExplorationState() {
+  if (!mission2ExploracionBlock) return;
+  const allSumaVerificada = sessionData.mission2.saved.length === 3 && sessionData.mission2.saved.every(c => c.sumaMagica !== null);
+  const shouldShow = sessionData.mission2.explorationUnlocked || allSumaVerificada || sessionData.mission2.audioSubmitted;
+  sessionData.mission2.explorationUnlocked = shouldShow;
+  mission2ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
+  syncMission2AudioButtons();
+}
+
+function buildMission2ExplorationStorageBasePath() {
+  return "Actividad3/2ReglaGeneral";
+}
+
+function buildMission2ExplorationFileName() {
+  if (studentCode === "0000") {
+    // Invitado: nombre_2reglageneral
+    const nombre = normalizeStorageSegment(studentInfo?.nombre || "invitado");
+    return `${nombre}_2reglageneral`;
+  } else {
+    // Estudiante: código_curso_2reglageneral
+    const curso = normalizeStorageSegment(String(studentInfo?.curso || "sin-curso"));
+    return `${studentCode}_${curso}_2reglageneral`;
+  }
+}
+
+// Inicialización de eventos de exploración y audio para misión 2
+if (mission2AudioRecordBtn && mission2AudioStopBtn && mission2AudioSubmitBtn) {
+  setupMission2AudioRecorder();
+}
+if (mission2ExploracionBlock) {
+  syncMission2ExplorationState();
+}
+// --- Misión 2: Chips, guardado y validación ---
+const mission2SlotOrder = ["leftTop2", "rightTop2", "leftMid2", "rightMid2", "bottom2"];
+const mission2ChipTray = document.getElementById("mission2ChipTray");
+const mission2Drops = Array.from(document.querySelectorAll('.magicv-drop[data-slot$="2"]'));
+const mission2SavedCount = document.getElementById("mission2SavedCount");
+const mission2SavedList = document.getElementById("mission2SavedList");
+const magicVFeedback2 = document.getElementById("magicVFeedback2");
+const checkMagicVBtn2 = document.getElementById("checkMagicVBtn2");
+const resetMagicVBtn2 = document.getElementById("resetMagicVBtn2");
+
+if (!sessionData.mission2) {
+  sessionData.mission2 = {
+    current: createEmptyMission2Assignment(),
+    saved: [],
+    explorationUnlocked: false,
+    audioSubmitted: false
+  };
+}
+
+function createEmptyMission2Assignment() {
+  return {
+    leftTop2: null,
+    rightTop2: null,
+    leftMid2: null,
+    rightMid2: null,
+    bottom2: null
+  };
+}
+
+function clearMission2Board(resetMessage) {
+  mission2SlotOrder.forEach((slot) => {
+    sessionData.mission2.current[slot] = null;
+    const drop = mission2Drops.find((item) => item.dataset.slot === slot);
+    if (drop) {
+      drop.classList.remove("filled", "drop-target");
+    }
+  });
+  const chips = Array.from(mission2ChipTray.querySelectorAll(".magicv-chip"));
+  chips.forEach((chip) => {
+    chip.dataset.slot = "";
+    mission2ChipTray.appendChild(chip);
+  });
+  orderMission2TrayChips();
+  saveSessionProgress();
+  if (resetMessage) {
+    setMessage(magicVFeedback2, "Tablero reiniciado.", "");
+  }
+}
+
+function orderMission2TrayChips() {
+  const chips = Array.from(mission2ChipTray.querySelectorAll(".magicv-chip"));
+  chips.sort((a, b) => Number(a.dataset.value) - Number(b.dataset.value)).forEach((chip) => mission2ChipTray.appendChild(chip));
+}
+
+function renderMission2SavedCombinations() {
+  mission2SavedCount.textContent = `${sessionData.mission2.saved.length}/3`;
+  if (sessionData.mission2.saved.length === 0) {
+    mission2SavedList.innerHTML = '<p class="magicv-saved-item-label">Aun no tienes combinaciones guardadas.</p>';
+    return;
+  }
+  const rows = sessionData.mission2.saved.map((comb, index) => {
+    const sumaCorrecta = comb.leftTop2 + comb.leftMid2 + comb.bottom2;
+    const sumaCell = comb.sumaMagica !== null
+      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
+      : `<div class="magicv-suma-input-group">
+           <input class="magicv-suma-input" type="number" min="1" max="99" data-index="${index}" aria-label="Ingresa la suma mágica de la combinación ${index + 1}">
+           <button class="magicv-suma-check btn btn-primary" data-index="${index}" type="button">Verificar</button>
+           <span class="magicv-suma-error" id="sumaMagicaError2${index}"></span>
+         </div>`;
+    let permutacionesHtml = "";
+    if (comb.permutaciones && comb.permutaciones.length > 0) {
+      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
+        comb.permutaciones.map((perm) => `
+          <div class="magicv-mini-board magicv-mini-board-permutacion">
+            <span class="magicv-mini-dot" data-slot="leftTop2">${perm.leftTop2}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop2">${perm.rightTop2}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid2">${perm.leftMid2}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid2">${perm.rightMid2}</span>
+            <span class="magicv-mini-dot" data-slot="bottom2">${perm.bottom2}</span>
+          </div>`).join("") + `</div>`;
+    }
+    return `<tr>
+      <td>
+        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
+        <div class="magicv-v-group">
+          <div class="magicv-mini-board">
+            <span class="magicv-mini-dot" data-slot="leftTop2">${comb.leftTop2}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop2">${comb.rightTop2}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid2">${comb.leftMid2}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid2">${comb.rightMid2}</span>
+            <span class="magicv-mini-dot" data-slot="bottom2">${comb.bottom2}</span>
+          </div>
+          ${permutacionesHtml}
+        </div>
+      </td>
+      <td class="magicv-suma-cell">${sumaCell}</td>
+    </tr>`;
+  }).join("");
+  mission2SavedList.innerHTML = `
+    <table class="magicv-saved-table">
+      <thead>
+        <tr>
+          <th>Magic V</th>
+          <th>Suma mágica</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function verificarSumaMagica2(index) {
+  const comb = sessionData.mission2.saved[index];
+  if (!comb || comb.sumaMagica !== null) return;
+  const input = mission2SavedList.querySelector(`.magicv-suma-input[data-index="${index}"]`);
+  const errorSpan = document.getElementById(`sumaMagicaError2${index}`);
+  const ingresado = parseInt(input.value, 10);
+  if (isNaN(ingresado) || input.value.trim() === "") {
+    errorSpan.textContent = "Ingresa un número.";
+    return;
+  }
+  const sumaCorrecta = comb.leftTop2 + comb.leftMid2 + comb.bottom2;
+  if (ingresado === sumaCorrecta) {
+    comb.sumaMagica = ingresado;
+    saveSessionProgress();
+    renderMission2SavedCombinations();
+  } else {
+    errorSpan.textContent = "Verifica tu respuesta.";
+    input.value = "";
+    input.focus();
+  }
+}
+
+function startMission2ChipDrag(event) {
+  const chip = event.target.closest(".magicv-chip");
+  if (!chip) return;
+  event.preventDefault();
+  mission2DragState.active = true;
+  mission2DragState.pointerId = event.pointerId;
+  mission2DragState.chip = chip;
+  mission2DragState.originSlot = chip.dataset.slot || null;
+  mission2DragState.hoverDrop = null;
+  mission2DragState.hoverTray = false;
+  chip.classList.add("dragging");
+  const ghost = document.createElement("div");
+  ghost.className = "magicv-chip-ghost";
+  ghost.textContent = chip.dataset.value;
+  document.body.appendChild(ghost);
+  mission2DragState.ghost = ghost;
+  moveMission2ChipGhost(event.clientX, event.clientY);
+}
+
+function moveMission2ChipGhost(clientX, clientY) {
+  if (!mission2DragState.ghost) return;
+  mission2DragState.ghost.style.left = `${clientX}px`;
+  mission2DragState.ghost.style.top = `${clientY}px`;
+}
+
+function handleMission2ChipMove(event) {
+  if (!mission2DragState.active || event.pointerId !== mission2DragState.pointerId) return;
+  event.preventDefault();
+  moveMission2ChipGhost(event.clientX, event.clientY);
+  updateMission2DropHover(event.clientX, event.clientY);
+}
+
+function updateMission2DropHover(clientX, clientY) {
+  const targetDrop = document.elementFromPoint(clientX, clientY)?.closest('.magicv-drop[data-slot$="2"]');
+  const hoverTray = Boolean(document.elementFromPoint(clientX, clientY)?.closest("#mission2ChipTray"));
+  mission2Drops.forEach((drop) => drop.classList.remove("drop-target"));
+  mission2ChipTray.classList.remove("tray-target");
+  mission2DragState.hoverDrop = targetDrop;
+  mission2DragState.hoverTray = hoverTray;
+  if (targetDrop) targetDrop.classList.add("drop-target");
+  if (hoverTray) mission2ChipTray.classList.add("tray-target");
+}
+
+function handleMission2ChipDrop(event) {
+  if (!mission2DragState.active || event.pointerId !== mission2DragState.pointerId) return;
+  event.preventDefault();
+  const chip = mission2DragState.chip;
+  const targetDrop = document.elementFromPoint(event.clientX, event.clientY)?.closest('.magicv-drop[data-slot$="2"]');
+  const droppedInTray = Boolean(document.elementFromPoint(event.clientX, event.clientY)?.closest("#mission2ChipTray"));
+  if (targetDrop) {
+    assignChipToDrop2(chip, targetDrop);
+  } else if (droppedInTray) {
+    sendChipToTray2(chip);
+  }
+  cleanupMission2Drag();
+}
+
+function assignChipToDrop2(chip, targetDrop) {
+  const targetSlot = targetDrop.dataset.slot;
+  const currentSlot = chip.dataset.slot || null;
+  if (currentSlot && currentSlot !== targetSlot) clearMission2Slot(currentSlot);
+  const existingChip = targetDrop.querySelector(".magicv-chip");
+  if (existingChip && existingChip !== chip) sendChipToTray2(existingChip);
+  targetDrop.appendChild(chip);
+  chip.dataset.slot = targetSlot;
+  sessionData.mission2.current[targetSlot] = Number(chip.dataset.value);
+  targetDrop.classList.add("filled");
+}
+
+function sendChipToTray2(chip) {
+  const currentSlot = chip.dataset.slot || null;
+  if (currentSlot) clearMission2Slot(currentSlot);
+  chip.dataset.slot = "";
+  mission2ChipTray.appendChild(chip);
+  orderMission2TrayChips();
+}
+
+function clearMission2Slot(slot) {
+  const drop = mission2Drops.find((item) => item.dataset.slot === slot);
+  if (!drop) return;
+  sessionData.mission2.current[slot] = null;
+  drop.classList.remove("filled");
+}
+
+function cleanupMission2Drag() {
+  if (mission2DragState.chip) mission2DragState.chip.classList.remove("dragging");
+  if (mission2DragState.ghost) mission2DragState.ghost.remove();
+  mission2Drops.forEach((drop) => drop.classList.remove("drop-target"));
+  mission2ChipTray.classList.remove("tray-target");
+  mission2DragState.active = false;
+  mission2DragState.pointerId = null;
+  mission2DragState.chip = null;
+  mission2DragState.originSlot = null;
+  mission2DragState.ghost = null;
+  mission2DragState.hoverDrop = null;
+  mission2DragState.hoverTray = false;
+}
+
+// Inicialización de eventos para misión 2
+const mission2DragState = {
+  active: false,
+  pointerId: null,
+  chip: null,
+  originSlot: null,
+  ghost: null,
+  hoverDrop: null,
+  hoverTray: false
+};
+
+if (mission2ChipTray && checkMagicVBtn2 && resetMagicVBtn2) {
+  mission2ChipTray.addEventListener("pointerdown", startMission2ChipDrag);
+  mission2Drops.forEach((drop) => {
+    drop.addEventListener("pointerdown", startMission2ChipDrag);
+  });
+  window.addEventListener("pointermove", handleMission2ChipMove, { passive: false });
+  window.addEventListener("pointerup", handleMission2ChipDrop);
+  checkMagicVBtn2.addEventListener("click", () => {
+    const current = sessionData.mission2.current;
+    const hasMissing = mission2SlotOrder.some((slot) => current[slot] === null);
+    if (hasMissing) {
+      setMessage(magicVFeedback2, "Completa toda la V antes de comprobar.", "bad");
+      return;
+    }
+    const leftArm = current.leftTop2 + current.leftMid2;
+    const rightArm = current.rightTop2 + current.rightMid2;
+    const valid = leftArm === rightArm;
+    if (!valid) {
+      setMessage(magicVFeedback2, "Verifica si la suma de los brazos es igual.", "bad");
+      return;
+    }
+    const nucleo = current.bottom2;
+    const brazos = [current.leftTop2, current.rightTop2, current.leftMid2, current.rightMid2];
+    const sumaMagica = current.leftTop2 + current.leftMid2 + current.bottom2;
+    let existente = sessionData.mission2.saved.find(item => item.nucleo === nucleo);
+    if (existente) {
+      const esExacta = existente.leftTop2 === current.leftTop2 && existente.rightTop2 === current.rightTop2 &&
+        existente.leftMid2 === current.leftMid2 && existente.rightMid2 === current.rightMid2;
+      if (esExacta) {
+        setMessage(magicVFeedback2, "Esta Magic V ya está registrada.", "bad");
+        return;
+      }
+      const brazosExistente = [existente.leftTop2, existente.rightTop2, existente.leftMid2, existente.rightMid2];
+      const esPermutacion =
+        brazos.slice().sort((a,b)=>a-b).join('-') === brazosExistente.slice().sort((a,b)=>a-b).join('-') &&
+        sumaMagica === (existente.leftTop2 + existente.leftMid2 + existente.bottom2);
+      if (esPermutacion) {
+        if (!existente.permutaciones) existente.permutaciones = [];
+        existente.permutaciones.push({ ...current });
+        saveSessionProgress();
+        setMessage(magicVFeedback2, `Esta Magic V es equivalente a la registrada con núcleo ${nucleo} porque la suma mágica es la misma.`, "good");
+        renderMission2SavedCombinations();
+        clearMission2Board(false);
+        return;
+      }
+      setMessage(magicVFeedback2, "Esta Magic V ya tiene ese núcleo pero no es una permutación válida.", "bad");
+      return;
+    }
+    if (sessionData.mission2.saved.length >= 3) {
+      setMessage(magicVFeedback2, "Ya registraste las 3 combinaciones validas. Responde la pregunta por audio para cerrar la misión.", "good");
+      return;
+    }
+    sessionData.mission2.saved.push({ ...current, sumaMagica: null, nucleo, permutaciones: [] });
+    saveSessionProgress();
+    renderMission2SavedCombinations();
+    clearMission2Board(false);
+    if (sessionData.mission2.saved.length === 3) {
+      setMessage(magicVFeedback2, "Excelente. Ya encontraste 3 combinaciones válidas distintas. Ahora responde la pregunta por audio.", "good");
+      return;
+    }
+    const missing = 3 - sessionData.mission2.saved.length;
+    setMessage(magicVFeedback2, `Combinacion guardada. Te faltan ${missing} combinaciones validas.`, "good");
+  });
+  resetMagicVBtn2.addEventListener("click", () => {
+    clearMission2Board(false);
+    setMessage(magicVFeedback2, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
+  });
+  mission2SavedList.addEventListener("click", (e) => {
+    const btn = e.target.closest(".magicv-suma-check");
+    if (!btn) return;
+    verificarSumaMagica2(Number(btn.dataset.index));
+  });
+  mission2SavedList.addEventListener("keydown", (e) => {
+    const input = e.target.closest(".magicv-suma-input");
+    if (!input || e.key !== "Enter") return;
+    verificarSumaMagica2(Number(input.dataset.index));
+  });
+  renderMission2SavedCombinations();
+  clearMission2Board(false);
+}
 // --- Modal Magic V Guardadas global ---
 function setupMagicVSavedModal() {
   const modal = document.getElementById("magicVSavedModal");
@@ -180,38 +668,6 @@ const dragState = {
   hoverMission: null
 };
 
-const mission1SlotOrder = ["leftTop", "rightTop", "leftMid", "rightMid", "bottom"];
-const mission1ChipTray = document.getElementById("mission1ChipTray");
-const mission1Drops = Array.from(document.querySelectorAll(".magicv-drop"));
-const mission1SavedCount = document.getElementById("mission1SavedCount");
-const mission1SavedList = document.getElementById("mission1SavedList");
-
-const magicVFeedback = document.getElementById("magicVFeedback");
-const checkMagicVBtn = document.getElementById("checkMagicVBtn");
-const resetMagicVBtn = document.getElementById("resetMagicVBtn");
-const mission1ExploracionBlock = document.getElementById("mission1ExploracionBlock");
-const mission1AudioRecordBtn = document.getElementById("recordBtnA3M1Exploracion");
-const mission1AudioStopBtn = document.getElementById("stopBtnA3M1Exploracion");
-const mission1AudioSubmitBtn = document.getElementById("submitA3M1Exploracion");
-const mission1AudioStatus = document.getElementById("statusA3M1Exploracion");
-
-const mission1DragState = {
-  active: false,
-  pointerId: null,
-  chip: null,
-  originSlot: null,
-  ghost: null,
-  hoverDrop: null,
-  hoverTray: false
-};
-
-const mission1AudioState = {
-  mediaRecorder: null,
-  chunks: [],
-  blob: null,
-  stream: null,
-  submitting: false
-};
 
 init();
 
@@ -751,678 +1207,6 @@ function canAccessMission(missionNumber) {
   return missionNumber <= sessionData.progress || sessionData.missionsCompleted.includes(missionNumber);
 }
 
-function setupMission1() {
-  setupMission1AudioRecorder();
-
-  mission1ChipTray.addEventListener("pointerdown", startMission1ChipDrag);
-  mission1Drops.forEach((drop) => {
-    drop.addEventListener("pointerdown", startMission1ChipDrag);
-  });
-
-  window.addEventListener("pointermove", handleMission1ChipMove, { passive: false });
-  window.addEventListener("pointerup", handleMission1ChipDrop);
-
-  // Verificación de suma mágica por delegación
-  mission1SavedList.addEventListener("click", (e) => {
-    const btn = e.target.closest(".magicv-suma-check");
-    if (!btn) return;
-    verificarSumaMagica(Number(btn.dataset.index));
-  });
-
-  mission1SavedList.addEventListener("keydown", (e) => {
-    const input = e.target.closest(".magicv-suma-input");
-    if (!input || e.key !== "Enter") return;
-    verificarSumaMagica(Number(input.dataset.index));
-  });
-
-  checkMagicVBtn.addEventListener("click", () => {
-    const current = sessionData.mission1.current;
-    const hasMissing = mission1SlotOrder.some((slot) => current[slot] === null);
-
-    if (hasMissing) {
-      setMessage(magicVFeedback, "Completa toda la V antes de comprobar.", "bad");
-      return;
-    }
-
-    const leftArm = current.leftTop + current.leftMid;
-    const rightArm = current.rightTop + current.rightMid;
-    const valid = leftArm === rightArm;
-
-    if (!valid) {
-      setMessage(magicVFeedback, "Verifica si la suma de los brazos es igual.", "bad");
-      return;
-    }
-
-    // --- Lógica avanzada de Magic V: núcleo y permutaciones ---
-    const nucleo = current.bottom;
-    const brazos = [current.leftTop, current.rightTop, current.leftMid, current.rightMid];
-    const sumaMagica = current.leftTop + current.leftMid + current.bottom; // suma de un brazo + núcleo
-
-    // Buscar Magic V con el mismo núcleo
-    let existente = sessionData.mission1.saved.find(item => item.nucleo === nucleo);
-    if (existente) {
-      // Duplicado exacto (misma disposición)
-      const esExacta = existente.leftTop === current.leftTop && existente.rightTop === current.rightTop &&
-        existente.leftMid === current.leftMid && existente.rightMid === current.rightMid;
-      if (esExacta) {
-        setMessage(magicVFeedback, "Esta Magic V ya está registrada.", "bad");
-        return;
-      }
-      // Permutación: mismo núcleo, suma mágica igual, pero brazos permutados
-      const brazosExistente = [existente.leftTop, existente.rightTop, existente.leftMid, existente.rightMid];
-      const esPermutacion =
-        brazos.slice().sort((a,b)=>a-b).join('-') === brazosExistente.slice().sort((a,b)=>a-b).join('-') &&
-        sumaMagica === (existente.leftTop + existente.leftMid + existente.bottom);
-      if (esPermutacion) {
-        // Guardar como permutación asociada
-        if (!existente.permutaciones) existente.permutaciones = [];
-        existente.permutaciones.push({ ...current });
-        saveSessionProgress();
-        setMessage(magicVFeedback, `Esta Magic V es equivalente a la registrada con núcleo ${nucleo} porque la suma mágica es la misma.`, "good");
-        renderMission1SavedCombinations();
-        clearMission1Board(false);
-        return;
-      }
-      // Si mismo núcleo pero brazos diferentes y suma diferente, permitir guardar como permutación (opcional, aquí lo bloqueamos)
-      setMessage(magicVFeedback, "Esta Magic V ya tiene ese núcleo pero no es una permutación válida.", "bad");
-      return;
-    }
-
-    // Si el núcleo es nuevo, guardar como nueva válida
-    if (sessionData.mission1.saved.length >= 3) {
-      unlockMission1Exploration();
-      setMessage(magicVFeedback, "Ya registraste las 3 combinaciones validas. Responde la pregunta por audio para cerrar la misión.", "good");
-      return;
-    }
-
-    sessionData.mission1.saved.push({ ...current, sumaMagica: null, nucleo, permutaciones: [] });
-    saveSessionProgress();
-    renderMission1SavedCombinations();
-    clearMission1Board(false);
-
-    if (sessionData.mission1.saved.length === 3) {
-      unlockMission1Exploration();
-      setMessage(magicVFeedback, "Excelente. Ya encontraste 3 combinaciones válidas distintas. Ahora responde la pregunta por audio.", "good");
-      return;
-    }
-
-    const missing = 3 - sessionData.mission1.saved.length;
-    setMessage(magicVFeedback, `Combinacion guardada. Te faltan ${missing} combinaciones validas.`, "good");
-  });
-
-  resetMagicVBtn.addEventListener("click", () => {
-    clearMission1Board(false);
-    setMessage(magicVFeedback, "Tablero reiniciado. Tus combinaciones guardadas siguen intactas.", "");
-  });
-}
-
-function startMission1ChipDrag(event) {
-  const chip = event.target.closest(".magicv-chip");
-  if (!chip) {
-    return;
-  }
-
-  event.preventDefault();
-
-  mission1DragState.active = true;
-  mission1DragState.pointerId = event.pointerId;
-  mission1DragState.chip = chip;
-  mission1DragState.originSlot = chip.dataset.slot || null;
-  mission1DragState.hoverDrop = null;
-  mission1DragState.hoverTray = false;
-
-  chip.classList.add("dragging");
-
-  const ghost = document.createElement("div");
-  ghost.className = "magicv-chip-ghost";
-  ghost.textContent = chip.dataset.value;
-  document.body.appendChild(ghost);
-  mission1DragState.ghost = ghost;
-  moveMission1ChipGhost(event.clientX, event.clientY);
-}
-
-function handleMission1ChipMove(event) {
-  if (!mission1DragState.active || event.pointerId !== mission1DragState.pointerId) {
-    return;
-  }
-
-  event.preventDefault();
-  moveMission1ChipGhost(event.clientX, event.clientY);
-  updateMission1DropHover(event.clientX, event.clientY);
-}
-
-function handleMission1ChipDrop(event) {
-  if (!mission1DragState.active || event.pointerId !== mission1DragState.pointerId) {
-    return;
-  }
-
-  event.preventDefault();
-
-  const chip = mission1DragState.chip;
-  const targetDrop = document.elementFromPoint(event.clientX, event.clientY)?.closest(".magicv-drop");
-  const droppedInTray = Boolean(document.elementFromPoint(event.clientX, event.clientY)?.closest("#mission1ChipTray"));
-
-  if (targetDrop) {
-    assignChipToDrop(chip, targetDrop);
-  } else if (droppedInTray) {
-    sendChipToTray(chip);
-  }
-
-  cleanupMission1Drag();
-}
-
-function moveMission1ChipGhost(clientX, clientY) {
-  if (!mission1DragState.ghost) {
-    return;
-  }
-
-  mission1DragState.ghost.style.left = `${clientX}px`;
-  mission1DragState.ghost.style.top = `${clientY}px`;
-}
-
-function updateMission1DropHover(clientX, clientY) {
-  const targetDrop = document.elementFromPoint(clientX, clientY)?.closest(".magicv-drop");
-  const hoverTray = Boolean(document.elementFromPoint(clientX, clientY)?.closest("#mission1ChipTray"));
-
-  mission1Drops.forEach((drop) => drop.classList.remove("drop-target"));
-  mission1ChipTray.classList.remove("tray-target");
-
-  mission1DragState.hoverDrop = targetDrop;
-  mission1DragState.hoverTray = hoverTray;
-
-  if (targetDrop) {
-    targetDrop.classList.add("drop-target");
-  }
-
-  if (hoverTray) {
-    mission1ChipTray.classList.add("tray-target");
-  }
-}
-
-function cleanupMission1Drag() {
-  if (mission1DragState.chip) {
-    mission1DragState.chip.classList.remove("dragging");
-  }
-
-  if (mission1DragState.ghost) {
-    mission1DragState.ghost.remove();
-  }
-
-  mission1Drops.forEach((drop) => drop.classList.remove("drop-target"));
-  mission1ChipTray.classList.remove("tray-target");
-
-  mission1DragState.active = false;
-  mission1DragState.pointerId = null;
-  mission1DragState.chip = null;
-  mission1DragState.originSlot = null;
-  mission1DragState.ghost = null;
-  mission1DragState.hoverDrop = null;
-  mission1DragState.hoverTray = false;
-}
-
-function assignChipToDrop(chip, targetDrop) {
-  const targetSlot = targetDrop.dataset.slot;
-  const currentSlot = chip.dataset.slot || null;
-
-  if (currentSlot && currentSlot !== targetSlot) {
-    clearMission1Slot(currentSlot);
-  }
-
-  const existingChip = targetDrop.querySelector(".magicv-chip");
-  if (existingChip && existingChip !== chip) {
-    sendChipToTray(existingChip);
-  }
-
-  targetDrop.appendChild(chip);
-  chip.dataset.slot = targetSlot;
-  sessionData.mission1.current[targetSlot] = Number(chip.dataset.value);
-  targetDrop.classList.add("filled");
-}
-
-function sendChipToTray(chip) {
-  const currentSlot = chip.dataset.slot || null;
-  if (currentSlot) {
-    clearMission1Slot(currentSlot);
-  }
-
-  chip.dataset.slot = "";
-  mission1ChipTray.appendChild(chip);
-  orderMission1TrayChips();
-}
-
-function clearMission1Slot(slot) {
-  const drop = mission1Drops.find((item) => item.dataset.slot === slot);
-  if (!drop) {
-    return;
-  }
-
-  sessionData.mission1.current[slot] = null;
-  drop.classList.remove("filled");
-}
-
-function clearMission1Board(resetMessage) {
-  mission1SlotOrder.forEach((slot) => {
-    sessionData.mission1.current[slot] = null;
-    const drop = mission1Drops.find((item) => item.dataset.slot === slot);
-    if (drop) {
-      drop.classList.remove("filled", "drop-target");
-    }
-  });
-
-  const chips = Array.from(document.querySelectorAll(".magicv-chip"));
-  chips.forEach((chip) => {
-    chip.dataset.slot = "";
-    mission1ChipTray.appendChild(chip);
-  });
-
-  orderMission1TrayChips();
-  saveSessionProgress();
-  if (resetMessage) {
-    setMessage(magicVFeedback, "Tablero reiniciado.", "");
-  }
-}
-
-function setupMission1AudioRecorder() {
-  if (!mission1AudioRecordBtn || !mission1AudioStopBtn || !mission1AudioSubmitBtn || !mission1AudioStatus) {
-    return;
-  }
-
-  syncMission1AudioButtons();
-
-  mission1AudioRecordBtn.addEventListener("click", async () => {
-    if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
-      return;
-    }
-
-    try {
-      const stream = await requestMission1AudioStream();
-      const mediaRecorder = new MediaRecorder(stream);
-
-      mission1AudioState.mediaRecorder = mediaRecorder;
-      mission1AudioState.stream = stream;
-      mission1AudioState.chunks = [];
-      mission1AudioState.blob = null;
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          mission1AudioState.chunks.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = () => {
-        mission1AudioState.blob = new Blob(mission1AudioState.chunks, {
-          type: mission1AudioState.chunks[0]?.type || "audio/webm"
-        });
-
-        if (mission1AudioState.stream) {
-          mission1AudioState.stream.getTracks().forEach((track) => track.stop());
-        }
-
-        mission1AudioState.stream = null;
-        setMessage(mission1AudioStatus, "Audio listo para enviar.", "good");
-        syncMission1AudioButtons();
-      };
-
-      mediaRecorder.start(250);
-      setMessage(mission1AudioStatus, "Grabando...", "");
-      syncMission1AudioButtons();
-    } catch (error) {
-      console.error("Error al acceder al micrófono de Misión 1:", error);
-      setMessage(mission1AudioStatus, "No se pudo acceder al micrófono. Revisa permisos e intenta de nuevo.", "bad");
-      syncMission1AudioButtons();
-    }
-  });
-
-  mission1AudioStopBtn.addEventListener("click", () => {
-    const mediaRecorder = mission1AudioState.mediaRecorder;
-    if (mediaRecorder && mediaRecorder.state === "recording") {
-      try {
-        mediaRecorder.requestData();
-      } catch (error) {
-        console.warn("No fue posible forzar el volcado del buffer de audio:", error);
-      }
-      mediaRecorder.stop();
-    }
-  });
-
-  mission1AudioSubmitBtn.addEventListener("click", () => {
-    handleMission1AudioSubmit();
-  });
-}
-
-function syncMission1AudioButtons() {
-  if (!mission1AudioRecordBtn || !mission1AudioStopBtn || !mission1AudioSubmitBtn) {
-    return;
-  }
-
-  const isRecording = Boolean(mission1AudioState.mediaRecorder && mission1AudioState.mediaRecorder.state === "recording");
-  const hasAudio = Boolean(mission1AudioState.blob && mission1AudioState.blob.size > 0);
-  const isLocked = sessionData.mission1.audioSubmitted || mission1AudioState.submitting;
-
-  mission1AudioRecordBtn.style.display = isRecording ? "none" : "inline-flex";
-  mission1AudioStopBtn.style.display = isRecording ? "inline-flex" : "none";
-
-  mission1AudioRecordBtn.disabled = isLocked;
-  mission1AudioStopBtn.disabled = !isRecording || isLocked;
-  mission1AudioSubmitBtn.disabled = !hasAudio || isLocked;
-}
-
-async function requestMission1AudioStream() {
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    throw new Error("getUserMedia no está disponible en este navegador");
-  }
-
-  const preferredConstraints = {
-    audio: {
-      echoCancellation: true,
-      noiseSuppression: true,
-      autoGainControl: true,
-      channelCount: 1
-    }
-  };
-
-  try {
-    return await navigator.mediaDevices.getUserMedia(preferredConstraints);
-  } catch (error) {
-    if (error?.name === "NotAllowedError") {
-      throw error;
-    }
-
-    return navigator.mediaDevices.getUserMedia({ audio: true });
-  }
-}
-
-async function handleMission1AudioSubmit() {
-  if (sessionData.mission1.audioSubmitted || mission1AudioState.submitting) {
-    return;
-  }
-
-  if (!mission1AudioState.blob || mission1AudioState.blob.size === 0) {
-    setMessage(mission1AudioStatus, "Primero graba una respuesta antes de enviarla.", "bad");
-    return;
-  }
-
-  const firebaseServices = window.firebaseServices;
-  if (!firebaseServices?.storage || !firebaseServices?.db) {
-    setMessage(mission1AudioStatus, "Firebase no está disponible en este momento. Intenta de nuevo en unos segundos.", "bad");
-    return;
-  }
-
-  mission1AudioState.submitting = true;
-  syncMission1AudioButtons();
-  setMessage(mission1AudioStatus, "Subiendo audio...", "");
-
-  try {
-    const {
-      storage,
-      db,
-      ref,
-      uploadBytes,
-      getDownloadURL,
-      collection,
-      addDoc,
-      serverTimestamp
-    } = firebaseServices;
-
-    const basePath = buildMission1ExplorationStorageBasePath();
-    const fileName = buildMission1ExplorationFileName();
-    const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
-
-    await uploadBytes(storageRef, mission1AudioState.blob, {
-      contentType: mission1AudioState.blob.type || "audio/webm"
-    });
-
-    const audioURL = await getDownloadURL(storageRef);
-
-    await addDoc(collection(db, "Actividad3"), {
-      studentCode,
-      studentName: getStudentDisplayName(),
-      curso: studentInfo?.curso || "",
-      isGuest: studentCode === "0000",
-      tag: "A3M1Exploracion",
-      componente: "1Exploración",
-      storageBasePath: basePath,
-      fileName: `${fileName}.webm`,
-      audioURL,
-      timestamp: serverTimestamp()
-    });
-
-    sessionData.mission1.audioSubmitted = true;
-    setMessage(mission1AudioStatus, "✅ Audio enviado correctamente.", "good");
-    setMessage(magicVFeedback, "Respuesta enviada. La misión 1 quedó completada.", "good");
-    syncMission1AudioButtons();
-    completeMission(1);
-  } catch (error) {
-    console.error("Error al enviar el audio de 1Exploración:", error);
-    setMessage(mission1AudioStatus, "Error al guardar el audio. Revisa tu conexión e intenta de nuevo.", "bad");
-  } finally {
-    mission1AudioState.submitting = false;
-    syncMission1AudioButtons();
-  }
-}
-
-function unlockMission1Exploration() {
-  sessionData.mission1.explorationUnlocked = true;
-  syncMission1ExplorationState();
-
-  if (!sessionData.mission1.audioSubmitted && !mission1AudioState.blob) {
-    setMessage(mission1AudioStatus, "Cuando estés lista, graba tu respuesta y envíala.", "");
-  }
-}
-
-function syncMission1ExplorationState() {
-  if (!mission1ExploracionBlock) {
-    return;
-  }
-
-  // Solo mostrar si hay 3 combinaciones y todas tienen suma mágica verificada, o si ya se envió el audio
-  const allSumaVerificada = sessionData.mission1.saved.length === 3 && sessionData.mission1.saved.every(c => c.sumaMagica !== null);
-  const shouldShow = sessionData.mission1.explorationUnlocked || allSumaVerificada || sessionData.mission1.audioSubmitted;
-  sessionData.mission1.explorationUnlocked = shouldShow;
-  mission1ExploracionBlock.classList.toggle("is-hidden", !shouldShow);
-  syncMission1AudioButtons();
-}
-
-function orderMission1TrayChips() {
-  const chips = Array.from(mission1ChipTray.querySelectorAll(".magicv-chip"));
-  chips
-    .sort((a, b) => Number(a.dataset.value) - Number(b.dataset.value))
-    .forEach((chip) => mission1ChipTray.appendChild(chip));
-}
-
-function verificarSumaMagica(index) {
-  const comb = sessionData.mission1.saved[index];
-  if (!comb || comb.sumaMagica !== null) return;
-
-  const input = mission1SavedList.querySelector(`.magicv-suma-input[data-index="${index}"]`);
-  const errorSpan = document.getElementById(`sumaMagicaError${index}`);
-
-  const ingresado = parseInt(input.value, 10);
-  if (isNaN(ingresado) || input.value.trim() === "") {
-    errorSpan.textContent = "Ingresa un número.";
-    return;
-  }
-
-  const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
-
-  if (ingresado === sumaCorrecta) {
-    comb.sumaMagica = ingresado;
-    saveSessionProgress();
-    renderMission1SavedCombinations();
-  } else {
-    errorSpan.textContent = "Verifica tu respuesta.";
-    input.value = "";
-    input.focus();
-  }
-}
-
-function renderMission1SavedCombinations() {
-  mission1SavedCount.textContent = `${sessionData.mission1.saved.length}/3`;
-
-  if (sessionData.mission1.saved.length === 0) {
-    mission1SavedList.innerHTML = "<p class=\"magicv-saved-item-label\">Aun no tienes combinaciones guardadas.</p>";
-    return;
-  }
-
-  const rows = sessionData.mission1.saved.map((comb, index) => {
-    const sumaCorrecta = comb.leftTop + comb.leftMid + comb.bottom;
-
-    const sumaCell = comb.sumaMagica !== null
-      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
-      : `<div class="magicv-suma-input-group">
-           <input class="magicv-suma-input" type="number" min="1" max="99"
-             data-index="${index}"
-             aria-label="Ingresa la suma mágica de la combinación ${index + 1}">
-           <button class="magicv-suma-check btn btn-primary" data-index="${index}" type="button">Verificar</button>
-           <span class="magicv-suma-error" id="sumaMagicaError${index}"></span>
-         </div>`;
-
-    // Permutaciones asociadas visuales
-    let permutacionesHtml = "";
-    if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
-        comb.permutaciones.map((perm) => `
-          <div class="magicv-mini-board magicv-mini-board-permutacion">
-            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
-          </div>`).join("") + `</div>`;
-    }
-
-    return `<tr>
-      <td>
-        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
-        <div class="magicv-v-group">
-          <div class="magicv-mini-board">
-            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
-          </div>
-          ${permutacionesHtml}
-        </div>
-      </td>
-      <td class="magicv-suma-cell">${sumaCell}</td>
-    </tr>`;
-  }).join("");
-
-  mission1SavedList.innerHTML = `
-    <table class="magicv-saved-table">
-      <thead>
-        <tr>
-          <th>Magic V</th>
-          <th>Suma mágica</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
-}
-
-function serializeMission1Combination(combination) {
-  return mission1SlotOrder.map((slot) => combination[slot]).join("-");
-}
-
-function createEmptyMission1Assignment() {
-  return {
-    leftTop: null,
-    rightTop: null,
-    leftMid: null,
-    rightMid: null,
-    bottom: null
-  };
-}
-
-function setupMissionCompletionButtons() {
-  document.getElementById("completeMission2Btn").addEventListener("click", () => completeMission(2));
-  document.getElementById("completeMission3Btn").addEventListener("click", () => completeMission(3));
-  document.getElementById("completeMission4Btn").addEventListener("click", () => completeMission(4));
-  document.getElementById("completeMission5Btn").addEventListener("click", () => completeMission(5));
-}
-
-function setupBackToMapButtons() {
-  document.querySelectorAll(".back-to-map").forEach((button) => {
-    button.addEventListener("click", () => {
-      renderMap();
-      showScreen("mapScreen");
-    });
-  });
-}
-
-function completeMission(missionNumber) {
-  if (!sessionData.missionsCompleted.includes(missionNumber)) {
-    sessionData.missionsCompleted.push(missionNumber);
-  }
-
-  sessionData.missionsCompleted.sort((a, b) => a - b);
-  sessionData.progress = Math.min(TOTAL_MISSIONS, Math.max(sessionData.progress, missionNumber + 1));
-  registerTimestamp(`mission${missionNumber}Completed`);
-
-  renderMap();
-  showScreen("mapScreen");
-}
-
-function showScreen(id) {
-  document.querySelectorAll(".app-screen").forEach((screen) => {
-    screen.classList.remove("active-screen");
-  });
-
-  if (id === "introductionScreen") {
-    setIntroStep(0);
-  }
-
-  const target = document.getElementById(id);
-  if (target) {
-    target.classList.add("active-screen");
-  }
-
-  if (id === "mission1Screen") {
-    syncMission1ExplorationState();
-  }
-
-  if (id === "mapScreen") {
-    window.requestAnimationFrame(() => {
-      ensureMapFogCanvases();
-      syncMapFogWithProgress();
-    });
-  }
-}
-
-function hydrateGuideBadges() {
-  if (!sessionData.character) {
-    return;
-  }
-
-  const mapGuideHtml = `
-    <button class="guide-dragger" aria-label="Arrastrar guia ${sessionData.character.name}" type="button">
-      <img src="${sessionData.character.image}" alt="${sessionData.character.name}">
-    </button>
-    <span>Guia: ${sessionData.character.name}</span>
-  `;
-
-  const inlineGuideHtml = `
-    <img src="${sessionData.character.image}" alt="${sessionData.character.name}">
-    <span>Guia: ${sessionData.character.name}</span>
-  `;
-
-  guideBadge.innerHTML = mapGuideHtml;
-
-  [
-    "guideInlineMission1",
-    "guideInlineMission2",
-    "guideInlineMission3",
-    "guideInlineMission4",
-    "guideInlineMission5"
-  ].forEach((id) => {
-    const target = document.getElementById(id);
-    if (target) {
-      target.innerHTML = inlineGuideHtml;
-    }
-  });
-}
 
 function registerTimestamp(key) {
   sessionData.timestamps[key] = new Date().toISOString();
@@ -1455,33 +1239,5 @@ function normalizeStorageSegment(value) {
     .toLowerCase();
 }
 
-function buildMission1ExplorationStorageBasePath() {
-  return "Actividad3/1Exploración";
-}
 
-function buildMission1ExplorationFileName() {
-  const suffix = studentCode === "0000"
-    ? (normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado")
-    : (normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso");
 
-  return `${studentCode}_1Exploracion_${suffix}`;
-}
-
-function getStudentDisplayName() {
-  const nombre = toTitle(studentInfo?.nombre || "");
-  const apellidos = toTitle(studentInfo?.apellidos || "");
-  return [nombre, apellidos].filter(Boolean).join(" ");
-}
-
-function toTitle(value) {
-  if (!value) {
-    return "";
-  }
-
-  return value
-    .toLocaleLowerCase("es-CO")
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((word) => word.charAt(0).toLocaleUpperCase("es-CO") + word.slice(1))
-    .join(" ");
-}
