@@ -1,3 +1,48 @@
+// --- Inicialización de sessionData ---
+function getInitialSessionData() {
+  try {
+    const saved = sessionStorage.getItem("actividad3_sessionData");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Asegura estructura mínima
+      return Object.assign({
+        character: null,
+        progress: 0,
+        missionsCompleted: [],
+        timestamps: {},
+        mission1: {
+          current: {},
+          saved: [],
+          explorationUnlocked: false,
+          audioSubmitted: false
+        }
+      }, parsed, {
+        mission1: Object.assign({
+          current: {},
+          saved: [],
+          explorationUnlocked: false,
+          audioSubmitted: false
+        }, parsed.mission1 || {})
+      });
+    }
+  } catch (e) {}
+  // Por defecto
+  return {
+    character: null,
+    progress: 0,
+    missionsCompleted: [],
+    timestamps: {},
+    mission1: {
+      current: {},
+      saved: [],
+      explorationUnlocked: false,
+      audioSubmitted: false
+    }
+  };
+}
+
+let sessionData = getInitialSessionData();
+
 // --- Misión 2: Audio y exploración ---
 const mission2ExploracionBlock = document.getElementById("mission2ExploracionBlock");
 const mission2AudioRecordBtn = document.getElementById("recordBtnA3M2Exploracion");
@@ -556,49 +601,6 @@ function renderMagicVSavedTable() {
 }
 
 // --- Persistencia de progreso con sessionStorage ---
-function getInitialSessionData() {
-  try {
-    const saved = sessionStorage.getItem("actividad3_sessionData");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Asegura estructura mínima
-      return Object.assign({
-        character: null,
-        progress: 0,
-        missionsCompleted: [],
-        timestamps: {},
-        mission1: {
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }
-      }, parsed, {
-        mission1: Object.assign({
-          current: createEmptyMission1Assignment(),
-          saved: [],
-          explorationUnlocked: false,
-          audioSubmitted: false
-        }, parsed.mission1 || {})
-      });
-    }
-  } catch (e) {}
-  // Por defecto
-  return {
-    character: null,
-    progress: 0,
-    missionsCompleted: [],
-    timestamps: {},
-    mission1: {
-      current: createEmptyMission1Assignment(),
-      saved: [],
-      explorationUnlocked: false,
-      audioSubmitted: false
-    }
-  };
-}
-
-let sessionData = getInitialSessionData();
 
 // Guarda el progreso relevante en sessionStorage
 function saveSessionProgress() {
