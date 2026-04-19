@@ -28,7 +28,7 @@ function setupMagicVSavedModal() {
       modal.style.display = "none";
     }
   });
-}
+// (Llave de cierre extra eliminada)
 
 // Devuelve el HTML de la tabla de Magic V guardadas (idéntico a misión 1)
 function renderMagicVSavedTable() {
@@ -789,17 +789,17 @@ function setupMission1() {
     boardFoto.innerHTML = '';
     chipTrayFoto.innerHTML = '';
     magicVFeedback.textContent = 'Aún no has comprobado.';
-    cardTotalMagicoContainer.innerHTML = '';
-    // Crear slots
-    mission1SlotOrder.forEach(slot => {
-      const div = document.createElement('div');
-      div.className = 'magicv-drop';
-      div.dataset.slot = slot;
-      div.setAttribute('aria-label', `Posición ${slot}`);
-      boardFoto.appendChild(div);
-    });
-    // Crear fichas
-    for (let i = 1; i <= 5; i++) {
+    cardTotalMagicoContainer.innerHTML = `
+      <article class="narrative-card narrative-card-magico">
+        <h3>¿Qué es un total mágico?</h3>
+        <p>Llamaremos <strong>"total mágico"</strong> a la suma de los tres números que forman un brazo de una V mágica.</p>
+        <p>En tu Magic V, el núcleo elegido es <strong>${comb.bottom}</strong>. ¿Cuál es el total mágico?</p>
+        <label for="inputTotalMagico">Total mágico:</label>
+        <input id="inputTotalMagico" type="number" min="1" max="100" class="chalk-input" style="width:120px; margin: 0 10px;">
+        <button id="btnValidarTotalMagico" class="btn btn-primary">Validar</button>
+        <div id="feedbackTotalMagico" class="status-text"></div>
+      </article>
+    `;
       const btn = document.createElement('button');
       btn.className = 'magicv-chip';
       btn.type = 'button';
@@ -930,15 +930,15 @@ function setupMission1() {
         input.focus();
         return;
       }
-      // Suma mágica correcta: inhabilitar inputs pero mantener visible la card
-      bloque1SumaMagicaCorrecta = true;
-      input.disabled = true;
-      btn.disabled = true;
-      feedback.textContent = '¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.';
-      feedback.classList.add('good');
-      document.getElementById('magicv-card-foto').style.opacity = '0.6';
-      exploracionBlock.style.display = '';
-      setupBloque2();
+      // Guardar la combinación como válida
+      sessionData.mission1.saved.push({ ...comb, sumaMagica: valor, nucleo: comb.bottom, permutaciones: [] });
+      delete sessionData.mission1._tmpFirstMagicV;
+      saveSessionProgress();
+      renderMission1SavedCombinations();
+      clearMission1Board(false);
+      card.remove();
+      setMessage(magicVFeedback, "¡Correcto! Has encontrado el total mágico. Ahora busca más Magic V.", "good");
+      totalMagicoCardMostrada = false;
     };
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') btn.click(); });
   }
@@ -994,6 +994,8 @@ function setupMission1() {
       dragState.ghost.textContent = chip.dataset.value;
       document.body.appendChild(dragState.ghost);
       moveGhost(event.clientX, event.clientY);
+      feedback.textContent = '';
+      feedback.classList.remove('good');
     }
     function moveGhost(x, y) {
       if (!dragState.ghost) return;
@@ -1021,6 +1023,8 @@ function setupMission1() {
       }
       if (dragState.ghost) dragState.ghost.remove();
       dragState = { active: false, pointerId: null, chip: null, ghost: null };
+      if (!feedback.classList.contains('good')) feedback.textContent = '';
+      feedback.classList.remove('good');
     }
     Array.from(board.querySelectorAll('.magicv-drop')).forEach(drop => {
       if (drop.dataset.slot !== 'bottom') drop.addEventListener('pointerdown', startDrag);
@@ -1068,6 +1072,8 @@ function setupMission1() {
       if (!sessionData.mission1.exploracionCombinaciones) sessionData.mission1.exploracionCombinaciones = [];
       sessionData.mission1.exploracionCombinaciones.push({ ...current });
       feedback.textContent = '¡Combinación guardada!';
+      feedback.classList.remove('bad');
+      feedback.classList.add('good');
       renderExploracionCombinaciones();
       // Limpiar tablero (solo las 4 fichas)
       slots.filter(s=>s!=='bottom').forEach(slot=>{
@@ -1079,15 +1085,32 @@ function setupMission1() {
         audioBlock.classList.remove('is-hidden');
         checkBtn.disabled = true;
         feedback.textContent = '¡Has encontrado todas las combinaciones! Ahora responde la pregunta por audio.';
+        feedback.classList.remove('good');
       }
     };
     // Renderizar combinaciones encontradas
     function renderExploracionCombinaciones() {
       const arr = sessionData.mission1.exploracionCombinaciones || [];
-      savedList.innerHTML = arr.map((c,i)=>
-        `<div class='magicv-mini-board'><span>${c.leftTop}</span><span>${c.rightTop}</span><span>${c.leftMid}</span><span>${c.rightMid}</span><span>${c.bottom}</span></div>`
-      ).join('');
-      savedCount.textContent = `${arr.length}/8`;
+      // Agrupar de a dos por fila
+      let html = '';
+      for (let i = 0; i < arr.length; i += 2) {
+        html += `<div class='magicv-mini-row'>`;
+        for (let j = i; j < i + 2 && j < arr.length; j++) {
+          const c = arr[j];
+          html += `
+            <div class='magicv-mini-board magicv-mini-board-small'>
+              <span>${c.leftTop}</span>
+              <span>${c.rightTop}</span>
+              <span>${c.leftMid}</span>
+              <span>${c.rightMid}</span>
+              <span>${c.bottom}</span>
+            </div>
+          `;
+        }
+        html += `</div>`;
+      }
+      savedList.innerHTML = html;
+      savedCount.textContent = '';
     }
     renderExploracionCombinaciones();
     // Reset
@@ -1095,6 +1118,7 @@ function setupMission1() {
       sessionData.mission1.exploracionCombinaciones = [];
       renderExploracionCombinaciones();
       feedback.textContent = '';
+      feedback.classList.remove('good');
       checkBtn.disabled = false;
       // Limpiar tablero
       slots.filter(s=>s!=='bottom').forEach(slot=>{
@@ -1102,6 +1126,7 @@ function setupMission1() {
         if (drop && drop.querySelector('.magicv-chip')) tray.appendChild(drop.querySelector('.magicv-chip'));
       });
       audioBlock.classList.add('is-hidden');
+      feedback.textContent = '';
     };
   }
 

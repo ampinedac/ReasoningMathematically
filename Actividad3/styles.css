@@ -1,3 +1,14 @@
+/* Magic V miniaturas para combinaciones guardadas en exploración */
+.magicv-mini-board-small {
+  transform: scale(0.7);
+  margin: 4px 12px;
+  display: inline-block;
+}
+.magicv-mini-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+}
 /* Permutaciones Magic V */
 /* Agrupación visual de Magic V y equivalentes */
 .magicv-v-group {
