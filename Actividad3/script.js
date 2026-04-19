@@ -37,25 +37,39 @@ function renderMagicVSavedTable() {
   }
   const rows = sessionData.mission1.saved.map((comb, index) => {
     const sumaCell = comb.sumaMagica !== null
-      ? `<span class=\"magicv-suma-confirmed\">✔ ${comb.sumaMagica}</span>`
-      : `<span class=\"magicv-suma-pending\">Sin verificar</span>`;
+      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
+      : `<span class="magicv-suma-pending">Sin verificar</span>`;
     let permutacionesHtml = "";
     if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class=\"magicv-permutaciones-list\">` +
+      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
         comb.permutaciones.map((perm) => `
-          <div class=\"magicv-mini-board magicv-mini-board-permutacion\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${perm.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${perm.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${perm.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${perm.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${perm.bottom}</span>\n          </div>`).join("") + `</div>`;
+          <div class="magicv-mini-board magicv-mini-board-permutacion">
+            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
+          </div>`).join("") + `</div>`;
     }
     return `<tr>
       <td>
-        <div class=\"magicv-saved-item-label\">V válida ${index + 1}</div>
-        <div class=\"magicv-v-group\">\n          <div class=\"magicv-mini-board\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${comb.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${comb.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${comb.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${comb.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${comb.bottom}</span>\n          </div>\n          ${permutacionesHtml}
+        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
+        <div class="magicv-v-group">
+          <div class="magicv-mini-board">
+            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
+          </div>
+          ${permutacionesHtml}
         </div>
       </td>
-      <td class=\"magicv-suma-cell\">${sumaCell}</td>
+      <td class="magicv-suma-cell">${sumaCell}</td>
     </tr>`;
   }).join("");
   return `
-    <table class=\"magicv-saved-table\">
+    <table class="magicv-saved-table">
       <thead>
         <tr>
           <th>Magic V</th>
@@ -941,7 +955,7 @@ function setupMission1() {
 
   // Card dinámica para total mágico
   function mostrarCardTotalMagico(comb) {
-    // Elimina si ya existe
+    // Eliminar si ya existe
     const existente = document.getElementById("cardTotalMagico");
     if (existente) existente.remove();
     // Construir la card
@@ -1137,31 +1151,30 @@ function sendChipToTray(chip) {
   orderMission1TrayChips();
 }
 
-function clearMission1Slot(slot) {
-  const drop = mission1Drops.find((item) => item.dataset.slot === slot);
-  if (!drop) {
-    return;
-  }
-
+function clearMission1Slot(slot, boardSelector = "#magicvBoardFoto") {
+  const board = document.querySelector(boardSelector);
+  if (!board) return;
+  const drop = Array.from(board.querySelectorAll('.magicv-drop')).find((item) => item.dataset.slot === slot);
+  if (!drop) return;
   sessionData.mission1.current[slot] = null;
   drop.classList.remove("filled");
 }
 
-function clearMission1Board(resetMessage) {
+function clearMission1Board(resetMessage, boardSelector = "#magicvBoardFoto", chipTraySelector = "#mission1ChipTray") {
+  const board = document.querySelector(boardSelector);
+  if (!board) return;
   mission1SlotOrder.forEach((slot) => {
     sessionData.mission1.current[slot] = null;
-    const drop = mission1Drops.find((item) => item.dataset.slot === slot);
+    const drop = Array.from(board.querySelectorAll('.magicv-drop')).find((item) => item.dataset.slot === slot);
     if (drop) {
       drop.classList.remove("filled", "drop-target");
     }
   });
-
-  const chips = Array.from(document.querySelectorAll(".magicv-chip"));
+  const chips = Array.from(document.querySelectorAll(chipTraySelector + " .magicv-chip"));
   chips.forEach((chip) => {
-    chip.dataset.slot = "";
-    mission1ChipTray.appendChild(chip);
+    chip.classList.remove("dragging");
+    chip.disabled = false;
   });
-
   orderMission1TrayChips();
   saveSessionProgress();
   if (resetMessage) {
@@ -1312,7 +1325,7 @@ async function handleMission1AudioSubmit() {
     } = firebaseServices;
 
     const basePath = buildMission1ExplorationStorageBasePath();
-    const fileName = buildMission1ExplorationFileName();
+    const fileName = buildMission1ExploracionFileName();
     const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
 
     await uploadBytes(storageRef, mission1AudioState.blob, {
@@ -1598,10 +1611,10 @@ function normalizeStorageSegment(value) {
 }
 
 function buildMission1ExplorationStorageBasePath() {
-  return "Actividad3/1Exploración";
+  return "Actividad3/1Exploracion";
 }
 
-function buildMission1ExplorationFileName() {
+function buildMission1ExploracionFileName() {
   const suffix = studentCode === "0000"
     ? (normalizeStorageSegment(studentInfo?.nombre || "invitado") || "invitado")
     : (normalizeStorageSegment(String(studentInfo?.curso || "sin-curso")) || "sin-curso");
