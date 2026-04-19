@@ -1444,40 +1444,16 @@ textarea {
   }
 }
 
-.modal-magicv {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(44, 62, 80, 0.32);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeInIntro 0.3s;
-}
-
 .modal-magicv-content {
+  width: 80%;
+  margin: 40px auto;
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
-  padding: 32px 28px 24px 28px;
-  max-width: 420px;
-  width: 90vw;
-  text-align: center;
-  font-family: 'Lobster Two', cursive;
-}
-
-#inputTotalMagico {
-  font-size: 1.3rem;
-  text-align: center;
-  margin: 10px 0;
-}
-
-#feedbackTotalMagico {
-  margin-top: 10px;
-  min-height: 24px;
-  color: #b91c1c;
-  font-size: 1.1rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 32px 24px 28px 24px;
+  max-width: 700px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

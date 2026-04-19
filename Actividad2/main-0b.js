@@ -60,8 +60,7 @@ function updateM4ReflectionSubmitState() {
     if (!submitBtn) return;
 
     const hasAudio = !!(audioState['M4Reflection']?.blob && audioState['M4Reflection'].blob.size > 0);
-    const checkedCount = document.querySelectorAll('input[name="m4Reflection"]:checked').length;
-    const canSubmit = hasAudio && checkedCount >= 1;
+    const canSubmit = hasAudio;
 
     submitBtn.disabled = !canSubmit;
     submitBtn.style.opacity = canSubmit ? '1' : '0.5';
@@ -96,11 +95,33 @@ document.addEventListener('DOMContentLoaded', () => {
     initM1Q2ThinkFlow();
     initM1Q2EquationForm();
     initMenteAndresSystem();
-    initM4StoryFlow();
-    initM4();
-    initEncuesta();
+    initM4ReflectionFlow();
 });
+// ─────────────────────────────────────────────
+// FLUJO DE REFLEXIÓN, FELICITACIÓN Y CIERRE FINAL
+// ─────────────────────────────────────────────
+function initM4ReflectionFlow() {
+    // Interceptar envío de audio reflexión
+    const submitBtn = document.getElementById('submitM4Reflection');
+    if (submitBtn) {
+        const origHandler = submitBtn.onclick;
+        submitBtn.onclick = function(e) {
+            if (typeof origHandler === 'function') origHandler(e);
+            // Ya no se avanza automáticamente, solo se habilita la flecha
+        };
+    }
+}
 
+
+<<<<<<< HEAD
+=======
+function ensureM3SpreadStructure() {
+    const spread = document.getElementById('m3FlowSpread');
+    const content = document.getElementById('m3q3StepContent');
+    if (!spread || !content) return;
+}
+
+>>>>>>> parent of 1e5127e (.)
 // ─────────────────────────────────────────────
 // 1. VISIBILIDAD INICIAL
 // ─────────────────────────────────────────────
@@ -237,9 +258,14 @@ function initWelcome() {
 
         // Rellenar pregunta de confirmación
         const q = document.getElementById('confirmationQuestion');
+
         if (q) {
-            const nombre = toTitle(estudiante.nombre);
-            const apellidos = toTitle(estudiante.apellidos || '');
+            // Capitalizar cada palabra y reemplazar coma por espacio
+            function toTitleCase(str) {
+                return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+            }
+            const nombre = toTitleCase((estudiante.nombre || '').replace(/,/g, ' '));
+            const apellidos = toTitleCase((estudiante.apellidos || '').replace(/,/g, ' '));
             if (estudiante.curso === 'DOCENTE') {
                 q.textContent = `¿Eres ${nombre} ${apellidos}?`;
             } else {
@@ -263,8 +289,16 @@ function toTitle(str) {
         .toLocaleLowerCase('es-CO')
         .split(/\s+/)
         .filter(Boolean)
-        .map(word => word.charAt(0).toLocaleUpperCase('es-CO') + word.slice(1))
-        .join(' ');
+
+        /*
+        ============================================================
+          main-0b.js – Lógica principal de Actividad 2
+          Organización y comentarios por bloques según el HTML
+        ============================================================
+        */
+
+        // ===================== INICIALIZACIÓN GENERAL =====================
+        // Importa y configura Firebase, define variables globales de estado.
 }
 
 function normalizeStorageSegment(value) {
@@ -372,7 +406,16 @@ function initPortada() {
         show('ContenedorLibro');
         show('prevBtn');
         show('nextBtn');
-        goToSpread(0);
+        window.requestAnimationFrame(() => {
+            const spreads = document.querySelectorAll('#ContenedorLibro .q1-book-spread');
+            if (spreads.length > 0 && !isFlipping) {
+                goToSpread(0);
+            } else if (spreads.length === 0) {
+                console.error('❌ No hay spreads disponibles al iniciar');
+            } else if (isFlipping) {
+                console.warn('⏳ Animación activa, esperando para navegar');
+            }
+        });
     });
 }
 
@@ -386,6 +429,16 @@ function getSpreads() {
 function goToSpread(index) {
     const spreads = getSpreads();
 
+    if (!spreads || spreads.length === 0) {
+        console.error('❌ No hay spreads en el DOM');
+        return;
+    }
+    // Validación de límites y animación
+    if (isFlipping || typeof index !== 'number' || index < 0 || index >= spreads.length) {
+        console.error('❌ Índice de spread fuera de rango o animación activa. index:', index, 'spreads:', spreads.length, 'isFlipping:', isFlipping);
+        return;
+    }
+
     // Llamada de inicializacion (mismo indice) o retorno desde Mente de Andres: mostrar sin animacion
     if (index === currentSpread) {
         spreads.forEach((s, i) => {
@@ -395,10 +448,21 @@ function goToSpread(index) {
         return;
     }
 
-    if (isFlipping || index < 0 || index >= spreads.length) return;
+    // Protección extra: si currentSpread es inválido, lo ajustamos al primer spread
+    let safeCurrentSpread = currentSpread;
+    if (typeof safeCurrentSpread !== 'number' || safeCurrentSpread < 0 || safeCurrentSpread >= spreads.length) {
+        console.warn('⚠️ currentSpread inválido, ajustando a 0');
+        safeCurrentSpread = 0;
+    }
 
-    const direction = index > currentSpread ? 'forward' : 'backward';
-    const oldSpread = spreads[currentSpread];
+    const direction = index > safeCurrentSpread ? 'forward' : 'backward';
+    const oldSpread = spreads[safeCurrentSpread];
+
+    if (!oldSpread) {
+        console.error('❌ oldSpread es undefined. currentSpread:', safeCurrentSpread);
+        console.log('Spreads encontrados:', spreads.length);
+        return;
+    }
 
     // La página que se pliega hacia el lomo (sale)
     const foldOutPage = direction === 'forward'
@@ -417,6 +481,8 @@ function goToSpread(index) {
         spreads.forEach((s, i) => {
             s.style.display = (i === index) ? 'flex' : 'none';
         });
+
+        console.log('✅ goToSpread protegido contra undefined');
         currentSpread = index;
         updateNavButtons();
 
@@ -811,41 +877,116 @@ async function handleSubmit(tag) {
     submitBtn.style.opacity = '0.4';
     if (statusEl) { statusEl.textContent = 'Subiendo...'; statusEl.style.color = '#555'; }
 
+
     try {
         if (!firebaseServices?.storage || !firebaseServices?.db) {
             throw new Error('Firebase no disponible');
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        const basePath = buildStorageBasePath(tag);
         const component = getComponentFromTag(tag);
 
-        // Nombre de archivo = código del estudiante (sin timestamp)
-        const audioFileName = studentCode;
+        // --- Lógica de rutas y nombres ---
+        let carpeta = '';
+        let nombreArchivo = '';
+        let carpetaImg = '';
+        let nombreCanvas = '';
+        const esEstudiante = studentInfo && studentInfo.curso && studentCode !== '0000' && studentInfo.curso !== 'INVITADO' && !studentInfo.curso.toLowerCase().includes('docente');
+        const esInvitado = studentCode === '0000' || (studentInfo && studentInfo.curso === 'INVITADO');
+        const esDocente = studentInfo && studentInfo.curso && studentInfo.curso.toLowerCase().includes('docente');
+        const curso = esEstudiante ? studentInfo.curso : '';
+        const nombreBase = esEstudiante
+            ? `${studentCode}_${curso}`
+            : esInvitado
+                ? `${studentInfo.nombre.trim().replace(/\s+/g, '_')}`
+                : esDocente
+                    ? `${studentCode}_docente`
+                    : 'desconocido';
 
-        // Subir audio
-        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
+        if (tag === 'M3Q1') {
+            carpeta = 'Actividad2/1Exploración';
+            nombreArchivo = `${nombreBase}_exploracion`;
+        } else if (tag === 'M3Q3') {
+            carpeta = 'Actividad2/2_3ReglageneralJustificacion/Audio';
+            nombreArchivo = `${nombreBase}_ReglaJustif`;
+            carpetaImg = 'Actividad2/2_3ReglageneralJustificacion/Img';
+            nombreCanvas = `${nombreBase}_ReglaJustif`;
+        } else if (tag === 'M4Reflection') {
+            carpeta = 'Actividad2/4Reflexion';
+            nombreArchivo = `${nombreBase}_reflexion`;
+        } else {
+            // Por defecto, mantener la lógica anterior
+            carpeta = buildStorageBasePath(tag);
+            nombreArchivo = studentCode;
+        }
+
+        // Subir audio con sufijo incremental si ya existe
+        async function getAvailableAudioRef(basePath, ext) {
+            let idx = 0;
+            let refPath = `${basePath}.${ext}`;
+            let fileRef = ref(storage, refPath);
+            // Verifica existencia
+            try {
+                await getDownloadURL(fileRef);
+                // Si existe, buscar siguiente disponible
+                while (true) {
+                    idx++;
+                    refPath = `${basePath}_${idx}.${ext}`;
+                    fileRef = ref(storage, refPath);
+                    try {
+                        await getDownloadURL(fileRef);
+                    } catch {
+                        break;
+                    }
+                }
+            } catch {
+                // No existe, usar el base
+            }
+            return fileRef;
+        }
+
+        const audioBasePath = `${carpeta}/${nombreArchivo}`;
+        const audioRef = await getAvailableAudioRef(audioBasePath, 'webm');
         await uploadBytes(audioRef, audioBlob);
         const audioURL = await getDownloadURL(audioRef);
 
         let imageURL = null;
 
-        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
-        if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
-            const canvasId = tag === 'M3Q1'
-                ? 'boardCanvasM3Q1'
-                : (tag === 'M3Q2'
-                    ? 'boardCanvasM3Q2'
-                    : (tag === 'M3Q3'
-                        ? 'boardCanvasM3Q3'
-                        : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
-            const canvasBlob = await canvasToBlob(canvasId);
-            if (canvasBlob) {
-                // Nombre de canvas también = código del estudiante
-                const canvasName = `${studentCode}.png`;
-                const imgRef = ref(storage, `${basePath}/${canvasName}`);
-                await uploadBytes(imgRef, canvasBlob);
-                imageURL = await getDownloadURL(imgRef);
+        // Guardar canvas solo para M3Q3 (regla general y justificación, página 18)
+        if (tag === 'M3Q3') {
+            const canvasId = 'boardCanvasM3Q3';
+            const canvas = document.getElementById(canvasId);
+            if (canvas) {
+                // Guardar como PNG
+                const canvasBlob = await new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'));
+                if (canvasBlob) {
+                    // Buscar nombre disponible
+                    async function getAvailableImgRef(basePath, ext) {
+                        let idx = 0;
+                        let refPath = `${basePath}.${ext}`;
+                        let fileRef = ref(storage, refPath);
+                        try {
+                            await getDownloadURL(fileRef);
+                            while (true) {
+                                idx++;
+                                refPath = `${basePath}_${idx}.${ext}`;
+                                fileRef = ref(storage, refPath);
+                                try {
+                                    await getDownloadURL(fileRef);
+                                } catch {
+                                    break;
+                                }
+                            }
+                        } catch {
+                            // No existe, usar el base
+                        }
+                        return fileRef;
+                    }
+                    const imgBasePath = `${carpetaImg}/${nombreCanvas}`;
+                    const imgRef = await getAvailableImgRef(imgBasePath, 'png');
+                    await uploadBytes(imgRef, canvasBlob);
+                    imageURL = await getDownloadURL(imgRef);
+                }
             }
         }
 
@@ -856,37 +997,44 @@ async function handleSubmit(tag) {
             curso: studentInfo?.curso || '',
             tag,
             componente: component,
-            storageBasePath: basePath,
+            storagePath: `${carpeta}/${nombreArchivo}.webm`,
             audioURL,
             imageURL: imageURL || null,
             timestamp: serverTimestamp()
         };
         await addDoc(collection(db, 'Actividad2'), firestoreDoc);
 
+
         if (statusEl) {
             statusEl.textContent = tag === 'M4Reflection'
-                ? '✅ Audio enviado. Finalizando actividad...'
+                ? '✅ Ya puedes continuar.'
                 : '✅ Guardado. Ya puedes pasar a la siguiente página.';
             statusEl.style.color = '#16a34a';
         }
 
-        // En el último spread, el envío del audio final dispara el formulario de cierre.
         if (tag === 'M4Reflection') {
-            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
-            if (checked.length === 0) {
-                if (statusEl) {
-                    statusEl.textContent = 'Selecciona al menos una opción antes de enviar.';
-                    statusEl.style.color = '#dc2626';
+            // Mostrar y habilitar la flecha de siguiente
+            show('nextBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+                nextBtn.style.cursor = 'pointer';
+                // Solo agregar el listener una vez
+                if (!nextBtn.dataset.solapaReady) {
+                    nextBtn.addEventListener('click', () => {
+                        // Ocultar libro y mostrar solapa final
+                        const contLibro = document.getElementById('ContenedorLibro');
+                        const contSolapa = document.getElementById('contenedorSolapa');
+                        if (contLibro) contLibro.style.display = 'none';
+                        if (contSolapa) contSolapa.style.display = 'flex';
+                        // Ocultar flechas de navegación
+                        hide('prevBtn');
+                        hide('nextBtn');
+                    });
+                    nextBtn.dataset.solapaReady = '1';
                 }
-                updateM4ReflectionSubmitState();
-                return;
             }
-
-            if (statusEl) {
-                statusEl.textContent = 'Enviando respuestas finales...';
-                statusEl.style.color = '#555';
-            }
-            submitEncuesta(checked);
             return;
         }
 
@@ -896,7 +1044,14 @@ async function handleSubmit(tag) {
     } catch (error) {
         console.error(`❌ Error al enviar ${tag}:`, error);
         if (statusEl) {
-            statusEl.textContent = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            let msg = 'Error al guardar. Revisa tu conexión e intenta de nuevo.';
+            // Mostrar detalle del error para depuración
+            if (error && error.message) {
+                msg += `\n[${error.message}]`;
+            } else if (typeof error === 'string') {
+                msg += `\n[${error}]`;
+            }
+            statusEl.textContent = msg;
             statusEl.style.color = '#dc2626';
         }
         submitBtn.disabled = false;
@@ -923,12 +1078,47 @@ async function submitM1Q2Equation() {
         return;
     }
 
-    const normalizeExpression = (value) => value.replace(/\s+/g, ' ').trim();
+    // --- Validación de suma mágica ---
+    // Si la suma no es misteriosa, mostrar mensaje personalizado
+    const leftVal = eval(leftRaw.replace(/[^0-9+\-*/() ]/g, ''));
+    const rightVal = eval(rightRaw.replace(/[^0-9+\-*/() ]/g, ''));
+    if (leftVal !== rightVal) {
+        if (statusEl) {
+            statusEl.textContent = 'Esta no es una suma misteriosa';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Lista de sumas mágicas ya vistas (izquierda = derecha, sin espacios)
+    const SUMAS_PROHIBIDAS = [
+        // Ejemplos del cuento y tabla
+        '7+7+7=3+3+3+3+3+3+3',
+        '3+3+3+3+3+3+3=7+7+7',
+        '5+5+5=3+3+3+3+3',
+        '3+3+3+3+3=5+5+5',
+        '2+2+2+2=4+4',
+        '4+4=2+2+2+2',
+        '6+6+6+6+6=5+5+5+5+5+5',
+        '5+5+5+5+5+5=6+6+6+6+6',
+        // Tabla spread 13-14
+        '2+2+2+2+2+2+2+2+2+2+2+2+2+2+2=15+15',
+        '15+15=2+2+2+2+2+2+2+2+2+2+2+2+2+2+2',
+        '4+4+4=3+3+3+3',
+        '3+3+3+3=4+4+4',
+        '6+6+6=3+3+3+3+3+3',
+        '3+3+3+3+3+3=6+6+6',
+        '8+8=2+2+2+2+2+2+2+2',
+        '2+2+2+2+2+2+2+2=8+8'
+    ];
+
+    // Normaliza y quita espacios
+    const normalizeExpression = (value) => value.replace(/\s+/g, '').trim();
     const leftExpr = normalizeExpression(leftRaw);
     const rightExpr = normalizeExpression(rightRaw);
 
-    const isValidExpression = (value) => /\d/.test(value) && /^[\d+\s]+$/.test(value);
-
+    // Verifica que solo haya números y +
+    const isValidExpression = (value) => /\d/.test(value) && /^[\d+]+$/.test(value);
     if (!isValidExpression(leftExpr) || !isValidExpression(rightExpr)) {
         if (statusEl) {
             statusEl.textContent = 'Usa solo números y el signo + en cada caja.';
@@ -937,17 +1127,60 @@ async function submitM1Q2Equation() {
         return;
     }
 
-    const confirmed = window.confirm('¿Estás segur@ de guardar este ejemplo?');
-    if (!confirmed) {
+    // Parsea sumandos
+    function parseSum(str) {
+        return str.split('+').map(Number).filter(n => !isNaN(n));
+    }
+    const leftArr = parseSum(leftExpr);
+    const rightArr = parseSum(rightExpr);
+
+    // Suma total
+    const sum = arr => arr.reduce((a, b) => a + b, 0);
+    if (sum(leftArr) !== sum(rightArr)) {
         if (statusEl) {
-            statusEl.textContent = 'Puedes seguir editando tu ejemplo antes de guardar.';
-            statusEl.style.color = '#1d4ed8';
+            statusEl.textContent = 'La suma de ambos lados debe ser igual.';
+            statusEl.style.color = '#dc2626';
         }
         return;
     }
 
-    const izquierda = leftExpr;
-    const derecha = rightExpr;
+    // Ambos lados deben ser sumandos iguales
+    const allEqual = arr => arr.every(n => n === arr[0]);
+    if (!allEqual(leftArr) || !allEqual(rightArr)) {
+        if (statusEl) {
+            statusEl.textContent = 'Cada lado debe tener sumandos iguales.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Conmutatividad: n sumandos de a = a sumandos de n
+    const a = leftArr[0], n = leftArr.length;
+    const b = rightArr[0], m = rightArr.length;
+    const isMagica = (n === b && m === a) && (a !== b || n !== m);
+    if (!isMagica) {
+        if (statusEl) {
+            statusEl.textContent = 'Esa suma no es mágica. Debe cumplir la conmutatividad: a veces b = b veces a, y ser diferente.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Chequeo de suma repetida (en cualquier orden)
+    const eqNorm1 = `${leftArr.join('+')}=${rightArr.join('+')}`;
+    const eqNorm2 = `${rightArr.join('+')}=${leftArr.join('+')}`;
+    if (SUMAS_PROHIBIDAS.includes(eqNorm1) || SUMAS_PROHIBIDAS.includes(eqNorm2)) {
+        if (statusEl) {
+            statusEl.textContent = 'Esa suma mágica ya la dijo Andrés.';
+            statusEl.style.color = '#dc2626';
+        }
+        return;
+    }
+
+    // Ya no se pregunta confirmación, se guarda directamente y se muestra mensaje de éxito
+
+    const izquierda = leftArr.join(' + ');
+    const derecha = rightArr.join(' + ');
     const equationText = `${izquierda} = ${derecha}`;
 
     submitBtn.disabled = true;
@@ -1641,13 +1874,13 @@ function initMenteAndresSystem() {
     let menteAndresNoticeTimer = null;
 
     function showMenteAndresNotice(message, type = 'success', durationMs = 2400, onDone = null) {
-        const menteAndresScreen = document.getElementById('menteAndresScreen');
+        const menteAndresScreen = document.getElementById('MenteAndresScreen');
         if (!menteAndresScreen) {
             if (typeof onDone === 'function') onDone();
             return;
         }
 
-        const oldNotice = document.getElementById('menteAndresFloatingNotice');
+        const oldNotice = document.getElementById('MenteAndresFloatingNotice');
         if (oldNotice) oldNotice.remove();
         if (menteAndresNoticeTimer) {
             clearTimeout(menteAndresNoticeTimer);
@@ -1655,7 +1888,7 @@ function initMenteAndresSystem() {
         }
 
         const notice = document.createElement('div');
-        notice.id = 'menteAndresFloatingNotice';
+        notice.id = 'MenteAndresFloatingNotice';
         notice.className = `mente-andres-floating-notice ${type}`;
         notice.setAttribute('role', 'status');
         notice.setAttribute('aria-live', 'polite');
@@ -1691,7 +1924,7 @@ function initMenteAndresSystem() {
             }
         }
 
-        const oldNotice = document.getElementById('menteAndresFloatingNotice');
+        const oldNotice = document.getElementById('MenteAndresFloatingNotice');
         if (oldNotice) oldNotice.remove();
         if (menteAndresNoticeTimer) {
             clearTimeout(menteAndresNoticeTimer);
@@ -1985,9 +2218,9 @@ function initMatchingActivity() {
 
     // Sumas misteriosas – se barajan al cargar
     const SUMS = [
-        { id: 'msum0', text: '5+5+5=3+3+3+3+3' },
-        { id: 'msum1', text: '2+2+2+2+2=4+4' },
-        { id: 'msum2', text: '6+6+6+6+6=5+5+5+5+5+5' }
+        { id: 'msum0', text: '5+5+5 = 3+3+3+3+3'},
+        { id: 'msum1', text: '2+2+2+2 = 4+4'},
+        { id: 'msum2', text: '6+6+6+6+6 = 5+5+5+5+5+5'}
     ];
     let shuffledSums = [...SUMS].sort(() => Math.random() - 0.5);
 
@@ -2355,21 +2588,9 @@ function renderExercise(index) {
         input.addEventListener('keypress', e => { if (e.key === 'Enter') checkAnswer(correctValue); });
     }
 
-    // Actualizar estado de vidas
-    renderLives();
 }
 
-function renderLives() {
-    const livesEl = document.getElementById('magicLives');
-    if (!livesEl) return;
-    livesEl.innerHTML = '';
-    for (let i = 0; i < 3; i++) {
-        const heart = document.createElement('span');
-        heart.className = 'magic-heart';
-        heart.textContent = i < m4Lives ? '❤️' : '🖤';
-        livesEl.appendChild(heart);
-    }
-}
+
 
 function checkAnswer(correctValue) {
     if (m4Finalized) return;
@@ -2475,84 +2696,7 @@ async function finalizeM4() {
     updateNavButtons();
 }
 
-// ─────────────────────────────────────────────
-// 12. SPREAD 19-20 – ENCUESTA (Google Forms)
-// ─────────────────────────────────────────────
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc30-KG8YdvHtJ_JFrn385BtNNLcaGsjvzxz2d5m5xKQYe0Gg/viewform';
-const GOOGLE_FORM_RESPONSE_URL = GOOGLE_FORM_URL.replace('/viewform', '/formResponse');
-const FORM_ENTRY_CODIGO = 'entry.975342770';
-// Campo detectado en tu Form actual: "Esta actividad fue"
-const FORM_ENTRY_RESPUESTA = 'entry.637654905';
 
-function initEncuesta() {
-    // Límite máximo de 2 checkboxes
-    const checkboxes = document.querySelectorAll('input[name="m4Reflection"]');
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => {
-            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
-            if (checked.length > 2) cb.checked = false;
-            updateNavButtons(); // actualizar estado del botón siguiente
-            updateM4ReflectionSubmitState(); // submit final requiere check + audio
-        });
-    });
-
-    // El envío del formulario final se ejecuta desde initNavigation
-    // cuando el usuario está en el último spread y pulsa "siguiente".
-}
-
-async function submitEncuesta(checkedBoxes) {
-    const reflectionLabelMap = {
-        facil: 'Fácil',
-        interesante: 'Interesante',
-        dificil: 'Difícil',
-        'pensar-mucho': 'Me hizo pensar mucho',
-        confusa: 'Confusa'
-    };
-    const valores = Array.from(checkedBoxes)
-        .map(cb => reflectionLabelMap[cb.value] || cb.value);
-
-    const payload = new URLSearchParams();
-    if (FORM_ENTRY_CODIGO) {
-        payload.append(FORM_ENTRY_CODIGO, studentCode || '');
-    }
-    valores.forEach(v => payload.append(FORM_ENTRY_RESPUESTA, v));
-
-    // Mostrar mensaje de agradecimiento
-    const spreads = getSpreads();
-    const lastSpread = spreads[spreads.length - 1];
-    if (lastSpread) {
-        lastSpread.innerHTML = `
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;
-                        height:100%;width:100%;text-align:center;padding:40px;gap:20px;">
-                <h2 style="font-family:'Lobster Two',cursive;color:#8000ff;font-size:2.5rem;">
-                    ¡Muchas gracias! 🎉
-                </h2>
-                <p style="font-size:1.4rem;color:#333;">
-                    Tus respuestas han sido enviadas. En 3 segundos regresas al inicio.
-                </p>
-            </div>
-        `;
-    }
-
-    // Envío silencioso al formulario (sin pedir correo ni abrir pestaña)
-    try {
-        await fetch(GOOGLE_FORM_RESPONSE_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: payload.toString()
-        });
-    } catch (error) {
-        console.error('No se pudo enviar al Google Form:', error);
-    }
-
-    // Redirigir al index después de 3 segundos
-    setTimeout(() => {
-        window.location.href = '../index.html';
-    }, 3000);
-}
 
 // Fin de main.js
 
