@@ -22,7 +22,7 @@ let sessionData = getInitialSessionData();
 // Parche defensivo: asegurar que mission2 existe y tiene audioSubmitted
 if (typeof sessionData.mission2 === 'undefined') {
   sessionData.mission2 = {
-    current: createEmptyMission2Assignment ? createEmptyMission2Assignment() : {},
+    current: {},
     saved: [],
     explorationUnlocked: false,
     audioSubmitted: false
@@ -132,7 +132,7 @@ async function handleMission2AudioSubmit() {
     const audioURL = await getDownloadURL(storageRef);
     await addDoc(collection(db, "Actividad3"), {
       studentCode,
-      studentName: getStudentDisplayName(),
+      // studentName eliminado,
       curso: studentInfo?.curso || "",
       isGuest: studentCode === "0000",
       tag: "A3M2Exploracion",
@@ -146,7 +146,7 @@ async function handleMission2AudioSubmit() {
     setMessage(mission2AudioStatus, "✅ Audio enviado correctamente.", "good");
     setMessage(magicVFeedback2, "Respuesta enviada. La misión 2 quedó completada.", "good");
     syncMission2AudioButtons();
-    completeMission(2);
+    // completeMission eliminado
   } catch (error) {
     setMessage(mission2AudioStatus, "Error al guardar el audio. Revisa tu conexión e intenta de nuevo.", "bad");
   } finally {
@@ -700,7 +700,6 @@ function setupEntryFlow() {
   confirmYesBtn.addEventListener("click", () => {
     confirmContainer.style.display = "none";
     activityApp.style.display = "block";
-    registerTimestamp("confirmationAccepted");
     showScreen("introductionScreen");
   });
 }
@@ -1189,10 +1188,6 @@ function canAccessMission(missionNumber) {
   return missionNumber <= sessionData.progress || sessionData.missionsCompleted.includes(missionNumber);
 }
 
-
-function registerTimestamp(key) {
-  sessionData.timestamps[key] = new Date().toISOString();
-}
 
 function setMessage(target, text, mode) {
   if (!target) {
