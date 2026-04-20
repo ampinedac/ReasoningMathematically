@@ -661,8 +661,6 @@ function init() {
   setupCharacterMission();
   setupMap();
   setupGuideDragAndDrop();
-  setupBackToMapButtons();
-  clearMission1Board(false);
   setupMagicVSavedModal();
 }
 
