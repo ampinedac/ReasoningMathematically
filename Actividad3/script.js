@@ -1,3 +1,10 @@
+// Muestra solo la sección con el id dado y oculta las demás secciones principales
+function showScreen(screenId) {
+  const screens = document.querySelectorAll('.screen'); // Usa la clase 'screen' para identificar secciones
+  screens.forEach(s => s.style.display = 'none');
+  const target = document.getElementById(screenId);
+  if (target) target.style.display = 'block';
+}
 // Convierte una cadena a formato título (primera letra de cada palabra en mayúscula)
 function toTitle(str) {
   return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
