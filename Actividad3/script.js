@@ -1,3 +1,7 @@
+// Convierte una cadena a formato título (primera letra de cada palabra en mayúscula)
+function toTitle(str) {
+  return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+}
 // --- Inicialización simple de sessionData ---
 function getInitialSessionData() {
   return {
