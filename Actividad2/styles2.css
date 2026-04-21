@@ -1,5 +1,5 @@
 ﻿.think-force-reveal-btn {
-  display: none !important;
+  display: inline-block !important;
 }
 /* ================= SOLAPA FINAL DEL LIBRO =================== */
 #contenedorSolapa.cover-book {

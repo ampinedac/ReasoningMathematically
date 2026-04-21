@@ -60,12 +60,10 @@ function updateM4ReflectionSubmitState() {
     if (!submitBtn) return;
 
     const hasAudio = !!(audioState['M4Reflection']?.blob && audioState['M4Reflection'].blob.size > 0);
-    const checkedCount = document.querySelectorAll('input[name="m4Reflection"]:checked').length;
-    const canSubmit = hasAudio && checkedCount >= 1;
-
-    submitBtn.disabled = !canSubmit;
-    submitBtn.style.opacity = canSubmit ? '1' : '0.5';
-    submitBtn.style.cursor = canSubmit ? 'pointer' : 'not-allowed';
+    // Solo requiere audio grabado
+    submitBtn.disabled = !hasAudio;
+    submitBtn.style.opacity = hasAudio ? '1' : '0.5';
+    submitBtn.style.cursor = hasAudio ? 'pointer' : 'not-allowed';
 }
 
 // ─────────────────────────────────────────────
@@ -110,10 +108,6 @@ function ensureM3SpreadStructure() {
     const leftPage = spread.querySelector('.q1-left-page');
     if (!leftPage) return;
 
-    // Blindaje: si el bloque quedó movido por edición accidental, lo regresamos a la página 17.
-    if (!leftPage.contains(content)) {
-        leftPage.prepend(content);
-    }
 }
 
 // ─────────────────────────────────────────────
@@ -523,7 +517,27 @@ function initNavigation() {
         if (currentSpread > 0) goToSpread(currentSpread - 1);
     });
     document.getElementById('nextBtn')?.addEventListener('click', () => {
-        if (canAdvance()) goToSpread(currentSpread + 1);
+        // Si estamos en la última página (spread 19-20), mostrar solapa
+        const libro = document.getElementById('ContenedorLibro');
+        const solapa = document.getElementById('contenedorSolapa');
+        // Busca el número de spreads (páginas dobles)
+        const spreads = libro?.querySelectorAll('.q1-book-spread, .activity-spread') || [];
+        if (canAdvance()) {
+            if (currentSpread === spreads.length - 1) {
+                if (libro) libro.style.display = 'none';
+                if (solapa) solapa.style.display = '';
+                // Mostrar la flecha de siguiente por si se requiere navegación extra
+                const nextBtn = document.getElementById('nextBtn');
+                if (nextBtn) {
+                    nextBtn.style.display = '';
+                    nextBtn.disabled = true;
+                    nextBtn.style.opacity = '0.5';
+                    nextBtn.style.cursor = 'not-allowed';
+                }
+            } else {
+                goToSpread(currentSpread + 1);
+            }
+        }
     });
 }
 
@@ -688,7 +702,7 @@ function applyToolStyle(ctx, tool) {
     } else if (tool === 'yellow') {
         ctx.globalAlpha     = 0.5;
         ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle     = '#f6e05e';
+        ctx.strokeStyle     = '#e0c1118c';
         ctx.lineWidth       = 14;
     } else if (tool === 'eraser') {
         ctx.globalAlpha = 1;
@@ -754,8 +768,11 @@ function initAudioRecorder(tag) {
                 stream.getTracks().forEach(t => t.stop());
                 if (statusEl) statusEl.textContent = 'Audio listo para enviar';
 
-                if (tag === 'M4Reflection') {
-                    updateM4ReflectionSubmitState();
+                // FORZAR activación inmediata del botón en M4Reflection
+                if (tag === 'M4Reflection' && submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor  = 'pointer';
                 } else if (submitBtn && audioState[tag].blob && audioState[tag].blob.size > 0) {
                     submitBtn.disabled = false;
                     submitBtn.style.opacity = '1';
@@ -801,7 +818,11 @@ function initAudioRecorder(tag) {
     });
 
     // Submit de audio (+ imagen de canvas si aplica)
-    submitBtn?.addEventListener('click', () => handleSubmit(tag));
+    submitBtn?.addEventListener('click', async () => {
+        await handleSubmit(tag);
+    });
+
+    // Ya no se activa la flecha al terminar de grabar, solo tras enviar
 }
 
 // _____________________________________________________________________________________
@@ -832,20 +853,69 @@ async function handleSubmit(tag) {
         }
 
         const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
-        const basePath = buildStorageBasePath(tag);
-        const component = getComponentFromTag(tag);
+        let folder = '';
+        let prefix = '';
+        let extension = 'webm';
+        let isGuest = studentCode === '0000';
+        let userName = isGuest ? normalizeStorageSegment(studentInfo?.nombre || 'invitado') : studentCode;
 
-        // Nombre de archivo = código del estudiante (sin timestamp)
-        const audioFileName = studentCode;
+        // Definir carpeta y prefijo según el tag
+        if (tag === 'M3Q1') {
+            folder = 'Actividad2/1Exploración';
+            // nombre: código_curso_exploracion1_N.webm o nombre_exploracion1_N.webm
+            prefix = isGuest
+                ? `${userName}_exploracion1`
+                : `${studentCode}_${studentInfo?.curso || ''}_exploracion1`;
+        } else if (tag === 'M3Q3') {
+            // Audio: Actividad2/2_3ReglageneralJustificacion/Audio
+            // Imagen: Actividad2/2_3ReglageneralJustificacion/Img
+            folder = 'Actividad2/2_3ReglageneralJustificacion/Audio';
+            prefix = isGuest
+                ? `${userName}_2_3ReglaJustif`
+                : `${studentCode}_${studentInfo?.curso || ''}_2_3ReglaJustif`;
+        } else if (tag === 'M4Reflection') {
+            // Audio: Actividad2/4Reflexion
+            folder = 'Actividad2/4Reflexion';
+            prefix = isGuest
+                ? `${userName}_4reflexion`
+                : `${studentCode}_4reflexion`;
+        } else {
+            // fallback: usar la lógica anterior
+            folder = buildStorageBasePath(tag);
+            prefix = isGuest ? `${userName}` : `${userName}`;
+        }
 
-        // Subir audio
-        const audioRef = ref(storage, `${basePath}/${audioFileName}.webm`);
+        // Obtener el consecutivo para no sobrescribir
+        // Listar archivos existentes en la carpeta con ese prefijo
+        let listRef = ref(storage, folder);
+        let existing = [];
+        try {
+            if (firebaseServices?.listAll) {
+                const res = await firebaseServices.listAll(listRef);
+                existing = res.items.map(item => item.name).filter(name => name.startsWith(prefix));
+            }
+        } catch (e) {
+            // Si listAll no está disponible, continuar con 1
+            existing = [];
+        }
+        let nextConsecutivo = 1;
+        if (existing.length > 0) {
+            // Buscar el mayor consecutivo
+            const nums = existing.map(name => {
+                const match = name.match(/_(\d+)\./);
+                return match ? parseInt(match[1], 10) : 0;
+            }).filter(n => n > 0);
+            if (nums.length > 0) nextConsecutivo = Math.max(...nums) + 1;
+        }
+
+        const audioFileName = `${prefix}_${nextConsecutivo}`;
+        const audioRef = ref(storage, `${folder}/${audioFileName}.${extension}`);
         await uploadBytes(audioRef, audioBlob);
         const audioURL = await getDownloadURL(audioRef);
 
         let imageURL = null;
 
-        // Si es M1Q1, M1Q2 o momentos M3 con tablero tambien subir imagen
+        // Si es M1Q1, M1Q2 o momentos M3 con tablero también subir imagen
         if (tag === 'M1Q1' || tag === 'M1Q2' || tag === 'M3Q1' || tag === 'M3Q2' || tag === 'M3Q3') {
             const canvasId = tag === 'M3Q1'
                 ? 'boardCanvasM3Q1'
@@ -856,22 +926,36 @@ async function handleSubmit(tag) {
                         : (tag === 'M1Q2' ? 'boardCanvasM1Q2' : 'boardCanvasM1Q1')));
             const canvasBlob = await canvasToBlob(canvasId);
             if (canvasBlob) {
-                // Nombre de canvas también = código del estudiante
-                const canvasName = `${studentCode}.png`;
-                const imgRef = ref(storage, `${basePath}/${canvasName}`);
+                let imgFolder = folder;
+                let canvasName = `${prefix}_${nextConsecutivo}.png`;
+                if (tag === 'M3Q3') {
+                    imgFolder = 'Actividad2/2_3ReglageneralJustificacion/Img';
+                    // nombre igual que audio
+                    canvasName = isGuest
+                        ? `${userName}_2_3ReglaJustif_${nextConsecutivo}.png`
+                        : `${studentCode}_${studentInfo?.curso || ''}_2_3ReglaJustif_${nextConsecutivo}.png`;
+                }
+                if (tag === 'M3Q1') {
+                    // nombre igual que audio
+                    canvasName = isGuest
+                        ? `${userName}_exploracion1_${nextConsecutivo}.png`
+                        : `${studentCode}_${studentInfo?.curso || ''}_exploracion1_${nextConsecutivo}.png`;
+                }
+                const imgRef = ref(storage, `${imgFolder}/${canvasName}`);
                 await uploadBytes(imgRef, canvasBlob);
                 imageURL = await getDownloadURL(imgRef);
             }
         }
 
         // Guardar registro en Firestore
+        const component = getComponentFromTag(tag);
         const firestoreDoc = {
             studentCode,
             studentName: studentInfo ? `${studentInfo.nombre} ${studentInfo.apellidos || ''}`.trim() : '',
             curso: studentInfo?.curso || '',
             tag,
             componente: component,
-            storageBasePath: basePath,
+            storageBasePath: folder,
             audioURL,
             imageURL: imageURL || null,
             timestamp: serverTimestamp()
@@ -885,23 +969,23 @@ async function handleSubmit(tag) {
             statusEl.style.color = '#16a34a';
         }
 
-        // En el último spread, el envío del audio final dispara el formulario de cierre.
+        // En el último spread, el envío del audio final oculta el libro y muestra la solapa
         if (tag === 'M4Reflection') {
-            const checked = document.querySelectorAll('input[name="m4Reflection"]:checked');
-            if (checked.length === 0) {
-                if (statusEl) {
-                    statusEl.textContent = 'Selecciona al menos una opción antes de enviar.';
-                    statusEl.style.color = '#dc2626';
-                }
-                updateM4ReflectionSubmitState();
-                return;
-            }
-
             if (statusEl) {
-                statusEl.textContent = 'Enviando respuestas finales...';
-                statusEl.style.color = '#555';
+                statusEl.textContent = '✅ Audio enviado.';
+                statusEl.style.color = '#16a34a';
             }
-            submitEncuesta(checked);
+            m4Submitted = true;
+            // Ocultar libro y mostrar solapa inmediatamente
+            const libro = document.getElementById('ContenedorLibro');
+            const solapa = document.getElementById('contenedorSolapa');
+            if (libro) libro.style.display = 'none';
+            if (solapa) solapa.style.display = 'flex';
+            // Ocultar ambos botones de navegación
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (prevBtn) prevBtn.style.display = 'none';
             return;
         }
 
@@ -952,14 +1036,6 @@ async function submitM1Q2Equation() {
         return;
     }
 
-    const confirmed = window.confirm('¿Estás segur@ de guardar este ejemplo?');
-    if (!confirmed) {
-        if (statusEl) {
-            statusEl.textContent = 'Puedes seguir editando tu ejemplo antes de guardar.';
-            statusEl.style.color = '#1d4ed8';
-        }
-        return;
-    }
 
     const izquierda = leftExpr;
     const derecha = rightExpr;
@@ -974,6 +1050,28 @@ async function submitM1Q2Equation() {
     }
 
     try {
+        // Validar antes de guardar
+        if (esSumaMisteriosaEjemplo(izquierda, derecha)) {
+            if (statusEl) {
+                statusEl.textContent = 'Esta suma misteriosa ya la pensó Andrés en el cuento, debes proponer una distinta.';
+                statusEl.style.color = '#1707f1';
+            }
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+            return;
+        } else if (!esSumaMisteriosa(izquierda, derecha)) {
+            if (statusEl) {
+                statusEl.textContent = 'Eso no es una suma misteriosa.';
+                statusEl.style.color = '#dc2626';
+            }
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+            submitBtn.style.cursor = 'pointer';
+            return;
+        }
+
+        // Solo guardar si es una suma misteriosa nueva
         if (!firebaseServices?.db) throw new Error('Firebase no disponible');
 
         const { db, collection, addDoc, serverTimestamp } = firebaseServices;
@@ -995,6 +1093,10 @@ async function submitM1Q2Equation() {
             timestamp: serverTimestamp()
         });
 
+        if (statusEl) {
+            statusEl.textContent = '¡Bien! Has propuesto una suma misteriosa nueva.';
+            statusEl.style.color = '#16a34a';
+        }
         markSubmitted('M1Q2');
     } catch (error) {
         console.error('❌ Error al guardar M1Q2:', error);
@@ -1008,6 +1110,52 @@ async function submitM1Q2Equation() {
     }
 }
 
+// Función para validar suma misteriosa (criterio: suma repetida conmutativa, no trivial, y no ejemplo del cuento)
+function esSumaMisteriosa(izq, der) {
+    // Solo acepta sumas del tipo a+a+... = b+b+... con a ≠ b, ambos lados suman igual, y ambos lados tienen al menos 2 sumandos
+    const parse = (exp) => exp.replace(/\s+/g, '').split('+').map(Number);
+    const izqArr = parse(izq);
+    const derArr = parse(der);
+    if (izqArr.length < 2 || derArr.length < 2) return false;
+    const sumIzq = izqArr.reduce((a,b)=>a+b,0);
+    const sumDer = derArr.reduce((a,b)=>a+b,0);
+    if (sumIzq !== sumDer) return false;
+    // Deben ser sumas homogéneas (todos los sumandos iguales en cada lado)
+    const allEqual = arr => arr.every(x => x === arr[0]);
+    if (!allEqual(izqArr) || !allEqual(derArr)) return false;
+    // Deben ser diferentes (no trivial)
+    if (izqArr[0] === derArr[0]) return false;
+    return true;
+}
+
+// Lista de ejemplos del cuento (ambos sentidos)
+const SUMAS_MISTERIOSAS_EJEMPLO = [
+    // 15+15 = 2+2+2+2+2+2+2+2+2+2+2+2+2+2+2
+    ['15+15','2+2+2+2+2+2+2+2+2+2+2+2+2+2+2'],
+    // 3+3+3+3+3+3 = 6+6+6
+    ['3+3+3+3+3+3','6+6+6'],
+    // 2+2+2+2+2+2+2+2 = 8+8
+    ['2+2+2+2+2+2+2+2','8+8'],
+    // 3+3+3+3 = 4+4+4
+    ['3+3+3+3','4+4+4'],
+    // 5+5+5 = 3+3+3+3+3
+    ['5+5+5','3+3+3+3+3'],
+    // 6+6+6+6 = 5+5+5+5+5
+    ['6+6+6+6','5+5+5+5+5'],
+    // 2+2+2+2+2+2 = 4+4
+    ['2+2+2+2+2+2','4+4'],
+];
+
+function esSumaMisteriosaEjemplo(izq, der) {
+    const norm = exp => exp.replace(/\s+/g,'');
+    for (const [a, b] of SUMAS_MISTERIOSAS_EJEMPLO) {
+        if ((norm(izq) === norm(a) && norm(der) === norm(b)) ||
+            (norm(izq) === norm(b) && norm(der) === norm(a))) {
+            return true;
+        }
+    }
+    return false;
+}
 function initM1Q2EquationForm() {
     const leftInput = document.getElementById('m1q2LeftInput');
     const rightInput = document.getElementById('m1q2RightInput');

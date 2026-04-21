@@ -75,7 +75,7 @@
               </div>
             </article>
 
-            <article class="intro-step" data-step="3">
+            <article id="introStep3" class="intro-step" data-step="3">
               <h2 class="intro-title">🛠️ Tu Misión: Ingeniera de Patrones</h2>
               <p class="intro-paragraph">Hemos detectado que tú tienes la visión lógica necesaria para recalibrar los sistemas. Tu tarea no es solo poner números; es encontrar la armonía.</p>
               <ul class="intro-list">
@@ -95,8 +95,8 @@
     <section id="characterMissionScreen" class="app-screen">
       <div class="screen-shell">
         <header class="screen-header">
-          <h2>Mision Inicial: Elige tu guia</h2>
-          <p>Antes de entrar al mapa, selecciona un animal guia de Numetrix.</p>
+          <h2>Misión Inicial: Elige tu guía</h2>
+          <p>Antes de entrar al mapa, selecciona un animal guía de Numetrix.</p>
         </header>
 
         <div class="character-grid" id="characterGrid">
@@ -191,13 +191,13 @@
           <span class="gear gear-b"></span>
         </div>
 
-        <p id="mapHint" class="map-hint">Completa una mision para desbloquear la siguiente.</p>
+        <p id="mapHint" class="map-hint">Completa una misión para desbloquear la siguiente.</p>
       </div>
     </section>
 
-<!--=================================== mision 1=========================================== --> 
+<!--=================================== misión 1=========================================== --> 
     <section id="mission1Screen" class="app-screen mission-screen">
-      <div class="screen-shell">
+      <div id="mission1Container" class="mission-visual-container">
         <header class="screen-header mission-header">
           <h2>Punto 1: Diagnostico de Robot V</h2>
           <div class="guide-inline" id="guideInlineMission1"></div>
@@ -205,17 +205,94 @@
         <article class="narrative-card narrative-card-m1">
           <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
           <div class="narrative-card-text">
-            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que descubras cómo funcionaba.</p>
+            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompió... necesito que descubras cómo funcionaba.</p>
             <p>Construye una Magic V para detectar combinaciones estables.</p>
           </div>
         </article>
         <div id="parteAm1"></div>
         <div id="parteBm1"></div>
       </div>
-    </section>
+      <!-- INICIO parteAm1: Magic V principal -->
+      <section id="parteAm1">
+        <div class="mission-visual-container">
+          <div class="magic-v-instruction">
+            A continuación vas a ver una V, se convierte en Magic V cuando los dos brazos de la V suman lo mismo. Encuentra una Magic V:
+          </div>
+          <div class="magic-v-board" id="magicVBoard">
+            <!-- SVG de la V orientada hacia arriba, grande y centrada -->
+            <svg width="420" height="320">
+              <!-- Brazo izquierdo (hacia arriba) -->
+              <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+              <!-- Brazo derecho (hacia arriba) -->
+              <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+              <!-- Círculos para los números -->
+              <circle id="v-pos-1" cx="210" cy="250" r="38" />
+              <circle id="v-pos-2" cx="90" cy="70" r="38" />
+              <circle id="v-pos-3" cx="150" cy="160" r="38" />
+              <circle id="v-pos-4" cx="270" cy="160" r="38" />
+              <circle id="v-pos-5" cx="330" cy="70" r="38" />
+              <!-- Los números se renderizan dinámicamente con JS -->
+            </svg>
+          </div>
+          <div class="magic-v-buttons" id="magicVButtons">
+            <!-- Botones del 1 al 5 -->
+            <button class="v-num-btn" data-num="1">1</button>
+            <button class="v-num-btn" data-num="2">2</button>
+            <button class="v-num-btn" data-num="3">3</button>
+            <button class="v-num-btn" data-num="4">4</button>
+            <button class="v-num-btn" data-num="5">5</button>
+          </div>
+          <div class="magic-v-actions">
+            <button id="magicVConfirmBtn" class="btn btn-primary">Confirmar</button>
+            <button id="magicVResetBtn" class="btn btn-secondary">Reiniciar</button>
+          </div>
+          <div class="magic-v-feedback" id="magicVFeedback"></div>
+        </div>
+      </section>
+
+      <!-- INICIO parteBm1: Total mágico y permutaciones -->
+      <section id="parteBm1" style="display:none;">
+        <div class="mission-visual-container">
+          <div class="magic-v-instruction">
+            Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
+          </div>
+          <div class="magic-v-question">
+            ¿Cuál es el total mágico de cada brazo en tu Magic V?
+          </div>
+          <input type="number" id="magicVTotalInput" min="3" max="12" />
+          <button id="magicVTotalCheckBtn">Comprobar</button>
+          <div class="magic-v-feedback" id="magicVTotalFeedback"></div>
+          <div class="magic-v-next-question" id="magicVNextQ" style="display:none;">
+            ¿Cuántas otras cartas mágicas V puedes encontrar con ese mismo total de magia?
+          </div>
+          <div class="magic-v-board" id="magicVBoard2" style="display:none;">
+            <!-- Tablero de la segunda parte, núcleo fijo -->
+            <svg width="220" height="160">
+              <line x1="110" y1="30" x2="50" y2="120" stroke="#b3b3ff" stroke-width="8" />
+              <line x1="110" y1="30" x2="170" y2="120" stroke="#b3b3ff" stroke-width="8" />
+              <circle id="v2-pos-1" cx="110" cy="30" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
+              <circle id="v2-pos-2" cx="50" cy="120" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
+              <circle id="v2-pos-3" cx="80" cy="75" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
+              <circle id="v2-pos-4" cx="140" cy="75" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
+              <circle id="v2-pos-5" cx="170" cy="120" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
+            </svg>
+          </div>
+          <div class="magic-v-buttons" id="magicVButtons2" style="display:none;">
+            <!-- Botones del 1 al 5, menos el núcleo fijo -->
+          </div>
+          <div class="magic-v-actions" id="magicVActions2" style="display:none;">
+            <button id="magicVSaveBtn">Guardar</button>
+            <button id="magicVResetBtn2">Reset</button>
+          </div>
+          <div class="magic-v-feedback" id="magicVSaveFeedback"></div>
+          <div class="magic-v-found-list" id="magicVFoundList" style="display:none;">
+            <!-- Aquí se mostrarán las miniaturas de las Magic V encontradas -->
+          </div>
+        </div>
+      </section>
 
     <section id="mission2Screen" class="app-screen mission-screen">
-      <div class="screen-shell">
+      <div id="mission2Container" class="mission-visual-container">
         <header class="screen-header mission-header">
           <h2>Punto 2: Rutas de Patron</h2>
           <div class="guide-inline" id="guideInlineMission2"></div>
@@ -282,7 +359,7 @@
     </section>
 
     <section id="mission3Screen" class="app-screen mission-screen">
-      <div class="screen-shell">
+      <div id="mission3Container" class="mission-visual-container">
         <header class="screen-header mission-header">
           <h2>Punto 3: Taller de Generalizacion</h2>
           <div class="guide-inline" id="guideInlineMission3"></div>
@@ -300,7 +377,7 @@
     </section>
 
     <section id="mission4Screen" class="app-screen mission-screen">
-      <div class="screen-shell">
+      <div id="mission4Container" class="mission-visual-container">
         <header class="screen-header mission-header">
           <h2>Punto 4: Zona de Justificacion</h2>
           <div class="guide-inline" id="guideInlineMission4"></div>
@@ -318,7 +395,7 @@
     </section>
 
     <section id="mission5Screen" class="app-screen mission-screen">
-      <div class="screen-shell">
+      <div id="mission5Container" class="mission-visual-container">
         <header class="screen-header mission-header">
           <h2>Punto 5: Reinicio Final</h2>
           <div class="guide-inline" id="guideInlineMission5"></div>

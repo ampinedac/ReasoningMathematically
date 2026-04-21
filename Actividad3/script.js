@@ -1,9 +1,416 @@
+// --- Drag & Drop para Magic V (parteAm1) ---
+let draggingBtn = null;
+let dragGhost = null;
+let dragOriginIdx = null;
+
+function enableMagicVDragDrop() {
+  // Botones arrastrables
+  Array.from(magicVButtons.children).forEach((btn, idx) => {
+    btn.setAttribute("draggable", "true");
+    btn.addEventListener("dragstart", (e) => {
+      draggingBtn = btn;
+      dragOriginIdx = null;
+      dragGhost = btn.cloneNode(true);
+      dragGhost.style.position = "absolute";
+      dragGhost.style.pointerEvents = "none";
+      dragGhost.style.opacity = "0.7";
+      dragGhost.style.zIndex = "9999";
+      document.body.appendChild(dragGhost);
+      document.body.style.userSelect = "none";
+    });
+    btn.addEventListener("dragend", (e) => {
+      if (dragGhost) dragGhost.remove();
+      dragGhost = null;
+      draggingBtn = null;
+      dragOriginIdx = null;
+      document.body.style.userSelect = "";
+    });
+    // Touch events
+    btn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      draggingBtn = btn;
+      dragOriginIdx = null;
+      dragGhost = btn.cloneNode(true);
+      dragGhost.style.position = "absolute";
+      dragGhost.style.pointerEvents = "none";
+      dragGhost.style.opacity = "0.7";
+      dragGhost.style.zIndex = "9999";
+      document.body.appendChild(dragGhost);
+    });
+    btn.addEventListener("touchmove", (e) => {
+      if (!dragGhost) return;
+      const touch = e.touches[0];
+      dragGhost.style.left = (touch.clientX - 32) + "px";
+      dragGhost.style.top = (touch.clientY - 32) + "px";
+    });
+    btn.addEventListener("touchend", (e) => {
+      if (dragGhost) dragGhost.remove();
+      dragGhost = null;
+      draggingBtn = null;
+      dragOriginIdx = null;
+    });
+  });
+  // Círculos de la V como drop targets
+  for (let i = 0; i < 5; i++) {
+    const circle = document.getElementById(`v-pos-${i+1}`);
+    circle.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      circle.setAttribute("stroke", "#1976d2");
+    });
+    circle.addEventListener("dragleave", (e) => {
+      circle.setAttribute("stroke", "#6ec6ff");
+    });
+    circle.addEventListener("drop", (e) => {
+      e.preventDefault();
+      circle.setAttribute("stroke", "#6ec6ff");
+      if (!draggingBtn) return;
+      const num = Number(draggingBtn.dataset.num);
+      if (magicVState.v[i] === null && magicVState.available.includes(num)) {
+        magicVState.v[i] = num;
+        magicVState.available = magicVState.available.filter(n => n !== num);
+        renderMagicVBoard();
+      }
+      if (dragGhost) dragGhost.remove();
+      dragGhost = null;
+      draggingBtn = null;
+      dragOriginIdx = null;
+    });
+    // Touch drop
+    circle.addEventListener("touchmove", (e) => {
+      if (!dragGhost) return;
+      const touch = e.touches[0];
+      dragGhost.style.left = (touch.clientX - 32) + "px";
+      dragGhost.style.top = (touch.clientY - 32) + "px";
+    });
+    circle.addEventListener("touchend", (e) => {
+      if (!draggingBtn) return;
+      const num = Number(draggingBtn.dataset.num);
+      if (magicVState.v[i] === null && magicVState.available.includes(num)) {
+        magicVState.v[i] = num;
+        magicVState.available = magicVState.available.filter(n => n !== num);
+        renderMagicVBoard();
+      }
+      if (dragGhost) dragGhost.remove();
+      dragGhost = null;
+      draggingBtn = null;
+      dragOriginIdx = null;
+    });
+  }
+}
+
+
+// --- Estado para la misión 1 (debe ir antes de cualquier uso)
+let magicVState = {
+  v: [null, null, null, null, null], // posiciones de la V
+  available: [1, 2, 3, 4, 5],
+  found: [], // lista de Magic V encontradas (array de arrays)
+  fixedCore: null, // núcleo fijo para parte 2
+  v2: [null, null, null, null, null], // para parte 2
+  available2: [],
+  found2: [] // para permutaciones
+};
+
+// --- Misión 1: Magic V ---
+const parteAm1 = document.getElementById("parteAm1");
+const parteBm1 = document.getElementById("parteBm1");
+const magicVBoard = document.getElementById("magicVBoard");
+const magicVButtons = document.getElementById("magicVButtons");
+const magicVConfirmBtn = document.getElementById("magicVConfirmBtn");
+const magicVResetBtn = document.getElementById("magicVResetBtn");
+const magicVFeedback = document.getElementById("magicVFeedback");
+const magicVTotalInput = document.getElementById("magicVTotalInput");
+const magicVTotalCheckBtn = document.getElementById("magicVTotalCheckBtn");
+const magicVTotalFeedback = document.getElementById("magicVTotalFeedback");
+const magicVNextQ = document.getElementById("magicVNextQ");
+const magicVBoard2 = document.getElementById("magicVBoard2");
+const magicVButtons2 = document.getElementById("magicVButtons2");
+const magicVActions2 = document.getElementById("magicVActions2");
+const magicVSaveBtn = document.getElementById("magicVSaveBtn");
+const magicVResetBtn2 = document.getElementById("magicVResetBtn2");
+const magicVSaveFeedback = document.getElementById("magicVSaveFeedback");
+const magicVFoundList = document.getElementById("magicVFoundList");
+
+// Llamar a enableMagicVDragDrop después de renderizar los botones
+if (parteAm1 && parteBm1) {
+  renderMagicVBoard();
+  enableMagicVDragDrop();
+  // ...existing code...
+}
+
+function renderMagicVBoard() {
+  // Renderiza los números en los círculos de la V usando SVG <text>
+  const svg = magicVBoard.querySelector('svg');
+  // Elimina textos previos
+  svg.querySelectorAll('text.magicv-num').forEach(t => t.remove());
+  // Coordenadas de los círculos
+  const coords = [
+    {x:210, y:250}, // v-pos-1
+    {x:90,  y:70},  // v-pos-2
+    {x:150, y:160}, // v-pos-3
+    {x:270, y:160}, // v-pos-4
+    {x:330, y:70}   // v-pos-5
+  ];
+  for (let i = 0; i < 5; i++) {
+    const circle = document.getElementById(`v-pos-${i+1}`);
+    circle.setAttribute("data-index", i);
+    circle.style.cursor = magicVState.v[i] !== null ? "pointer" : "default";
+    // Si hay número, dibuja el texto SVG
+    if (magicVState.v[i] !== null) {
+      const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      t.setAttribute('x', coords[i].x);
+      t.setAttribute('y', coords[i].y + 8); // ajuste visual vertical
+      t.setAttribute('class', 'magicv-num');
+      t.textContent = magicVState.v[i];
+      svg.appendChild(t);
+    }
+  }
+  // Renderiza los botones disponibles
+  Array.from(magicVButtons.children).forEach((btn, idx) => {
+    const num = idx + 1;
+    btn.disabled = !magicVState.available.includes(num);
+  });
+}
+
+function resetMagicVBoard() {
+  magicVState.v = [null, null, null, null, null];
+  magicVState.available = [1,2,3,4,5];
+  renderMagicVBoard();
+  setMessage(magicVFeedback, "", "");
+}
+
+function handleMagicVButtonClick(e) {
+  const num = Number(e.target.dataset.num);
+  const emptyIdx = magicVState.v.findIndex(x => x === null);
+  if (emptyIdx !== -1 && magicVState.available.includes(num)) {
+    magicVState.v[emptyIdx] = num;
+    magicVState.available = magicVState.available.filter(n => n !== num);
+    renderMagicVBoard();
+  }
+}
+
+function handleMagicVCircleClick(e) {
+  const idx = Number(e.target.getAttribute("data-index"));
+  const val = magicVState.v[idx];
+  if (val !== null) {
+    magicVState.v[idx] = null;
+    magicVState.available.push(val);
+    magicVState.available.sort((a,b)=>a-b);
+    renderMagicVBoard();
+  }
+}
+
+function isMagicV(arr) {
+  // arr: [n1, n2, n3, n4, n5] en posiciones de la V
+  // Brazos: [0,2,1] y [0,3,4]
+  if (arr.some(x => x === null)) return false;
+  const left = arr[0] + arr[2] + arr[1];
+  const right = arr[0] + arr[3] + arr[4];
+  return left === right;
+}
+
+function handleMagicVConfirm() {
+  if (magicVState.v.some(x => x === null)) {
+    setMessage(magicVFeedback, "Completa toda la V antes de confirmar.", "bad");
+    return;
+  }
+  if (isMagicV(magicVState.v)) {
+    setMessage(magicVFeedback, "¡Encontraste una Magic V!", "good");
+    // Guardar y pasar a parteBm1
+    magicVState.found = [magicVState.v.slice()];
+    magicVState.fixedCore = magicVState.v[0];
+    // Mostrar parte B inmediatamente
+    parteAm1.style.display = "none";
+    parteBm1.style.display = "block";
+    setupMagicVPart2();
+  } else {
+    setMessage(magicVFeedback, "¿La suma de los brazos es igual?", "bad");
+  }
+}
+
+// --- Parte 2: total mágico y permutaciones ---
+function setupMagicVPart2() {
+  magicVTotalInput.value = "";
+  magicVTotalFeedback.textContent = "";
+  magicVNextQ.style.display = "none";
+  magicVBoard2.style.display = "none";
+  magicVButtons2.style.display = "none";
+  magicVActions2.style.display = "none";
+  magicVFoundList.style.display = "none";
+  magicVState.v2 = magicVState.found[0].slice();
+  magicVState.available2 = [1,2,3,4,5].filter(n => n !== magicVState.fixedCore);
+  renderMagicVBoard2();
+  renderMagicVButtons2();
+  renderMagicVFoundList();
+}
+
+function handleMagicVTotalCheck() {
+  const val = Number(magicVTotalInput.value);
+  const arr = magicVState.found[0];
+  const total = arr[0] + arr[2] + arr[1];
+  if (val === total) {
+    setMessage(magicVTotalFeedback, "¡Correcto!", "good");
+    magicVNextQ.style.display = "block";
+    magicVBoard2.style.display = "block";
+    magicVButtons2.style.display = "block";
+    magicVActions2.style.display = "block";
+    magicVFoundList.style.display = "block";
+  } else {
+    setMessage(magicVTotalFeedback, "Intenta de nuevo.", "bad");
+  }
+}
+
+function renderMagicVBoard2() {
+  for (let i = 0; i < 5; i++) {
+    const circle = document.getElementById(`v2-pos-${i+1}`);
+    circle.textContent = magicVState.v2[i] !== null ? magicVState.v2[i] : "";
+    circle.setAttribute("data-index2", i);
+    if (i === 0) {
+      circle.style.fill = "#ffe680";
+      circle.style.cursor = "not-allowed";
+    } else {
+      circle.style.fill = "#fff";
+      circle.style.cursor = magicVState.v2[i] !== null ? "pointer" : "default";
+    }
+  }
+}
+
+function renderMagicVButtons2() {
+  magicVButtons2.innerHTML = "";
+  magicVState.available2.forEach(num => {
+    const btn = document.createElement("button");
+    btn.className = "v-num-btn2";
+    btn.textContent = num;
+    btn.dataset.num2 = num;
+    btn.disabled = false;
+    magicVButtons2.appendChild(btn);
+  });
+}
+
+function handleMagicVButton2Click(e) {
+  const num = Number(e.target.dataset.num2);
+  const emptyIdx = magicVState.v2.findIndex((x,idx) => x === null && idx !== 0);
+  if (emptyIdx !== -1 && magicVState.available2.includes(num)) {
+    magicVState.v2[emptyIdx] = num;
+    magicVState.available2 = magicVState.available2.filter(n => n !== num);
+    renderMagicVBoard2();
+    renderMagicVButtons2();
+  }
+}
+
+function handleMagicVCircle2Click(e) {
+  const idx = Number(e.target.getAttribute("data-index2"));
+  if (idx === 0) return; // núcleo fijo
+  const val = magicVState.v2[idx];
+  if (val !== null) {
+    magicVState.v2[idx] = null;
+    magicVState.available2.push(val);
+    magicVState.available2.sort((a,b)=>a-b);
+    renderMagicVBoard2();
+    renderMagicVButtons2();
+  }
+}
+
+function isMagicV2(arr) {
+  if (arr.some(x => x === null)) return false;
+  const left = arr[0] + arr[2] + arr[1];
+  const right = arr[0] + arr[3] + arr[4];
+  return left === right;
+}
+
+function handleMagicVSave() {
+  if (magicVState.v2.some(x => x === null)) {
+    setMessage(magicVSaveFeedback, "Completa toda la V antes de guardar.", "bad");
+    return;
+  }
+  if (!isMagicV2(magicVState.v2)) {
+    setMessage(magicVSaveFeedback, "No es una Magic V.", "bad");
+    return;
+  }
+  // Revisar si ya existe
+  const exists = magicVState.found2.some(v => v.join('-') === magicVState.v2.join('-'));
+  if (exists) {
+    setMessage(magicVSaveFeedback, "Ya encontraste esta Magic V.", "bad");
+    highlightFoundV(magicVState.v2);
+    return;
+  }
+  magicVState.found2.push(magicVState.v2.slice());
+  renderMagicVFoundList();
+  setMessage(magicVSaveFeedback, "Magic V guardada.", "good");
+  if (magicVState.found2.length >= 8) {
+    setMessage(magicVSaveFeedback, "¡Has encontrado todas las permutaciones!", "good");
+  }
+}
+
+function handleMagicVReset2() {
+  magicVState.v2 = [magicVState.fixedCore, null, null, null, null];
+  magicVState.available2 = [1,2,3,4,5].filter(n => n !== magicVState.fixedCore);
+  renderMagicVBoard2();
+  renderMagicVButtons2();
+  setMessage(magicVSaveFeedback, "", "");
+}
+
+function renderMagicVFoundList() {
+  magicVFoundList.innerHTML = "";
+  magicVState.found2.forEach((v, idx) => {
+    const mini = document.createElement("div");
+    mini.className = "magicv-mini-v";
+    mini.innerHTML = v.map((n,i) => `<span class='mini-v-num mini-v-num${i}'>${n}</span>`).join("");
+    magicVFoundList.appendChild(mini);
+  });
+}
+
+function highlightFoundV(arr) {
+  // Ilumina la miniatura correspondiente
+  const idx = magicVState.found2.findIndex(v => v.join('-') === arr.join('-'));
+  if (idx !== -1) {
+    const mini = magicVFoundList.children[idx];
+    if (mini) {
+      mini.style.background = "yellow";
+      setTimeout(()=>{ mini.style.background = ""; }, 1000);
+    }
+  }
+}
+
+// --- Eventos ---
+if (parteAm1 && parteBm1) {
+  // Mostrar parteAm1 al abrir misión 1
+  const mission1Screen = document.getElementById("mission1Screen");
+  if (mission1Screen) {
+    mission1Screen.addEventListener("show", () => {
+      parteAm1.style.display = "block";
+      parteBm1.style.display = "none";
+      resetMagicVBoard();
+    });
+  }
+  renderMagicVBoard();
+  magicVButtons.addEventListener("click", function(e){
+    if (e.target.classList.contains("v-num-btn")) handleMagicVButtonClick(e);
+  });
+  magicVBoard.addEventListener("click", function(e){
+    if (e.target.tagName === "circle" && e.target.hasAttribute("data-index")) handleMagicVCircleClick(e);
+  });
+  magicVConfirmBtn.addEventListener("click", handleMagicVConfirm);
+  magicVResetBtn.addEventListener("click", resetMagicVBoard);
+  magicVTotalCheckBtn.addEventListener("click", handleMagicVTotalCheck);
+  magicVButtons2.addEventListener("click", function(e){
+    if (e.target.classList.contains("v-num-btn2")) handleMagicVButton2Click(e);
+  });
+  magicVBoard2.addEventListener("click", function(e){
+    if (e.target.tagName === "circle" && e.target.hasAttribute("data-index2")) handleMagicVCircle2Click(e);
+  });
+  magicVSaveBtn.addEventListener("click", handleMagicVSave);
+  magicVResetBtn2.addEventListener("click", handleMagicVReset2);
+}
 // Muestra solo la sección con el id dado y oculta las demás secciones principales
 function showScreen(screenId) {
-  const screens = document.querySelectorAll('.screen'); // Usa la clase 'screen' para identificar secciones
+  const screens = document.querySelectorAll('.app-screen');
   screens.forEach(s => s.style.display = 'none');
   const target = document.getElementById(screenId);
   if (target) target.style.display = 'block';
+  // Si se muestra el mapa, renderizar y sincronizar fog
+  if (screenId === "mapScreen") {
+    renderMap();
+  }
 }
 // Convierte una cadena a formato título (primera letra de cada palabra en mayúscula)
 function toTitle(str) {
@@ -24,7 +431,10 @@ function getInitialSessionData() {
 
 
 let sessionData = getInitialSessionData();
-// Parche defensivo: asegurar que mission2 existe y tiene audioSubmitted
+// Parche defensivo: asegurar que missionsCompleted existe y es un array
+if (!Array.isArray(sessionData.missionsCompleted)) {
+  sessionData.missionsCompleted = [];
+}
 
 // Parche defensivo: asegurar que mission2 existe y tiene audioSubmitted
 if (typeof sessionData.mission2 === 'undefined') {
@@ -131,7 +541,7 @@ async function handleMission2AudioSubmit() {
   syncMission2AudioButtons();
   setMessage(mission2AudioStatus, "Subiendo audio...", "");
   try {
-    const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc, serverTimestamp } = firebaseServices;
+    const { storage, db, ref, uploadBytes, getDownloadURL, collection, addDoc } = firebaseServices;
     const basePath = buildMission2ExplorationStorageBasePath();
     const fileName = buildMission2ExplorationFileName();
     const storageRef = ref(storage, `${basePath}/${fileName}.webm`);
@@ -147,7 +557,6 @@ async function handleMission2AudioSubmit() {
       storageBasePath: basePath,
       fileName: `${fileName}.webm`,
       audioURL,
-      timestamp: serverTimestamp()
     });
     sessionData.mission2.audioSubmitted = true;
     setMessage(mission2AudioStatus, "✅ Audio enviado correctamente.", "good");
@@ -563,25 +972,39 @@ function renderMagicVSavedTable() {
   }
   const rows = sessionData.mission1.saved.map((comb, index) => {
     const sumaCell = comb.sumaMagica !== null
-      ? `<span class=\"magicv-suma-confirmed\">✔ ${comb.sumaMagica}</span>`
-      : `<span class=\"magicv-suma-pending\">Sin verificar</span>`;
+      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
+      : `<span class="magicv-suma-pending">Sin verificar</span>`;
     let permutacionesHtml = "";
     if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class=\"magicv-permutaciones-list\">` +
+      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
         comb.permutaciones.map((perm) => `
-          <div class=\"magicv-mini-board magicv-mini-board-permutacion\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${perm.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${perm.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${perm.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${perm.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${perm.bottom}</span>\n          </div>`).join("") + `</div>`;
+          <div class="magicv-mini-board magicv-mini-board-permutacion">
+            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
+          </div>`).join("") + `</div>`;
     }
     return `<tr>
       <td>
-        <div class=\"magicv-saved-item-label\">V válida ${index + 1}</div>
-        <div class=\"magicv-v-group\">\n          <div class=\"magicv-mini-board\">\n            <span class=\"magicv-mini-dot\" data-slot=\"leftTop\">${comb.leftTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightTop\">${comb.rightTop}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"leftMid\">${comb.leftMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"rightMid\">${comb.rightMid}</span>\n            <span class=\"magicv-mini-dot\" data-slot=\"bottom\">${comb.bottom}</span>\n          </div>\n          ${permutacionesHtml}
+        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
+        <div class="magicv-v-group">
+          <div class="magicv-mini-board">
+            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
+            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
+            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
+            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
+            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
+          </div>
+          ${permutacionesHtml}
         </div>
       </td>
-      <td class=\"magicv-suma-cell\">${sumaCell}</td>
+      <td class="magicv-suma-cell">${sumaCell}</td>
     </tr>`;
   }).join("");
   return `
-    <table class=\"magicv-saved-table\">
+    <table class="magicv-saved-table">
       <thead>
         <tr>
           <th>Magic V</th>
@@ -709,6 +1132,14 @@ function setupEntryFlow() {
     activityApp.style.display = "block";
     showScreen("introductionScreen");
   });
+
+// Botón para continuar desde la leyenda a la selección de animal guía
+const continueToCharacterBtn = document.getElementById("continueToCharacterBtn");
+if (continueToCharacterBtn) {
+  continueToCharacterBtn.addEventListener("click", () => {
+    showScreen("characterMissionScreen");
+  });
+}
 }
 
 function handleCodeSubmit() {
@@ -781,7 +1212,11 @@ function setupIntroductionScreen() {
   }
 
   startIntroBtn.addEventListener("click", () => {
-    registerTimestamp("introductionViewed");
+    // Oculta toda la caja de la introducción
+    const introScreen = document.getElementById("introductionScreen");
+    if (introScreen) {
+      introScreen.style.display = "none";
+    }
     showScreen("characterMissionScreen");
   });
 }
@@ -826,9 +1261,13 @@ function setupCharacterMission() {
 
     sessionData.progress = 1;
     saveSessionProgress();
-    registerTimestamp("characterSelected");
     hydrateGuideBadges();
     renderMap();
+    // Oculta la pantalla de selección de personaje
+    const characterScreen = document.getElementById("characterMissionScreen");
+    if (characterScreen) {
+      characterScreen.style.display = "none";
+    }
     showScreen("mapScreen");
   });
 }
@@ -968,8 +1407,10 @@ function getCurrentAvailableMission() {
 
 function openMission(mission) {
   setMessage(mapHint, `Abriendo mision ${mission}...`, "good");
+  // Oculta el mapa antes de mostrar la misión
+  const mapScreen = document.getElementById("mapScreen");
+  if (mapScreen) mapScreen.style.display = "none";
   showScreen(`mission${mission}Screen`);
-  registerTimestamp(`mission${mission}Opened`);
 }
 
 function renderMap() {
@@ -1222,6 +1663,41 @@ function normalizeStorageSegment(value) {
     .replace(/\s+/g, "-")
     .toLowerCase();
 }
+
+// Muestra el animal guía seleccionado en el badge del mapa
+function hydrateGuideBadges() {
+  if (!guideBadge || !sessionData.character) {
+    guideBadge.innerHTML = "";
+    return;
+  }
+  guideBadge.innerHTML = `
+    <div class="guide-dragger" title="${sessionData.character.name}">
+      <img src="${sessionData.character.image}" alt="${sessionData.character.name}" class="guide-badge-img">
+    </div>
+    <span class="guide-badge-name">${sessionData.character.name}</span>
+  `;
+}
+
+// Renderiza el badge del guía en todos los contenedores de misión
+function renderGuideBadgeInMissions() {
+  const badgeHtml = sessionData.character ? `
+    <div class="guide-dragger" title="${sessionData.character.name}">
+      <img src="${sessionData.character.image}" alt="${sessionData.character.name}" class="guide-badge-img">
+    </div>
+    <span class="guide-badge-name">${sessionData.character.name}</span>
+  ` : "";
+  for (let i = 1; i <= 5; i++) {
+    const inline = document.getElementById(`guideInlineMission${i}`);
+    if (inline) inline.innerHTML = badgeHtml;
+  }
+}
+
+// Modificar hydrateGuideBadges para que también actualice en misiones
+const originalHydrateGuideBadges = hydrateGuideBadges;
+hydrateGuideBadges = function() {
+  originalHydrateGuideBadges();
+  renderGuideBadgeInMissions();
+};
 
 
 
