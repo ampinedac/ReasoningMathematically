@@ -1,9 +1,11 @@
-
 #introductionScreen {
-  display: flex;
   flex-direction: column;
-  justify-content: center;
-  min-height: 100vh;
+  justify-content: center; /* Centrado vertical del contenido */
+  align-items: center; /* Centrado horizontal del contenido */
+  flex: 1 1 0%; /* Ajusta el tamaño del contenedor */
+  height: 100%; /* Asegura altura completa */
+  box-sizing: border-box;
+  display: none; /* Se muestra solo cuando se activa el flujo */
 }
 /* Centrado horizontal de la V y los botones */
 .magic-v-board {
@@ -134,12 +136,17 @@
 
 body {
   margin: 0; /* Elimina margenes por defecto del navegador */
-  min-height: 100vh; /* Asegura altura minima completa de ventana */
+  height: 100vh; /* Asegura altura minima completa de ventana */
+  min-height: 100vh; /* Asegura altura total para pantallas internas */
   font-family: 'Rancho', cursive; /* Tipografia principal de la experiencia */
-  font-size: clamp(1.5rem, 1.5vw, 1.5rem); /* Escala de texto responsiva */
+  font-size: clamp(2rem, 2vw, 2rem); /* Escala de texto responsiva */
   color: var(--texto); /* Color de texto base */
   background: url("assets/images/Fondo.png") no-repeat center center fixed; /* Fondo principal del escenario */
   background-size: cover; /* Ajusta imagen de fondo para cubrir toda la pantalla */
+  display: flex; /* Usa flex para centrar contenido */
+  flex-direction: column; /* Apila en columna */
+  align-items: stretch; /* Centra contenido verticalmente en body */
+  justify-content: stretch; /* Centra contenido horizontalmente en body */
 }
 
 /* ======================================
@@ -301,134 +308,147 @@ body {
    5) Estructura general del app
    ====================================== */
 #activityApp {
-  min-height: 100vh; /* Asegura altura total para pantallas internas */
-  width: 100%; /* Ocupa ancho completo */
+  height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  display: none; /* Se muestra solo cuando se activa el flujo */
+  flex-direction: column;
 }
 
 .app-screen {
-  display: none; /* Oculta todas las pantallas por defecto */
-  min-height: 100vh; /* Garantiza alto completo */
-  padding: clamp(14px, 3vw, 28px); /* Respira en bordes para responsive */
-  align-items: center; /* Centra verticalmente contenido */
-  justify-content: center; /* Centra horizontalmente contenido */
+  display: none;
+  flex: 1 1 0%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .active-screen {
-  display: flex; /* Muestra la pantalla activa con flex para centrado */
+  display: flex;
 }
 
 .screen-shell {
-  width: min(1200px, 100%); /* Limita ancho maximo en desktop */
-  margin: 0 auto; /* Centra el contenedor principal */
-  border: 2px solid var(--borde); /* Borde principal del modulo */
-  border-radius: 26px; /* Redondeo grande de modulo */
-  background: var(--glass); /* Fondo translusido */
-  box-shadow: var(--sombra); /* Sombra envolvente */
-  padding: clamp(16px, 2.8vw, 28px); /* Espaciado interno adaptable */
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  border: 2px solid var(--borde);
+  border-radius: 26px;
+  background: var(--glass);
+  box-shadow: var(--sombra);
+  padding: clamp(16px, 2.8vw, 28px);
 }
 
 .screen-header {
-  display: flex; /* Organiza titulo y apoyo en fila */
-  justify-content: space-between; /* Separa extremos de cabecera */
-  align-items: center; /* Alinea verticalmente elementos */
-  gap: 12px; /* Espacio interno entre columnas */
-  margin-bottom: 18px; /* Separacion inferior de cabecera */
+  display: flex; /* Usa flex para alinear titulo y subtitulo */
+  flex-direction: row; 
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
 .screen-header h2 {
-  margin: 0; /* Elimina margen por defecto del h2 */
-  font-family: 'Lobster Two', cursive; /* Tipografia de titulo de pantalla */
-  font-size: clamp(1.8rem, 4vw, 2.8rem); /* Escala responsiva de h2 */
+  margin: 0;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
 }
 
 .screen-header p {
-  margin: 4px 0 0 0; /* Espacio superior ligero respecto al h2 */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
-  color: var(--texto-suave); /* Color secundario */
+  margin: 4px 0 0 0;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+  color: var(--texto-suave);
 }
 
 /* ======================================
    6) Mision inicial: seleccion de personaje
    ====================================== */
+
+.characterMissionScreen {
+  display: flex;
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  height: 100vh;
+}
+
 .character-grid {
-  display: grid; /* Rejilla para tarjetas de personaje */
-  grid-template-columns: repeat(3, minmax(170px, 1fr)); /* Tres guias por fila en desktop */
-  gap: 14px; /* Separacion uniforme entre tarjetas */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(170px, 1fr));
+  gap: 14px;
 }
 
 .character-card {
-  border: 2px solid #9ec4ea; /* Borde base de tarjeta */
-  border-radius: 18px; /* Esquinas redondeadas */
-  background: linear-gradient(150deg, rgba(255, 255, 255, 0.95), rgba(206, 239, 255, 0.87)); /* Fondo degradado suave */
-  padding: 12px; /* Espaciado interno de tarjeta */
-  display: grid; /* Layout vertical para imagen y nombre */
-  gap: 8px; /* Separacion entre contenido */
-  justify-items: center; /* Centra elementos de la grilla */
-  cursor: pointer; /* Cursor de seleccion */
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; /* Transicion de seleccion */
+  border: 2px solid #9ec4ea;
+  border-radius: 18px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.95), rgba(206, 239, 255, 0.87));
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .character-card:hover {
-  transform: translateY(-4px); /* Levanta tarjeta en hover */
-  box-shadow: 0 10px 22px rgba(77, 123, 187, 0.27); /* Sombra de interaccion */
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(77, 123, 187, 0.27);
 }
 
 .character-card.selected {
-  border-color: #1f8dff; /* Borde activo de seleccion */
-  box-shadow: 0 0 0 4px rgba(36, 140, 255, 0.23); /* Resalte externo de tarjeta activa */
+  border-color: #1f8dff;
+  box-shadow: 0 0 0 4px rgba(36, 140, 255, 0.23);
 }
 
 .character-card img {
-  width: 100%; /* Hace imagen adaptable al ancho de tarjeta */
-  height: 110px; /* Alto consistente en todas las tarjetas */
-  object-fit: contain; /* Ajusta imagen sin recorte */
+  width: 100%;
+  height: 110px;
+  object-fit: contain;
 }
 
 .character-card span {
-  font-family: 'Lobster Two', cursive; /* Tipografia de nombre de personaje */
-  font-size: 1.25rem; /* Tamano legible para nombres */
+  font-family: 'Lobster Two', cursive;
+  font-size: 1.25rem;
 }
 
 .character-footer {
-  margin-top: 16px; /* Espacio respecto de la grilla */
-  display: flex; /* Organiza estado y boton */
-  flex-wrap: wrap; /* Permite salto de linea en movil */
-  align-items: center; /* Centra verticalmente */
-  justify-content: space-between; /* Distribuye extremos */
-  gap: 12px; /* Espaciado entre controles */
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .status-pill {
-  margin: 0; /* Elimina margen de parrafo */
-  padding: 9px 14px; /* Espacio interno tipo chip */
-  border-radius: 999px; /* Forma de capsula */
-  background: linear-gradient(160deg, #f2f8ff 0%, #deedff 100%); /* Fondo claro de estado */
-  border: 1px solid #b8d5f3; /* Delimita visualmente el estado */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
+  margin: 0;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: linear-gradient(160deg, #f2f8ff 0%, #deedff 100%);
+  border: 1px solid #b8d5f3;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
 }
 
 .status-pill.good {
-  color: #11784f; /* Color de exito */
-  border-color: #76d0ad; /* Borde verde suave */
-  background: linear-gradient(160deg, #e5fff4 0%, #d7ffec 100%); /* Fondo de exito */
+  color: #11784f;
+  border-color: #76d0ad;
+  background: linear-gradient(160deg, #e5fff4 0%, #d7ffec 100%);
 }
 
 .status-pill.bad {
-  color: #9d2c46; /* Color de error */
-  border-color: #f0a0b3; /* Borde rojo suave */
-  background: linear-gradient(160deg, #ffeef3 0%, #ffe2ea 100%); /* Fondo de error */
+  color: #9d2c46;
+  border-color: #f0a0b3;
+  background: linear-gradient(160deg, #ffeef3 0%, #ffe2ea 100%);
 }
 
 /* ======================================
    7) Mapa de misiones (visual principal)
    ====================================== */
 .map-shell {
-  position: relative; /* Permite posicionar overlays decorativos */
-  overflow: hidden; /* Oculta excedentes visuales del mapa */
+  position: relative;
+  overflow: hidden;
 }
 
 .map-header {
-  margin-bottom: 10px; /* Ajuste de separacion en cabecera del mapa */
+  margin-bottom: 10px;
 }
 
 .guide-inline {
@@ -465,7 +485,7 @@ body {
 }
 
 .guide-dragger:active {
-  cursor: grabbing; /* Cursor durante arrastre */
+  cursor: grabbing;
 }
 
 .guide-badge img, .guide-inline img {
@@ -531,316 +551,314 @@ body {
 
 
 .guide-drag-ghost {
-  position: fixed; /* Sigue el puntero en pantalla */
-  left: 0; /* Posicion inicial, luego se actualiza por JS */
-  top: 0; /* Posicion inicial, luego se actualiza por JS */
-  width: 56px; /* Tamano del avatar flotante */
-  height: 56px; /* Tamano vertical del avatar flotante */
-  transform: translate(-50%, -50%); /* Centra sobre el puntero */
-  border-radius: 50%; /* Forma circular */
-  border: 2px solid #7fb9ff; /* Borde visual del avatar flotante */
-  background: rgba(255, 255, 255, 0.95); /* Fondo de contraste */
-  box-shadow: 0 10px 22px rgba(37, 74, 130, 0.35); /* Sombra para separarlo del fondo */
-  display: flex; /* Centra imagen interna */
-  align-items: center; /* Centra imagen verticalmente */
-  justify-content: center; /* Centra imagen horizontalmente */
-  pointer-events: none; /* No bloquea deteccion del objetivo */
-  z-index: 9999; /* Siempre por encima durante arrastre */
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 56px;
+  height: 56px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid #7fb9ff;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 22px rgba(37, 74, 130, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
 }
 
 .guide-drag-ghost img {
-  width: 86%; /* Escala imagen dentro del avatar flotante */
-  height: 86%; /* Escala imagen dentro del avatar flotante */
-  object-fit: contain; /* Conserva proporcion */
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
 }
 
-
-
 .map-stage {
-  position: relative; /* Contexto de posicion para nodos */
-  width: 100%; /* Ocupa ancho completo del shell */
-  min-height: 620px; /* Altura minima del escenario del mapa */
-  border-radius: 20px; /* Redondeo del escenario */
-  background-image: url("assets/images/NumetrixMapa.png"); /* Imagen del mapa */
-  background-size: cover; /* Cubre todo el area */
-  background-position: center; /* Centra la imagen */
-  background-repeat: no-repeat; /* Sin repeticion */
-  border: 2px solid #acd0f2; /* Marco del mapa */
-  overflow: hidden; /* Recorta decoracion al contenedor */
+  position: relative;
+  width: 100%;
+  min-height: 620px;
+  border-radius: 20px;
+  background-image: url("assets/images/NumetrixMapa.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #acd0f2;
+  overflow: hidden;
 }
 
 .map-layer-canvas {
-  position: absolute; /* Superpone capas dinamicas sobre el mapa */
-  inset: 0; /* Cubre todo el escenario */
-  width: 100%; /* Mantiene ancho completo del canvas */
-  height: 100%; /* Mantiene alto completo del canvas */
-  pointer-events: none; /* No interfiere con nodos ni arrastre */
-  border-radius: 18px; /* Respeta las esquinas del mapa */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: 18px;
 }
 
 .map-glow-layer {
-  z-index: 2; /* Debajo de la niebla y de los nodos */
-  filter: blur(14px) saturate(0.82); /* Glow mas suave y menos invasivo */
-  opacity: 0.72; /* Reduce presencia del halo */
+  z-index: 2;
+  filter: blur(14px) saturate(0.82);
+  opacity: 0.72;
 }
 
 .map-fog-layer {
-  z-index: 3; /* Encima del glow, debajo de nodos */
-  filter: blur(10px); /* Difumina borde entre sectores revelados */
-  transform: scale(1.03); /* Evita ver recorte duro en bordes tras blur */
-  transform-origin: center; /* Mantiene expansion centrada */
+  z-index: 3;
+  filter: blur(10px);
+  transform: scale(1.03);
+  transform-origin: center;
 }
 
 .map-aura {
-  position: absolute; /* Posicionamiento libre de auras */
-  border-radius: 999px; /* Forma circular suave */
-  filter: blur(2px); /* Difumina bordes del halo */
-  opacity: 0.6; /* Transparencia ambiental */
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(2px);
+  opacity: 0.6;
 }
 
 .map-aura-1 {
-  width: 320px; /* Tamano del primer halo */
-  height: 320px; /* Tamano vertical del primer halo */
-  left: -80px; /* Posicion horizontal del halo */
-  top: -60px; /* Posicion vertical del halo */
-  background: radial-gradient(circle, rgba(255, 214, 235, 0.85), rgba(255, 214, 235, 0)); /* Color del primer halo */
+  width: 320px;
+  height: 320px;
+  left: -80px;
+  top: -60px;
+  background: radial-gradient(circle, rgba(255, 214, 235, 0.85), rgba(255, 214, 235, 0));
 }
 
 .map-aura-2 {
-  width: 360px; /* Tamano del segundo halo */
-  height: 360px; /* Tamano vertical del segundo halo */
-  right: -120px; /* Posicion horizontal del halo */
-  bottom: -120px; /* Posicion vertical del halo */
-  background: radial-gradient(circle, rgba(181, 240, 244, 0.9), rgba(181, 240, 244, 0)); /* Color del segundo halo */
+  width: 360px;
+  height: 360px;
+  right: -120px;
+  bottom: -120px;
+  background: radial-gradient(circle, rgba(181, 240, 244, 0.9), rgba(181, 240, 244, 0));
 }
 
 .map-shape,
 .map-paths {
-  position: absolute; /* Superpone vectores en el escenario */
-  inset: 0; /* Estira SVG al total del contenedor */
-  width: 100%; /* Mantiene ancho completo */
-  height: 100%; /* Mantiene alto completo */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .map-shape path {
-  fill: rgba(218, 236, 255, 0.88); /* Relleno del mapa conceptual */
-  stroke: rgba(112, 158, 211, 0.7); /* Borde del mapa conceptual */
-  stroke-width: 4; /* Grosor del borde del mapa */
-  filter: drop-shadow(0 6px 14px rgba(70, 117, 176, 0.35)); /* Sombra para profundidad */
+  fill: rgba(218, 236, 255, 0.88);
+  stroke: rgba(112, 158, 211, 0.7);
+  stroke-width: 4;
+  filter: drop-shadow(0 6px 14px rgba(70, 117, 176, 0.35));
 }
 
 .map-paths path {
-  fill: none; /* Sin relleno en caminos */
-  stroke: rgba(255, 245, 165, 0.95); /* Color luminoso de caminos */
-  stroke-width: 9; /* Grosor de camino */
-  stroke-linecap: round; /* Extremos redondeados del camino */
-  stroke-dasharray: 14 12; /* Patrin punteado brillante */
-  animation: flowPath 6s linear infinite; /* Movimiento continuo de camino */
+  fill: none;
+  stroke: rgba(255, 245, 165, 0.95);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 14 12;
+  animation: flowPath 6s linear infinite;
 }
 
 .mission-node {
-  position: absolute; /* Permite ubicar nodos en coordenadas del mapa */
-  transform: translate(-50%, -50%); /* Centra el nodo respecto al punto */
-  display: grid; /* Ordena boton y etiquetas */
-  justify-items: center; /* Centra hijos del nodo */
-  gap: 4px; /* Espaciado vertical interno */
-  z-index: 6; /* Mantiene nodos por encima de niebla y glow */
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  z-index: 6;
 }
 
 .node-button {
-  width: 78px; /* Ancho del marcador */
-  height: 86px; /* Alto del marcador */
-  border: none; /* Sin borde para usar la imagen completa */
-  border-radius: 0; /* La forma la define la imagen */
-  background: url("assets/images/marcador-de-posicion.png") no-repeat center center; /* Imagen marcador */
-  background-size: contain; /* Mantiene proporcion del marcador */
-  filter: drop-shadow(0 7px 11px rgba(33, 63, 109, 0.42)); /* Sombra del marcador */
-  cursor: pointer; /* Cursor de interaccion */
-  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease; /* Animacion de hover en nodo */
+  width: 78px;
+  height: 86px;
+  border: none;
+  border-radius: 0;
+  background: url("assets/images/marcador-de-posicion.png") no-repeat center center;
+  background-size: contain;
+  filter: drop-shadow(0 7px 11px rgba(33, 63, 109, 0.42));
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
 .node-button:hover {
-  transform: scale(1.06) translateY(-2px); /* Aumenta ligeramente en hover */
+  transform: scale(1.06) translateY(-2px);
 }
 
 .node-caption {
-  display: inline-flex; /* Alinea texto e icono en una sola fila */
-  align-items: center; /* Centra texto e icono verticalmente */
-  gap: 6px; /* Espacio entre nombre de mision y estado */
-  padding: 4px 10px; /* Espaciado interno del contenedor */
-  border-radius: 999px; /* Forma de capsula */
-  border: 1px solid rgba(255, 255, 255, 0.88); /* Borde sutil luminoso */
-  background: rgba(255, 255, 255, 0.73); /* Fondo blanco semitransparente */
-  backdrop-filter: blur(5px); /* Efecto difuminado sobre el mapa */
-  box-shadow: 0 6px 12px rgba(38, 58, 94, 0.22); /* Sombra de separacion */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.73);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 6px 12px rgba(38, 58, 94, 0.22);
 }
 
 .node-label {
-  font-family: 'Lobster Two', cursive; /* Fuente de etiqueta de mision */
-  font-size: 1rem; /* Tamano de etiqueta */
-  color: #15386b; /* Color de etiqueta */
-  line-height: 1; /* Compacta la etiqueta en la capsula */
+  font-family: 'Lobster Two', cursive;
+  font-size: 1rem;
+  color: #15386b;
+  line-height: 1;
 }
 
 .node-state {
-  font-size: 1rem; /* Tamano del indicador de estado */
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif; /* Garantiza render de iconos */
-  line-height: 1; /* Compacta la altura de la linea del icono */
+  font-size: 1rem;
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif;
+  line-height: 1;
 }
 
 .mission-node.locked .node-button {
-  opacity: 0.62; /* Atenua marcador bloqueado */
-  filter: grayscale(0.65) drop-shadow(0 5px 9px rgba(90, 98, 118, 0.32)); /* Estilo apagado bloqueado */
-  cursor: not-allowed; /* Cursor de bloqueo */
+  opacity: 0.62;
+  filter: grayscale(0.65) drop-shadow(0 5px 9px rgba(90, 98, 118, 0.32));
+  cursor: not-allowed;
 }
 
 .mission-node.available .node-button {
-  filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35)); /* Brillo de disponibilidad */
+  filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35));
 }
 
 .map-stage.dragging-guide .mission-node.available .node-button {
-  filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35)); /* Mantiene brillo del objetivo durante arrastre */
+  filter: drop-shadow(0 0 10px rgba(80, 173, 255, 0.75)) drop-shadow(0 10px 14px rgba(52, 119, 192, 0.35));
 }
 
 .map-stage.dragging-guide .mission-node.drop-hover .node-button {
-  transform: scale(1.1) translateY(-3px); /* Resalta objetivo al pasar encima */
-  filter: drop-shadow(0 0 14px rgba(251, 221, 82, 0.95)) drop-shadow(0 10px 14px rgba(194, 149, 42, 0.44)); /* Brillo dorado de destino valido */
+  transform: scale(1.1) translateY(-3px);
+  filter: drop-shadow(0 0 14px rgba(251, 221, 82, 0.95)) drop-shadow(0 10px 14px rgba(194, 149, 42, 0.44));
 }
 
 .map-stage.dragging-guide .mission-node.drop-hover .node-caption {
-  border-color: rgba(255, 233, 128, 0.98); /* Borde dorado al estar listo para soltar */
-  background: rgba(255, 251, 223, 0.86); /* Fondo dorado suave del label */
+  border-color: rgba(255, 233, 128, 0.98);
+  background: rgba(255, 251, 223, 0.86);
 }
 
 .mission-node.completed .node-button {
-  filter: drop-shadow(0 0 10px rgba(29, 194, 122, 0.8)) drop-shadow(0 10px 14px rgba(36, 150, 109, 0.34)); /* Brillo verde de completado */
+  filter: drop-shadow(0 0 10px rgba(29, 194, 122, 0.8)) drop-shadow(0 10px 14px rgba(36, 150, 109, 0.34));
 }
 
 .mission-node.locked .node-caption {
-  border-color: rgba(207, 216, 230, 0.95); /* Borde de etiqueta bloqueada */
-  background: rgba(247, 249, 254, 0.76); /* Fondo de etiqueta bloqueada */
+  border-color: rgba(207, 216, 230, 0.95);
+  background: rgba(247, 249, 254, 0.76);
 }
 
 .mission-node.available .node-caption {
-  border-color: rgba(167, 216, 255, 0.95); /* Borde de etiqueta desbloqueada */
+  border-color: rgba(167, 216, 255, 0.95);
 }
 
 .mission-node.completed .node-caption {
-  border-color: rgba(142, 224, 191, 0.95); /* Borde de etiqueta completada */
-  background: rgba(239, 255, 247, 0.78); /* Fondo de etiqueta completada */
+  border-color: rgba(142, 224, 191, 0.95);
+  background: rgba(239, 255, 247, 0.78);
 }
 
 .math-star {
-  position: absolute; /* Ubicacion libre de estrellas */
-  width: 14px; /* Tamano de estrella */
-  height: 14px; /* Tamano de estrella en vertical */
-  background: radial-gradient(circle, #fff9ba 0%, #ffde66 60%, #ffde6600 100%); /* Gradiente estrella */
-  border-radius: 50%; /* Forma redonda de destello */
-  box-shadow: 0 0 12px #ffe681; /* Brillo externo de estrella */
-  animation: twinkle 1.8s ease-in-out infinite alternate; /* Animacion de parpadeo */
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: radial-gradient(circle, #fff9ba 0%, #ffde66 60%, #ffde6600 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 12px #ffe681;
+  animation: twinkle 1.8s ease-in-out infinite alternate;
 }
 
 .gear {
-  position: absolute; /* Posicionamiento de engranajes */
-  width: 74px; /* Tamano de engranaje */
-  height: 74px; /* Alto de engranaje */
-  border-radius: 50%; /* Base circular del engranaje */
-  border: 7px dotted rgba(100, 145, 199, 0.55); /* Borde punteado simbolizando dientes */
-  animation: rotateGear 9s linear infinite; /* Rotacion continua */
-  z-index: 1; /* Queda bajo la niebla del mapa */
+  position: absolute;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 7px dotted rgba(100, 145, 199, 0.55);
+  animation: rotateGear 9s linear infinite;
+  z-index: 1;
 }
 
 .gear-a {
-  left: 14%; /* Posicion horizontal del primer engranaje */
-  bottom: 14%; /* Posicion vertical del primer engranaje */
+  left: 14%;
+  bottom: 14%;
 }
 
 .gear-b {
-  right: 16%; /* Posicion horizontal del segundo engranaje */
-  top: 18%; /* Posicion vertical del segundo engranaje */
-  animation-direction: reverse; /* Giro opuesto para dinamismo */
+  right: 16%;
+  top: 18%;
+  animation-direction: reverse;
 }
 
 .map-hint {
-  margin: 14px 0 0 0; /* Separacion respecto al mapa */
-  text-align: center; /* Centra mensaje de guia */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
-  color: var(--texto-suave); /* Color secundario del mensaje */
+  margin: 14px 0 0 0;
+  text-align: center;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+  color: var(--texto-suave);
 }
 
 /* ======================================
    7.5) Pantalla de introduccion (narrativa)
    ====================================== */
 .introduction-shell {
-  background: linear-gradient(160deg, rgba(241, 241, 255, 0.94), rgba(230, 243, 255, 0.92)); /* Fondo narrativo */
-  max-width: 920px; /* Limite de ancho para legibilidad de narrativa */
+  background: linear-gradient(160deg, rgba(241, 241, 255, 0.94), rgba(230, 243, 255, 0.92));
+  max-width: 920px;
 }
 
 .intro-content {
-  padding: 6px 0; /* Espaciado vertical comprimido */
+  padding: 6px 0;
 }
 
 .intro-sequence {
-  min-height: 440px; /* Evita saltos bruscos al cambiar de paso */
+  min-height: 440px;
 }
 
 .intro-step {
-  display: none; /* Oculta pasos inactivos */
-  animation: fadeInIntro 0.28s ease; /* Aparicion suave */
+  display: none;
+  animation: fadeInIntro 0.28s ease;
 }
 
 .intro-step.is-active {
-  display: grid; /* Muestra el paso actual */
-  gap: 14px; /* Espaciado interno */
+  display: grid;
+  gap: 14px;
 }
 
 .intro-title {
-  margin: 0; /* Elimina margen por defecto */
-  font-family: 'Lobster Two', cursive; /* Fuente de titulo */
-  font-size: clamp(2rem, 5vw, 3rem); /* Escala responsiva del titulo */
-  color: #0c4f92; /* Azul fuerte para narrativa */
-  text-align: center; /* Centra titulo */
+  margin: 0;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: #0c4f92;
+  text-align: center;
 }
 
 .intro-paragraph {
-  margin: 0; /* Elimina margen externo */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
-  line-height: 1.6; /* Espaciado entre lineas para legibilidad */
-  color: var(--texto); /* Color base de texto */
-  text-align: justify; /* Justifica parrafos de historia */
+  margin: 0;
+  font-size: clamp(2rem, 2.5vw, 2rem);
+  line-height: 1.6;
+  color: var(--texto);
+  text-align: justify;
 }
 
 .intro-list {
-  margin: 0; /* Sin margen para control exacto */
-  padding: 0 0 0 24px; /* Indentacion de lista */
-  text-align: left; /* Lista alineada a la izquierda */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
-  list-style: none; /* Quita bullets por defecto */
+  margin: 0;
+  padding: 0 0 0 24px;
+  text-align: left;
+  font-size: clamp(2rem, 2.5vw, 2rem);
+  list-style: none;
 }
 
 .intro-list li {
-  margin: 8px 0; /* Espaciado entre items */
-  line-height: 1.5; /* Mejor lectura de items largos */
-  text-align: justify; /* Justifica cada item */
+  margin: 8px 0;
+  line-height: 1.5;
+  text-align: justify;
 }
 
 .intro-list li::before {
-  content: "* "; /* Bullet solicitado */
-  color: #1c91ff; /* Color azul del bullet */
-  margin-right: 6px; /* Espacio despues del bullet */
+  content: "* ";
+  color: #1c91ff;
+  margin-right: 6px;
 }
 
 .intro-figure {
-  margin: 2px auto; /* Centra la imagen narrativa */
+  margin: 2px auto;
 }
 
 .intro-story-image {
-  width: min(100%, 520px); /* Limite visual de la imagen */
-  max-height: 290px; /* Controla alto para evitar desborde */
-  object-fit: contain; /* Conserva proporcion de imagen */
-  border-radius: 18px; /* Bordes suaves */
-  border: 2px solid rgba(95, 153, 214, 0.5); /* Marco ligero */
-  box-shadow: 0 10px 24px rgba(60, 96, 158, 0.24); /* Profundidad */
+  width: min(100%, 520px);
+  max-height: 290px;
+  object-fit: contain;
+  border-radius: 18px;
+  border: 2px solid rgba(95, 153, 214, 0.5);
+  box-shadow: 0 10px 24px rgba(60, 96, 158, 0.24);
 }
 
 .conectores-v-img {
@@ -855,48 +873,48 @@ body {
 }
 
 .intro-nav {
-  display: flex; /* Centra flecha de avance */
-  justify-content: center; /* Flecha al centro */
-  margin-top: 4px; /* Separacion ligera superior */
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
 }
 
 .intro-arrow {
-  width: 54px; /* Tamano circular del control */
-  height: 54px; /* Tamano circular del control */
-  border: none; /* Sin borde por defecto */
-  border-radius: 999px; /* Forma circular */
-  background: linear-gradient(145deg, #47b0ff, #1d7eed); /* Fondo azul de accion */
-  color: #ffffff; /* Contraste alto del icono */
-  font-size: 1.65rem; /* Tamano del icono */
-  cursor: pointer; /* Cursor de interaccion */
-  box-shadow: 0 10px 20px rgba(40, 108, 194, 0.34); /* Relieve */
-  transition: transform 0.2s ease, filter 0.2s ease; /* Animacion de interaccion */
+  width: 54px;
+  height: 54px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(145deg, #47b0ff, #1d7eed);
+  color: #ffffff;
+  font-size: 1.65rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(40, 108, 194, 0.34);
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .intro-arrow:hover {
-  transform: translateY(-2px) scale(1.03); /* Feedback de hover */
-  filter: brightness(1.03); /* Refuerzo de brillo */
+  transform: translateY(-2px) scale(1.03);
+  filter: brightness(1.03);
 }
 
 .intro-arrow:focus-visible {
-  outline: 3px solid rgba(28, 145, 255, 0.4); /* Foco accesible */
-  outline-offset: 2px; /* Separacion del foco */
+  outline: 3px solid rgba(28, 145, 255, 0.4);
+  outline-offset: 2px;
 }
 
 .intro-actions {
-  display: flex; /* Alinea boton */
-  justify-content: center; /* Centra boton horizontalmente */
-  margin-top: 8px; /* Separacion superior del bloque de acciones */
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
 }
 
 @keyframes fadeInIntro {
   from {
-    opacity: 0; /* Estado inicial transparente */
-    transform: translateY(6px); /* Entrada con leve ascenso */
+    opacity: 0;
+    transform: translateY(6px);
   }
   to {
-    opacity: 1; /* Estado final visible */
-    transform: translateY(0); /* Termina en posicion natural */
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -904,103 +922,103 @@ body {
    8) Pantallas de misiones (puntos)
    ====================================== */
 .mission-screen .screen-shell {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(224, 243, 255, 0.88)); /* Fondo diferenciado de misiones */
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(224, 243, 255, 0.88));
 }
 
 .mission-header {
-  flex-wrap: wrap; /* Permite ajustar cabecera en pantallas pequenas */
+  flex-wrap: wrap;
 }
 
 .narrative-card {
-  border-radius: 18px; /* Esquinas redondeadas del bloque narrativo */
-  border: 2px solid #b5d7f5; /* Borde del bloque narrativo */
-  background: linear-gradient(160deg, rgba(255, 251, 231, 0.82), rgba(226, 243, 255, 0.84)); /* Fondo narrativo */
-  padding: 14px; /* Espacio interno */
-  margin-bottom: 14px; /* Separacion inferior */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
+  border-radius: 18px;
+  border: 2px solid #b5d7f5;
+  background: linear-gradient(160deg, rgba(255, 251, 231, 0.82), rgba(226, 243, 255, 0.84));
+  padding: 14px;
+  margin-bottom: 14px;
+  font-size: clamp(2rem, 2.5vw, 2rem);
 }
 
 .narrative-card p {
-  margin: 0 0 8px 0; /* Espaciado entre parrafos */
+  margin: 0 0 8px 0;
 }
 
 .narrative-card p:last-child {
-  margin-bottom: 0; /* Evita espacio extra en ultimo parrafo */
+  margin-bottom: 0;
 }
 
 .narrative-card-m1 {
-  display: flex; /* Imagen y texto en fila */
-  align-items: stretch; /* Hace que ambos bloques compartan altura */
-  gap: 14px; /* Separacion entre imagen y texto */
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
 }
 
 .narrative-bot-image {
-  width: auto; /* Conserva proporcion */
-  height: auto; /* Escala dinamica */
-  max-height: 100%; /* No supera la altura del bloque narrativo */
-  max-width: 120px; /* Limite visual del bot */
-  object-fit: contain; /* Evita deformacion */
-  align-self: stretch; /* Toma la altura del contenido textual */
+  width: auto;
+  height: auto;
+  max-height: 100%;
+  max-width: 120px;
+  object-fit: contain;
+  align-self: stretch;
 }
 
 .narrative-card-text {
-  flex: 1; /* El texto ocupa el ancho restante */
-  display: grid; /* Mantiene espaciado consistente entre parrafos */
-  gap: 8px; /* Separacion de lineas narrativas */
+  flex: 1;
+  display: grid;
+  gap: 8px;
 }
 
 .magicv-card {
-  border-radius: 18px; /* Redondeo del bloque de actividad */
-  border: 2px solid #a8d0f2; /* Borde principal del bloque */
-  background: rgba(255, 255, 255, 0.82); /* Fondo semitransparente */
-  padding: 16px; /* Espaciado interno */
+  border-radius: 18px;
+  border: 2px solid #a8d0f2;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 16px;
 }
 
 .magicv-card h3 {
-  margin: 0 0 8px 0; /* Espacio inferior del subtitulo */
-  font-family: 'Lobster Two', cursive; /* Tipografia de subtitulo */
-  font-size: clamp(1.5rem, 3.2vw, 2rem); /* Escala de subtitulo */
+  margin: 0 0 8px 0;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
 }
 
 .objective {
-  margin: 0 0 12px 0; /* Espacio antes de la rejilla */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
-  color: #2b4f84; /* Color de texto de objetivo */
+  margin: 0 0 12px 0;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
+  color: #2b4f84;
 }
 
 .magicv-layout {
-  display: grid; /* Distribuye tablero y resultados */
-  grid-template-columns: minmax(320px, 1fr) minmax(250px, 0.85fr); /* Columna de juego + panel derecho */
-  gap: 20px; /* Separacion entre areas */
-  align-items: start; /* Alinea arriba ambos bloques */
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(250px, 0.85fr);
+  gap: 20px;
+  align-items: start;
 }
 
 .magicv-play-area {
-  border-right: 2px solid #83b8e9; /* Separador visual al estilo referencia */
-  padding-right: 18px; /* Aire antes del panel derecho */
+  border-right: 2px solid #83b8e9;
+  padding-right: 18px;
 }
 
 .magicv-board {
-  position: relative; /* Permite ubicar las 5 posiciones de la V */
-  width: min(100%, 420px); /* Da un ancho real al tablero para centrar la V */
-  min-height: 320px; /* Espacio de armado */
-  margin: 0 auto 14px; /* Centra el tablero dentro del area de juego */
+  position: relative;
+  width: min(100%, 420px);
+  min-height: 320px;
+  margin: 0 auto 14px;
 }
 
 .magicv-drop {
-  position: absolute; /* Ubicacion puntual de cada nodo */
-  width: 86px; /* Tamano del nodo */
-  height: 86px; /* Tamano vertical del nodo */
-  border-radius: 50%; /* Forma circular */
-  border: 2px solid #4e9cf0; /* Borde base */
-  background: rgba(161, 205, 226, 0.95); /* Color de nodo vacio */
-  color: #0e5f89; /* Color del numero */
-  font-family: 'Lobster Two', cursive; /* Numero legible y decorativo */
-  font-size: 2rem; /* Tamano de ficha colocada */
-  display: flex; /* Centrado de contenido */
-  align-items: center; /* Centrado vertical */
-  justify-content: center; /* Centrado horizontal */
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; /* Feedback visual */
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 2px solid #4e9cf0;
+  background: rgba(161, 205, 226, 0.95);
+  color: #0e5f89;
+  font-family: 'Lobster Two', cursive;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .magicv-drop[data-slot="leftTop"] {
@@ -1029,61 +1047,61 @@ body {
 }
 
 .magicv-drop.drop-target {
-  background: rgba(181, 224, 247, 0.98); /* Resalte al pasar ficha */
-  box-shadow: 0 0 0 6px rgba(93, 179, 255, 0.25); /* Halo de destino */
-  transform: scale(1.05); /* Pulso suave */
+  background: rgba(181, 224, 247, 0.98);
+  box-shadow: 0 0 0 6px rgba(93, 179, 255, 0.25);
+  transform: scale(1.05);
 }
 
 .magicv-drop.filled {
-  background: rgba(197, 232, 255, 1); /* Nodo ocupado */
+  background: rgba(197, 232, 255, 1);
 }
 
 .magicv-chip-tray {
-  display: flex; /* Fichas en una sola fila */
-  flex-wrap: wrap; /* Permite ajuste si falta espacio */
-  gap: 12px; /* Separacion de fichas */
-  padding-top: 8px; /* Aire superior */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 8px;
 }
 
 .magicv-chip-tray.tray-target {
-  outline: 2px dashed #7fbaf4; /* Marca zona para devolver fichas */
+  outline: 2px dashed #7fbaf4;
   outline-offset: 6px;
 }
 
 .magicv-chip {
-  width: 74px; /* Tamano de ficha */
-  height: 74px; /* Tamano vertical de ficha */
-  border-radius: 50%; /* Ficha circular */
-  border: 2px solid #4e9cf0; /* Borde de ficha */
-  background: rgba(197, 226, 243, 0.95); /* Color de ficha */
-  color: #17688f; /* Color de numero */
-  font-family: 'Lobster Two', cursive; /* Estilo numerico */
-  font-size: 2.7rem; /* Numero grande */
-  line-height: 1; /* Compacta texto */
-  display: inline-flex; /* Centrado */
-  align-items: center; /* Centrado vertical */
-  justify-content: center; /* Centrado horizontal */
-  cursor: grab; /* Accion arrastrable */
-  touch-action: none; /* Permite drag en touch */
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease; /* Feedback */
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 2px solid #4e9cf0;
+  background: rgba(197, 226, 243, 0.95);
+  color: #17688f;
+  font-family: 'Lobster Two', cursive;
+  font-size: 2.7rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
 }
 
 .magicv-chip:hover {
-  transform: translateY(-3px); /* Levanta la ficha */
-  box-shadow: 0 8px 16px rgba(61, 124, 187, 0.3); /* Sombra de hover */
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(61, 124, 187, 0.3);
 }
 
 .magicv-chip.dragging {
-  opacity: 0.3; /* Atenua la ficha original durante arrastre */
+  opacity: 0.3;
 }
 
 .magicv-chip-ghost {
-  position: fixed; /* Sigue el puntero */
+  position: fixed;
   left: 0;
   top: 0;
-  width: 74px; /* Igual a ficha base */
+  width: 74px;
   height: 74px;
-  transform: translate(-50%, -50%); /* Centrado en puntero */
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 2px solid #4e9cf0;
   background: rgba(197, 226, 243, 0.98);
@@ -1099,18 +1117,18 @@ body {
 }
 
 .magicv-results-panel {
-  min-height: 330px; /* Equilibra altura con tablero */
+  min-height: 330px;
 }
 
 .magicv-results-panel h4 {
-  margin: 0 0 12px 0; /* Separacion del listado */
+  margin: 0 0 12px 0;
   font-family: 'Lobster Two', cursive;
   font-size: clamp(1.2rem, 2.8vw, 1.7rem);
   color: #244878;
 }
 
 .magicv-results-panel h4 span {
-  color: #0f7f55; /* Destaca progreso */
+  color: #0f7f55;
 }
 
 .magicv-saved-list {
@@ -1278,38 +1296,38 @@ body {
 }
 
 .magicv-grid {
-  display: grid; /* Rejilla para selectores Magic V */
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Columnas adaptables */
-  gap: 12px; /* Separacion entre campos */
-  margin-bottom: 14px; /* Espacio previo a acciones */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .magicv-grid label {
-  display: grid; /* Organiza etiqueta y select en columna */
-  gap: 6px; /* Espacio entre texto y control */
-  font-size: 1.08rem; /* Tamano de etiqueta de control */
+  display: grid;
+  gap: 6px;
+  font-size: 1.08rem;
 }
 
 .magicv-grid select,
 textarea {
-  width: 100%; /* Ocupa todo el ancho disponible */
-  border-radius: 12px; /* Redondeo del control */
-  border: 2px solid #9dc4e8; /* Borde del control */
-  background: #fff; /* Fondo de entrada */
-  padding: 10px; /* Espaciado interno del control */
-  font-family: 'Rancho', cursive; /* Fuente del contenido de entrada */
-  font-size: clamp(1.5rem, 2.5vw, 1.5rem); /* Escala de parrafo uniforme */
+  width: 100%;
+  border-radius: 12px;
+  border: 2px solid #9dc4e8;
+  background: #fff;
+  padding: 10px;
+  font-family: 'Rancho', cursive;
+  font-size: clamp(1.5rem, 2.5vw, 1.5rem);
 }
 
 textarea {
-  resize: vertical; /* Permite redimension solo en vertical */
+  resize: vertical;
 }
 
 .mission-actions {
-  display: flex; /* Alinea botones de accion */
-  flex-wrap: wrap; /* Ajusta filas en pantallas pequenas */
-  gap: 10px; /* Separacion entre botones */
-  margin-top: 10px; /* Espacio superior del bloque de acciones */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .magicv-card .status-pill {
@@ -1411,30 +1429,30 @@ textarea {
    ====================================== */
 @keyframes flowPath {
   from {
-    stroke-dashoffset: 0; /* Inicio del desplazamiento de guiones */
+    stroke-dashoffset: 0;
   }
   to {
-    stroke-dashoffset: -260; /* Fin del desplazamiento para efecto de flujo */
+    stroke-dashoffset: -260;
   }
 }
 
 @keyframes twinkle {
   from {
-    transform: scale(0.85); /* Estado minimo de brillo */
-    opacity: 0.5; /* Opacidad minima */
+    transform: scale(0.85);
+    opacity: 0.5;
   }
   to {
-    transform: scale(1.2); /* Estado maximo de brillo */
-    opacity: 1; /* Opacidad maxima */
+    transform: scale(1.2);
+    opacity: 1;
   }
 }
 
 @keyframes rotateGear {
   from {
-    transform: rotate(0deg); /* Angulo inicial */
+    transform: rotate(0deg);
   }
   to {
-    transform: rotate(360deg); /* Vuelta completa */
+    transform: rotate(360deg);
   }
 }
 
@@ -1443,30 +1461,25 @@ textarea {
    ====================================== */
 @media (max-width: 900px) {
   .character-grid {
-    grid-template-columns: repeat(2, minmax(150px, 1fr)); /* Dos por fila en tablet */
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
   }
 
   .map-stage {
-    min-height: 560px; /* Ajusta altura del mapa en tablet */
+    min-height: 560px;
   }
 
   .node-button {
-    width: 68px; /* Reduce tamano de marcador en tablet */
-    height: 76px; /* Reduce alto de marcador en tablet */
-  }
-
-  .screen-header {
-    flex-direction: column; /* Apila cabecera en pantallas medianas */
-    align-items: flex-start; /* Alinea cabecera al inicio */
+    width: 68px;
+    height: 76px;
   }
 
   .magicv-layout {
-    grid-template-columns: 1fr; /* En tablet apila tablero y panel */
+    grid-template-columns: 1fr;
   }
 
   .magicv-play-area {
-    border-right: none; /* Quita separador vertical al apilar */
-    border-bottom: 2px solid #83b8e9; /* Separador horizontal */
+    border-right: none;
+    border-bottom: 2px solid #83b8e9;
     padding-right: 0;
     padding-bottom: 14px;
   }
@@ -1474,39 +1487,39 @@ textarea {
 
 @media (max-width: 640px) {
   .character-grid {
-    grid-template-columns: 1fr; /* Una por fila en movil */
+    grid-template-columns: 1fr;
   }
 
   #ContenedorBienvenida,
   #ContenedorConfirmacion,
   .app-screen {
-    padding: 10px; /* Reduce padding global en movil */
+    padding: 10px;
   }
 
   .screen-shell {
-    border-radius: 18px; /* Redondeo menor en movil */
-    padding: 12px; /* Espaciado interno menor en movil */
+    border-radius: 18px;
+    padding: 12px;
   }
 
   .map-stage {
-    min-height: 500px; /* Ajusta alto del escenario en movil */
+    min-height: 500px;
   }
 
   .node-label {
-    font-size: 0.95rem; /* Escala etiqueta de nodo en movil */
+    font-size: 0.95rem;
   }
 
   .node-caption {
-    padding: 4px 8px; /* Compacta capsula de etiqueta en movil */
-    gap: 4px; /* Reduce separacion en movil */
+    padding: 4px 8px;
+    gap: 4px;
   }
 
   .narrative-card-m1 {
-    gap: 10px; /* Ajusta separacion en pantallas pequenas */
+    gap: 10px;
   }
 
   .narrative-bot-image {
-    max-width: 82px; /* Reduce bot sin romper la fila */
+    max-width: 82px;
   }
 
   .magicv-board {
@@ -1557,12 +1570,12 @@ textarea {
   }
 
   .intro-layout {
-    flex-direction: column; /* Apila verticalmente en movil */
-    align-items: center; /* Centra contenido */
+    flex-direction: column;
+    align-items: center;
   }
 
   .intro-image-column {
-    order: -1; /* Muestra imagen primero en movil */
+    order: -1;
   }
 }
 

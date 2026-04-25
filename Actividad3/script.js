@@ -208,17 +208,22 @@ function isMagicV(arr) {
   return left === right;
 }
 
+
 function handleMagicVConfirm() {
+  console.log('handleMagicVConfirm: magicVState.v =', magicVState.v);
   if (magicVState.v.some(x => x === null)) {
     setMessage(magicVFeedback, "Completa toda la V antes de confirmar.", "bad");
     return;
   }
-  if (isMagicV(magicVState.v)) {
+  const isValid = isMagicV(magicVState.v);
+  console.log('isMagicV result:', isValid);
+  if (isValid) {
     setMessage(magicVFeedback, "¡Encontraste una Magic V!", "good");
     // Guardar y pasar a parteBm1
     magicVState.found = [magicVState.v.slice()];
     magicVState.fixedCore = magicVState.v[0];
     // Mostrar parte B inmediatamente
+    console.log('Mostrando parteBm1:', parteBm1);
     parteAm1.style.display = "none";
     parteBm1.style.display = "block";
     setupMagicVPart2();

@@ -1881,47 +1881,49 @@ function initMenteAndresSystem() {
         const allCorrect = results.length === 3 && results.every(r => r.isCorrect);
         const totalPaired = results.length;
 
+        // --- FEEDBACK MODAL ---
+        const feedbackModal = document.getElementById('menteAndresFeedback');
+        if (!feedbackModal) return;
+        let msg = '';
+        let type = '';
         if (allCorrect) {
-            showMenteAndresNotice(
-                '¡Perfecto! Emparejaste las bolsitas correctas. Te llevaremos al libro.',
-                'success',
-                4000,
-                () => {
+            msg = '¡Perfecto! Emparejaste las bolsitas correctas. Ahora puedes continuar.';
+            type = 'success';
+        } else {
+            const wrongCount = results.filter(r => !r.isCorrect).length;
+            const missingPairs = Math.max(0, 3 - totalPaired);
+            if (wrongCount > 0) {
+                msg += `Tienes ${wrongCount} emparejamiento(s) incorrecto(s). `;
+            }
+            if (missingPairs > 0) {
+                msg += `Aún faltan ${missingPairs} pareja(s) por formar.`;
+            }
+            if (!msg) msg = 'Revisa los emparejamientos.';
+            type = 'error';
+        }
+        feedbackModal.innerHTML = `<div class="feedback-box">${msg}</div>`;
+        feedbackModal.style.display = 'flex';
+        setTimeout(() => {
+            feedbackModal.style.display = 'none';
+            feedbackModal.innerHTML = '';
+            if (allCorrect) {
                 hide('ContenedorMenteAndres');
                 show('ContenedorLibro');
                 show('prevBtn');
                 show('nextBtn');
                 if (traysImage) traysImage.style.display = 'block';
                 menteAndresCompleted = true;
-
                 if (returnSpread === 7) {
                     show('m1Q2FinalQuestion');
                     const leftInput = document.getElementById('m1q2LeftInput');
                     if (leftInput) leftInput.focus();
                 }
-
                 if (returnSpread === 4) {
                     menteAndresM0Completed = true;
                 }
-
                 goToSpread(returnSpread);
-                }
-            );
-        } else {
-            const wrongCount = results.filter(r => !r.isCorrect).length;
-            const missingPairs = Math.max(0, 3 - totalPaired);
-            let msg = '';
-
-            if (wrongCount > 0) {
-                msg += `Tienes ${wrongCount} emparejamiento(s) incorrecto(s). Revisa las parejas que no corresponden. `;
             }
-
-            if (missingPairs > 0) {
-                msg += `Aún faltan ${missingPairs} pareja(s) por formar.`;
-            }
-
-            showMenteAndresNotice(msg || 'Revisa los emparejamientos.', 'error', 3200);
-        }
+        }, 3000);
     });
 }
 
@@ -2149,7 +2151,7 @@ function initMatchingActivity() {
     // Sumas misteriosas – se barajan al cargar
     const SUMS = [
         { id: 'msum0', text: '5+5+5=3+3+3+3+3' },
-        { id: 'msum1', text: '2+2+2+2+2=4+4' },
+        { id: 'msum1', text: '2+2+2+2=4+4' },
         { id: 'msum2', text: '6+6+6+6+6=5+5+5+5+5+5' }
     ];
     let shuffledSums = [...SUMS].sort(() => Math.random() - 0.5);
