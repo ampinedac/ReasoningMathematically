@@ -146,6 +146,15 @@
         <div class="map-stage">
           <canvas id="mapGlowCanvas" class="map-layer-canvas map-glow-layer" aria-hidden="true"></canvas>
           <canvas id="mapFogCanvas" class="map-layer-canvas map-fog-layer" aria-hidden="true"></canvas>
+          <!-- Controles de misión SOLO para código 98100 -->
+          <div id="devMissionControls" style="display:none; position:absolute; top:18px; right:18px; z-index:20;">
+            <button class="btn btn-primary dev-mission-btn" data-m="1">M1</button>
+            <button class="btn btn-primary dev-mission-btn" data-m="2">M2</button>
+            <button class="btn btn-primary dev-mission-btn" data-m="3">M3</button>
+            <button class="btn btn-primary dev-mission-btn" data-m="4">M4</button>
+            <button class="btn btn-primary dev-mission-btn" data-m="5">M5</button>
+            <button class="btn btn-secondary dev-mission-btn" data-m="reset">Reset</button>
+          </div>
           <!-- Cinco nodos anclados a hitos reales del mapa -->
           <div class="mission-node" data-mission="1" style="left: 13%; top: 20%;">
             <button class="node-button" aria-label="Mision 1"></button>
@@ -209,14 +218,13 @@
             <p>Construye una Magic V para detectar combinaciones estables.</p>
           </div>
         </article>
-        <div id="parteAm1"></div>
-        <div id="parteBm1"></div>
+
       </div>
       <!-- INICIO parteAm1: Magic V principal -->
       <section id="parteAm1">
         <div class="mission-visual-container">
           <div class="magic-v-instruction">
-            A continuación vas a ver una V, se convierte en Magic V cuando los dos brazos de la V suman lo mismo. Encuentra una Magic V:
+            A continuación, vas a ver una V, se convierte en Magic V cuando los dos brazos de la V suman lo mismo. Encuentra una Magic V:
           </div>
           <div class="magic-v-board" id="magicVBoard">
             <!-- SVG de la V orientada hacia arriba, grande y centrada -->
@@ -259,32 +267,61 @@
           <div class="magic-v-question">
             ¿Cuál es el total mágico de cada brazo en tu Magic V?
           </div>
-          <input type="number" id="magicVTotalInput" min="3" max="12" />
-          <button id="magicVTotalCheckBtn">Comprobar</button>
+          <input type="number" id="magicVTotalInput" min="3" max="12" class="magicv-suma-input" />
+          <button id="magicVTotalCheckBtn" class="btn btn-primary magicv-suma-check">Comprobar</button>
           <div class="magic-v-feedback" id="magicVTotalFeedback"></div>
           <div class="magic-v-next-question" id="magicVNextQ" style="display:none;">
-            ¿Cuántas otras cartas mágicas V puedes encontrar con ese mismo total de magia?
+            ¿Cuántas otras Magic V puedes encontrar con ese mismo total mágico?
           </div>
-          <div class="magic-v-board" id="magicVBoard2" style="display:none;">
-            <!-- Tablero de la segunda parte, núcleo fijo -->
-            <svg width="220" height="160">
-              <line x1="110" y1="30" x2="50" y2="120" stroke="#b3b3ff" stroke-width="8" />
-              <line x1="110" y1="30" x2="170" y2="120" stroke="#b3b3ff" stroke-width="8" />
-              <circle id="v2-pos-1" cx="110" cy="30" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
-              <circle id="v2-pos-2" cx="50" cy="120" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
-              <circle id="v2-pos-3" cx="80" cy="75" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
-              <circle id="v2-pos-4" cx="140" cy="75" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
-              <circle id="v2-pos-5" cx="170" cy="120" r="18" fill="#fff" stroke="#b3b3ff" stroke-width="3" />
-            </svg>
+          <div class="magic-v-board-row" id="magicVBoardRowF" style="display:flex; align-items:flex-start; gap:32px;">
+            <!-- V editable grande -->
+            <div class="magic-v-board" id="magicVBoard2" style="display:none;">
+              <svg width="420" height="320">
+                <!-- Brazo izquierdo (hacia arriba) -->
+                <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                <!-- Brazo derecho (hacia arriba) -->
+                <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                <!-- Círculos para los números -->
+                <circle id="v2-pos-1" cx="210" cy="250" r="38" />
+                <circle id="v2-pos-2" cx="90" cy="70" r="38" />
+                <circle id="v2-pos-3" cx="150" cy="160" r="38" />
+                <circle id="v2-pos-4" cx="270" cy="160" r="38" />
+                <circle id="v2-pos-5" cx="330" cy="70" r="38" />
+                <!-- Los números se renderizan dinámicamente con JS -->
+              </svg>
+            </div>
+
           </div>
           <div class="magic-v-buttons" id="magicVButtons2" style="display:none;">
-            <!-- Botones del 1 al 5, menos el núcleo fijo -->
+            <!-- Botones arrastrables, igual que en parte A -->
           </div>
           <div class="magic-v-actions" id="magicVActions2" style="display:none;">
             <button id="magicVSaveBtn">Guardar</button>
             <button id="magicVResetBtn2">Reset</button>
           </div>
           <div class="magic-v-feedback" id="magicVSaveFeedback"></div>
+          <div id="magicVTableFinalBlock" style="display:none; margin-top:10px;">
+            <p class="magicv-final-question">¿Hay alguna Magic V que no esté en la tabla? ¿Cómo lo sabes?</p>
+            <div class="audio-controls">
+              <button id="recordBtnA3M1Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+              <button id="submitA3M1Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+            </div>
+            <p id="statusA3M1Final" class="status-text"></p>
+            <button id="finmision1" class="btn btn-finmision">
+               <img src="../Actividad3/assets/images/finmision.png" alt="Fin de misión 1">
+            </button>
+            <style>
+              #finmision1 { display: none; }
+            </style>
+            </button>
+          </div>
+          <!-- Burbuja de felicitación misión 1 -->
+          <div id="felicitacionMision1" class="comic-bubble-felicitacion" style="display:none;">
+            <img src="assets/images/robot-happy.png" alt="Robot feliz" class="robot-happy-img">
+            <div class="felicitacion-texto">
+              ¡Felicidades! Has completado la misión 1
+            </div>
+          </div>
           <div class="magic-v-found-list" id="magicVFoundList" style="display:none;">
             <!-- Aquí se mostrarán las miniaturas de las Magic V encontradas -->
           </div>

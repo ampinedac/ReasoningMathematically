@@ -1,3 +1,123 @@
+/* =============================
+   Overlay de felicitación misión 1
+   ============================= */
+.comic-bubble-felicitacion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(40, 60, 120, 0.55);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  pointer-events: auto;
+  animation: fadeInIntro 0.3s;
+}
+.comic-bubble-felicitacion .robot-happy-img {
+  width: 220px;
+  height: auto;
+  max-width: 90vw;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 10px 32px #fff8);
+}
+.comic-bubble-felicitacion .felicitacion-texto {
+  background: #fffbe7;
+  color: #1a3a6b;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  border-radius: 28px;
+  padding: 32px 48px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+  text-align: center;
+  max-width: 92vw;
+}
+/* Ajuste de tamaño para Magic V miniatura más grande */
+.magicv-table-grid {
+  border-collapse: collapse;
+  margin-left: 32px;
+  background: #f5e6f7;
+}
+.magicv-table-cell {
+  width: 120px;
+  height: 95px;
+  border: 2px solid #b57fc5;
+  background: #fff6ff;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+}
+.magicv-table-cell svg {
+  display: block;
+  margin: 0 auto;
+  width: 100px;
+  height: 85px !important;
+}
+/* Feedback Magic V */
+.magic-v-feedback {
+  color: #1976d2; /* Azul principal para feedback neutro */
+  font-family: 'Lobster Two', cursive;
+  font-size: 1.25rem;
+  margin-top: 8px;
+  min-height: 28px;
+  transition: color 0.2s;
+}
+.magic-v-feedback.good {
+  color: #1ca97a; /* Verde para éxito */
+}
+.magic-v-feedback.bad {
+  color: #c62828; /* Rojo para error */
+}
+#magicVSaveBtn, #magicVResetBtn2 {
+  border: none;
+  border-radius: 16px;
+  padding: 12px 24px;
+  font-family: 'Lobster Two', cursive;
+  font-size: clamp(1rem, 2.3vw, 1.35rem);
+  cursor: pointer;
+  transition: transform 0.22s ease, filter 0.22s ease, box-shadow 0.22s ease;
+  margin-right: 12px;
+}
+#magicVSaveBtn {
+  color: #fff;
+  background: linear-gradient(135deg, #42a7ff 0%, #2967ff 100%);
+  box-shadow: 0 8px 20px rgba(53, 111, 219, 0.34);
+}
+#magicVResetBtn2 {
+  color: #1b4a8e;
+  background: linear-gradient(135deg, #ffffff 0%, #d8ebff 100%);
+  box-shadow: 0 8px 20px rgba(80, 126, 181, 0.25);
+}
+#magicVSaveBtn:hover, #magicVResetBtn2:hover {
+  transform: translateY(-2px);
+}
+#magicVSaveBtn:disabled, #magicVResetBtn2:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+/* Miniaturas Magic V encontradas (parte B) */
+#magicVFoundListB {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  margin-top: 8px;
+}
+.magicv-found-item {
+  margin: 0 8px 0 0;
+  display: inline-block;
+}
+/* Cada fila de miniaturas (creada por JS) */
+#magicVFoundListB > div {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 8px;
+}
 #introductionScreen {
   flex-direction: column;
   justify-content: center; /* Centrado vertical del contenido */
@@ -1374,6 +1494,7 @@ textarea {
   margin-top: 0.4em;
   flex-shrink: 0;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .audio-controls .btn {
@@ -1381,7 +1502,7 @@ textarea {
   height: 82px;
   padding: 0;
   border-radius: 20px;
-  background: #ffffff;
+  background: #a1d2eec4;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1390,7 +1511,7 @@ textarea {
 .audio-controls .btn:hover:not(:disabled) {
   transform: translateY(-3px);
   filter: brightness(1.15);
-  box-shadow: 0 6px 18px rgba(255, 231, 10, 0.42);
+  box-shadow: 0 6px 18px rgba(10, 218, 255, 0.644);
 }
 
 .audio-controls .btn:disabled {
@@ -1595,7 +1716,7 @@ textarea {
 
 /* Contenedor visual principal para cada misión */
 .mission-visual-container {
-  width: min(1200px, 100%);
+  width: min(1200px, 80%);
   margin: 0 auto;
   border: 2px solid var(--borde);
   border-radius: 26px;
@@ -1610,3 +1731,24 @@ textarea {
   box-shadow: none !important;
   padding: 0 !important;
 }
+
+.btn-finmision {
+  margin: 24px auto 0 auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 40%;
+}
+
+.btn-finmision img {
+  width: 100%;
+  height: auto;
+  display: block; /* Elimina el espacio debajo de la imagen */
+  transition: transform 0.18s;
+}
+
+.btn-finmision:hover img {
+  transform: scale(1.08) rotate(-2deg);
+  filter: brightness(1.1);
+}
+
