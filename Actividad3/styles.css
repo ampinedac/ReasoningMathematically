@@ -56,6 +56,10 @@
   width: 100px;
   height: 85px !important;
 }
+
+.magic-v-instruction {
+  margin: 20px 0 12px 0;
+}
 /* Feedback Magic V */
 .magic-v-feedback {
   color: #1976d2; /* Azul principal para feedback neutro */
@@ -1723,6 +1727,13 @@ textarea {
   background: var(--glass);
   box-shadow: var(--sombra);
   padding: clamp(16px, 2.8vw, 28px);
+}
+
+/* Las pantallas de misión deben ser scrolleables */
+.mission-screen {
+  overflow-y: auto;
+  align-items: flex-start !important;
+  padding-top: 20px;
 }
 
 .mission-screen .screen-shell {

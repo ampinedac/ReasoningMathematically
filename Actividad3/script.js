@@ -341,13 +341,13 @@ function enableMagicVDragDrop() {
       dragGhost.style.opacity = "0.7";
       dragGhost.style.zIndex = "9999";
       document.body.appendChild(dragGhost);
-    });
+    }, { passive: false });
     btn.addEventListener("touchmove", (e) => {
       if (!dragGhost) return;
       const touch = e.touches[0];
       dragGhost.style.left = (touch.clientX - 32) + "px";
       dragGhost.style.top = (touch.clientY - 32) + "px";
-    });
+    }, { passive: false });
     btn.addEventListener("touchend", (e) => {
       if (dragGhost) dragGhost.remove();
       dragGhost = null;
@@ -528,14 +528,16 @@ function handleMagicVConfirm() {
     const vStr = magicVState.v.join("-");
     const exists = magicVState.found.some(arr => arr.join("-") === vStr);
     if (exists) {
-      setMessage(magicVFeedback, "Ya guardaste esta Magic V.", "bad");
+      setMessage(magicVFeedback, "Ya guardaste esta V mágica.", "bad");
       return;
     }
-    setMessage(magicVFeedback, "¡Encontraste una Magic V!", "good");
+    setMessage(magicVFeedback, "¡Encontraste una V mágica!", "good");
     magicVState.found.push(magicVState.v.slice());
     // Si es la primera, fija el núcleo
     if (magicVState.found.length === 1) {
       magicVState.fixedCore = magicVState.v[0];
+      // Ocultar Reiniciar para que found[0] y la V visible sean siempre la misma
+      magicVResetBtn.style.display = "none";
     }
     renderMagicVFoundListA();
     // Ya no se resetea la V automáticamente, solo se guarda y se muestra la mini V
@@ -830,13 +832,13 @@ function enableMagicVDragDrop2() {
       dragGhost.style.opacity = "0.7";
       dragGhost.style.zIndex = "9999";
       document.body.appendChild(dragGhost);
-    });
+    }, { passive: false });
     btn.addEventListener("touchmove", (e) => {
       if (!dragGhost) return;
       const touch = e.touches[0];
       dragGhost.style.left = (touch.clientX - 32) + "px";
       dragGhost.style.top = (touch.clientY - 32) + "px";
-    });
+    }, { passive: false });
     btn.addEventListener("touchend", (e) => {
       if (dragGhost) dragGhost.remove();
       dragGhost = null;
@@ -944,22 +946,32 @@ function handleMagicVSave() {
     setMessage(magicVSaveFeedback, "Completa toda la V antes de guardar.", "bad");
     return;
   }
+
+  // VALIDAR QUE SEA UNA MAGIC V: ambos brazos deben sumar igual
+  // v2[0]=núcleo, v2[1]=arriba-izq, v2[2]=medio-izq, v2[3]=medio-der, v2[4]=arriba-der
+  const sumBrazoIzq = magicVState.v2[0] + magicVState.v2[1] + magicVState.v2[2];
+  const sumBrazoDer = magicVState.v2[0] + magicVState.v2[4] + magicVState.v2[3];
+  if (sumBrazoIzq !== sumBrazoDer) {
+    setMessage(magicVSaveFeedback, `Esa V, no es una V mágica. Recuerda: ambos brazos deben sumar igual.`, "bad");
+    return;
+  }
+
   // Verifica si ya existe esta permutación (encontrada o guardada)
   const v2str = magicVState.v2.join("-");
   // No permitir guardar la V inicial (la morada de referencia)
   const initialVStr = magicVState.found.length > 0 ? magicVState.found[0].join("-") : "";
   if (v2str === initialVStr) {
-    setMessage(magicVSaveFeedback, "Esta Magic V ya es la inicial, busca otra diferente.", "bad");
+    setMessage(magicVSaveFeedback, "Esta V mágica ya es la inicial, busca otra diferente.", "bad");
     return;
   }
   // No permitir guardar permutaciones repetidas
   const exists = magicVState.found2.some(arr => arr.join("-") === v2str);
   if (exists) {
-    setMessage(magicVSaveFeedback, "Ya guardaste esta Magic V.", "bad");
+    setMessage(magicVSaveFeedback, "Ya guardaste esta V mágica.", "bad");
     return;
   }
   magicVState.found2.push(magicVState.v2.slice());
-  setMessage(magicVSaveFeedback, "¡Magic V guardada!", "good");
+  setMessage(magicVSaveFeedback, "¡V mágica guardada!", "good");
   renderMagicVTable();
   // Resetear la V editable para buscar otra
   magicVState.v2 = [magicVState.fixedCore, null, null, null, null];
@@ -976,7 +988,7 @@ function showScreen(screenId) {
   const screens = document.querySelectorAll('.app-screen');
   screens.forEach(s => s.style.display = 'none');
   const target = document.getElementById(screenId);
-  if (target) target.style.display = 'block';
+  if (target) target.style.display = 'flex';
   // Si se muestra el mapa, renderizar y sincronizar fog
   if (screenId === "mapScreen") {
     renderMap();
@@ -1027,6 +1039,12 @@ function toTitle(str) {
 function getInitialSessionData() {
   return {
     character: null,
+    mission1: {
+      current: {},
+      saved: [],
+      explorationUnlocked: false,
+      audioSubmitted: false
+    },
     mission2: {
       current: {},
       saved: [],
@@ -1041,6 +1059,16 @@ let sessionData = getInitialSessionData();
 // Parche defensivo: asegurar que missionsCompleted existe y es un array
 if (!Array.isArray(sessionData.missionsCompleted)) {
   sessionData.missionsCompleted = [];
+}
+
+// Parche defensivo: asegurar que mission1 existe y tiene la estructura correcta
+if (typeof sessionData.mission1 === 'undefined') {
+  sessionData.mission1 = {
+    current: {},
+    saved: [],
+    explorationUnlocked: false,
+    audioSubmitted: false
+  };
 }
 
 // Parche defensivo: asegurar que mission2 existe y tiene audioSubmitted
@@ -1180,12 +1208,37 @@ async function handleMission2AudioSubmit() {
 
 function unlockMission2Exploration() {
   sessionData.mission2.explorationUnlocked = true;
+  // Avanzar el progreso a misión 2 si corresponde
+  if (typeof sessionData.progress === "number" && sessionData.progress < 2) {
+    sessionData.progress = 2;
+  }
   syncMission2ExplorationState();
+  if (typeof renderMap === "function") renderMap();
+  // Sincronizar botones de desarrollo si existen
+  if (typeof syncDevMissionBtns === "function") syncDevMissionBtns();
   if (!sessionData.mission2.audioSubmitted && !mission2AudioState.blob) {
     setMessage(mission2AudioStatus, "Cuando estés lista, graba tu respuesta y envíala.", "");
   }
 }
 
+// Sincroniza el estado visual de los botones de desarrollo (dev-mission-btn) con el progreso actual
+function syncDevMissionBtns() {
+  const devBtns = document.querySelectorAll('.dev-mission-btn');
+  devBtns.forEach(btn => {
+    const missionNum = Number(btn.dataset.mission);
+    if (!missionNum) return;
+    if (missionNum === sessionData.progress) {
+      btn.classList.add('btn-primary');
+      btn.disabled = false;
+    } else if (sessionData.missionsCompleted.includes(missionNum)) {
+      btn.classList.remove('btn-primary');
+      btn.disabled = true;
+    } else {
+      btn.classList.remove('btn-primary');
+      btn.disabled = true;
+    }
+  });
+}
 function syncMission2ExplorationState() {
   if (!mission2ExploracionBlock) return;
   const allSumaVerificada = sessionData.mission2.saved.length === 3 && sessionData.mission2.saved.every(c => c.sumaMagica !== null);
@@ -1489,7 +1542,7 @@ if (mission2ChipTray && checkMagicVBtn2 && resetMagicVBtn2) {
       const esExacta = existente.leftTop2 === current.leftTop2 && existente.rightTop2 === current.rightTop2 &&
         existente.leftMid2 === current.leftMid2 && existente.rightMid2 === current.rightMid2;
       if (esExacta) {
-        setMessage(magicVFeedback2, "Esta Magic V ya está registrada.", "bad");
+        setMessage(magicVFeedback2, "Esta V mágica ya está registrada.", "bad");
         return;
       }
       const brazosExistente = [existente.leftTop2, existente.rightTop2, existente.leftMid2, existente.rightMid2];
@@ -1500,12 +1553,12 @@ if (mission2ChipTray && checkMagicVBtn2 && resetMagicVBtn2) {
         if (!existente.permutaciones) existente.permutaciones = [];
         existente.permutaciones.push({ ...current });
         saveSessionProgress();
-        setMessage(magicVFeedback2, `Esta Magic V es equivalente a la registrada con núcleo ${nucleo} porque la suma mágica es la misma.`, "good");
+        setMessage(magicVFeedback2, `Esta V mágica es equivalente a la registrada con núcleo ${nucleo} porque la suma mágica es la misma.`, "good");
         renderMission2SavedCombinations();
         clearMission2Board(false);
         return;
       }
-      setMessage(magicVFeedback2, "Esta Magic V ya tiene ese núcleo pero no es una permutación válida.", "bad");
+      setMessage(magicVFeedback2, "Esta V mágica ya tiene ese núcleo pero no es una permutación válida.", "bad");
       return;
     }
     if (sessionData.mission2.saved.length >= 3) {
@@ -1572,55 +1625,46 @@ function setupMagicVSavedModal() {
   });
 }
 
-// Devuelve el HTML de la tabla de Magic V guardadas (idéntico a misión 1)
+
+// Devuelve el HTML de la tabla de Magic V guardadas
 function renderMagicVSavedTable() {
-  if (!sessionData.mission1.saved.length) {
+  // Mostrar todas las Magic V encontradas (referencia + variantes)
+  const allFound = [magicVState.found[0], ...magicVState.found2].filter(Boolean);
+  
+  if (!allFound.length) {
     return '<p class="magicv-saved-item-label">Aún no tienes combinaciones guardadas.</p>';
   }
-  const rows = sessionData.mission1.saved.map((comb, index) => {
-    const sumaCell = comb.sumaMagica !== null
-      ? `<span class="magicv-suma-confirmed">✔ ${comb.sumaMagica}</span>`
-      : `<span class="magicv-suma-pending">Sin verificar</span>`;
-    let permutacionesHtml = "";
-    if (comb.permutaciones && comb.permutaciones.length > 0) {
-      permutacionesHtml = `<div class="magicv-permutaciones-list">` +
-        comb.permutaciones.map((perm) => `
-          <div class="magicv-mini-board magicv-mini-board-permutacion">
-            <span class="magicv-mini-dot" data-slot="leftTop">${perm.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${perm.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${perm.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${perm.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${perm.bottom}</span>
-          </div>`).join("") + `</div>`;
-    }
-    return `<tr>
-      <td>
-        <div class="magicv-saved-item-label">V válida ${index + 1}</div>
-        <div class="magicv-v-group">
-          <div class="magicv-mini-board">
-            <span class="magicv-mini-dot" data-slot="leftTop">${comb.leftTop}</span>
-            <span class="magicv-mini-dot" data-slot="rightTop">${comb.rightTop}</span>
-            <span class="magicv-mini-dot" data-slot="leftMid">${comb.leftMid}</span>
-            <span class="magicv-mini-dot" data-slot="rightMid">${comb.rightMid}</span>
-            <span class="magicv-mini-dot" data-slot="bottom">${comb.bottom}</span>
-          </div>
-          ${permutacionesHtml}
-        </div>
-      </td>
-      <td class="magicv-suma-cell">${sumaCell}</td>
-    </tr>`;
-  }).join("");
-  return `
-    <table class="magicv-saved-table">
-      <thead>
-        <tr>
-          <th>Magic V</th>
-          <th>Suma mágica</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  `;
+
+  let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px;">';
+  
+  allFound.forEach((magicV, index) => {
+    if (!Array.isArray(magicV) || magicV.length !== 5) return;
+    
+    const suma = magicV[1] + magicV[2] + magicV[3];
+    html += `
+      <div style="border: 2px solid #6ec6ff; border-radius: 12px; padding: 12px; text-align: center;">
+        <div style="font-size: 0.9rem; margin-bottom: 8px; color: #555;">Magic V ${index + 1}</div>
+        <svg width="120" height="100" style="display: block; margin: 0 auto;">
+          <line x1="60" y1="80" x2="20" y2="20" stroke="#b3b3ff" stroke-width="3" />
+          <line x1="60" y1="80" x2="100" y2="20" stroke="#b3b3ff" stroke-width="3" />
+          <circle cx="60" cy="80" r="16" fill="#fff" stroke="#6ec6ff" stroke-width="2" />
+          <text x="60" y="85" text-anchor="middle" font-size="12">${magicV[0]}</text>
+          <circle cx="20" cy="20" r="16" fill="#fff" stroke="#6ec6ff" stroke-width="2" />
+          <text x="20" y="25" text-anchor="middle" font-size="12">${magicV[1]}</text>
+          <circle cx="100" cy="20" r="16" fill="#fff" stroke="#6ec6ff" stroke-width="2" />
+          <text x="100" y="25" text-anchor="middle" font-size="12">${magicV[2]}</text>
+          <circle cx="40" cy="50" r="16" fill="#fff" stroke="#6ec6ff" stroke-width="2" />
+          <text x="40" y="55" text-anchor="middle" font-size="12">${magicV[3]}</text>
+          <circle cx="80" cy="50" r="16" fill="#fff" stroke="#6ec6ff" stroke-width="2" />
+          <text x="80" y="55" text-anchor="middle" font-size="12">${magicV[4]}</text>
+        </svg>
+        <div style="font-size: 0.85rem; color: #1976d2; margin-top: 8px;">Suma: ${suma}</div>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  return html;
 }
 
 // --- Persistencia de progreso con sessionStorage ---
@@ -1955,7 +1999,10 @@ function updateDropHover(clientX, clientY) {
   const currentMission = getCurrentAvailableMission();
   const hoveredNode = document.elementFromPoint(clientX, clientY)?.closest(".mission-node");
   const hoveredMission = hoveredNode ? Number(hoveredNode.dataset.mission) : null;
-  const isValidHover = currentMission && hoveredMission === currentMission;
+  const isValidHover = hoveredMission && (
+    (currentMission && hoveredMission === currentMission) ||
+    sessionData.missionsCompleted.includes(hoveredMission)
+  );
 
   missionNodes.forEach((node) => {
     node.classList.remove("drop-hover");
@@ -1964,7 +2011,10 @@ function updateDropHover(clientX, clientY) {
   if (isValidHover && hoveredNode) {
     hoveredNode.classList.add("drop-hover");
     dragState.hoverMission = hoveredMission;
-    setMessage(mapHint, `Suelta para entrar a la mision ${hoveredMission}.`, "good");
+    const label = sessionData.missionsCompleted.includes(hoveredMission)
+      ? `Suelta para revisar la mision ${hoveredMission}.`
+      : `Suelta para entrar a la mision ${hoveredMission}.`;
+    setMessage(mapHint, label, "good");
     return;
   }
 
@@ -1976,10 +2026,13 @@ function finishGuideDrag(clientX, clientY) {
   const currentMission = getCurrentAvailableMission();
   const droppedNode = document.elementFromPoint(clientX, clientY)?.closest(".mission-node");
   const droppedMission = droppedNode ? Number(droppedNode.dataset.mission) : null;
-  const isValidDrop = currentMission && droppedMission === currentMission;
+  const isValidDrop = droppedMission && (
+    (currentMission && droppedMission === currentMission) ||
+    sessionData.missionsCompleted.includes(droppedMission)
+  );
 
   if (isValidDrop) {
-    openMission(currentMission);
+    openMission(droppedMission);
   } else {
     setMessage(mapHint, "Punto invalido. El guia vuelve a su lugar.", "bad");
   }

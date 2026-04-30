@@ -40,7 +40,7 @@
   <div id="magicVSavedModal" class="modal-magicv" style="display:none;">
     <div class="modal-magicv-content">
       <button id="closeMagicVSavedModal" class="btn btn-secondary" style="float:right;">Cerrar</button>
-      <h3>Magic V guardadas</h3>
+      <h3>V mágicas guardadas</h3>
       <div id="magicVSavedModalContent"></div>
     </div>
   </div>
@@ -219,12 +219,10 @@
           </div>
         </article>
 
-      </div>
-      <!-- INICIO parteAm1: Magic V principal -->
-      <section id="parteAm1">
-        <div class="mission-visual-container">
+        <!-- INICIO parteAm1: Magic V principal (dentro de mission1Container) -->
+        <div id="parteAm1">
           <div class="magic-v-instruction">
-            A continuación, vas a ver una V, se convierte en Magic V cuando los dos brazos de la V suman lo mismo. Encuentra una Magic V:
+            A continuación, vas a ver una V, se convierte en V mágica cuando los dos brazos de la V suman lo mismo. Encuentra una V mágica:
           </div>
           <div class="magic-v-board" id="magicVBoard">
             <!-- SVG de la V orientada hacia arriba, grande y centrada -->
@@ -256,22 +254,20 @@
           </div>
           <div class="magic-v-feedback" id="magicVFeedback"></div>
         </div>
-      </section>
 
-      <!-- INICIO parteBm1: Total mágico y permutaciones -->
-      <section id="parteBm1" style="display:none;">
-        <div class="mission-visual-container">
+        <!-- INICIO parteBm1: Total mágico y permutaciones (dentro de mission1Container) -->
+        <div id="parteBm1" style="display:none;">
           <div class="magic-v-instruction">
             Llamaremos "total mágico" a la suma de los tres números que forman un brazo de una V mágica.
           </div>
           <div class="magic-v-question">
-            ¿Cuál es el total mágico de cada brazo en tu Magic V?
+            ¿Cuál es el total mágico de cada brazo en tu V mágica?
           </div>
           <input type="number" id="magicVTotalInput" min="3" max="12" class="magicv-suma-input" />
           <button id="magicVTotalCheckBtn" class="btn btn-primary magicv-suma-check">Comprobar</button>
           <div class="magic-v-feedback" id="magicVTotalFeedback"></div>
           <div class="magic-v-next-question" id="magicVNextQ" style="display:none;">
-            ¿Cuántas otras Magic V puedes encontrar con ese mismo total mágico?
+            ¿Cuántas otras V mágicas puedes encontrar con ese mismo total mágico?
           </div>
           <div class="magic-v-board-row" id="magicVBoardRowF" style="display:flex; align-items:flex-start; gap:32px;">
             <!-- V editable grande -->
@@ -301,7 +297,7 @@
           </div>
           <div class="magic-v-feedback" id="magicVSaveFeedback"></div>
           <div id="magicVTableFinalBlock" style="display:none; margin-top:10px;">
-            <p class="magicv-final-question">¿Hay alguna Magic V que no esté en la tabla? ¿Cómo lo sabes?</p>
+            <p class="magicv-final-question">¿Hay alguna V mágica que no esté en la tabla? ¿Cómo lo sabes?</p>
             <div class="audio-controls">
               <button id="recordBtnA3M1Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
               <button id="submitA3M1Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
@@ -326,7 +322,8 @@
             <!-- Aquí se mostrarán las miniaturas de las Magic V encontradas -->
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
     <section id="mission2Screen" class="app-screen mission-screen">
       <div id="mission2Container" class="mission-visual-container">
@@ -337,21 +334,17 @@
         <article class="narrative-card narrative-card-m2">
           <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
           <div class="narrative-card-text">
-            <p><strong>V-Bot:</strong> Mi sistema de patrones se rompio... necesito que descubras cómo funcionaba.</p>
-            <p>Construye una Magic V para detectar combinaciones estables.</p>
+            <p><strong>V-Bot:</strong> ¿Diferentes sumas mágicas?</p>
           </div>
         </article>
         <div class="magicv-card">
-          <h3>Exploracion inicial: Construccion de Magic V</h3>
-          <p class="narrative-card-text">Reglas: 
-            <br>1. Coloca cada uno de los números del 1 al 5 en la forma de V que aparece a continuación.
-            <br>2. Una V es Magic V cuando los dos brazos de la V dan la misma suma.
-            <br>Construye una Magic V.
+          <p> Supondremos que si dos o más V mágicas tienen el mismo total mágico, son la misma V mágica.
+              ¿Puedes ordenar los números del 1 al 5 para formar algunas V mágicas con diferentes totales mágicos?
           </p>
 
           <div id="magicvLayoutA" class="magicv-layout">
             <div class="magicv-play-area">
-              <div class="magicv-board" aria-label="Tablero de la Magic V">
+              <div class="magicv-board" aria-label="Tablero de la V mágica">
                 <div class="magicv-drop" data-slot="leftTop2" aria-label="Posicion izquierda superior"></div>
                 <div class="magicv-drop" data-slot="rightTop2" aria-label="Posicion derecha superior"></div>
                 <div class="magicv-drop" data-slot="leftMid2" aria-label="Posicion izquierda media"></div>
@@ -377,13 +370,13 @@
           <div class="mission-actions">
             <button id="checkMagicVBtn2" class="btn btn-primary">Comprobar combinacion</button>
             <button id="resetMagicVBtn2" class="btn btn-secondary">Reiniciar</button>
-            <button id="showMagicVSavedBtn2" class="btn btn-info" type="button">Ver Magic V guardadas</button>
+            <button id="showMagicVSavedBtn2" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
           </div>
 
           <p id="magicVFeedback2" class="status-pill">Aun no has comprobado.</p>
 
           <section id="mission2ExploracionBlock" class="mission2-exploration is-hidden" aria-live="polite">
-            <p class="mission2-exploration-question">Según las Magic V que encontraste, ¿el número del núcleo tiene alguna característica especial? Explícale a V-Bot.</p>
+            <p class="mission2-exploration-question">Según las V mágicas que encontraste, ¿el número del núcleo tiene alguna característica especial? Explícale a V-Bot.</p>
             <div class="audio-controls">
               <button id="recordBtnA3M2Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 2Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
               <button id="stopBtnA3M2Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 2Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
@@ -408,7 +401,7 @@
         <div class="mission-actions">
           <button id="completeMission3Btn" class="btn btn-success">Completar mision 3</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
-          <button id="showMagicVSavedBtn3" class="btn btn-info" type="button">Ver Magic V guardadas</button>
+          <button id="showMagicVSavedBtn3" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
         </div>
       </div>
     </section>
@@ -426,7 +419,7 @@
         <div class="mission-actions">
           <button id="completeMission4Btn" class="btn btn-success">Completar mision 4</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
-          <button id="showMagicVSavedBtn4" class="btn btn-info" type="button">Ver Magic V guardadas</button>
+          <button id="showMagicVSavedBtn4" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
         </div>
       </div>
     </section>
@@ -444,7 +437,7 @@
         <div class="mission-actions">
           <button id="completeMission5Btn" class="btn btn-success">Completar mision 5</button>
           <button class="btn btn-secondary back-to-map">Volver al mapa</button>
-          <button id="showMagicVSavedBtn5" class="btn btn-info" type="button">Ver Magic V guardadas</button>
+          <button id="showMagicVSavedBtn5" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
         </div>
       </div>
     </section>
