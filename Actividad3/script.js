@@ -1970,6 +1970,7 @@ function getInitialSessionData() {
       currentV: [null, null, null, null, null],
       available: [],
       solved: false,
+      cuadernoStep: 0,
       finalAudioSubmitted: false,
       finalAudioURL: null,
     }
@@ -2367,6 +2368,9 @@ function updateMission3TimerUI(remainingSeconds) {
   const bottomHeight = BOTTOM_H * (1 - ratio);
 
   if (sandTop) {
+    // Anclar la arena en el cuello (y=72) y mover el borde superior hacia abajo
+    // → el vaciado ocurre desde la parte ancha (arriba) hacia la punta (abajo)
+    sandTop.setAttribute("y", String(Math.round(72 - topHeight)));
     sandTop.setAttribute("height", String(Math.round(topHeight)));
   }
   if (sandBottom) {
@@ -2870,11 +2874,7 @@ function handleMission4Check() {
   const list = sessionData.mission4Lab.savedByCore[core];
   const key = arr.join("-");
   if (list.some((item) => item.v.join("-") === key)) {
-    setMessage(m4Feedback, "Esta V mágica ya está registrada en su columna.", "bad");
-    return;
-  }
-  if (list.some((item) => item.sum === sum)) {
-    setMessage(m4Feedback, "Busca otra V válida con suma mágica diferente en esa columna.", "bad");
+    setMessage(m4Feedback, "Esta permutación exacta ya está registrada en esa columna.", "bad");
     return;
   }
   list.push({ v: arr.slice(), sum });
@@ -3141,9 +3141,13 @@ function ensureMission5LabState() {
       currentV: [null, null, null, null, null],
       available: [],
       solved: false,
+      cuadernoStep: 0,
       finalAudioSubmitted: false,
       finalAudioURL: null,
     };
+  }
+  if (typeof sessionData.mission5Lab.cuadernoStep !== "number") {
+    sessionData.mission5Lab.cuadernoStep = 0;
   }
   if (!Array.isArray(sessionData.mission5Lab.currentV) || sessionData.mission5Lab.currentV.length !== 5) {
     sessionData.mission5Lab.currentV = [null, null, null, null, null];
@@ -3476,6 +3480,56 @@ function setupMission5Interactions() {
     submitBtnA3M5Final.dataset.bound = "1";
     submitBtnA3M5Final.addEventListener("click", submitMission5FinalAudio);
   }
+  const m5CuadernoNextBtn = document.getElementById("m5CuadernoNextBtn");
+  if (m5CuadernoNextBtn && !m5CuadernoNextBtn.dataset.bound) {
+    m5CuadernoNextBtn.dataset.bound = "1";
+    m5CuadernoNextBtn.addEventListener("click", () => {
+      ensureMission5LabState();
+      if (sessionData.mission5Lab.finalAudioSubmitted) return;
+      const step = sessionData.mission5Lab.cuadernoStep;
+      if (step <= 3) {
+        sessionData.mission5Lab.cuadernoStep = step + 1;
+        saveSessionProgress();
+        renderMission5CuadernoFlow();
+      }
+    });
+  }
+}
+
+function renderMission5CuadernoFlow() {
+  ensureMission5LabState();
+  const wrap1 = document.getElementById("m5CuadernoQWrap1");
+  const wrap2 = document.getElementById("m5CuadernoQWrap2");
+  const wrap3 = document.getElementById("m5CuadernoQWrap3");
+  const nextBtn = document.getElementById("m5CuadernoNextBtn");
+  if (!m5CuadernoBlock || !wrap1 || !wrap2 || !wrap3 || !nextBtn) return;
+
+  const solved = Boolean(sessionData.mission5Lab.solved);
+  if (!solved) {
+    m5CuadernoBlock.style.display = "none";
+    if (m5AudioFinalBlock) m5AudioFinalBlock.style.display = "none";
+    return;
+  }
+
+  m5CuadernoBlock.style.display = "block";
+  let step = sessionData.mission5Lab.cuadernoStep;
+  if (step < 1) step = 1;
+  sessionData.mission5Lab.cuadernoStep = step;
+
+  wrap1.style.display = step >= 1 ? "block" : "none";
+  wrap2.style.display = step >= 2 ? "block" : "none";
+  wrap3.style.display = step >= 3 ? "block" : "none";
+
+  const audioVisible = sessionData.mission5Lab.finalAudioSubmitted || step > 3;
+  if (m5AudioFinalBlock) m5AudioFinalBlock.style.display = audioVisible ? "grid" : "none";
+
+  if (sessionData.mission5Lab.finalAudioSubmitted) {
+    nextBtn.style.display = "none";
+  } else if (step <= 3) {
+    nextBtn.style.display = "inline-block";
+  } else {
+    nextBtn.style.display = "none";
+  }
 }
 
 function renderMission5Screen() {
@@ -3489,8 +3543,7 @@ function renderMission5Screen() {
   }
   const solved = Boolean(sessionData.mission5Lab.solved);
   if (m5ReflectionBlock) m5ReflectionBlock.style.display = solved ? "block" : "none";
-  if (m5CuadernoBlock) m5CuadernoBlock.style.display = solved ? "block" : "none";
-  if (m5AudioFinalBlock) m5AudioFinalBlock.style.display = solved ? "grid" : "none";
+  renderMission5CuadernoFlow();
   if (statusA3M5Final && sessionData.mission5Lab.finalAudioSubmitted) {
     setMessage(statusA3M5Final, "✅ Audio enviado correctamente.", "good");
   }
@@ -3631,6 +3684,7 @@ function saveSessionProgress() {
         currentV: Array.isArray(sessionData.mission5Lab?.currentV) ? sessionData.mission5Lab.currentV : [null, null, null, null, null],
         available: Array.isArray(sessionData.mission5Lab?.available) ? sessionData.mission5Lab.available : [],
         solved: sessionData.mission5Lab?.solved || false,
+        cuadernoStep: sessionData.mission5Lab?.cuadernoStep || 0,
         finalAudioSubmitted: sessionData.mission5Lab?.finalAudioSubmitted || false,
         finalAudioURL: sessionData.mission5Lab?.finalAudioURL || null,
       }
@@ -3710,6 +3764,7 @@ async function saveProgressToFirestore() {
         currentV: Array.isArray(sessionData.mission5Lab?.currentV) ? sessionData.mission5Lab.currentV : [null, null, null, null, null],
         available: Array.isArray(sessionData.mission5Lab?.available) ? sessionData.mission5Lab.available : [],
         solved: sessionData.mission5Lab?.solved || false,
+        cuadernoStep: sessionData.mission5Lab?.cuadernoStep || 0,
         finalAudioSubmitted: sessionData.mission5Lab?.finalAudioSubmitted || false,
         finalAudioURL: sessionData.mission5Lab?.finalAudioURL || null,
       },
@@ -3806,6 +3861,7 @@ function restoreProgressFromData(data) {
     sessionData.mission5Lab.currentV = Array.isArray(data.mission5Lab.currentV) ? data.mission5Lab.currentV : [null, null, null, null, null];
     sessionData.mission5Lab.available = Array.isArray(data.mission5Lab.available) ? data.mission5Lab.available : [];
     sessionData.mission5Lab.solved = Boolean(data.mission5Lab.solved);
+    sessionData.mission5Lab.cuadernoStep = typeof data.mission5Lab.cuadernoStep === "number" ? data.mission5Lab.cuadernoStep : 0;
     sessionData.mission5Lab.finalAudioSubmitted = Boolean(data.mission5Lab.finalAudioSubmitted);
     sessionData.mission5Lab.finalAudioURL = data.mission5Lab.finalAudioURL || null;
   }

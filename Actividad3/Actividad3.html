@@ -578,7 +578,7 @@
     <section id="mission4Screen" class="app-screen mission-screen">
       <div id="mission4Container" class="mission-visual-container">
         <header class="screen-header mission-header">
-          <h2>Punto 4: Probando con otros numeros</h2>
+          <h2>Punto 4: Probando con otros números</h2>
           <div class="guide-inline" id="guideInlineMission4"></div>
         </header>
 
@@ -688,7 +688,7 @@
           </div>
 
           <section id="m5BoardBlock" style="display:none;">
-            <p class="mission5-board-instruction">Arma una sola V mágica con el conjunto elegido.</p>
+            <p class="mission5-board-instruction">Arma una V mágica con el conjunto elegido.</p>
             <p class="mission5-board-tip">¿Sabes cómo identificar si es correcta o no sin importar el conjunto de números elegido?</p>
 
             <div class="magic-v-board" id="m5MagicVBoard">
@@ -718,16 +718,23 @@
           </section>
 
           <section id="m5CuadernoBlock" class="mission5-cuaderno-block" style="display:none;" aria-live="polite">
-            <h4>Responde las siguientes preguntas en tu cuaderno:</h4>
-            <ol class="mission5-cuaderno-list">
-              <li>¿Qué debe hacer para construir una V mágica?</li>
-              <li>¿Cómo puede saber si su V realmente es mágica?</li>
-              <li>¿Qué debe tener en cuenta sobre el número del centro?</li>
-            </ol>
+            <p class="cuaderno-responde-blue">Responde en tu cuaderno.</p>
+            <div id="m5CuadernoQWrap1" class="mission3-q-wrap" style="display:none;">
+              <p class="magicv-final-question">1. ¿Qué debe hacer para construir una V mágica?</p>
+            </div>
+            <div id="m5CuadernoQWrap2" class="mission3-q-wrap" style="display:none;">
+              <p class="magicv-final-question">2. ¿Cómo puede saber si su V realmente es mágica?</p>
+            </div>
+            <div id="m5CuadernoQWrap3" class="mission3-q-wrap" style="display:none;">
+              <p class="magicv-final-question">3. ¿Qué debe tener en cuenta sobre el núcleo?</p>
+            </div>
+            <button id="m5CuadernoNextBtn" class="btn btn-primary" type="button" style="display:none;">Ya respondí</button>
           </section>
 
           <section id="m5AudioFinalBlock" class="mission2-exploration" style="display:none;" aria-live="polite">
-            <p class="mission2-exploration-question">Ten en cuenta todo lo que has realizado hasta este punto. Explícale a V-Bot qué debe hacer, cómo puede saber si una V es mágica y qué debe tener en cuenta sobre el número del centro.</p>
+            <p class="mission2-exploration-question">Ten en cuenta todo lo que has realizado hasta este punto. 
+              Explícale a V-Bot qué debe hacer, cómo puede saber si una V es mágica y qué debe tener en cuenta 
+              sobre el núcleo.</p>
             <div class="audio-controls">
               <button id="recordBtnA3M5Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final de mision 5"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
               <button id="submitA3M5Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final de mision 5" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
