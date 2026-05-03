@@ -208,7 +208,7 @@
     <section id="mission1Screen" class="app-screen mission-screen">
       <div id="mission1Container" class="mission-visual-container">
         <header class="screen-header mission-header">
-          <h2>Punto 1: Diagnostico de Robot V</h2>
+          <h2>Punto 1: Diagnóstico</h2>
           <div class="guide-inline" id="guideInlineMission1"></div>
         </header>
         <article class="narrative-card narrative-card-m1">
@@ -297,25 +297,26 @@
           </div>
           <div class="magic-v-feedback" id="magicVSaveFeedback"></div>
           <div id="magicVTableFinalBlock" style="display:none; margin-top:10px;">
-            <p class="magicv-final-question">¿Hay alguna V mágica que no esté en la tabla? ¿Cómo lo sabes?</p>
-            <div class="audio-controls">
-              <button id="recordBtnA3M1Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-              <button id="submitA3M1Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+            <div id="preguntas" class="mission1-preguntas" style="display:none;">
+              <p class="magicv-final-intro">Sabemos que, las V mágicas de la tabla tienen el mismo total mágico y que todas utilizan los números 1, 2, 3, 4 y 5.</p>
+              <p class="cuaderno-responde-blue">Responde las siguientes preguntas en tu cuaderno:</p>
+              <p id="preguntaTexto" class="magicv-final-question"></p>
+              <button id="preguntaRespondidaBtn" class="btn btn-primary" type="button">Ya respondí</button>
             </div>
-            <p id="statusA3M1Final" class="status-text"></p>
-            <button id="finmision1" class="btn btn-finmision">
-               <img src="../Actividad3/assets/images/finmision.png" alt="Fin de misión 1">
-            </button>
-            <style>
-              #finmision1 { display: none; }
-            </style>
-            </button>
-          </div>
-          <!-- Burbuja de felicitación misión 1 -->
-          <div id="felicitacionMision1" class="comic-bubble-felicitacion" style="display:none;">
-            <img src="assets/images/robot-happy.png" alt="Robot feliz" class="robot-happy-img">
-            <div class="felicitacion-texto">
-              ¡Felicidades! Has completado la misión 1
+            <div id="audioFinalBlock" style="display:none;">
+              <p class="magicv-final-question">¡V-Bot quiere entender cómo funcionan las V mágicas que encontraste!<br>
+              Usa todo lo que has descubierto hasta el momento para explicarle qué tienen en común y cómo las puede reconocer.</p>
+              <div class="audio-controls">
+                <button id="recordBtnA3M1Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+                <button id="submitA3M1Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+              </div>
+              <p id="statusA3M1Final" class="status-text"></p>
+              <button id="finmision1" class="btn btn-finmision">
+                 <img src="../Actividad3/assets/images/finmision.png" alt="Fin de misión 1">
+              </button>
+              <style>
+                #finmision1 { display: none; }
+              </style>
             </div>
           </div>
           <div class="magic-v-found-list" id="magicVFoundList" style="display:none;">
@@ -328,62 +329,133 @@
     <section id="mission2Screen" class="app-screen mission-screen">
       <div id="mission2Container" class="mission-visual-container">
         <header class="screen-header mission-header">
-          <h2>Punto 2: Rutas de Patron</h2>
+          <h2>Punto 2: Exploración del Núcleo</h2>
           <div class="guide-inline" id="guideInlineMission2"></div>
         </header>
         <article class="narrative-card narrative-card-m2">
           <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
           <div class="narrative-card-text">
-            <p><strong>V-Bot:</strong> ¿Diferentes sumas mágicas?</p>
+            <p><strong>V-Bot:</strong> ¿Cuántas V puedo construir a partir de una V mágica?</p>
           </div>
         </article>
-        <div class="magicv-card">
-          <p> Supondremos que si dos o más V mágicas tienen el mismo total mágico, son la misma V mágica.
-              ¿Puedes ordenar los números del 1 al 5 para formar algunas V mágicas con diferentes totales mágicos?
-          </p>
-
-          <div id="magicvLayoutA" class="magicv-layout">
-            <div class="magicv-play-area">
-              <div class="magicv-board" aria-label="Tablero de la V mágica">
-                <div class="magicv-drop" data-slot="leftTop2" aria-label="Posicion izquierda superior"></div>
-                <div class="magicv-drop" data-slot="rightTop2" aria-label="Posicion derecha superior"></div>
-                <div class="magicv-drop" data-slot="leftMid2" aria-label="Posicion izquierda media"></div>
-                <div class="magicv-drop" data-slot="rightMid2" aria-label="Posicion derecha media"></div>
-                <div class="magicv-drop" data-slot="bottom2" aria-label="Posicion inferior"></div>
-              </div>
-
-              <div class="magicv-chip-tray" id="mission2ChipTray" aria-label="Fichas disponibles">
-                <button class="magicv-chip" type="button" data-value="1">1</button>
-                <button class="magicv-chip" type="button" data-value="2">2</button>
-                <button class="magicv-chip" type="button" data-value="3">3</button>
-                <button class="magicv-chip" type="button" data-value="4">4</button>
-                <button class="magicv-chip" type="button" data-value="5">5</button>
-              </div>
+        <div class="magicv-card mission2-core-card">
+          <div class="mission2-core-layout">
+            <div class="mission2-core-table-panel">
+              <h4>Tabla de V mágicas de la misión 1</h4>
+              <div id="mission2FromM1Table" class="magicv-saved-list"></div>
             </div>
-
-            <aside class="magicv-results-panel" aria-live="polite">
-              <h4>Combinaciones guardadas <span id="mission2SavedCount">0/3</span></h4>
-              <div id="mission2SavedList" class="magicv-saved-list"></div>
-            </aside>
+            <div class="mission2-core-text-panel">
+              <p>V-Bot cree que con ese mismo núcleo hay más V mágicas, no solamente 8.</p>
+              <p>Exploraremos las V mágicas que tienen núcleo <strong id="mission2CoreValue">?</strong>.</p>
+              <p class="cuaderno-responde-blue">Responde las siguientes preguntas en tu cuaderno:</p>
+              <p id="mission2QuestionText" class="mission2-question-list"></p>
+              <button id="mission2QuestionNextBtn" class="btn btn-primary" type="button">Ya terminé</button>
+            </div>
           </div>
-
-          <div class="mission-actions">
-            <button id="checkMagicVBtn2" class="btn btn-primary">Comprobar combinacion</button>
-            <button id="resetMagicVBtn2" class="btn btn-secondary">Reiniciar</button>
-            <button id="showMagicVSavedBtn2" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
-          </div>
-
-          <p id="magicVFeedback2" class="status-pill">Aun no has comprobado.</p>
-
-          <section id="mission2ExploracionBlock" class="mission2-exploration is-hidden" aria-live="polite">
-            <p class="mission2-exploration-question">Según las V mágicas que encontraste, ¿el número del núcleo tiene alguna característica especial? Explícale a V-Bot.</p>
+          <section id="mission2AudioBlock" class="mission2-exploration" aria-live="polite" style="display:none;">
+            <p class="mission2-exploration-question">¿Existen otras V mágicas con núcleo <strong id="mission2CoreValueAudio">?</strong> que no esten en la tabla? Explica cuidadosamente teniendo en cuenta todo lo que has realizado hasta el momento.</p>
             <div class="audio-controls">
-              <button id="recordBtnA3M2Exploracion" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de 2Exploración"><img src="../Actividad2/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
-              <button id="stopBtnA3M2Exploracion" class="btn btn-audiostop" type="button" aria-label="Detener grabación de 2Exploración"><img src="../Actividad2/assets/images/boton-detener.png" alt="Detener"></button>
-              <button id="submitA3M2Exploracion" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de 2Exploración" disabled><img src="../Actividad2/assets/images/enviar.png" alt="Enviar"></button>
+              <button id="recordBtnA3M2Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta de misión 2"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+              <button id="submitA3M2Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio de misión 2" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
             </div>
-            <p id="statusA3M2Exploracion" class="status-text"></p>
+            <p id="statusA3M2Final" class="status-text"></p>
           </section>
+
+          <!-- Exploración: nueva V con núcleo diferente -->
+          <div id="mission2ExploreBlock" style="display:none;">
+            <article class="narrative-card narrative-card-m2">
+              <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
+              <div class="narrative-card-text">
+                <p>👉 ¿Y si cambiamos el número del centro?</p>
+                <p>👉 ¿Seguirán existiendo V mágicas?</p>
+              </div>
+            </article>
+            <p class="magicv-explore-instruction">Intenta construir una V mágica donde el núcleo (número del centro) sea <strong>diferente</strong> al que tenías en la misión 1.</p>
+            <div class="magic-v-board" id="magicVBoardM2">
+              <svg width="420" height="320">
+                <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                <circle id="m2v-pos-1" cx="210" cy="250" r="38" />
+                <circle id="m2v-pos-2" cx="90" cy="70" r="38" />
+                <circle id="m2v-pos-3" cx="150" cy="160" r="38" />
+                <circle id="m2v-pos-4" cx="270" cy="160" r="38" />
+                <circle id="m2v-pos-5" cx="330" cy="70" r="38" />
+              </svg>
+            </div>
+            <div class="magic-v-buttons" id="magicVBtnsM2">
+              <button class="v-num-btn" data-num="1">1</button>
+              <button class="v-num-btn" data-num="2">2</button>
+              <button class="v-num-btn" data-num="3">3</button>
+              <button class="v-num-btn" data-num="4">4</button>
+              <button class="v-num-btn" data-num="5">5</button>
+            </div>
+            <div class="magic-v-actions">
+              <button id="m2ExploreConfirmBtn" class="btn btn-primary">Confirmar</button>
+              <button id="m2ExploreResetBtn" class="btn btn-secondary">Reiniciar</button>
+            </div>
+            <div class="magic-v-feedback" id="m2ExploreFeedback"></div>
+
+            <!-- Suma mágica de la 1ra V de exploración -->
+            <div id="m2ExploreSumBlock" style="display:none;">
+              <div class="magic-v-instruction">Llamaremos "total mágico" a la suma de los tres números que forman un brazo de esta V mágica.</div>
+              <div class="magic-v-question">¿Cuál es el total mágico de cada brazo en esta V mágica?</div>
+              <input type="number" id="m2ExploreSumInput" min="3" max="12" class="magicv-suma-input" />
+              <button id="m2ExploreSumCheckBtn" class="btn btn-primary magicv-suma-check">Comprobar</button>
+              <div class="magic-v-feedback" id="m2ExploreSumFeedback"></div>
+            </div>
+
+            <div id="m2ExploreCuadernoBlock" style="display:none;">
+              <p class="magicv-final-question">¿Cuántas V mágicas crees que deben existir con ese mismo núcleo? Explica por qué en tu cuaderno.</p>
+              <button id="m2ExploreCuadernoDoneBtn" class="btn btn-primary" type="button">Ya respondí</button>
+            </div>
+
+            <!-- Segundo tablero: otra V con otro núcleo -->
+            <div id="m2Explore2Block" style="display:none;">
+              <p class="magicv-explore-instruction">¡Muy bien! Ahora intenta construir otra V mágica con un núcleo diferente al de la misión 1 y al de la V anterior.</p>
+              <div class="magic-v-board" id="magicVBoardM2B">
+                <svg width="420" height="320">
+                  <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                  <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                  <circle id="m2bv-pos-1" cx="210" cy="250" r="38" />
+                  <circle id="m2bv-pos-2" cx="90" cy="70" r="38" />
+                  <circle id="m2bv-pos-3" cx="150" cy="160" r="38" />
+                  <circle id="m2bv-pos-4" cx="270" cy="160" r="38" />
+                  <circle id="m2bv-pos-5" cx="330" cy="70" r="38" />
+                </svg>
+              </div>
+              <div class="magic-v-buttons" id="magicVBtnsM2B">
+                <button class="v-num-btn" data-num="1">1</button>
+                <button class="v-num-btn" data-num="2">2</button>
+                <button class="v-num-btn" data-num="3">3</button>
+                <button class="v-num-btn" data-num="4">4</button>
+                <button class="v-num-btn" data-num="5">5</button>
+              </div>
+              <div class="magic-v-actions">
+                <button id="m2Explore2ConfirmBtn" class="btn btn-primary">Confirmar</button>
+                <button id="m2Explore2ResetBtn" class="btn btn-secondary">Reiniciar</button>
+              </div>
+              <div class="magic-v-feedback" id="m2Explore2Feedback"></div>
+            </div>
+
+            <!-- Segundo cuaderno: pregunta después de segunda V exploración -->
+            <div id="m2Explore2CuadernoBlock" style="display:none;">
+              <p class="magicv-final-question"><span class="cuaderno-responde-blue">Responde en tu cuaderno.</span> ¿Cómo podrías saber cuántas V mágicas habrá con este nuevo núcleo sin construirlas todas?</p>
+              <button id="m2Explore2CuadernoDoneBtn" class="btn btn-primary" type="button">Ya respondí</button>
+            </div>
+
+            <div id="m2ExploreFinalBlock" style="display:none;">
+              <p class="magicv-final-question">V-Bot quiere entender: ¿Con cualquier núcleo (1,3,5) se pueden construir la misma cantidad de V mágicas? Ten en cuenta todo lo que sabes hasta el momento para explicarle</p>
+              <div class="audio-controls">
+                <button id="recordBtnA3M2Regla" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta regla general"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+                <button id="submitA3M2Regla" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio regla general" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+              </div>
+              <p id="statusA3M2Regla" class="status-text"></p>
+            </div>
+
+            <button id="finmision2" class="btn btn-finmision" style="display:none;">
+               <img src="../Actividad3/assets/images/finmision.png" alt="Fin de misión 2">
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -391,57 +463,304 @@
     <section id="mission3Screen" class="app-screen mission-screen">
       <div id="mission3Container" class="mission-visual-container">
         <header class="screen-header mission-header">
-          <h2>Punto 3: Taller de Generalizacion</h2>
+          <h2>Punto 3: Verificando...</h2>
           <div class="guide-inline" id="guideInlineMission3"></div>
         </header>
-        <article class="narrative-card">
-          <p>Propone una regla general para mantener estable el sistema.</p>
-          <textarea id="m3Input" rows="5" placeholder="Escribe tu regla general..."></textarea>
+
+        <section class="mission3-header-vs" aria-label="V mágicas de referencia">
+          <h3>Referencias encontradas (misiones anteriores)</h3>
+          <div id="mission3HeaderVs" class="mission3-header-vs-list"></div>
+        </section>
+
+        <article class="narrative-card narrative-card-m2">
+          <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
+          <div class="narrative-card-text">
+            <p><strong>V-Bot:</strong> Si con 1, 3 y 5 se pueden construir V mágicas, creo que también deberían existir V mágicas con núcleo 2 o 4.</p>
+          </div>
         </article>
-        <div class="mission-actions">
-          <button id="completeMission3Btn" class="btn btn-success">Completar mision 3</button>
-          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
-          <button id="showMagicVSavedBtn3" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
-        </div>
+
+        <section class="magicv-card mission3-lab-card">
+          <p>Pon a prueba la hipótesis de V-Bot: intenta construir V mágicas con núcleo 2 o 4. Tienes 10 minutos para explorar.</p>
+
+          <div class="mission3-lab-top">
+            <div class="mission3-hourglass" id="m3Hourglass" aria-live="polite">
+              <svg class="m3-hourglass-svg" viewBox="0 0 100 162" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="m3ClipTop">
+                    <polygon points="8,8 92,8 52,72 48,72"/>
+                  </clipPath>
+                  <clipPath id="m3ClipBottom">
+                    <polygon points="48,84 52,84 92,152 8,152"/>
+                  </clipPath>
+                </defs>
+                <!-- Arena superior -->
+                <rect id="m3SandTop" x="0" y="8" width="100" height="64" clip-path="url(#m3ClipTop)" fill="#f2b84b"/>
+                <!-- Arena inferior -->
+                <rect id="m3SandBottom" x="0" y="152" width="100" height="0" clip-path="url(#m3ClipBottom)" fill="#f2b84b"/>
+                <!-- Grano cayendo por el cuello -->
+                <circle id="m3SandDrop" cx="50" cy="74" r="2.2" fill="#e8a020">
+                  <animate attributeName="cy" values="72;84" dur="0.6s" repeatCount="indefinite"/>
+                  <animate attributeName="opacity" values="1;0.1" dur="0.6s" repeatCount="indefinite"/>
+                </circle>
+                <!-- Perfil del reloj de arena -->
+                <path d="M8,8 L92,8 L52,72 L52,84 L92,152 L8,152 L48,84 L48,72 Z"
+                      fill="none" stroke="#8eb8ea" stroke-width="2.8" stroke-linejoin="round"/>
+                <!-- Barra superior -->
+                <rect x="3" y="2" width="94" height="10" rx="5" fill="#d7edfb" stroke="#8eb8ea" stroke-width="1.8"/>
+                <!-- Barra inferior -->
+                <rect x="3" y="150" width="94" height="10" rx="5" fill="#d7edfb" stroke="#8eb8ea" stroke-width="1.8"/>
+              </svg>
+              <div class="mission3-timer-text" id="m3TimerText">10:00</div>
+            </div>
+          </div>
+
+          <div class="magic-v-board" id="m3MagicVBoard">
+            <svg width="420" height="320">
+              <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+              <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+              <circle id="m3v-pos-1" cx="210" cy="250" r="38" />
+              <circle id="m3v-pos-2" cx="90" cy="70" r="38" />
+              <circle id="m3v-pos-3" cx="150" cy="160" r="38" />
+              <circle id="m3v-pos-4" cx="270" cy="160" r="38" />
+              <circle id="m3v-pos-5" cx="330" cy="70" r="38" />
+            </svg>
+          </div>
+
+          <div class="magic-v-buttons" id="m3MagicVBtns">
+            <button class="v-num-btn" data-num="1">1</button>
+            <button class="v-num-btn" data-num="2">2</button>
+            <button class="v-num-btn" data-num="3">3</button>
+            <button class="v-num-btn" data-num="4">4</button>
+            <button class="v-num-btn" data-num="5">5</button>
+          </div>
+
+          <div class="magic-v-actions">
+            <button id="m3ConfirmBtn" class="btn btn-primary" type="button">Comprobar</button>
+            <button id="m3ResetBtn" class="btn btn-secondary" type="button">Reiniciar</button>
+            <button id="m3DevEndTimerBtn" class="btn btn-info" type="button" style="display:none;">Forzar fin de tiempo (dev)</button>
+          </div>
+
+          <div class="magic-v-feedback" id="m3Feedback"></div>
+        </section>
+
+        <section id="m3CuadernoBlock" class="mission3-cuaderno" style="display:none;">
+          <p class="cuaderno-responde-blue">Responde en tu cuaderno.</p>
+
+          <div id="m3CuadernoQWrap1" class="mission3-q-wrap" style="display:none;">
+            <p class="magicv-final-question">1. Cuando intentas construirla, ¿qué pasa con los dos brazos? ¿Tienen el mismo total mágico o no?</p>
+          </div>
+
+          <div id="m3CuadernoQWrap2" class="mission3-q-wrap" style="display:none;">
+            <p class="magicv-final-question">2. ¿Cuántas veces aparece el número del centro cuando calculas la suma de los brazos?</p>
+          </div>
+
+          <div id="m3CuadernoQWrap3" class="mission3-q-wrap" style="display:none;">
+            <p class="magicv-final-question">3. Si intentas ajustar un brazo para que funcione, ¿qué pasa con el otro? ¿Logras que se equilibren?</p>
+          </div>
+
+          <button id="m3CuadernoNextBtn" class="btn btn-primary" type="button" style="display:none;">Ya respondí</button>
+        </section>
+
+        <section id="m3AudioFinalBlock" class="mission2-exploration" style="display:none;" aria-live="polite">
+          <p class="mission2-exploration-question">V-Bot quiere poder construir V mágicas siempre. Explícale cómo, usando todo lo que has descubierto desde la misión 1 hasta ahora. Dile exactamente qué debe hacer y qué debe tener en cuenta para que su V sea mágica.</p>
+          <div class="audio-controls">
+            <button id="recordBtnA3M3Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final de misión 3"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+            <button id="submitA3M3Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final de misión 3" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+          </div>
+          <p id="statusA3M3Final" class="status-text"></p>
+          <button id="finmision3" class="btn btn-finmision" style="display:none;">
+             <img src="../Actividad3/assets/images/finmision.png" alt="Fin de misión 3">
+          </button>
+        </section>
       </div>
     </section>
 
     <section id="mission4Screen" class="app-screen mission-screen">
       <div id="mission4Container" class="mission-visual-container">
         <header class="screen-header mission-header">
-          <h2>Punto 4: Zona de Justificacion</h2>
+          <h2>Punto 4: Probando con otros numeros</h2>
           <div class="guide-inline" id="guideInlineMission4"></div>
         </header>
-        <article class="narrative-card">
-          <p>Justifica por que tu regla funciona en casos diferentes.</p>
-          <textarea id="m4Input" rows="5" placeholder="Escribe tu justificacion..."></textarea>
+
+        <article class="narrative-card narrative-card-m2">
+          <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
+          <div class="narrative-card-text">
+            <p><strong>V-Bot:</strong> Ahora, vamos a investigar qué sucede si cambiamos el conjunto de números. <br> Tendremos 2, 3, 4, 5 y 6.</p>
+          </div>
         </article>
-        <div class="mission-actions">
-          <button id="completeMission4Btn" class="btn btn-success">Completar mision 4</button>
-          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
-          <button id="showMagicVSavedBtn4" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
-        </div>
+
+        <section class="magicv-card mission4-lab-card">
+          <p>Encuentra V mágicas con diferentes sumas mágicas:</p>
+
+          <div class="mission4-lab-layout">
+            <div class="mission4-lab-left">
+              <div class="magic-v-board" id="m4MagicVBoard">
+                <svg width="420" height="320">
+                  <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                  <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                  <circle id="m4v-pos-1" cx="210" cy="250" r="38" />
+                  <circle id="m4v-pos-2" cx="90" cy="70" r="38" />
+                  <circle id="m4v-pos-3" cx="150" cy="160" r="38" />
+                  <circle id="m4v-pos-4" cx="270" cy="160" r="38" />
+                  <circle id="m4v-pos-5" cx="330" cy="70" r="38" />
+                </svg>
+              </div>
+
+              <div class="magic-v-buttons" id="m4MagicVBtns">
+                <button class="v-num-btn" data-num="2">2</button>
+                <button class="v-num-btn" data-num="3">3</button>
+                <button class="v-num-btn" data-num="4">4</button>
+                <button class="v-num-btn" data-num="5">5</button>
+                <button class="v-num-btn" data-num="6">6</button>
+              </div>
+
+              <div class="magic-v-actions">
+                <button id="m4ConfirmBtn" class="btn btn-primary" type="button">Comprobar</button>
+                <button id="m4ResetBtn" class="btn btn-secondary" type="button">Reiniciar</button>
+              </div>
+
+              <div class="magic-v-feedback" id="m4Feedback"></div>
+            </div>
+
+            <div class="mission4-lab-right" aria-live="polite">
+              <div class="mission4-columns" id="m4ColumnsBoard">
+                <div class="mission4-column mission4-column-core2" id="m4ColCore2"></div>
+                <div class="mission4-column mission4-column-core4" id="m4ColCore4"></div>
+                <div class="mission4-column mission4-column-core6" id="m4ColCore6"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="m4CuadernoBlock" class="mission3-cuaderno" style="display:none;">
+          <p class="cuaderno-responde-blue">Responde en tu cuaderno.</p>
+
+          <div id="m4CuadernoQWrap1" class="mission3-q-wrap" style="display:none;">
+            <p class="magicv-final-question">1. ¿Qué números funcionan mejor como núcleo?</p>
+          </div>
+
+          <div id="m4CuadernoQWrap2" class="mission3-q-wrap" style="display:none;">
+            <p class="magicv-final-question">2. ¿Qué tienen en común esos números?</p>
+          </div>
+
+          <div id="m4CuadernoQWrap3" class="mission3-q-wrap" style="display:none;">
+            <p class="magicv-final-question">3. Compara con lo que pasaba antes con los números 1, 2, 3, 4 y 5.</p>
+          </div>
+
+          <button id="m4CuadernoNextBtn" class="btn btn-primary" type="button" style="display:none;">Ya respondí</button>
+        </section>
+
+        <section id="m4AudioFinalBlock" class="mission2-exploration" style="display:none;" aria-live="polite">
+          <p class="mission2-exploration-question">¿Qué tipo de números crees que pueden ser el núcleo en una V mágica? Explica usando los dos conjuntos.</p>
+          <div class="audio-controls">
+            <button id="recordBtnA3M4Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final de misión 4"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+            <button id="submitA3M4Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final de misión 4" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+          </div>
+          <p id="statusA3M4Final" class="status-text"></p>
+          <button id="finmision4" class="btn btn-finmision" style="display:none;">
+             <img src="../Actividad3/assets/images/finmision.png" alt="Fin de misión 4">
+          </button>
+        </section>
       </div>
     </section>
 
     <section id="mission5Screen" class="app-screen mission-screen">
       <div id="mission5Container" class="mission-visual-container">
         <header class="screen-header mission-header">
-          <h2>Punto 5: Reinicio Final</h2>
+          <h2>Mision 5: El reto final</h2>
           <div class="guide-inline" id="guideInlineMission5"></div>
         </header>
-        <article class="narrative-card">
-          <p>Comprobacion final: resume como reparaste el laboratorio.</p>
-          <textarea id="m5Input" rows="5" placeholder="Resumen final de la ingeniera de patrones..."></textarea>
+
+        <article class="narrative-card narrative-card-m2">
+          <img src="assets/images/bot-instruccion.png" alt="Bot de instrucciones" class="narrative-bot-image">
+          <div class="narrative-card-text">
+            <p><strong>V-Bot:</strong> Vamos a identificar qué sucede cuando cambiamos los conjuntos.</p>
+          </div>
         </article>
-        <div class="mission-actions">
-          <button id="completeMission5Btn" class="btn btn-success">Completar mision 5</button>
-          <button class="btn btn-secondary back-to-map">Volver al mapa</button>
-          <button id="showMagicVSavedBtn5" class="btn btn-info" type="button">Ver V mágicas guardadas</button>
-        </div>
+
+        <section class="magicv-card mission5-lab-card">
+          <p class="mission5-select-title">Selecciona uno de los siguientes conjuntos de números</p>
+          <div class="mission5-set-list" id="m5SetList">
+            <button class="btn btn-primary mission5-set-btn" data-set="3,4,5,6,7" type="button">3, 4, 5, 6, 7</button>
+            <button class="btn btn-primary mission5-set-btn" data-set="4,5,6,7,8" type="button">4, 5, 6, 7, 8</button>
+            <button class="btn btn-primary mission5-set-btn" data-set="6,7,8,9,10" type="button">6, 7, 8, 9, 10</button>
+            <button class="btn btn-primary mission5-set-btn" data-set="8,9,10,11,12" type="button">8, 9, 10, 11, 12</button>
+          </div>
+
+          <section id="m5BoardBlock" style="display:none;">
+            <p class="mission5-board-instruction">Arma una sola V mágica con el conjunto elegido.</p>
+            <p class="mission5-board-tip">¿Sabes cómo identificar si es correcta o no sin importar el conjunto de números elegido?</p>
+
+            <div class="magic-v-board" id="m5MagicVBoard">
+              <svg width="420" height="320">
+                <line x1="210" y1="250" x2="90" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                <line x1="210" y1="250" x2="330" y2="70" stroke="#b3b3ff" stroke-width="12" />
+                <circle id="m5v-pos-1" cx="210" cy="250" r="38" />
+                <circle id="m5v-pos-2" cx="90" cy="70" r="38" />
+                <circle id="m5v-pos-3" cx="150" cy="160" r="38" />
+                <circle id="m5v-pos-4" cx="270" cy="160" r="38" />
+                <circle id="m5v-pos-5" cx="330" cy="70" r="38" />
+              </svg>
+            </div>
+
+            <div class="magic-v-buttons" id="m5MagicVBtns"></div>
+
+            <div class="magic-v-actions">
+              <button id="m5ConfirmBtn" class="btn btn-primary" type="button">Comprobar</button>
+              <button id="m5ResetBtn" class="btn btn-secondary" type="button">Reiniciar</button>
+            </div>
+
+            <div class="magic-v-feedback" id="m5Feedback"></div>
+          </section>
+
+          <section id="m5ReflectionBlock" class="mission2-exploration" style="display:none;" aria-live="polite">
+            <p>Imagina que V-Bot quiere construir V mágicas con cualquier conjunto de números.</p>
+          </section>
+
+          <section id="m5CuadernoBlock" class="mission5-cuaderno-block" style="display:none;" aria-live="polite">
+            <h4>Responde las siguientes preguntas en tu cuaderno:</h4>
+            <ol class="mission5-cuaderno-list">
+              <li>¿Qué debe hacer para construir una V mágica?</li>
+              <li>¿Cómo puede saber si su V realmente es mágica?</li>
+              <li>¿Qué debe tener en cuenta sobre el número del centro?</li>
+            </ol>
+          </section>
+
+          <section id="m5AudioFinalBlock" class="mission2-exploration" style="display:none;" aria-live="polite">
+            <p class="mission2-exploration-question">Ten en cuenta todo lo que has realizado hasta este punto. Explícale a V-Bot qué debe hacer, cómo puede saber si una V es mágica y qué debe tener en cuenta sobre el número del centro.</p>
+            <div class="audio-controls">
+              <button id="recordBtnA3M5Final" class="btn btn-audiorecord" type="button" aria-label="Grabar respuesta final de mision 5"><img src="../Actividad3/assets/images/grabadora-de-voz.png" alt="Grabar"></button>
+              <button id="submitA3M5Final" class="btn btn-audiosubmit" type="button" aria-label="Enviar audio final de mision 5" disabled><img src="../Actividad3/assets/images/enviar.png" alt="Enviar"></button>
+            </div>
+            <p id="statusA3M5Final" class="status-text"></p>
+            <button id="finmision5" class="btn btn-finmision" style="display:none;">
+               <img src="../Actividad3/assets/images/finmision.png" alt="Fin de mision 5">
+            </button>
+          </section>
+        </section>
+
       </div>
     </section>
   </main>
+
+  <!-- Burbuja global de felicitación (reutilizable para cualquier misión) -->
+  <div id="felicitacionMisionGlobal" class="comic-bubble-felicitacion" style="display:none;">
+    <img src="assets/images/robot-happy.png" alt="Robot feliz" class="robot-happy-img">
+    <div id="felicitacionMisionTexto" class="felicitacion-texto">
+      ¡Felicidades! Has completado la misión
+    </div>
+  </div>
+
+  <div id="numetrixRescueScene" class="numetrix-rescue-scene" style="display:none;" aria-live="polite">
+    <div class="numetrix-rescue-panel">
+      <div class="numetrix-stars" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <img src="assets/images/robot-happy.png" alt="V-Bot celebrando" class="numetrix-rescue-bot">
+      <h3>Numetrix fue rescatada</h3>
+      <p>Tu razonamiento matemático ayudó a restaurar el equilibrio de la ciudad.</p>
+    </div>
+  </div>
 
   <script src="assets/estudiantes-data.js"></script>
   <script type="module" src="firebase3.js"></script>

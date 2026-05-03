@@ -1,5 +1,5 @@
 import { getApp, getApps, initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { addDoc, collection, getFirestore, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { addDoc, collection, getFirestore, serverTimestamp, setDoc, getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 const firebaseConfig = {
@@ -24,7 +24,10 @@ try {
     serverTimestamp,
     ref,
     uploadBytes,
-    getDownloadURL
+    getDownloadURL,
+    setDoc,
+    getDoc,
+    doc
   };
 
   console.log('Firebase (Actividad3) inicializado correctamente');
