@@ -708,6 +708,9 @@ body {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .guide-dragger:active {
@@ -811,6 +814,10 @@ body {
   background-repeat: no-repeat;
   border: 2px solid #acd0f2;
   overflow: hidden;
+}
+
+.map-stage.dragging-guide {
+  touch-action: none;
 }
 
 .map-layer-canvas {

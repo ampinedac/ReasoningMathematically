@@ -4159,6 +4159,10 @@ function setupMap() {
 
 function setupGuideDragAndDrop() {
   guideBadge.addEventListener("pointerdown", (event) => {
+    if (dragState.active || event.isPrimary === false) {
+      return;
+    }
+
     const dragHandle = event.target.closest(".guide-dragger");
     if (!dragHandle || !sessionData.character) {
       return;
@@ -4171,8 +4175,15 @@ function setupGuideDragAndDrop() {
     }
 
     event.preventDefault();
+    if (typeof dragHandle.setPointerCapture === "function") {
+      try {
+        dragHandle.setPointerCapture(event.pointerId);
+      } catch (_) {
+        // Algunos navegadores moviles pueden fallar al capturar; continuamos sin bloquear el drag.
+      }
+    }
     startGuideDrag(event);
-  });
+  }, { passive: false });
 
   window.addEventListener("pointermove", (event) => {
     if (!dragState.active || event.pointerId !== dragState.pointerId) {
@@ -4191,10 +4202,30 @@ function setupGuideDragAndDrop() {
 
     event.preventDefault();
     finishGuideDrag(event.clientX, event.clientY);
+  }, { passive: false });
+
+  window.addEventListener("pointercancel", (event) => {
+    if (!dragState.active || event.pointerId !== dragState.pointerId) {
+      return;
+    }
+
+    cancelGuideDrag();
+  }, { passive: false });
+
+  window.addEventListener("blur", () => {
+    if (!dragState.active) {
+      return;
+    }
+
+    cancelGuideDrag();
   });
 }
 
 function startGuideDrag(event) {
+  if (dragState.ghost) {
+    dragState.ghost.remove();
+  }
+
   dragState.active = true;
   dragState.pointerId = event.pointerId;
   dragState.hoverMission = null;
@@ -4259,6 +4290,19 @@ function finishGuideDrag(clientX, clientY) {
     openMission(droppedMission);
   } else {
     setMessage(mapHint, "Punto invalido. El guia vuelve a su lugar.", "bad");
+  }
+
+  resetGuideDragState();
+}
+
+function cancelGuideDrag() {
+  setMessage(mapHint, "Arrastra tu guia al marcador resaltado y sueltalo para entrar.", "");
+  resetGuideDragState();
+}
+
+function resetGuideDragState() {
+  if (!dragState.active && !dragState.ghost) {
+    return;
   }
 
   missionNodes.forEach((node) => {
