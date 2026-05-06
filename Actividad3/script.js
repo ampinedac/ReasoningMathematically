@@ -1212,26 +1212,57 @@ function enableMagicVDragDrop() {
       draggingBtn = btn;
       dragOriginIdx = null;
       dragGhost = btn.cloneNode(true);
-      dragGhost.style.position = "absolute";
+      dragGhost.style.position = "fixed";
       dragGhost.style.pointerEvents = "none";
       dragGhost.style.opacity = "0.7";
       dragGhost.style.zIndex = "9999";
+      const t0 = e.touches[0];
+      dragGhost.style.left = (t0.clientX - 32) + "px";
+      dragGhost.style.top = (t0.clientY - 32) + "px";
       document.body.appendChild(dragGhost);
     }, { passive: false });
     btn.addEventListener("touchmove", (e) => {
+      e.preventDefault();
       if (!dragGhost) return;
       const touch = e.touches[0];
       dragGhost.style.left = (touch.clientX - 32) + "px";
       dragGhost.style.top = (touch.clientY - 32) + "px";
     }, { passive: false });
     btn.addEventListener("touchend", (e) => {
+      if (!draggingBtn) return;
+      const touch = e.changedTouches[0];
+      // Detectar el círculo destino usando getBoundingClientRect (más fiable en SVG)
+      let posIdx = -1;
+      for (let i = 0; i < 5; i++) {
+        const circleEl = document.getElementById(`v-pos-${i + 1}`);
+        if (!circleEl) continue;
+        const rect = circleEl.getBoundingClientRect();
+        if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+            touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+          posIdx = i;
+          break;
+        }
+      }
+      if (posIdx !== -1) {
+        const num = Number(draggingBtn.dataset.num);
+        if (magicVState.v[posIdx] === null && magicVState.available.includes(num)) {
+          magicVState.v[posIdx] = num;
+          magicVState.available = magicVState.available.filter(n => n !== num);
+          if (dragGhost) dragGhost.remove();
+          dragGhost = null;
+          draggingBtn = null;
+          dragOriginIdx = null;
+          renderMagicVBoard();
+          return;
+        }
+      }
       if (dragGhost) dragGhost.remove();
       dragGhost = null;
       draggingBtn = null;
       dragOriginIdx = null;
     });
   });
-  // Círculos de la V como drop targets
+  // Círculos de la V como drop targets (mouse)
   for (let i = 0; i < 5; i++) {
     const circle = document.getElementById(`v-pos-${i+1}`);
     circle.addEventListener("dragover", (e) => {
@@ -1244,26 +1275,6 @@ function enableMagicVDragDrop() {
     circle.addEventListener("drop", (e) => {
       e.preventDefault();
       circle.setAttribute("stroke", "#6ec6ff");
-      if (!draggingBtn) return;
-      const num = Number(draggingBtn.dataset.num);
-      if (magicVState.v[i] === null && magicVState.available.includes(num)) {
-        magicVState.v[i] = num;
-        magicVState.available = magicVState.available.filter(n => n !== num);
-        renderMagicVBoard();
-      }
-      if (dragGhost) dragGhost.remove();
-      dragGhost = null;
-      draggingBtn = null;
-      dragOriginIdx = null;
-    });
-    // Touch drop
-    circle.addEventListener("touchmove", (e) => {
-      if (!dragGhost) return;
-      const touch = e.touches[0];
-      dragGhost.style.left = (touch.clientX - 32) + "px";
-      dragGhost.style.top = (touch.clientY - 32) + "px";
-    });
-    circle.addEventListener("touchend", (e) => {
       if (!draggingBtn) return;
       const num = Number(draggingBtn.dataset.num);
       if (magicVState.v[i] === null && magicVState.available.includes(num)) {
@@ -1521,28 +1532,7 @@ function setupMagicVPart2() {
       draggingBtn = null;
       dragOriginIdx = null;
     };
-    // Touch drop
-    circle.ontouchmove = (e) => {
-      if (!dragGhost) return;
-      const touch = e.touches[0];
-      dragGhost.style.left = (touch.clientX - 32) + "px";
-      dragGhost.style.top = (touch.clientY - 32) + "px";
-    };
-    circle.ontouchend = (e) => {
-      if (!draggingBtn) return;
-      const num = Number(draggingBtn.dataset.num2);
-      if (i !== 0 && magicVState.v2[i] === null && magicVState.available2.includes(num)) {
-        magicVState.v2[i] = num;
-        magicVState.available2 = magicVState.available2.filter(n => n !== num);
-        renderMagicVBoard2();
-        renderMagicVButtons2();
-        enableMagicVDragDrop2();
-      }
-      if (dragGhost) dragGhost.remove();
-      dragGhost = null;
-      draggingBtn = null;
-      dragOriginIdx = null;
-    };
+    // Touch drop: gestionado desde el touchend del botón vía elementFromPoint
   }
 }
 
@@ -1703,26 +1693,59 @@ function enableMagicVDragDrop2() {
       draggingBtn = btn;
       dragOriginIdx = null;
       dragGhost = btn.cloneNode(true);
-      dragGhost.style.position = "absolute";
+      dragGhost.style.position = "fixed";
       dragGhost.style.pointerEvents = "none";
       dragGhost.style.opacity = "0.7";
       dragGhost.style.zIndex = "9999";
+      const t0 = e.touches[0];
+      dragGhost.style.left = (t0.clientX - 32) + "px";
+      dragGhost.style.top = (t0.clientY - 32) + "px";
       document.body.appendChild(dragGhost);
     }, { passive: false });
     btn.addEventListener("touchmove", (e) => {
+      e.preventDefault();
       if (!dragGhost) return;
       const touch = e.touches[0];
       dragGhost.style.left = (touch.clientX - 32) + "px";
       dragGhost.style.top = (touch.clientY - 32) + "px";
     }, { passive: false });
     btn.addEventListener("touchend", (e) => {
+      if (!draggingBtn) return;
+      const touch = e.changedTouches[0];
+      // Detectar el círculo destino usando getBoundingClientRect (más fiable en SVG)
+      let posIdx = -1;
+      for (let i = 0; i < 5; i++) {
+        const circleEl = document.getElementById(`v2-pos-${i + 1}`);
+        if (!circleEl) continue;
+        const rect = circleEl.getBoundingClientRect();
+        if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+            touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+          posIdx = i;
+          break;
+        }
+      }
+      if (posIdx !== -1) {
+        const num = Number(draggingBtn.dataset.num2);
+        if (posIdx !== 0 && magicVState.v2[posIdx] === null && magicVState.available2.includes(num)) {
+          magicVState.v2[posIdx] = num;
+          magicVState.available2 = magicVState.available2.filter(n => n !== num);
+          if (dragGhost) dragGhost.remove();
+          dragGhost = null;
+          draggingBtn = null;
+          dragOriginIdx = null;
+          renderMagicVBoard2();
+          renderMagicVButtons2();
+          enableMagicVDragDrop2();
+          return;
+        }
+      }
       if (dragGhost) dragGhost.remove();
       dragGhost = null;
       draggingBtn = null;
       dragOriginIdx = null;
     });
   });
-  // Círculos de la V como drop targets
+  // Círculos de la V como drop targets (mouse)
   for (let i = 0; i < 5; i++) {
     const circle = document.getElementById(`v2-pos-${i+1}`);
     circle.addEventListener("dragover", (e) => {
@@ -1749,28 +1772,7 @@ function enableMagicVDragDrop2() {
       draggingBtn = null;
       dragOriginIdx = null;
     });
-    // Touch drop
-    circle.addEventListener("touchmove", (e) => {
-      if (!dragGhost) return;
-      const touch = e.touches[0];
-      dragGhost.style.left = (touch.clientX - 32) + "px";
-      dragGhost.style.top = (touch.clientY - 32) + "px";
-    });
-    circle.addEventListener("touchend", (e) => {
-      if (!draggingBtn) return;
-      const num = Number(draggingBtn.dataset.num2);
-      if (i !== 0 && magicVState.v2[i] === null && magicVState.available2.includes(num)) {
-        magicVState.v2[i] = num;
-        magicVState.available2 = magicVState.available2.filter(n => n !== num);
-        renderMagicVBoard2();
-        renderMagicVButtons2();
-        enableMagicVDragDrop2();
-      }
-      if (dragGhost) dragGhost.remove();
-      dragGhost = null;
-      draggingBtn = null;
-      dragOriginIdx = null;
-    });
+    // Touch drop: gestionado desde el touchend del botón vía elementFromPoint
   }
 }
 
