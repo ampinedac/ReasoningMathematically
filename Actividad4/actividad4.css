@@ -193,6 +193,99 @@ h3 {
   font-size: 1.35rem;
 }
 
+.recap-hero {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  text-align: center;
+}
+
+.recap-main-title {
+  color: #1f5fbf;
+}
+
+.recap-image {
+  width: min(460px, 100%);
+  height: auto;
+  border-radius: 10px;
+  border: 0.5px solid #b7dcff;
+  background: #ffffff;
+}
+
+.recap-examples-wrap {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.recap-example-card {
+  background: #f2f8ff;
+  border: 0.5px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.recap-example-word {
+  color: #1f5fbf;
+}
+
+.recap-example-text {
+  background: #f7fbff;
+  border: 0.5px solid #d3e6f9;
+  border-radius: 8px;
+  padding: 8px 10px;
+  color: #2a2a2a;
+}
+
+.recap-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.recap-btn {
+  border: 0.5px solid var(--line);
+  background: #ffffff;
+  color: #1f1f1f;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.recap-btn.selected.yes {
+  background: var(--ok-bg);
+  color: var(--ok-text);
+  border-color: #b9e4d5;
+}
+
+.recap-btn.selected.no {
+  background: var(--coral-bg);
+  color: var(--coral-text);
+  border-color: #e7c4b8;
+}
+
+.recap-feedback {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.recap-feedback.ok {
+  color: #0f6a4f;
+}
+
+.recap-feedback.warn {
+  color: #712b13;
+}
+
+.recap-status {
+  text-align: center;
+  color: #355466;
+}
+
 .grid-2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -554,6 +647,11 @@ h3 {
 @media (max-width: 740px) {
   .grid-2,
   .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .recap-examples-wrap,
+  .recap-actions {
     grid-template-columns: 1fr;
   }
 
